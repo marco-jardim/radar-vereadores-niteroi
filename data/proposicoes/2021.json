@@ -48241,15 +48241,10 @@
   ],
   "data": "2021-11-11",
   "data_protocolo": "2021-11-16",
-  "desfecho": "virou_lei",
+  "desfecho": "arquivado",
   "ementa": "Cria o Programa Municipal de Prevenção ao Suicídio e de Promoção do Direito ao Acesso à Saúde Mental entre Jovens e Adolescentes em Niterói, e dá outras providências.",
   "id": 135514,
-  "lei": {
-   "data": "2022-04-25",
-   "numero": 3448,
-   "tipo": "sancionada",
-   "veto_parcial": false
-  },
+  "lei": null,
   "n_tramitacoes": 6,
   "numero": "418/2021",
   "processo": "3051/2021",

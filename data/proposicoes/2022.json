@@ -3512,15 +3512,10 @@
   ],
   "data": "2022-03-28",
   "data_protocolo": "2022-04-07",
-  "desfecho": "virou_lei",
+  "desfecho": "arquivado",
   "ementa": "DISPÕE SOBRE A PRIORIDADE DE MATRÍCULA ESCOLAR PARA IRMÃOS DE ATÉ 12 ANOS DE IDADE INCOMPLETOS, NO MESMO ESTABELECIMENTO DE ENSINO PÚBLICO NO MUNICÍPIO DE NITERÓI.",
   "id": 138972,
-  "lei": {
-   "data": "2023-08-30",
-   "numero": 3452,
-   "tipo": "sancionada",
-   "veto_parcial": false
-  },
+  "lei": null,
   "n_tramitacoes": 9,
   "numero": "34/2022",
   "processo": "61/2022",
