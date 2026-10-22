@@ -32,7 +32,7 @@ CURADORIA = RAIZ / "config" / "curadoria.json"
 BASE_URL = os.environ.get("OPENCODE_BASE_URL", "https://opencode.ai/zen/go/v1")
 MODELO = os.environ.get("OPENCODE_MODEL", "deepseek-v4.1-flash")
 USER_AGENT = "radar-vereadores-niteroi/1.0 (+https://github.com/marco-jardim/radar-vereadores-niteroi)"
-VERSAO_PROMPT = "2026-10-v1"
+VERSAO_PROMPT = "2026-10-v2"
 LOTE = int(os.environ.get("CLASSIFICADOR_LOTE", 15))
 
 CATEGORIAS = {
@@ -60,9 +60,12 @@ CONFIANCA_MINIMA = float(os.environ.get("CLASSIFICADOR_CONFIANCA_MINIMA", 0.75))
 RE_SIMBOLICA = re.compile(
     r"\bD[ÁA] (O )?NOME\b|PASSA A (SE )?DENOMINAR|DENOMINA[- ]SE\b|\bDENOMINA (A|O|DE|DO|DA|AS|OS)\b|"
     r"CALEND[ÁA]RIO OFICIAL|\bDIA MUNICIPAL\b|SEMANA MUNICIPAL|M[ÊE]S MUNICIPAL|UTILIDADE P[ÚU]BLICA|"
-    r"PATRIM[ÔO]NIO CULTURAL (DE NATUREZA )?IMATERIAL|T[ÍI]TULO DE CIDAD|INSTITUI O DIA\b|INCLUI NO CALEND|HOMENAGEM",
+    r"PATRIM[ÔO]NIO CULTURAL (DE NATUREZA )?IMATERIAL|T[ÍI]TULO DE CIDAD|INSTITUI O DIA\b|INCLUI NO CALEND|HOMENAGEM|"
+    r"LEI\s+(MUNICIPAL\s+)?(DE\s+)?(N[º°O.]*\s*)?3\.?474",  # Lei 3.474/2020 é o calendário oficial de datas
     re.I,
 )
+# "Autoriza o Poder Executivo a..." não obriga nada: o Executivo já pode agir sem a lei
+RE_AUTORIZATIVA = re.compile(r"^\s*(EMENTA:\s*)?(FICA\s+)?AUTORIZ(A|ADO)\s+(O\s+)?(PODER\s+)?EXECUTIVO", re.I)
 
 
 def sinais_tramitacao(p: dict) -> list[str]:
@@ -95,6 +98,10 @@ def categoria_por_regra(p: dict) -> str | None:
     return "simbolica" if RE_SIMBOLICA.search(p.get("ementa") or "") else None
 
 
+def e_autorizativa(p: dict) -> bool:
+    return bool(RE_AUTORIZATIVA.search(p.get("ementa") or ""))
+
+
 # --------------------------------------------------------------------------- IA
 PROMPT_SISTEMA = f"""Você classifica projetos de lei municipais da Câmara de Niterói (RJ) para um site de transparência
 apartidário. Avalie apenas o texto da ementa. Seja conservador: só marque um alerta se a ementa der base clara para ele.
@@ -106,11 +113,22 @@ CATEGORIA (escolha exatamente uma):
 ALERTAS (zero ou mais; a maioria dos projetos não tem nenhum):
 {json.dumps(ALERTAS, ensure_ascii=False, indent=1)}
 
+IMPACTO (0 a 3), o efeito concreto esperado sobre a vida das pessoas ou sobre a gestão da cidade:
+ 0 = nenhum efeito prático (homenagem, data, nome, título, utilidade pública, lei meramente autorizativa ou que repete norma existente);
+ 1 = baixo (efeito pontual, restrito a um local, grupo pequeno ou procedimento menor);
+ 2 = médio (muda regra ou serviço para um grupo relevante ou para um setor da cidade);
+ 3 = alto (afeta grande parte da população, cria política ou serviço amplo, ou mexe em orçamento/tributo relevante).
+Avalie o efeito pelo que a ementa determina, não pelo tema ser importante.
+
+RESUMO: até 140 caracteres, linguagem simples, começando por um verbo no presente ("Obriga...", "Cria...", "Proíbe...").
+PUBLICO: quem é diretamente afetado, em até 4 palavras (ex.: "pessoas com deficiência", "comércio do Centro", "toda a cidade").
+
 TEMA: uma palavra entre saude, educacao, seguranca, mobilidade, meio_ambiente, urbanismo, cultura, esporte,
 assistencia_social, direitos_humanos, economia, consumidor, animais, administracao, tributos, homenagem, outro.
 
 Responda SOMENTE com JSON no formato:
-{{"itens":[{{"id":<id>,"categoria":"...","tema":"...","alertas":[{{"rotulo":"...","confianca":0.0-1.0}}],
+{{"itens":[{{"id":<id>,"categoria":"...","tema":"...","impacto":0-3,"resumo":"...","publico":"...",
+"alertas":[{{"rotulo":"...","confianca":0.0-1.0}}],
 "justificativa":"até 200 caracteres, em português, citando o trecho da ementa que motivou os alertas (ou 'sem alertas')"}}]}}"""
 
 
@@ -172,8 +190,15 @@ def normalizar_ia(bruto: dict) -> dict:
             a = {"rotulo": a, "confianca": 0.5}
         if a.get("rotulo") in ALERTAS:
             alertas.append({"rotulo": a["rotulo"], "confianca": round(float(a.get("confianca") or 0), 2)})
+    try:
+        impacto = max(0, min(3, int(bruto.get("impacto"))))
+    except (TypeError, ValueError):
+        impacto = None
     return {
         "categoria": cat,
+        "impacto": impacto,
+        "resumo": str(bruto.get("resumo") or "")[:180],
+        "publico": str(bruto.get("publico") or "")[:60],
         "tema": str(bruto.get("tema") or "outro")[:30],
         "alertas": alertas,
         "justificativa": str(bruto.get("justificativa") or "")[:240],
@@ -241,10 +266,22 @@ def classificacao_final(p: dict, cache_ia: dict, curadoria: dict) -> dict:
         for a in ia.get("alertas", []):
             if a["rotulo"] not in ja and a["confianca"] >= CONFIANCA_MINIMA:
                 alertas.append({"rotulo": a["rotulo"], "origem": "ia", "confianca": a["confianca"], "nota": ia.get("justificativa", "")})
+    autorizativa = e_autorizativa(p)
+    impacto = (cur or {}).get("impacto")
+    if impacto is None:
+        impacto = (ia or {}).get("impacto")
+    if categoria == "simbolica":
+        impacto = 0
+    elif autorizativa and impacto is not None:
+        impacto = min(impacto, 1)
+    sinais = sinais_tramitacao(p) + (cur or {}).get("sinais", []) + (["autorizativa"] if autorizativa else [])
     return {
         "categoria": categoria,
+        "impacto": impacto,
+        "resumo": (cur or {}).get("resumo") or (ia or {}).get("resumo") or "",
+        "publico": (ia or {}).get("publico") or "",
         "tema": (ia or {}).get("tema") or ("homenagem" if categoria == "simbolica" else "outro"),
-        "sinais": sinais_tramitacao(p) + (cur or {}).get("sinais", []),
+        "sinais": sinais,
         "alertas": alertas,
         "polemico": any(a["rotulo"] in ALERTAS_POLEMICOS for a in alertas),
         "risco_juridico": any(a["rotulo"] == "inconstitucionalidade_provavel" for a in alertas)
