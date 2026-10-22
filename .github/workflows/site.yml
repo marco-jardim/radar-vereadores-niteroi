@@ -8,7 +8,9 @@ on:
       - "config/**"
       - "data/**"
       - "site_src/**"
+      - "tests/**"
       - ".github/workflows/site.yml"
+      - ".github/workflows/testes.yml"
   workflow_run:
     workflows: ["Coleta semanal"]
     types: [completed]
@@ -21,16 +23,37 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  # como no modelo do GitHub Pages: não interrompe uma publicação em andamento
+  cancel-in-progress: false
 
 jobs:
+  testes:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    permissions:
+      contents: read
+    uses: ./.github/workflows/testes.yml
+    with:
+      ref: main
+
   gerar:
+    needs: testes
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
+    # o código do repositório roda aqui: sem pages: write nem id-token: write, que ficam
+    # só com a publicação; pages: read basta para actions/configure-pages consultar o site
+    permissions:
+      contents: read
+      pages: read
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main
+          # exatamente o commit aprovado nos testes, mesmo que main tenha avançado depois
+          ref: ${{ needs.testes.outputs.sha }}
+
+      - name: Confirmar que o commit foi testado
+        env:
+          SHA_TESTADO: ${{ needs.testes.outputs.sha }}
+        run: test "$(git rev-parse HEAD)" = "$SHA_TESTADO"
 
       - uses: actions/setup-python@v5
         with:

@@ -20,6 +20,8 @@
   --alerta-fundo: #F9E3E6;
   --exec: #2F6FB8;
   --foco: #1E6FB0;
+  --legislacao: #7A4FA3;
+  --resolucao: #B39BD0;
   --display: "Barlow Condensed", "Arial Narrow", sans-serif;
   --texto: "Public Sans", system-ui, sans-serif;
 }
@@ -29,6 +31,7 @@
     --linha: #26394A; --grade: #1E3141; --efeito: #22A07D; --efeito-fundo: #133A33; --baixo: #3D8A75;
     --sem-efeito: #B68A14; --sem-efeito-fundo: #3A3119; --andamento: #5D6F7D; --sem-exito: #1B2C3A; --sem-exito-borda: #3A4C5B;
     --alerta: #DA4F63; --alerta-fundo: #3D1E26; --exec: #4C88D4; --foco: #7DB8E8;
+    --legislacao: #A784CF; --resolucao: #6F5A8C;
   }
 }
 :root[data-theme="dark"] {
@@ -36,9 +39,11 @@
   --linha: #26394A; --grade: #1E3141; --efeito: #22A07D; --efeito-fundo: #133A33; --baixo: #3D8A75;
   --sem-efeito: #B68A14; --sem-efeito-fundo: #3A3119; --andamento: #5D6F7D; --sem-exito: #1B2C3A; --sem-exito-borda: #3A4C5B;
   --alerta: #DA4F63; --alerta-fundo: #3D1E26; --exec: #4C88D4; --foco: #7DB8E8;
+  --legislacao: #A784CF; --resolucao: #6F5A8C;
 }
 
 * { box-sizing: border-box; }
+.so-leitor { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 html { -webkit-text-size-adjust: 100%; }
 body { margin: 0; background: var(--fundo); color: var(--tinta); font: 400 1rem/1.55 var(--texto); }
 a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px; }
@@ -77,6 +82,7 @@ section { margin-top: 36px; }
 .texto h2 { font: 700 1.6rem/1.15 var(--display); margin: 32px 0 8px; }
 .texto p, .texto li { color: var(--tinta); }
 .texto code { font-size: .85em; background: var(--superficie); padding: 1px 4px; border: 1px solid var(--linha); }
+.texto h3 { font: 700 1.25rem/1.2 var(--display); margin: 22px 0 6px; }
 
 /* ------------------------------------------------------------------- tiles */
 .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 12px 0 20px; }
@@ -98,6 +104,7 @@ section { margin-top: 36px; }
 .cartao h3 a { text-decoration: none; }
 .cartao h3 a:hover { text-decoration: underline; }
 .cartao-topo { display: flex; justify-content: space-between; gap: 8px; align-items: center; font-size: .82rem; color: var(--tinta-suave); }
+.lei-situacao { font-size: .82rem; font-weight: 600; color: var(--tinta); }
 .cartao-autor { margin-top: auto !important; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .publico { font-size: .86rem; color: var(--tinta-suave); margin: 2px 0 4px; }
 
@@ -123,6 +130,7 @@ a.chip:hover { border-color: var(--tinta); }
 label { color: var(--tinta-suave); font-size: .9rem; }
 .controles label, .grade-filtros label, .linha-busca label { display: flex; align-items: center; gap: 8px; }
 select, input[type="search"] { font: inherit; font-size: .93rem; color: var(--tinta); background: var(--superficie); border: 1px solid var(--sem-exito-borda); padding: 7px 9px; border-radius: 3px; max-width: 100%; }
+select:disabled { color: var(--tinta-suave); opacity: .65; cursor: not-allowed; }
 input[type="checkbox"] { accent-color: var(--tinta); width: 18px; height: 18px; }
 
 .leg-graf { display: flex; flex-wrap: wrap; gap: 4px 18px; list-style: none; padding: 0; margin: 8px 0 12px; font-size: .84rem; color: var(--tinta-suave); }
@@ -136,6 +144,14 @@ input[type="checkbox"] { accent-color: var(--tinta); width: 18px; height: 18px; 
 .sw.c-sem-exito, .mini-barra .c-sem-exito { box-shadow: inset 0 0 0 1px var(--sem-exito-borda); }
 .c-exec { background: var(--exec); fill: var(--exec); stroke: var(--exec); }
 .c-alerta { background: var(--alerta); fill: var(--alerta); stroke: var(--alerta); }
+/* tipos de documento e eixos do perfil de atuação: indicação ~ zeladoria, requerimento ~ fiscalização,
+   moção ~ homenagem, PDL e resolução ~ legislação */
+.c-t-pl { background: var(--tinta); fill: var(--tinta); stroke: var(--tinta); }
+.c-t-indicacao, .c-p-zeladoria { background: var(--exec); fill: var(--exec); stroke: var(--exec); }
+.c-t-requerimento, .c-p-fiscalizacao { background: var(--efeito); fill: var(--efeito); stroke: var(--efeito); }
+.c-t-mocao, .c-p-homenagem { background: var(--sem-efeito); fill: var(--sem-efeito); stroke: var(--sem-efeito); }
+.c-t-pdl, .c-p-legislacao { background: var(--legislacao); fill: var(--legislacao); stroke: var(--legislacao); }
+.c-t-resolucao { background: var(--resolucao); fill: var(--resolucao); stroke: var(--resolucao); }
 
 .placar { list-style: none; margin: 0; padding: 0; }
 .linha { display: grid; grid-template-columns: minmax(170px, 230px) 1fr minmax(180px, 230px); align-items: center; gap: 6px 18px; padding: 9px 0; border-bottom: 1px solid var(--linha); }
@@ -153,6 +169,8 @@ input[type="checkbox"] { accent-color: var(--tinta); width: 18px; height: 18px; 
 .numeros { margin: 0; font-size: .84rem; color: var(--tinta-suave); display: flex; flex-direction: column; line-height: 1.3; }
 .n-efeito b { font: 700 1.25rem/1 var(--texto); color: var(--tinta); margin-right: 3px; }
 .n-alerta { color: var(--alerta); font-weight: 600; }
+.n-docs { display: flex; flex-wrap: wrap; gap: 0 10px; margin-top: 3px; font-size: .78rem; }
+.n-docs b { color: var(--tinta); font-variant-numeric: tabular-nums; }
 
 .convite { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
 .convite a { display: block; text-decoration: none; padding: 16px 18px; background: var(--superficie); border: 1px solid var(--linha); border-left: 5px solid var(--tinta); }
@@ -162,7 +180,10 @@ input[type="checkbox"] { accent-color: var(--tinta); width: 18px; height: 18px; 
 
 /* ------------------------------------------------------------ listas */
 .projetos { list-style: none; padding: 0; margin: 0; }
-.projeto { padding: 12px 0 12px 14px; border-bottom: 1px solid var(--linha); border-left: 4px solid var(--andamento); max-width: 92ch; }
+/* content-visibility recorta a pintura na caixa do item: o respiro à direita (como os 12px e 14px dos outros
+   lados) deixa inteiro o anel de foco (3px + 2px de afastamento) de links e botões que chegam à borda. */
+.projeto { padding: 12px 6px 12px 14px; border-bottom: 1px solid var(--linha); border-left: 4px solid var(--andamento); max-width: 92ch; }
+li.projeto { content-visibility: auto; contain-intrinsic-size: auto 220px; }
 .projeto.d-lei, .projeto.imp-borda-2, .projeto.imp-borda-3 { border-left-color: var(--efeito); }
 .projeto.d-lei.imp-borda-0 { border-left-color: var(--sem-efeito); }
 .projeto.d-lei.imp-borda-1 { border-left-color: var(--baixo); }
@@ -183,6 +204,31 @@ input[type="checkbox"] { accent-color: var(--tinta); width: 18px; height: 18px; 
 .vazio { color: var(--tinta-suave); font-style: italic; padding: 12px 0; }
 .link { background: none; border: 0; padding: 0; text-decoration: underline; cursor: pointer; font-style: normal; }
 .mais { margin: 20px 0; font: 600 1.05rem var(--display); padding: 10px 18px; background: var(--tinta); color: var(--fundo); border: 0; cursor: pointer; }
+.mais:disabled { opacity: .6; cursor: progress; }
+
+/* --------------------------------------------- documentos e detalhe do SISCAM */
+.projeto.doc { border-left-color: var(--andamento); }
+.projeto.t-indicacao { border-left-color: var(--exec); }
+.projeto.t-requerimento { border-left-color: var(--efeito); }
+.projeto.t-mocao { border-left-color: var(--sem-efeito); }
+.projeto.t-pdl { border-left-color: var(--legislacao); }
+.projeto.t-resolucao { border-left-color: var(--resolucao); }
+.selo.cat-zeladoria, .selo.cat-fiscalizacao, .selo.cat-homenagem, .selo.cat-manifestacao, .selo.cat-legislacao, .selo.cat-outra { background: transparent; color: var(--tinta-suave); box-shadow: inset 0 0 0 1px var(--sem-exito-borda); }
+.assunto { font-size: .86rem; color: var(--tinta); margin: 4px 0 0; }
+.acoes-item { margin: 6px 0 0; display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; font-size: .82rem; }
+.ver-siscam { display: none; background: transparent; border: 1px solid var(--sem-exito-borda); padding: 3px 10px; border-radius: 3px; cursor: pointer; font-size: .82rem; }
+.com-dialogo .ver-siscam { display: inline-block; }
+.ver-siscam:hover { border-color: var(--tinta); }
+.abrir-siscam { color: var(--tinta-suave); }
+.dialogo-siscam { padding: 0; border: 1px solid var(--linha); background: var(--superficie); color: var(--tinta); width: min(1100px, 96vw); height: min(860px, 92vh); max-width: none; max-height: none; }
+.dialogo-siscam::backdrop { background: rgba(10, 20, 30, .55); }
+.dialogo-caixa { display: flex; flex-direction: column; height: 100%; padding: 12px 14px; gap: 6px; }
+.dialogo-cab { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.dialogo-cab h2 { font: 600 1.25rem/1.2 var(--display); margin: 0 auto 0 0; }
+.dialogo-cab .fechar { background: var(--tinta); color: var(--fundo); border: 0; padding: 6px 14px; border-radius: 3px; cursor: pointer; }
+.dialogo-nota { margin: 0; font-size: .8rem; color: var(--tinta-suave); }
+.dialogo-quadro { flex: 1; min-height: 0; }
+.dialogo-quadro iframe { width: 100%; height: 100%; border: 1px solid var(--linha); background: #fff; }
 
 /* ------------------------------------------------------------- filtros */
 .filtros { margin: 16px 0 12px; padding: 14px 16px; background: var(--superficie); border: 1px solid var(--linha); display: flex; flex-direction: column; gap: 12px; }
@@ -195,6 +241,8 @@ input[type="checkbox"] { accent-color: var(--tinta); width: 18px; height: 18px; 
 .chips-impacto label:has(input:checked) { border-color: var(--tinta); background: var(--superficie); box-shadow: inset 0 0 0 1px var(--tinta); }
 .chips-impacto input { width: 15px; height: 15px; }
 .chips-impacto .n { font-size: .76rem; color: var(--tinta-suave); font-variant-numeric: tabular-nums; }
+/* Contagens geradas no build valem só sem filtros: com consulta no endereço, ficam ocultas até o app.js recalcular. */
+.com-consulta .inicial { visibility: hidden; }
 .mais-filtros > summary { cursor: pointer; font-weight: 600; font-size: .92rem; margin-bottom: 8px; }
 .mais-filtros:not([open]) > summary { margin-bottom: 0; }
 .grade-filtros label.check { justify-content: flex-start; flex-direction: row-reverse; }
@@ -263,4 +311,4 @@ details.bloco summary { cursor: pointer; font: 600 1.2rem/1.3 var(--display); }
   .tile-valor { font-size: 2.1rem; }
 }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
-@media print { .filtros, .controles, .topo nav, #tip { display: none; } }
+@media print { .filtros, .controles, .topo nav, #tip, .acoes-item, .dialogo-siscam { display: none; } }

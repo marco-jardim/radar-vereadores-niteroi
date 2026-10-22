@@ -1,0 +1,98 @@
+{
+  "nota": "Recorte escrito à mão dos PLs 407/2026, 8/2025, 1/2025 e 5/2025. No primeiro, omite-se deliberadamente a pessoa/mandato da lista legada para exercitar o nome de fallback vindo de au; o partido fica vazio. Os demais campos seguem o contrato de dados_cliente.",
+  "legado": {
+    "pessoas": {
+      "benny-briolly": "Benny Briolly",
+      "daniel-marques-frederico": "Daniel Marques",
+      "rodrigo-flach-farah": "Rodrigo Farah",
+      "sylvio-mauricio-de-freitas": "Sylvio Maurício"
+    },
+    "projetos": [
+      {
+        "n": "407/2026", "a": 2026, "d": "2026-10-21",
+        "e": "EMENTA: Estabelece diretrizes para a orientação e capacitação de mulheres em defesa pessoal e utilização segura de instrumentos de autodefesa legalmente permitidos, determina a divulgação da legislação federal e estadual pertinente nos serviços municipais de atendimento e proteção às mulheres e dá outras providências.",
+        "u": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=300889",
+        "r": "Estabelece diretrizes de defesa pessoal e orientação para mulheres.", "pb": "mulheres", "t": "direitos_humanos",
+        "g": "andamento", "dx": "Em tramitação", "c": "politica_publica", "i": 2, "ef": 0, "se": 0,
+        "l": null, "ld": null, "lt": null, "vp": 0, "dl": null, "o": "vereador", "lg": "2025-2028", "pt": "", "pr": "fabiano-goncalves",
+        "au": [["Fabiano Gonçalves", "fabiano-goncalves"]], "al": [], "pol": 0, "s": [], "rp": null
+      },
+      {
+        "n": "8/2025", "a": 2025, "d": "2025-02-11",
+        "e": "Altera a Lei de nº 3.474, de 07 de fevereiro de 2020, para instituir a Semana de Conscientização da Lei Maria da Penha e de Prevenção e Enfrentamento da Violência Doméstica e Familiar nas Escolas Municipais em agosto.",
+        "u": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=275604",
+        "r": "Institui semana de conscientização da Lei Maria da Penha nas escolas.", "pb": "comunidade escolar", "t": "direitos_humanos",
+        "g": "lei", "dx": "Virou lei", "c": "simbolica", "i": 0, "ef": 0, "se": 1,
+        "l": 3991, "ld": "2025-04-10", "lt": "sancionada", "vp": 0, "dl": 57, "o": "vereador", "lg": "2025-2028", "pt": "PSOL", "pr": "sylvio-mauricio-de-freitas",
+        "au": [["Benny Briolly", "benny-briolly"], ["Sylvio Maurício", "sylvio-mauricio-de-freitas"]], "al": [], "pol": 0, "s": [], "rp": null
+      },
+      {
+        "n": "1/2025", "a": 2025, "d": "2025-02-06",
+        "e": "Ementa: Altera a Lei nº 1.212, de 21 de setembro de 1993, que institui o Código de Limpeza Urbana do Município de Niterói.",
+        "u": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=275545",
+        "r": "Altera o Código de Limpeza Urbana do Município de Niterói.", "pb": "moradores de Niterói", "t": "urbanismo",
+        "g": "lei", "dx": "Virou lei", "c": "regulacao", "i": 2, "ef": 1, "se": 0,
+        "l": 3987, "ld": "2025-04-08", "lt": "sancionada", "vp": 0, "dl": 57, "o": "vereador", "lg": "2025-2028", "pt": "Cidadania", "pr": "rodrigo-flach-farah",
+        "au": [["Rodrigo Farah", "rodrigo-flach-farah"]], "al": [], "pol": 0, "s": [], "rp": null
+      },
+      {
+        "n": "5/2025", "a": 2025, "d": "2025-02-06",
+        "e": "AUTORIZA A APREENSÃO DE ANIMAIS DE GRANDE PORTE ENCONTRADOS EM LOGRADOUROS PÚBLICOS E DÁ OUTRAS PROVIDÊNCIAS.",
+        "u": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=275593",
+        "r": "Autoriza a apreensão de animais de grande porte em logradouros públicos.", "pb": "animais de grande porte", "t": "animais",
+        "g": "sem_exito", "dx": "Vetado", "c": "regulacao", "i": 1, "ef": 0, "se": 0,
+        "l": null, "ld": null, "lt": null, "vp": 0, "dl": null, "o": "vereador", "lg": "2025-2028", "pt": "PL", "pr": "daniel-marques-frederico",
+        "au": [["Daniel Marques", "daniel-marques-frederico"]], "al": [], "pol": 0, "s": ["veto_total"], "rp": null
+      }
+    ]
+  },
+  "dic": {
+    "esquema": 2, "build": "fixture-fase1", "n": 5,
+    "pessoas": [
+      ["benny-briolly", "Benny Briolly", {"2025-2028": "PSOL"}],
+      ["daniel-marques-frederico", "Daniel Marques", {"2025-2028": "PL"}],
+      ["fabiano-goncalves", "Fabiano Gonçalves", {}],
+      ["rodrigo-flach-farah", "Rodrigo Farah", {"2021-2024": "PV", "2025-2028": "Cidadania"}],
+      ["sylvio-mauricio-de-freitas", "Sylvio Maurício", {"2025-2028": "PSOL"}]
+    ],
+    "temas": [["animais", "Animais"], ["direitos_humanos", "Direitos humanos"], ["urbanismo", "Urbanismo"]],
+    "sinais": [["autorizativa", "Lei autorizativa"], ["inconstitucionalidade_declarada", "Declarada inconstitucional"], ["repete_projeto", "Repete projeto anterior"], ["veto_total", "Veto total"]],
+    "desfechos": [["em_tramitacao", "Em tramitação", "andamento"], ["vetado", "Vetado", "sem_exito"], ["virou_lei", "Virou lei", "lei"]],
+    "categorias": [["politica_publica", "Política pública"], ["regulacao", "Regulação"], ["simbolica", "Simbólica"]],
+    "alertas": [["inconstitucionalidade_provavel", "Risco de inconstitucionalidade"], ["pauta_de_costumes", "Pauta de costumes"]],
+    "origens": ["curadoria", "executivo", "ia", "vereador"], "legislaturas": ["2021-2024", "2025-2028"],
+    "url_detalhe": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento={id}"
+  },
+  "fatias": [
+    {
+      "esquema": 2, "build": "fixture-fase1", "nome": "pl-lei", "n": 2,
+      "colunas": {
+        "id": [275604, 275545], "ord": [1, 2], "n": ["8/2025", "1/2025"], "a": [2025, 2025], "d": ["2025-02-11", "2025-02-06"],
+        "e": ["Altera a Lei de nº 3.474, de 07 de fevereiro de 2020, para instituir a Semana de Conscientização da Lei Maria da Penha e de Prevenção e Enfrentamento da Violência Doméstica e Familiar nas Escolas Municipais em agosto.", "Ementa: Altera a Lei nº 1.212, de 21 de setembro de 1993, que institui o Código de Limpeza Urbana do Município de Niterói."],
+        "r": ["Institui semana de conscientização da Lei Maria da Penha nas escolas.", "Altera o Código de Limpeza Urbana do Município de Niterói."], "pb": ["comunidade escolar", "moradores de Niterói"],
+        "t": [1, 2], "h": [2, 2], "c": [2, 1], "i": [0, 2], "l": [3991, 3987], "ld": ["2025-04-10", "2025-04-08"], "lt": ["sancionada", "sancionada"], "vp": [0, 0], "dl": [57, 57],
+        "o": [3, 3], "lg": [1, 1], "pr": [4, 3], "au": [[0, 4], [3]], "al": [[], []], "pol": [0, 0], "s": [[], []], "rp": [null, null]
+      }
+    },
+    {
+      "esquema": 2, "build": "fixture-fase1", "nome": "pl-andamento", "n": 1,
+      "colunas": {
+        "id": [300889], "ord": [0], "n": ["407/2026"], "a": [2026], "d": ["2026-10-21"],
+        "e": ["EMENTA: Estabelece diretrizes para a orientação e capacitação de mulheres em defesa pessoal e utilização segura de instrumentos de autodefesa legalmente permitidos, determina a divulgação da legislação federal e estadual pertinente nos serviços municipais de atendimento e proteção às mulheres e dá outras providências."],
+        "r": ["Estabelece diretrizes de defesa pessoal e orientação para mulheres."], "pb": ["mulheres"],
+        "t": [1], "h": [0], "c": [0], "i": [2], "l": [null], "ld": [null], "lt": [null], "vp": [0], "dl": [null],
+        "o": [3], "lg": [1], "pr": [2], "au": [[2]], "al": [[]], "pol": [0], "s": [[]], "rp": [null]
+      }
+    },
+    {
+      "esquema": 2, "build": "fixture-fase1", "nome": "pl-sem_exito", "n": 1,
+      "colunas": {
+        "id": [275593], "ord": [3], "n": ["5/2025"], "a": [2025], "d": ["2025-02-06"],
+        "e": ["AUTORIZA A APREENSÃO DE ANIMAIS DE GRANDE PORTE ENCONTRADOS EM LOGRADOUROS PÚBLICOS E DÁ OUTRAS PROVIDÊNCIAS."],
+        "r": ["Autoriza a apreensão de animais de grande porte em logradouros públicos."], "pb": ["animais de grande porte"],
+        "t": [0], "h": [1], "c": [1], "i": [1], "l": [null], "ld": [null], "lt": [null], "vp": [0], "dl": [null],
+        "o": [3], "lg": [1], "pr": [1], "au": [[1]], "al": [[]], "pol": [0], "s": [[3]], "rp": [null]
+      }
+    }
+  ]
+}

@@ -9,9 +9,12 @@ from collections import Counter, defaultdict
 from datetime import date
 from pathlib import Path
 
+from coletor import regras_documentos as RD
 from coletor.classificar import carregar_curadoria, carregar_proposicoes, classificacao_final
+from coletor.siscam import derivar_lei
 
 RAIZ = Path(__file__).resolve().parents[2]
+URL_DETALHE = "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento={id}"
 
 DESFECHO_GRUPO = {
     "virou_lei": "lei",
@@ -34,6 +37,11 @@ NOME_DESFECHO = {
     "rejeitado": "Rejeitado em plenário",
     "parecer_contrario": "Parecer contrário",
     "retirado": "Retirado pelo autor",
+}
+NOME_TIPO_LEI = {
+    "sancionada": "Sancionada",
+    "promulgada_camara": "Promulgada pela Câmara",
+    "veto_derrubado": "Veto derrubado",
 }
 NOME_CATEGORIA = {
     "simbolica": "Simbólica",
@@ -81,6 +89,61 @@ NOME_TEMA = {
 }
 PARTICULAS = {"de", "da", "do", "das", "dos", "e"}
 SUFIXOS = {"junior", "júnior", "filho", "neto", "sobrinho"}
+
+# ---------------------------------------------------------- demais documentos
+# Pastas de data/documentos/<tipo>/<ano>.json, na ordem do coletor.
+TIPOS_DOC = ("requerimento", "indicacao", "mocao", "pdl", "resolucao")
+# (singular, plural, rótulo curto usado antes do número)
+NOME_TIPO_DOC = {
+    "requerimento": ("Requerimento", "Requerimentos", "Requerimento"),
+    "indicacao": ("Indicação", "Indicações", "Indicação"),
+    "mocao": ("Moção", "Moções", "Moção"),
+    "pdl": ("Projeto de decreto legislativo", "Projetos de decreto legislativo", "PDL"),
+    "resolucao": ("Projeto de resolução", "Projetos de resolução", "Resolução"),
+}
+# Tipos cujo detalhe (autoria com papel e tramitação completa) é consultado; os demais
+# só pela listagem, exceto quando têm mais de um autor.
+TIPOS_COM_DETALHE = ("requerimento", "pdl", "resolucao")
+NOME_CATEGORIA_DOC = {
+    "zeladoria": "Zeladoria",
+    "fiscalizacao": "Fiscalização",
+    "homenagem": "Homenagem",
+    "manifestacao": "Manifestação",
+    "legislacao": "Legislação",
+    "outra": "Outra",
+}
+DESC_CATEGORIA_DOC = {
+    "zeladoria": "Indicações: pedidos de serviço ao Executivo, como iluminação, asfalto, poda ou limpeza.",
+    "fiscalizacao": "Requerimentos que pedem informações ou cópias de processos e contratos.",
+    "homenagem": "Moções de aplauso ou de pesar; títulos de cidadão, medalhas, diplomas e outras honrarias em PDLs e resoluções.",
+    "manifestacao": "Demais moções: repúdio, apoio e outras.",
+    "legislacao": "PDLs e resoluções que não são homenagem, como mudanças no Regimento ou sustação de atos.",
+    "outra": "Demais requerimentos.",
+}
+NOME_SUBCATEGORIA_DOC = {
+    ("indicacao", "iluminacao"): "Iluminação",
+    ("indicacao", "asfalto"): "Asfalto e buracos",
+    ("indicacao", "poda"): "Poda e árvores",
+    ("indicacao", "limpeza"): "Limpeza",
+    ("indicacao", "saneamento"): "Saneamento e drenagem",
+    ("indicacao", "transito"): "Trânsito e sinalização",
+    ("indicacao", "outra"): "Outros serviços",
+    ("requerimento", "informacao"): "Pedido de informação",
+    ("requerimento", "outro"): "Outro requerimento",
+    ("mocao", "aplauso"): "Aplauso",
+    ("mocao", "pesar"): "Pesar",
+    ("mocao", "repudio"): "Repúdio",
+    ("mocao", "apoio"): "Apoio",
+    ("mocao", "outra"): "Outra moção",
+    ("pdl", "titulo_cidadao"): "Título de cidadão",
+    ("pdl", "honraria"): "Honraria",
+    ("pdl", "outra"): "Outro PDL",
+    ("resolucao", "honraria"): "Honraria",
+    ("resolucao", "regimento"): "Regimento",
+    ("resolucao", "administrativa"): "Administrativa",
+    ("resolucao", "outra"): "Outra resolução",
+}
+NOME_EIXO = {"zeladoria": "Zeladoria", "fiscalizacao": "Fiscalização", "homenagem": "Homenagem", "legislacao": "Legislação"}
 
 
 def slug(texto: str) -> str:
@@ -180,7 +243,172 @@ def marcar_repetidos(projetos: list[dict], limiar: float = 0.8) -> None:
             indice[w].append(i)
 
 
+# ------------------------------------------------------------- demais documentos
+def _sem_acento(texto: str) -> str:
+    t = unicodedata.normalize("NFKD", texto or "")
+    return "".join(c for c in t if not unicodedata.combining(c)).upper()
+
+
+def numero_int(numero) -> int:
+    try:
+        return int(str(numero).split("/")[0])
+    except ValueError:
+        return 0
+
+
+def chave_documento(d: dict) -> tuple:
+    """Ordem dos documentos; com reverse=True, do mais recente ao mais antigo (igual a compararDocs no dados.js)."""
+    return (d.get("data") or "", d["ano"], numero_int(d["numero"]), d["id"])
+
+
+def carregar_documentos() -> list[dict]:
+    """Registros de data/documentos/<tipo>/<ano>.json; tipo ou ano sem arquivo não contribui com nada."""
+    registros = []
+    for tipo in TIPOS_DOC:
+        pasta = RAIZ / "data" / "documentos" / tipo
+        if not pasta.is_dir():
+            continue
+        for arq in sorted(pasta.glob("*.json")):
+            dados = json.loads(arq.read_text(encoding="utf-8"))
+            if not isinstance(dados, list):
+                raise ValueError(f"{arq}: esperada uma lista de documentos")
+            registros.extend({**r, "tipo": r.get("tipo") or tipo} for r in dados)
+    return registros
+
+
+def e_autor_vereador_doc(autor: dict, nao_vereador: list[str]) -> bool:
+    """Como e_vereador, mas sem diferenciar caixa nem acentos: a listagem traz nomes em caixa mista."""
+    nome = _sem_acento(autor.get("nome") or "")
+    if any(_sem_acento(t) in nome for t in nao_vereador):
+        return False
+    return (autor.get("origem") or "").lower() in ("", "vereador", "vereadora")
+
+
+def indice_pessoas(pessoas: dict) -> dict[str, str]:
+    """Slug de nome → slug da pessoa; aceita também o nome sem o apelido depois de " - "."""
+    indice = {s: s for s in pessoas}
+    variantes: dict[str, set[str]] = defaultdict(set)
+    for s, p in pessoas.items():
+        base = slug(p["nome_siscam"].split(" - ")[0])
+        if base and base not in indice:
+            variantes[base].add(s)
+    indice.update({b: next(iter(ss)) for b, ss in variantes.items() if len(ss) == 1})  # ambíguas ficam de fora
+    return indice
+
+
+def montar_documentos(registros: list[dict], cfg: dict, pessoas: dict, legs: list[dict]) -> list[dict]:
+    """Documentos enriquecidos, do mais recente ao mais antigo, separados dos projetos de lei.
+
+    A autoria vem do detalhe ("autoria", com papel) quando existe; senão, da listagem
+    ("autores"), em que todos contam como autores, sem principal nem coautor.
+    """
+    nao_vereador = cfg.get("nao_vereador", [])
+    apelidos = {slug(k): v for k, v in cfg.get("apelidos", {}).items() if not k.startswith("_")}
+    indice = indice_pessoas(pessoas)
+    vistos: set[tuple[str, int]] = set()
+    documentos = []
+    for r in registros:
+        if (r["tipo"], r["id"]) in vistos:
+            continue
+        vistos.add((r["tipo"], r["id"]))
+        cls = RD.classificar_documento(r)
+        autoria = r.get("autoria") or []
+        autores, marcas = [], set()
+        for a in autoria or r.get("autores") or []:
+            nome = " ".join(str(a.get("nome") or "").split())
+            if not nome:
+                continue
+            vereador = e_autor_vereador_doc({**a, "nome": nome}, nao_vereador)
+            s = indice.get(slug(nome), slug(nome)) if vereador else ""
+            vereador = vereador and bool(s)
+            marca = s or _sem_acento(nome)
+            if marca in marcas:
+                continue
+            marcas.add(marca)
+            if s in pessoas:
+                exibicao = pessoas[s]["nome"]
+            elif vereador:
+                exibicao = apelidos.get(slug(nome)) or nome_curto(nome)
+            else:
+                exibicao = nome.title() if nome.isupper() else nome
+            autores.append({"nome": nome, "papel": (a.get("papel") or "") if autoria else "", "slug": s,
+                            "vereador": vereador, "pagina": s in pessoas, "exibicao": exibicao})
+        respondido_em = r.get("respondido_em")
+        dias = r.get("dias_ate_resposta")
+        if "dias_ate_resposta" not in r and respondido_em:
+            dias = dias_entre(r.get("data"), respondido_em)
+        pub = r.get("publicacao")
+        documentos.append({
+            "id": r["id"], "tipo": r["tipo"], "numero": r["numero"], "ano": r["ano"], "data": r.get("data"),
+            "ementa": r.get("ementa") or "", "situacao": r.get("situacao") or "", "assunto": r.get("assunto") or None,
+            "url": r.get("url") or URL_DETALHE.format(id=r["id"]),
+            "legislatura": legislatura_de(r.get("data"), r["ano"], legs),
+            "autores": autores,
+            "categoria": cls["categoria"], "subcategoria": cls["subcategoria"], "homenagem": bool(cls["homenagem"]),
+            "respondido": bool(cls["respondido"]), "publicado": bool(cls["publicado"]), "bairro": cls["bairro"],
+            "respondido_em": respondido_em, "dias_ate_resposta": dias,
+            "publicacao": {"numero": pub.get("numero"), "data": pub.get("data")} if isinstance(pub, dict) else None,
+            "detalhe_pendente": bool(r.get("detalhe_pendente")),
+        })
+    documentos.sort(key=chave_documento, reverse=True)
+    return documentos
+
+
+def eixos_perfil(d: dict) -> list[str]:
+    """Eixos do perfil de atuação de um documento, como em regras_documentos.perfil_atuacao."""
+    eixos = [e for e in ("zeladoria", "fiscalizacao", "legislacao") if d["categoria"] == e]
+    if d["homenagem"]:
+        eixos.append("homenagem")
+    return eixos
+
+
+def atividade_por_autor(documentos: list[dict]) -> dict[str, dict]:
+    """Documentos de cada autor vereador e contagens por legislatura; todo autor listado conta."""
+    atividade: dict[str, dict] = {}
+    for d in documentos:
+        eixos = eixos_perfil(d)
+        for a in d["autores"]:
+            if not a["vereador"]:
+                continue
+            reg = atividade.setdefault(a["slug"], {"documentos": [], "por_leg": {}})
+            reg["documentos"].append(d)
+            if not d["legislatura"]:
+                continue
+            leg = reg["por_leg"].setdefault(d["legislatura"], {
+                "tipos": dict.fromkeys(TIPOS_DOC, 0),
+                "perfil": dict.fromkeys(RD.EIXOS_PERFIL, 0),
+                "informacao": {"respondidos": 0, "sem_resposta": 0},
+            })
+            leg["tipos"][d["tipo"]] = leg["tipos"].get(d["tipo"], 0) + 1
+            for e in eixos:
+                leg["perfil"][e] = leg["perfil"].get(e, 0) + 1
+            if d["tipo"] == "requerimento" and d["subcategoria"] == "informacao":
+                leg["informacao"]["respondidos" if d["respondido"] else "sem_resposta"] += 1
+    return atividade
+
+
 # ------------------------------------------------------------------------ modelo
+def corrigir_proposicao(p: dict, correcao: dict | None) -> dict:
+    """Aplica a curadoria sem apagar campos conhecidos da lei com valores nulos."""
+    corrigido = {**p, **(correcao or {})}
+    lei = {**(p.get("lei") or {})}
+    lei.update({k: v for k, v in ((correcao or {}).get("lei") or {}).items() if v is not None})
+    if corrigido["desfecho"] == "virou_lei" and not lei.get("data"):
+        # A mesma seleção do coletor, mas só entre passos datados: não usar a data de
+        # apresentação, votação ou de uma simples menção a outra lei como publicação.
+        trams = [t for t in p.get("tramitacoes", []) if t.get("data_resposta") or t.get("enviado")]
+        derivada = derivar_lei(trams) or {}
+        lei = {**lei, **derivada, **{k: v for k, v in lei.items() if v is not None}}
+    corrigido["lei"] = lei or None
+    return corrigido
+
+
+def situacao_lei(lei: dict) -> str:
+    """Situação da lei; espelho de situacaoLei em app.js."""
+    rotulo = NOME_TIPO_LEI.get(lei.get("tipo"), "Situação não informada")
+    return rotulo + (" · Veto parcial" if lei.get("veto_parcial") else "")
+
+
 def carregar_config() -> dict:
     return json.loads((RAIZ / "config" / "vereadores.json").read_text(encoding="utf-8"))
 
@@ -228,8 +456,7 @@ def montar_modelo() -> dict:
     projetos = []
     for p in carregar_proposicoes():
         correcao = (curadoria.get(p["numero"]) or {}).get("corrige")
-        if correcao:
-            p = {**p, **correcao}
+        p = corrigir_proposicao(p, correcao)
         cls = classificacao_final(p, cache_ia, curadoria)
         leg = legislatura_de(p.get("data") or p.get("data_protocolo"), p["ano"], legs)
         autoria = p.get("autoria", [])
@@ -294,7 +521,14 @@ def montar_modelo() -> dict:
             a["exibicao"] = nomes.get(a["slug"]) or nome_curto(a["nome"])
         reg["partido"] = partido_de.get((reg["principal"], reg["legislatura"]), "")
 
-    return {"legislaturas": legs, "pessoas": pessoas, "projetos": projetos, "meta": meta, "curadoria": curadoria, "cfg": cfg}
+    # Documentos ficam fora de `projetos`: não entram em marcar_repetidos nem nas métricas de PL.
+    documentos = montar_documentos(carregar_documentos(), cfg, pessoas, legs)
+    atividade = atividade_por_autor(documentos)
+    for s, pessoa in pessoas.items():
+        pessoa["atividade"] = atividade.get(s) or {"documentos": [], "por_leg": {}}
+
+    return {"legislaturas": legs, "pessoas": pessoas, "projetos": projetos, "meta": meta, "curadoria": curadoria, "cfg": cfg,
+            "documentos": documentos, "atividade": atividade}
 
 
 def mediana_legislatura(modelo: dict, leg_id: str, chave: str) -> float | None:

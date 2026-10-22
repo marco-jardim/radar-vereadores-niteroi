@@ -1,16 +1,22 @@
 """Páginas HTML do site."""
 from __future__ import annotations
 
+import hashlib
 import html
+import json
 import re
 import statistics
+import unicodedata
 from collections import Counter, defaultdict
+from functools import cmp_to_key
+from pathlib import Path
 
 from coletor.classificar import ALERTAS, CATEGORIAS, CONFIANCA_MINIMA
 from coletor.site import graficos as G
 from coletor.site.modelo import (
-    DESC_SINAL, DESFECHO_GRUPO, NOME_ALERTA, NOME_CATEGORIA, NOME_DESFECHO, NOME_IMPACTO, NOME_SINAL, NOME_TEMA,
-    com_efeito, mediana_legislatura, sem_efeito,
+    DESC_CATEGORIA_DOC, DESC_SINAL, DESFECHO_GRUPO, NOME_ALERTA, NOME_CATEGORIA, NOME_CATEGORIA_DOC, NOME_DESFECHO, NOME_EIXO,
+    NOME_IMPACTO, NOME_SINAL, NOME_SUBCATEGORIA_DOC, NOME_TEMA, NOME_TIPO_DOC, TIPOS_DOC, com_efeito, mediana_legislatura,
+    sem_efeito, situacao_lei,
 )
 
 REPO = "https://github.com/marco-jardim/radar-vereadores-niteroi"
@@ -18,11 +24,34 @@ NAV = [
     ("index.html", "Início"),
     ("leis.html", "Leis aprovadas"),
     ("projetos.html", "Projetos"),
+    ("atividades.html", "Atividades"),
     ("ruido.html", "Sem efeito e polêmicas"),
     ("analises.html", "Análises"),
     ("metodologia.html", "Metodologia"),
 ]
 CLASSE_IMPACTO = {3: "imp-3", 2: "imp-2", 1: "imp-1", 0: "imp-0", None: "imp-x"}
+FONTE_ESTATICA = Path(__file__).resolve().parents[2] / "site_src"
+LIMITE_ITENS_RUIDO = 30
+PASSO_LISTA = 40  # itens por "Mostrar mais"; igual a PASSO em site_src/app.js
+# Sem filtros, projetos.html carrega só a prévia (pl-recentes, as PASSO_LISTA primeiras linhas) e traz o resumo
+# exato no HTML (resumo_projetos); as três fatias completas vêm depois da primeira pintura (app.js).
+INICIAIS_PL = {"leis.html": ["dic-pl", "pl-lei"], "projetos.html": ["dic-pl", "pl-recentes"]}
+CHIPS_IMPACTO = (("3", "Alto"), ("2", "Médio"), ("1", "Baixo"), ("0", "Sem efeito"), ("x", "Não avaliado"))
+SISCAM = "https://consultaniteroi.siscam.com.br/"
+NOVA_ABA = '<span class="so-leitor"> (abre em nova aba)</span>'
+# O detalhe do SISCAM é aberto num <dialog> nativo (app.js cria o iframe). O link comum fica sempre visível,
+# para o caso de o SISCAM passar a bloquear a exibição incorporada.
+DIALOGO_SISCAM = f"""<dialog id="siscam-dialogo" class="dialogo-siscam" aria-labelledby="siscam-titulo">
+ <div class="dialogo-caixa">
+  <div class="dialogo-cab">
+   <h2 id="siscam-titulo">Detalhe no SISCAM</h2>
+   <a id="siscam-abrir" href="{SISCAM}" target="_blank" rel="noopener">abrir no SISCAM{NOVA_ABA}</a>
+   <button type="button" id="siscam-fechar" class="fechar" autofocus>Fechar</button>
+  </div>
+  <p class="dialogo-nota">Página do SISCAM exibida aqui dentro. Se ela não aparecer, use o link “abrir no SISCAM”.</p>
+  <div id="siscam-quadro" class="dialogo-quadro"></div>
+ </div>
+</dialog>"""
 
 
 def esc(x) -> str:
@@ -67,7 +96,112 @@ def plural(n: int, um: str, varios: str) -> str:
     return f"{n} {um if n == 1 else varios}"
 
 
-def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: str = "") -> str:
+def versao_bytes(conteudo: bytes) -> str:
+    return hashlib.sha1(conteudo).hexdigest()[:10]
+
+
+def versao_estatica(nome: str) -> str:
+    return versao_bytes((FONTE_ESTATICA / nome).read_bytes())
+
+
+def _cmp(x, y) -> int:
+    return (x > y) - (x < y)
+
+
+def _ordem_partes(a: tuple[str, dict], b: tuple[str, dict]) -> int:
+    """Mesma ordem de ordemPartes em dados.js: mais recente primeiro; depois ano, tipo, parte e nome."""
+    (na, ea), (nb, eb) = a, b
+    return (_cmp(eb.get("ate") or "", ea.get("ate") or "") or _cmp(eb.get("ano") or 0, ea.get("ano") or 0)
+            or _cmp(ea.get("tipo") or "", eb.get("tipo") or "") or _cmp(ea.get("parte") or 0, eb.get("parte") or 0) or _cmp(na, nb))
+
+
+def plano_docs(arquivos: dict, tipos: list[str] | None = None, ano: int | None = None, alvo: int = PASSO_LISTA) -> list[str]:
+    """Espelho de fatiasDocs (dados.js) sem autor nem filtro de conteúdo: menor prefixo de partes que garante `alvo` itens em ordem."""
+    candidatos = sorted(((n, e) for n, e in arquivos.items() if e.get("familia") == "doc"
+                         and (tipos is None or e.get("tipo") in tipos) and (ano is None or e.get("ano") == ano)),
+                        key=cmp_to_key(_ordem_partes))
+    k = len(candidatos)
+    for k in range(1, len(candidatos) + 1):
+        if k == len(candidatos):
+            break
+        fronteira = candidatos[k][1].get("ate") or ""
+        if sum(e["n"] for _, e in candidatos[:k] if (e.get("de") or "") > fronteira) >= alvo:
+            break
+    return [n for n, _ in candidatos[:k]]
+
+
+def ano_padrao_doc(arquivos: dict) -> int | None:
+    """Ano mais recente com documentos: o filtro inicial de atividades.html."""
+    return max((e["ano"] for e in arquivos.values() if e.get("familia") == "doc"), default=None)
+
+
+def iniciais_por_pagina(manifesto: dict) -> dict[str, list[str]]:
+    """Arquivos JSON que cada página carrega sem filtros; base do orçamento de carga inicial."""
+    iniciais = {k: list(v) for k, v in INICIAIS_PL.items()}
+    ano = ano_padrao_doc(manifesto["arquivos"])
+    if ano is not None and "dic-doc" in manifesto["arquivos"]:
+        iniciais["atividades.html"] = ["dic-doc", *plano_docs(manifesto["arquivos"], ano=ano)]
+    return iniciais
+
+
+def cabecalho_dados(manifesto: dict | None, ativo: str, prefixo: str) -> str:
+    if not manifesto:
+        return ""
+    iniciais = iniciais_por_pagina(manifesto)
+    if ativo not in iniciais:
+        return ""
+    inicial = iniciais[ativo]
+    if ativo == "atividades.html":
+        # Só as famílias de documentos; o PL continua com o seu build.
+        arquivos = {n: e for n, e in manifesto["arquivos"].items() if e.get("familia")}
+        dados = {"esquema": manifesto["esquema"], "build": manifesto["build"], "build_doc": manifesto["build_doc"],
+                 "inicial": inicial, "arquivos": arquivos}
+    else:
+        arquivos = {n: e for n, e in manifesto["arquivos"].items() if not e.get("familia")}
+        dados = {"esquema": manifesto["esquema"], "build": manifesto["build"], "inicial": inicial, "arquivos": arquivos}
+    texto = json.dumps(dados, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
+    partes = [f'<script type="application/json" id="manifesto-dados">{texto}</script>']
+    # Uma página estática não conhece a query: escolha antes de iniciar os preloads.
+    estaticos = inicial if ativo == "leis.html" else inicial[:1]
+    for nome in estaticos:
+        partes.append(f'<link rel="preload" as="fetch" crossorigin href="{esc(prefixo + dados["arquivos"][nome]["url"])}">')
+    if ativo == "atividades.html":
+        partes.append("""<script>
+(function () {
+  if (location.search) return;
+  var m = JSON.parse(document.getElementById("manifesto-dados").textContent);
+  m.inicial.slice(1).forEach(function (n) {
+    var link = document.createElement("link");
+    link.rel = "preload"; link.as = "fetch"; link.crossOrigin = "anonymous";
+    link.href = """ + json.dumps(prefixo) + """ + m.arquivos[n].url;
+    document.head.appendChild(link);
+  });
+})();
+</script>""")
+    if ativo == "projetos.html":
+        # Sem consulta, só a prévia; com consulta, as fatias que filtrar() (app.js) vai pedir, e com-consulta
+        # esconde as contagens do HTML (classe "inicial"), que só valem sem filtros.
+        partes.append("""<script>
+(function () {
+  var m = JSON.parse(document.getElementById("manifesto-dados").textContent), grupos = ["lei", "andamento", "sem_exito"];
+  var desfecho = new URLSearchParams(location.search).get("desfecho");
+  var nomes = !location.search ? ["pl-recentes"] : grupos.indexOf(desfecho) >= 0 ? ["pl-" + desfecho]
+    : grupos.map(function (g) { return "pl-" + g; });
+  if (location.search) document.documentElement.classList.add("com-consulta");
+  nomes.forEach(function (n) {
+    if (!m.arquivos[n]) return;
+    var link = document.createElement("link");
+    link.rel = "preload"; link.as = "fetch"; link.crossOrigin = "anonymous";
+    link.href = """ + json.dumps(prefixo) + """ + m.arquivos[n].url;
+    document.head.appendChild(link);
+  });
+})();
+</script>""")
+    return "\n".join(partes)
+
+
+def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: str = "", manifesto: dict | None = None,
+           dialogo: bool = False) -> str:
     desc = esc(descricao or "Quais leis de Niterói mudam a cidade, quem as escreveu, e quanto da produção da Câmara é homenagem, "
                "lei sem efeito ou pauta polêmica. Dados do SISCAM atualizados toda semana.")
     nav = "".join(
@@ -85,8 +219,9 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{prefixo}estilo.css">
+<link rel="stylesheet" href="{prefixo}estilo.css?v={versao_estatica('estilo.css')}">
 <link rel="icon" href="{prefixo}favicon.svg" type="image/svg+xml">
+{cabecalho_dados(manifesto, ativo, prefixo)}
 </head>
 <body>
 <a class="pular" href="#conteudo">Ir para o conteúdo</a>
@@ -100,8 +235,9 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
 <footer class="rodape">
  <p>Dados públicos do <a href="https://consultaniteroi.siscam.com.br/">SISCAM da Câmara Municipal de Niterói</a>, coletados toda semana. Classificação por regras, curadoria com fonte e IA, explicada na <a href="{prefixo}metodologia.html">metodologia</a>. Código aberto sob GPL v3 no <a href="{REPO}">GitHub</a>. Encontrou um erro? <a href="{REPO}/issues/new">Abra uma issue</a>.</p>
 </footer>
-<div id="tip" role="tooltip" hidden></div>
-<script src="{prefixo}app.js" defer></script>
+{(DIALOGO_SISCAM + chr(10)) if dialogo else ''}<div id="tip" role="tooltip" hidden></div>
+<script src="{prefixo}dados.js?v={versao_estatica('dados.js')}" defer></script>
+<script src="{prefixo}app.js?v={versao_estatica('app.js')}" defer></script>
 </body>
 </html>
 """
@@ -141,7 +277,7 @@ def tags_html(p: dict, contestar: bool = True) -> str:
     sinais = "".join(f'<span class="tag sinal" title="{esc(DESC_SINAL.get(s, ""))}">{esc(NOME_SINAL.get(s, s))}</span>'
                      for s in p["sinais"] if s != "autorizativa")
     if p.get("repete"):
-        sinais += f'<a class="tag sinal" href="{esc(p["repete"]["url"])}">igual ao PL {esc(p["repete"]["numero"])}</a>'
+        sinais += f'<a class="tag sinal" href="{esc(p["repete"]["url"])}" target="_blank" rel="noopener">igual ao PL {esc(p["repete"]["numero"])}{NOVA_ABA}</a>'
     if not (alertas or sinais):
         return ""
     link = ""
@@ -155,8 +291,9 @@ def cartao_lei(p: dict, prefixo: str) -> str:
     resumo = p["resumo"] or legivel(p["ementa"])
     tema = NOME_TEMA.get(p["tema"], "") if p["tema"] not in ("outro", "homenagem") else ""
     return f"""<article class="cartao {CLASSE_IMPACTO[p['impacto']]}">
- <p class="cartao-topo">{selo_impacto(p)}<span>Lei {esc(lei.get('numero') or '')} · {data_br(lei.get('data'))}</span></p>
- <h3><a href="{esc(p['url'])}">{esc(resumo)}</a></h3>
+ <p class="cartao-topo">{selo_impacto(p)}<span>Lei {esc(lei.get('numero') or '')} · {esc(data_br(lei['data'])) if lei.get('data') else 'data não informada'}</span></p>
+ <p class="lei-situacao">{esc(situacao_lei(lei))}</p>
+ <h3><a href="{esc(p['url'])}" target="_blank" rel="noopener">{esc(resumo)}{NOVA_ABA}</a></h3>
  {f'<p class="publico">Afeta: {esc(p["publico"])}{" · " + esc(tema) if tema else ""}</p>' if p['publico'] or tema else ''}
  <p class="cartao-autor">{autores_html(p, prefixo)}{f'<span class="partido">{esc(p["partido"])}</span>' if p["partido"] else ''}</p>
 </article>"""
@@ -165,12 +302,81 @@ def cartao_lei(p: dict, prefixo: str) -> str:
 def item_projeto(p: dict, prefixo: str) -> str:
     lei = p.get("lei") or {}
     lei_txt = f" · Lei {lei['numero']}" if lei.get("numero") else ""
+    if p["desfecho"] == "virou_lei":
+        lei_txt += f" · {situacao_lei(lei)} · {data_br(lei['data']) if lei.get('data') else 'data não informada'}"
     resumo = f'<p class="resumo-ia">{esc(p["resumo"])}</p>' if p["resumo"] else ""
     return f"""<li class="projeto d-{esc(DESFECHO_GRUPO.get(p['desfecho'], 'andamento'))}">
- <p class="cab"><a href="{esc(p['url'])}">PL {esc(p['numero'])}</a><span>{data_br(p['data'])}</span><span class="desfecho">{esc(NOME_DESFECHO.get(p['desfecho'], p['desfecho']))}{esc(lei_txt)}</span>{selo_impacto(p)}</p>
+ <p class="cab"><a href="{esc(p['url'])}" target="_blank" rel="noopener">PL {esc(p['numero'])}{NOVA_ABA}</a><span>{data_br(p['data'])}</span><span class="desfecho">{esc(NOME_DESFECHO.get(p['desfecho'], p['desfecho']))}{esc(lei_txt)}</span>{selo_impacto(p)}</p>
  {resumo}<p class="ementa">{esc(legivel(p['ementa']))}</p>
  <p class="autoria">{autores_html(p, prefixo)}</p>
  {tags_html(p)}
+</li>"""
+
+
+def botoes_siscam(url: str, rotulo: str) -> str:
+    """Botão que abre o detalhe num diálogo (visível só com JS) e link comum, sempre presente, em nova aba."""
+    return (f'<p class="acoes-item"><button type="button" class="ver-siscam" data-url="{esc(url)}" data-rotulo="{esc(rotulo)}">'
+            f'Ver no SISCAM<span class="so-leitor"> ({esc(rotulo)})</span></button> '
+            f'<a class="abrir-siscam" href="{esc(url)}" target="_blank" rel="noopener">abrir no SISCAM'
+            f'<span class="so-leitor"> ({esc(rotulo)})</span>{NOVA_ABA}</a></p>')
+
+
+def rotulo_documento(d: dict) -> str:
+    return f"{NOME_TIPO_DOC[d['tipo']][2]} {d['numero']}"
+
+
+def situacao_legivel(s: str) -> str:
+    return s[:1] + s[1:].lower() if s.isupper() else s
+
+
+def meta_documento(d: dict) -> list[str]:
+    """Subcategoria, bairro, resposta e publicação; mesma ordem de metaD em app.js."""
+    meta = [NOME_SUBCATEGORIA_DOC.get((d["tipo"], d["subcategoria"]), d["subcategoria"])]
+    if d["bairro"]:
+        meta.append(f"Bairro: {d['bairro']}")
+    if d["tipo"] == "requerimento":
+        if d["respondido"]:
+            txt = "Respondido"
+            if d["respondido_em"]:
+                txt += f" em {data_br(d['respondido_em'][:10])}"
+            if d["dias_ate_resposta"] is not None:
+                txt += f" ({plural(d['dias_ate_resposta'], 'dia', 'dias')})"
+            meta.append(txt)
+        else:
+            meta.append("Sem resposta registrada")
+    pub = d["publicacao"]
+    if pub:
+        meta.append("Publicado" + (f" nº {pub['numero']}" if pub.get("numero") else "")
+                    + (f" em {data_br(str(pub['data'])[:10])}" if pub.get("data") else ""))
+    if d["detalhe_pendente"]:
+        meta.append("detalhe ainda não coletado")
+    return meta
+
+
+def autores_documento_html(d: dict, prefixo: str, maximo: int = 3) -> str:
+    """Autores na ordem do SISCAM, sem destacar principal: a listagem não separa autor de coautor."""
+    chips = []
+    for a in d["autores"][:maximo]:
+        if a["vereador"] and a["pagina"]:
+            chips.append(f'<a class="chip" href="{prefixo}vereadores/{esc(a["slug"])}.html">{esc(a["exibicao"])}</a>')
+        else:
+            chips.append(f'<span class="chip{"" if a["vereador"] else " chip-exec"}">{esc(a["exibicao"])}</span>')
+    resto = d["autores"][maximo:]
+    if resto:
+        chips.append(f'<span class="coautores" title="{esc(", ".join(a["exibicao"] for a in resto))}">'
+                     f'e mais {plural(len(resto), "autor", "autores")}</span>')
+    return "".join(chips)
+
+
+def item_documento(d: dict, prefixo: str) -> str:
+    rotulo = rotulo_documento(d)
+    assunto = f'<p class="assunto">Assunto: {esc(d["assunto"])}</p>' if d.get("assunto") else ""
+    return f"""<li class="projeto doc t-{esc(d['tipo'])}">
+ <p class="cab"><a href="{esc(d['url'])}" target="_blank" rel="noopener">{esc(rotulo)}{NOVA_ABA}</a><span>{data_br(d['data'])}</span><span class="desfecho">{esc(situacao_legivel(d['situacao']))}</span><span class="selo cat-{esc(d['categoria'])}">{esc(NOME_CATEGORIA_DOC.get(d['categoria'], d['categoria']))}</span></p>
+ {assunto}<p class="ementa">{esc(legivel(d['ementa']))}</p>
+ <p class="publico">{esc(' · '.join(meta_documento(d)))}</p>
+ <p class="autoria">{autores_documento_html(d, prefixo)}</p>
+ {botoes_siscam(d['url'], rotulo)}
 </li>"""
 
 
@@ -205,7 +411,12 @@ LEGENDA_BARRA = """<ul class="leg-graf" aria-label="Legenda das barras">
 
 
 # ------------------------------------------------------------------------- início
-def linha_placar(pessoa: dict, leg: str, maximo: int) -> str:
+PLACAR_DOCS = (("indicacao", "indicacoes", "indicação", "indicações"), ("mocao", "mocoes", "moção", "moções"),
+               ("requerimento", "requerimentos", "requerimento", "requerimentos"))
+
+
+def linha_placar(pessoa: dict, leg: str, maximo: int, docs: dict | None = None) -> str:
+    """docs: contagem por tipo de documento na legislatura; None quando não há documentos coletados."""
     m = pessoa["mandatos"][leg]
     me = m["metricas"]
     status = []
@@ -216,10 +427,15 @@ def linha_placar(pessoa: dict, leg: str, maximo: int) -> str:
     dados = " ".join(f'data-{k.replace("_", "-")}="{v if v is not None else -1}"' for k, v in me.items())
     alerta = f'<span class="n-alerta">{plural(me["polemicos"], "projeto com alerta", "projetos com alerta")}</span>' if me["polemicos"] else ""
     sem = f'<span>{me["leis_sem_efeito"]} sem efeito</span>' if me["leis_sem_efeito"] else ""
-    return f"""<li class="linha" {dados} data-nome="{esc(pessoa['nome'])}" data-eleito="{int(m['eleito'])}" data-partido="{esc(m['partido'])}">
+    dados_docs = colunas_docs = ""
+    if docs is not None:
+        dados_docs = "".join(f' data-{chave}="{docs.get(t, 0)}"' for t, chave, _, _ in PLACAR_DOCS)
+        colunas_docs = '<span class="n-docs">' + "".join(
+            f'<span><b>{milhar(docs.get(t, 0))}</b> {um if docs.get(t, 0) == 1 else varios}</span>' for t, _, um, varios in PLACAR_DOCS) + "</span>"
+    return f"""<li class="linha" {dados}{dados_docs} data-nome="{esc(pessoa['nome'])}" data-eleito="{int(m['eleito'])}" data-partido="{esc(m['partido'])}">
  <a class="quem" href="vereadores/{pessoa['slug']}.html"><strong>{esc(pessoa['nome'])}</strong> <span class="partido">{esc(m['partido'])}</span>{''.join(f'<span class="status">{esc(s)}</span>' for s in status)}</a>
  {barra_producao(me, maximo)}
- <p class="numeros"><span class="n-efeito"><b>{me['leis_efeito']}</b> {'lei com efeito' if me['leis_efeito'] == 1 else 'leis com efeito'}</span><span>{me['leis']} de {plural(me['apresentados'], 'projeto', 'projetos')}{' · ' if sem else ''}{sem}</span>{alerta}</p>
+ <p class="numeros"><span class="n-efeito"><b>{me['leis_efeito']}</b> {'lei com efeito' if me['leis_efeito'] == 1 else 'leis com efeito'}</span><span>{me['leis']} de {plural(me['apresentados'], 'projeto', 'projetos')}{' · ' if sem else ''}{sem}</span>{alerta}{colunas_docs}</p>
 </li>"""
 
 
@@ -239,6 +455,13 @@ def gerar_index(modelo: dict) -> str:
 
     blocos, abas = [], []
     partidos_por_leg = {}
+    tem_docs = bool(modelo.get("documentos"))
+
+    def docs_de(p: dict, leg_id: str) -> dict | None:
+        if not tem_docs:
+            return None
+        return (((p.get("atividade") or {}).get("por_leg") or {}).get(leg_id) or {}).get("tipos") or {}
+
     for leg in reversed(legs):
         pessoas = [p for p in modelo["pessoas"].values() if leg["id"] in p["mandatos"]]
         pessoas.sort(key=lambda p: (-p["mandatos"][leg["id"]]["metricas"]["leis_efeito"], -p["mandatos"][leg["id"]]["metricas"]["leis"], p["nome"]))
@@ -248,12 +471,18 @@ def gerar_index(modelo: dict) -> str:
         nota_zero = f'<p class="nota">Eleitos sem nenhuma lei de autoria própria nesta legislatura: {esc(", ".join(zerados))}.</p>' if zerados else ""
         blocos.append(f"""<section class="legislatura" id="leg-{esc(leg['id'])}" data-leg="{esc(leg['id'])}"{'' if leg['id'] == atual else ' hidden'}>
 {nota_zero}
-<ol class="placar">{''.join(linha_placar(p, leg['id'], maximo) for p in pessoas)}</ol>
+<ol class="placar">{''.join(linha_placar(p, leg['id'], maximo, docs_de(p, leg['id'])) for p in pessoas)}</ol>
 </section>""")
         abas.append(f'<button type="button" role="tab" aria-selected="{"true" if leg["id"] == atual else "false"}" data-alvo="leg-{esc(leg["id"])}">{esc(leg["id"])}</button>')
     opcoes_partido = "".join(f'<option value="{esc(pt)}">{esc(pt)}</option>' for pt in sorted({x for v in partidos_por_leg.values() for x in v}))
     atualizado = (modelo["meta"].get("coleta") or {}).get("em", "")[:10]
     pct_sem = round(100 * len(sem) / len(leis_atual)) if leis_atual else 0
+    ordem_docs = explica_docs = ""
+    if tem_docs:
+        ordem_docs = "".join(f'\n    <option value="{chave}">{varios.capitalize()}</option>' for _, chave, _, varios in PLACAR_DOCS)
+        explica_docs = (' Indicações, moções e requerimentos aparecem à parte, sem entrar na barra: contam todo documento em que o vereador '
+                        'aparece como autor, inclusive os assinados em conjunto, porque a listagem do SISCAM não separa autor de coautor. '
+                        'Veja todos em <a href="atividades.html">Atividades</a>.')
 
     corpo = f"""<section class="abertura">
  <h1>Leis que mudam a cidade, e quem as escreveu.</h1>
@@ -278,7 +507,7 @@ def gerar_index(modelo: dict) -> str:
 
 <section aria-labelledby="t-placar">
  <div class="cab-secao"><h2 id="t-placar" class="h-secao">Produção de cada vereador como autor principal</h2></div>
- <p class="explica">O comprimento da barra é o total de projetos apresentados; as cores mostram o que aconteceu com eles. Projetos assinados como coautor não entram, para que assinaturas em bloco não inflem a conta.</p>
+ <p class="explica">O comprimento da barra é o total de projetos apresentados; as cores mostram o que aconteceu com eles. Projetos assinados como coautor não entram, para que assinaturas em bloco não inflem a conta.{explica_docs}</p>
  <div class="controles">
   <div role="tablist" aria-label="Legislatura" class="abas">{''.join(abas)}</div>
   <label>Ordenar por
@@ -289,7 +518,7 @@ def gerar_index(modelo: dict) -> str:
     <option value="leis-sem-efeito">Leis sem efeito prático</option>
     <option value="pct-sem-efeito">% de leis sem efeito</option>
     <option value="polemicos">Projetos com alerta</option>
-    <option value="taxa-aprovacao">Taxa de aprovação</option>
+    <option value="taxa-aprovacao">Taxa de aprovação</option>{ordem_docs}
     <option value="nome">Nome</option>
    </select>
   </label>
@@ -308,56 +537,184 @@ def gerar_index(modelo: dict) -> str:
 
 
 # ------------------------------------------------------------- leis e projetos
-def filtros_lista(modo: str) -> str:
+def chave_impacto(p: dict) -> str:
+    """Chip de impacto de um registro de dados_cliente; mesma regra de chaveImp em app.js."""
+    if p["c"] == "simbolica" or "autorizativa" in p["s"]:
+        return "0"
+    return "x" if p["i"] is None else str(p["i"])
+
+
+def resumo_projetos(cliente: dict) -> dict:
+    """Contagens de projetos.html sem filtros, com as regras de aplicarFiltros (app.js) no modo projetos.
+
+    Vão no HTML para que a página mostre os totais exatos antes de carregar as fatias completas:
+    a prévia (pl-recentes) só tem as primeiras linhas e nunca serve para contar.
+    """
+    projetos = cliente["projetos"]
+    chips = Counter(chave_impacto(p) for p in projetos)
+    return {"total": len(projetos), "ef": sum(1 for p in projetos if p["ef"]), "se": sum(1 for p in projetos if p["se"]),
+            "pol": sum(1 for p in projetos if p["pol"]), "chips": {k: chips[k] for k, _ in CHIPS_IMPACTO}}
+
+
+def contagem_projetos(r: dict) -> str:
+    """O mesmo texto que aplicarFiltros (app.js) escreve no modo projetos; "inicial" marca que vale sem filtros."""
+    n = r["total"]
+    detalhe = (f' · <b>{r["ef"]}</b> com efeito (viraram lei) · <b>{r["se"]}</b> sem efeito prático'
+               f' · <b>{r["pol"]}</b> com alerta') if n else ""
+    return f'<p class="contagem inicial"><b>{n}</b> {"projeto" if n == 1 else "projetos"}{detalhe}</p>'
+
+
+def filtros_lista(modo: str, cliente: dict | None = None) -> str:
+    resumo = resumo_projetos(cliente) if modo == "projetos" and cliente is not None else None
+    cliente = cliente or {"projetos": [], "pessoas": {}, "temas": {}, "legislaturas": []}
+    base = [p for p in cliente["projetos"] if modo != "leis" or p["g"] == "lei"]
+    autores, partidos, temas, anos = {}, set(), Counter(), set()
+    for p in base:
+        autores.update({s: cliente["pessoas"].get(s, nome) for nome, s in p["au"] if s})
+        if p["pt"]:
+            partidos.add(p["pt"])
+        temas[p["t"]] += 1
+        anos.add(str(p["ld"][:4] if modo == "leis" and p["ld"] else p["a"]))
+
+    def opcoes(pares) -> str:
+        return "".join(f'<option value="{esc(k)}">{esc(v)}</option>' for k, v in pares)
+
+    def chave_nome(par: tuple[str, str]) -> str:
+        return "".join(c for c in unicodedata.normalize("NFD", par[1].lower()) if not unicodedata.combining(c))
+
+    op_autores = opcoes(sorted(autores.items(), key=chave_nome))
+    op_partidos = opcoes((p, p) for p in sorted(partidos))
+    op_temas = opcoes((t, f"{cliente['temas'].get(t, t)} ({n})") for t, n in temas.most_common())
+    op_legs = opcoes((l, l) for l in reversed(cliente["legislaturas"]))
+    op_anos = opcoes((a, a) for a in sorted(anos, reverse=True))
+
+    def chip(k: str, rotulo: str) -> str:
+        n = f'<span class="n inicial">{resumo["chips"][k]}</span>' if resumo else ""
+        return f'  <label><input type="checkbox" name="imp" value="{k}"> {rotulo}{n}</label>'
+
+    chips = "\n".join(chip(k, rotulo) for k, rotulo in CHIPS_IMPACTO)
+    atributos_resumo = f' data-total="{resumo["total"]}"' if resumo else ""
+    texto_resumo = contagem_projetos(resumo) if resumo else ""
+    sem_js = {"leis": "A lista de leis precisa de JavaScript. As leis de cada vereador também aparecem na página dele.",
+              "projetos": "A lista de projetos precisa de JavaScript. Os projetos de cada vereador também aparecem na página dele."}
     extra = ""
     if modo == "projetos":
         extra = """
   <label>Desfecho <select id="f-desfecho"><option value="">Todos</option><option value="lei">Virou lei</option><option value="andamento">Em andamento</option><option value="sem_exito">Sem êxito</option></select></label>
-  <label>Sinal <select id="f-sinal"><option value="">Qualquer</option><option value="alerta">Com alerta de polêmica</option><option value="autorizativa">Lei autorizativa</option><option value="repete_projeto">Repete projeto anterior</option><option value="veto">Vetado ou com veto</option><option value="parecer_contrario_ccj">Parecer contrário da CCJ</option></select></label>"""
+  <label>Sinal <select id="f-sinal"><option value="">Qualquer</option><option value="alerta">Com alerta de polêmica</option><option value="curadoria">Revisado por curadoria</option><option value="alerta_ia">Alerta de IA (sem curadoria)</option><option value="autorizativa">Lei autorizativa</option><option value="repete_projeto">Repete projeto anterior</option><option value="veto">Vetado ou com veto</option><option value="parecer_contrario_ccj">Parecer contrário da CCJ</option></select></label>"""
     return f"""<form class="filtros" role="search" onsubmit="return false" data-modo="{modo}">
  <div class="linha-busca"><label class="busca-q">Buscar <input type="search" id="q" placeholder="tema, número, nome de vereador…" autocomplete="off"></label>
   <label>Ordenar <select id="f-ordem"><option value="recente">Mais recentes</option><option value="impacto">Maior impacto</option>{'<option value="rapida">Aprovadas mais rápido</option>' if modo == 'leis' else ''}</select></label></div>
  <fieldset class="chips-impacto"><legend>Impacto</legend>
-  <label><input type="checkbox" name="imp" value="3"> Alto</label>
-  <label><input type="checkbox" name="imp" value="2"> Médio</label>
-  <label><input type="checkbox" name="imp" value="1"> Baixo</label>
-  <label><input type="checkbox" name="imp" value="0"> Sem efeito</label>
-  <label><input type="checkbox" name="imp" value="x"> Não avaliado</label>
+{chips}
  </fieldset>
  <details class="mais-filtros" open><summary>Mais filtros</summary>
  <div class="grade-filtros">
-  <label>Autoria <select id="f-origem"><option value="">Todas</option><option value="vereador">Vereadores</option><option value="executivo">Prefeitura</option></select></label>
-  <label>Vereador <select id="f-autor"><option value="">Todos</option></select></label>
-  <label>Partido <select id="f-partido"><option value="">Todos</option></select></label>
-  <label>Tema <select id="f-tema"><option value="">Todos</option></select></label>
-  <label>Legislatura <select id="f-leg"><option value="">Todas</option></select></label>
-  <label>Ano <select id="f-ano"><option value="">Todos</option></select></label>{extra}
-  <label class="check"><input type="checkbox" id="f-coautor"> Incluir coautoria</label>
+  <label>Origem <select id="f-origem"><option value="">Todas</option><option value="vereador">Vereadores</option><option value="executivo">Prefeitura</option></select></label>
+   <label>Vereador <select id="f-autor"><option value="">Todos</option>{op_autores}</select></label>
+   <label>Partido <select id="f-partido"><option value="">Todos</option>{op_partidos}</select></label>
+   <label>Tema <select id="f-tema"><option value="">Todos</option>{op_temas}</select></label>
+   <label>Legislatura <select id="f-leg"><option value="">Todas</option>{op_legs}</select></label>
+   <label>Ano <select id="f-ano"><option value="">Todos</option>{op_anos}</select></label>{extra}
+  <label>Autoria <select id="f-coautor" disabled><option value="">Só autoria principal</option><option value="1">Incluir coautoria</option><option value="so">Apenas coautoria</option></select></label>
  </div>
  </details>
  <p class="acoes-filtro"><button type="button" id="limpar">Limpar filtros</button> <button type="button" id="csv">Baixar CSV</button></p>
 </form>
-<div class="resumo-filtro" id="resumo-filtro" aria-live="polite"></div>
+<div class="resumo-filtro" id="resumo-filtro" aria-live="polite"{atributos_resumo}>{texto_resumo}</div>
 <ol id="resultados" class="projetos"></ol>
-<button type="button" id="mais" class="mais" hidden>Mostrar mais</button>"""
+<button type="button" id="mais" class="mais" hidden>Mostrar mais</button>
+<noscript><p class="vazio">{esc(sem_js[modo])}</p></noscript>"""
 
 
-def gerar_leis() -> str:
+def gerar_leis(cliente: dict | None = None, manifesto: dict | None = None) -> str:
     corpo = f"""<section class="abertura">
  <h1>Leis aprovadas</h1>
  <p>Todas as leis que saíram de projetos apresentados desde 2021, com o impacto estimado e um resumo em linguagem simples. Filtre por impacto, tema, vereador ou partido; o quadro abaixo dos filtros mostra quem mais aprovou leis no recorte escolhido.</p>
 </section>
-{filtros_lista('leis')}"""
-    return pagina("Leis aprovadas · Radar dos Vereadores de Niterói", corpo, "leis.html")
+{filtros_lista('leis', cliente)}"""
+    return pagina("Leis aprovadas · Radar dos Vereadores de Niterói", corpo, "leis.html", manifesto=manifesto, dialogo=True)
 
 
-def gerar_projetos() -> str:
+def gerar_projetos(cliente: dict | None = None, manifesto: dict | None = None) -> str:
     corpo = f"""<section class="abertura">
  <h1>Todos os projetos de lei</h1>
- <p>Os {''}projetos apresentados desde 2021, incluindo os arquivados, vetados e em tramitação. Os filtros ficam no endereço da página, então dá para compartilhar uma busca.</p>
+ <p>Os projetos apresentados desde 2021, incluindo os arquivados, vetados e em tramitação. Os filtros ficam no endereço da página, então dá para compartilhar uma busca.</p>
 </section>
-{filtros_lista('projetos')}"""
-    return pagina("Projetos de lei · Radar dos Vereadores de Niterói", corpo, "projetos.html")
+{filtros_lista('projetos', cliente)}"""
+    return pagina("Projetos de lei · Radar dos Vereadores de Niterói", corpo, "projetos.html", manifesto=manifesto, dialogo=True)
+
+
+# ------------------------------------------------------------------ atividades
+def _chave_nome(nome: str) -> str:
+    return "".join(c for c in unicodedata.normalize("NFD", nome.lower()) if not unicodedata.combining(c))
+
+
+def gerar_atividades(modelo: dict, manifesto: dict | None = None) -> str:
+    docs = modelo.get("documentos") or []
+    abertura = """<section class="abertura">
+ <h1>Atividades na Câmara</h1>
+ <p>Indicações, moções, requerimentos, projetos de decreto legislativo e projetos de resolução apresentados desde 2021, separados dos projetos de lei. Filtre por tipo, ano, vereador, categoria ou bairro; cada item leva ao documento oficial no SISCAM. Os filtros ficam no endereço da página.</p>
+ <p class="atualizacao">Classificação por regras sobre a ementa · <a href="metodologia.html#atividades">como classificamos</a></p>
+</section>"""
+    titulo = "Atividades · Radar dos Vereadores de Niterói"
+    descricao = "Indicações, moções, requerimentos, PDLs e resoluções da Câmara de Niterói, por vereador, tipo, categoria e bairro."
+    ano_padrao = ano_padrao_doc(manifesto["arquivos"]) if manifesto and manifesto.get("build_doc") else None
+    if not docs or ano_padrao is None:
+        return pagina(titulo, abertura + '\n<p class="vazio">Nenhum documento coletado ainda.</p>', "atividades.html", descricao=descricao)
+
+    def opcoes(pares) -> str:
+        return "".join(f'<option value="{esc(k)}">{esc(v)}</option>' for k, v in pares)
+
+    por_tipo = Counter(d["tipo"] for d in docs)
+    por_ano = Counter(d["ano"] for d in docs)
+    autores = {a["slug"]: a["exibicao"] for d in docs for a in d["autores"] if a["vereador"]}
+    categorias = Counter(d["categoria"] for d in docs)
+    subcategorias = Counter((d["tipo"], d["subcategoria"]) for d in docs)
+    bairros = Counter(d["bairro"] for d in docs if d["bairro"])
+    situacoes = Counter(d["situacao"] for d in docs if d["situacao"])
+
+    op_tipos = opcoes((t, f"{NOME_TIPO_DOC[t][1]} ({milhar(por_tipo[t])})") for t in TIPOS_DOC if por_tipo[t])
+    op_anos = '<option value="todos">Todos os anos</option>' + "".join(
+        f'<option value="{a}"{" selected" if a == ano_padrao else ""}>{a} ({milhar(por_ano[a])})</option>' for a in sorted(por_ano, reverse=True))
+    op_autores = opcoes(sorted(autores.items(), key=lambda par: (_chave_nome(par[1]), par[0])))
+    ordem_cat = [c for c in NOME_CATEGORIA_DOC if categorias[c]] + sorted(c for c in categorias if c not in NOME_CATEGORIA_DOC)
+    op_cat = opcoes((c, f"{NOME_CATEGORIA_DOC.get(c, c)} ({milhar(categorias[c])})") for c in ordem_cat)
+    op_sub = ""
+    for t in TIPOS_DOC:
+        subs = sorted(((s, n) for (tt, s), n in subcategorias.items() if tt == t), key=lambda sn: (-sn[1], sn[0]))
+        if subs:
+            op_sub += (f'<optgroup label="{esc(NOME_TIPO_DOC[t][1])}">'
+                       + opcoes((f"{t}:{s}", f"{NOME_SUBCATEGORIA_DOC.get((t, s), s)} ({milhar(n)})") for s, n in subs) + "</optgroup>")
+    op_bairros = opcoes((b, f"{b} ({milhar(n)})") for b, n in sorted(bairros.items(), key=lambda bn: (_chave_nome(bn[0]), bn[0])))
+    op_sit = opcoes((s, f"{situacao_legivel(s)} ({milhar(n)})") for s, n in sorted(situacoes.items(), key=lambda sn: (-sn[1], sn[0])))
+    n_inicial = por_ano[ano_padrao]
+
+    corpo = f"""{abertura}
+<form class="filtros" role="search" onsubmit="return false" data-modo="atividades" data-ano-padrao="{ano_padrao}">
+ <div class="linha-busca"><label class="busca-q">Buscar <input type="search" id="q" placeholder="rua, bairro, número, assunto, vereador…" autocomplete="off"></label>
+  <label>Ordenar <select id="f-ordem"><option value="recente">Mais recentes</option><option value="antigo">Mais antigos</option></select></label></div>
+ <details class="mais-filtros" open><summary>Mais filtros</summary>
+ <div class="grade-filtros">
+  <label>Tipo <select id="f-tipo"><option value="">Todos</option>{op_tipos}</select></label>
+  <label>Ano <select id="f-ano">{op_anos}</select></label>
+  <label>Vereador <select id="f-autor"><option value="">Todos</option>{op_autores}</select></label>
+  <label>Categoria <select id="f-categoria"><option value="">Todas</option>{op_cat}</select></label>
+  <label>Subcategoria <select id="f-subcategoria"><option value="">Todas</option>{op_sub}</select></label>
+  <label>Bairro <select id="f-bairro"><option value="">Todos</option>{op_bairros}</select></label>
+  <label>Situação <select id="f-situacao"><option value="">Todas</option>{op_sit}</select></label>
+  <label>Resposta <select id="f-respondido"><option value="">Qualquer</option><option value="1">Requerimentos respondidos</option><option value="0">Requerimentos sem resposta</option></select></label>
+  <label>Publicação <select id="f-publicado"><option value="">Qualquer</option><option value="1">Publicados</option><option value="0">Não publicados</option></select></label>
+ </div>
+ </details>
+ <p class="acoes-filtro"><button type="button" id="limpar">Limpar filtros</button> <button type="button" id="csv">Baixar CSV</button></p>
+</form>
+<div class="resumo-filtro" id="resumo-filtro" aria-live="polite"><p class="contagem"><b>{milhar(n_inicial)}</b> {'documento' if n_inicial == 1 else 'documentos'} em {ano_padrao}</p></div>
+<p id="anuncio" class="so-leitor" aria-live="polite"></p>
+<ol id="resultados" class="projetos documentos"></ol>
+<button type="button" id="mais" class="mais" hidden>Mostrar mais</button>
+<noscript><p class="vazio">A lista de documentos precisa de JavaScript. Os documentos mais recentes de cada vereador também aparecem na página dele.</p></noscript>"""
+    return pagina(titulo, corpo, "atividades.html", descricao=descricao, manifesto=manifesto, dialogo=True)
 
 
 # --------------------------------------------------------------------- ruído
@@ -369,6 +726,7 @@ def gerar_ruido(modelo: dict) -> str:
     leis_ver = [p for p in ver if p["desfecho"] == "virou_lei"]
     simb = [p for p in leis_ver if p["categoria"] == "simbolica"]
     autoriz = [p for p in ver if "autorizativa" in p["sinais"]]
+    autoriz_leis = [p for p in autoriz if p["desfecho"] == "virou_lei"]
     rep = [p for p in ver if "repete_projeto" in p["sinais"]]
     curados = [p for p in projs if any(a["origem"] == "curadoria" for a in p["alertas"]) or "inconstitucionalidade_declarada" in p["sinais"]]
     ia = [p for p in projs if p not in curados and (p["polemico"] or p["risco_juridico"])]
@@ -399,8 +757,10 @@ def gerar_ruido(modelo: dict) -> str:
     graf_tipo = G.barras_horizontais("Leis simbólicas de vereadores desde 2021, por tipo", "",
                                      [{"rotulo": k, "v": v} for k, v in por_tipo.most_common()], [("Leis", "c-sem-efeito", "v")])
 
-    def lista(ps, vazio):
-        return f'<ol class="projetos">{"".join(item_projeto(p, "") for p in ps) or f"<li class=vazio>{vazio}</li>"}</ol>'
+    def lista(ps: list[dict], vazio: str, consulta: str) -> str:
+        itens = "".join(item_projeto(p, "") for p in ps[:LIMITE_ITENS_RUIDO]) or f'<li class="vazio">{esc(vazio)}</li>'
+        return (f'<ol class="projetos">{itens}</ol><p>Exibindo {min(len(ps), LIMITE_ITENS_RUIDO)} de {len(ps)}. '
+                f'<a href="projetos.html?{esc(consulta)}">Ver lista completa ({len(ps)})</a></p>')
 
     corpo = f"""<section class="abertura">
  <h1>Sem efeito e polêmicas</h1>
@@ -414,10 +774,10 @@ def gerar_ruido(modelo: dict) -> str:
 </div>
 <nav class="indice" aria-label="Nesta página"><a href="#por-vereador">Por vereador</a><a href="#polemicas">Polêmicas revisadas</a><a href="#ia">Marcadas por IA</a><a href="#autorizativas">Autorizativas</a><a href="#repetidos">Repetidos</a></nav>
 <section id="por-vereador">{graf}{graf_tipo}</section>
-<section id="polemicas"><h2 class="h-secao">Polêmicas revisadas por curadoria</h2><p class="explica">Cada item tem fonte pública em <a href="{REPO}/blob/main/config/curadoria.json">config/curadoria.json</a>.</p>{lista(curados, "Nenhum projeto revisado.")}</section>
-<section id="ia"><h2 class="h-secao">Marcadas por IA</h2><p class="explica">Alertas sugeridos pela IA a partir da ementa, com confiança mínima de {int(CONFIANCA_MINIMA * 100)}%. Podem conter erros; cada um tem link para contestar.</p>{lista(ia[:150], "Nenhum projeto marcado por IA ainda.")}</section>
-<section id="autorizativas"><h2 class="h-secao">Leis autorizativas aprovadas</h2><p class="explica">{esc(DESC_SINAL['autorizativa'])}</p>{lista([p for p in autoriz if p['desfecho'] == 'virou_lei'], "Nenhuma.")}</section>
-<section id="repetidos"><h2 class="h-secao">Projetos que repetem outro</h2><p class="explica">{esc(DESC_SINAL['repete_projeto'])} Reapresentar um projeto arquivado é legítimo; o sinal serve para ver o quanto da produção é reaproveitada.</p>{lista(sorted(rep, key=lambda p: p['data'] or '', reverse=True), "Nenhum.")}</section>"""
+<section id="polemicas"><h2 class="h-secao">Polêmicas revisadas por curadoria ({len(curados)})</h2><p class="explica">Cada item tem fonte pública em <a href="{REPO}/blob/main/config/curadoria.json">config/curadoria.json</a>.</p>{lista(curados, "Nenhum projeto revisado.", "sinal=curadoria")}</section>
+<section id="ia"><h2 class="h-secao">Marcadas por IA ({len(ia)})</h2><p class="explica">Alertas sugeridos pela IA a partir da ementa, com confiança mínima de {int(CONFIANCA_MINIMA * 100)}%. Podem conter erros; cada um tem link para contestar.</p>{lista(ia, "Nenhum projeto marcado por IA ainda.", "sinal=alerta_ia")}</section>
+<section id="autorizativas"><h2 class="h-secao">Leis autorizativas aprovadas ({len(autoriz_leis)})</h2><p class="explica">{esc(DESC_SINAL['autorizativa'])}</p>{lista(autoriz_leis, "Nenhuma.", "origem=vereador&desfecho=lei&sinal=autorizativa")}</section>
+<section id="repetidos"><h2 class="h-secao">Projetos que repetem outro ({len(rep)})</h2><p class="explica">{esc(DESC_SINAL['repete_projeto'])} Reapresentar um projeto arquivado é legítimo; o sinal serve para ver o quanto da produção é reaproveitada.</p>{lista(sorted(rep, key=lambda p: p['data'] or '', reverse=True), "Nenhum.", "origem=vereador&sinal=repete_projeto")}</section>"""
     return pagina("Sem efeito e polêmicas · Radar dos Vereadores de Niterói", corpo, "ruido.html")
 
 
@@ -472,6 +832,7 @@ def gerar_analises(modelo: dict) -> str:
     g4 = "" if len(temas) < 3 else G.barras_horizontais("Temas das leis de vereadores com efeito, desde 2021", "Tema atribuído pela IA a partir da ementa.",
                               [{"rotulo": NOME_TEMA.get(t, t), "v": n, "link": f"leis.html?efeito=1&tema={t}"} for t, n in temas.most_common(14)],
                               [("Leis com efeito", "c-efeito", "v")])
+    g5 = grafico_producao_por_tipo(modelo)
 
     blocos_leg = []
     for leg in reversed(modelo["legislaturas"]):
@@ -502,9 +863,27 @@ def gerar_analises(modelo: dict) -> str:
  <h1>Análises históricas</h1>
  <p>Como a produção legislativa de Niterói evoluiu desde 2021: quanto vira lei, quanto disso tem efeito, quanto tempo leva e quais temas dominam. Cada gráfico tem uma tabela com os números.</p>
 </section>
-<div class="graficos">{g1}{g2}{g3}{g4}</div>
+<div class="graficos">{g1}{g2}{g3}{g4}{g5}</div>
 {''.join(blocos_leg)}"""
     return pagina("Análises · Radar dos Vereadores de Niterói", corpo, "analises.html")
+
+
+def grafico_producao_por_tipo(modelo: dict) -> str:
+    """Produção total da Câmara por tipo de documento e ano, de qualquer autor; vazio sem documentos."""
+    docs = modelo.get("documentos") or []
+    if not docs:
+        return ""
+    projs = modelo["projetos"]
+    anos = sorted({p["ano"] for p in projs} | {d["ano"] for d in docs})
+    pl = Counter(p["ano"] for p in projs)
+    cont = Counter((d["tipo"], d["ano"]) for d in docs)
+    series = [("Projetos de lei", "c-t-pl", [pl.get(a, 0) for a in anos])]
+    series += [(NOME_TIPO_DOC[t][1], f"c-t-{t}", [cont.get((t, a), 0) for a in anos]) for t in TIPOS_DOC
+               if any(cont.get((t, a)) for a in anos)]
+    return G.colunas_empilhadas(
+        "Produção total da Câmara por tipo e ano",
+        "Documentos de qualquer autor, pelo ano do número. Contar documentos não mede qualidade nem resultado; detalhes em Atividades.",
+        [str(a) for a in anos], series)
 
 
 # ------------------------------------------------------------------ vereador
@@ -570,15 +949,68 @@ def gerar_vereador(modelo: dict, pessoa: dict) -> str:
  <details class="bloco"><summary>Todos os projetos como autor principal ({len(proj)})</summary>{'<ol class="projetos">' + ''.join(item_projeto(p, '../') for p in proj) + '</ol>' if proj else '<p class="vazio">Nenhum.</p>'}</details>
  <p><a href="../leis.html?autor={pessoa['slug']}&amp;coautor=1">Ver também as leis em que é coautor</a></p>
 </section>""")
+    tem_docs = bool(modelo.get("documentos"))
     corpo = f"""<section class="abertura ficha">
  <p><a href="../index.html">Todos os vereadores</a></p>
  <h1>{esc(pessoa['nome'])}</h1>
  <p class="siscam">Nome no SISCAM: {esc(pessoa['nome_siscam'])}</p>
 </section>
 {LEGENDA_BARRA}
-{''.join(secoes)}"""
+{''.join(secoes)}{secao_atividade(modelo, pessoa) if tem_docs else ''}"""
     return pagina(f"{pessoa['nome']} · Radar dos Vereadores de Niterói", corpo, "", "../",
-                  f"Leis e projetos de {pessoa['nome']} na Câmara de Niterói: quantas leis com efeito, quantas sem efeito prático e quais pautas polêmicas.")
+                  f"Leis e projetos de {pessoa['nome']} na Câmara de Niterói: quantas leis com efeito, quantas sem efeito prático e quais pautas polêmicas.",
+                  dialogo=tem_docs)
+
+
+def secao_atividade(modelo: dict, pessoa: dict) -> str:
+    """Indicações, moções, requerimentos, PDLs e resoluções da pessoa: gráficos SVG com tabela e os 10 mais recentes."""
+    ativ = pessoa.get("atividade") or {"documentos": [], "por_leg": {}}
+    docs = ativ["documentos"]
+    cab = ('<h2 id="t-atividade">Atividade <span>indicações, moções, requerimentos, PDLs e resoluções</span></h2>'
+           '<p class="explica">Conta todo documento em que aparece como autor, inclusive os assinados em conjunto: nas indicações e '
+           'moções, o SISCAM não separa autor de coautor. Estes documentos não entram nos números de projetos de lei acima. '
+           '<a href="../metodologia.html#atividades">Como classificamos</a>.</p>')
+    if not docs:
+        return (f'\n<section class="mandato atividade" aria-labelledby="t-atividade">{cab}'
+                '<p class="vazio">Nenhum documento encontrado com este nome no SISCAM.</p></section>')
+    por_tipo = Counter(d["tipo"] for d in docs)
+    tiles = "".join(tile(milhar(por_tipo[t]), (NOME_TIPO_DOC[t][0] if por_tipo[t] == 1 else NOME_TIPO_DOC[t][1]).lower())
+                    for t in TIPOS_DOC)
+    anos = sorted({d["ano"] for d in docs})
+    cont = Counter((d["tipo"], d["ano"]) for d in docs)
+    graf_tipos = G.colunas_empilhadas("Documentos por ano e tipo", "Pelo ano do número do documento.", [str(a) for a in anos], [
+        (NOME_TIPO_DOC[t][1], f"c-t-{t}", [cont.get((t, a), 0) for a in anos]) for t in TIPOS_DOC if por_tipo[t]
+    ], altura=200)
+    legs = [leg["id"] for leg in reversed(modelo["legislaturas"]) if leg["id"] in ativ["por_leg"]]
+    graf_perfil = "" if not legs else G.barras_horizontais(
+        "Perfil de atuação por legislatura",
+        "Zeladoria: indicações. Fiscalização: requerimentos de informação. Homenagem: moções de aplauso e pesar, títulos e honrarias. "
+        "Legislação: PDLs e resoluções que não são homenagem.",
+        [{"rotulo": leg, **ativ["por_leg"][leg]["perfil"]} for leg in legs],
+        [(nome, f"c-p-{eixo}", eixo) for eixo, nome in NOME_EIXO.items()])
+    info = [d for d in docs if d["tipo"] == "requerimento" and d["subcategoria"] == "informacao"]
+    graf_info = ""
+    if info:
+        anos_i = sorted({d["ano"] for d in info})
+        resp = Counter(d["ano"] for d in info if d["respondido"])
+        sem_resp = Counter(d["ano"] for d in info if not d["respondido"])
+        graf_info = G.colunas_empilhadas(
+            "Requerimentos de informação: respondidos ou não",
+            "Situação atual no SISCAM; pedidos recentes ainda podem ser respondidos.", [str(a) for a in anos_i], [
+                ("Respondidos", "c-efeito", [resp.get(a, 0) for a in anos_i]),
+                ("Sem resposta registrada", "c-sem-exito", [sem_resp.get(a, 0) for a in anos_i]),
+            ], altura=200)
+    recentes = "".join(item_documento(d, "../") for d in docs[:10])
+    return f"""
+<section class="mandato atividade" aria-labelledby="t-atividade">
+ {cab}
+ <div class="tiles">{tiles}</div>
+ <div class="graficos duas">{graf_tipos}{graf_perfil}</div>
+ {graf_info}
+ <h3>Documentos mais recentes</h3>
+ <ol class="projetos documentos">{recentes}</ol>
+ <p><a href="../atividades.html?autor={esc(pessoa['slug'])}">{'Ver o documento' if len(docs) == 1 else f'Ver todos os {milhar(len(docs))} documentos'} de {esc(pessoa['nome'])} em Atividades</a></p>
+</section>"""
 
 
 # -------------------------------------------------------------------- metodologia
@@ -587,9 +1019,10 @@ def gerar_metodologia(modelo: dict) -> str:
     defs_cat = "".join(f"<dt>{esc(NOME_CATEGORIA[k])}</dt><dd>{esc(v)}</dd>" for k, v in CATEGORIAS.items())
     defs_al = "".join(f"<dt>{esc(NOME_ALERTA[k])}</dt><dd>{esc(v)}</dd>" for k, v in ALERTAS.items())
     defs_sin = "".join(f"<dt>{esc(v)}</dt><dd>{esc(DESC_SINAL[k])}</dd>" for k, v in NOME_SINAL.items())
+    defs_doc = "".join(f"<dt>{esc(v)}</dt><dd>{esc(DESC_CATEGORIA_DOC.get(k, ''))}</dd>" for k, v in NOME_CATEGORIA_DOC.items())
     corpo = f"""<section class="abertura texto">
 <h1>Metodologia</h1>
-<p>Este site mede a produção de cada vereador em projetos de lei, não seu trabalho inteiro. Indicações, requerimentos, fiscalização do Executivo, comissões e atendimento à população não entram nos números.</p>
+<p>Este site mede a produção de cada vereador em projetos de lei, não seu trabalho inteiro. Indicações, moções, requerimentos, projetos de decreto legislativo e de resolução aparecem à parte, na página <a href="atividades.html">Atividades</a>, e não entram nos números de projetos e leis. Comissões, fiscalização fora do SISCAM e atendimento à população não aparecem no site.</p>
 
 <h2>De onde vêm os dados</h2>
 <p>Toda semana, uma GitHub Action baixa do <a href="https://consultaniteroi.siscam.com.br/">SISCAM</a> os projetos de lei de cada ano desde 2021 e, para os novos ou com tramitação alterada, a autoria e a tramitação completa. Só a composição das legislaturas e a curadoria são editadas à mão, em arquivos públicos.</p>
@@ -630,8 +1063,32 @@ def gerar_metodologia(modelo: dict) -> str:
 <dl class="defs">{defs_al}</dl>
 <p>"Com alerta de polêmica" soma restrição de direitos, pauta de costumes e apelo populista. Risco de inconstitucionalidade aparece à parte, porque é comum em projetos municipais de todos os campos.</p>
 
+<h2 id="atividades">Indicações, moções, requerimentos, PDLs e resoluções</h2>
+<p>Além dos projetos de lei, a coleta semanal traz do SISCAM outros cinco tipos de documento desde 2021. Eles aparecem na página <a href="atividades.html">Atividades</a>, na seção "Atividade" de cada vereador e nas colunas do placar da página inicial, sempre separados dos projetos de lei: não entram em leis aprovadas, impacto, taxa de aprovação nem projetos repetidos.</p>
+<dl class="defs">
+ <dt>Indicação</dt><dd>Pedido ao Executivo de um serviço ou obra, como iluminação, asfalto, poda ou limpeza.</dd>
+ <dt>Moção</dt><dd>Manifestação da Câmara: aplauso, pesar, repúdio, apoio e outras.</dd>
+ <dt>Requerimento</dt><dd>Pedido formal, como de informações ao Executivo ou de cópia de processos e contratos.</dd>
+ <dt>Projeto de decreto legislativo (PDL)</dt><dd>Ato da Câmara sem sanção do prefeito, como a concessão de títulos e honrarias ou a sustação de atos.</dd>
+ <dt>Projeto de resolução</dt><dd>Norma interna da Câmara, como mudanças no Regimento, na estrutura administrativa ou em honrarias.</dd>
+</dl>
+<h3>Classificação por regras</h3>
+<p>Cada documento recebe categoria e subcategoria por regras fixas sobre a ementa, sem IA, em <a href="{REPO}/blob/main/coletor/regras_documentos.py"><code>coletor/regras_documentos.py</code></a>. O mesmo texto recebe sempre a mesma classificação, e as regras valem igualmente para qualquer autor, partido ou espectro político.</p>
+<dl class="defs">{defs_doc}</dl>
+<p>O perfil de atuação de cada vereador soma, por legislatura, documentos de zeladoria, fiscalização, homenagem e legislação. Todo autor listado conta, inclusive em documentos assinados em conjunto.</p>
+<h3>O que vem de cada tipo</h3>
+<ul>
+ <li>A listagem do SISCAM traz número, data, ementa, situação, autores e o último passo da tramitação. <b>Indicações e moções são coletadas só pela listagem</b>: a autoria aparece na ordem do SISCAM, sem separar autor de coautor, e por isso o site não destaca autor principal nesses documentos.</li>
+ <li><b>Requerimentos, PDLs e resoluções</b>, e documentos de qualquer tipo com mais de um autor, têm também a página de detalhe consultada, com o papel de cada autor e a tramitação completa. Enquanto o detalhe não é baixado, o documento aparece como "detalhe ainda não coletado".</li>
+ <li><b>Respondido</b> vale só para requerimentos com situação "Respondido". A data de resposta (<code>respondido_em</code>) é a do passo "Respondido" da tramitação: é quando a Câmara registrou a resposta, não necessariamente o dia em que o Executivo respondeu. Os dias até a resposta também são contados até esse passo.</li>
+ <li><b>Publicado</b> vale para documentos com situação "Publicado"; nos PDLs e resoluções, o número e a data da publicação vêm da tramitação.</li>
+ <li><b>Bairro</b> é procurado só nas indicações, comparando a ementa com os 52 bairros oficiais de Niterói, sem diferenciar acentos nem maiúsculas, e vale a última menção. Sub-bairros, comunidades e nomes de rua não são reconhecidos, e um nome de bairro usado em outro sentido pode gerar um bairro errado; indicações sem bairro reconhecido ficam sem bairro.</li>
+</ul>
+<p>Cada item das listas tem o botão "Ver no SISCAM", que abre a página oficial do documento dentro do site, e o link "abrir no SISCAM", que a abre numa nova aba.</p>
+
 <h2>Limitações</h2>
 <ul>
+ <li>Contar documentos não mede qualidade nem resultado: uma indicação atendida e outra ignorada contam igual.</li>
  <li>A ementa é um resumo. A IA não lê o texto integral nem o contexto político, e pode errar nos dois sentidos.</li>
  <li>Impacto estimado não é avaliação de resultado: uma lei de impacto alto pode nunca ser cumprida.</li>
  <li>A detecção de projetos repetidos compara palavras da ementa e pode juntar projetos parecidos mas diferentes.</li>
