@@ -190,9 +190,11 @@ def derivar_lei(trams: list[dict]) -> dict | None:
         if re.search(r"Promulgad|Sancionad|Promulgação", t.get("resultado", ""), re.I):
             escolhido = t
             break
-    if escolhido is None:  # 2º: observação que cita o número da lei
+    if escolhido is None:  # 2º: observação que cita a publicação da lei (não só menciona outra lei)
         for t in trams:
-            if _numero_lei(t.get("observacao", "") + " " + t.get("complemento", "")):
+            texto_t = t.get("observacao", "") + " " + t.get("complemento", "")
+            if (_numero_lei(texto_t) and re.search(r"PUBLICAD|JORNAL|DI[ÁA]RIO OFICIAL|SANCION|PROMULG", texto_t, re.I)
+                    and not re.search(r"DUPLICIDADE|EM VIGOR|REAN[ÁA]LISE", texto_t, re.I)):
                 escolhido = t
                 break
     if escolhido is None:

@@ -58,7 +58,7 @@ CONFIANCA_MINIMA = float(os.environ.get("CLASSIFICADOR_CONFIANCA_MINIMA", 0.75))
 
 # ------------------------------------------------------------------------ regras
 RE_SIMBOLICA = re.compile(
-    r"\bD[ÁA] (O )?NOME\b|PASSA A (SE )?DENOMINAR|DENOMINA[- ]SE\b|\bDENOMINA (A|O|DE|DO|DA|AS|OS)\b|"
+    r"\bD[ÁA] (O )?NOME\b|PASSA A (SE )?DENOMINAR|ALTERA[ÇC][ÃA]O DA DENOMINA[ÇC][ÃA]O|ALTERA A DENOMINA[ÇC][ÃA]O|DENOMINA[- ]SE\b|\bDENOMINA (A|O|DE|DO|DA|AS|OS)\b|"
     r"CALEND[ÁA]RIO OFICIAL|\bDIA MUNICIPAL\b|SEMANA MUNICIPAL|M[ÊE]S MUNICIPAL|UTILIDADE P[ÚU]BLICA|"
     r"PATRIM[ÔO]NIO CULTURAL (DE NATUREZA )?IMATERIAL|T[ÍI]TULO DE CIDAD|INSTITUI O DIA\b|INCLUI NO CALEND|HOMENAGEM|"
     r"LEI\s+(MUNICIPAL\s+)?(DE\s+)?(N[º°O.]*\s*)?3\.?474",  # Lei 3.474/2020 é o calendário oficial de datas
@@ -79,6 +79,8 @@ def sinais_tramitacao(p: dict) -> list[str]:
             sinais.append("rejeitado_plenario")
         if re.search(r"veto total", res, re.I):
             sinais.append("veto_total")
+        if re.search(r"DUPLICIDADE|J[ÁA] EXISTE (UMA )?LEI|LEI .{0,40}EM VIGOR", res + " " + (t.get("complemento") or ""), re.I):
+            sinais.append("duplica_lei_vigente")
     s = (p.get("situacao") or "").upper()
     if s in {"VETO TOTAL", "VETO MANTIDO"}:
         sinais.append("veto_total")
