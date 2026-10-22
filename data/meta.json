@@ -1,27 +1,47 @@
 {
  "classificacao": {
   "total": 2055,
-  "ia_novos": 0,
+  "ia_novos": 2053,
   "ia_cache": 0,
-  "ia_desligada": true,
+  "ia_desligada": false,
   "modelo": "deepseek-v4.1-flash",
-  "versao_prompt": "2026-10-v1"
+  "versao_prompt": "2026-10-v2"
  },
  "coleta": {
-  "em": "2026-10-22T13:13:29+00:00",
+  "em": "2026-10-22T13:47:46+00:00",
   "anos": {
+   "2021": {
+    "total": 448,
+    "atualizados": 0,
+    "segundos": 79
+   },
+   "2022": {
+    "total": 188,
+    "atualizados": 0,
+    "segundos": 36
+   },
+   "2023": {
+    "total": 265,
+    "atualizados": 0,
+    "segundos": 49
+   },
+   "2024": {
+    "total": 241,
+    "atualizados": 0,
+    "segundos": 44
+   },
    "2025": {
     "total": 506,
-    "atualizados": 6,
-    "segundos": 83
+    "atualizados": 0,
+    "segundos": 92
    },
    "2026": {
     "total": 407,
     "atualizados": 0,
-    "segundos": 74
+    "segundos": 72
    }
   },
-  "detalhes_baixados": 6,
+  "detalhes_baixados": 0,
   "falhas": 0
  }
 }
