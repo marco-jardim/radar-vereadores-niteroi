@@ -22,6 +22,8 @@ import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
+from coletor.arquivos import salvar_json, salvar_lista
+
 BASE = "https://consultaniteroi.siscam.com.br"
 LISTAGEM = BASE + "/ResultadoPropositura.aspx?Tipo=4&Exibir=1,2,3,4,6,7,8&Ano={ano}&pagina={pagina}"
 DETALHE = BASE + "/DetalhesDocumentos.aspx?IdDocumento={doc}"
@@ -257,9 +259,7 @@ def carregar_ano(ano: int) -> dict[int, dict]:
 def salvar_ano(ano: int, registros: dict[int, dict]) -> None:
     DIR_DADOS.mkdir(parents=True, exist_ok=True)
     lista = sorted(registros.values(), key=lambda p: (p["ano"], int(p["numero"].split("/")[0])))
-    (DIR_DADOS / f"{ano}.json").write_text(
-        json.dumps(lista, ensure_ascii=False, indent=1, sort_keys=True) + "\n", encoding="utf-8"
-    )
+    salvar_lista(DIR_DADOS / f"{ano}.json", lista)  # um projeto por linha: diffs por registro
 
 
 def precisa_detalhe(anterior: dict | None, resumo: dict, forcar: bool) -> bool:
@@ -347,7 +347,7 @@ def main() -> None:
     meta = RAIZ / "data" / "meta.json"
     dados_meta = json.loads(meta.read_text(encoding="utf-8")) if meta.exists() else {}
     dados_meta["coleta"] = {"em": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), **estat}
-    meta.write_text(json.dumps(dados_meta, ensure_ascii=False, indent=1, default=str) + "\n", encoding="utf-8")
+    salvar_json(meta, dados_meta)
     print(json.dumps(estat, ensure_ascii=False, default=str))
     if estat["falhas"] and estat["detalhes_baixados"] == 0:
         sys.exit(1)

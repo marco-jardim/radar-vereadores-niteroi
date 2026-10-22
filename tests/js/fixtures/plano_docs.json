@@ -1,0 +1,44 @@
+{
+  "nota": "Escrita à mão. Os mesmos casos são conferidos em Python (plano_docs, tests/test_documentos_site.py) e no navegador (fatiasDocs, tests/js/documentos.test.js). Há empates de 'ate' (indicação e PDL em 2026-10-20; indicação e resolução em 2025-12-20), desempatados por ano, tipo, parte e nome.",
+  "manifesto": {
+    "esquema": 2, "build": "pl", "build_doc": "doc0000001",
+    "arquivos": {
+      "dic-pl": {"url": "dados/dic-pl.json?v=1", "n": 1, "bytes": 1},
+      "pl-lei": {"url": "dados/pl-lei.json?v=1", "n": 1, "bytes": 1},
+      "dic-doc": {"url": "dados/dic-doc.json?v=1", "n": 5, "bytes": 1, "familia": "dic-doc"},
+      "doc-indicacao-2026": {"url": "dados/doc-indicacao-2026.json?v=1", "n": 50, "bytes": 1, "familia": "doc", "tipo": "indicacao", "ano": 2026, "parte": 0, "ate": "2026-10-20", "de": "2026-10-01"},
+      "doc-indicacao-2026-1": {"url": "dados/doc-indicacao-2026-1.json?v=1", "n": 500, "bytes": 1, "familia": "doc", "tipo": "indicacao", "ano": 2026, "parte": 1, "ate": "2026-09-30", "de": "2026-05-01"},
+      "doc-indicacao-2026-2": {"url": "dados/doc-indicacao-2026-2.json?v=1", "n": 500, "bytes": 1, "familia": "doc", "tipo": "indicacao", "ano": 2026, "parte": 2, "ate": "2026-04-30", "de": "2026-01-02"},
+      "doc-mocao-2026": {"url": "dados/doc-mocao-2026.json?v=1", "n": 30, "bytes": 1, "familia": "doc", "tipo": "mocao", "ano": 2026, "parte": 0, "ate": "2026-10-21", "de": "2026-08-01"},
+      "doc-mocao-2026-1": {"url": "dados/doc-mocao-2026-1.json?v=1", "n": 300, "bytes": 1, "familia": "doc", "tipo": "mocao", "ano": 2026, "parte": 1, "ate": "2026-07-31", "de": "2026-01-05"},
+      "doc-requerimento-2026": {"url": "dados/doc-requerimento-2026.json?v=1", "n": 120, "bytes": 1, "familia": "doc", "tipo": "requerimento", "ano": 2026, "parte": 0, "ate": "2026-10-15", "de": "2026-01-10"},
+      "doc-pdl-2026": {"url": "dados/doc-pdl-2026.json?v=1", "n": 5, "bytes": 1, "familia": "doc", "tipo": "pdl", "ano": 2026, "parte": 0, "ate": "2026-10-20", "de": "2026-03-01"},
+      "doc-indicacao-2025": {"url": "dados/doc-indicacao-2025.json?v=1", "n": 400, "bytes": 1, "familia": "doc", "tipo": "indicacao", "ano": 2025, "parte": 0, "ate": "2025-12-20", "de": "2025-06-01"},
+      "doc-indicacao-2025-1": {"url": "dados/doc-indicacao-2025-1.json?v=1", "n": 400, "bytes": 1, "familia": "doc", "tipo": "indicacao", "ano": 2025, "parte": 1, "ate": "2025-05-31", "de": "2025-01-03"},
+      "doc-resolucao-2025": {"url": "dados/doc-resolucao-2025.json?v=1", "n": 2, "bytes": 1, "familia": "doc", "tipo": "resolucao", "ano": 2025, "parte": 0, "ate": "2025-12-20", "de": "2025-11-03"},
+      "ver/ana-maria-teste": {"url": "dados/ver/ana-maria-teste.json?v=1", "n": 10, "bytes": 1, "familia": "ver", "slug": "ana-maria-teste", "tipo": null, "parte": 0}
+    }
+  },
+  "casos": [
+    {"nome": "2026, primeira tela", "tipo": null, "ano": 2026, "alvo": 40,
+     "nomes": ["doc-mocao-2026", "doc-indicacao-2026", "doc-pdl-2026", "doc-requerimento-2026"]},
+    {"nome": "2026, mais itens", "tipo": null, "ano": 2026, "alvo": 100,
+     "nomes": ["doc-mocao-2026", "doc-indicacao-2026", "doc-pdl-2026", "doc-requerimento-2026", "doc-indicacao-2026-1", "doc-mocao-2026-1"]},
+    {"nome": "2026 inteiro", "tipo": null, "ano": 2026, "alvo": 1000000000,
+     "nomes": ["doc-mocao-2026", "doc-indicacao-2026", "doc-pdl-2026", "doc-requerimento-2026", "doc-indicacao-2026-1", "doc-mocao-2026-1", "doc-indicacao-2026-2"]},
+    {"nome": "só indicações de 2026", "tipo": ["indicacao"], "ano": 2026, "alvo": 40,
+     "nomes": ["doc-indicacao-2026"]},
+    {"nome": "tipo sem partes no ano", "tipo": ["mocao"], "ano": 2025, "alvo": 40,
+     "nomes": []},
+    {"nome": "todos os anos", "tipo": null, "ano": null, "alvo": 40,
+     "nomes": ["doc-mocao-2026", "doc-indicacao-2026", "doc-pdl-2026", "doc-requerimento-2026"]},
+    {"nome": "indicações e requerimentos de 2026", "tipo": ["indicacao", "requerimento"], "ano": 2026, "alvo": 60,
+     "nomes": ["doc-indicacao-2026", "doc-requerimento-2026", "doc-indicacao-2026-1"]},
+    {"nome": "empate de ate desempatado pelo tipo", "tipo": ["indicacao", "resolucao"], "ano": 2025, "alvo": 401,
+     "nomes": ["doc-indicacao-2025", "doc-resolucao-2025"]},
+    {"nome": "uma única parte", "tipo": ["pdl"], "ano": 2026, "alvo": 40,
+     "nomes": ["doc-pdl-2026"]},
+    {"nome": "2025, primeira tela", "tipo": null, "ano": 2025, "alvo": 40,
+     "nomes": ["doc-indicacao-2025", "doc-resolucao-2025"]}
+  ]
+}

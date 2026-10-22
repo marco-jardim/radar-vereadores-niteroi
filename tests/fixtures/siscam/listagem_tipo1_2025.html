@@ -1,0 +1,938 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>
+	Consulta de Proposituras
+</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><link href="App_Themes/Consulta/StyleSheet.css" type="text/css" rel="stylesheet" /></head>
+<body>
+    <a name="topo"></a>
+    <form name="form1" method="post" action="ResultadoPropositura.aspx?Tipo=1&amp;Exibir=1%2c2%2c3%2c4%2c6%2c7%2c8&amp;Ano=2025&amp;pagina=1&amp;NumeroInicial=1&amp;NumeroFinal=400" id="form1">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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" />
+
+
+<script type="text/javascript">
+//<![CDATA[
+var __cultureInfo = '{"name":"pt-BR","numberFormat":{"CurrencyDecimalDigits":2,"CurrencyDecimalSeparator":",","IsReadOnly":true,"CurrencyGroupSizes":[3],"NumberGroupSizes":[3],"PercentGroupSizes":[3],"CurrencyGroupSeparator":".","CurrencySymbol":"R$","NaNSymbol":"NaN (Não é um número)","CurrencyNegativePattern":9,"NumberNegativePattern":1,"PercentPositivePattern":1,"PercentNegativePattern":1,"NegativeInfinitySymbol":"-Infinito","NegativeSign":"-","NumberDecimalDigits":2,"NumberDecimalSeparator":",","NumberGroupSeparator":".","CurrencyPositivePattern":2,"PositiveInfinitySymbol":"+Infinito","PositiveSign":"+","PercentDecimalDigits":2,"PercentDecimalSeparator":",","PercentGroupSeparator":".","PercentSymbol":"%","PerMilleSymbol":"‰","NativeDigits":["0","1","2","3","4","5","6","7","8","9"],"DigitSubstitution":1},"dateTimeFormat":{"AMDesignator":"","Calendar":{"MinSupportedDateTime":"\/Date(-62135586000000)\/","MaxSupportedDateTime":"\/Date(253402300799999)\/","AlgorithmType":1,"CalendarType":1,"Eras":[1],"TwoDigitYearMax":2049,"IsReadOnly":true},"DateSeparator":"/","FirstDayOfWeek":0,"CalendarWeekRule":0,"FullDateTimePattern":"dddd, d\u0027 de \u0027MMMM\u0027 de \u0027yyyy H:mm:ss","LongDatePattern":"dddd, d\u0027 de \u0027MMMM\u0027 de \u0027yyyy","LongTimePattern":"H:mm:ss","MonthDayPattern":"dd\u0027 de \u0027MMMM","PMDesignator":"","RFC1123Pattern":"ddd, dd MMM yyyy HH\u0027:\u0027mm\u0027:\u0027ss \u0027GMT\u0027","ShortDatePattern":"d/M/yyyy","ShortTimePattern":"H:mm","SortableDateTimePattern":"yyyy\u0027-\u0027MM\u0027-\u0027dd\u0027T\u0027HH\u0027:\u0027mm\u0027:\u0027ss","TimeSeparator":":","UniversalSortableDateTimePattern":"yyyy\u0027-\u0027MM\u0027-\u0027dd HH\u0027:\u0027mm\u0027:\u0027ss\u0027Z\u0027","YearMonthPattern":"MMMM\u0027 de \u0027yyyy","AbbreviatedDayNames":["dom","seg","ter","qua","qui","sex","sáb"],"ShortestDayNames":["dom","seg","ter","qua","qui","sex","sáb"],"DayNames":["domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado"],"AbbreviatedMonthNames":["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez",""],"MonthNames":["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro",""],"IsReadOnly":true,"NativeCalendarName":"Calendário gregoriano","AbbreviatedMonthGenitiveNames":["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez",""],"MonthGenitiveNames":["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro",""]}}';//]]>
+</script>
+
+<script src="/ScriptResource.axd?d=aHMm1ltdwLZOVHLUrjZ96y8wG3GcOzjU9Hu7aV4EcH2B5fTwZKqzC0D1h7mYRrVjlYV5GgaWc2t0W4uPK6XrwyhYZHoJlNHwSulY98t9cfzEqjWgO44Dj0h6wa9Sh7d1Rm7vMoymoB2ja0lggX6yBPDiA8p2wE-9V7pPC1ZyM-Wv4nsX0&amp;t=ffffffffa50b82b2" type="text/javascript"></script>
+<script src="App_Scripts/geral.js" type="text/javascript"></script>
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="D0EAF505" />
+<input type="hidden" name="__VIEWSTATEENCRYPTED" id="__VIEWSTATEENCRYPTED" value="" />
+<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="4dnUFIHf/uj9Cjop6BoHFRAUogYzM3HLCHGngaRQnt9rZ8FrzOvfQ5G/1ZIoFINpWMlTXn/KUefYnbN/mcqadx/QV5YKXwPRGvQIjlb3a9+BMnVNmyY1yqDUPwhS22PPQ6ihrcrt8SlhsMWE/UEMHNTq4/4mQx1ROeuB/Z5DEByaOcj8oTVVeasbgDzxoq2yUd6CUAXVscYuiNtWwgIfy1h3fOy/V3qb3/lI9HajhPSZubvYAlxTaOfWKtxnSPG48P5Dl2Jt3Tp4KmuWm84b1gbZk6rfegnZyPISLcGy6hWw6NCX" />
+
+    
+    
+    <div class="documentos">
+    
+    
+<table cellpadding="5" width="100%" bgcolor="#ffffff">
+    <tr>
+        <td width="150"><a href='Default.aspx'><img src="Arquivos/brasao.jpg" width="90" border="0" /></a></td>
+        <td>
+            <h1>Câmara Municipal de Niterói</h1>
+            Sistema online de consulta de Leis e Proposituras<br /><br />
+            <a href='http://www.camaraniteroi.rj.gov.br' target='_blank'>http://www.camaraniteroi.rj.gov.br</a>
+        </td>
+    </tr>
+</table>
+
+
+    <table cellpadding="5" width="100%">
+        <tr>
+            <td><h2>Requerimento</h2></td>
+        </tr>
+        <tr>
+            <td>
+                <fieldset class='tabela-simples'><legend>[ Filtro ]</legend><br /><strong>Ano:</strong> 2025&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>NumeroInicial:</strong> 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>NumeroFinal:</strong> 400&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</fieldset>
+            </td>
+        </tr>
+        
+                
+                <tr>
+                    <td>
+                        <table width="100%" class="tabela-simples">
+                            <tr>
+                                <td>
+                                    <table width="100%" class="tabela" cellpadding="5" onclick="window.location.href='DetalhesDocumentos.aspx?IdDocumento=290506'">
+                                        <tr>
+                                            <td width='30%'><a href="DetalhesDocumentos.aspx?IdDocumento=290506" style="font-weight:bold;">Requerimento Nº 00253/2025</td>
+                                            <td width='20%'><strong>Data: </strong>11/12/2025</td>                                            
+                                            <td id="listPropositura_ctrl0_tdSituacao"><strong>Situação: </strong> RECEBIDO PELA SMD</td>
+
+                                            <td id="listPropositura_ctrl0_tdAssunto"><strong>Assunto: </strong> INFORMAÇÕES</td>
+                                            
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4"><strong>Ementa/Assunto: </strong> REQUER INFORMAÇÕES SOBRE O PROCESSO ELETRÔNICO DE Nº 990/169964/2025 QUE TEM POR OBJETO A REURBANIZAÇÃO DA AVENIDA AMARAL PEIXOTO, A RUA DA CONCEIÇÃO E SUAS TRANSVERSAIS</td>
+                                        </tr>
+                                        <tr id="listPropositura_ctrl0_trAutores">
+	<td colspan="4"><strong>Autores: </strong> <a href='?Exibir=1,2,3,4,6,7,8&Tipo=1&Autor=275'>Michel Salim Saad Neto</a></td>
+</tr>
+
+                                    </table>
+                                </td>
+                                <td id="listPropositura_ctrl0_tdArquivos" width="10%" align="center">
+                                    <a href="javascript:;" onclick="PopupCenter('Arquivos.aspx?IdDocumento=290506','',600,400)"><img src="Imagens/arquivos.png" border="0" alt="" /><br />Arquivos (1)</a>                                    
+                                </td>
+
+                            </tr>
+
+                            
+                            
+                                    
+                            
+                        </table>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+                        <table width="100%" class="tabela-simples">
+                            <tr>
+                                <td>
+                                    <table width="100%" class="tabela" cellpadding="5" onclick="window.location.href='DetalhesDocumentos.aspx?IdDocumento=290505'">
+                                        <tr>
+                                            <td width='30%'><a href="DetalhesDocumentos.aspx?IdDocumento=290505" style="font-weight:bold;">Requerimento Nº 00252/2025</td>
+                                            <td width='20%'><strong>Data: </strong>11/12/2025</td>                                            
+                                            <td id="listPropositura_ctrl1_tdSituacao"><strong>Situação: </strong> ENCAMINHADO À PREFEITURA</td>
+
+                                            <td id="listPropositura_ctrl1_tdAssunto"><strong>Assunto: </strong> INFORMAÇÕES</td>
+                                            
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4"><strong>Ementa/Assunto: </strong> REQUER INFORMAÇÕES SOBRE O  NÚMERO DE AUTUAÇÕES DE TRÂNSITO QUE FORAM REALIZADAS PELO AGENTE DE TRÂNSITO DE MATRÍCULA Nº 1235578-2, SR. MAX HÉLIO DA COSTA VASCONCELLOS, NOS MESES DE MAIO DE 2025 ATÉ NOVEMBRO DE 2025, COM A DISCRIMINAÇÃO MÊS A MÊS, RELACIONADAS AO CÓDIGO DA INFRAÇÃO 5541 POR “ESTACIONAR EM DESACORDO COM A REGULAMENTAÇÃO – ESTACIONAMENTO ROTATIVO”.</td>
+                                        </tr>
+                                        <tr id="listPropositura_ctrl1_trAutores">
+	<td colspan="4"><strong>Autores: </strong> <a href='?Exibir=1,2,3,4,6,7,8&Tipo=1&Autor=275'>Michel Salim Saad Neto</a></td>
+</tr>
+
+                                    </table>
+                                </td>
+                                <td id="listPropositura_ctrl1_tdArquivos" width="10%" align="center">
+                                    <a href="javascript:;" onclick="PopupCenter('Arquivos.aspx?IdDocumento=290505','',600,400)"><img src="Imagens/arquivos.png" border="0" alt="" /><br />Arquivos (1)</a>                                    
+                                </td>
+
+                            </tr>
+
+                            <tr id="listPropositura_ctrl1_trTramitacoes">
+	<td colspan="2">
+                                    <fieldset>
+                                        <legend>Última Tramitacação (4)</legend>
+                                        <div>
+		<table class="grid-borda" cellspacing="0" cellpadding="5" border="0" id="listPropositura_ctrl1_tramitacoes_gvTramitacoes">
+			<tr class="grid-header-listagem-simples">
+				<th scope="col">Tramitação</th>
+			</tr><tr class="grid-row-item">
+				<td>
+
+                <table width="100%">
+                    <tr>
+                        <td width="10%"><strong>Sequência: </strong>4</td>
+                        <td width="45%"><strong>Remetente: </strong>Secretaria Municipal de Governo</td>
+                        <td width="45%"><strong>Destinatário: </strong>Secretaria Mesa Diretora</td>
+                    </tr>
+                </table>
+
+                <table width="100%">
+                    <tr>
+                        <td width="55%"><strong>Objetivo: </strong>Prorrogação de prazo</td>
+                        <td width="45%"><strong>Enviado em: </strong>06/05/2026 12:47</td>
+                    </tr>
+                </table>
+
+                <table width="100%">
+                    <tr id="listPropositura_ctrl1_tramitacoes_gvTramitacoes_ctl02_trComplemento">
+					<td colspan="3"><strong>Complemento: </strong>OFÍCIO/SEMUG/REQ/Nº 26/2026</td>
+				</tr>
+				
+                    <tr id="listPropositura_ctrl1_tramitacoes_gvTramitacoes_ctl02_trResultado">
+					<td id="listPropositura_ctrl1_tramitacoes_gvTramitacoes_ctl02_tdResultado" width="25%"><strong>Resultado: </strong>Lido na Sessão Plenária do dia</td>
+					<td id="listPropositura_ctrl1_tramitacoes_gvTramitacoes_ctl02_tdDataResposta" width="30%"><strong>Data Resposta: </strong>07/05/2026</td>
+				</tr>
+				
+                    
+                </table>
+            
+            </td>
+			</tr>
+		</table>
+	</div>      
+                                    </fieldset>
+                                </td>
+</tr>
+
+                            
+                            <tr id="listPropositura_ctrl1_trVinculos">
+	<td colspan="2">
+                                    <fieldset>
+                                        <legend>[ Vinculos ]</legend>
+                                        <br />
+                                        <div>
+		<table class="grid-borda" cellspacing="0" cellpadding="5" border="0" id="listPropositura_ctrl1_Vinculos2_gvListagem">
+			<tr class="grid-header-listagem-simples">
+				<th scope="col" width="30%">Documento Vinculado</th><th scope="col" width="15%">Data do Documento</th><th scope="col">Ementa</th>
+			</tr><tr class="grid-row-item">
+				<td>
+                <a href='DetalhesDocumentos.aspx?IdDocumento=292802' target='_blank'>Ofício Legislativo Nº 00017/2026</a>
+            </td><td>
+                01/04/2026
+            </td><td>
+                OFÍCIO/Nº 017/2026/S.M.D.C.P. - ASSUNTO: ENCAMINHA REQUERIMENTOS
+            </td>
+			</tr>
+		</table>
+	</div>
+
+
+                                    </fieldset>
+                                </td>
+</tr>
+        
+                            
+                        </table>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+                        <table width="100%" class="tabela-simples">
+                            <tr>
+                                <td>
+                                    <table width="100%" class="tabela" cellpadding="5" onclick="window.location.href='DetalhesDocumentos.aspx?IdDocumento=290504'">
+                                        <tr>
+                                            <td width='30%'><a href="DetalhesDocumentos.aspx?IdDocumento=290504" style="font-weight:bold;">Requerimento Nº 00251/2025</td>
+                                            <td width='20%'><strong>Data: </strong>11/12/2025</td>                                            
+                                            <td id="listPropositura_ctrl2_tdSituacao"><strong>Situação: </strong> RESPONDIDO</td>
+
+                                            <td id="listPropositura_ctrl2_tdAssunto"><strong>Assunto: </strong> INFORMAÇÕES</td>
+                                            
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4"><strong>Ementa/Assunto: </strong> REQUER INFORMAÇÕES E O ENCAMINHAMENTO DA ÍNTEGRA DOS PROCESSOS ADMINISTRATIVOS QUE VERSAM SOBRE O PROGRAMA VIDA NOVA NO MORRO</td>
+                                        </tr>
+                                        <tr id="listPropositura_ctrl2_trAutores">
+	<td colspan="4"><strong>Autores: </strong> <a href='?Exibir=1,2,3,4,6,7,8&Tipo=1&Autor=275'>Michel Salim Saad Neto</a></td>
+</tr>
+
+                                    </table>
+                                </td>
+                                <td id="listPropositura_ctrl2_tdArquivos" width="10%" align="center">
+                                    <a href="javascript:;" onclick="PopupCenter('Arquivos.aspx?IdDocumento=290504','',600,400)"><img src="Imagens/arquivos.png" border="0" alt="" /><br />Arquivos (1)</a>                                    
+                                </td>
+
+                            </tr>
+
+                            <tr id="listPropositura_ctrl2_trTramitacoes">
+	<td colspan="2">
+                                    <fieldset>
+                                        <legend>Última Tramitacação (5)</legend>
+                                        <div>
+		<table class="grid-borda" cellspacing="0" cellpadding="5" border="0" id="listPropositura_ctrl2_tramitacoes_gvTramitacoes">
+			<tr class="grid-header-listagem-simples">
+				<th scope="col">Tramitação</th>
+			</tr><tr class="grid-row-item">
+				<td>
+
+                <table width="100%">
+                    <tr>
+                        <td width="10%"><strong>Sequência: </strong>5</td>
+                        <td width="45%"><strong>Remetente: </strong>Secretaria Municipal de Governo</td>
+                        <td width="45%"><strong>Destinatário: </strong>Secretaria Mesa Diretora</td>
+                    </tr>
+                </table>
+
+                <table width="100%">
+                    <tr>
+                        <td width="55%"><strong>Objetivo: </strong>Respondido</td>
+                        <td width="45%"><strong>Enviado em: </strong>20/10/2026 13:47</td>
+                    </tr>
+                </table>
+
+                <table width="100%">
+                    <tr id="listPropositura_ctrl2_tramitacoes_gvTramitacoes_ctl02_trComplemento">
+					<td colspan="3"><strong>Complemento: </strong>OFÍCIO/SEMUG/REQ/Nº 64/2026</td>
+				</tr>
+				
+                    <tr id="listPropositura_ctrl2_tramitacoes_gvTramitacoes_ctl02_trResultado">
+					<td id="listPropositura_ctrl2_tramitacoes_gvTramitacoes_ctl02_tdResultado" width="25%"><strong>Resultado: </strong>Ofício Lido na Sessão Plenária do dia</td>
+					<td id="listPropositura_ctrl2_tramitacoes_gvTramitacoes_ctl02_tdDataResposta" width="30%"><strong>Data Resposta: </strong>21/10/2026</td>
+				</tr>
+				
+                    
+                </table>
+            
+            </td>
+			</tr>
+		</table>
+	</div>      
+                                    </fieldset>
+                                </td>
+</tr>
+
+                            
+                            <tr id="listPropositura_ctrl2_trVinculos">
+	<td colspan="2">
+                                    <fieldset>
+                                        <legend>[ Vinculos ]</legend>
+                                        <br />
+                                        <div>
+		<table class="grid-borda" cellspacing="0" cellpadding="5" border="0" id="listPropositura_ctrl2_Vinculos2_gvListagem">
+			<tr class="grid-header-listagem-simples">
+				<th scope="col" width="30%">Documento Vinculado</th><th scope="col" width="15%">Data do Documento</th><th scope="col">Ementa</th>
+			</tr><tr class="grid-row-item">
+				<td>
+                <a href='DetalhesDocumentos.aspx?IdDocumento=294329' target='_blank'>Ofício Legislativo Nº 00036/2026</a>
+            </td><td>
+                08/05/2026
+            </td><td>
+                OFÍCIO/Nº 036/2026/S.M.D.C.P. - ASSUNTO: ENCAMINHA REQUERIMENTOS
+            </td>
+			</tr><tr class="grid-row-alternativo">
+				<td>
+                <a href='DetalhesDocumentos.aspx?IdDocumento=300764' target='_blank'>Ofício Legislativo Nº 00063/2026</a>
+            </td><td>
+                19/10/2026
+            </td><td>
+                OFÍCIO /SEMUG/REQ/N°063/2026- ASSUNTO:RESPOSTA REQUERIMENTO 251/2025 - Vereador Michel Saad
+            </td>
+			</tr>
+		</table>
+	</div>
+
+
+                                    </fieldset>
+                                </td>
+</tr>
+        
+                            
+                        </table>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+                        <table width="100%" class="tabela-simples">
+                            <tr>
+                                <td>
+                                    <table width="100%" class="tabela" cellpadding="5" onclick="window.location.href='DetalhesDocumentos.aspx?IdDocumento=290503'">
+                                        <tr>
+                                            <td width='30%'><a href="DetalhesDocumentos.aspx?IdDocumento=290503" style="font-weight:bold;">Requerimento Nº 00250/2025</td>
+                                            <td width='20%'><strong>Data: </strong>11/12/2025</td>                                            
+                                            <td id="listPropositura_ctrl3_tdSituacao"><strong>Situação: </strong> RECEBIDO PELA SMD</td>
+
+                                            <td id="listPropositura_ctrl3_tdAssunto"><strong>Assunto: </strong> INFORMAÇÕES</td>
+                                            
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4"><strong>Ementa/Assunto: </strong> REQUER INFORMAÇÕES E O ENCAMINHAMENTO DA ÍNTEGRA DO PROCESSO ADMINISTRATIVO ELETRONICO DE Nº 9900013086/2024 QUE TRATA-SE DE CONTRATO ASSINADO ENTRE A FUNDAÇÃO MUNICIPAL DE SAÚDE DE NITEROI E A EMPRESA MEAT COMERCIO & SERVIÇOS LTDA</td>
+                                        </tr>
+                                        <tr id="listPropositura_ctrl3_trAutores">
+	<td colspan="4"><strong>Autores: </strong> <a href='?Exibir=1,2,3,4,6,7,8&Tipo=1&Autor=275'>Michel Salim Saad Neto</a></td>
+</tr>
+
+                                    </table>
+                                </td>
+                                <td id="listPropositura_ctrl3_tdArquivos" width="10%" align="center">
+                                    <a href="javascript:;" onclick="PopupCenter('Arquivos.aspx?IdDocumento=290503','',600,400)"><img src="Imagens/arquivos.png" border="0" alt="" /><br />Arquivos (1)</a>                                    
+                                </td>
+
+                            </tr>
+
+                            
+                            
+                                    
+                            
+                        </table>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+                        <table width="100%" class="tabela-simples">
+                            <tr>
+                                <td>
+                                    <table width="100%" class="tabela" cellpadding="5" onclick="window.location.href='DetalhesDocumentos.aspx?IdDocumento=290502'">
+                                        <tr>
+                                            <td width='30%'><a href="DetalhesDocumentos.aspx?IdDocumento=290502" style="font-weight:bold;">Requerimento Nº 00249/2025</td>
+                                            <td width='20%'><strong>Data: </strong>11/12/2025</td>                                            
+                                            <td id="listPropositura_ctrl4_tdSituacao"><strong>Situação: </strong> RECEBIDO PELA SMD</td>
+
+                                            <td id="listPropositura_ctrl4_tdAssunto"><strong>Assunto: </strong> INFORMAÇÕES</td>
+                                            
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4"><strong>Ementa/Assunto: </strong> REQUER INFORMAÇÕES E O ENCAMINHAMENTO DA ÍNTEGRA DO PROCESSO ELETRÔNICO DE Nº 9900010633/2023 QUE TEM POR OBJETO A CONTRATAÇÃO DE EMPRESA PARA PRESTAÇÃO DE MANUTENÇÃO, CONSERVAÇÃO E REPOSIÇÃO PAISAGÍSTICA E SERVIÇOS DE FITOSSANIDADE NO PARQUE DA ORLA DE PIRATININGA</td>
+                                        </tr>
+                                        <tr id="listPropositura_ctrl4_trAutores">
+	<td colspan="4"><strong>Autores: </strong> <a href='?Exibir=1,2,3,4,6,7,8&Tipo=1&Autor=275'>Michel Salim Saad Neto</a></td>
+</tr>
+
+                                    </table>
+                                </td>
+                                <td id="listPropositura_ctrl4_tdArquivos" width="10%" align="center">
+                                    <a href="javascript:;" onclick="PopupCenter('Arquivos.aspx?IdDocumento=290502','',600,400)"><img src="Imagens/arquivos.png" border="0" alt="" /><br />Arquivos (1)</a>                                    
+                                </td>
+
+                            </tr>
+
+                            
+                            
+                                    
+                            
+                        </table>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+                        <table width="100%" class="tabela-simples">
+                            <tr>
+                                <td>
+                                    <table width="100%" class="tabela" cellpadding="5" onclick="window.location.href='DetalhesDocumentos.aspx?IdDocumento=290412'">
+                                        <tr>
+                                            <td width='30%'><a href="DetalhesDocumentos.aspx?IdDocumento=290412" style="font-weight:bold;">Requerimento Nº 00248/2025</td>
+                                            <td width='20%'><strong>Data: </strong>10/12/2025</td>                                            
+                                            <td id="listPropositura_ctrl5_tdSituacao"><strong>Situação: </strong> RECEBIDO PELA SMD</td>
+
+                                            <td id="listPropositura_ctrl5_tdAssunto"><strong>Assunto: </strong> INFORMAÇÕES</td>
+                                            
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4"><strong>Ementa/Assunto: </strong> Requer informações sobre o sistema de abastecimento de água na região do Engenho do Mato, especialmente nas ruas Três (Rua da Escola Kairós) e São Sebastião</td>
+                                        </tr>
+                                        <tr id="listPropositura_ctrl5_trAutores">
+	<td colspan="4"><strong>Autores: </strong> <a href='?Exibir=1,2,3,4,6,7,8&Tipo=1&Autor=238'>TULIO RABELO DE ALBUQUERQUE MOTA</a></td>
+</tr>
+
+                                    </table>
+                                </td>
+                                <td id="listPropositura_ctrl5_tdArquivos" width="10%" align="center">
+                                    <a href="javascript:;" onclick="PopupCenter('Arquivos.aspx?IdDocumento=290412','',600,400)"><img src="Imagens/arquivos.png" border="0" alt="" /><br />Arquivos (1)</a>                                    
+                                </td>
+
+                            </tr>
+
+                            
+                            
+                                    
+                            
+                        </table>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+                        <table width="100%" class="tabela-simples">
+                            <tr>
+                                <td>
+                                    <table width="100%" class="tabela" cellpadding="5" onclick="window.location.href='DetalhesDocumentos.aspx?IdDocumento=290039'">
+                                        <tr>
+                                            <td width='30%'><a href="DetalhesDocumentos.aspx?IdDocumento=290039" style="font-weight:bold;">Requerimento Nº 00247/2025</td>
+                                            <td width='20%'><strong>Data: </strong>05/12/2025</td>                                            
+                                            <td id="listPropositura_ctrl6_tdSituacao"><strong>Situação: </strong> ENCAMINHADO À PREFEITURA</td>
+
+                                            <td id="listPropositura_ctrl6_tdAssunto"><strong>Assunto: </strong> INFORMAÇÕES</td>
+                                            
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4"><strong>Ementa/Assunto: </strong> Requer informações ao Prefeito Municipal de Niterói, Sr. Rodrigo Neves, com cópia à Fundação de Arte de Niterói, acerca do evento “Viva Zumbi 2025”.</td>
+                                        </tr>
+                                        <tr id="listPropositura_ctrl6_trAutores">
+	<td colspan="4"><strong>Autores: </strong> <a href='?Exibir=1,2,3,4,6,7,8&Tipo=1&Autor=273'>FERNANDA ANCHIETA LOUBACK</a></td>
+</tr>
+
+                                    </table>
+                                </td>
+                                <td id="listPropositura_ctrl6_tdArquivos" width="10%" align="center">
+                                    <a href="javascript:;" onclick="PopupCenter('Arquivos.aspx?IdDocumento=290039','',600,400)"><img src="Imagens/arquivos.png" border="0" alt="" /><br />Arquivos (1)</a>                                    
+                                </td>
+
+                            </tr>
+
+                            <tr id="listPropositura_ctrl6_trTramitacoes">
+	<td colspan="2">
+                                    <fieldset>
+                                        <legend>Última Tramitacação (4)</legend>
+                                        <div>
+		<table class="grid-borda" cellspacing="0" cellpadding="5" border="0" id="listPropositura_ctrl6_tramitacoes_gvTramitacoes">
+			<tr class="grid-header-listagem-simples">
+				<th scope="col">Tramitação</th>
+			</tr><tr class="grid-row-item">
+				<td>
+
+                <table width="100%">
+                    <tr>
+                        <td width="10%"><strong>Sequência: </strong>4</td>
+                        <td width="45%"><strong>Remetente: </strong>Secretaria Municipal de Governo</td>
+                        <td width="45%"><strong>Destinatário: </strong>Secretaria Mesa Diretora</td>
+                    </tr>
+                </table>
+
+                <table width="100%">
+                    <tr>
+                        <td width="55%"><strong>Objetivo: </strong>Prorrogação de prazo</td>
+                        <td width="45%"><strong>Enviado em: </strong>19/01/2026 16:26</td>
+                    </tr>
+                </table>
+
+                <table width="100%">
+                    <tr id="listPropositura_ctrl6_tramitacoes_gvTramitacoes_ctl02_trComplemento">
+					<td colspan="3"><strong>Complemento: </strong>OFÍCIO/SEMUG/REQ/Nº 14/2026</td>
+				</tr>
+				
+                    <tr id="listPropositura_ctrl6_tramitacoes_gvTramitacoes_ctl02_trResultado">
+					<td id="listPropositura_ctrl6_tramitacoes_gvTramitacoes_ctl02_tdResultado" width="25%"><strong>Resultado: </strong>Lido na Sessão Plenária do dia</td>
+					<td id="listPropositura_ctrl6_tramitacoes_gvTramitacoes_ctl02_tdDataResposta" width="30%"><strong>Data Resposta: </strong>25/02/2026</td>
+				</tr>
+				
+                    
+                </table>
+            
+            </td>
+			</tr>
+		</table>
+	</div>      
+                                    </fieldset>
+                                </td>
+</tr>
+
+                            
+                            <tr id="listPropositura_ctrl6_trVinculos">
+	<td colspan="2">
+                                    <fieldset>
+                                        <legend>[ Vinculos ]</legend>
+                                        <br />
+                                        <div>
+		<table class="grid-borda" cellspacing="0" cellpadding="5" border="0" id="listPropositura_ctrl6_Vinculos2_gvListagem">
+			<tr class="grid-header-listagem-simples">
+				<th scope="col" width="30%">Documento Vinculado</th><th scope="col" width="15%">Data do Documento</th><th scope="col">Ementa</th>
+			</tr><tr class="grid-row-item">
+				<td>
+                <a href='DetalhesDocumentos.aspx?IdDocumento=290507' target='_blank'>Ofício Legislativo Nº 00145/2025</a>
+            </td><td>
+                12/12/2025
+            </td><td>
+                OFÍCIO/Nº 145/2025/S.M.D.C.P. - ASSUNTO: ENCAMINHA REQUERIMENTOS
+            </td>
+			</tr>
+		</table>
+	</div>
+
+
+                                    </fieldset>
+                                </td>
+</tr>
+        
+                            
+                        </table>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+                        <table width="100%" class="tabela-simples">
+                            <tr>
+                                <td>
+                                    <table width="100%" class="tabela" cellpadding="5" onclick="window.location.href='DetalhesDocumentos.aspx?IdDocumento=290038'">
+                                        <tr>
+                                            <td width='30%'><a href="DetalhesDocumentos.aspx?IdDocumento=290038" style="font-weight:bold;">Requerimento Nº 00246/2025</td>
+                                            <td width='20%'><strong>Data: </strong>05/12/2025</td>                                            
+                                            <td id="listPropositura_ctrl7_tdSituacao"><strong>Situação: </strong> ENCAMINHADO À PREFEITURA</td>
+
+                                            <td id="listPropositura_ctrl7_tdAssunto"><strong>Assunto: </strong> INFORMAÇÕES</td>
+                                            
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4"><strong>Ementa/Assunto: </strong> Requer informações ao Prefeito Municipal de Niterói, Sr. Rodrigo Neves, com cópia à Fundação de Arte de Niterói, acerca do evento “Aniversário de 452 anos de Niterói – Horto do Fonseca”.</td>
+                                        </tr>
+                                        <tr id="listPropositura_ctrl7_trAutores">
+	<td colspan="4"><strong>Autores: </strong> <a href='?Exibir=1,2,3,4,6,7,8&Tipo=1&Autor=273'>FERNANDA ANCHIETA LOUBACK</a></td>
+</tr>
+
+                                    </table>
+                                </td>
+                                <td id="listPropositura_ctrl7_tdArquivos" width="10%" align="center">
+                                    <a href="javascript:;" onclick="PopupCenter('Arquivos.aspx?IdDocumento=290038','',600,400)"><img src="Imagens/arquivos.png" border="0" alt="" /><br />Arquivos (1)</a>                                    
+                                </td>
+
+                            </tr>
+
+                            <tr id="listPropositura_ctrl7_trTramitacoes">
+	<td colspan="2">
+                                    <fieldset>
+                                        <legend>Última Tramitacação (4)</legend>
+                                        <div>
+		<table class="grid-borda" cellspacing="0" cellpadding="5" border="0" id="listPropositura_ctrl7_tramitacoes_gvTramitacoes">
+			<tr class="grid-header-listagem-simples">
+				<th scope="col">Tramitação</th>
+			</tr><tr class="grid-row-item">
+				<td>
+
+                <table width="100%">
+                    <tr>
+                        <td width="10%"><strong>Sequência: </strong>4</td>
+                        <td width="45%"><strong>Remetente: </strong>Secretaria Municipal de Governo</td>
+                        <td width="45%"><strong>Destinatário: </strong>Secretaria Mesa Diretora</td>
+                    </tr>
+                </table>
+
+                <table width="100%">
+                    <tr>
+                        <td width="55%"><strong>Objetivo: </strong>Prorrogação de prazo</td>
+                        <td width="45%"><strong>Enviado em: </strong>25/02/2026 16:25</td>
+                    </tr>
+                </table>
+
+                <table width="100%">
+                    <tr id="listPropositura_ctrl7_tramitacoes_gvTramitacoes_ctl02_trComplemento">
+					<td colspan="3"><strong>Complemento: </strong>OFÍCIO/SEMUG/REQ/Nº 13/2026</td>
+				</tr>
+				
+                    
+                    
+                </table>
+            
+            </td>
+			</tr>
+		</table>
+	</div>      
+                                    </fieldset>
+                                </td>
+</tr>
+
+                            
+                            <tr id="listPropositura_ctrl7_trVinculos">
+	<td colspan="2">
+                                    <fieldset>
+                                        <legend>[ Vinculos ]</legend>
+                                        <br />
+                                        <div>
+		<table class="grid-borda" cellspacing="0" cellpadding="5" border="0" id="listPropositura_ctrl7_Vinculos2_gvListagem">
+			<tr class="grid-header-listagem-simples">
+				<th scope="col" width="30%">Documento Vinculado</th><th scope="col" width="15%">Data do Documento</th><th scope="col">Ementa</th>
+			</tr><tr class="grid-row-item">
+				<td>
+                <a href='DetalhesDocumentos.aspx?IdDocumento=290507' target='_blank'>Ofício Legislativo Nº 00145/2025</a>
+            </td><td>
+                12/12/2025
+            </td><td>
+                OFÍCIO/Nº 145/2025/S.M.D.C.P. - ASSUNTO: ENCAMINHA REQUERIMENTOS
+            </td>
+			</tr>
+		</table>
+	</div>
+
+
+                                    </fieldset>
+                                </td>
+</tr>
+        
+                            
+                        </table>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+                        <table width="100%" class="tabela-simples">
+                            <tr>
+                                <td>
+                                    <table width="100%" class="tabela" cellpadding="5" onclick="window.location.href='DetalhesDocumentos.aspx?IdDocumento=290037'">
+                                        <tr>
+                                            <td width='30%'><a href="DetalhesDocumentos.aspx?IdDocumento=290037" style="font-weight:bold;">Requerimento Nº 00245/2025</td>
+                                            <td width='20%'><strong>Data: </strong>05/12/2025</td>                                            
+                                            <td id="listPropositura_ctrl8_tdSituacao"><strong>Situação: </strong> ENCAMINHADO À PREFEITURA</td>
+
+                                            <td id="listPropositura_ctrl8_tdAssunto"><strong>Assunto: </strong> INFORMAÇÕES</td>
+                                            
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4"><strong>Ementa/Assunto: </strong> Requer informações ao Prefeito Municipal de Niterói, Sr. Rodrigo Neves, com cópia à Fundação de Arte de Niterói, acerca do evento “Festival Mercocidades”.</td>
+                                        </tr>
+                                        <tr id="listPropositura_ctrl8_trAutores">
+	<td colspan="4"><strong>Autores: </strong> <a href='?Exibir=1,2,3,4,6,7,8&Tipo=1&Autor=273'>FERNANDA ANCHIETA LOUBACK</a></td>
+</tr>
+
+                                    </table>
+                                </td>
+                                <td id="listPropositura_ctrl8_tdArquivos" width="10%" align="center">
+                                    <a href="javascript:;" onclick="PopupCenter('Arquivos.aspx?IdDocumento=290037','',600,400)"><img src="Imagens/arquivos.png" border="0" alt="" /><br />Arquivos (1)</a>                                    
+                                </td>
+
+                            </tr>
+
+                            <tr id="listPropositura_ctrl8_trTramitacoes">
+	<td colspan="2">
+                                    <fieldset>
+                                        <legend>Última Tramitacação (4)</legend>
+                                        <div>
+		<table class="grid-borda" cellspacing="0" cellpadding="5" border="0" id="listPropositura_ctrl8_tramitacoes_gvTramitacoes">
+			<tr class="grid-header-listagem-simples">
+				<th scope="col">Tramitação</th>
+			</tr><tr class="grid-row-item">
+				<td>
+
+                <table width="100%">
+                    <tr>
+                        <td width="10%"><strong>Sequência: </strong>4</td>
+                        <td width="45%"><strong>Remetente: </strong>Secretaria Municipal de Governo</td>
+                        <td width="45%"><strong>Destinatário: </strong>Secretaria Mesa Diretora</td>
+                    </tr>
+                </table>
+
+                <table width="100%">
+                    <tr>
+                        <td width="55%"><strong>Objetivo: </strong>Prorrogação de prazo</td>
+                        <td width="45%"><strong>Enviado em: </strong>19/01/2026 16:24</td>
+                    </tr>
+                </table>
+
+                <table width="100%">
+                    <tr id="listPropositura_ctrl8_tramitacoes_gvTramitacoes_ctl02_trComplemento">
+					<td colspan="3"><strong>Complemento: </strong>OFÍCIO/SEMUG/REQ/Nº 12/2026</td>
+				</tr>
+				
+                    <tr id="listPropositura_ctrl8_tramitacoes_gvTramitacoes_ctl02_trResultado">
+					<td id="listPropositura_ctrl8_tramitacoes_gvTramitacoes_ctl02_tdResultado" width="25%"><strong>Resultado: </strong>Lido na Sessão Plenária do dia</td>
+					<td id="listPropositura_ctrl8_tramitacoes_gvTramitacoes_ctl02_tdDataResposta" width="30%"><strong>Data Resposta: </strong>25/02/2026</td>
+				</tr>
+				
+                    
+                </table>
+            
+            </td>
+			</tr>
+		</table>
+	</div>      
+                                    </fieldset>
+                                </td>
+</tr>
+
+                            
+                            <tr id="listPropositura_ctrl8_trVinculos">
+	<td colspan="2">
+                                    <fieldset>
+                                        <legend>[ Vinculos ]</legend>
+                                        <br />
+                                        <div>
+		<table class="grid-borda" cellspacing="0" cellpadding="5" border="0" id="listPropositura_ctrl8_Vinculos2_gvListagem">
+			<tr class="grid-header-listagem-simples">
+				<th scope="col" width="30%">Documento Vinculado</th><th scope="col" width="15%">Data do Documento</th><th scope="col">Ementa</th>
+			</tr><tr class="grid-row-item">
+				<td>
+                <a href='DetalhesDocumentos.aspx?IdDocumento=290507' target='_blank'>Ofício Legislativo Nº 00145/2025</a>
+            </td><td>
+                12/12/2025
+            </td><td>
+                OFÍCIO/Nº 145/2025/S.M.D.C.P. - ASSUNTO: ENCAMINHA REQUERIMENTOS
+            </td>
+			</tr>
+		</table>
+	</div>
+
+
+                                    </fieldset>
+                                </td>
+</tr>
+        
+                            
+                        </table>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>
+                        <table width="100%" class="tabela-simples">
+                            <tr>
+                                <td>
+                                    <table width="100%" class="tabela" cellpadding="5" onclick="window.location.href='DetalhesDocumentos.aspx?IdDocumento=290036'">
+                                        <tr>
+                                            <td width='30%'><a href="DetalhesDocumentos.aspx?IdDocumento=290036" style="font-weight:bold;">Requerimento Nº 00244/2025</td>
+                                            <td width='20%'><strong>Data: </strong>05/12/2025</td>                                            
+                                            <td id="listPropositura_ctrl9_tdSituacao"><strong>Situação: </strong> RESPONDIDO</td>
+
+                                            <td id="listPropositura_ctrl9_tdAssunto"><strong>Assunto: </strong> INFORMAÇÕES</td>
+                                            
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4"><strong>Ementa/Assunto: </strong> Requer informações ao Prefeito Municipal de Niterói, Sr. Rodrigo Neves, com cópia à Fundação de Arte de Niterói-FAN, acerca do evento “Semana Latino-Americana Niterói 2025”.</td>
+                                        </tr>
+                                        <tr id="listPropositura_ctrl9_trAutores">
+	<td colspan="4"><strong>Autores: </strong> <a href='?Exibir=1,2,3,4,6,7,8&Tipo=1&Autor=273'>FERNANDA ANCHIETA LOUBACK</a></td>
+</tr>
+
+                                    </table>
+                                </td>
+                                <td id="listPropositura_ctrl9_tdArquivos" width="10%" align="center">
+                                    <a href="javascript:;" onclick="PopupCenter('Arquivos.aspx?IdDocumento=290036','',600,400)"><img src="Imagens/arquivos.png" border="0" alt="" /><br />Arquivos (1)</a>                                    
+                                </td>
+
+                            </tr>
+
+                            <tr id="listPropositura_ctrl9_trTramitacoes">
+	<td colspan="2">
+                                    <fieldset>
+                                        <legend>Última Tramitacação (4)</legend>
+                                        <div>
+		<table class="grid-borda" cellspacing="0" cellpadding="5" border="0" id="listPropositura_ctrl9_tramitacoes_gvTramitacoes">
+			<tr class="grid-header-listagem-simples">
+				<th scope="col">Tramitação</th>
+			</tr><tr class="grid-row-item">
+				<td>
+
+                <table width="100%">
+                    <tr>
+                        <td width="10%"><strong>Sequência: </strong>4</td>
+                        <td width="45%"><strong>Remetente: </strong>Secretaria Municipal de Governo</td>
+                        <td width="45%"><strong>Destinatário: </strong>Secretaria Mesa Diretora</td>
+                    </tr>
+                </table>
+
+                <table width="100%">
+                    <tr>
+                        <td width="55%"><strong>Objetivo: </strong>Respondido</td>
+                        <td width="45%"><strong>Enviado em: </strong>19/12/2025 19:03</td>
+                    </tr>
+                </table>
+
+                <table width="100%">
+                    <tr id="listPropositura_ctrl9_tramitacoes_gvTramitacoes_ctl02_trComplemento">
+					<td colspan="3"><strong>Complemento: </strong>OFÍCIO/SEMUG/REQ/Nº 111/2025</td>
+				</tr>
+				
+                    <tr id="listPropositura_ctrl9_tramitacoes_gvTramitacoes_ctl02_trResultado">
+					<td id="listPropositura_ctrl9_tramitacoes_gvTramitacoes_ctl02_tdResultado" width="25%"><strong>Resultado: </strong>Ofício Lido na Sessão Plenária do dia</td>
+					<td id="listPropositura_ctrl9_tramitacoes_gvTramitacoes_ctl02_tdDataResposta" width="30%"><strong>Data Resposta: </strong>25/02/2026</td>
+				</tr>
+				
+                    
+                </table>
+            
+            </td>
+			</tr>
+		</table>
+	</div>      
+                                    </fieldset>
+                                </td>
+</tr>
+
+                            
+                            <tr id="listPropositura_ctrl9_trVinculos">
+	<td colspan="2">
+                                    <fieldset>
+                                        <legend>[ Vinculos ]</legend>
+                                        <br />
+                                        <div>
+		<table class="grid-borda" cellspacing="0" cellpadding="5" border="0" id="listPropositura_ctrl9_Vinculos2_gvListagem">
+			<tr class="grid-header-listagem-simples">
+				<th scope="col" width="30%">Documento Vinculado</th><th scope="col" width="15%">Data do Documento</th><th scope="col">Ementa</th>
+			</tr><tr class="grid-row-item">
+				<td>
+                <a href='DetalhesDocumentos.aspx?IdDocumento=290507' target='_blank'>Ofício Legislativo Nº 00145/2025</a>
+            </td><td>
+                12/12/2025
+            </td><td>
+                OFÍCIO/Nº 145/2025/S.M.D.C.P. - ASSUNTO: ENCAMINHA REQUERIMENTOS
+            </td>
+			</tr>
+		</table>
+	</div>
+
+
+                                    </fieldset>
+                                </td>
+</tr>
+        
+                            
+                        </table>
+                    </td>
+                </tr>
+            
+            
+        
+        <tr id="trPaginacao">
+	<td>
+                <table cellpadding='10' width='100%' class='tabela-item'>
+                    <tr>
+                        <td width='33%'><h3 class='destaque'>Requerimento</h3> (<span class='total-item'><strong>253 registro(s)</strong></span>)</td>
+                        <td>
+                            <span id="pager"><span class="currentPage">1</span>&nbsp;<a class="pagenumber" href="/ResultadoPropositura.aspx?Tipo=1&amp;Exibir=1%2c2%2c3%2c4%2c6%2c7%2c8&amp;Ano=2025&amp;NumeroInicial=1&amp;NumeroFinal=400&amp;pagina=2">2</a>&nbsp;<a class="pagenumber" href="/ResultadoPropositura.aspx?Tipo=1&amp;Exibir=1%2c2%2c3%2c4%2c6%2c7%2c8&amp;Ano=2025&amp;NumeroInicial=1&amp;NumeroFinal=400&amp;pagina=3">3</a>&nbsp;<a class="pagenumber" href="/ResultadoPropositura.aspx?Tipo=1&amp;Exibir=1%2c2%2c3%2c4%2c6%2c7%2c8&amp;Ano=2025&amp;NumeroInicial=1&amp;NumeroFinal=400&amp;pagina=4">4</a>&nbsp;<a class="pagenumber" href="/ResultadoPropositura.aspx?Tipo=1&amp;Exibir=1%2c2%2c3%2c4%2c6%2c7%2c8&amp;Ano=2025&amp;NumeroInicial=1&amp;NumeroFinal=400&amp;pagina=5">5</a>&nbsp;<a class="pagenumber" href="/ResultadoPropositura.aspx?Tipo=1&amp;Exibir=1%2c2%2c3%2c4%2c6%2c7%2c8&amp;Ano=2025&amp;NumeroInicial=1&amp;NumeroFinal=400&amp;pagina=6">6</a>&nbsp;<a class="pagenumber" href="/ResultadoPropositura.aspx?Tipo=1&amp;Exibir=1%2c2%2c3%2c4%2c6%2c7%2c8&amp;Ano=2025&amp;NumeroInicial=1&amp;NumeroFinal=400&amp;pagina=7">7</a>&nbsp;<a class="pagenumber" href="/ResultadoPropositura.aspx?Tipo=1&amp;Exibir=1%2c2%2c3%2c4%2c6%2c7%2c8&amp;Ano=2025&amp;NumeroInicial=1&amp;NumeroFinal=400&amp;pagina=8">8</a>&nbsp;<a class="pagenumber" href="/ResultadoPropositura.aspx?Tipo=1&amp;Exibir=1%2c2%2c3%2c4%2c6%2c7%2c8&amp;Ano=2025&amp;NumeroInicial=1&amp;NumeroFinal=400&amp;pagina=9">9</a>&nbsp;<a class="pagenumber" href="/ResultadoPropositura.aspx?Tipo=1&amp;Exibir=1%2c2%2c3%2c4%2c6%2c7%2c8&amp;Ano=2025&amp;NumeroInicial=1&amp;NumeroFinal=400&amp;pagina=10">10</a>&nbsp;&nbsp;<a href="/ResultadoPropositura.aspx?Tipo=1&amp;Exibir=1%2c2%2c3%2c4%2c6%2c7%2c8&amp;Ano=2025&amp;NumeroInicial=1&amp;NumeroFinal=400&amp;pagina=11">...</a>&nbsp;</span>
+                        </td>
+                        <td width='20%' align="right">
+                            Ir para página: <select name="ddlPaginacao" id="ddlPaginacao" class="controle-dropDownList" onchange="window.location.href='?Exibir=1,2,3,4,6,7,8&amp;Tipo=1&amp;Ano=2025&amp;NumeroInicial=1&amp;NumeroFinal=400&amp;pagina='+this.options[this.selectedIndex].value;">
+		<option selected="selected" value="1">1</option>
+		<option value="2">2</option>
+		<option value="3">3</option>
+		<option value="4">4</option>
+		<option value="5">5</option>
+		<option value="6">6</option>
+		<option value="7">7</option>
+		<option value="8">8</option>
+		<option value="9">9</option>
+		<option value="10">10</option>
+		<option value="11">11</option>
+		<option value="12">12</option>
+		<option value="13">13</option>
+		<option value="14">14</option>
+		<option value="15">15</option>
+		<option value="16">16</option>
+		<option value="17">17</option>
+		<option value="18">18</option>
+		<option value="19">19</option>
+		<option value="20">20</option>
+		<option value="21">21</option>
+		<option value="22">22</option>
+		<option value="23">23</option>
+		<option value="24">24</option>
+		<option value="25">25</option>
+		<option value="26">26</option>
+
+	</select>        
+                        </td>
+                    </tr>
+                </table>
+                <table cellpadding='10' width='100%' class='tabela-item'><tr><td width='33%'><a href='ResultadoPropositura.aspx?Exibir=1,2,3,4,6,7,8&Tipo=2&Ano=2025&NumeroInicial=1&NumeroFinal=400'<h3>Indicação</h3></a> (<span class='total-item'>400 registro(s)</span>)</td><td><span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=2&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=1' class='pagenumber'>1</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=2&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=2' class='pagenumber'>2</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=2&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=3' class='pagenumber'>3</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=2&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=4' class='pagenumber'>4</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=2&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=5' class='pagenumber'>5</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=2&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=6' class='pagenumber'>6</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=2&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=7' class='pagenumber'>7</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=2&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=8' class='pagenumber'>8</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=2&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=9' class='pagenumber'>9</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=2&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=10' class='pagenumber'>10</a></span>&nbsp;</td><td width='20%' align='right'>Ir para página: <select class='controle-dropDownList' name='comboPaginacao2' onchange="window.location.href='?Exibir=1,2,3,4,6,7,8&Tipo=2&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=' + this.options[this.selectedIndex].value;"><option value='1'></option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option><option value='9'>9</option><option value='10'>10</option><option value='11'>11</option><option value='12'>12</option><option value='13'>13</option><option value='14'>14</option><option value='15'>15</option><option value='16'>16</option><option value='17'>17</option><option value='18'>18</option><option value='19'>19</option><option value='20'>20</option><option value='21'>21</option><option value='22'>22</option><option value='23'>23</option><option value='24'>24</option><option value='25'>25</option><option value='26'>26</option><option value='27'>27</option><option value='28'>28</option><option value='29'>29</option><option value='30'>30</option><option value='31'>31</option><option value='32'>32</option><option value='33'>33</option><option value='34'>34</option><option value='35'>35</option><option value='36'>36</option><option value='37'>37</option><option value='38'>38</option><option value='39'>39</option><option value='40'>40</option></select></td></tr></table><table cellpadding='10' width='100%' class='tabela-item'><tr><td width='33%'><a href='ResultadoPropositura.aspx?Exibir=1,2,3,4,6,7,8&Tipo=3&Ano=2025&NumeroInicial=1&NumeroFinal=400'<h3>Moção</h3></a> (<span class='total-item'>400 registro(s)</span>)</td><td><span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=3&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=1' class='pagenumber'>1</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=3&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=2' class='pagenumber'>2</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=3&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=3' class='pagenumber'>3</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=3&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=4' class='pagenumber'>4</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=3&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=5' class='pagenumber'>5</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=3&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=6' class='pagenumber'>6</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=3&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=7' class='pagenumber'>7</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=3&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=8' class='pagenumber'>8</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=3&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=9' class='pagenumber'>9</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=3&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=10' class='pagenumber'>10</a></span>&nbsp;</td><td width='20%' align='right'>Ir para página: <select class='controle-dropDownList' name='comboPaginacao3' onchange="window.location.href='?Exibir=1,2,3,4,6,7,8&Tipo=3&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=' + this.options[this.selectedIndex].value;"><option value='1'></option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option><option value='9'>9</option><option value='10'>10</option><option value='11'>11</option><option value='12'>12</option><option value='13'>13</option><option value='14'>14</option><option value='15'>15</option><option value='16'>16</option><option value='17'>17</option><option value='18'>18</option><option value='19'>19</option><option value='20'>20</option><option value='21'>21</option><option value='22'>22</option><option value='23'>23</option><option value='24'>24</option><option value='25'>25</option><option value='26'>26</option><option value='27'>27</option><option value='28'>28</option><option value='29'>29</option><option value='30'>30</option><option value='31'>31</option><option value='32'>32</option><option value='33'>33</option><option value='34'>34</option><option value='35'>35</option><option value='36'>36</option><option value='37'>37</option><option value='38'>38</option><option value='39'>39</option><option value='40'>40</option></select></td></tr></table><table cellpadding='10' width='100%' class='tabela-item'><tr><td width='33%'><a href='ResultadoPropositura.aspx?Exibir=1,2,3,4,6,7,8&Tipo=4&Ano=2025&NumeroInicial=1&NumeroFinal=400'<h3>Projeto de Lei</h3></a> (<span class='total-item'>400 registro(s)</span>)</td><td><span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=4&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=1' class='pagenumber'>1</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=4&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=2' class='pagenumber'>2</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=4&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=3' class='pagenumber'>3</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=4&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=4' class='pagenumber'>4</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=4&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=5' class='pagenumber'>5</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=4&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=6' class='pagenumber'>6</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=4&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=7' class='pagenumber'>7</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=4&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=8' class='pagenumber'>8</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=4&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=9' class='pagenumber'>9</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=4&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=10' class='pagenumber'>10</a></span>&nbsp;</td><td width='20%' align='right'>Ir para página: <select class='controle-dropDownList' name='comboPaginacao4' onchange="window.location.href='?Exibir=1,2,3,4,6,7,8&Tipo=4&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=' + this.options[this.selectedIndex].value;"><option value='1'></option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option><option value='9'>9</option><option value='10'>10</option><option value='11'>11</option><option value='12'>12</option><option value='13'>13</option><option value='14'>14</option><option value='15'>15</option><option value='16'>16</option><option value='17'>17</option><option value='18'>18</option><option value='19'>19</option><option value='20'>20</option><option value='21'>21</option><option value='22'>22</option><option value='23'>23</option><option value='24'>24</option><option value='25'>25</option><option value='26'>26</option><option value='27'>27</option><option value='28'>28</option><option value='29'>29</option><option value='30'>30</option><option value='31'>31</option><option value='32'>32</option><option value='33'>33</option><option value='34'>34</option><option value='35'>35</option><option value='36'>36</option><option value='37'>37</option><option value='38'>38</option><option value='39'>39</option><option value='40'>40</option></select></td></tr></table><table cellpadding='10' width='100%' class='tabela-item'><tr><td width='33%'><a href='ResultadoPropositura.aspx?Exibir=1,2,3,4,6,7,8&Tipo=6&Ano=2025&NumeroInicial=1&NumeroFinal=400'<h3>Projeto de Decreto Legislativo</h3></a> (<span class='total-item'>315 registro(s)</span>)</td><td><span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=6&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=1' class='pagenumber'>1</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=6&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=2' class='pagenumber'>2</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=6&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=3' class='pagenumber'>3</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=6&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=4' class='pagenumber'>4</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=6&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=5' class='pagenumber'>5</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=6&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=6' class='pagenumber'>6</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=6&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=7' class='pagenumber'>7</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=6&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=8' class='pagenumber'>8</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=6&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=9' class='pagenumber'>9</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=6&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=10' class='pagenumber'>10</a></span>&nbsp;</td><td width='20%' align='right'>Ir para página: <select class='controle-dropDownList' name='comboPaginacao6' onchange="window.location.href='?Exibir=1,2,3,4,6,7,8&Tipo=6&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=' + this.options[this.selectedIndex].value;"><option value='1'></option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option><option value='9'>9</option><option value='10'>10</option><option value='11'>11</option><option value='12'>12</option><option value='13'>13</option><option value='14'>14</option><option value='15'>15</option><option value='16'>16</option><option value='17'>17</option><option value='18'>18</option><option value='19'>19</option><option value='20'>20</option><option value='21'>21</option><option value='22'>22</option><option value='23'>23</option><option value='24'>24</option><option value='25'>25</option><option value='26'>26</option><option value='27'>27</option><option value='28'>28</option><option value='29'>29</option><option value='30'>30</option><option value='31'>31</option><option value='32'>32</option><option value='33'>33</option></select></td></tr></table><table cellpadding='10' width='100%' class='tabela-item'><tr><td width='33%'><a href='ResultadoPropositura.aspx?Exibir=1,2,3,4,6,7,8&Tipo=7&Ano=2025&NumeroInicial=1&NumeroFinal=400'<h3>Projeto de Resolução</h3></a> (<span class='total-item'>22 registro(s)</span>)</td><td><span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=7&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=1' class='pagenumber'>1</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=7&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=2' class='pagenumber'>2</a></span>&nbsp;<span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=7&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=3' class='pagenumber'>3</a></span>&nbsp;</td><td width='20%' align='right'>Ir para página: <select class='controle-dropDownList' name='comboPaginacao7' onchange="window.location.href='?Exibir=1,2,3,4,6,7,8&Tipo=7&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=' + this.options[this.selectedIndex].value;"><option value='1'></option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option></select></td></tr></table><table cellpadding='10' width='100%' class='tabela-item'><tr><td width='33%'><a href='ResultadoPropositura.aspx?Exibir=1,2,3,4,6,7,8&Tipo=8&Ano=2025&NumeroInicial=1&NumeroFinal=400'<h3>Projeto de Emenda à Lei Orgânica</h3></a> (<span class='total-item'>4 registro(s)</span>)</td><td><span><a href='?Exibir=1,2,3,4,6,7,8&Tipo=8&Ano=2025&NumeroInicial=1&NumeroFinal=400&pagina=1' class='pagenumber'>1</a></span>&nbsp;</td><td width='20%' align='right'></td></tr></table>                
+            </td>
+</tr>
+
+    </table>
+    <br />
+
+    <div align="center">
+        <table align="center">
+            <tr valign="top">
+                <td><a href="javascript:history.back();"><img src="imagens/voltar.png" border="0" alt="" /></a></td>
+                <td><a href="#topo"><img src="imagens/topo.png" border="0" alt="" /></a></td>
+                <td><a href="Default.aspx"><img src="imagens/novaconsulta.png" border="0" alt="" /></a></td>
+                
+            </tr>
+        </table>
+    </div>
+
+    </div>
+
+    
+    
+    
+
+<script type="text/javascript">
+//<![CDATA[
+Sys.Application.initialize();
+//]]>
+</script>
+</form>
+</body>
+</html>

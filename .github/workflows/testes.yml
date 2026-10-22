@@ -1,0 +1,54 @@
+name: Testes
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: "Referência a verificar; por padrão, o commit do evento."
+        required: false
+        type: string
+        default: ""
+    outputs:
+      sha:
+        description: "Commit aprovado nas verificações."
+        value: ${{ jobs.testes.outputs.sha }}
+  pull_request:
+  push:
+    branches-ignore: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  testes:
+    runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.checkout.outputs.commit }}
+    steps:
+      - uses: actions/checkout@v4
+        id: checkout
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Executar testes Python
+        run: python -m unittest discover -s tests -t . -v
+
+      - name: Validar dados
+        run: python -m coletor.validar
+
+      - name: Executar testes JavaScript, quando presentes
+        run: if [ -d tests/js ]; then node --test "tests/js/**/*.test.js"; fi
+
+      - name: Verificar geração do site
+        run: |
+          python -m coletor.gerar_site
+          test -f site/index.html
+          test -f site/dados/projetos.json

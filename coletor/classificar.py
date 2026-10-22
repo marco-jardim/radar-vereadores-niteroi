@@ -24,6 +24,8 @@ import urllib.request
 import uuid
 from pathlib import Path
 
+from coletor.arquivos import salvar_json, salvar_mapa
+
 RAIZ = Path(__file__).resolve().parent.parent
 DIR_DADOS = RAIZ / "data" / "proposicoes"
 CACHE_IA = RAIZ / "data" / "classificacao_ia.json"
@@ -246,9 +248,9 @@ def classificar(usar_ia: bool, limite: int | None) -> dict:
                     }
                     estat["ia_novos"] += 1
             if (i // LOTE) % 10 == 9:
-                CACHE_IA.write_text(json.dumps(cache, ensure_ascii=False, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+                salvar_mapa(CACHE_IA, cache)
                 print(f"  {min(i + LOTE, len(pendentes))}/{len(pendentes)}", flush=True)
-        CACHE_IA.write_text(json.dumps(cache, ensure_ascii=False, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+        salvar_mapa(CACHE_IA, cache)  # um projeto por linha: diffs por registro
     elif usar_ia:
         print("OPENCODE_API_KEY não definida: classificação só por regras e curadoria.", file=sys.stderr)
     return estat
@@ -307,7 +309,7 @@ def main() -> None:
     meta = RAIZ / "data" / "meta.json"
     dados = json.loads(meta.read_text(encoding="utf-8")) if meta.exists() else {}
     dados["classificacao"] = {**estat, "modelo": MODELO, "versao_prompt": VERSAO_PROMPT}
-    meta.write_text(json.dumps(dados, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    salvar_json(meta, dados)
     print(json.dumps(estat, ensure_ascii=False))
 
 

@@ -10,6 +10,10 @@ on:
         description: "Intervalo de anos (ex.: 2021-2026). Vazio = 2021 até o ano atual."
         required: false
         default: ""
+      anos_documentos:
+        description: "Anos dos documentos (ex.: 2021-2022). Vazio = ano anterior e atual."
+        required: false
+        default: ""
       forcar:
         description: "Rebaixar todos os detalhes, mesmo sem mudança"
         type: boolean
@@ -25,7 +29,7 @@ concurrency:
 jobs:
   coletar:
     runs-on: ubuntu-latest
-    timeout-minutes: 300
+    timeout-minutes: 350
     steps:
       - uses: actions/checkout@v4
 
@@ -34,6 +38,7 @@ jobs:
           python-version: "3.12"
 
       - name: Baixar projetos do SISCAM
+        timeout-minutes: 90
         env:
           ANOS: ${{ inputs.anos }}
           FORCAR: ${{ inputs.forcar }}
@@ -43,7 +48,28 @@ jobs:
           if [ "$FORCAR" = "true" ]; then args="$args --forcar"; fi
           python -m coletor.siscam $args
 
+      - name: Listar demais documentos do SISCAM (requerimentos, indicações, moções, PDLs e resoluções)
+        # um problema no SISCAM com estes tipos (falha ou lentidão) não pode impedir a
+        # gravação semanal dos projetos de lei: se a validação ou os testes falharem, as
+        # mudanças em data/documentos são descartadas e os projetos de lei são validados
+        # de novo sem elas. Os arquivos são gravados de forma atômica e o detalhe que
+        # faltar fica marcado como pendente para a próxima execução. O prazo interno
+        # (--max-minutos) encerra a coleta de forma limpa; o `timeout` (SIGTERM, que o
+        # coletor trata gravando o que já baixou) e o limite do passo ficam como reserva.
+        id: documentos
+        continue-on-error: true
+        timeout-minutes: 120
+        env:
+          ANOS: ${{ inputs.anos_documentos }}
+          FORCAR: ${{ inputs.forcar }}
+        run: |
+          args="--max-minutos 100"
+          if [ -n "$ANOS" ]; then args="$args --anos $ANOS"; fi
+          if [ "$FORCAR" = "true" ]; then args="$args --forcar"; fi
+          timeout --kill-after=2m 110m python -m coletor.documentos $args
+
       - name: Classificar projetos (regras, curadoria e IA)
+        timeout-minutes: 90
         env:
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
           OPENCODE_MODEL: ${{ vars.OPENCODE_MODEL }}
@@ -51,14 +77,64 @@ jobs:
           if [ -z "$OPENCODE_MODEL" ]; then unset OPENCODE_MODEL; fi
           python -m coletor.classificar
 
+      - name: Validar dados e executar testes
+        id: validar
+        continue-on-error: true
+        env:
+          RADAR_COLETA: "1"
+        run: |
+          python -m coletor.validar
+          python -m unittest discover -s tests -t .
+
+      - name: Descartar documentos e validar novamente os projetos de lei
+        # barreira obrigatória: sem continue-on-error, uma falha aqui impede o commit
+        id: fallback
+        if: steps.validar.outcome == 'failure'
+        env:
+          RADAR_COLETA: "1"
+        run: |
+          echo "::warning::validação ou testes falharam; mudanças em data/documentos descartadas, gravando somente os demais dados"
+          git checkout -- data/documentos 2>/dev/null || true
+          git clean -fdq -- data/documentos
+          # temporários de uma gravação interrompida (o arquivo de destino segue intacto)
+          find data -name '.*.tmp' -delete
+          # a chave "documentos" de data/meta.json fica com as estatísticas desta execução:
+          # o arquivo também é escrito pela coleta e pela classificação dos projetos de lei
+          python -m coletor.validar
+          python -m unittest discover -s tests -t .
+
       - name: Gravar dados no repositório
+        if: steps.validar.outcome == 'success' || steps.fallback.outcome == 'success'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          find data -name '.*.tmp' -delete
           git add data
           if git diff --cached --quiet; then
             echo "Nenhuma mudança nos dados."
           else
             git commit -m "Atualiza dados do SISCAM ($(date -u +%Y-%m-%d))"
-            git push
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push origin "HEAD:$GITHUB_REF_NAME"
           fi
+
+      # Se nada foi gravado (validação de reserva, classificação ou push com falha), a
+      # classificação paga da IA em data/classificacao_ia.json não pode se perder:
+      # data/ inteiro fica disponível como artefato da execução.
+      - name: Preservar dados não gravados
+        if: failure() || steps.fallback.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: dados-nao-gravados-${{ github.run_id }}
+          path: data/
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Explicar como recuperar os dados não gravados
+        if: failure() || steps.fallback.outcome == 'failure'
+        run: |
+          echo "::warning::os dados desta execução não foram gravados no repositório. Baixe o artefato dados-nao-gravados-$GITHUB_RUN_ID (Artifacts em $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID, por 14 dias), extraia-o sobre data/ numa cópia local atualizada, rode python -m coletor.validar e faça o commit ao menos de data/classificacao_ia.json, que guarda a classificação já paga da IA."
+
+      - name: Avisar falha na coleta de documentos
+        if: always() && steps.documentos.outcome == 'failure'
+        run: echo "::warning::coleta de documentos falhou nesta execução"
