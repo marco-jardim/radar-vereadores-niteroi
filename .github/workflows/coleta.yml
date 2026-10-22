@@ -1,0 +1,64 @@
+name: Coleta semanal
+
+on:
+  schedule:
+    # segundas-feiras, 06:17 no horário de Brasília (09:17 UTC)
+    - cron: "17 9 * * 1"
+  workflow_dispatch:
+    inputs:
+      anos:
+        description: "Intervalo de anos (ex.: 2021-2026). Vazio = 2021 até o ano atual."
+        required: false
+        default: ""
+      forcar:
+        description: "Rebaixar todos os detalhes, mesmo sem mudança"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: coleta
+  cancel-in-progress: false
+
+jobs:
+  coletar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Baixar projetos do SISCAM
+        env:
+          ANOS: ${{ inputs.anos }}
+          FORCAR: ${{ inputs.forcar }}
+        run: |
+          args=""
+          if [ -n "$ANOS" ]; then args="$args --anos $ANOS"; fi
+          if [ "$FORCAR" = "true" ]; then args="$args --forcar"; fi
+          python -m coletor.siscam $args
+
+      - name: Classificar projetos (regras, curadoria e IA)
+        env:
+          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+          OPENCODE_MODEL: ${{ vars.OPENCODE_MODEL }}
+        run: |
+          if [ -z "$OPENCODE_MODEL" ]; then unset OPENCODE_MODEL; fi
+          python -m coletor.classificar
+
+      - name: Gravar dados no repositório
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data
+          if git diff --cached --quiet; then
+            echo "Nenhuma mudança nos dados."
+          else
+            git commit -m "Atualiza dados do SISCAM ($(date -u +%Y-%m-%d))"
+            git push
+          fi

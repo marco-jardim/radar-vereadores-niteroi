@@ -1,0 +1,82 @@
+{
+ "_leia_me": "Rótulos atribuídos à mão. Cada entrada precisa de pelo menos uma fonte pública. 'projeto' é o número do PL como no SISCAM (ex.: '1/2022'). 'alertas' usa a mesma taxonomia da IA; 'sinais' aceita 'inconstitucionalidade_declarada'. Com 'substitui_ia': true, os alertas da IA para o projeto são ignorados. Para contestar ou sugerir, abra uma issue ou PR.",
+ "entradas": [
+  {
+   "projeto": "1/2022",
+   "alertas": ["restricao_de_direitos", "pauta_de_costumes"],
+   "nota": "Proíbe o uso de banheiros, vestiários e espaços femininos por pessoas trans em estabelecimentos públicos e privados. Foi a audiência pública em junho de 2026.",
+   "fontes": [
+    "https://folhadoleste.com.br/banheiros-femininos-por-pessoas-trans-em-niteroi-audiencia/",
+    "https://www.atribunarj.com.br/materia/projetos-de-lei-polemicos-serao-votados-em-niteroi"
+   ]
+  },
+  {
+   "projeto": "12/2022",
+   "alertas": ["restricao_de_direitos", "pauta_de_costumes"],
+   "nota": "Proíbe a participação de atletas trans em equipes e competições de acordo com sua identidade de gênero. Desarquivado em 2025.",
+   "fontes": ["https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=138296"]
+  },
+  {
+   "projeto": "410/2021",
+   "alertas": ["restricao_de_direitos", "pauta_de_costumes"],
+   "nota": "Proíbe a instalação e adequação de banheiros unissex em estabelecimentos públicos e privados.",
+   "fontes": ["https://enfoco.com.br/noticias/politica/niteroi-pode-impedir-entrada-de-mulheres-trans-em-espacos-femininos-97413"]
+  },
+  {
+   "projeto": "10/2021",
+   "alertas": ["pauta_de_costumes", "inconstitucionalidade_provavel"],
+   "nota": "Veda a 'linguagem neutra' de gênero no município. Regras de língua e de ensino são de competência da União.",
+   "fontes": ["https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=125466"]
+  },
+  {
+   "projeto": "186/2021",
+   "alertas": ["restricao_de_direitos", "pauta_de_costumes"],
+   "nota": "Veda publicidade com alusão a gênero, orientação sexual e diversidade sexual relacionada a crianças.",
+   "fontes": ["https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=128830"]
+  },
+  {
+   "projeto": "254/2021",
+   "alertas": ["restricao_de_direitos", "pauta_de_costumes"],
+   "nota": "Reapresentação da vedação de publicidade com alusão a gênero e orientação sexual.",
+   "fontes": ["https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=130455"]
+  },
+  {
+   "projeto": "57/2025",
+   "alertas": ["pauta_de_costumes", "apelo_populista"],
+   "nota": "Lei 'Anti-Oruam': proíbe recursos públicos para atrações que façam apologia ao crime ou às drogas em eventos para crianças e adolescentes. O prefeito vetou a multa e a fiscalização pela PM. Críticos apontam risco de exclusão de manifestações culturais das periferias; defensores dizem que só restringe dinheiro público.",
+   "fontes": [
+    "https://revistaoeste.com/politica/niteroi-promulga-lei-anti-oruam-entenda/",
+    "https://diariodopoder.com.br/brasil-e-regioes/niteroi-barra-verba-publica-para-shows-com-apologia-ao-crime-voltados-a-menores"
+   ]
+  },
+  {
+   "projeto": "9/2024",
+   "alertas": ["restricao_de_direitos"],
+   "nota": "'Internação humanizada' de dependentes químicos em situação de rua. Segundo o MPF, a Lei 3.997/2025 (do Executivo) incorpora na prática este projeto; MPF, DPU e DPRJ consideram a internação sem consentimento inconstitucional.",
+   "fontes": ["https://www.mpf.mp.br/o-mpf/unidades/pr-rj/noticias/internacao-compulsoria-de-usuarios-de-alcool-e-drogas-e-inconstitucional-dizem-mpf-dpu-e-dprj"]
+  },
+  {
+   "projeto": "47/2025",
+   "alertas": ["restricao_de_direitos"],
+   "nota": "Projeto do Executivo que virou a Lei 3.997/2025 (acolhimento sem consentimento de pessoas em uso abusivo de drogas e em situação de rua). MPF, DPU e DPRJ emitiram nota técnica considerando a internação sem consentimento inconstitucional.",
+   "fontes": ["https://www.mpf.mp.br/o-mpf/unidades/pr-rj/noticias/internacao-compulsoria-de-usuarios-de-alcool-e-drogas-e-inconstitucional-dizem-mpf-dpu-e-dprj"]
+  },
+  {
+   "projeto": "140/2021",
+   "alertas": [],
+   "sinais": ["inconstitucionalidade_declarada"],
+   "corrige": {"desfecho": "virou_lei", "lei": {"numero": 3958, "data": null, "tipo": "veto_derrubado", "veto_parcial": false}},
+   "nota": "Obrigava prédios a instalar infraestrutura de recarga de veículos elétricos. Virou a Lei 3.958/2024 após a Câmara derrubar o veto do prefeito; o SISCAM registra o projeto apenas como apensado. Em novembro de 2025 o Órgão Especial do TJRJ declarou a lei inconstitucional por unanimidade.",
+   "fontes": ["https://www.sindiconet.com.br/informese/lei-recarga-veiculos-eletricos-niteroi-anulada-noticias-juridico/amp"]
+  },
+  {
+   "projeto": "222/2026",
+   "alertas": ["pauta_de_costumes"],
+   "nota": "Banheiros e vestiários 'neutros' para pessoas trans em locais de uso coletivo ('terceiro banheiro'), apresentado após o ato no Plaza Shopping. Movimentos trans criticam a separação; a autora o apresenta como alternativa de segurança.",
+   "fontes": [
+    "https://folhadoleste.com.br/banheiros-neutros-para-pessoas-trans-alerj-niteroi/",
+    "https://www.atribunarj.com.br/materia/-plaza-shopping-vai-ter-ato-de-travestis-pelo-uso-do-banheiro-feminino"
+   ]
+  }
+ ]
+}

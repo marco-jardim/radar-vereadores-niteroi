@@ -1,0 +1,276 @@
+"""Classificação híbrida dos projetos de lei.
+
+Três camadas, nesta ordem de precedência:
+  1. Curadoria  (config/curadoria.json) — rótulos atribuídos à mão, sempre com fonte.
+  2. Regras     — sinais objetivos extraídos da tramitação (veto, rejeição, parecer
+                  contrário) e padrões de ementa para projetos simbólicos.
+  3. IA         — modelo via OpenCode Go classifica a ementa numa taxonomia fixa,
+                  com justificativa curta e grau de confiança. Resultado em cache.
+
+A IA só roda se OPENCODE_API_KEY estiver definida. Sem ela, valem regras + curadoria.
+Uso: python -m coletor.classificar [--sem-ia] [--limite N]
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+import re
+import sys
+import time
+import urllib.error
+import urllib.request
+import uuid
+from pathlib import Path
+
+RAIZ = Path(__file__).resolve().parent.parent
+DIR_DADOS = RAIZ / "data" / "proposicoes"
+CACHE_IA = RAIZ / "data" / "classificacao_ia.json"
+CURADORIA = RAIZ / "config" / "curadoria.json"
+
+BASE_URL = os.environ.get("OPENCODE_BASE_URL", "https://opencode.ai/zen/go/v1")
+MODELO = os.environ.get("OPENCODE_MODEL", "deepseek-v4.1-flash")
+USER_AGENT = "radar-vereadores-niteroi/1.0 (+https://github.com/marco-jardim/radar-vereadores-niteroi)"
+VERSAO_PROMPT = "2026-10-v1"
+LOTE = int(os.environ.get("CLASSIFICADOR_LOTE", 15))
+
+CATEGORIAS = {
+    "simbolica": "Homenagem, nome de rua/logradouro/prédio público, data ou semana comemorativa, título, "
+    "declaração de patrimônio cultural imaterial, utilidade pública, tombamento de bem específico.",
+    "politica_publica": "Cria ou altera programa, política, serviço público, direito ou benefício para a população.",
+    "regulacao": "Regras para atividades, comércio, consumo, posturas, trânsito, obras, uso do espaço urbano.",
+    "administrativa_fiscal": "Estrutura administrativa, servidores, orçamento, créditos, tributos, fundos, contratos.",
+    "outra": "Nenhuma das anteriores.",
+}
+ALERTAS = {
+    "restricao_de_direitos": "Restringe direitos, acesso a espaços/serviços ou expressão de um grupo "
+    "(ex.: pessoas LGBTQIA+, população em situação de rua, minorias religiosas, mulheres, artistas de periferia).",
+    "pauta_de_costumes": "Tema de disputa moral/cultural (gênero, sexualidade, drogas, religião, 'ideologia') "
+    "cujo efeito principal é simbólico ou de posicionamento, não de gestão.",
+    "apelo_populista": "Medida de forte apelo imediato sem indicação de custo, fonte de recurso ou viabilidade, "
+    "reação a caso midiático, ou que mira pessoa/grupo específico pelo nome.",
+    "inconstitucionalidade_provavel": "Provável vício: invade competência da União/Estado, legisla sobre relações "
+    "privadas fora da competência municipal, ou cria despesa/atribuição ao Executivo por iniciativa parlamentar.",
+}
+ALERTAS_POLEMICOS = {"restricao_de_direitos", "pauta_de_costumes", "apelo_populista"}
+CONFIANCA_MINIMA = float(os.environ.get("CLASSIFICADOR_CONFIANCA_MINIMA", 0.75))
+
+# ------------------------------------------------------------------------ regras
+RE_SIMBOLICA = re.compile(
+    r"\bD[ÁA] (O )?NOME\b|PASSA A (SE )?DENOMINAR|DENOMINA[- ]SE\b|\bDENOMINA (A|O|DE|DO|DA|AS|OS)\b|"
+    r"CALEND[ÁA]RIO OFICIAL|\bDIA MUNICIPAL\b|SEMANA MUNICIPAL|M[ÊE]S MUNICIPAL|UTILIDADE P[ÚU]BLICA|"
+    r"PATRIM[ÔO]NIO CULTURAL (DE NATUREZA )?IMATERIAL|T[ÍI]TULO DE CIDAD|INSTITUI O DIA\b|INCLUI NO CALEND|HOMENAGEM",
+    re.I,
+)
+
+
+def sinais_tramitacao(p: dict) -> list[str]:
+    sinais = []
+    for t in p.get("tramitacoes", []):
+        dest = (t.get("destinatario") or "") + " " + (t.get("remetente") or "")
+        res = (t.get("resultado") or "") + " " + (t.get("observacao") or "")
+        if re.search(r"Constitui[çc][ãa]o e Justi[çc]a", dest, re.I) and re.search(r"\bContr[áa]ri", res, re.I):
+            sinais.append("parecer_contrario_ccj")
+        if re.search(r"rejeitad[oa] em", res, re.I) and not re.search(r"veto", res, re.I):
+            sinais.append("rejeitado_plenario")
+        if re.search(r"veto total", res, re.I):
+            sinais.append("veto_total")
+    s = (p.get("situacao") or "").upper()
+    if s in {"VETO TOTAL", "VETO MANTIDO"}:
+        sinais.append("veto_total")
+    if s == "PARECER CONTRÁRIO":
+        sinais.append("parecer_contrario_ccj")
+    if s in {"REJEITADO", "REJEITADA"}:
+        sinais.append("rejeitado_plenario")
+    lei = p.get("lei") or {}
+    if lei.get("tipo") == "veto_derrubado":
+        sinais.append("veto_derrubado")
+    if lei.get("veto_parcial"):
+        sinais.append("veto_parcial")
+    return sorted(set(sinais))
+
+
+def categoria_por_regra(p: dict) -> str | None:
+    return "simbolica" if RE_SIMBOLICA.search(p.get("ementa") or "") else None
+
+
+# --------------------------------------------------------------------------- IA
+PROMPT_SISTEMA = f"""Você classifica projetos de lei municipais da Câmara de Niterói (RJ) para um site de transparência
+apartidário. Avalie apenas o texto da ementa. Seja conservador: só marque um alerta se a ementa der base clara para ele.
+Aplique os mesmos critérios a qualquer autor, partido ou espectro político.
+
+CATEGORIA (escolha exatamente uma):
+{json.dumps(CATEGORIAS, ensure_ascii=False, indent=1)}
+
+ALERTAS (zero ou mais; a maioria dos projetos não tem nenhum):
+{json.dumps(ALERTAS, ensure_ascii=False, indent=1)}
+
+TEMA: uma palavra entre saude, educacao, seguranca, mobilidade, meio_ambiente, urbanismo, cultura, esporte,
+assistencia_social, direitos_humanos, economia, consumidor, animais, administracao, tributos, homenagem, outro.
+
+Responda SOMENTE com JSON no formato:
+{{"itens":[{{"id":<id>,"categoria":"...","tema":"...","alertas":[{{"rotulo":"...","confianca":0.0-1.0}}],
+"justificativa":"até 200 caracteres, em português, citando o trecho da ementa que motivou os alertas (ou 'sem alertas')"}}]}}"""
+
+
+def _hash(texto: str) -> str:
+    return hashlib.sha1(f"{VERSAO_PROMPT}|{MODELO}|{texto}".encode()).hexdigest()[:16]
+
+
+def chamar_ia(itens: list[dict], chave: str, sessao: str) -> dict[int, dict]:
+    conteudo = "\n".join(f'{{"id":{p["id"]},"ementa":{json.dumps(p.get("ementa") or "", ensure_ascii=False)}}}' for p in itens)
+    corpo = {
+        "model": MODELO,
+        "temperature": 0,
+        "response_format": {"type": "json_object"},
+        "messages": [
+            {"role": "system", "content": PROMPT_SISTEMA},
+            {"role": "user", "content": "Classifique os projetos abaixo (um JSON por linha):\n" + conteudo},
+        ],
+    }
+    req = urllib.request.Request(
+        BASE_URL.rstrip("/") + "/chat/completions",
+        data=json.dumps(corpo).encode(),
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {chave}",
+            "User-Agent": USER_AGENT,
+            "x-opencode-session": sessao,
+        },
+        method="POST",
+    )
+    for tentativa in range(4):
+        try:
+            with urllib.request.urlopen(req, timeout=180) as r:
+                resposta = json.loads(r.read().decode())
+            texto = resposta["choices"][0]["message"]["content"]
+            texto = re.sub(r"^```(?:json)?|```$", "", texto.strip(), flags=re.M)
+            dados = json.loads(texto[texto.find("{"): texto.rfind("}") + 1])
+            return {int(i["id"]): i for i in dados.get("itens", []) if "id" in i}
+        except urllib.error.HTTPError as e:
+            corpo_erro = e.read().decode(errors="ignore")[:300]
+            if e.code in (401, 403):
+                raise PermissionError(f"OpenCode Go recusou a chave ({e.code}): {corpo_erro}")
+            if e.code == 429:
+                espera = int(e.headers.get("Retry-After") or 30 * (tentativa + 1))
+                print(f"  limite de uso; aguardando {espera}s", file=sys.stderr)
+                time.sleep(espera)
+                continue
+            print(f"  HTTP {e.code}: {corpo_erro}", file=sys.stderr)
+        except (json.JSONDecodeError, KeyError, ValueError, urllib.error.URLError, TimeoutError) as e:
+            print(f"  resposta inválida ({type(e).__name__}); tentando de novo", file=sys.stderr)
+        time.sleep(5 * (tentativa + 1))
+    return {}
+
+
+def normalizar_ia(bruto: dict) -> dict:
+    cat = bruto.get("categoria") if bruto.get("categoria") in CATEGORIAS else "outra"
+    alertas = []
+    for a in bruto.get("alertas") or []:
+        if isinstance(a, str):
+            a = {"rotulo": a, "confianca": 0.5}
+        if a.get("rotulo") in ALERTAS:
+            alertas.append({"rotulo": a["rotulo"], "confianca": round(float(a.get("confianca") or 0), 2)})
+    return {
+        "categoria": cat,
+        "tema": str(bruto.get("tema") or "outro")[:30],
+        "alertas": alertas,
+        "justificativa": str(bruto.get("justificativa") or "")[:240],
+    }
+
+
+# ---------------------------------------------------------------------- execução
+def carregar_proposicoes() -> list[dict]:
+    todos = []
+    for arq in sorted(DIR_DADOS.glob("*.json")):
+        todos.extend(json.loads(arq.read_text(encoding="utf-8")))
+    return todos
+
+
+def classificar(usar_ia: bool, limite: int | None) -> dict:
+    proposicoes = carregar_proposicoes()
+    cache = json.loads(CACHE_IA.read_text(encoding="utf-8")) if CACHE_IA.exists() else {}
+    chave = os.environ.get("OPENCODE_API_KEY", "").strip()
+    estat = {"total": len(proposicoes), "ia_novos": 0, "ia_cache": 0, "ia_desligada": not (usar_ia and chave)}
+
+    if usar_ia and chave:
+        pendentes = [p for p in proposicoes if p.get("ementa") and cache.get(str(p["id"]), {}).get("hash") != _hash(p["ementa"])]
+        estat["ia_cache"] = len(proposicoes) - len(pendentes)
+        if limite:
+            pendentes = pendentes[:limite]
+        sessao = f"radar-vereadores-{os.environ.get('GITHUB_RUN_ID') or uuid.uuid4().hex[:12]}"
+        print(f"IA: {len(pendentes)} projetos para classificar com {MODELO}", flush=True)
+        for i in range(0, len(pendentes), LOTE):
+            lote = pendentes[i: i + LOTE]
+            try:
+                respostas = chamar_ia(lote, chave, sessao)
+            except PermissionError as e:  # chave inválida: segue só com regras e curadoria
+                print(f"::warning::{e}", file=sys.stderr)
+                estat["ia_erro"] = str(e)
+                break
+            for p in lote:
+                if p["id"] in respostas:
+                    cache[str(p["id"])] = {
+                        **normalizar_ia(respostas[p["id"]]),
+                        "hash": _hash(p["ementa"]),
+                        "modelo": MODELO,
+                        "versao_prompt": VERSAO_PROMPT,
+                    }
+                    estat["ia_novos"] += 1
+            if (i // LOTE) % 10 == 9:
+                CACHE_IA.write_text(json.dumps(cache, ensure_ascii=False, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+                print(f"  {min(i + LOTE, len(pendentes))}/{len(pendentes)}", flush=True)
+        CACHE_IA.write_text(json.dumps(cache, ensure_ascii=False, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+    elif usar_ia:
+        print("OPENCODE_API_KEY não definida: classificação só por regras e curadoria.", file=sys.stderr)
+    return estat
+
+
+def classificacao_final(p: dict, cache_ia: dict, curadoria: dict) -> dict:
+    """Combina as três camadas. Usada pelo gerador do site."""
+    ia = cache_ia.get(str(p["id"]))
+    cur = curadoria.get(p["numero"])
+    categoria = (cur or {}).get("categoria") or categoria_por_regra(p) or (ia or {}).get("categoria") or "outra"
+    alertas = []
+    if cur:
+        for r in cur.get("alertas", []):
+            alertas.append({"rotulo": r, "origem": "curadoria", "fontes": cur.get("fontes", []), "nota": cur.get("nota", "")})
+    if ia and not (cur and cur.get("substitui_ia")):
+        ja = {a["rotulo"] for a in alertas}
+        for a in ia.get("alertas", []):
+            if a["rotulo"] not in ja and a["confianca"] >= CONFIANCA_MINIMA:
+                alertas.append({"rotulo": a["rotulo"], "origem": "ia", "confianca": a["confianca"], "nota": ia.get("justificativa", "")})
+    return {
+        "categoria": categoria,
+        "tema": (ia or {}).get("tema") or ("homenagem" if categoria == "simbolica" else "outro"),
+        "sinais": sinais_tramitacao(p) + (cur or {}).get("sinais", []),
+        "alertas": alertas,
+        "polemico": any(a["rotulo"] in ALERTAS_POLEMICOS for a in alertas),
+        "risco_juridico": any(a["rotulo"] == "inconstitucionalidade_provavel" for a in alertas)
+        or "inconstitucionalidade_declarada" in (cur or {}).get("sinais", []),
+    }
+
+
+def carregar_curadoria() -> dict:
+    if not CURADORIA.exists():
+        return {}
+    dados = json.loads(CURADORIA.read_text(encoding="utf-8"))
+    return {e["projeto"]: e for e in dados.get("entradas", [])}
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--sem-ia", action="store_true")
+    ap.add_argument("--limite", type=int, default=None, help="classifica no máximo N projetos novos")
+    args = ap.parse_args()
+    estat = classificar(not args.sem_ia, args.limite)
+    meta = RAIZ / "data" / "meta.json"
+    dados = json.loads(meta.read_text(encoding="utf-8")) if meta.exists() else {}
+    dados["classificacao"] = {**estat, "modelo": MODELO, "versao_prompt": VERSAO_PROMPT}
+    meta.write_text(json.dumps(dados, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    print(json.dumps(estat, ensure_ascii=False))
+
+
+if __name__ == "__main__":
+    main()

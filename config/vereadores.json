@@ -1,0 +1,268 @@
+{
+ "_leia_me": "Composição eleita por legislatura, com o partido da eleição. 'siscam' é o nome exatamente como aparece no SISCAM. Quem assina projetos como Vereador e não está em 'eleitos' é tratado como suplente em exercício. Corrija aqui e abra um PR.",
+ "legislaturas": [
+  {
+   "id": "2021-2024",
+   "inicio": "2021-01-01",
+   "fim": "2024-12-31",
+   "fonte": "https://diariodorio.com/quem-sao-os-vereadores-eleitos-em-niteroi-em-2020/",
+   "observacao": "Paulo Boechat (PDT) foi eleito em 2020 e morreu de Covid-19 antes de assumir; a vaga ficou com suplente. Fonte: https://oantagonista.com.br/brasil/vereador-eleito-irmao-de-boechat-morre-de-covid-19/",
+   "eleitos": [
+    {
+     "nome": "Andrigo",
+     "siscam": "JORGE ANDRIGO DIAS DE CARVALHO",
+     "partido": "PDT"
+    },
+    {
+     "nome": "Renato Cariello",
+     "siscam": "RENATO FERREIRA DE OLIVEIRA CARIELLO",
+     "partido": "PDT"
+    },
+    {
+     "nome": "Binho Guimarães",
+     "siscam": "ROBSON GUIMARÃES JOSÉ FILHO",
+     "partido": "PDT"
+    },
+    {
+     "nome": "Benny Briolly",
+     "siscam": "BENNY BRIOLLY",
+     "partido": "PSOL"
+    },
+    {
+     "nome": "Professor Túlio",
+     "siscam": "TULIO RABELO DE ALBUQUERQUE MOTA",
+     "partido": "PSOL"
+    },
+    {
+     "nome": "Paulo Eduardo Gomes",
+     "siscam": "PAULO EDUARDO GOMES",
+     "partido": "PSOL"
+    },
+    {
+     "nome": "Gallo",
+     "siscam": "LUIZ CARLOS GALLO DE FREITAS",
+     "partido": "Cidadania"
+    },
+    {
+     "nome": "Fabiano Gonçalves",
+     "siscam": "FABIANO GONÇALVES",
+     "partido": "Cidadania"
+    },
+    {
+     "nome": "Paulo Velasco",
+     "siscam": "PAULO FERNANDO GONÇALVES VELASCO",
+     "partido": "Avante"
+    },
+    {
+     "nome": "Daniel Marques",
+     "siscam": "DANIEL MARQUES FREDERICO",
+     "partido": "DEM"
+    },
+    {
+     "nome": "Rodrigo Farah",
+     "siscam": "RODRIGO FLACH FARAH",
+     "partido": "MDB"
+    },
+    {
+     "nome": "Leonardo Giordano",
+     "siscam": "LEONARDO SOARES GIORDANO",
+     "partido": "PCdoB"
+    },
+    {
+     "nome": "Beto da Pipa",
+     "siscam": "ROBERTO FERNANDES JALES",
+     "partido": "PL"
+    },
+    {
+     "nome": "Milton Cal",
+     "siscam": "MILTON CARLOS DA SILVA LOPES",
+     "partido": "PP"
+    },
+    {
+     "nome": "Folha",
+     "siscam": "JOSÉ ADRIANO VALLE DA COSTA - FOLHA",
+     "partido": "PSD"
+    },
+    {
+     "nome": "Casota",
+     "siscam": "CARLOS OTÁVIO DIAS VAZ - CASOTA",
+     "partido": "PSDB"
+    },
+    {
+     "nome": "Verônica Lima",
+     "siscam": "VERÔNICA DOS SANTOS LIMA",
+     "partido": "PT"
+    },
+    {
+     "nome": "Douglas Gomes",
+     "siscam": "DOUGLAS DE SOUZA GOMES",
+     "partido": "PTC"
+    },
+    {
+     "nome": "Leandro Portugal",
+     "siscam": "LEANDRO PORTUGAL FRANZEN DE LIMA",
+     "partido": "PV"
+    },
+    {
+     "nome": "Emanuel Rocha",
+     "siscam": "EMANUEL JORGE ROCHA",
+     "partido": "Solidariedade"
+    }
+   ]
+  },
+  {
+   "id": "2025-2028",
+   "inicio": "2025-01-01",
+   "fim": "2028-12-31",
+   "fonte": "https://diariodorio.com/confira-os-vereadores-eleitos-em-niteroi-em-2024/",
+   "eleitos": [
+    {
+     "nome": "Douglas Gomes",
+     "siscam": "DOUGLAS DE SOUZA GOMES",
+     "partido": "PL"
+    },
+    {
+     "nome": "Professor Túlio",
+     "siscam": "TULIO RABELO DE ALBUQUERQUE MOTA",
+     "partido": "PSOL"
+    },
+    {
+     "nome": "Daniel Marques",
+     "siscam": "DANIEL MARQUES FREDERICO",
+     "partido": "PL"
+    },
+    {
+     "nome": "Binho Guimarães",
+     "siscam": "ROBSON GUIMARÃES JOSÉ FILHO",
+     "partido": "PDT"
+    },
+    {
+     "nome": "Milton Cal",
+     "siscam": "MILTON CARLOS DA SILVA LOPES",
+     "partido": "União Brasil"
+    },
+    {
+     "nome": "Andrigo",
+     "siscam": "JORGE ANDRIGO DIAS DE CARVALHO",
+     "partido": "PDT"
+    },
+    {
+     "nome": "Anderson Pipico",
+     "siscam": "ANDERSON JOSÉ RODRIGUES - PIPICO",
+     "partido": "PT"
+    },
+    {
+     "nome": "Renato Cariello",
+     "siscam": "RENATO FERREIRA DE OLIVEIRA CARIELLO",
+     "partido": "PDT"
+    },
+    {
+     "nome": "Benny Briolly",
+     "siscam": "BENNY BRIOLLY",
+     "partido": "PSOL"
+    },
+    {
+     "nome": "Rodrigo Farah",
+     "siscam": "RODRIGO FLACH FARAH",
+     "partido": "Cidadania"
+    },
+    {
+     "nome": "Gallo",
+     "siscam": "LUIZ CARLOS GALLO DE FREITAS",
+     "partido": "Cidadania"
+    },
+    {
+     "nome": "Leandro Portugal",
+     "siscam": "LEANDRO PORTUGAL FRANZEN DE LIMA",
+     "partido": "MDB"
+    },
+    {
+     "nome": "Allan Lyra",
+     "siscam": "ALLAN PINHO LYRA",
+     "partido": "PL"
+    },
+    {
+     "nome": "Leonardo Giordano",
+     "siscam": "LEONARDO SOARES GIORDANO",
+     "partido": "PCdoB"
+    },
+    {
+     "nome": "Gabriel Velasco",
+     "siscam": "GABRIEL AMOÊDO GUIMARÃES VELASCO",
+     "partido": "PSD"
+    },
+    {
+     "nome": "Sylvio",
+     "siscam": "SYLVIO MAURÍCIO DE FREITAS",
+     "partido": "PT"
+    },
+    {
+     "nome": "ZAF",
+     "siscam": "JOSÉ ANTONIO TORO FERNANDEZ",
+     "partido": "União Brasil"
+    },
+    {
+     "nome": "Beto da Pipa",
+     "siscam": "ROBERTO FERNANDES JALES",
+     "partido": "MDB"
+    },
+    {
+     "nome": "Fernanda Louback",
+     "siscam": "FERNANDA ANCHIETA LOUBACK",
+     "partido": "PL"
+    },
+    {
+     "nome": "Fabiano Gonçalves",
+     "siscam": "FABIANO GONÇALVES",
+     "partido": "Republicanos"
+    },
+    {
+     "nome": "Michel Saad Neto",
+     "siscam": "MICHEL SALIM SAAD NETO",
+     "partido": "Podemos"
+    }
+   ]
+  }
+ ],
+ "afastamentos": [
+  {
+   "siscam": "JOSÉ ANTONIO TORO FERNANDEZ",
+   "legislatura": "2025-2028",
+   "cargo": "Secretário Municipal do Idoso",
+   "fonte": "https://aseguirniteroi.com.br/noticias/mais-dois-vereadores-reeleitos-farao-parte-do-novo-governo-de-niteroi/"
+  },
+  {
+   "siscam": "JORGE ANDRIGO DIAS DE CARVALHO",
+   "legislatura": "2025-2028",
+   "cargo": "Administração Regional do Fonseca, Cubango e Caramujo",
+   "fonte": "https://folhadoleste.com.br/secretariado-de-rodrigo-neves-ja-abre-espaco-para-suplentes-na-camara-municipal-de-niteroi/"
+  }
+ ],
+ "nao_vereador": [
+  "MESA DIRETORA",
+  "COMISSÃO",
+  "COMISSAO",
+  "FRENTE PARLAMENTAR",
+  "PODER EXECUTIVO",
+  "PREFEITO",
+  "RODRIGO NEVES",
+  "AXEL GRAEL",
+  "TRIBUNAL",
+  "DEFENSORIA",
+  "MINISTÉRIO PÚBLICO"
+ ],
+ "apelidos": {
+  "_leia_me": "Nome de exibição para suplentes e outros autores que não estão em 'eleitos'. Chave: nome exato no SISCAM.",
+  "EMANUEL JORGE ROCHA": "Emanuel Rocha",
+  "RAFAEL FAUSTINO JUNIOR": "Fael Faustino",
+  "RAPHAEL ROCHA BARROS COSTA": "Raphael Costa",
+  "EDUARDO PAIVA DA SILVA": "Eduardo Paiva",
+  "MAURICIO FIRMINO GOMES": "Mauricio Firmino",
+  "ROMÉRIO PEDRO DUARTE": "Romério Duarte",
+  "ANTONIO CARLOS MORETT SILVA JUNIOR": "Antonio Carlos Morett",
+  "JHONATAN COSTA DOS ANJOS": "Jhonatan dos Anjos",
+  "WALKIRIA NICTHEROY OLIVEIRA": "Walkiria Nictheroy",
+  "LUIZ OTÁVIO FERREIRA DE SOUZA NAZAR": "Dr. Nazar",
+  "ATRATINO CORTES COUTINHO NETO": "Atratino"
+ }
+}
