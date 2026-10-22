@@ -105,6 +105,7 @@ section { margin-top: 36px; }
 .cartao h3 a:hover { text-decoration: underline; }
 .cartao-topo { display: flex; justify-content: space-between; gap: 8px; align-items: center; font-size: .82rem; color: var(--tinta-suave); }
 .lei-situacao { font-size: .82rem; font-weight: 600; color: var(--tinta); }
+.via-substitutivo { font-size: .78rem; font-weight: 400; font-style: italic; color: var(--tinta-suave); white-space: nowrap; }
 .cartao-autor { margin-top: auto !important; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .publico { font-size: .86rem; color: var(--tinta-suave); margin: 2px 0 4px; }
 

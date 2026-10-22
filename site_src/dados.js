@@ -17,7 +17,8 @@
       throw new Error("Esquema ou build incompatível");
     }
     var c = fatia.colunas;
-    var colunas = ["id", "ord", "n", "a", "d", "e", "r", "pb", "t", "h", "c", "i", "l", "ld", "lt", "vp", "dl", "o", "lg", "pr", "au", "al", "pol", "s", "rp"];
+    // ls: id do substitutivo de onde saiu a lei (ou null); vira a URL do detalhe, como u.
+    var colunas = ["id", "ord", "n", "a", "d", "e", "r", "pb", "t", "h", "c", "i", "l", "ld", "lt", "vp", "dl", "o", "lg", "pr", "au", "al", "pol", "s", "rp", "ls"];
     colunas.forEach(function (k) {
       if (!Array.isArray(c[k]) || c[k].length !== fatia.n) throw new Error("Coluna inválida: " + k);
     });
@@ -34,7 +35,9 @@
         c: categoria, i: impacto,
         ef: Number(desfecho[0] === "virou_lei" && (impacto !== null ? impacto >= 2 : categoria !== "simbolica" && sinais.indexOf("autorizativa") < 0)),
         se: Number(categoria === "simbolica" || impacto === 0 || sinais.indexOf("autorizativa") >= 0),
-        l: c.l[j], ld: c.ld[j], lt: c.lt[j], vp: c.vp[j], dl: c.dl[j], o: dic.origens[c.o[j]], lg: leg,
+        l: c.l[j], ld: c.ld[j], lt: c.lt[j], vp: c.vp[j],
+        ls: c.ls[j] === null ? null : dic.url_detalhe.replace("{id}", String(c.ls[j])),
+        dl: c.dl[j], o: dic.origens[c.o[j]], lg: leg,
         pt: principal && principal[2][leg] || "", pr: principal ? principal[0] : null,
         au: c.au[j].map(function (a) { var pessoa = dic.pessoas[a]; return [pessoa[1], pessoa[0]]; }),
         al: c.al[j].map(function (a) { return [dic.alertas[a[0]][1], dic.origens[a[1]], a[2]]; }),

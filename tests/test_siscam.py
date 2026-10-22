@@ -1,7 +1,11 @@
 """Testes do coletor do SISCAM: utilidades, parsing de páginas reais e derivações."""
 from __future__ import annotations
 
+import contextlib
+import copy
+import io
 import unittest
+from unittest import mock
 
 from coletor import siscam
 from tests.apoio import ler_fixture, registro_versionado
@@ -321,6 +325,271 @@ class TestDerivarDesfecho(unittest.TestCase):
 
     def test_registro_vazio(self):
         self.assertEqual(siscam.derivar_desfecho({}), "em_tramitacao")
+
+
+# -------------------------------------------------------------------- substitutivos
+# PL 140/2021 (id 127858): o SISCAM o registra como apensado, mas o Substitutivo nº 1 (id 266596)
+# virou a Lei 3.958/2024 depois que a Câmara derrubou o veto total.
+URL_127858 = "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=127858"
+URL_266596 = "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=266596"
+FIXTURES_DETALHE = {127858: "detalhe_pl_127858.html", 266596: "detalhe_substitutivo_266596.html"}
+RESUMO_127858 = {
+    "id": 127858, "numero": "140/2021", "ano": 2021, "situacao": "Apensado",
+    "autor_ids": [(81, "DANIEL MARQUES FREDERICO")], "n_tramitacoes": 10,
+}
+LEI_3958 = {"numero": 3958, "data": "2024-09-12", "tipo": "veto_derrubado", "veto_parcial": False}
+
+
+def doc_da_url(url: str) -> int:
+    return int(url.rsplit("=", 1)[1])
+
+
+def baixar_fixtures(url: str, tentativas: int = 5) -> str:
+    """Substitui siscam.baixar: devolve as páginas reais salvas, sem rede."""
+    return ler_fixture("siscam", FIXTURES_DETALHE[doc_da_url(url)])
+
+
+def silencioso():
+    """Engole os avisos e o progresso impressos pelo coletor."""
+    pilha = contextlib.ExitStack()
+    pilha.enter_context(contextlib.redirect_stderr(io.StringIO()))
+    pilha.enter_context(contextlib.redirect_stdout(io.StringIO()))
+    return pilha
+
+
+def substitutivo(id_: int = 266596, lei: dict | None = None, **campos) -> dict:
+    """Substitutivo já gravado, no formato de montar_registro."""
+    trams = [
+        tram(seq=1, resultado="Aprovado em Discussão Única", observacao="DERRUBADO O VETO TOTAL EM DISCUSSÃO ÚNICA"),
+        tram(seq=2, resultado="PROMULGADO", observacao="PROMULGA LEI Nº 3958/2024, PUBLICADA NO JORNAL", data_resposta="2024-09-12"),
+    ] if lei else []
+    return {"id": id_, "numero": "1", "data": "2024-03-14", "situacao": "RECEBIDO PELA SMD",
+            "autoria": [{"nome": "DANIEL MARQUES FREDERICO", "origem": "Vereador", "papel": "Autor", "id": 81}],
+            "tramitacoes": trams, "lei": lei, **campos}
+
+
+class TestParseSubstitutivos(unittest.TestCase):
+    def test_secao_do_pl_140_2021(self):
+        refs = siscam.parse_substitutivos(ler_fixture("siscam", "detalhe_pl_127858.html"))
+        # só o substitutivo: a Emenda nº 1 (252101) e os pareceres ficam de fora
+        self.assertEqual(refs, [{"id": 266596, "numero": "1", "data": "2024-03-14"}])
+
+    def test_pagina_sem_substitutivos(self):
+        with silencioso():
+            # o próprio substitutivo só tem emendas e parecer
+            self.assertEqual(siscam.parse_substitutivos(ler_fixture("siscam", "detalhe_substitutivo_266596.html")), [])
+            self.assertEqual(siscam.parse_substitutivos(ler_fixture("siscam", "detalhe_pl_275545.html")), [])
+            self.assertEqual(siscam.parse_substitutivos(""), [])
+
+    def test_detalhe_do_pl_continua_igual(self):
+        d = siscam.parse_detalhe(ler_fixture("siscam", "detalhe_pl_127858.html"))
+        self.assertEqual(d["situacao"], "Apensado")
+        self.assertEqual([t["seq"] for t in d["tramitacoes"]], list(range(1, 11)))
+        self.assertEqual(d["tramitacoes"][-1]["observacao"], "RECEBIDO SUBSTITUTIVO N° 01/2024")
+        self.assertNotIn("substitutivos", d)
+        self.assertIsNone(siscam.derivar_lei(d["tramitacoes"]))
+
+    def test_detalhe_do_substitutivo(self):
+        d = siscam.parse_detalhe(ler_fixture("siscam", "detalhe_substitutivo_266596.html"))
+        self.assertEqual(d["situacao"], "RECEBIDO PELA SMD")
+        self.assertEqual(d["data"], "2024-03-14")
+        self.assertEqual(d["autoria"], [
+            {"nome": "DANIEL MARQUES FREDERICO", "origem": "Vereador", "papel": "Autor"},
+            {"nome": "MILTON CARLOS DA SILVA LOPES", "origem": "Vereador", "papel": "Co-Autor"},
+        ])
+        trams = d["tramitacoes"]
+        self.assertEqual([t["seq"] for t in trams], list(range(1, 13)))
+        self.assertEqual((trams[7]["objetivo"], trams[7]["resultado"]), ("Sancionar / Vetar Lei", "Vetado"))
+        self.assertEqual((trams[11]["objetivo"], trams[11]["resultado"], trams[11]["data_resposta"]),
+                         ("VETO DERRUBADO", "PROMULGADO", "2024-09-12"))
+
+    def test_lei_do_substitutivo(self):
+        d = siscam.parse_detalhe(ler_fixture("siscam", "detalhe_substitutivo_266596.html"))
+        self.assertEqual(siscam.derivar_lei(d["tramitacoes"]), LEI_3958)
+
+
+class TestRegistroComSubstitutivo(unittest.TestCase):
+    def montar(self) -> dict:
+        with mock.patch.object(siscam, "baixar", side_effect=baixar_fixtures) as baixar:
+            pagina = siscam.baixar(URL_127858)
+            substitutivos = siscam.coletar_substitutivos(siscam.parse_substitutivos(pagina), None)
+            reg = siscam.montar_registro(RESUMO_127858, siscam.parse_detalhe(pagina), substitutivos)
+        self.assertEqual([c.args[0] for c in baixar.call_args_list], [URL_127858, URL_266596])
+        return reg
+
+    def test_lei_do_substitutivo_vai_para_o_pl_original(self):
+        reg = self.montar()
+        self.assertEqual(reg["desfecho"], "virou_lei")
+        self.assertEqual(reg["lei"], LEI_3958)
+        self.assertEqual(reg["lei_substitutivo"], 266596)
+        self.assertEqual(reg["url"], URL_127858)  # o registro continua sendo o do PL original
+        self.assertEqual((reg["numero"], reg["situacao"]), ("140/2021", "Apensado"))
+
+    def test_forma_do_substitutivo_gravado(self):
+        [s] = self.montar()["substitutivos"]
+        self.assertEqual(set(s), {"id", "numero", "data", "situacao", "autoria", "tramitacoes", "lei"})
+        self.assertEqual((s["id"], s["numero"], s["data"], s["situacao"]), (266596, "1", "2024-03-14", "RECEBIDO PELA SMD"))
+        self.assertEqual(s["lei"], LEI_3958)
+        self.assertEqual(len(s["tramitacoes"]), 12)
+        # ids dos autores vêm da listagem do PL; o coautor que só assina o substitutivo fica sem id
+        self.assertEqual([(a["nome"], a["papel"], a["id"]) for a in s["autoria"]],
+                         [("DANIEL MARQUES FREDERICO", "Autor", 81), ("MILTON CARLOS DA SILVA LOPES", "Co-Autor", None)])
+
+    def test_sem_substitutivos_o_registro_nao_muda(self):
+        detalhe = siscam.parse_detalhe(ler_fixture("siscam", "detalhe_pl_127858.html"))
+        reg = siscam.montar_registro(RESUMO_127858, detalhe)
+        self.assertEqual(reg["desfecho"], "apensado")
+        self.assertIsNone(reg["lei"])
+        self.assertNotIn("substitutivos", reg)
+        self.assertNotIn("lei_substitutivo", reg)
+        vazio = siscam.montar_registro(RESUMO_127858, detalhe, [])
+        self.assertEqual(vazio, {**reg, "substitutivos": []})
+
+
+class TestColetarSubstitutivos(unittest.TestCase):
+    REF = {"id": 266596, "numero": "1", "data": "2024-03-14"}
+
+    def test_falha_mantem_o_substitutivo_anterior(self):
+        anterior = substitutivo(lei=dict(LEI_3958))
+        with silencioso(), mock.patch.object(siscam, "baixar", side_effect=RuntimeError("fora do ar")):
+            self.assertEqual(siscam.coletar_substitutivos([self.REF], [anterior]), [anterior])
+
+    def test_falha_sem_dado_anterior_faz_o_pl_falhar(self):
+        with mock.patch.object(siscam, "baixar", side_effect=RuntimeError("fora do ar")):
+            with self.assertRaisesRegex(RuntimeError, "substitutivo 266596"):
+                siscam.coletar_substitutivos([self.REF], [])
+
+    def test_pagina_sem_tramitacao_nao_apaga_a_anterior(self):
+        anterior = substitutivo(lei=dict(LEI_3958))
+        with silencioso(), mock.patch.object(siscam, "baixar", return_value="<html></html>"):
+            self.assertEqual(siscam.coletar_substitutivos([self.REF], [anterior]), [anterior])
+
+    def test_substitutivo_que_sumiu_da_pagina_e_mantido(self):
+        anterior = substitutivo(id_=111, lei=dict(LEI_3958))
+        with silencioso(), mock.patch.object(siscam, "baixar", side_effect=baixar_fixtures):
+            obtido = siscam.coletar_substitutivos([self.REF], [anterior])
+        self.assertEqual([s["id"] for s in obtido], [266596, 111])
+        self.assertEqual(obtido[1], anterior)
+
+
+class TestAplicarSubstitutivos(unittest.TestCase):
+    def registro(self, **campos) -> dict:
+        return {"situacao": "Apensado", "tramitacoes": [], "lei": None, "desfecho": "apensado", **campos}
+
+    def test_sem_lei_no_substitutivo_o_desfecho_nao_muda(self):
+        reg = siscam.aplicar_substitutivos(self.registro(substitutivos=[substitutivo()]))
+        self.assertEqual(reg["desfecho"], "apensado")
+        self.assertIsNone(reg["lei"])
+        self.assertNotIn("lei_substitutivo", reg)
+
+    def test_vence_o_substitutivo_que_virou_lei(self):
+        reg = siscam.aplicar_substitutivos(self.registro(substitutivos=[substitutivo(id_=1), substitutivo(lei=LEI_3958)]))
+        self.assertEqual((reg["desfecho"], reg["lei"], reg["lei_substitutivo"]), ("virou_lei", LEI_3958, 266596))
+
+    def test_lei_do_proprio_pl_prevalece(self):
+        proprio = tram(resultado="Promulgado/Sancionado", observacao="LEI MUNICIPAL N° 3987/2025", data_resposta="2025-04-08")
+        reg = siscam.aplicar_substitutivos(self.registro(tramitacoes=[proprio], substitutivos=[substitutivo(lei=LEI_3958)],
+                                                         lei_substitutivo=266596))
+        self.assertEqual(reg["lei"]["numero"], 3987)
+        self.assertNotIn("lei_substitutivo", reg)
+
+    def test_recalcula_e_e_idempotente(self):
+        reg = self.registro(substitutivos=[substitutivo(lei=LEI_3958)])
+        uma = copy.deepcopy(siscam.aplicar_substitutivos(reg))
+        self.assertEqual(siscam.aplicar_substitutivos(reg), uma)
+
+
+class TestPrecisaSubstitutivos(unittest.TestCase):
+    def test_casos(self):
+        casos = [
+            (None, False),
+            ({"lei": None}, True),  # registro coletado antes do suporte: backfill
+            ({"lei": None, "substitutivos": []}, False),
+            ({"lei": None, "substitutivos": [substitutivo()]}, True),  # substitutivo ainda sem lei
+            ({"lei": LEI_3958, "substitutivos": [substitutivo(lei=LEI_3958)], "lei_substitutivo": 266596}, False),
+            ({"lei": {"numero": 4000}, "substitutivos": [substitutivo()]}, False),  # o próprio PL já virou lei
+        ]
+        for anterior, esperado in casos:
+            with self.subTest(anterior=anterior):
+                self.assertEqual(siscam.precisa_substitutivos(anterior), esperado)
+
+
+class TestColetarComSubstitutivos(unittest.TestCase):
+    """coletar() com listagem, gravação e downloads simulados."""
+
+    @staticmethod
+    def par(id_: int, numero: int, ano: int, **anterior) -> tuple[dict, dict]:
+        resumo = {"id": id_, "numero": f"{numero}/{ano}", "ano": ano, "situacao": "SMDCP",
+                  "autor_ids": [(81, "DANIEL MARQUES FREDERICO")], "n_tramitacoes": 1}
+        reg = {"id": id_, "numero": resumo["numero"], "ano": ano, "situacao": "SMDCP", "n_tramitacoes": 1,
+               "tramitacoes": [tram()], "lei": None, "desfecho": "em_tramitacao",
+               "autoria": [{"id": 81, "nome": "DANIEL MARQUES FREDERICO", "origem": "Vereador", "papel": "Autor"}],
+               "url": siscam.DETALHE.format(doc=id_), **anterior}
+        return resumo, reg
+
+    def rodar(self, pares: dict[int, list[tuple[dict, dict]]], max_detalhes: int, baixar) -> tuple[dict, dict, list[int]]:
+        salvos, baixados = {}, []
+
+        def baixar_registrando(url, tentativas=5):
+            baixados.append(doc_da_url(url))
+            return baixar(url)
+
+        with silencioso(), \
+                mock.patch.object(siscam, "listar_ano", side_effect=lambda ano, w: [dict(r) for r, _ in pares[ano]]), \
+                mock.patch.object(siscam, "carregar_ano", side_effect=lambda ano: {a["id"]: copy.deepcopy(a) for _, a in pares[ano]}), \
+                mock.patch.object(siscam, "salvar_ano", side_effect=lambda ano, regs: salvos.__setitem__(ano, copy.deepcopy(regs))), \
+                mock.patch.object(siscam, "baixar", side_effect=baixar_registrando):
+            estat = siscam.coletar(sorted(pares), False, 1, max_detalhes)
+        return estat, salvos, baixados
+
+    def test_limite_e_ordem_do_backfill(self):
+        pares = {
+            2025: [self.par(501, 1, 2025), self.par(502, 2, 2025), self.par(503, 3, 2025)],
+            2024: [self.par(401, 1, 2024), self.par(402, 2, 2024),
+                   self.par(403, 3, 2024, substitutivos=[], n_tramitacoes=0),  # mudou na listagem: fora do limite
+                   self.par(404, 4, 2024, substitutivos=[])],                  # já conferido e sem mudança
+        }
+        estat, salvos, baixados = self.rodar(pares, 4, lambda url: "<html></html>")
+        # do mais recente ao mais antigo; a mudança da listagem vem antes e não gasta o limite
+        self.assertEqual(baixados, [503, 502, 501, 403, 402])
+        self.assertEqual((estat["por_substitutivos"], estat["substitutivos_adiados"], estat["falhas"]), (4, 1, 0))
+        for id_ in (501, 502, 503):
+            self.assertEqual(salvos[2025][id_]["substitutivos"], [])
+        self.assertEqual(salvos[2024][402]["substitutivos"], [])
+        self.assertEqual(salvos[2024][403]["substitutivos"], [])
+        self.assertNotIn("substitutivos", salvos[2024][401])  # fica para a próxima execução
+        self.assertEqual(salvos[2024][404], pares[2024][3][1])
+
+    def test_falha_mantem_o_registro_anterior(self):
+        pares = {2025: [self.par(501, 1, 2025), self.par(502, 2, 2025)]}
+
+        def baixar(url):
+            if doc_da_url(url) == 502:
+                raise RuntimeError("fora do ar")
+            return "<html></html>"
+
+        estat, salvos, _ = self.rodar(pares, 10, baixar)
+        self.assertEqual(estat["falhas"], 1)
+        self.assertEqual(salvos[2025][502], pares[2025][1][1])
+        self.assertEqual(salvos[2025][501]["substitutivos"], [])
+
+    def test_pl_140_2021_vira_lei_pelo_substitutivo(self):
+        resumo = dict(RESUMO_127858)
+        _, anterior = self.par(127858, 140, 2021, situacao="Apensado", n_tramitacoes=10, desfecho="apensado")
+        estat, salvos, baixados = self.rodar({2021: [(resumo, anterior)]}, 400, baixar_fixtures)
+        self.assertEqual(baixados, [127858, 266596])
+        self.assertEqual(estat["por_substitutivos"], 1)
+        reg = salvos[2021][127858]
+        self.assertEqual((reg["desfecho"], reg["lei"], reg["lei_substitutivo"]), ("virou_lei", LEI_3958, 266596))
+        self.assertEqual(reg["url"], URL_127858)
+        self.assertFalse(siscam.precisa_substitutivos(reg))  # com a lei, não volta a ser pedido
+
+    def test_limite_zero_nao_baixa_nada_pelos_substitutivos(self):
+        pares = {2025: [self.par(501, 1, 2025)]}
+        estat, salvos, baixados = self.rodar(pares, 0, lambda url: "<html></html>")
+        self.assertEqual(baixados, [])
+        self.assertEqual((estat["por_substitutivos"], estat["substitutivos_adiados"]), (0, 1))
+        self.assertNotIn("substitutivos", salvos[2025][501])
 
 
 if __name__ == "__main__":

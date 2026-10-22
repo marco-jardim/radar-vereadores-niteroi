@@ -10,7 +10,7 @@ const fixture = require("./fixtures/pl.json");
 const fonte = fs.readFileSync(path.join(__dirname, "../../site_src/app.js"), "utf8");
 const copiar = (x) => JSON.parse(JSON.stringify(x));
 const assentar = () => new Promise((resolve) => setImmediate(resolve));
-const COLUNAS_PL = ["id", "ord", "n", "a", "d", "e", "r", "pb", "t", "h", "c", "i", "l", "ld", "lt", "vp", "dl", "o", "lg", "pr", "au", "al", "pol", "s", "rp"];
+const COLUNAS_PL = ["id", "ord", "n", "a", "d", "e", "r", "pb", "t", "h", "c", "i", "l", "ld", "lt", "vp", "dl", "o", "lg", "pr", "au", "al", "pol", "s", "rp", "ls"];
 
 function manifestoPara(build, conjunto = fixture) {
   const arquivos = {};
@@ -41,7 +41,7 @@ function conjuntoPL(n, ajustar = () => {}) {
       id: 400000 + j, ord: j, n: (n - j) + "/2026", a: 2026, d: data, e: "Ementa do projeto " + j, r: "Resumo " + j, pb: "moradores",
       t: 2, h: desfecho[g], c: 1, i: j % 4, l: g === "lei" ? 5000 + j : null, ld: g === "lei" ? data : null, dl: g === "lei" ? 10 : null,
       lt: g === "lei" ? "sancionada" : null, vp: 0,
-      o: 3, lg: 1, pr: 3, au: [3], al: [], pol: j % 5 === 0 ? 1 : 0, s: [], rp: null
+      o: 3, lg: 1, pr: 3, au: [3], al: [], pol: j % 5 === 0 ? 1 : 0, s: [], rp: null, ls: null
     };
     ajustar(linha, j);
     [grupos[g]].concat(j < 40 ? [recentes] : []).forEach((f) => {
@@ -363,6 +363,38 @@ function conjuntoAutoria() {
 }
 
 for (const modo of ["leis", "projetos"]) {
+  test(modo + ": autor acrescentado pelo substitutivo recebe crédito só nos modos de coautoria", async () => {
+    const conjunto = copiar(fixture), leis = conjunto.fatias[0].colunas;
+    const daniel = conjunto.dic.pessoas.findIndex((p) => p[0] === "daniel-marques-frederico");
+    const milton = conjunto.dic.pessoas.push(["milton-carlos-da-silva-lopes", "Cal", { "2021-2024": "PY" }]) - 1;
+    conjunto.dic.n = conjunto.dic.pessoas.length;
+    // Como no modelo: Daniel assina o PL; Milton, só o substitutivo que virou lei.
+    Object.assign(leis, { n: ["140/2021", leis.n[1]], pr: [daniel, leis.pr[1]], au: [[daniel, milton], leis.au[1]],
+      ls: [266596, null] });
+    const app = iniciar({ modo, query: "?autor=milton-carlos-da-silva-lopes" + (modo === "projetos" ? "&desfecho=lei" : ""),
+      manifesto: manifestoPara(fixture.dic.build, conjunto),
+      buscar: (url) => resposta(url, fixture.dic.build, conjunto) });
+    await assentar();
+    assert.equal(app.elementos.csv.disabled, false, "o conjunto com o novo coautor deve carregar sem erro de manifesto");
+    assert.equal(itens(app), 0, "o coautor do substitutivo não vira autor principal do PL");
+    for (const valor of ["1", "so"]) {
+      app.alterar("f-coautor", valor);
+      await assentar();
+      assert.equal(itens(app), 1);
+      assert.match(app.elementos.resultados.innerHTML, /PL 140\/2021/);
+      assert.match(app.elementos.resultados.innerHTML, /chip-principal[^>]+daniel-marques-frederico/);
+      assert.match(app.elementos.resultados.innerHTML, /coautores" title="Cal">e 1 coautor/);
+      assert.match(app.elementos.resultados.innerHTML, /via substitutivo/);
+      const arquivo = await app.csv();
+      assert.equal(arquivo.texto.split("\n").length, 2);
+      assert.match(arquivo.texto, /Daniel Marques; Cal/);
+    }
+    app.alterar("f-autor", "daniel-marques-frederico");
+    app.alterar("f-coautor", "");
+    await assentar();
+    assert.equal(itens(app), 1, "a autoria principal do PL continua recebendo o crédito");
+  });
+
   test(modo + ": autoria principal, incluir e apenas coautoria filtram lista, totais e CSV", async () => {
     const conjunto = conjuntoAutoria();
     const app = iniciar({ modo, query: "?autor=rodrigo-flach-farah", buscar: (url) => resposta(url, fixture.dic.build, conjunto) });
@@ -435,5 +467,20 @@ for (const modo of ["leis", "projetos"]) {
       assert.match(html, /<a class="chip chip-principal" href="vereadores\/sylvio-mauricio-de-freitas\.html">/);
       assert.doesNotMatch(html, /href="vereadores\/[^\"]+" target=/);
     }
+  });
+
+  test(modo + ": lei via substitutivo leva à página do substitutivo, e o número, ao PL original", async () => {
+    const conjunto = copiar(fixture);
+    conjunto.fatias[0].colunas.ls[0] = 266596;
+    const app = iniciar({ modo, buscar: (url) => resposta(url, fixture.dic.build, conjunto) });
+    await assentar();
+    const html = app.elementos.resultados.innerHTML;
+    assert.match(html, /<a href="https:\/\/consultaniteroi\.siscam\.com\.br\/DetalhesDocumentos\.aspx\?IdDocumento=275604" target="_blank" rel="noopener">PL 8\/2025/);
+    assert.ok(html.includes('Sancionada <a class="via-substitutivo" href="https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=266596" ' +
+      'target="_blank" rel="noopener">via substitutivo<span class="so-leitor"> (substitutivo ao PL 8/2025)</span>' +
+      '<span class="so-leitor"> (abre em nova aba)</span></a>'));
+    assert.equal((html.match(/via substitutivo/g) || []).length, 1, "só a lei com substitutivo recebe a marca");
+    assert.ok(html.includes('data-url="https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=275604"'),
+      "os botões do SISCAM continuam no PL original");
   });
 }

@@ -169,6 +169,76 @@ class TestValidarProposicoes(Afirmacoes):
         self.assertEqual(numeros, {"1/2025", "2/2025"})
 
 
+# -------------------------------------------------------------------- substitutivos
+LEI_3958 = {"numero": 3958, "data": "2024-09-12", "tipo": "veto_derrubado", "veto_parcial": False}
+
+
+def substitutivo(**campos) -> dict:
+    base = {
+        "id": 266596, "numero": "1", "data": "2024-03-14", "situacao": "RECEBIDO PELA SMD",
+        "autoria": [{"id": 81, "nome": "DANIEL MARQUES FREDERICO", "origem": "Vereador", "papel": "Autor"},
+                    {"id": None, "nome": "MILTON CARLOS DA SILVA LOPES", "origem": "Vereador", "papel": "Co-Autor"}],
+        "tramitacoes": [{"seq": 12, "enviado": "2024-07-31", "data_resposta": "2024-09-12", "resultado": "PROMULGADO"}],
+        "lei": dict(LEI_3958),
+    }
+    return {**base, **campos}
+
+
+def pl_140(**campos) -> dict:
+    """PL 140/2021 como o coletor grava depois de ler o substitutivo que virou lei."""
+    base = registro(id=127858, numero="140/2021", ano=2021, data="2021-04-21", data_protocolo="2021-04-21",
+                    situacao="Apensado", lei=dict(LEI_3958), substitutivos=[substitutivo()], lei_substitutivo=266596)
+    return {**base, **campos}
+
+
+class TestValidarSubstitutivos(Afirmacoes):
+    def validar(self, p: dict) -> list[str]:
+        return V.validar_proposicoes({p["ano"]: [p]})
+
+    def test_validos(self):
+        self.assertEqual(self.validar(pl_140()), [])
+        self.assertEqual(self.validar(registro(substitutivos=[])), [])  # chave vazia: PL já conferido
+        sem_lei = pl_140(lei=None, desfecho="apensado", substitutivos=[substitutivo(lei=None)])
+        del sem_lei["lei_substitutivo"]
+        self.assertEqual(self.validar(sem_lei), [])
+
+    def test_forma_dos_substitutivos(self):
+        casos = {
+            "'substitutivos' deveria ser uma lista": pl_140(substitutivos={"id": 1}),
+            "substitutivo 1 deveria ser um objeto": pl_140(substitutivos=["x"]),
+            "'id' ausente ou não inteiro": pl_140(substitutivos=[substitutivo(id="266596")]),
+            "é o do próprio PL": pl_140(substitutivos=[substitutivo(id=127858)]),
+            "id 266596 repetido": pl_140(substitutivos=[substitutivo(), substitutivo()]),
+            "'numero' '001'": pl_140(substitutivos=[substitutivo(numero="001")]),
+            "'data' '14/03/2024'": pl_140(substitutivos=[substitutivo(data="14/03/2024")]),
+            "'situacao' ausente": pl_140(substitutivos=[substitutivo(situacao=None)]),
+            "autor 1 sem a chave 'id'": pl_140(substitutivos=[substitutivo(autoria=[{"nome": "X", "origem": "", "papel": "Autor"}])]),
+            "tramitação 12 com 'data_resposta'": pl_140(substitutivos=[substitutivo(tramitacoes=[{"seq": 12, "data_resposta": "12/09/2024"}])]),
+            "'lei.data'": pl_140(substitutivos=[substitutivo(lei={**LEI_3958, "data": "12/09/2024"})]),
+        }
+        for trecho, p in casos.items():
+            with self.subTest(trecho=trecho):
+                self.assertProblema(self.validar(p), trecho)
+        sem_chave = substitutivo()
+        del sem_chave["lei"]
+        self.assertProblema(self.validar(pl_140(substitutivos=[sem_chave])), "sem a chave 'lei'")
+
+    def test_lei_substitutivo_coerente(self):
+        casos = {
+            "deveria ser o id inteiro": pl_140(lei_substitutivo="266596"),
+            "não está em 'substitutivos'": pl_140(lei_substitutivo=999),
+            "aponta para um substitutivo sem lei": pl_140(substitutivos=[substitutivo(lei=None)]),
+            "o PL não consta como lei": pl_140(desfecho="apensado"),
+        }
+        for trecho, p in casos.items():
+            with self.subTest(trecho=trecho):
+                self.assertProblema(self.validar(p), trecho)
+        sem_lista = pl_140()
+        del sem_lista["substitutivos"]
+        self.assertProblema(self.validar(sem_lista), "não está em 'substitutivos'")
+        self.assertProblema(self.validar(pl_140(lei=None)), "o PL não consta como lei")
+
+
 # ------------------------------------------------------------------------ cache IA
 class TestValidarCacheIa(Afirmacoes):
     def test_valido(self):
