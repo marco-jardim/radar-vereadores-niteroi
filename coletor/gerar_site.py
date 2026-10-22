@@ -50,6 +50,8 @@ def dados_cliente(modelo: dict) -> dict:
             "g": DESFECHO_GRUPO.get(p["desfecho"], "andamento"), "dx": NOME_DESFECHO.get(p["desfecho"], p["desfecho"]),
             "c": p["categoria"], "i": p["impacto"], "ef": int(com_efeito(p)), "se": int(sem_efeito(p)),
             "l": lei.get("numero"), "ld": lei.get("data"), "lt": lei.get("tipo"), "vp": int(bool(lei.get("veto_parcial"))),
+            # Página do substitutivo de onde saiu a lei; u continua sendo a do PL original.
+            "ls": URL_DETALHE.format(id=p["lei_substitutivo"]) if p.get("lei_substitutivo") else None,
             "dl": p["dias_ate_lei"],
             "o": p["origem"], "lg": p["legislatura"], "pt": p["partido"], "pr": p["principal"],
             "au": [[a["exibicao"], a["slug"] if a["vereador"] else ""] for a in p["autores"]],
@@ -102,17 +104,20 @@ def exportar_fatias(modelo: dict, cliente: dict, saida: Path) -> dict:
     indices.update({k: {v: i for i, v in enumerate(dic[k])} for k in ("origens", "legislaturas")})
     autores = {(s, nome): i for i, (s, nome, _) in enumerate(dic["pessoas"])}
     principais = {s: i for i, (s, _, _) in enumerate(dic["pessoas"]) if s}
-    # h referencia desfechos; ord restaura a ordem global ao reunir as três fatias.
-    nomes_colunas = ("id", "ord", "n", "a", "d", "e", "r", "pb", "t", "h", "c", "i", "l", "ld", "lt", "vp", "dl", "o", "lg", "pr", "au", "al", "pol", "s", "rp")
+    # h referencia desfechos; ord restaura a ordem global ao reunir as três fatias; ls é o id do substitutivo da lei.
+    nomes_colunas = ("id", "ord", "n", "a", "d", "e", "r", "pb", "t", "h", "c", "i", "l", "ld", "lt", "vp", "dl", "o", "lg", "pr", "au", "al", "pol", "s", "rp", "ls")
     fatias = {nome: {"nome": nome, "n": 0, "colunas": {k: [] for k in nomes_colunas}} for nome in FATIAS_PL}
     recentes = []
     for ordem, (reg, p) in enumerate(zip(registros, cliente["projetos"], strict=True)):
         if p["u"] != dic["url_detalhe"].format(id=reg["id"]):
             raise ValueError(f"URL fora do modelo de detalhes: {p['u']}")
+        ls = reg.get("lei_substitutivo")
+        if p["ls"] != (dic["url_detalhe"].format(id=ls) if ls else None):
+            raise ValueError(f"URL do substitutivo fora do modelo de detalhes: {p['ls']}")
         linha = {k: p[k] for k in ("n", "a", "d", "e", "r", "pb", "i", "l", "ld", "lt", "vp", "dl", "pol", "rp")}
         linha.update({k: indices[tabela][p[k]] for k, tabela in (("t", "temas"), ("c", "categorias"), ("o", "origens"))})
         linha.update({
-            "id": reg["id"], "ord": ordem, "h": indices["desfechos"][reg["desfecho"]],
+            "id": reg["id"], "ord": ordem, "h": indices["desfechos"][reg["desfecho"]], "ls": ls or None,
             "lg": indices["legislaturas"][p["lg"]] if p["lg"] is not None else None,
             "pr": principais[p["pr"]] if p["pr"] is not None else None,
             "au": [autores[(s, nome)] for nome, s in p["au"]],

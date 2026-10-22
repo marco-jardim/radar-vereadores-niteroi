@@ -38,6 +38,17 @@ test("tipo da lei e veto parcial são hidratados sem perder a paridade com o leg
   assert.deepEqual(p, { ...fixture.legado.projetos[1], lt: "veto_derrubado", vp: 1 });
 });
 
+test("substitutivo da lei vira a URL do detalhe, sem mudar a URL do PL original", () => {
+  const fatia = copiar(fixture.fatias[0]);
+  fatia.colunas.ls[0] = 266596;
+  const [p, outro] = hidratar(fixture.dic, fatia);
+  assert.deepEqual(p, { ...fixture.legado.projetos[1], ls: "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=266596" });
+  assert.equal(p.u, fixture.legado.projetos[1].u);
+  assert.equal(outro.ls, null);
+  delete fatia.colunas.ls;
+  assert.throws(() => hidratar(fixture.dic, fatia), /Coluna inválida: ls/);
+});
+
 test("partido é o da legislatura do projeto, com fallback vazio", () => {
   const fatia = copiar(fixture.fatias[0]);
   fatia.colunas.lg[1] = 0;

@@ -65,7 +65,6 @@
    "projeto": "140/2021",
    "alertas": [],
    "sinais": ["inconstitucionalidade_declarada"],
-   "corrige": {"desfecho": "virou_lei", "lei": {"numero": 3958, "data": null, "tipo": "veto_derrubado", "veto_parcial": false}},
    "nota": "Obrigava prédios a instalar infraestrutura de recarga de veículos elétricos. Virou a Lei 3.958/2024 após a Câmara derrubar o veto do prefeito; o SISCAM registra o projeto apenas como apensado. Em novembro de 2025 o Órgão Especial do TJRJ declarou a lei inconstitucional por unanimidade.",
    "fontes": ["https://www.sindiconet.com.br/informese/lei-recarga-veiculos-eletricos-niteroi-anulada-noticias-juridico/amp"]
   },

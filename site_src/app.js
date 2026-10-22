@@ -174,9 +174,15 @@
     if (p.rp) t += '<span class="tag sinal">Repete o PL ' + esc(p.rp) + "</span>";
     return t ? '<p class="tags">' + t + "</p>" : "";
   }
+  // Lei aprovada por substitutivo: este link leva à página do substitutivo; o do número continua no PL original.
+  function viaSubstitutivo(p) {
+    if (!p.ls) return "";
+    return ' <a class="via-substitutivo" href="' + esc(p.ls) + '" target="_blank" rel="noopener">via substitutivo' +
+      '<span class="so-leitor"> (substitutivo ao PL ' + esc(p.n) + ")</span>" + NOVA_ABA + "</a>";
+  }
   function item(p) {
     var lei = p.l ? " · Lei " + esc(p.l) : "";
-    if (p.g === "lei") lei += " · " + esc(situacaoLei(p));
+    if (p.g === "lei") lei += " · " + esc(situacaoLei(p)) + viaSubstitutivo(p);
     var dataLei = p.ld ? dataBr(p.ld) : "data não informada";
     if (p.g === "lei" && modo !== "leis") lei += " · " + esc(dataLei);
     var tema = DADOS.temas[p.t] && p.t !== "outro" && p.t !== "homenagem" ? DADOS.temas[p.t] : "";

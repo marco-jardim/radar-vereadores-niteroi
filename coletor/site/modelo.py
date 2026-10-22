@@ -388,19 +388,53 @@ def atividade_por_autor(documentos: list[dict]) -> dict[str, dict]:
 
 
 # ------------------------------------------------------------------------ modelo
+def substitutivo_da_lei(p: dict) -> dict | None:
+    """Substitutivo de onde saiu a lei do PL (lei_substitutivo), se ele estiver entre os coletados."""
+    ls = p.get("lei_substitutivo")
+    return next((s for s in p.get("substitutivos") or [] if isinstance(s, dict) and s.get("id") == ls), None) if ls else None
+
+
+def autoria_efetiva(p: dict) -> list[dict]:
+    """Soma os autores do substitutivo que virou lei, como coautores se não assinaram o PL."""
+    autoria = p.get("autoria") or []
+    substitutivo = substitutivo_da_lei(p)
+    if not substitutivo or p.get("desfecho") != "virou_lei" or not p.get("lei"):
+        return autoria
+    autores, vistos = [], set()
+    novos = [{**a, "papel": "Co-Autor"} for a in substitutivo.get("autoria") or []]
+    for a in autoria + novos:
+        s = slug(a["nome"])  # mesma identidade usada no PL; o id do autor pode não existir no substitutivo
+        if s not in vistos:
+            vistos.add(s)
+            autores.append(a)
+    return autores
+
+
 def corrigir_proposicao(p: dict, correcao: dict | None) -> dict:
-    """Aplica a curadoria sem apagar campos conhecidos da lei com valores nulos."""
+    """Aplica a curadoria sem apagar campos conhecidos da lei com valores nulos.
+
+    A lei coletada (inclusive a de um substitutivo, com a data da promulgação) só perde para
+    campos não nulos da curadoria.
+    """
     corrigido = {**p, **(correcao or {})}
     lei = {**(p.get("lei") or {})}
     lei.update({k: v for k, v in ((correcao or {}).get("lei") or {}).items() if v is not None})
     if corrigido["desfecho"] == "virou_lei" and not lei.get("data"):
         # A mesma seleção do coletor, mas só entre passos datados: não usar a data de
         # apresentação, votação ou de uma simples menção a outra lei como publicação.
-        trams = [t for t in p.get("tramitacoes", []) if t.get("data_resposta") or t.get("enviado")]
+        # Lei vinda de substitutivo: a tramitação é a do substitutivo, não a do PL original.
+        origem = substitutivo_da_lei(p) or p
+        trams = [t for t in origem.get("tramitacoes", []) if t.get("data_resposta") or t.get("enviado")]
         derivada = derivar_lei(trams) or {}
         lei = {**lei, **derivada, **{k: v for k, v in lei.items() if v is not None}}
     corrigido["lei"] = lei or None
     return corrigido
+
+
+def url_lei(p: dict) -> str:
+    """Página do SISCAM da lei: a do substitutivo aprovado, quando houver; senão, a do próprio PL."""
+    ls = p.get("lei_substitutivo")
+    return URL_DETALHE.format(id=ls) if ls else p["url"]
 
 
 def situacao_lei(lei: dict) -> str:
@@ -469,10 +503,15 @@ def montar_modelo() -> dict:
         else:
             origem = "outra"
         lei = p.get("lei") or {}
+        # Só com lei e substitutivo coletado: o link da lei passa a ser o do substitutivo aprovado.
+        lei_substitutivo = p.get("lei_substitutivo") if p["desfecho"] == "virou_lei" and lei and substitutivo_da_lei(p) else None
+        # O principal e a origem continuam sendo os do PL, mesmo se só o substitutivo tiver vereadores.
+        autoria = autoria_efetiva(p)
         projetos.append({
             "id": p["id"], "numero": p["numero"], "ano": p["ano"], "data": p.get("data"),
             "ementa": p.get("ementa") or "", "situacao": p.get("situacao") or "",
             "desfecho": p["desfecho"], "lei": p.get("lei"), "url": p["url"], "legislatura": leg,
+            "lei_substitutivo": lei_substitutivo,
             "origem": origem,
             "autores": [{"nome": a["nome"], "papel": a.get("papel", ""), "slug": slug(a["nome"]), "vereador": e_vereador(a, cfg["nao_vereador"])} for a in autoria],
             "principal": slug(principal["nome"]) if principal else None,

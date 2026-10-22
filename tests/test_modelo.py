@@ -147,6 +147,26 @@ class TestMarcarRepetidos(unittest.TestCase):
 
 
 # ------------------------------------------------------------- correções de lei
+# PL 140/2021 como o coletor grava depois de ler o Substitutivo nº 1 (id 266596), que virou a Lei 3.958/2024,
+# e a correção da curadoria, que não sabia a data.
+SUBSTITUTIVO_266596 = {
+    "id": 266596, "numero": "1", "data": "2024-03-14", "situacao": "RECEBIDO PELA SMD", "autoria": [],
+    "tramitacoes": [
+        {"resultado": "Vetado", "data_resposta": "2024-06-27", "observacao": "RECEBIDO OF/GAB/N° 396/2024, COM AS RAZÕES DO VETO TOTAL"},
+        {"resultado": "Aprovado em Discussão Única", "enviado": "2024-07-30", "observacao": "DERRUBADO O VETO TOTAL EM DISCUSSÃO ÚNICA."},
+        {"resultado": "PROMULGADO", "enviado": "2024-07-31", "data_resposta": "2024-09-12",
+         "observacao": "PROMULGA LEI Nº 3958/2024, PUBLICADA NO JORNAL “A TRIBUNA” DE 12/09/2024."},
+    ],
+    "lei": {"numero": 3958, "data": "2024-09-12", "tipo": "veto_derrubado", "veto_parcial": False},
+}
+PL_140 = {
+    "id": 127858, "numero": "140/2021", "desfecho": "virou_lei", "lei_substitutivo": 266596,
+    "substitutivos": [SUBSTITUTIVO_266596],
+    "tramitacoes": [{"resultado": "Recebido", "data_resposta": "2024-03-14", "observacao": "RECEBIDO SUBSTITUTIVO N° 01/2024"}],
+}
+CORRIGE_140 = {"desfecho": "virou_lei", "lei": {"numero": 3958, "data": None, "tipo": "veto_derrubado", "veto_parcial": False}}
+
+
 class TestCorrecaoLei(unittest.TestCase):
     def test_nulos_nao_apagam_campos_e_false_e_correcao_valida(self):
         p = {"desfecho": "virou_lei", "lei": {
@@ -186,6 +206,28 @@ class TestCorrecaoLei(unittest.TestCase):
             {"resultado": "Sancionado", "enviado": "2025-03-03"},
         ]}
         self.assertEqual(M.corrigir_proposicao(p, None)["lei"]["data"], "2025-03-03")
+
+    def test_lei_do_substitutivo_com_data_vence_a_data_nula_da_curadoria(self):
+        lei = {"numero": 3958, "data": "2024-09-12", "tipo": "veto_derrubado", "veto_parcial": False}
+        p = {**PL_140, "lei": dict(lei)}
+        corrigido = M.corrigir_proposicao(p, CORRIGE_140)
+        self.assertEqual(corrigido["lei"], lei)
+        self.assertEqual(corrigido["lei_substitutivo"], 266596)
+        # campos não nulos da curadoria continuam prevalecendo
+        outra = M.corrigir_proposicao(p, {"lei": {"numero": 3959, "data": None, "tipo": "sancionada"}})["lei"]
+        self.assertEqual((outra["numero"], outra["data"], outra["tipo"]), (3959, "2024-09-12", "sancionada"))
+
+    def test_data_ausente_vem_da_tramitacao_do_substitutivo(self):
+        p = {**PL_140, "lei": {"numero": 3958, "data": None}}
+        self.assertEqual(M.corrigir_proposicao(p, CORRIGE_140)["lei"]["data"], "2024-09-12")
+        sem_lista = {**p, "substitutivos": []}  # sem o substitutivo, só a tramitação do PL: nenhuma data
+        self.assertIsNone(M.corrigir_proposicao(sem_lista, CORRIGE_140)["lei"].get("data"))
+
+    def test_url_da_lei(self):
+        self.assertEqual(M.url_lei({"url": "https://exemplo.invalid/pl", "lei_substitutivo": 266596}),
+                         "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=266596")
+        self.assertEqual(M.url_lei({"url": "https://exemplo.invalid/pl", "lei_substitutivo": None}), "https://exemplo.invalid/pl")
+        self.assertEqual(M.url_lei({"url": "https://exemplo.invalid/pl"}), "https://exemplo.invalid/pl")
 
     def test_nao_inventa_data_a_partir_de_votacao_ou_outra_lei(self):
         p = {"desfecho": "virou_lei", "lei": {"numero": 3958, "data": None}, "tramitacoes": [
@@ -238,6 +280,95 @@ CACHE_IA = {"1": {
     "categoria": "politica_publica", "impacto": 3, "resumo": "Cria hortas.", "publico": "estudantes", "tema": "educacao",
     "alertas": [], "justificativa": "sem alertas", "hash": "0123456789abcdef",
 }}
+
+
+class TestAutoriaSubstitutivo(unittest.TestCase):
+    def setUp(self):
+        self.daniel = {"id": 1, "nome": "DANIEL MARQUES FREDERICO", "origem": "Vereador", "papel": "Autor"}
+        self.milton = {"id": None, "nome": "MILTON CARLOS DA SILVA LOPES", "origem": "Vereador", "papel": "Co-Autor"}
+        self.p = {
+            **proposicao(127858, "Dispõe sobre infraestrutura de recarga de veículos elétricos", [self.daniel],
+                         data="2021-04-21", ano=2021),
+            **PL_140, "lei": dict(SUBSTITUTIVO_266596["lei"]),
+            "substitutivos": [{**SUBSTITUTIVO_266596, "autoria": [{**self.daniel, "id": None}, self.milton]}],
+        }
+        self.cfg = {**CFG, "afastamentos": [], "legislaturas": [{
+            "id": "2021-2024", "inicio": "2021-01-01", "fim": "2024-12-31",
+            "eleitos": [
+                {"nome": "Daniel Marques", "siscam": self.daniel["nome"], "partido": "PX"},
+                {"nome": "Cal", "siscam": self.milton["nome"], "partido": "PY"},
+            ],
+        }]}
+
+    def montar(self, p: dict) -> dict:
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(M, "RAIZ", Path(tmp)), \
+                mock.patch.object(M, "carregar_config", return_value=self.cfg), \
+                mock.patch.object(M, "carregar_proposicoes", return_value=[p]), \
+                mock.patch.object(M, "carregar_curadoria", return_value={}), \
+                mock.patch.object(M, "carregar_documentos", return_value=[]):
+            return M.montar_modelo()
+
+    def test_soma_autoria_por_nome_sem_duplicar_nem_mudar_os_dados_coletados(self):
+        antes = json.loads(json.dumps(self.p))
+        modelo = self.montar(self.p)
+        p = modelo["projetos"][0]
+        self.assertEqual(p["principal"], "daniel-marques-frederico")
+        self.assertEqual([(a["slug"], a["papel"], a["exibicao"]) for a in p["autores"]], [
+            ("daniel-marques-frederico", "Autor", "Daniel Marques"),
+            ("milton-carlos-da-silva-lopes", "Co-Autor", "Cal"),
+        ])
+        self.assertTrue(all(a["vereador"] for a in p["autores"]))
+        self.assertEqual((p["desfecho"], p["lei"]["numero"], p["lei"]["data"]), ("virou_lei", 3958, "2024-09-12"))
+        daniel = modelo["pessoas"][p["principal"]]["mandatos"]["2021-2024"]
+        milton = modelo["pessoas"]["milton-carlos-da-silva-lopes"]["mandatos"]["2021-2024"]
+        self.assertEqual(daniel["projetos_autor"], [p])
+        self.assertEqual((daniel["metricas"]["leis"], daniel["metricas"]["leis_efeito"]), (1, 1))
+        self.assertEqual(milton["projetos_autor"], [])
+        self.assertEqual(milton["projetos_coautor"], [p])
+        self.assertEqual((milton["metricas"]["coautorias"], milton["metricas"]["leis_coautoria"]), (1, 1))
+        self.assertEqual((milton["metricas"]["apresentados"], milton["metricas"]["leis_efeito"]), (0, 0))
+        self.assertEqual(self.p, antes)
+
+    def test_normaliza_nomes_preserva_ordem_do_pl_e_rebaixa_novos_autores(self):
+        p = {**self.p, "autoria": [self.daniel, self.milton], "substitutivos": [{
+            **SUBSTITUTIVO_266596, "autoria": [
+                {**self.milton, "nome": "  Mílton Carlos da Silva Lopes  ", "papel": "Autor"},
+                {**self.daniel, "id": None, "nome": "Daniel Marques Frederico"},
+                {**CARLOS, "id": None, "papel": "Autor"},
+                {**CARLOS, "id": 999, "nome": "Carlos Suplente da Silva"},
+            ],
+        }]}
+        autores = M.autoria_efetiva(p)
+        self.assertEqual(autores, [self.daniel, self.milton, {**CARLOS, "id": None}])
+        self.assertEqual([a["papel"] for a in autores], ["Autor", "Co-Autor", "Co-Autor"])
+        self.assertEqual(p["substitutivos"][0]["autoria"][2]["papel"], "Autor")
+
+    def test_sem_lei_ou_sem_substitutivo_da_lei_nao_soma_autoria(self):
+        sem_indicacao = {k: v for k, v in self.p.items() if k != "lei_substitutivo"}
+        casos = [sem_indicacao, {**self.p, "lei_substitutivo": None}, {**self.p, "lei_substitutivo": 999},
+                 {**self.p, "substitutivos": []}, {**self.p, "desfecho": "em_tramitacao", "lei": None}]
+        for p in casos:
+            with self.subTest(lei_substitutivo=p.get("lei_substitutivo"), desfecho=p["desfecho"]):
+                self.assertEqual(M.autoria_efetiva(p), [self.daniel])
+                self.assertEqual([a["slug"] for a in self.montar(p)["projetos"][0]["autores"]],
+                                 ["daniel-marques-frederico"])
+        outro = {**SUBSTITUTIVO_266596, "id": 999, "lei": None, "autoria": [CARLOS]}
+        self.assertEqual(M.autoria_efetiva({**self.p, "substitutivos": [outro, *self.p["substitutivos"]]}),
+                         [self.daniel, self.milton])
+
+    def test_novos_autores_nao_substituem_principal_ou_origem_e_comissao_nao_vira_vereador(self):
+        mesa = {"id": None, "nome": "MESA DIRETORA", "origem": "", "papel": "Autor"}
+        p = {**self.p, "autoria": [EXECUTIVO], "substitutivos": [{
+            **SUBSTITUTIVO_266596, "autoria": [self.daniel, mesa],
+        }]}
+        modelo = self.montar(p)
+        projeto = modelo["projetos"][0]
+        self.assertIsNone(projeto["principal"])
+        self.assertEqual(projeto["origem"], "executivo")
+        self.assertEqual([a["papel"] for a in projeto["autores"]], ["Autor", "Co-Autor", "Co-Autor"])
+        self.assertEqual([a["vereador"] for a in projeto["autores"]], [False, True, False])
+        self.assertNotIn("mesa-diretora", modelo["pessoas"])
+        self.assertNotIn("poder-executivo", modelo["pessoas"])
 
 
 class TestMontarModelo(unittest.TestCase):
@@ -308,6 +439,27 @@ class TestMontarModelo(unittest.TestCase):
         self.assertEqual(projeto["lei"]["data"], "2025-03-03")
         self.assertEqual(projeto["lei"]["tipo"], "veto_derrubado")
         self.assertEqual(projeto["dias_ate_lei"], 30)
+
+    def test_lei_via_substitutivo_chega_ao_projeto(self):
+        lei = dict(SUBSTITUTIVO_266596["lei"])
+        com = {**PROPOSICOES[3], "desfecho": "virou_lei", "lei": lei, "lei_substitutivo": 266596,
+               "substitutivos": [SUBSTITUTIVO_266596]}
+        sem_lista = {**PROPOSICOES[1], "desfecho": "virou_lei", "lei": lei, "lei_substitutivo": 266596}
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(M, "RAIZ", Path(tmp)), \
+                mock.patch.object(M, "carregar_config", return_value=CFG), \
+                mock.patch.object(M, "carregar_proposicoes", return_value=[com, sem_lista, PROPOSICOES[2]]), \
+                mock.patch.object(M, "carregar_curadoria", return_value=CURADORIA), \
+                mock.patch.object(M, "carregar_documentos", return_value=[]):
+            projetos = {p["id"]: p for p in M.montar_modelo()["projetos"]}
+        p = projetos[4]
+        # a curadoria de 4/2025 corrige número e tipo, com data nula: vale a data do substitutivo
+        self.assertEqual(p["lei"], {"numero": 4001, "data": "2024-09-12", "tipo": "veto_derrubado", "veto_parcial": False})
+        self.assertEqual(p["lei_substitutivo"], 266596)
+        self.assertEqual(p["url"], "https://exemplo.invalid/4")  # o número do PL continua no original
+        self.assertEqual(M.url_lei(p), "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=266596")
+        self.assertIsNone(projetos[2]["lei_substitutivo"])  # substitutivo ausente da lista: sem link para ele
+        self.assertIsNone(projetos[3]["lei_substitutivo"])
+        self.assertEqual(M.url_lei(projetos[3]), "https://exemplo.invalid/3")
 
     def test_projeto_fora_das_legislaturas(self):
         self.assertIsNone(self.projetos[5]["legislatura"])

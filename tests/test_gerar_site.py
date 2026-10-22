@@ -59,6 +59,38 @@ class TestGerarSite(unittest.TestCase):
                 with self.subTest(fatia=nome, projeto=ordem):
                     self.assertEqual(colunas["lt"][j], legado[ordem]["lt"])
                     self.assertEqual(colunas["vp"][j], legado[ordem]["vp"])
+                    # ls: id do substitutivo nas fatias, URL do detalhe no legado (como hidratar em dados.js)
+                    ls = colunas["ls"][j]
+                    self.assertEqual(legado[ordem]["ls"], None if ls is None else f"{P.SISCAM}DetalhesDocumentos.aspx?IdDocumento={ls}")
+                    if ls is not None:
+                        self.assertEqual(legado[ordem]["g"], "lei")
+
+    def test_autoria_principal_e_coautores_nas_fatias_e_no_legado(self):
+        legado = json.loads((self.saida / "dados/projetos.json").read_bytes())["projetos"]
+        pessoas = json.loads((self.saida / "dados/dic-pl.json").read_bytes())["pessoas"]
+        for nome in gerar_site.FATIAS_PL:
+            colunas = json.loads((self.saida / f"dados/{nome}.json").read_bytes())["colunas"]
+            for j, ordem in enumerate(colunas["ord"]):
+                with self.subTest(fatia=nome, projeto=legado[ordem]["n"]):
+                    autores = [[pessoas[i][1], pessoas[i][0]] for i in colunas["au"][j]]
+                    principal = colunas["pr"][j]
+                    self.assertEqual(autores, legado[ordem]["au"])
+                    self.assertEqual(None if principal is None else pessoas[principal][0], legado[ordem]["pr"])
+
+    def test_pl_140_credita_o_substitutivo_sem_corrige(self):
+        cliente = json.loads((self.saida / "dados/projetos.json").read_bytes())
+        p = next(p for p in cliente["projetos"] if p["n"] == "140/2021")
+        self.assertEqual(p["pr"], "daniel-marques-frederico")
+        self.assertEqual([s for _, s in p["au"]], ["daniel-marques-frederico", "milton-carlos-da-silva-lopes"])
+        self.assertEqual((p["g"], p["l"], p["ld"]), ("lei", 3958, "2024-09-12"))
+        self.assertIn("inconstitucionalidade_declarada", p["s"])
+        curadoria = json.loads((gerar_site.RAIZ / "config/curadoria.json").read_bytes())["entradas"]
+        self.assertNotIn("corrige", next(e for e in curadoria if e["projeto"] == "140/2021"))
+        for modo in ("leis", "projetos"):
+            html = (self.saida / f"{modo}.html").read_text(encoding="utf-8")
+            self.assertIn(f'<option value="milton-carlos-da-silva-lopes">{P.esc(p["au"][1][0])}</option>', html)
+        metodologia = (self.saida / "metodologia.html").read_text(encoding="utf-8")
+        self.assertIn("os autores do substitutivo também recebem o crédito, como coautores se não assinaram o PL", metodologia)
 
     def test_detalhes_externos_em_todas_as_paginas_e_navegacao_interna(self):
         for caminho in self.saida.rglob("*.html"):
@@ -180,6 +212,26 @@ class TestComponentesLei(unittest.TestCase):
                     self.assertIn("Infraestrutura &lt;pública&gt; &amp; elétrica", html)
                     p["lei"]["data"] = None
                     self.assertIn("data não informada", renderizar(p, "../"))
+
+    def test_lei_via_substitutivo(self):
+        pl = "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=127858"
+        sub = "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=266596"
+        p = self.projeto(lei_substitutivo=266596, lei={"numero": 3958, "data": "2024-09-12", "tipo": "veto_derrubado", "veto_parcial": False})
+        cartao = P.cartao_lei(p, "../")
+        self.assertEqual([l["href"] for l in LinksHTML(cartao).links if l["href"].startswith("https://consultaniteroi")], [sub])
+        self.assertIn('<p class="lei-situacao">Veto derrubado <span class="via-substitutivo">via substitutivo</span></p>', cartao)
+        self.assertIn("Lei 3958 · 12/09/2024", cartao)
+        item = P.item_projeto(p, "../")
+        self.assertEqual([l["href"] for l in LinksHTML(item).links if l["href"].startswith("https://consultaniteroi")], [pl, sub])
+        self.assertIn(f'>PL 140/2021{P.NOVA_ABA}</a>', item)
+        self.assertIn(f' · Lei 3958 · Veto derrubado <a class="via-substitutivo" href="{sub}" target="_blank" rel="noopener">'
+                      f'via substitutivo<span class="so-leitor"> (substitutivo ao PL 140/2021)</span>{P.NOVA_ABA}</a> · 12/09/2024', item)
+        for renderizar in (P.cartao_lei, P.item_projeto):
+            with self.subTest(componente=renderizar.__name__):
+                html = renderizar(self.projeto(), "../")
+                self.assertNotIn("via substitutivo", html)
+                self.assertIn(pl, html)
+                self.assertNotIn(sub, html)
 
     def test_links_externos_em_nova_aba_e_chips_na_mesma(self):
         for renderizar in (P.cartao_lei, P.item_projeto):

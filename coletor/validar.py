@@ -1,6 +1,7 @@
 """Validação dos dados versionados e da configuração.
 
-Confere, sem alterar nada, a forma de data/proposicoes/<ano>.json, de
+Confere, sem alterar nada, a forma de data/proposicoes/<ano>.json (inclusive os
+substitutivos e a coerência de lei_substitutivo), de
 data/documentos/<tipo>/<ano>.json (inclusive o formato byte a byte gravado por
 coletor.arquivos), do cache da IA (data/classificacao_ia.json), de data/meta.json e
 dos arquivos config/curadoria.json e config/vereadores.json, e acusa temporários de
@@ -103,26 +104,89 @@ def validar_registro(p: object, ano: int, arquivo: str) -> list[str]:
             problemas.append(f"{rotulo}: '{chave}' {p.get(chave)!r} não é data AAAA-MM-DD nem null")
     if p.get("desfecho") not in DESFECHOS_CONHECIDOS:
         problemas.append(f"{rotulo}: desfecho {p.get('desfecho')!r} desconhecido em coletor/site/modelo.py")
-    lei = p.get("lei")
-    if lei is not None:
-        if not isinstance(lei, dict):
-            problemas.append(f"{rotulo}: 'lei' deveria ser um objeto ou null")
-        elif not data_valida(lei.get("data")):
-            problemas.append(f"{rotulo}: 'lei.data' {lei.get('data')!r} não é data AAAA-MM-DD nem null")
+    problemas += _validar_lei(p.get("lei"), rotulo)
     problemas += validar_autoria(p.get("autoria"), rotulo)
-    tramitacoes = p.get("tramitacoes", [])
+    problemas += validar_tramitacoes(p.get("tramitacoes", []), rotulo)
+    problemas += validar_substitutivos(p, rotulo)
+    return problemas
+
+
+def validar_tramitacoes(tramitacoes: object, rotulo: str) -> list[str]:
     if not isinstance(tramitacoes, list):
-        problemas.append(f"{rotulo}: 'tramitacoes' deveria ser uma lista")
-    else:
-        for t in tramitacoes:
-            if not isinstance(t, dict):
-                problemas.append(f"{rotulo}: tramitação deveria ser um objeto")
+        return [f"{rotulo}: 'tramitacoes' deveria ser uma lista"]
+    problemas = []
+    for t in tramitacoes:
+        if not isinstance(t, dict):
+            problemas.append(f"{rotulo}: tramitação deveria ser um objeto")
+            continue
+        for chave in CAMPOS_DATA_TRAMITACAO:
+            if not data_valida(t.get(chave)):
+                problemas.append(
+                    f"{rotulo}: tramitação {t.get('seq')!r} com '{chave}' {t.get(chave)!r} fora do formato AAAA-MM-DD"
+                )
+    return problemas
+
+
+def _validar_lei(lei: object, rotulo: str) -> list[str]:
+    if lei is None:
+        return []
+    if not isinstance(lei, dict):
+        return [f"{rotulo}: 'lei' deveria ser um objeto ou null"]
+    if not data_valida(lei.get("data")):
+        return [f"{rotulo}: 'lei.data' {lei.get('data')!r} não é data AAAA-MM-DD nem null"]
+    return []
+
+
+def validar_substitutivos(p: dict, rotulo: str) -> list[str]:
+    """Confere 'substitutivos' (opcional: registros coletados antes do suporte não têm a chave) e 'lei_substitutivo'.
+
+    lei_substitutivo, quando existe, precisa ser o id de um substitutivo da lista que tenha lei,
+    e o PL precisa constar como lei (desfecho virou_lei), como siscam.aplicar_substitutivos grava.
+    """
+    problemas = []
+    com_id: dict[int, dict] = {}
+    if "substitutivos" in p:
+        substitutivos = p["substitutivos"]
+        if not isinstance(substitutivos, list):
+            problemas.append(f"{rotulo}: 'substitutivos' deveria ser uma lista")
+            substitutivos = []
+        for i, s in enumerate(substitutivos, 1):
+            r = f"{rotulo}: substitutivo {i}"
+            if not isinstance(s, dict):
+                problemas.append(f"{r} deveria ser um objeto")
                 continue
-            for chave in CAMPOS_DATA_TRAMITACAO:
-                if not data_valida(t.get(chave)):
-                    problemas.append(
-                        f"{rotulo}: tramitação {t.get('seq')!r} com '{chave}' {t.get(chave)!r} fora do formato AAAA-MM-DD"
-                    )
+            sid = s.get("id")
+            if not _e_inteiro(sid):
+                problemas.append(f"{r}: 'id' ausente ou não inteiro")
+            elif sid == p.get("id"):
+                problemas.append(f"{r}: 'id' {sid} é o do próprio PL")
+            elif sid in com_id:
+                problemas.append(f"{r}: id {sid} repetido")
+            else:
+                com_id[sid] = s
+                r = f"{rotulo}: substitutivo {sid}"
+            numero = s.get("numero")
+            if not isinstance(numero, str) or not re.fullmatch(r"[1-9]\d*", numero):
+                problemas.append(f"{r}: 'numero' {numero!r} deveria ser o número sem zeros à esquerda, como texto")
+            if not data_valida(s.get("data")):
+                problemas.append(f"{r}: 'data' {s.get('data')!r} não é data AAAA-MM-DD nem null")
+            if not isinstance(s.get("situacao"), str):
+                problemas.append(f"{r}: 'situacao' ausente ou não textual")
+            problemas += validar_autoria(s.get("autoria"), r)
+            problemas += validar_tramitacoes(s.get("tramitacoes"), r)
+            if "lei" not in s:
+                problemas.append(f"{r}: sem a chave 'lei'")
+            problemas += _validar_lei(s.get("lei"), r)
+    if "lei_substitutivo" in p:
+        ls = p["lei_substitutivo"]
+        if not _e_inteiro(ls):
+            problemas.append(f"{rotulo}: 'lei_substitutivo' {ls!r} deveria ser o id inteiro de um substitutivo")
+        elif ls not in com_id:
+            problemas.append(f"{rotulo}: 'lei_substitutivo' {ls} não está em 'substitutivos'")
+        elif not isinstance(com_id[ls].get("lei"), dict):
+            problemas.append(f"{rotulo}: 'lei_substitutivo' {ls} aponta para um substitutivo sem lei")
+        elif not p.get("lei") or p.get("desfecho") != "virou_lei":
+            problemas.append(f"{rotulo}: 'lei_substitutivo' {ls} definido, mas o PL não consta como lei (virou_lei)")
     return problemas
 
 

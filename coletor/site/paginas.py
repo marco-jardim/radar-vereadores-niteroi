@@ -16,7 +16,7 @@ from coletor.site import graficos as G
 from coletor.site.modelo import (
     DESC_CATEGORIA_DOC, DESC_SINAL, DESFECHO_GRUPO, NOME_ALERTA, NOME_CATEGORIA, NOME_CATEGORIA_DOC, NOME_DESFECHO, NOME_EIXO,
     NOME_IMPACTO, NOME_SINAL, NOME_SUBCATEGORIA_DOC, NOME_TEMA, NOME_TIPO_DOC, TIPOS_DOC, com_efeito, mediana_legislatura,
-    sem_efeito, situacao_lei,
+    sem_efeito, situacao_lei, url_lei,
 )
 
 REPO = "https://github.com/marco-jardim/radar-vereadores-niteroi"
@@ -286,14 +286,28 @@ def tags_html(p: dict, contestar: bool = True) -> str:
     return f'<p class="tags">{alertas}{sinais}{link}</p>'
 
 
+def via_substitutivo(p: dict, link: bool) -> str:
+    """Marca "via substitutivo" da lei aprovada por substitutivo; espelho de viaSubstitutivo em app.js.
+
+    Com `link`, aponta para a página do substitutivo (o link do número do PL continua no original).
+    """
+    if not p.get("lei_substitutivo"):
+        return ""
+    if not link:
+        return ' <span class="via-substitutivo">via substitutivo</span>'
+    return (f' <a class="via-substitutivo" href="{esc(url_lei(p))}" target="_blank" rel="noopener">via substitutivo'
+            f'<span class="so-leitor"> (substitutivo ao PL {esc(p["numero"])})</span>{NOVA_ABA}</a>')
+
+
 def cartao_lei(p: dict, prefixo: str) -> str:
     lei = p.get("lei") or {}
     resumo = p["resumo"] or legivel(p["ementa"])
     tema = NOME_TEMA.get(p["tema"], "") if p["tema"] not in ("outro", "homenagem") else ""
+    # O título leva à página de onde saiu a lei: a do substitutivo aprovado, quando houver.
     return f"""<article class="cartao {CLASSE_IMPACTO[p['impacto']]}">
  <p class="cartao-topo">{selo_impacto(p)}<span>Lei {esc(lei.get('numero') or '')} · {esc(data_br(lei['data'])) if lei.get('data') else 'data não informada'}</span></p>
- <p class="lei-situacao">{esc(situacao_lei(lei))}</p>
- <h3><a href="{esc(p['url'])}" target="_blank" rel="noopener">{esc(resumo)}{NOVA_ABA}</a></h3>
+ <p class="lei-situacao">{esc(situacao_lei(lei))}{via_substitutivo(p, link=False)}</p>
+ <h3><a href="{esc(url_lei(p))}" target="_blank" rel="noopener">{esc(resumo)}{NOVA_ABA}</a></h3>
  {f'<p class="publico">Afeta: {esc(p["publico"])}{" · " + esc(tema) if tema else ""}</p>' if p['publico'] or tema else ''}
  <p class="cartao-autor">{autores_html(p, prefixo)}{f'<span class="partido">{esc(p["partido"])}</span>' if p["partido"] else ''}</p>
 </article>"""
@@ -301,12 +315,13 @@ def cartao_lei(p: dict, prefixo: str) -> str:
 
 def item_projeto(p: dict, prefixo: str) -> str:
     lei = p.get("lei") or {}
-    lei_txt = f" · Lei {lei['numero']}" if lei.get("numero") else ""
+    lei_txt = esc(f" · Lei {lei['numero']}") if lei.get("numero") else ""
     if p["desfecho"] == "virou_lei":
-        lei_txt += f" · {situacao_lei(lei)} · {data_br(lei['data']) if lei.get('data') else 'data não informada'}"
+        lei_txt += (esc(f" · {situacao_lei(lei)}") + via_substitutivo(p, link=True)
+                    + esc(f" · {data_br(lei['data']) if lei.get('data') else 'data não informada'}"))
     resumo = f'<p class="resumo-ia">{esc(p["resumo"])}</p>' if p["resumo"] else ""
     return f"""<li class="projeto d-{esc(DESFECHO_GRUPO.get(p['desfecho'], 'andamento'))}">
- <p class="cab"><a href="{esc(p['url'])}" target="_blank" rel="noopener">PL {esc(p['numero'])}{NOVA_ABA}</a><span>{data_br(p['data'])}</span><span class="desfecho">{esc(NOME_DESFECHO.get(p['desfecho'], p['desfecho']))}{esc(lei_txt)}</span>{selo_impacto(p)}</p>
+ <p class="cab"><a href="{esc(p['url'])}" target="_blank" rel="noopener">PL {esc(p['numero'])}{NOVA_ABA}</a><span>{data_br(p['data'])}</span><span class="desfecho">{esc(NOME_DESFECHO.get(p['desfecho'], p['desfecho']))}{lei_txt}</span>{selo_impacto(p)}</p>
  {resumo}<p class="ementa">{esc(legivel(p['ementa']))}</p>
  <p class="autoria">{autores_html(p, prefixo)}</p>
  {tags_html(p)}
@@ -1031,6 +1046,7 @@ def gerar_metodologia(modelo: dict) -> str:
 <ul>
  <li><b>Autor principal</b> é quem o SISCAM registra como "Autor". As barras e os rankings contam só autoria principal, para que projetos assinados em bloco não inflem a produção de cada um.</li>
  <li><b>Virou lei</b>: sancionada, promulgada pela Câmara ou com veto derrubado. Número e data vêm da tramitação, incluindo as corrigendas publicadas.</li>
+ <li><b>Substitutivos</b>: quando a Câmara aprova um substitutivo (um texto novo que substitui o do projeto) e é ele que vira lei, a lei conta para o projeto original e seus autores, mas o número, a data e o link da lei, marcados "via substitutivo", vêm da tramitação do substitutivo. Quando a lei vem de um substitutivo, os autores do substitutivo também recebem o crédito, como coautores se não assinaram o PL.</li>
  <li><b>Tempo até virar lei</b>: dias entre o protocolo e a sanção ou promulgação.</li>
  <li><b>Taxa de aprovação</b>: leis divididas por projetos já concluídos (viraram lei, foram arquivados, vetados, rejeitados ou retirados). Projetos em tramitação ficam de fora.</li>
  <li><b>Legislatura</b>: o projeto conta na legislatura em que foi apresentado. Suplentes em exercício e afastamentos para o Executivo aparecem identificados.</li>

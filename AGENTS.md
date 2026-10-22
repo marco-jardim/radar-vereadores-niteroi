@@ -39,6 +39,9 @@ Os testes de JavaScript pedem Node 21+ (o CI usa 22).
 ## Pipeline (coleta → documentos → classificação → validação → site)
 
 1. `coletor.siscam` lista os projetos de lei por ano e baixa detalhes novos ou alterados.
+   Junto com o detalhe do PL, baixa o de cada substitutivo da seção "[ Substitutivos ]" e grava `substitutivos`
+   (id, número, data, situação, autoria, tramitação e lei). Se a lei sai de um substitutivo e não do próprio PL,
+   o PL fica com essa lei (número e data do substitutivo), `desfecho` `virou_lei` e `lei_substitutivo` com o id.
    Salva `data/proposicoes/<ano>.json` e atualiza `data/meta.json`.
 2. `coletor.documentos` lista os cinco demais tipos e salva `data/documentos/<tipo>/<ano>.json`.
    A página de detalhe (autoria com papéis, tramitação completa, processo e protocolo) só é baixada para
@@ -74,7 +77,9 @@ python -m http.server -d site 8000
 - `--anos` aceita um ano ou intervalo inclusivo, como `2025-2026`. Padrão: 2021 até o ano atual em `coletor.siscam`;
   ano anterior e atual em `coletor.documentos`.
 - `--workers 4` controla a concorrência dos dois coletores. Em `coletor.siscam`, `--forcar` baixa novamente
-  todos os detalhes, mesmo sem mudança.
+  todos os detalhes, mesmo sem mudança; `--max-detalhes 400` limita, por execução e do mais recente ao mais antigo,
+  os detalhes pedidos só pelos substitutivos (PL ainda sem a chave `substitutivos` ou sem lei com substitutivo
+  ainda sem lei, cuja tramitação não muda a listagem do PL); o resto fica para a próxima execução.
 - Em `coletor.documentos`: `--tipos requerimento,indicacao,mocao,pdl,resolucao` restringe os tipos;
   `--max-detalhes 1500` limita as páginas de detalhe por execução; `--sem-detalhe` só lista; `--so-detalhes`
   não relista e só esvazia a fila de pendentes (não combina com `--sem-detalhe` nem `--forcar`); `--forcar`
@@ -128,7 +133,8 @@ Com `GITHUB_ACTIONS` definida, `coletor.validar` emite os problemas como `::erro
   manifesto desatualizado. `dados/projetos.json` continua gerado apenas como exportação.
 - Projetos de lei: `dic-pl` (dicionários) e as fatias em colunas `pl-lei`, `pl-andamento` e `pl-sem_exito`, com o
   mesmo `build`; `pl-recentes` é a prévia das 40 primeiras linhas, usada por `projetos.html` sem filtros.
-  `site_src/dados.js` hidrata as colunas no formato de objeto legado que `app.js` usa.
+  `site_src/dados.js` hidrata as colunas no formato de objeto legado que `app.js` usa. A coluna `ls` (id do
+  substitutivo da lei) vira, como `u`, a URL do detalhe; o link "via substitutivo" usa `ls`, e o número do PL, `u`.
 - Documentos: `dic-doc` só com enumerações estáveis (tipos, categorias, subcategorias e URL de detalhe);
   `doc-<tipo>-<ano>[-k]` e `ver/<slug>[-<tipo>][-k]` têm dicionários locais (pessoas, situações, bairros) e não
   levam build, então uma parte sem mudança mantém os mesmos bytes e a mesma URL.
