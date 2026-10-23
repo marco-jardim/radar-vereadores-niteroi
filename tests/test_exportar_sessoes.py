@@ -231,6 +231,7 @@ class TestExportarSessoes(unittest.TestCase):
     def test_manifesto_da_pagina_so_com_familias_de_sessoes_e_preload_do_dicionario(self):
         html = P.pagina("Sessões", "", "sessoes.html", manifesto=self.manifesto)
         embutido = manifesto_embutido(html)
+        self.assertEqual(set(embutido), {"esquema", "build", "build_ses", "inicial", "arquivos"})
         self.assertEqual(set(embutido["arquivos"]), {"dic-ses", "vot-2025", "vot-2026"})
         self.assertEqual(embutido["inicial"], ["dic-ses", "vot-2026"])
         self.assertEqual(embutido["build_ses"], self.manifesto["build_ses"])
@@ -244,6 +245,18 @@ class TestExportarSessoes(unittest.TestCase):
             "doc-pdl-2026": {"familia": "doc", "ano": 2026, "tipo": "pdl", "n": 1, "url": "dados/doc-pdl-2026.json?v=x"}})
         docs = manifesto_embutido(P.cabecalho_dados(self.manifesto, "atividades.html", ""))
         self.assertEqual(set(docs["arquivos"]), {"dic-doc", "doc-pdl-2026"})
+        # Mesmas chaves obrigatórias de validarManifesto (app.js), inclusive nas famílias sem build.
+        for pagina, manifesto in (("sessoes", embutido), ("projetos", pl), ("atividades", docs)):
+            with self.subTest(pagina=pagina):
+                self.assertTrue({"esquema", "build", "arquivos"} <= set(manifesto))
+                self.assertEqual(manifesto["esquema"], 2)
+                self.assertIsInstance(manifesto["build"], str)
+                self.assertEqual(manifesto["build"], self.manifesto["build"])
+
+    def test_cabecalho_compartilhado_com_vm_igual_ao_gerado(self):
+        pasta = Path(__file__).resolve().parent / "js" / "fixtures"
+        html = (pasta / "cabecalho_sessoes.html").read_text(encoding="utf-8").strip()
+        self.assertEqual(P.cabecalho_dados(manifesto_embutido(html), "sessoes.html", ""), html)
 
     def test_main_embute_manifesto_no_html_sem_acoplar_o_renderizador(self):
         raiz = self.saida / "integracao"
@@ -267,6 +280,8 @@ class TestExportarSessoes(unittest.TestCase):
             GS.main()
         embutido = manifesto_embutido((saida / "sessoes.html").read_text(encoding="utf-8"))
         manifesto = json.loads((saida / "dados/manifest.json").read_bytes())
+        self.assertEqual(embutido["esquema"], manifesto["esquema"])
+        self.assertEqual(embutido["build"], manifesto["build"])
         self.assertEqual((saida / "sessoes.js").read_bytes(), (GS.FONTE_ESTATICA / "sessoes.js").read_bytes())
         self.assertEqual(embutido["arquivos"], {n: e for n, e in manifesto["arquivos"].items()
                                                if e.get("familia") in {"dic-ses", "vot"}})
