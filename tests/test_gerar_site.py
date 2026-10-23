@@ -11,12 +11,15 @@ import sys
 import unittest
 from html.parser import HTMLParser
 from unittest import mock
+from xml.etree import ElementTree
 
 from coletor import gerar_site
+from coletor import novidades as N
 from coletor.site import paginas as P
 from coletor.site.modelo import TIPOS_DOC
 
-PAGINAS = ("index.html", "leis.html", "projetos.html", "atividades.html", "ruido.html", "analises.html", "metodologia.html")
+PAGINAS = ("index.html", "novidades.html", "leis.html", "projetos.html", "atividades.html", "ruido.html", "analises.html",
+           "metodologia.html")
 DOCUMENTOS = gerar_site.RAIZ / "data" / "documentos"
 
 
@@ -36,6 +39,24 @@ class TestGerarSite(unittest.TestCase):
                 self.assertTrue(arq.is_file(), f"{arq} não foi gerado")
                 conteudo = arq.read_text(encoding="utf-8")
                 self.assertIn("<html", conteudo.lower())
+
+    def test_novidades_e_feed_rss(self):
+        canal = ElementTree.fromstring((self.saida / "feed.xml").read_bytes()).find("channel")
+        self.assertIsNotNone(canal)
+        itens = canal.findall("item")
+        self.assertLessEqual(len(itens), N.MAX_ITENS_RSS)
+        for item in itens:
+            self.assertTrue(item.findtext("link").startswith("https://"))
+            self.assertEqual(item.find("guid").get("isPermaLink"), "false")
+        self.assertEqual(len({i.findtext("guid") for i in itens}), len(itens))
+        for nome in PAGINAS:
+            with self.subTest(pagina=nome):
+                html = (self.saida / nome).read_text(encoding="utf-8")
+                self.assertIn('<link rel="alternate" type="application/rss+xml"', html)
+                self.assertIn('href="novidades.html"', html)  # no menu
+        self.assertIn('id="novidades"', (self.saida / "metodologia.html").read_text(encoding="utf-8"))
+        tamanho = gerar_site.tamanho_gzip((self.saida / "novidades.html").read_bytes())
+        self.assertLessEqual(tamanho, gerar_site.LIMITE_HTML_GZIP)
 
     def test_recursos_estaticos_copiados(self):
         for arq in gerar_site.FONTE_ESTATICA.iterdir():

@@ -25,6 +25,7 @@ Os testes de JavaScript pedem Node 21+ (o CI usa 22).
 | `coletor/arquivos.py` | Gravação atômica dos JSONs de `data/`, com um registro por linha. |
 | `coletor/validar.py` | Validação de `data/` e `config/`, sem alterar nada. |
 | `coletor/gerar_site.py` | Entrada da geração; exporta os JSONs do navegador, o manifesto e o relatório de tamanhos. |
+| `coletor/novidades.py` | Eventos dos PLs (apresentado, lei, veto, veto derrubado) pelas datas dos dados, semanas e feed RSS. |
 | `coletor/site/modelo.py` | Enriquecimento, pessoas, mandatos, métricas, projetos repetidos e documentos por autor. |
 | `coletor/site/graficos.py` | Gráficos SVG com tabelas acessíveis. |
 | `coletor/site/paginas.py` | HTML, componentes, diálogo do SISCAM e metodologia publicada. |
@@ -53,7 +54,8 @@ Os testes de JavaScript pedem Node 21+ (o CI usa 22).
    Atualiza `data/classificacao_ia.json` quando usa IA e registra estatísticas em `data/meta.json`.
 4. `coletor.validar` confere a forma de `data/` e `config/`, inclusive o formato byte a byte de `data/documentos`,
    e sai com código 1 se encontrar problema.
-5. `coletor.gerar_site` combina curadoria, regras e cache, classifica os documentos, calcula métricas e recria `site/`.
+5. `coletor.gerar_site` combina curadoria, regras e cache, classifica os documentos, calcula métricas e recria `site/`,
+   inclusive `novidades.html` e `feed.xml`, com eventos derivados na hora (não há `data/novidades.json`).
 
 `coletor/regras_documentos.py` não usa IA nem rede: categoria e subcategoria saem da ementa normalizada (o `assunto`
 da listagem só desempata), e o bairro é o último bairro oficial citado na ementa das indicações. A coleta grava,
@@ -141,6 +143,18 @@ Com `GITHUB_ACTIONS` definida, `coletor.validar` emite os problemas como `::erro
 - As URLs levam `?v=` com os 10 primeiros caracteres do SHA-1 do conteúdo.
 - Orçamentos em gzip: JSON inicial de cada página e cada JSON de PL ou dicionário ≤ 200 KiB; cada parte de
   documentos ≤ 150 KiB; cada HTML ≤ 100 KiB. O gerador imprime um relatório de tamanhos e `::warning::` ao exceder.
+- `novidades.html` e `feed.xml` (RSS 2.0, na raiz do site) não têm JSON próprio: o HTML sai pronto do servidor.
+  `coletor/novidades.py` deriva os eventos só das datas já coletadas, sem comparar coletas nem guardar estado:
+  `data` do PL (apresentado), `lei.data` (virou lei, com `lei_substitutivo`) e, por `marcos_tramitacao` (chave
+  `marcos` do projeto em `modelo.py`), a Data Resposta do passo de veto e a do passo de plenário que derruba o veto,
+  no PL ou num substitutivo. A derrubada só conta com confirmação no mesmo documento (situação "VETO REJEITADO" ou
+  "VETO DERRUBADO", ou `lei.tipo == "veto_derrubado"`), nunca com "VETO MANTIDO" ou desfecho `vetado`, e ignora
+  "votos pela derrubada". A semana mais recente é a semana ISO (segunda a domingo) da última data dos eventos,
+  nunca a do relógio; datas posteriores ao dia de `coleta.em` de `data/meta.json`, no horário de Brasília (UTC−3),
+  são ignoradas. A página mostra 12 semanas; o feed, os 100 eventos mais recentes, com `guid` fixo (tipo, id e
+  data), links absolutos sobre `URL_SITE` (a lei via substitutivo leva ao substitutivo) e `lastBuildDate` igual à
+  data mais recente: a mesma entrada gera os mesmos bytes. Alertas de polêmica ficam de fora
+  porque curadoria e cache da IA não têm data. Toda página leva `<link rel="alternate" type="application/rss+xml">`.
 - `atividades.html` lista os documentos com filtros na URL; cada página de vereador tem a seção "Atividade".
   "Ver no SISCAM" abre um `<dialog>` com iframe em sandbox, aceito só para
   `DetalhesDocumentos.aspx?IdDocumento=<n>`; o link "abrir no SISCAM" fica sempre visível como alternativa.
@@ -233,8 +247,8 @@ python -m coletor.validar
 
 Para mudanças de pipeline ou apresentação, rode também os comandos da seção Comandos e inspecione
 `http://localhost:8000`: contagens e JSONs gerados, avisos e relatório de tamanhos do gerador, filtros de leis,
-projetos e atividades, páginas de vereadores com a seção "Atividade", diálogo do SISCAM, gráficos, tabelas
-acessíveis, links e console do navegador. Informe o que foi verificado e o que não foi executado.
+projetos e atividades, páginas de vereadores com a seção "Atividade", novidades e `feed.xml`, diálogo do SISCAM,
+gráficos, tabelas acessíveis, links e console do navegador. Informe o que foi verificado e o que não foi executado.
 
 ## Commits
 

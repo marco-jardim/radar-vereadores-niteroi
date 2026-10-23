@@ -12,6 +12,7 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
+from coletor import novidades as N
 from coletor import regras_documentos as RD
 from coletor.site import paginas as P
 from coletor.site.modelo import (
@@ -450,6 +451,10 @@ def main() -> None:
     escrever("ruido.html", P.gerar_ruido(modelo))
     escrever("analises.html", P.gerar_analises(modelo))
     escrever("metodologia.html", P.gerar_metodologia(modelo))
+    # Eventos derivados das datas já coletadas; nada é gravado em data/.
+    eventos = N.eventos_do_modelo(modelo)
+    escrever(N.PAGINA, P.gerar_novidades(eventos))
+    (SAIDA / N.FEED).write_bytes(N.gerar_rss(eventos).encode("utf-8"))  # bytes: LF em qualquer sistema
     escrever("alertas.html", P.redirecionar("ruido.html"))
     for pessoa in modelo["pessoas"].values():
         escrever(f"vereadores/{pessoa['slug']}.html", P.gerar_vereador(modelo, pessoa))

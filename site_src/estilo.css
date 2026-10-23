@@ -84,6 +84,15 @@ section { margin-top: 36px; }
 .texto code { font-size: .85em; background: var(--superficie); padding: 1px 4px; border: 1px solid var(--linha); }
 .texto h3 { font: 700 1.25rem/1.2 var(--display); margin: 22px 0 6px; }
 
+/* --------------------------------------------------------------- novidades */
+.semana { margin: 28px 0 40px; }
+.semana h2 { font: 700 1.6rem/1.15 var(--display); margin: 0 0 8px; border-bottom: 2px solid var(--tinta); padding-bottom: 6px; }
+.semana h2 span { font: 500 1rem var(--texto); color: var(--tinta-suave); margin-left: 8px; }
+.titulo-evento { font-weight: 600; }
+.projeto.ev-lei { border-left-color: var(--efeito); }
+.projeto.ev-veto { border-left-color: var(--alerta); }
+.projeto.ev-veto_derrubado { border-left-color: var(--sem-efeito); }
+
 /* ------------------------------------------------------------------- tiles */
 .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 12px 0 20px; }
 .tile { background: var(--superficie); border: 1px solid var(--linha); border-top: 4px solid var(--andamento); padding: 14px 16px 12px; }
