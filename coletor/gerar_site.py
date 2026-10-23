@@ -29,9 +29,11 @@ FATIAS_PL = ("pl-lei", "pl-andamento", "pl-sem_exito")
 # Prévia de projetos.html sem filtros: as primeiras linhas na ordem padrão, no formato das fatias.
 PREVIA_PL = "pl-recentes"
 JSON_BUSCADOS = {f"dados/{nome}.json" for nome in ("manifest", "dic-pl", "dic-doc", *FATIAS_PL, PREVIA_PL)}
-# Documentos: cada parte cabe em 150 KiB gzip; as primeiras (mais recentes) de cada tipo/ano são menores, para
-# que a carga inicial de atividades.html (dic-doc + primeiras partes de cada tipo) fique em até 200 KiB.
+# Documentos: fatiar com alvo de 120 KiB gzip deixa folga para o orçamento oficial de 150 KiB do relatório.
+# As primeiras (mais recentes) de cada tipo/ano são menores, para que a carga inicial de atividades.html
+# (dic-doc + primeiras partes de cada tipo) fique em até 200 KiB.
 LIMITE_PARTE_DOC_GZIP = 150 * 1024
+ALVO_PARTE_DOC_GZIP = 120 * 1024
 LIMITE_PRIMEIRA_PARTE_DOC_GZIP = 24 * 1024
 LIMITE_INICIAL_GZIP = 200 * 1024
 MARGEM_GZIP = 512  # folga para o nível de compressão do relatório
@@ -334,7 +336,7 @@ def exportar_documentos(modelo: dict, saida: Path, manifesto: dict) -> dict:
         base = f"doc-{tipo}-{ano}"
         extra = lambda k: {"tipo": tipo, "ano": ano, "parte": k}
         montar = lambda k, ls: fatia_documentos(nome_parte(base, k), ls, extra(k))
-        for k, parte in enumerate(partir_por_orcamento(grupos[(tipo, ano)], montar, LIMITE_PRIMEIRA_PARTE_DOC_GZIP, LIMITE_PARTE_DOC_GZIP)):
+        for k, parte in enumerate(partir_por_orcamento(grupos[(tipo, ano)], montar, LIMITE_PRIMEIRA_PARTE_DOC_GZIP, ALVO_PARTE_DOC_GZIP)):
             fatias.append((nome_parte(base, k), montar(k, parte),
                            {"familia": "doc", **extra(k), "ate": parte[0]["d"], "de": parte[-1]["d"]}))
 
@@ -345,7 +347,7 @@ def exportar_documentos(modelo: dict, saida: Path, manifesto: dict) -> dict:
     for s in sorted(por_autor):
         base = f"ver/{s}"
         inteiro = fatia_documentos(base, por_autor[s], {"slug": s, "tipo": None, "parte": 0})
-        if tamanho_gzip(json_compacto(inteiro), nivel=6) <= LIMITE_PARTE_DOC_GZIP - MARGEM_GZIP:
+        if tamanho_gzip(json_compacto(inteiro), nivel=6) <= ALVO_PARTE_DOC_GZIP - MARGEM_GZIP:
             fatias.append((base, inteiro, {"familia": "ver", "slug": s, "tipo": None, "parte": 0}))
             continue
         for tipo in TIPOS_DOC:  # grande demais: um arquivo por tipo, em partes se preciso
@@ -354,7 +356,7 @@ def exportar_documentos(modelo: dict, saida: Path, manifesto: dict) -> dict:
                 continue
             base_t = f"{base}-{tipo}"
             montar = lambda k, ls: fatia_documentos(nome_parte(base_t, k), ls, {"slug": s, "tipo": tipo, "parte": k})
-            for k, parte in enumerate(partir_por_orcamento(do_tipo, montar, LIMITE_PARTE_DOC_GZIP, LIMITE_PARTE_DOC_GZIP)):
+            for k, parte in enumerate(partir_por_orcamento(do_tipo, montar, ALVO_PARTE_DOC_GZIP, ALVO_PARTE_DOC_GZIP)):
                 fatias.append((nome_parte(base_t, k), montar(k, parte), {"familia": "ver", "slug": s, "tipo": tipo, "parte": k}))
 
     (saida / "dados" / "ver").mkdir(parents=True, exist_ok=True)

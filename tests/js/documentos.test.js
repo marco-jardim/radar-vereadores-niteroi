@@ -214,11 +214,30 @@ test("com autor, usa só os arquivos do vereador, inteiros e filtrados pelo tipo
 
 test("paridade com plano_docs (paginas.py): a mesma fixture é conferida em tests/test_documentos_site.py", () => {
   const antes = JSON.stringify(plano);
-  assert.ok(plano.casos.length > 0);
-  plano.casos.forEach((caso) => {
-    assert.deepEqual(fatiasDocs(plano.manifesto, { tipo: caso.tipo, ano: caso.ano, alvo: caso.alvo }).nomes, caso.nomes, caso.nome);
+  [plano, ...plano.refatiamentos].forEach((cenario) => {
+    assert.ok(cenario.casos.length > 0);
+    cenario.casos.forEach((caso) => {
+      assert.deepEqual(fatiasDocs(cenario.manifesto, { tipo: caso.tipo, ano: caso.ano, alvo: caso.alvo }).nomes, caso.nomes, caso.nome);
+    });
   });
   assert.equal(JSON.stringify(plano), antes);
+});
+
+test("partes menores preservam contagens, fronteira estrita e planos que só acrescentam arquivos", () => {
+  const manifesto = plano.refatiamentos[0].manifesto;
+  const inicial = fatiasDocs(manifesto, { ano: 2026, alvo: 40 });
+  assert.equal(inicial.total, 530);
+  assert.deepEqual(inicial.porTipo, { indicacao: 450, mocao: 80 });
+  assert.equal(inicial.fronteira, "2026-10-19");
+  assert.equal(inicial.completo, false);
+  const mais = fatiasDocs(manifesto, { ano: 2026, alvo: 100 });
+  assert.deepEqual(mais.nomes.slice(0, inicial.nomes.length), inicial.nomes);
+  assert.equal(mais.fronteira, "2026-06-30");
+  const inteiro = fatiasDocs(manifesto, { ano: 2026, completo: true });
+  assert.deepEqual(inteiro.nomes.slice(0, mais.nomes.length), mais.nomes);
+  assert.equal(inteiro.total, inicial.total);
+  assert.equal(inteiro.completo, true);
+  assert.equal(inteiro.fronteira, null);
 });
 
 test("ignora arquivos de PL e tolera manifesto vazio", () => {

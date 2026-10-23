@@ -10,6 +10,7 @@ import hashlib
 import io
 import json
 import random
+import re
 import tempfile
 import unittest
 from datetime import date, timedelta
@@ -250,7 +251,7 @@ class TestExportacaoDocumentos(unittest.TestCase):
         (saida / "dados").mkdir(parents=True)
         manifesto = {"esquema": 2, "build": "pl00000000", "arquivos": {"dic-pl": {"url": "dados/dic-pl.json?v=x", "n": 1, "bytes": 1}}}
         with mock.patch.object(GS, "LIMITE_PRIMEIRA_PARTE_DOC_GZIP", cls.LIMITE_PRIMEIRA), \
-                mock.patch.object(GS, "LIMITE_PARTE_DOC_GZIP", cls.LIMITE):
+                mock.patch.object(GS, "ALVO_PARTE_DOC_GZIP", cls.LIMITE):
             return GS.exportar_documentos(modelo, saida, manifesto)
 
     def ler(self, nome: str) -> dict:
@@ -418,6 +419,63 @@ class TestExportacaoDocumentos(unittest.TestCase):
             self.assertEqual(P.iniciais_por_pagina(manifesto), P.INICIAIS_PL)
 
 
+class TestAlvoDocumentos(unittest.TestCase):
+    def test_alvo_com_folga_sem_relaxar_orcamento_oficial(self):
+        self.assertEqual(GS.ALVO_PARTE_DOC_GZIP, 120 * 1024)
+        self.assertEqual(GS.LIMITE_PARTE_DOC_GZIP, 150 * 1024)
+        self.assertEqual(GS.LIMITE_PRIMEIRA_PARTE_DOC_GZIP, 24 * 1024)
+        self.assertEqual(GS.MARGEM_GZIP, 512)
+
+    def test_exportacao_com_alvo_padrao_nas_duas_familias(self):
+        base = montar()
+        docs = sinteticos(base["pessoas"])
+        rnd = random.Random(120)
+        # Texto pouco repetitivo força partes grandes sem depender dos dados versionados.
+        docs = [dict(d, ementa=d["ementa"] + " " + rnd.randbytes(128).hex()) for d in docs]
+        modelo = {"documentos": docs}
+        with tempfile.TemporaryDirectory() as tmp:
+            saida, antiga = Path(tmp) / "nova", Path(tmp) / "antiga"
+            for pasta in (saida, antiga):
+                (pasta / "dados").mkdir(parents=True)
+            manifesto = GS.exportar_documentos(modelo, saida, {"esquema": 2, "build": "pl", "arquivos": {}})
+            with mock.patch.object(GS, "ALVO_PARTE_DOC_GZIP", GS.LIMITE_PARTE_DOC_GZIP):
+                anterior = GS.exportar_documentos(modelo, antiga, {"esquema": 2, "build": "pl", "arquivos": {}})
+            inalterados = ["dic-doc", "ver/michel-salim-saad-neto"]
+            for familia in ("doc", "ver"):
+                partes = [(n, e) for n, e in manifesto["arquivos"].items() if e.get("familia") == familia]
+                self.assertTrue(any(e["parte"] > 1 for _, e in partes), "pré-condição: várias partes em " + familia)
+                self.assertGreater(len(partes), sum(e.get("familia") == familia for e in anterior["arquivos"].values()))
+                for nome, e in partes:
+                    conteudo = (saida / e["url"].split("?")[0]).read_bytes()
+                    with self.subTest(nome=nome):
+                        self.assertLessEqual(GS.tamanho_gzip(conteudo, nivel=6), GS.ALVO_PARTE_DOC_GZIP - GS.MARGEM_GZIP)
+                        self.assertLessEqual(GS.tamanho_gzip(conteudo), 125 * 1024)
+                        if familia == "doc" and e["parte"] == 0:
+                            self.assertLessEqual(GS.tamanho_gzip(conteudo, nivel=6), GS.LIMITE_PRIMEIRA_PARTE_DOC_GZIP - GS.MARGEM_GZIP)
+                            inalterados.append(nome)
+            for nome in inalterados:
+                with self.subTest(inalterado=nome):
+                    self.assertEqual(manifesto["arquivos"][nome], anterior["arquivos"][nome])
+                    self.assertEqual((saida / f"dados/{nome}.json").read_bytes(), (antiga / f"dados/{nome}.json").read_bytes())
+
+    def test_relatorio_so_avisa_acima_de_150_kib(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            saida = Path(tmp)
+            (saida / "dados" / "ver").mkdir(parents=True)
+            for nome in ("doc-indicacao-2026", "ver/ana-maria-teste"):
+                (saida / f"dados/{nome}.json").write_bytes(b"{}")
+            for tamanho in (GS.ALVO_PARTE_DOC_GZIP + 1, GS.LIMITE_PARTE_DOC_GZIP, GS.LIMITE_PARTE_DOC_GZIP + 1):
+                avisos = io.StringIO()
+                with self.subTest(tamanho=tamanho), contextlib.redirect_stdout(io.StringIO()), \
+                        contextlib.redirect_stderr(avisos), mock.patch.object(GS.gzip, "compress", return_value=b"x" * tamanho):
+                    GS.relatorio_tamanhos(saida)
+                if tamanho <= GS.LIMITE_PARTE_DOC_GZIP:
+                    self.assertEqual(avisos.getvalue(), "")
+                else:
+                    self.assertEqual(avisos.getvalue().count("::warning::"), 2)
+                    self.assertIn("orçamento de parte de documentos de 153600 bytes", avisos.getvalue())
+
+
 class TestDataDivididaNaPrimeiraParte(unittest.TestCase):
     """Uma data com mais documentos do que cabem na primeira parte não pode levar uma parte grande à carga inicial."""
     LIMITE_PRIMEIRA, LIMITE = 3 * 1024, 16 * 1024
@@ -439,7 +497,7 @@ class TestDataDivididaNaPrimeiraParte(unittest.TestCase):
             saida = Path(tmp)
             (saida / "dados").mkdir()
             with mock.patch.object(GS, "LIMITE_PRIMEIRA_PARTE_DOC_GZIP", self.LIMITE_PRIMEIRA), \
-                    mock.patch.object(GS, "LIMITE_PARTE_DOC_GZIP", self.LIMITE):
+                    mock.patch.object(GS, "ALVO_PARTE_DOC_GZIP", self.LIMITE):
                 manifesto = GS.exportar_documentos(modelo, saida, {"esquema": 2, "build": "pl", "arquivos": {}})
             arquivos = manifesto["arquivos"]
             gz = lambda n: len(gzip.compress((saida / f"dados/{n}.json").read_bytes(), mtime=0))
@@ -465,11 +523,16 @@ class TestParidadePlano(unittest.TestCase):
 
     def test_plano_docs_igual_ao_esperado_pelo_navegador(self):
         fixture = json.loads(FIXTURE_PLANO.read_text(encoding="utf-8"))
-        self.assertTrue(fixture["casos"])
-        for caso in fixture["casos"]:
-            with self.subTest(caso=caso["nome"]):
-                self.assertEqual(P.plano_docs(fixture["manifesto"]["arquivos"], tipos=caso["tipo"], ano=caso["ano"], alvo=caso["alvo"]),
-                                 caso["nomes"])
+        for cenario in (fixture, *fixture["refatiamentos"]):
+            self.assertTrue(cenario["casos"])
+            for caso in cenario["casos"]:
+                with self.subTest(caso=caso["nome"]):
+                    self.assertEqual(P.plano_docs(cenario["manifesto"]["arquivos"], tipos=caso["tipo"], ano=caso["ano"], alvo=caso["alvo"]),
+                                     caso["nomes"])
+
+    def test_passo_lista_igual_ao_do_app(self):
+        app = (GS.FONTE_ESTATICA / "app.js").read_text(encoding="utf-8")
+        self.assertEqual(int(re.search(r"\bPASSO = (\d+)", app).group(1)), P.PASSO_LISTA)
 
     def test_iniciais_de_atividades_usam_o_mesmo_plano(self):
         fixture = json.loads(FIXTURE_PLANO.read_text(encoding="utf-8"))
