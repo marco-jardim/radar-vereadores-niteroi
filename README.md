@@ -2,9 +2,9 @@
 
 Site aberto que mostra quais leis de Niterói mudam a cidade e quem as escreveu, e quanto da produção da Câmara desde 2021 é homenagem, lei sem efeito prático, projeto repetido ou pauta polêmica.
 
-Páginas: placar por vereador e leis com efeito mais recentes (início), novidades das últimas 12 semanas (projetos de lei apresentados, leis sancionadas ou promulgadas, vetos e vetos derrubados, também no feed RSS `feed.xml`), leis aprovadas com filtros por impacto, tema, vereador e partido, todos os projetos, atividades (indicações, moções, requerimentos, projetos de decreto legislativo e de resolução, com filtros por tipo, ano, vereador, categoria e bairro), sem efeito e polêmicas, análises históricas e metodologia. Cada vereador tem uma página com seus projetos e uma seção "Atividade" com esses documentos, que não entram nos números de projetos e leis.
+Páginas: placar por vereador e leis com efeito mais recentes (início), novidades das últimas 12 semanas (projetos de lei apresentados, leis sancionadas ou promulgadas, vetos e vetos derrubados, também no feed RSS `feed.xml`), leis aprovadas com filtros por impacto, tema, vereador e partido, todos os projetos, atividades (indicações, moções, requerimentos, projetos de decreto legislativo e de resolução, com filtros por tipo, ano, vereador, categoria e bairro), sessões e votações (`sessoes.html`), sem efeito e polêmicas, análises históricas e metodologia. Cada vereador tem uma página com seus projetos, a seção "Presença e votos" das sessões plenárias e uma seção "Atividade" com os demais documentos, que não entram nos números de projetos e leis.
 
-Os dados vêm do [SISCAM da Câmara Municipal de Niterói](https://consultaniteroi.siscam.com.br/) e são atualizados toda semana por GitHub Actions. O site é estático e fica no GitHub Pages.
+Os dados vêm do [SISCAM da Câmara Municipal de Niterói](https://consultaniteroi.siscam.com.br/). Projetos e demais documentos são atualizados toda semana por GitHub Actions; a coleta de sessões ainda é opcional, fora de `coleta.yml`. O site é estático e fica no GitHub Pages.
 
 ## Como funciona
 
@@ -12,7 +12,8 @@ Os dados vêm do [SISCAM da Câmara Municipal de Niterói](https://consultaniter
 |---|---|---|
 | Coleta de projetos | `coletor/siscam.py` | Baixa a lista de projetos de lei de cada ano e, para os novos ou com tramitação alterada, a autoria e a tramitação completa. Grava `data/proposicoes/<ano>.json`. |
 | Coleta de documentos | `coletor/documentos.py` | Lista requerimentos, indicações, moções, PDLs e resoluções. Baixa a página de detalhe só de requerimentos, PDLs, resoluções e documentos com mais de um autor, com limite por execução; o que fica para depois é marcado como pendente. Grava `data/documentos/<tipo>/<ano>.json`. |
-| Coleta de sessões (opcional) | `coletor/sessoes.py` | Lista as sessões plenárias de cada ano e baixa o detalhe: documentos da sessão, itens de pauta com fase (só a referência ao documento, cujo tipo, número e ementa já estão em `data/proposicoes` ou `data/documentos`; o item cujo documento ainda não foi coletado, ou sem link, guarda também tipo, número e ementa), frequência e votações nominais, com os textos como o SISCAM os exibe (um nome repetido numa votação é mantido e sinalizado). Grava `data/sessoes/<ano>.json`. Ainda não roda na coleta semanal nem aparece no site. |
+| Coleta de sessões (opcional) | `coletor/sessoes.py` | Lista as sessões plenárias de cada ano e baixa o detalhe: documentos da sessão, itens de pauta com fase (só a referência ao documento, cujo tipo, número e ementa já estão em `data/proposicoes` ou `data/documentos`; o item cujo documento ainda não foi coletado, ou sem link, guarda também tipo, número e ementa), frequência e votações nominais, com os textos como o SISCAM os exibe (um nome repetido numa votação é mantido e sinalizado). Grava `data/sessoes/<ano>.json`, usado pelo site. Ainda não roda em `coleta.yml`; o passo do workflow fica para uma etapa posterior. |
+| Presença e votos | `coletor/regras_sessoes.py`, `coletor/site/modelo_sessoes.py` e `coletor/site/pagina_sessoes.py` | Aplica regras sem IA, agrega as sessões coletadas e gera `sessoes.html`, a seção "Presença e votos" dos vereadores e as regras publicadas em `metodologia.html#sessoes`, com tabelas acessíveis e qualidade dos dados. |
 | Classificação | `coletor/classificar.py` | Nos projetos de lei, combina curadoria (`config/curadoria.json`), regras determinísticas (simbólica, autorizativa, vetos, pareceres, duplicação de lei em vigor) e IA via OpenCode Go, que atribui categoria, tema, impacto (0 a 3), resumo, público afetado e alertas. O resultado fica em cache (`data/classificacao_ia.json`) e só é refeito quando a ementa ou o prompt mudam. |
 | Regras dos documentos | `coletor/regras_documentos.py` | Classifica os demais documentos só por regras sobre a ementa, sem IA: categoria, bairro citado nas indicações, data em que o requerimento consta como respondido na tramitação (não necessariamente a data da resposta do Executivo), publicação de PDLs e resoluções, eixos do perfil de atuação (única regra do perfil), órgão citado nos requerimentos de informação e estado do pedido (respondido, aguardando, encerrado ou retirado). Com elas, o site mostra em tabelas, sem novos dados no navegador: homenagens com contagem e peso na produção, por vereador e por ano, em "Sem efeito e polêmicas"; requerimentos de informação por vereador e por órgão e indicações por bairro em "Atividades"; e as três na página de cada vereador. |
 | Geometria dos bairros | `coletor/geo.py` | Converte uma resposta local do Overpass em `data/geo/bairros.json`, com limites simplificados e atribuição OSM/ODbL. Atualização manual por comando, separada da coleta semanal; a geometria é opcional na geração do site. |
@@ -56,6 +57,21 @@ Testes (offline, sem acesso ao SISCAM nem à IA):
 python -m unittest discover -s tests -t .
 node --test "tests/js/**/*.test.js"
 ```
+
+## Sessões e votações
+
+`sessoes.html` mostra presença por legislatura, votações que dividiram a Câmara, placares por ano,
+ritmo mensal e cobertura da coleta. Cada vereador tem a seção **Presença e votos**, antes de "Atividade".
+Suplentes sem página própria aparecem com nome e a identificação "suplente em exercício", sem link.
+Tudo é gerado no servidor: sem novos JSONs de votos nem JavaScript; os primeiros 40 cartões de cada
+legislatura aparecem na lista e os demais ficam em "Ver mais". Sem `data/sessoes`, o site gera os estados vazios.
+
+As regras estão em **`metodologia.html#sessoes`**: só sessões deliberativas realizadas com lista entram na
+presença; licenças ficam fora da base individual. Favor/Contra é voto sobre o parecer da comissão;
+sentidos não determinados e placares inconsistentes são identificados. Contar presença e votos não mede
+qualidade do mandato, e comissões, debates e votações simbólicas não aparecem nestes indicadores.
+A coleta continua opcional e **fora de `coleta.yml`**; quando entrar no workflow, deve vir depois de
+`siscam` e `documentos`, para resolver as referências da pauta com os dados já coletados.
 
 ## Mapa das indicações por bairro
 

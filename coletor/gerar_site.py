@@ -14,6 +14,7 @@ from pathlib import Path
 
 from coletor import novidades as N
 from coletor import regras_documentos as RD
+from coletor.site import modelo_sessoes, pagina_sessoes
 from coletor.site import paginas as P
 from coletor.site.modelo import (
     DESFECHO_GRUPO, NOME_ALERTA, NOME_CATEGORIA, NOME_CATEGORIA_DOC, NOME_DESFECHO, NOME_SINAL, NOME_SUBCATEGORIA_DOC,
@@ -448,6 +449,7 @@ def carregar_geo(raiz: Path | None = None) -> dict | None:
 
 def main() -> None:
     modelo = montar_modelo()
+    modelo["sessoes"] = modelo_sessoes.montar_sessoes(modelo) if (RAIZ / "data" / "sessoes").is_dir() else None
     modelo["geo_bairros"] = carregar_geo()
     if SAIDA.exists():
         shutil.rmtree(SAIDA)
@@ -465,6 +467,7 @@ def main() -> None:
     escrever("leis.html", P.gerar_leis(cliente, manifesto))
     escrever("projetos.html", P.gerar_projetos(cliente, manifesto))
     escrever("atividades.html", P.gerar_atividades(modelo, manifesto))
+    escrever("sessoes.html", pagina_sessoes.gerar_sessoes(modelo))
     escrever("ruido.html", P.gerar_ruido(modelo))
     escrever("analises.html", P.gerar_analises(modelo))
     escrever("metodologia.html", P.gerar_metodologia(modelo))

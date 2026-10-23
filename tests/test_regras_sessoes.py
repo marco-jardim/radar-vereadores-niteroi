@@ -163,6 +163,88 @@ class TestVotos(unittest.TestCase):
 
 
 # ---- sentido e consistência -----------------------------------------------------
+class TestRegrasDoModelo(unittest.TestCase):
+    def test_realizacao_observada_nao_se_confunde_com_pauta_ou_detalhe(self):
+        s = sessao(pauta=[{"id_documento": 123}], detalhe_em="2026-10-23")
+        self.assertFalse(R.indicadores_sessao(s)["realizada"])
+        self.assertIn("sem lista de frequência", R.indicadores_sessao(s)["marcas"])
+        for campos in ({"frequencia": [frequencia("A", "Presença")]},
+                       {"votacoes": [votacao()]}, {"documentos_sessao": [{"rotulo": "Ata"}]}):
+            self.assertTrue(R.indicadores_sessao(sessao(**campos))["realizada"])
+        estado = R.indicadores_sessao(sessao(tipo="solene", detalhe_pendente=True, data="2016-03-25"))
+        self.assertFalse(estado["deliberativa"])
+        self.assertIn("detalhe pendente", estado["marcas"])
+        self.assertIn("data fora do ano da listagem", estado["marcas"])
+
+    def test_exercicio_individual_nao_inventa_suplencia_e_exclui_licenca(self):
+        s = sessao(frequencia=[frequencia("Ausência", "Ausência"), frequencia("Licença", "Licença")],
+                   votacoes=[votacao(votos=[{"nome": n, "voto": v} for n, v in
+                                           (("Só voto", "Branco"), ("Presidência", "Presidente"),
+                                            ("Só ausência nominal", "Ausente"), ("Licença", "Favor"))])])
+        self.assertEqual(R.pessoas_em_exercicio(s), {"ausencia", "so-voto", "presidencia"})
+        self.assertEqual(R.pessoas_em_exercicio(s, {"so-voto": "so-voto"}), {"so-voto"})
+
+    def test_resumo_e_quorum_nao_traduzem_sentido_indeterminado(self):
+        v = votacao(votos=votacao()["votos"] + [{"nome": f"Ausente {n}", "voto": "Ausente"} for n in range(3)])
+        analise = R.sentido_voto(v, sessao(), documento())
+        self.assertEqual(R.quorum_veto(analise), {"exigido": 11, "manter": 11, "derrubar": 6})
+        self.assertEqual(R.resumo_placar(analise), "11 para manter · 6 para derrubar · 3 ausentes")
+        analise = R.sentido_voto(v, sessao(), None)
+        self.assertIsNone(R.quorum_veto(analise))
+        self.assertIn("Favor ao parecer (sentido não determinado)", R.resumo_placar(analise))
+        self.assertNotIn("para manter", R.resumo_placar(analise))
+        analise = R.sentido_voto(votacao(resultado="Aprovado"), sessao(), None)
+        self.assertIsNone(R.quorum_veto(analise))
+        self.assertIn("a favor do projeto", R.resumo_placar(analise))
+
+
+class TestSuplentesDasSessoes(unittest.TestCase):
+    def fontes(self):
+        cfg = {"legislaturas": [{"id": "2021-2024", "inicio": "2021-01-01", "fim": "2024-12-31", "eleitos": []},
+                                {"id": "2025-2028", "inicio": "2025-01-01", "fim": "2028-12-31", "eleitos": []}],
+               "apelidos": {"NOME COMPLETO - APELIDO": "Exibição"}}
+        return cfg
+
+    def test_tres_sessoes_distintas_nao_tres_linhas_e_sem_alias_novo(self):
+        cfg = self.fontes()
+        nome = "NOME COMPLETO - APELIDO"
+        registros = [sessao(id=n, frequencia=[frequencia(nome, "Presença"), frequencia(nome, "Consignado"),
+                                              frequencia("Só duas", "Ausência")]) for n in (1, 2)]
+        registros += [sessao(id=3, frequencia=[frequencia(nome, "Presença")]),
+                      sessao(id=4, tipo="solene", frequencia=[frequencia("Só duas", "Presença")])]
+        antes = copy.deepcopy(registros)
+        candidatos = R.suplentes_das_sessoes(registros, {}, cfg)
+        candidato = candidatos[(R.slug(nome), "2025-2028")]
+        self.assertTrue(candidato["incluido"])
+        self.assertEqual((candidato["sessoes_deliberativas"], candidato["nome"]), (3, "Exibição"))
+        self.assertFalse(candidatos[("so-duas", "2025-2028")]["incluido"])
+        pessoa = {R.slug(nome): {"nome_siscam": nome, "legislaturas": {"2025-2028"}, "suplencias_sessoes": {"2025-2028"}}}
+        indice = R.indice_membros(registros[0], pessoa, cfg)
+        self.assertEqual(indice, {R.slug(nome): R.slug(nome)})
+        self.assertNotIn("nome-completo", indice)
+        self.assertEqual(candidatos, R.suplentes_das_sessoes(list(reversed(registros)), {}, cfg))
+        self.assertEqual(registros, antes)
+
+    def test_voto_substantivo_e_legislaturas_independentes(self):
+        cfg = self.fontes()
+        registros = [sessao(id=1, ano=2024, data="2024-11-01", frequencia=[frequencia("Nome", "Presença")]),
+                     sessao(id=2, frequencia=[frequencia("Nome", "Presença")]),
+                     sessao(id=3, frequencia=[frequencia("Nome", "Presença")],
+                            votacoes=[votacao(votos=[{"nome": "Votou", "voto": "Branco"},
+                                                    {"nome": "Conflito", "voto": "Favor"},
+                                                    {"nome": "Conflito", "voto": "Contra"},
+                                                    {"nome": "Presidente", "voto": "Presidente"}]),
+                                      votacao(tipo_votacao="Simbólica", votos=[{"nome": "Simbólica", "voto": "Favor"}])])]
+        candidatos = R.suplentes_das_sessoes(registros, {}, cfg)
+        self.assertFalse(candidatos[("nome", "2021-2024")]["incluido"])
+        self.assertFalse(candidatos[("nome", "2025-2028")]["incluido"])
+        self.assertTrue(candidatos[("votou", "2025-2028")]["incluido"])
+        self.assertTrue(candidatos[("votou", "2025-2028")]["voto_substantivo"])
+        self.assertFalse(candidatos[("conflito", "2025-2028")]["incluido"])
+        self.assertFalse(candidatos[("presidente", "2025-2028")]["incluido"])
+        self.assertNotIn(("simbolica", "2025-2028"), candidatos)
+
+
 class TestSentido(unittest.TestCase):
     def test_resultado_oficial_sem_depender_do_texto(self):
         casos = [

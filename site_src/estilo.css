@@ -350,3 +350,87 @@ details.bloco summary { cursor: pointer; font: 600 1.2rem/1.3 var(--display); }
 }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
 @media print { .filtros, .controles, .topo nav, #tip, .acoes-item, .dialogo-siscam { display: none; } }
+
+/* ---- sessões */
+/* Paleta própria, sem as cores de efeito/alerta; ≥ 3:1 contra a superfície.
+   Glifos, texturas, rótulos e tabelas também identificam as categorias. */
+:root {
+  --presente: #245A81;
+  --consignado: #7951A1;
+  --votou-ausente: #007C91;
+  --justificada: #916211;
+  --ausente: #687783;
+  --licenca: #746B86;
+  --voto-maioria: #245A81;
+  --voto-diferente: #7951A1;
+  --voto-abstencao: #687783;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --presente: #7CB4DE;
+    --consignado: #BE9EE0;
+    --votou-ausente: #50AFC2;
+    --justificada: #D2AC64;
+    --ausente: #93A4B1;
+    --licenca: #B3A7C5;
+    --voto-maioria: #7CB4DE;
+    --voto-diferente: #BE9EE0;
+    --voto-abstencao: #93A4B1;
+  }
+}
+:root[data-theme="dark"] {
+  --presente: #7CB4DE;
+  --consignado: #BE9EE0;
+  --votou-ausente: #50AFC2;
+  --justificada: #D2AC64;
+  --ausente: #93A4B1;
+  --licenca: #B3A7C5;
+  --voto-maioria: #7CB4DE;
+  --voto-diferente: #BE9EE0;
+  --voto-abstencao: #93A4B1;
+}
+.s-presente { background: var(--presente); fill: var(--presente); }
+.s-consignado { background: var(--consignado); fill: var(--consignado); }
+.s-votou-ausente { background: var(--votou-ausente); fill: var(--votou-ausente); }
+.s-justificada { background: var(--justificada); fill: var(--justificada); }
+.s-ausente { background: var(--ausente); fill: var(--ausente); }
+.s-licenca { background: var(--licenca); fill: var(--licenca); }
+.s-voto-maioria { background: var(--voto-maioria); fill: var(--voto-maioria); }
+.s-voto-diferente { background: var(--voto-diferente); fill: var(--voto-diferente); }
+.s-voto-abstencao { background: var(--voto-abstencao); fill: var(--voto-abstencao); }
+.sessoes .tile { border-top-color: var(--presente); }
+.sessoes .tile-valor { font-size: clamp(1.55rem, 2.5vw, 2.1rem); line-height: 1.2; }
+.sessoes .presenca .trilho { width: 100%; }
+.sessoes .presenca .trilho i { min-width: 0; }
+.sessoes .presenca .s-consignado { background-image: repeating-linear-gradient(90deg, transparent 0 5px, var(--superficie) 5px 6px); }
+.sessoes .presenca .s-votou-ausente { background-image: repeating-linear-gradient(135deg, transparent 0 5px, var(--superficie) 5px 6px); }
+.sessoes .presenca .s-justificada { background-image: repeating-linear-gradient(45deg, transparent 0 5px, var(--superficie) 5px 6px); }
+.sessoes .leg-presenca { gap: 8px 16px; }
+.sessoes .votacao { border-left-color: var(--voto-diferente); max-width: none; padding-right: 14px; }
+.sessoes .votacao .ementa { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.sessoes .votacao .mini-barra { max-width: 440px; height: 14px; margin: 10px 0 6px; }
+.sessoes .votacao .mini-n { color: var(--tinta); }
+.sessoes .votacao .qualidade-voto { border-left: 2px solid var(--ausente); padding-left: 8px; margin-top: 8px; }
+.sessoes .votacao .quorum, .sessoes .votacao .fonte-sentido { font-size: .85rem; }
+.sessoes .notas-conferencia { margin-top: 10px; font-size: .8rem; color: var(--tinta-suave); max-width: 75ch; }
+.sessoes .notas-conferencia summary { cursor: pointer; }
+.sessoes .notas-conferencia ul { margin: 6px 0; padding-left: 20px; }
+.sessoes .votos-nomes { margin: 10px 0; }
+.sessoes .votos-nomes summary { cursor: pointer; font-weight: 600; }
+.sessoes .grupo-votos h4 { font-size: .9rem; margin: 12px 0 4px; }
+.sessoes .grupo-votos p { display: flex; flex-wrap: wrap; gap: 5px; }
+.sessoes .como-votou { list-style: none; padding: 0; margin: 12px 0; font-size: .92rem; }
+.sessoes .como-votou li { margin: 6px 0; }
+.sessoes .tabela-como-votou > summary { font-size: 1rem; }
+.sessoes .votos-diferentes { padding-left: 22px; }
+.sessoes .votos-diferentes li { margin-bottom: 10px; }
+.sessoes .sentido-indeterminado { color: var(--tinta-suave); }
+.sessoes details.bloco > summary { scroll-margin-top: 12px; }
+.sessoes [id], #sessoes { scroll-margin-top: 16px; }
+@media (max-width: 760px) {
+  .sessoes .tiles { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+  .sessoes .presenca { margin: 5px 0; }
+}
+@media print {
+  .sessoes details::details-content { display: block; content-visibility: visible; }
+}

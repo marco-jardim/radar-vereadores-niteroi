@@ -8,8 +8,10 @@ import contextlib
 import io
 import json
 import sys
+import tempfile
 import unittest
 from html.parser import HTMLParser
+from pathlib import Path
 from unittest import mock
 from xml.etree import ElementTree
 
@@ -18,7 +20,7 @@ from coletor import novidades as N
 from coletor.site import paginas as P
 from coletor.site.modelo import TIPOS_DOC
 
-PAGINAS = ("index.html", "novidades.html", "leis.html", "projetos.html", "atividades.html", "ruido.html", "analises.html",
+PAGINAS = ("index.html", "novidades.html", "leis.html", "projetos.html", "atividades.html", "sessoes.html", "ruido.html", "analises.html",
            "metodologia.html")
 DOCUMENTOS = gerar_site.RAIZ / "data" / "documentos"
 
@@ -39,6 +41,54 @@ class TestGerarSite(unittest.TestCase):
                 self.assertTrue(arq.is_file(), f"{arq} não foi gerado")
                 conteudo = arq.read_text(encoding="utf-8")
                 self.assertIn("<html", conteudo.lower())
+
+    def test_integracao_sessoes_menu_metodologia_e_fichas(self):
+        hrefs = [href for href, _ in P.NAV]
+        posicao = hrefs.index("sessoes.html")
+        self.assertEqual(hrefs[posicao - 1:posicao + 2], ["atividades.html", "sessoes.html", "ruido.html"])
+        html = (self.saida / "sessoes.html").read_text(encoding="utf-8")
+        self.assertIn('<h1>Sessões e votações</h1>', html)
+        self.assertIn('href="sessoes.html" aria-current="page">Sessões</a>', html)
+        self.assertIn('href="metodologia.html#sessoes"', html)
+        self.assertIn("sessoes.html", self.mensagem)  # o relatório percorre todos os HTMLs
+        tamanho = gerar_site.tamanho_gzip((self.saida / "sessoes.html").read_bytes())
+        print(f"\nSessões (dados versionados): {tamanho} B gzip; alvo de apresentação: 60 KiB.")
+        self.assertLessEqual(tamanho, gerar_site.LIMITE_HTML_GZIP)
+        metodo = (self.saida / "metodologia.html").read_text(encoding="utf-8")
+        self.assertIn('id="sessoes"', metodo)
+        self.assertIn('href="#sessoes"', metodo)
+        for caminho in (self.saida / "vereadores").glob("*.html"):
+            with self.subTest(vereador=caminho.name):
+                ficha = caminho.read_text(encoding="utf-8")
+                self.assertIn('id="t-sessoes">Presença e votos', ficha)
+                self.assertIn('href="../metodologia.html#sessoes"', ficha)
+                if 'class="mandato"' in ficha:
+                    self.assertLess(ficha.index('class="mandato"'), ficha.index('id="t-sessoes"'))
+                if 'id="t-atividade"' in ficha:
+                    self.assertLess(ficha.index('id="t-sessoes"'), ficha.index('id="t-atividade"'))
+
+    def test_gera_sem_pasta_de_sessoes(self):
+        # Isola só a raiz opcional e a saída, sem renomear nem alterar data/.
+        with tempfile.TemporaryDirectory(prefix="site-sem-sessoes-", dir=self.saida.parent) as pasta:
+            raiz = Path(pasta)
+            saida = raiz / "site"
+            mensagem = io.StringIO()
+            renderizar = gerar_site.pagina_sessoes.gerar_sessoes
+            with (mock.patch.object(gerar_site, "RAIZ", raiz),
+                  mock.patch.object(gerar_site, "SAIDA", saida),
+                  mock.patch.object(gerar_site.modelo_sessoes, "montar_sessoes") as montar,
+                  mock.patch.object(gerar_site.pagina_sessoes, "gerar_sessoes", wraps=renderizar) as pagina,
+                  contextlib.redirect_stdout(mensagem)):
+                gerar_site.main()
+            montar.assert_not_called()
+            self.assertIsNone(pagina.call_args.args[0]["sessoes"])
+            self.assertIn("Nenhuma sessão coletada disponível", (saida / "sessoes.html").read_text(encoding="utf-8"))
+            self.assertIn('id="sessoes"', (saida / "metodologia.html").read_text(encoding="utf-8"))
+            ficha = next((saida / "vereadores").glob("*.html")).read_text(encoding="utf-8")
+            self.assertIn("Nenhum registro de frequência com este nome", ficha)
+            for nome in PAGINAS:
+                self.assertTrue((saida / nome).is_file(), nome)
+            self.assertIn("sessoes.html", mensagem.getvalue())
 
     def test_novidades_e_feed_rss(self):
         canal = ElementTree.fromstring((self.saida / "feed.xml").read_bytes()).find("channel")
