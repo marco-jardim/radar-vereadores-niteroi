@@ -2,5 +2,5 @@
 # linha no checkout (os testes as decodificam como siscam.baixar, preservando CRLF).
 tests/fixtures/** -text
 # Dados versionados: sempre LF, como coletor.arquivos grava. coletor.validar compara os
-# arquivos de data/documentos byte a byte com o formato canônico.
+# arquivos de data/documentos e data/sessoes byte a byte com o formato canônico.
 data/** text eol=lf

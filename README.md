@@ -12,6 +12,7 @@ Os dados vêm do [SISCAM da Câmara Municipal de Niterói](https://consultaniter
 |---|---|---|
 | Coleta de projetos | `coletor/siscam.py` | Baixa a lista de projetos de lei de cada ano e, para os novos ou com tramitação alterada, a autoria e a tramitação completa. Grava `data/proposicoes/<ano>.json`. |
 | Coleta de documentos | `coletor/documentos.py` | Lista requerimentos, indicações, moções, PDLs e resoluções. Baixa a página de detalhe só de requerimentos, PDLs, resoluções e documentos com mais de um autor, com limite por execução; o que fica para depois é marcado como pendente. Grava `data/documentos/<tipo>/<ano>.json`. |
+| Coleta de sessões (opcional) | `coletor/sessoes.py` | Lista as sessões plenárias de cada ano e baixa o detalhe: documentos da sessão, itens de pauta com fase (só a referência ao documento, cujo tipo, número e ementa já estão em `data/proposicoes` ou `data/documentos`; o item cujo documento ainda não foi coletado, ou sem link, guarda também tipo, número e ementa), frequência e votações nominais, com os textos como o SISCAM os exibe (um nome repetido numa votação é mantido e sinalizado). Grava `data/sessoes/<ano>.json`. Ainda não roda na coleta semanal nem aparece no site. |
 | Classificação | `coletor/classificar.py` | Nos projetos de lei, combina curadoria (`config/curadoria.json`), regras determinísticas (simbólica, autorizativa, vetos, pareceres, duplicação de lei em vigor) e IA via OpenCode Go, que atribui categoria, tema, impacto (0 a 3), resumo, público afetado e alertas. O resultado fica em cache (`data/classificacao_ia.json`) e só é refeito quando a ementa ou o prompt mudam. |
 | Regras dos documentos | `coletor/regras_documentos.py` | Classifica os demais documentos só por regras sobre a ementa, sem IA: categoria, bairro citado nas indicações, data em que o requerimento consta como respondido na tramitação (não necessariamente a data da resposta do Executivo), publicação de PDLs e resoluções, eixos do perfil de atuação (única regra do perfil), órgão citado nos requerimentos de informação e estado do pedido (respondido, aguardando, encerrado ou retirado). Com elas, o site mostra em tabelas, sem novos dados no navegador: homenagens com contagem e peso na produção, por vereador e por ano, em "Sem efeito e polêmicas"; requerimentos de informação por vereador e por órgão e indicações por bairro em "Atividades"; e as três na página de cada vereador. |
 | Validação | `coletor/validar.py` | Confere a forma dos dados em `data/` e da configuração em `config/`, sem alterar nada. |
@@ -41,6 +42,7 @@ Só precisa de Python 3.12+ (sem dependências externas). Os testes de JavaScrip
 ```bash
 python -m coletor.siscam --anos 2025-2026   # projetos de lei
 python -m coletor.documentos --anos 2026    # demais documentos
+python -m coletor.sessoes --anos 2026       # sessões plenárias (opcional)
 OPENCODE_API_KEY=... python -m coletor.classificar   # ou --sem-ia
 python -m coletor.validar
 python -m coletor.gerar_site
