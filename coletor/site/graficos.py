@@ -5,8 +5,12 @@ e uma tabela com os mesmos números em <details>, para leitores de tela e para q
 """
 from __future__ import annotations
 
+import hashlib
 import html
 import math
+from collections import Counter
+
+from coletor.regras_documentos import BAIRROS_POR_REGIAO
 
 LARGURA = 720
 
@@ -57,6 +61,106 @@ def tabela(cabecalho: list[str], linhas: list[list]) -> str:
     th = "".join(f"<th scope=\"col\">{esc(c)}</th>" for c in cabecalho)
     trs = "".join("<tr>" + "".join(f"<td>{esc(_fmt(c) if isinstance(c, (int, float)) else c)}</td>" for c in l) + "</tr>" for l in linhas)
     return f'<details class="tabela-graf"><summary>Ver os números em tabela</summary><table><thead><tr>{th}</tr></thead><tbody>{trs}</tbody></table></details>'
+
+
+def _corte_limpo(inferior: int, superior: int) -> int:
+    """Múltiplo de 1, 2 ou 5 × potência de dez, no vão entre dois valores distintos.
+
+    Prefere o passo mais largo e o múltiplo mais próximo do meio do vão. Se não
+    houver espaço para arredondar, usa o próprio inteiro, sem mudar os grupos.
+    """
+    potencia = 10 ** (len(str(superior)) - 1)
+    while potencia:
+        for fator in (5, 2, 1):
+            passo = fator * potencia
+            primeiro, ultimo = (inferior + passo - 1) // passo, superior // passo
+            if primeiro <= ultimo:
+                meio = (inferior + superior + passo) // (2 * passo)
+                return min(ultimo, max(primeiro, meio)) * passo
+        potencia //= 10
+    return inferior
+
+
+def faixas_quantis(valores: list[int], classes: int = 5) -> list[tuple[int, int, int]]:
+    """(mínimo, máximo, bairros) por faixa; zero separado e até cinco quantis positivos.
+
+    Busca os cortes cumulativos mais próximos dos quantis, sem dividir empates e
+    reservando ao menos um valor distinto para cada classe restante. Arredondar
+    apenas no vão entre observações preserva a classificação e evita faixas vazias.
+    """
+    if classes < 1 or any(v < 0 for v in valores):
+        raise ValueError("classes deve ser positivo e valores não podem ser negativos")
+    contagens = Counter(valores)
+    faixas = [(0, 0, contagens[0])] if contagens[0] else []
+    distintos = sorted(v for v in contagens if v > 0)
+    if not distintos:
+        return faixas
+    acumuladas, total = [], 0
+    for valor in distintos:
+        total += contagens[valor]
+        acumuladas.append(total)
+    quantidade = min(classes, 5, len(distintos))
+    anterior, inicio, base = -1, distintos[0], 0
+    for i in range(1, quantidade):
+        # Desempate pelo menor índice; contas inteiras evitam diferenças de ponto flutuante.
+        limite = len(distintos) - quantidade + i
+        corte = min(range(anterior + 1, limite), key=lambda j: (abs(quantidade * acumuladas[j] - i * total), j))
+        fim = _corte_limpo(distintos[corte], distintos[corte + 1] - 1)
+        faixas.append((inicio, fim, acumuladas[corte] - base))
+        anterior, inicio, base = corte, fim + 1, acumuladas[corte]
+    faixas.append((inicio, distintos[-1], total - base))
+    return faixas
+
+
+def mapa_coropletico(valores: dict[str, int], geo: dict, titulo: str, subtitulo: str = "") -> str:
+    """Mapa estático de valores absolutos; quantis dos positivos e zeros hachurados.
+
+    A tabela alternativa inclui todos os 52 bairros, usando as mesmas contagens do mapa.
+    Nenhum tooltip ou legenda depende de JavaScript.
+    """
+    identificador = "mapa-" + hashlib.sha1(titulo.encode("utf-8")).hexdigest()[:10]
+    numeros = [valores.get(b, 0) for bairros in BAIRROS_POR_REGIAO.values() for b in bairros]
+    faixas = faixas_quantis(numeros)
+    positivas = sum(inicio > 0 for inicio, _, _ in faixas)
+    classes, itens_legenda, ordem = [], [], 0
+    for inicio, fim, quantidade in faixas:
+        # Com poucas faixas, ainda usa a amplitude da paleta; uma única faixa é neutra.
+        cor = 0 if inicio == 0 else 3 if positivas == 1 else 1 + round(4 * ordem / (positivas - 1))
+        ordem += inicio > 0
+        classes.append((inicio, fim, cor))
+        rotulo = "0 (hachurado)" if cor == 0 else _fmt(inicio) if inicio == fim else f"{_fmt(inicio)}–{_fmt(fim)}"
+        bairros_txt = f"{quantidade} {'bairro' if quantidade == 1 else 'bairros'}"
+        itens_legenda.append(f'<li><i class="sw mapa-{cor}" aria-hidden="true"></i>'
+                            f'<span>{esc(rotulo)} indicações · {esc(bairros_txt)}</span></li>')
+    leg = ('<ul class="leg-graf leg-mapa" role="list" aria-label="Faixas de indicações e número de bairros">'
+           + "".join(itens_legenda) + '</ul>')
+    viewbox = " ".join(str(int(v)) for v in geo["viewbox"])
+    partes = [f'<svg class="mapa-bairros" viewBox="{esc(viewbox)}" xmlns="http://www.w3.org/2000/svg" '
+              f'aria-labelledby="{identificador}-titulo" aria-describedby="{identificador}-desc">',
+              f'<title id="{identificador}-titulo">{esc(titulo)}</title>',
+              f'<desc id="{identificador}-desc">Indicações nos 52 bairros de Niterói, em valores absolutos, sem ajuste por população. '
+              'Até cinco quantis dos valores positivos, sem separar empates. Zero é hachurado. '
+              'A legenda mostra os limites das faixas e quantos bairros há em cada uma; '
+              'a tabela abaixo traz os nomes e valores exatos de todos os bairros.</desc>',
+              f'<defs><pattern id="{identificador}-zero" width="8" height="8" patternUnits="userSpaceOnUse">'
+              '<rect class="mapa-fundo-zero" width="8" height="8"/>'
+              '<line class="mapa-hachura" x1="0" y1="8" x2="8" y2="0"/></pattern></defs>']
+    linhas = []
+    for regiao, bairros in BAIRROS_POR_REGIAO.items():
+        for bairro in bairros:
+            valor = valores.get(bairro, 0)
+            faixa = next(cor for inicio, fim, cor in classes if inicio <= valor <= fim)
+            geometria = geo["bairros"][bairro]
+            preenchimento = f' fill="url(#{identificador}-zero)"' if faixa == 0 else ""
+            partes.append(f'<path class="mapa-bairro mapa-{faixa}" d="{esc(geometria["path"])}" '
+                          f'fill-rule="evenodd"{preenchimento}><title>{esc(bairro)}: {_fmt(valor)} indicações</title></path>')
+            linhas.append([bairro, regiao, valor])
+    partes.append("</svg>")
+    atribuicao = (f'<p class="nota fonte-mapa">Limites simplificados: {esc(geo["atribuicao"])} · '
+                  '<a href="https://www.openstreetmap.org/copyright">ODbL 1.0</a> · '
+                  f'base OSM: {esc(geo["osm_base"])}. Não é um mapa cadastral.</p>')
+    return figura(titulo, subtitulo, "".join(partes), leg,
+                  tabela(["Bairro", "Região", "Indicações"], linhas) + atribuicao, titulo)
 
 
 def figura(titulo: str, subtitulo: str, corpo_svg: str, leg: str, tab: str, rotulo: str) -> str:

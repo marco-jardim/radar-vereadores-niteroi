@@ -3,8 +3,9 @@
 Confere, sem alterar nada, a forma de data/proposicoes/<ano>.json (inclusive os
 substitutivos e a coerência de lei_substitutivo), de
 data/documentos/<tipo>/<ano>.json e de data/sessoes/<ano>.json (inclusive o formato
-byte a byte gravado por coletor.arquivos; as duas pastas são opcionais), do cache da
-IA (data/classificacao_ia.json), de data/meta.json e dos arquivos
+byte a byte gravado por coletor.arquivos; as duas pastas são opcionais), da geometria
+opcional (data/geo/bairros.json), do cache da IA (data/classificacao_ia.json), de
+data/meta.json e dos arquivos
 config/curadoria.json e config/vereadores.json, e acusa temporários de gravação
 interrompida em data/. Cada verificação é uma função que recebe os dados já
 carregados e devolve a lista de problemas encontrados (vazia quando está tudo certo).
@@ -26,6 +27,7 @@ from pathlib import Path
 from coletor import documentos as D
 from coletor import sessoes as S
 from coletor.arquivos import texto_lista
+from coletor.regras_documentos import BAIRROS_NITEROI
 from coletor.site.modelo import DESFECHO_GRUPO
 
 RAIZ = Path(__file__).resolve().parent.parent
@@ -621,6 +623,49 @@ def validar_sessoes(raiz: Path | None = None) -> list[str]:
     return problemas
 
 
+# ---------------------------------------------------------------------- geometria
+def validar_geo(geo: object) -> list[str]:
+    """Confere a geometria opcional gerada por coletor.geo, sem acessar OSM/Overpass."""
+    arquivo = "data/geo/bairros.json"
+    if not isinstance(geo, dict):
+        return [f"{arquivo}: deveria conter um objeto"]
+    problemas = []
+    for chave in ("atribuicao", "osm_base"):
+        if not isinstance(geo.get(chave), str) or not geo[chave].strip():
+            problemas.append(f"{arquivo}: '{chave}' ausente ou vazia")
+    if geo.get("licenca") != "ODbL 1.0":
+        problemas.append(f"{arquivo}: licença deveria ser ODbL 1.0")
+    if not isinstance(geo.get("fonte"), str) or not RE_URL.fullmatch(geo["fonte"]):
+        problemas.append(f"{arquivo}: 'fonte' deveria ser uma URL pública")
+    viewbox = geo.get("viewbox")
+    caixa_valida = (isinstance(viewbox, list) and len(viewbox) == 4 and all(_e_inteiro(v) for v in viewbox)
+                    and viewbox[:2] == [0, 0] and viewbox[2] > 0 and viewbox[3] > 0)
+    if not caixa_valida:
+        problemas.append(f"{arquivo}: 'viewbox' deveria ser [0, 0, largura, altura], com inteiros positivos")
+    bairros = geo.get("bairros")
+    if not isinstance(bairros, dict):
+        return problemas + [f"{arquivo}: 'bairros' deveria ser um objeto com os 52 bairros oficiais"]
+    faltam, sobram = set(BAIRROS_NITEROI) - bairros.keys(), bairros.keys() - set(BAIRROS_NITEROI)
+    if faltam or sobram:
+        problemas.append(f"{arquivo}: esperados os 52 bairros oficiais; faltam {sorted(faltam)}; sobram {sorted(sobram)}")
+    for nome, bairro in bairros.items():
+        rotulo = f"{arquivo}: bairro {nome!r}"
+        if not isinstance(bairro, dict):
+            problemas.append(f"{rotulo} deveria ser um objeto")
+            continue
+        path = bairro.get("path")
+        if not isinstance(path, str) or not re.fullmatch(r"(?:M\d+,\d+(?: \d+,\d+){2,}Z)+", path):
+            problemas.append(f"{rotulo}: 'path' vazio ou fora do formato de anéis inteiros gerado por coletor.geo")
+        if not _e_inteiro(bairro.get("osm_id")) or bairro["osm_id"] <= 0:
+            problemas.append(f"{rotulo}: 'osm_id' deveria ser um inteiro positivo")
+        centro = bairro.get("centro")
+        if not isinstance(centro, list) or len(centro) != 2 or not all(_e_inteiro(v) for v in centro):
+            problemas.append(f"{rotulo}: 'centro' deveria ser [x, y], com inteiros")
+        elif caixa_valida and not (0 <= centro[0] <= viewbox[2] and 0 <= centro[1] <= viewbox[3]):
+            problemas.append(f"{rotulo}: 'centro' fora do viewBox")
+    return problemas
+
+
 # ------------------------------------------------------------- meta e temporários
 def validar_meta(meta: object) -> list[str]:
     """Confere a forma geral de data/meta.json (escrito pela coleta, pela classificação, pelos documentos e pelas sessões)."""
@@ -765,6 +810,11 @@ def validar_tudo(raiz: Path | None = None) -> list[str]:
     ids, numeros = indices(arquivos)
     problemas += validar_documentos(raiz, ids)
     problemas += validar_sessoes(raiz)
+
+    arq_geo = raiz / "data" / "geo" / "bairros.json"
+    if arq_geo.exists():  # mapa opcional: sem geometria, permanecem gráficos e tabelas
+        geo, erros = _ler_json(arq_geo, "data/geo/bairros.json")
+        problemas += erros or validar_geo(geo)
 
     arq_meta = raiz / "data" / "meta.json"
     if arq_meta.exists():  # escrito pelos coletores; num repositório recém-criado pode faltar
