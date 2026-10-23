@@ -98,9 +98,11 @@ def _pct(valor) -> str:
     return "—" if valor is None else f"{G._fmt(valor)}%"
 
 
-def _compareceu(presenca: dict) -> str:
+def _compareceu(presenca: dict, afastado: bool = False) -> str:
     base = presenca.get("denominador", 0)
     texto = f"{presenca.get('presentes', 0)} de {base}"
+    if afastado and base < 10:
+        return texto + " sessões em exercício"
     return f"{_pct(presenca['pct'])} · {texto}" if base >= 10 and presenca.get("pct") is not None else texto
 
 
@@ -143,8 +145,16 @@ def _nome(modelo: dict, slug: str, prefixo: str = "", chip: bool = False) -> str
     return f'<a{classe} href="{prefixo}vereadores/{P.esc(slug)}.html">{nome}</a>'
 
 
-def _barra_presenca(presenca: dict) -> str:
+def _etiqueta_afastamento(afastamentos: list[dict]) -> str:
+    """Reutiliza cargo e fonte do mandato enriquecido a partir do config."""
+    return "".join(f'<span class="status">afastado: {P.esc(a["cargo"])} '
+                   f'(<a href="{P.esc(a["fonte"])}">fonte</a>)</span>' for a in afastamentos)
+
+
+def _barra_presenca(presenca: dict, afastado: bool = False) -> str:
     base = presenca.get("denominador", 0)
+    if afastado and base < 10:
+        return '<p class="nota">Sem base suficiente para comparação de presença.</p>'
     rotulo = "; ".join(f"{'Consignado' if codigo == 'C' else nome}: {presenca.get(codigo, 0)}"
                        for codigo, _, _, nome in PRESENCA)
     if presenca.get("L", 0):
@@ -170,8 +180,8 @@ def _tabela_presenca(titulo: str, linhas: list[list]) -> str:
                                    "Ausência com voto", "Justificada", "Ausência", "Licença (fora da base)"], linhas)
 
 
-def _celulas_presenca(p: dict) -> list:
-    return [P.esc(_compareceu(p)), *[p.get(c, 0) for c in ("P", "C", "V", "J", "A", "L")]]
+def _celulas_presenca(p: dict, afastado: bool = False) -> list:
+    return [P.esc(_compareceu(p, afastado)), *[p.get(c, 0) for c in ("P", "C", "V", "J", "A", "L")]]
 
 
 def _presencas(modelo: dict, dados: dict, leg: dict, ordenar: bool = False) -> str:
@@ -185,12 +195,18 @@ def _presencas(modelo: dict, dados: dict, leg: dict, ordenar: bool = False) -> s
             continue
         presenca = registro.get("presenca") or {}
         mandato = (pessoa.get("mandatos") or {}).get(leg["id"]) or {}
+        afastamentos = mandato.get("afastamentos") or []
+        afastado = bool(afastamentos)
         partido = mandato.get("partido") or ""
         eleito = bool(mandato.get("eleito"))
         status = '' if eleito else f'<span class="status">{P.esc(pessoa.get("condicao") or "suplente em exercício")}</span>'
         conteudo_nome = f'<strong>{P.esc(pessoa["nome"])}</strong><span class="partido">{P.esc(partido)}</span>{status}'
         quem = (f'<a class="quem" href="vereadores/{P.esc(slug)}.html">{conteudo_nome}</a>' if slug in pessoas
                 else f'<span class="quem">{conteudo_nome}</span>')
+        if afastado:
+            # A fonte é um link próprio, nunca um <a> dentro do link do vereador.
+            nome = (f'<a href="vereadores/{P.esc(slug)}.html">{conteudo_nome}</a>' if slug in pessoas else conteudo_nome)
+            quem = f'<span class="quem">{nome}{_etiqueta_afastamento(afastamentos)}</span>'
         # O contrato .legislatura > .placar > .linha e data-* é o do placar existente.
         atributos = (f'data-nome="{P.esc(pessoa["nome"])}" data-partido="{P.esc(partido)}" '
                      f'data-eleito="{int(eleito)}" data-presenca="{presenca.get("pct") if presenca.get("denominador", 0) >= 10 and presenca.get("pct") is not None else -1}" '
@@ -198,10 +214,10 @@ def _presencas(modelo: dict, dados: dict, leg: dict, ordenar: bool = False) -> s
         nota = _nota_presenca(presenca)
         nota_html = f'<span>{P.esc(nota)}</span>' if nota else ''
         linhas.append(f'<li class="linha" {atributos}>'
-                      f'{quem}{_barra_presenca(presenca)}'
-                      f'<p class="numeros"><strong>{P.esc(_compareceu(presenca))}</strong>'
+                      f'{quem}{_barra_presenca(presenca, afastado)}'
+                      f'<p class="numeros"><strong>{P.esc(_compareceu(presenca, afastado))}</strong>'
                       f'{nota_html}</p></li>')
-        tabela.append([_nome(modelo, slug), *_celulas_presenca(presenca)])
+        tabela.append([_nome(modelo, slug) + _etiqueta_afastamento(afastamentos), *_celulas_presenca(presenca, afastado)])
     if not linhas:
         return '<p class="vazio">Nenhum registro de frequência nesta legislatura.</p>'
     controles = ('<div class="controles"><label for="ordem">Ordenar presença da legislatura mais recente</label>'
@@ -597,7 +613,9 @@ def gerar_sessoes(modelo: dict) -> str:
                           f'<summary>Legislatura {P.esc(leg["rotulo"])}</summary><div class="tiles">{tiles}</div>{indice_html}'
                           f'<section id="presenca-{ident}"><h2 class="h-secao">Presença nas sessões deliberativas</h2>'
                           '<p class="explica">O percentual usa a base de cada vereador, sem licenças. Com menos de 10 sessões, '
-                          'mostramos só a contagem. Partido é o da eleição; nomes em ordem alfabética.</p>'
+                          'mostramos só a contagem. Afastados com base inferior a 10 sessões aparecem sem barra, '
+                          'com a contagem em exercício e fora da mediana dos eleitos. '
+                          'Partido é o da eleição; nomes em ordem alfabética.</p>'
                            + _presencas(modelo, dados, leg, ordenar=indice == 0) + '</section>'
                            f'<section id="divididas-{ident}"><h2 class="h-secao">Votações que dividiram a Câmara</h2>'
                            + _divididas(modelo, dados, leg) + '</section>'
@@ -706,11 +724,13 @@ def secao_sessoes_vereador(modelo: dict, pessoa: dict) -> str:
     por_leg = (dados.get("por_pessoa") or {}).get(pessoa["slug"]) or {}
     por_leg = {leg: r for leg, r in por_leg.items()
                if isinstance(r, dict) and (any((r.get("presenca") or {}).get(c, 0) for c in ("P", "C", "V", "J", "A", "L"))
-                                          or any((r.get("participacao") or {}).values()))}
+                                          or any((r.get("participacao") or {}).values())
+                                          or ((pessoa.get("mandatos") or {}).get(leg) or {}).get("afastamentos"))}
     cabecalho = ('<section class="mandato sessoes" aria-labelledby="t-sessoes">'
                  '<h2 id="t-sessoes">Presença e votos <span>sessões plenárias e votações nominais</span></h2>'
                  '<p class="explica">Presença e votos registrados, não uma avaliação do mandato. A base é individual, '
                  'só nas sessões deliberativas com lista; licenças ficam fora. '
+                 'Afastados com base inferior a 10 sessões aparecem sem barra e ficam fora da mediana dos eleitos. '
                  '<a href="../metodologia.html#sessoes">Como contamos</a>.</p>')
     if not por_leg:
         return (cabecalho + '<p class="vazio">Nenhum registro de frequência com este nome nas sessões coletadas '
@@ -721,6 +741,8 @@ def secao_sessoes_vereador(modelo: dict, pessoa: dict) -> str:
         if not registro:
             continue
         p = registro.get("presenca") or {}
+        afastamentos = ((pessoa.get("mandatos") or {}).get(leg["id"]) or {}).get("afastamentos") or []
+        afastado = bool(afastamentos)
         part = registro.get("participacao") or {}
         mediana = (dados.get("mediana_presenca") or {}).get(leg["id"])
         comparacao = P.comparacao(p.get("pct"), mediana, sufixo="%") if p.get("denominador", 0) >= 10 else "base inferior a 10 sessões; sem comparação percentual"
@@ -729,6 +751,8 @@ def secao_sessoes_vereador(modelo: dict, pessoa: dict) -> str:
         tem_pct = base >= 10 and p.get("pct") is not None
         rotulo_presenca = (f'{contagem} sessões deliberativas' if tem_pct else
                            'compareceu à sessão deliberativa' if base == 1 else 'compareceu às sessões deliberativas')
+        if afastado and base < 10:
+            rotulo_presenca = "sessões em exercício"
         ausencias = p.get("A", 0) + p.get("J", 0)
         presidindo = f'{part["presidindo"]} presidindo' if part.get("presidindo", 0) else ''
         tiles = (P.tile(_pct(p["pct"]) if tem_pct else contagem, rotulo_presenca, comparacao)
@@ -738,9 +762,10 @@ def secao_sessoes_vereador(modelo: dict, pessoa: dict) -> str:
                  + P.tile(f'{len(registro.get("divergencias") or [])} de {registro.get("divididas", 0)}',
                           "votou diferente da maioria", "Votações divididas com sentido conhecido; divergir não mede qualidade"))
         por_ano = registro.get("por_ano") or {}
-        tabela = _tabela_presenca("Presença por ano", [[P.esc(a), *_celulas_presenca(r)] for a, r in sorted(por_ano.items(), key=lambda i: str(i[0]))])
+        tabela = _tabela_presenca("Presença por ano", [[P.esc(a), *_celulas_presenca(r, afastado)] for a, r in sorted(por_ano.items(), key=lambda i: str(i[0]))])
         blocos.append(f'<details class="bloco"{" open" if not blocos else ""}><summary>Legislatura {P.esc(leg["rotulo"])}</summary>'
-                      f'<div class="tiles">{tiles}</div>' + _barra_presenca(p) + _legenda_presenca()
+                      + _etiqueta_afastamento(afastamentos)
+                      + f'<div class="tiles">{tiles}</div>' + _barra_presenca(p, afastado) + _legenda_presenca()
                       + '<h3>Como votou</h3>' + _como_votou(registro)
                       + '<h3>Onde votou diferente da maioria</h3>' + _diferentes(dados, registro, pessoa["slug"], leg)
                       + f'<p><a href="../sessoes.html#sessoes-leg-{P.esc(leg["id"])}">Ver todas em Sessões</a></p>'
@@ -762,6 +787,7 @@ def metodologia_sessoes(modelo: dict) -> str:
 <li>▲ Ausência na abertura com voto nominal substantivo registrado na mesma sessão conta como presença (V), identificada à parte. Presidir não é voto substantivo.</li>
 <li>◇ Ausência justificada (J) e ○ Ausência (A) contam no denominador, mas não como presença. Licença (L) e textos desconhecidos ficam fora da base. O SISCAM não informa o motivo de ausência.</li>
 <li>Não inventamos faltas para nomes que não estão na lista. Cada pessoa conta uma vez por sessão; vale a melhor evidência de presença. Com menos de 10 sessões na base, mostramos somente “X de Y”, sem percentual. A mediana considera os eleitos com base suficiente; suplentes são identificados e não entram na mediana.</li>
+<li>Afastamentos registrados na configuração aparecem com cargo e fonte pública, por legislatura. Com base inferior a 10 sessões, mostramos “X de Y sessões em exercício”, sem barra de presença nem percentual; esses afastados ficam no fim da ordenação por presença e fora da mediana dos eleitos, como os demais sem base suficiente. Com pelo menos 10 sessões, a barra e o percentual permanecem, junto à etiqueta. O afastamento não reclassifica os registros brutos nem informa suas datas de início e fim.</li>
 </ul>
 <h3>O que significa cada voto</h3>
 <p>O voto nominal “Favor” ou “Contra” é sobre o parecer da comissão, não necessariamente a favor ou contra a matéria. O sentido apresentado vem do resultado oficial e do lado vencedor. O texto da tramitação só determina o sentido em vetos mantidos sem nenhum lado com 11 votos, quando há decisão e direção inequívocas na mesma data; nos demais casos serve como conferência. Notas técnicas ficam em “Notas de conferência” e em “Qualidade dos dados”, sem apagar votos só porque o texto diverge.</p>

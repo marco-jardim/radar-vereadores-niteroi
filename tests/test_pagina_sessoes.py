@@ -231,6 +231,75 @@ class TestPaginaSessoes(unittest.TestCase):
         self.assertIn('id="ordem"', html)
         self.assertIn("suplente em exercício", html)
 
+    def test_afastamento_por_mandato_com_fonte_base_curta_sem_barra_e_base_dez_com_barra(self):
+        leg = self.modelo["sessoes"]["legislaturas"][1]
+        afastamento = {"cargo": 'Administração <Regional> & Serviços',
+                       "fonte": 'https://example.org/ato?cargo=1&edicao="2"'}
+        self.pessoa["mandatos"][leg["id"]]["afastamentos"] = [afastamento]
+        registro = self.modelo["sessoes"]["por_pessoa"][self.pessoa["slug"]][leg["id"]]
+        # Isola a ficha nesta legislatura, inclusive sem frequência nem votos.
+        self.modelo["sessoes"]["por_pessoa"][self.pessoa["slug"]] = {leg["id"]: registro}
+        registro["participacao"] = {"votou": 0, "possiveis": 0, "presidindo": 0}
+        for base in (0, 1, 9, 10):
+            with self.subTest(base=base):
+                p = presenca(P=2 if base == 10 else 0, C=0, V=0, J=0, A=8 if base == 10 else base,
+                             L=0, denominador=base, presentes=2 if base == 10 else 0, pct=20 if base == 10 else 17)
+                registro["presenca"] = p
+                registro["por_ano"] = {2026: p}
+                html = S._presencas(self.modelo, self.modelo["sessoes"], leg)
+                doc = Documento(html)
+                linha = next(n for n in doc.com_classe("linha") if n["attrs"]["data-nome"] == self.pessoa["nome"])
+                links = Documento.descendentes(linha, "a")
+                self.assertEqual([a["attrs"]["href"] for a in links],
+                                 [f'vereadores/{self.pessoa["slug"]}.html', afastamento["fonte"]])
+                self.assertTrue(all(not Documento.descendentes(a, "a") for a in links))
+                self.assertIn('afastado: ' + afastamento["cargo"], Documento.texto(linha))
+                self.assertIn(P.esc(afastamento["fonte"]), html)
+                self.assertNotIn('<Regional>', html)
+                barras = [n for n in Documento.descendentes(linha, "div") if n["attrs"].get("class") == "barra presenca"]
+                ficha = S.secao_sessoes_vereador(self.modelo, self.pessoa)
+                doc_ficha = Documento(ficha)
+                self.assertIn('afastado: ' + P.esc(afastamento["cargo"]), ficha)
+                self.assertTrue(any(n["tag"] == "a" and n["attrs"].get("href") == afastamento["fonte"]
+                                    and Documento.texto(n) == "fonte" for n in doc_ficha.nos))
+                if base < 10:
+                    self.assertFalse(barras)
+                    self.assertFalse(doc_ficha.com_classe("presenca"))
+                    self.assertEqual(linha["attrs"]["data-presenca"], "-1")
+                    self.assertIn(f'0 de {base} sessões em exercício', Documento.texto(linha))
+                    self.assertEqual(Documento.texto(doc_ficha.com_classe("tile-valor")[0]), f'0 de {base}')
+                    self.assertEqual(Documento.texto(doc_ficha.com_classe("tile-rotulo")[0]), "sessões em exercício")
+                    self.assertIn(f'0 de {base} sessões em exercício', ficha)  # também na tabela anual
+                    self.assertNotIn("17%", html + ficha)
+                    self.assertIn("Sem base suficiente", Documento.texto(linha))
+                else:
+                    self.assertTrue(barras)
+                    self.assertTrue(doc_ficha.com_classe("presenca"))
+                    self.assertEqual(linha["attrs"]["data-presenca"], "20")
+                    self.assertIn("20%", Documento.texto(linha))
+                    self.assertEqual(Documento.texto(doc_ficha.com_classe("tile-valor")[0]), "20%")
+
+    def test_afastamento_nao_vaza_para_outra_legislatura_e_metodologia_explica_base(self):
+        self.pessoa["mandatos"]["2025-2028"]["afastamentos"] = [
+            {"cargo": "Secretaria de teste", "fonte": "https://example.org/fonte"}]
+        dados = self.modelo["sessoes"]
+        antigo = S._presencas(self.modelo, dados, dados["legislaturas"][0])
+        self.assertNotIn("afastado:", antigo)
+        self.assertNotIn("https://example.org/fonte", antigo)
+        # Base curta sem afastamento continua com a apresentação anterior.
+        pessoa = self.modelo["pessoas"]["pessoa-01"]
+        dados["por_pessoa"][pessoa["slug"]]["2025-2028"]["presenca"] = presenca(denominador=1, presentes=0, pct=None)
+        doc = Documento(S._presencas(self.modelo, dados, dados["legislaturas"][1]))
+        linha = next(n for n in doc.com_classe("linha") if n["attrs"]["data-nome"] == pessoa["nome"])
+        self.assertTrue(any(n["attrs"].get("class") == "barra presenca" for n in Documento.descendentes(linha, "div")))
+        self.assertNotIn("sessões em exercício", Documento.texto(linha))
+        pagina = Documento(S.gerar_sessoes(self.modelo))
+        self.assertTrue(any("fora da mediana dos eleitos" in Documento.texto(n) for n in pagina.com_classe("explica")))
+        metodo = S.metodologia_sessoes(self.modelo)
+        self.assertIn("Afastamentos registrados", metodo)
+        self.assertIn("fora da mediana dos eleitos", metodo)
+        self.assertIn("no fim da ordenação por presença", metodo)
+
     def test_suplente_sem_pagina_tem_nome_condicao_e_nenhum_link(self):
         slug = "suplente-sem-pagina"
         nome = "Ana Maria de Souza"
