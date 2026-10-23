@@ -11,6 +11,7 @@ from pathlib import Path
 
 from coletor import regras_documentos as RD
 from coletor.classificar import carregar_curadoria, carregar_proposicoes, classificacao_final
+from coletor.novidades import marcos_tramitacao
 from coletor.siscam import derivar_lei
 
 RAIZ = Path(__file__).resolve().parents[2]
@@ -517,6 +518,8 @@ def montar_modelo() -> dict:
             "principal": slug(principal["nome"]) if principal else None,
             "dias_ate_lei": dias_entre(p.get("data_protocolo") or p.get("data"), lei.get("data")) if p["desfecho"] == "virou_lei" else None,
             "repete": None,
+            # Veto e derrubada de veto com a data do passo da tramitação (do PL ou de um substitutivo).
+            "marcos": marcos_tramitacao(p),
             **cls,
         })
     marcar_repetidos(projetos)

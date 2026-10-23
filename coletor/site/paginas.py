@@ -11,6 +11,7 @@ from collections import Counter, defaultdict
 from functools import cmp_to_key
 from pathlib import Path
 
+from coletor import novidades as N
 from coletor.classificar import ALERTAS, CATEGORIAS, CONFIANCA_MINIMA
 from coletor.site import graficos as G
 from coletor.site.modelo import (
@@ -22,6 +23,7 @@ from coletor.site.modelo import (
 REPO = "https://github.com/marco-jardim/radar-vereadores-niteroi"
 NAV = [
     ("index.html", "Início"),
+    ("novidades.html", "Novidades"),
     ("leis.html", "Leis aprovadas"),
     ("projetos.html", "Projetos"),
     ("atividades.html", "Atividades"),
@@ -221,6 +223,7 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{prefixo}estilo.css?v={versao_estatica('estilo.css')}">
 <link rel="icon" href="{prefixo}favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Novidades · Radar dos Vereadores de Niterói" href="{prefixo}{N.FEED}">
 {cabecalho_dados(manifesto, ativo, prefixo)}
 </head>
 <body>
@@ -660,6 +663,61 @@ def gerar_projetos(cliente: dict | None = None, manifesto: dict | None = None) -
     return pagina("Projetos de lei · Radar dos Vereadores de Niterói", corpo, "projetos.html", manifesto=manifesto, dialogo=True)
 
 
+# ------------------------------------------------------------------- novidades
+def item_evento(ev: dict, prefixo: str) -> str:
+    """Um evento: o número do PL leva ao SISCAM, e os autores vereadores, às suas páginas."""
+    p = ev["projeto"]
+    sub = ""
+    if ev.get("substitutivo"):
+        sub = (f' · <a class="via-substitutivo" href="{esc(N.url_detalhe(ev["substitutivo"]))}" target="_blank" rel="noopener">'
+               f'substitutivo no SISCAM<span class="so-leitor"> (substitutivo ao PL {esc(p["numero"])})</span>{NOVA_ABA}</a>')
+    resumo = f'<p class="resumo-ia">{esc(p["resumo"])}</p>' if p.get("resumo") else ""
+    partido = f'<span class="partido">{esc(p["partido"])}</span>' if p.get("partido") else ""
+    return f"""<li class="projeto ev-{esc(ev['tipo'])}">
+ <p class="cab"><span class="desfecho">{esc(N.ROTULO_EVENTO[ev['tipo']])}</span><time datetime="{esc(ev['data'])}">{data_br(ev['data'])}</time><a href="{esc(p['url'])}" target="_blank" rel="noopener">PL {esc(p['numero'])}{NOVA_ABA}</a></p>
+ <p class="titulo-evento">{esc(N.titulo_evento(ev))}{sub}</p>
+ {resumo}<p class="ementa">{esc(legivel(p['ementa']))}</p>
+ <p class="autoria">{autores_html(p, prefixo)}{partido}</p>
+</li>"""
+
+
+def secao_semana(semana: dict, prefixo: str, mais_recente: bool) -> str:
+    ident = f"semana-{semana['inicio']}"
+    marca = " <span>mais recente</span>" if mais_recente else ""
+    if semana["eventos"]:
+        contagem = " · ".join(f"<b>{n}</b> {esc(N.NOME_EVENTO[t][0 if n == 1 else 1])}" for t, n in semana["contagem"].items())
+        corpo = (f'<p class="contagem">{contagem}</p>\n'
+                 f'<ol class="projetos">{"".join(item_evento(e, prefixo) for e in semana["eventos"])}</ol>')
+    else:
+        corpo = '<p class="vazio">Nenhum evento com data nesta semana.</p>'
+    return f"""<section class="semana" id="{ident}" aria-labelledby="t-{ident}">
+<h2 id="t-{ident}">Semana de {data_br(semana['inicio'])} a {data_br(semana['fim'])}{marca}</h2>
+{corpo}
+</section>"""
+
+
+def gerar_novidades(eventos: list[dict]) -> str:
+    """Últimas N.SEMANAS semanas ISO até a da data mais recente dos eventos (nunca a data de hoje)."""
+    semanas = N.semanas_recentes(eventos)
+    if semanas:
+        referencia = (f"Semana mais recente: {data_br(semanas[0]['inicio'])} a {data_br(semanas[0]['fim'])}, "
+                      "a da última data encontrada nos dados")
+    else:
+        referencia = "Nenhum evento com data encontrado nos dados"
+    indice = "".join(f'<a href="#semana-{s["inicio"]}">{data_br(s["inicio"])[:5]} ({sum(s["contagem"].values())})</a>'
+                     for s in semanas)
+    corpo = f"""<section class="abertura">
+ <h1>Novidades</h1>
+ <p>Projetos de lei apresentados, leis sancionadas ou promulgadas, vetos do prefeito e vetos derrubados pela Câmara nas últimas {N.SEMANAS} semanas, pelas datas registradas no SISCAM. Cada item leva ao projeto no SISCAM e às páginas dos vereadores autores.</p>
+ <p class="atualizacao">{esc(referencia)} · <a href="{N.FEED}" type="application/rss+xml">assinar o feed RSS</a> · <a href="metodologia.html#novidades">de onde vêm as datas</a></p>
+</section>
+{f'<nav class="indice" aria-label="Semanas, pela segunda-feira, com o número de eventos">{indice}</nav>' if indice else ''}
+{''.join(secao_semana(s, '', i == 0) for i, s in enumerate(semanas)) or '<p class="vazio">Nenhum evento encontrado.</p>'}"""
+    return pagina("Novidades · Radar dos Vereadores de Niterói", corpo, "novidades.html",
+                  descricao="O que aconteceu nas últimas semanas com os projetos de lei da Câmara de Niterói: projetos apresentados, "
+                            "leis, vetos e vetos derrubados, com feed RSS.")
+
+
 # ------------------------------------------------------------------ atividades
 def _chave_nome(nome: str) -> str:
     return "".join(c for c in unicodedata.normalize("NFD", nome.lower()) if not unicodedata.combining(c))
@@ -1041,6 +1099,16 @@ def gerar_metodologia(modelo: dict) -> str:
 
 <h2>De onde vêm os dados</h2>
 <p>Toda semana, uma GitHub Action baixa do <a href="https://consultaniteroi.siscam.com.br/">SISCAM</a> os projetos de lei de cada ano desde 2021 e, para os novos ou com tramitação alterada, a autoria e a tramitação completa. Só a composição das legislaturas e a curadoria são editadas à mão, em arquivos públicos.</p>
+
+<h2 id="novidades">Novidades da semana</h2>
+<p>A página <a href="novidades.html">Novidades</a> e o <a href="{N.FEED}">feed RSS</a> não comparam uma coleta com a anterior nem guardam estado entre coletas: cada evento sai de uma data já registrada no SISCAM.</p>
+<ul>
+ <li><b>Projeto apresentado</b>: a data do documento.</li>
+ <li><b>Virou lei</b>: a data da sanção ou promulgação, a mesma de Leis aprovadas, inclusive quando a lei sai de um substitutivo.</li>
+ <li><b>Veto</b>: a data de resposta do passo da tramitação em que o SISCAM registra o veto do prefeito, no projeto ou num substitutivo. É total ou parcial pelo texto do passo ou, sem essa informação, pela situação do documento. Uma lei sancionada com veto parcial aparece como lei e, se a tramitação registrar o veto num passo próprio, também como veto.</li>
+ <li><b>Veto derrubado</b>: a data do passo de plenário em que a tramitação registra a derrubada ou rejeição do veto, só quando a situação do documento ("veto rejeitado") ou a lei promulgada depois da derrubada confirmam. Votos "pela derrubada" num veto que acabou mantido não contam.</li>
+</ul>
+<p>As semanas vão de segunda a domingo. A mais recente é a que contém a última data encontrada nos dados, não a data de hoje; datas posteriores ao dia da última coleta, no horário de Brasília, são tratadas como erro de registro e ignoradas. A página mostra as últimas {N.SEMANAS} semanas, e o feed, os {N.MAX_ITENS_RSS} eventos mais recentes. Como a Câmara registra alguns passos com atraso, um evento pode surgir numa semana já passada, e a semana mais recente pode estar incompleta. Alertas de polêmica não entram nas novidades, porque nem a curadoria nem o cache da IA registram a data em que o alerta foi atribuído.</p>
 
 <h2>Como os números são contados</h2>
 <ul>
