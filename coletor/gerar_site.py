@@ -432,8 +432,23 @@ def relatorio_tamanhos(saida: Path, manifesto: dict | None = None) -> None:
         print(f"::warning::{aviso}", file=sys.stderr)
 
 
+def carregar_geo(raiz: Path | None = None) -> dict | None:
+    """A geometria é opcional; se presente, um arquivo inválido não deve virar mapa enganoso."""
+    from coletor.validar import validar_geo
+
+    caminho = (raiz or RAIZ) / "data" / "geo" / "bairros.json"
+    if not caminho.exists():
+        return None
+    geo = json.loads(caminho.read_text(encoding="utf-8"))
+    problemas = validar_geo(geo)
+    if problemas:
+        raise ValueError("; ".join(problemas))
+    return geo
+
+
 def main() -> None:
     modelo = montar_modelo()
+    modelo["geo_bairros"] = carregar_geo()
     if SAIDA.exists():
         shutil.rmtree(SAIDA)
     (SAIDA / "vereadores").mkdir(parents=True)

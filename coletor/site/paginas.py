@@ -1,6 +1,7 @@
 """Páginas HTML do site."""
 from __future__ import annotations
 
+import gzip
 import hashlib
 import html
 import json
@@ -861,6 +862,22 @@ def _chave_nome(nome: str) -> str:
     return "".join(c for c in unicodedata.normalize("NFD", nome.lower()) if not unicodedata.combining(c))
 
 
+def mapa_indicacoes(modelo: dict, docs: list[dict], titulo: str, *, limite_gzip: int | None = None) -> str:
+    """Reusa os agregados existentes; o orçamento individual inclui SVG, legenda, tabela e atribuição."""
+    geo = modelo.get("geo_bairros")
+    if not geo:
+        return ""
+    resumo = resumo_bairros(docs)
+    valores = {b["bairro"]: b["indicacoes"] for b in indicacoes_por_bairro(docs)}
+    mapa = G.mapa_coropletico(valores, geo, titulo,
+                             "Valores absolutos, sem ajuste por população. Bairro inferido da ementa por regras; "
+                             f"{pct_txt(resumo['pct_sem_bairro'])} sem bairro identificado "
+                             f"({milhar(resumo['sem_bairro'])} de {milhar(resumo['indicacoes'])} indicações), fora do mapa.")
+    if limite_gzip is not None and len(gzip.compress(mapa.encode("utf-8"), mtime=0)) > limite_gzip:
+        return ""
+    return mapa
+
+
 def gerar_atividades(modelo: dict, manifesto: dict | None = None) -> str:
     docs = modelo.get("documentos") or []
     abertura = """<section class="abertura">
@@ -998,6 +1015,7 @@ def secao_resumos_atividades(modelo: dict) -> str:
         graf = G.barras_horizontais(f"Indicações por bairro, {periodo}",
                                     "Os 52 bairros oficiais de Niterói, inclusive os que não aparecem em nenhuma indicação.",
                                     itens, [("Indicações", "c-t-indicacao", "v")], max_itens=len(itens))
+        graf = mapa_indicacoes(modelo, docs, f"Indicações por bairro, {periodo}") or graf
         menos = menos_citados(por_bairro)
         sem_nenhuma = sum(1 for b in por_bairro if not b["indicacoes"])
         secao_bairros = f"""<section id="bairros" aria-labelledby="t-bairros">
@@ -1434,9 +1452,12 @@ def metricas_atividade(modelo: dict, pessoa: dict) -> str:
     if bairros:
         tab = tabela_resumo("Bairros das indicações por legislatura", ["Legislatura", *CAB_BAIRROS],
                             [[esc(leg), *celulas_bairros(r)] for leg, r in bairros], texto=TEXTO_BAIRROS)
+        anos = sorted({d["ano"] for d in docs if d["tipo"] == "indicacao"})
+        periodo = str(anos[0]) if len(anos) == 1 else f"{anos[0]}–{anos[-1]}"
+        mapa = mapa_indicacoes(modelo, docs, f"Indicações de {pessoa['nome']} por bairro, {periodo}", limite_gzip=12 * 1024)
         blocos.append(f"""<h3 id="bairros">Bairros das indicações</h3>
  <p class="explica">{esc(EXPLICA_BAIRROS)}</p>
- {tab}""")
+ {tab}{mapa}""")
     return "\n ".join(blocos)
 
 
@@ -1531,6 +1552,10 @@ def gerar_metodologia(modelo: dict) -> str:
  <li><b>Órgão citado</b>: o primeiro órgão específico citado na ementa do requerimento (secretaria, fundação, empresa municipal como NitTrans, Clin ou ION, ou concessionária), mesmo como intermediário ("por intermédio da NitTrans") ou cópia ("ao Prefeito, com cópia à Secretaria de Educação"), com o nome normalizado; sem órgão na ementa, vale o assunto da listagem. Órgão estadual só conta quando é o destinatário ("ao Governo do Estado", "à Secretaria de Estado de Saúde"); citado em outro papel ("baixa junto ao Detran-RJ"), vale o nível municipal. Sem órgão específico, o pedido fica como "Prefeito ou Poder Executivo"; sem nenhum, "Não identificado". Siglas ambíguas não são reconhecidas. Os nomes das secretarias mudam entre gestões e aparecem como citados, sem juntar nomes diferentes: "Secretaria de Mobilidade Urbana" e "Secretaria de Urbanismo e Mobilidade" ficam separadas, porque os dados não dizem se são o mesmo órgão. A tramitação não serve para isso: os pedidos seguem para a Secretaria Municipal de Governo, que os repassa.</li>
  <li><b>Bairros das indicações</b>: para cada vereador, os cinco bairros mais citados, o número de bairros distintos e a concentração (parte das indicações com bairro que vai para o bairro mais citado; com empate no topo, os empatados aparecem juntos); para a cidade, as indicações em cada um dos 52 bairros oficiais, inclusive os sem nenhuma, os menos citados e a parte das indicações sem bairro identificado. Não há dado de população no site, por isso não há taxa por habitante.</li>
 </ul>
+
+<h3 id="mapa-bairros">Mapa das indicações por bairro</h3>
+<p>O mapa usa valores absolutos, sem ajuste por população: não mede necessidade, atendimento nem qualidade. O bairro é inferido da ementa pelas mesmas regras das tabelas; a porcentagem sem bairro identificado aparece junto ao mapa, e essas indicações ficam fora dele. Os resumos cobrem todos os anos coletados e não mudam com os filtros da lista. Os bairros com indicações são divididos em até cinco faixas por quantis: os cortes buscam grupos de tamanhos semelhantes, sem separar bairros empatados, e há menos faixas quando há poucos valores distintos. Os limites são arredondados para números simples apenas no intervalo entre valores observados, sem alterar os grupos ou criar faixas vazias. Zero tem uma faixa própria hachurada, só quando há bairros sem indicações. A legenda mostra os limites e o número de bairros em cada faixa; a tabela alternativa inclui os 52 bairros, inclusive zeros, com os valores exatos. As faixas dependem dos dados: cores de mapas com limites diferentes não são diretamente comparáveis.</p>
+<p>Limites: © contribuidores do OpenStreetMap, sob <a href="https://www.openstreetmap.org/copyright">ODbL 1.0</a>, obtidos pelo Overpass das relações administrativas dos bairros (nível 10) dentro do município de Niterói (<a href="https://www.openstreetmap.org/relation/2220789">relação 2220789</a>). A data da base OSM aparece junto a cada mapa; as tags de origem dos limites indicam IBGE. A geometria é projetada localmente, simplificada e arredondada para exibição: não é um mapa cadastral nem uma confirmação municipal dos limites. Nas páginas dos vereadores, o mapa só pode aparecer se SVG, legenda, tabela e atribuição somarem no máximo 12 KiB gzip. Com a geometria atual (base OSM de 23/10/2026), esse orçamento é excedido: o mapa por vereador não é exibido, e ficam as tabelas por legislatura. O <a href="atividades.html#bairros">mapa geral está em Atividades</a>. Sem o arquivo de geometria, a geração mantém os gráficos e tabelas existentes, sem mapa.</p>
 
 <h2>Limitações</h2>
 <ul>

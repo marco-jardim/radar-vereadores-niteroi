@@ -22,6 +22,7 @@ Os testes de JavaScript pedem Node 21+ (o CI usa 22).
 | `coletor/documentos.py` | Listagem e detalhe seletivo de requerimentos, indicações, moções, PDLs e resoluções. |
 | `coletor/sessoes.py` | Sessões plenárias: listagem por ano, pauta, fases, frequência e votações nominais (ainda fora do workflow e do site). |
 | `coletor/regras_documentos.py` | Categorias, bairro, resposta e publicação dos documentos, por regras determinísticas. |
+| `coletor/geo.py` | Conversão offline do Overpass em limites simplificados dos 52 bairros, com fonte OSM/ODbL. |
 | `coletor/classificar.py` | Taxonomia, regras, prompt, chamadas à IA, cache e curadoria dos projetos de lei. |
 | `coletor/arquivos.py` | Gravação atômica dos JSONs de `data/`, com um registro por linha. |
 | `coletor/validar.py` | Validação de `data/` e `config/`, sem alterar nada. |
@@ -102,6 +103,18 @@ da listagem só desempata), e o bairro é o último bairro oficial citado na eme
 a partir da tramitação do detalhe, `respondido_em` e `dias_ate_resposta` dos requerimentos e `publicacao`
 (número e data) de PDLs e resoluções; categoria, bairro e `respondido` são calculados na geração do site.
 `respondido_em` é a data do passo "Respondido" da tramitação, não necessariamente a data da resposta do Executivo.
+
+Geometria opcional, separada da coleta semanal: `python -m coletor.geo --entrada bairros-overpass.json`
+atualiza `data/geo/bairros.json` a partir de JSON Overpass com `out geom` dos bairros administrativos de nível 10
+dentro de Niterói (relação OSM 2220789; consulta no README). Não usa rede. Encadeia ways por pontas, inverte
+quando preciso, respeita outer/inner e falha com aviso em anel aberto; projeta em metros (equiretangular local),
+simplifica por way compartilhado (Douglas–Peucker, inicialmente 25 m), preserva pontas, descarta recortes
+menores que 400 m²/invisíveis e arredonda num viewBox de largura 1000. Anel degenerado/cruzado reduz a tolerância
+global ou aborta. O comando ajusta até 100 m para caber em 60 KiB brutos e informa tolerância final e tamanhos
+bruto/gzip. Mesma entrada, mesmos bytes; nunca edite a geometria à mão. Rode a validação e gere/inspecione o site.
+Fonte: © contribuidores do OpenStreetMap, ODbL 1.0, https://www.openstreetmap.org/copyright; preserve a atribuição
+visível e a data da base OSM em todo mapa. Não trate limites simplificados como mapa cadastral. Os 52 nomes da
+extração inicial de 23/10/2026 coincidem com BAIRROS_NITEROI; faltas, sobras e duplicatas abortam a conversão.
 
 As regras das métricas dos documentos também ficam só em `coletor/regras_documentos.py`; `coletor/site/modelo.py`
 só agrega. `eixos_perfil` é a única regra do perfil de atuação. Homenagem é a categoria `homenagem` (moções de
@@ -217,6 +230,16 @@ Com `GITHUB_ACTIONS` definida, `coletor.validar` emite os problemas como `::erro
 - As métricas dos documentos (homenagens em `ruido.html`; requerimentos de informação por vereador e por órgão e
   indicações nos 52 bairros em `atividades.html`; as três na seção "Atividade") são tabelas e gráficos gerados no
   servidor, só com agregados: não há colunas novas nos JSONs do navegador.
+- O mapa de indicações reusa esses agregados e a geometria opcional `data/geo/bairros.json`, carregada por
+  `gerar_site.py`. Sem o arquivo, ficam os gráficos/tabelas anteriores. SVG sem JS, com título/descrição,
+  até cinco quantis dos positivos (menos com poucos valores distintos, sem dividir empates), zero hachurado
+  quando presente, títulos por bairro e tabela dos 52 bairros. Arredonde cortes só no vão entre observações:
+  não mude os grupos nem crie classes vazias. A legenda mostra limites e contagem de bairros; cores de mapas
+  com limites diferentes não são comparáveis. Informe valores absolutos (sem população), bairro inferido da
+  ementa e % sem bairro fora do mapa.
+  Em cada vereador, o bloco completo só aparece se medir ≤ 12 KiB gzip (medição determinística na geração);
+  acima disso, só tabelas por legislatura. Com a geometria atual (base OSM 23/10/2026), o mapa individual não
+  é exibido por exceder esse orçamento. Preserve ODbL/atribuição junto ao mapa, inclusive em páginas individuais.
 
 ## CI/CD
 
