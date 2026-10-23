@@ -20,7 +20,7 @@ Os testes de JavaScript pedem Node 21+ (o CI usa 22).
 | --- | --- |
 | `coletor/siscam.py` | HTTP, parsing do SISCAM, autoria, tramitação e desfechos dos projetos de lei. |
 | `coletor/documentos.py` | Listagem e detalhe seletivo de requerimentos, indicações, moções, PDLs e resoluções. |
-| `coletor/sessoes.py` | Sessões plenárias: listagem por ano, pauta, fases, frequência e votações nominais (ainda fora de `coleta.yml`). |
+| `coletor/sessoes.py` | Sessões plenárias: listagem por ano, pauta, fases, frequência e votações nominais, coletadas semanalmente em `coleta.yml`. |
 | `coletor/regras_sessoes.py` | Regras determinísticas de presença, votos, sentido do parecer, quórum e qualidade, sem IA. |
 | `coletor/regras_documentos.py` | Categorias, bairro, resposta e publicação dos documentos, por regras determinísticas. |
 | `coletor/geo.py` | Conversão offline do Overpass em limites simplificados dos 52 bairros, com fonte OSM/ODbL. |
@@ -42,7 +42,7 @@ Os testes de JavaScript pedem Node 21+ (o CI usa 22).
 | `.github/workflows/` | Testes, coleta semanal e publicação do site. |
 | `site/` | Saída gerada localmente, ignorada pelo Git. |
 
-## Pipeline (coleta → documentos → classificação → validação → site)
+## Pipeline (coleta → documentos → sessões → classificação → validação → site)
 
 1. `coletor.siscam` lista os projetos de lei por ano e baixa detalhes novos ou alterados.
    Junto com o detalhe do PL, baixa o de cada substitutivo da seção "[ Substitutivos ]" e grava `substitutivos`
@@ -55,14 +55,16 @@ Os testes de JavaScript pedem Node 21+ (o CI usa 22).
    com a listagem. O detalhe que falta, falha ou fica para depois recebe `"detalhe_pendente": true`; a fila reúne
    os pendentes de todos os arquivos, os mais recentes primeiro. Atualiza a chave `documentos` de `data/meta.json`,
    inclusive numa interrupção.
-3. `coletor.classificar` consulta a IA para ementas de projetos de lei ainda não cobertas pelo cache válido.
+3. `coletor.sessoes` lista as sessões plenárias por ano e baixa pauta, frequência e votações nominais (detalhes abaixo).
+   Salva `data/sessoes/<ano>.json` e atualiza a chave `sessoes` de `data/meta.json`, inclusive numa interrupção.
+4. `coletor.classificar` consulta a IA para ementas de projetos de lei ainda não cobertas pelo cache válido.
    Atualiza `data/classificacao_ia.json` quando usa IA e registra estatísticas em `data/meta.json`.
-4. `coletor.validar` confere a forma de `data/` e `config/`, inclusive o formato byte a byte de `data/documentos`
+5. `coletor.validar` confere a forma de `data/` e `config/`, inclusive o formato byte a byte de `data/documentos`
    e de `data/sessoes` (pastas opcionais), e sai com código 1 se encontrar problema.
-5. `coletor.gerar_site` combina curadoria, regras e cache, classifica os documentos, calcula métricas e recria `site/`,
+6. `coletor.gerar_site` combina curadoria, regras e cache, classifica os documentos, calcula métricas e recria `site/`,
    inclusive `sessoes.html`, `novidades.html` e `feed.xml`, com eventos derivados na hora (não há `data/novidades.json`).
 
-Passo opcional, **ainda não ligado a `coleta.yml`** (a inclusão no workflow fica para uma etapa posterior):
+Passo de sessões em `coleta.yml`, depois de documentos e antes da classificação:
 `coletor.sessoes` lista as sessões plenárias de cada ano
 (`ResultadoSessao.aspx?Ano=<ano>&pagina=<n>`, 10 por página, sem total) e baixa o detalhe de cada uma
 (`DetalhesSessao.aspx`): observações, documentos da sessão (rótulo e arquivo), itens de pauta, frequência por
@@ -75,7 +77,7 @@ Salva `data/sessoes/<ano>.json`, ordenado por data, hora, número e id, e atuali
   `tipo_documento`, `numero`, `ano` e `ementa`, para não perder informação; os ids conhecidos são lidos uma vez por
   execução (`sessoes.ids_conhecidos`). As votações, poucas, continuam com `documento`, `tipo_documento`, `numero` e
   `ano`, que servem de conferência; votação sem link também fica com `id_documento` null.
-- Quando entrar no workflow, a ordem é obrigatória: `siscam` → `documentos` → `sessoes`, para que os ids da pauta já
+- No workflow, a ordem é obrigatória: `siscam` → `documentos` → `sessoes`, para que os ids da pauta já
   estejam em `data/`. Risco: um item enxuto cujo documento depois some de `data/proposicoes` ou `data/documentos`
   (removido ou renumerado no SISCAM) perde tipo, número e ementa. Recuperação: rode `python -m coletor.sessoes
   --anos <ano> --forcar` (o item volta completo se o id não for mais conhecido); o SISCAM ainda mostra a pauta.
@@ -138,6 +140,7 @@ Execute na raiz. Para verificar um ano, substitua `2026` pelo ano desejado:
 ```text
 python -m coletor.siscam --anos 2026
 python -m coletor.documentos --anos 2026
+python -m coletor.sessoes --anos 2026
 python -m coletor.classificar --sem-ia
 python -m coletor.validar
 python -m coletor.gerar_site
@@ -145,7 +148,7 @@ python -m http.server -d site 8000
 ```
 
 - `--anos` aceita um ano ou intervalo inclusivo, como `2025-2026`. Padrão: 2021 até o ano atual em `coletor.siscam`;
-  ano anterior e atual em `coletor.documentos`.
+  ano anterior e atual em `coletor.documentos` e `coletor.sessoes`.
 - `--workers 4` controla a concorrência dos coletores (no de sessões, só dos detalhes). Em `coletor.siscam`, `--forcar` baixa novamente
   todos os detalhes, mesmo sem mudança; `--max-detalhes 400` limita, por execução e do mais recente ao mais antigo,
   os detalhes pedidos só pelos substitutivos (PL ainda sem a chave `substitutivos` ou sem lei com substitutivo
@@ -155,7 +158,7 @@ python -m http.server -d site 8000
   não relista e só esvazia a fila de pendentes (não combina com `--sem-detalhe` nem `--forcar`); `--forcar`
   rebaixa o detalhe de todos os elegíveis, ainda dentro de `--max-detalhes`; `--max-minutos 100` encerra de forma
   limpa no prazo e deixa o resto pendente.
-- Sessões (opcional, fora do workflow): `python -m coletor.sessoes --anos 2021-2026 --workers 4`; padrão: ano anterior
+- Sessões: `python -m coletor.sessoes --anos 2021-2026 --workers 4`; padrão: ano anterior
   e atual. `--max-detalhes 400` limita as páginas de detalhe por execução, as mais recentes primeiro; `--forcar`
   rebaixa o detalhe de todas as sessões listadas, ainda dentro do limite; `--max-minutos` encerra de forma limpa.
 - No classificador, `--sem-ia` evita novas chamadas; `--limite 15` limita a 15 projetos novos classificados por IA.
@@ -240,7 +243,7 @@ Com `GITHUB_ACTIONS` definida, `coletor.validar` emite os problemas como `::erro
   o parecer, não automaticamente sobre a matéria. Sentidos não determinados ficam explícitos e placares
   inconsistentes mostram apenas os totais oficiais, sem nomes. Contar presença e votos não mede qualidade.
   O relatório inclui `sessoes.html` no teto oficial de 100 KiB gzip; o alvo de apresentação é 60 KiB nos dados
-  reais, e a seção individual tem orçamento de +10 KiB gzip. A coleta de sessões continua fora de `coleta.yml`.
+  reais, e a seção individual tem orçamento de +10 KiB gzip. A coleta de sessões roda semanalmente em `coleta.yml`.
 - As métricas dos documentos (homenagens em `ruido.html`; requerimentos de informação por vereador e por órgão e
   indicações nos 52 bairros em `atividades.html`; as três na seção "Atividade") são tabelas e gráficos gerados no
   servidor, só com agregados: não há colunas novas nos JSONs do navegador.
@@ -260,12 +263,17 @@ Com `GITHUB_ACTIONS` definida, `coletor.validar` emite os problemas como `::erro
 - `.github/workflows/testes.yml`: em `pull_request`, em pushes para branches que não são `main` e como workflow
   reutilizável. Com Python 3.12 e Node 22, roda os testes Python, `coletor.validar`, os testes JS e a geração do site.
 - `.github/workflows/coleta.yml`: cron `17 9 * * 1`, segunda-feira às 09:17 UTC (06:17 em Brasília), ou execução
-  manual com `anos`, `anos_documentos` e `forcar`. Passos: `siscam` (90 min) → `documentos` (`continue-on-error`,
-  120 min, `timeout 110m` e `--max-minutos 100`) → `classificar` (90 min) → `coletor.validar` e testes Python com
-  `RADAR_COLETA=1`. Se a validação ou os testes falharem, descarta as mudanças em `data/documentos`, apaga
-  temporários e valida de novo. Só então faz commit de `data/` como `github-actions[bot]`, com `git pull --rebase`
-  antes do push. Se nada for gravado, `data/` sobe como artefato por 14 dias, para não perder a classificação já
-  paga da IA. A concorrência não cancela execuções; não interrompa uma coleta em andamento sem necessidade.
+  manual com `anos`, `anos_documentos`, `anos_sessoes` e `forcar`. Passos: `siscam` (90 min) → `documentos`
+  (`continue-on-error`, 120 min, `timeout 110m` e `--max-minutos 100`) → `sessoes` (`continue-on-error`, 30 min,
+  `timeout 25m` e `--max-minutos 20`) → `classificar` (90 min) → `coletor.validar` e testes Python com
+  `RADAR_COLETA=1`. Ambos os comandos `timeout` usam `--kill-after=2m`; o job tem limite de 350 min.
+  `anos_sessoes` vazio mantém o padrão (ano anterior e atual); `forcar` também rebaixa os detalhes das sessões listadas,
+  respeitando o limite padrão de 400 detalhes por execução e o prazo, sem aumentar os 4 workers padrão.
+  Se a validação ou os testes falharem, descarta as mudanças em `data/documentos` e `data/sessoes`, apaga
+  temporários e valida de novo. As estatísticas dessas etapas em `data/meta.json` ficam como registro da execução.
+  Só então faz commit de `data/` inteiro (inclusive `data/sessoes`) como `github-actions[bot]`, com `git pull --rebase`
+  antes do push. Se nada for gravado, `data/` inteiro sobe como artefato por 14 dias, para não perder a classificação
+  já paga da IA. A concorrência não cancela execuções; não interrompa uma coleta em andamento sem necessidade.
 - IA na coleta: secret **`OPENCODE_API_KEY`** e variável de Actions **`OPENCODE_MODEL`**, opcional.
 - `.github/workflows/site.yml`: em pushes para `main` que alterem `coletor/**`, `config/**`, `data/**`, `site_src/**`,
   `tests/**`, `site.yml` ou `testes.yml`; também após uma coleta bem-sucedida e por execução manual. Chama
