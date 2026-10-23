@@ -136,6 +136,28 @@ class TestPresenca(unittest.TestCase):
         curto = montar_sessoes(modelo_minimo(), registros[:9], {})
         self.assertIsNone(curto["mediana_presenca"][LEG])
 
+    def test_afastado_com_base_curta_fora_da_mediana_e_com_dez_sessoes_dentro(self):
+        modelo = modelo_minimo(eleitos=("Ana", "Bruno", "Afastado"))
+        modelo["pessoas"]["afastado"]["mandatos"][LEG]["afastamentos"] = [
+            {"cargo": "Secretaria de teste", "fonte": "https://example.org/ato"}]
+        antes = copy.deepcopy(modelo)
+        for base in (0, 1, 9, 10):
+            with self.subTest(base=base):
+                registros = [sessao(n, frequencia=[frequencia("Ana"), frequencia("Bruno", "Ausência")]
+                                    + ([frequencia("Afastado", "Ausência")] if n <= base else []))
+                             for n in range(1, 11)]
+                resultado = montar_sessoes(modelo, registros, {})
+                p = resultado["por_pessoa"]["afastado"][LEG]["presenca"]
+                self.assertEqual(p["denominador"], base)
+                self.assertEqual(p["presentes"], 0)
+                if base < 10:
+                    self.assertIsNone(p["pct"])
+                    self.assertEqual(resultado["mediana_presenca"][LEG], 50)
+                else:
+                    self.assertEqual(p["pct"], 0)
+                    self.assertEqual(resultado["mediana_presenca"][LEG], 0)
+        self.assertEqual(modelo, antes)
+
     def test_pagina_antiga_com_autoria_de_vereador_na_nova_legislatura(self):
         modelo = modelo_minimo()
         modelo["pessoas"]["suplente"]["mandatos"] = {"2021-2024": {"eleito": False}}

@@ -1,0 +1,54 @@
+{
+  "leg": {"id": "2025-2028", "rotulo": "2025–2028", "anos": [2025, 2026]},
+  "membros": [
+    {"slug": "ana", "nome": "Ana Souza", "pagina": true, "condicao": ""},
+    {"slug": "bia", "nome": "Bia Suplente", "pagina": false, "condicao": "suplente em exercício"}
+  ],
+  "votacoes": [
+    {"id": "10-1", "sessao": 10, "data": "2025-02-01", "titulo_sessao": "10ª Ordinária", "materia": "pl", "id_documento": 101, "documento": "PL 1/2025", "numero": "1/2025", "ementa": "Fiscalização da saúde & educação.", "resultado": "Aprovado", "totais": {"favor": 11, "contra": 6, "abstencao": 0, "ausentes": 0, "branco": 0, "nulo": 0}, "classe": "dividida", "sentido": "favor_aprova", "maioria": "Favor", "qualidade": "ok", "notas": [], "votos": {"ana": "Favor", "bia": "Contra"}},
+    {"id": "11-2", "sessao": 11, "data": "2025-03-01", "titulo_sessao": "11ª Ordinária", "materia": "veto", "id_documento": 102, "documento": "Veto 2/2025", "numero": "2/2025", "ementa": "Fiscalização da saúde & educação.", "resultado": "Veto Mantido", "totais": {"favor": 10, "contra": 7, "abstencao": 3, "ausentes": 0, "branco": 0, "nulo": 0}, "classe": "dividida", "sentido": "indeterminado", "maioria": "Favor", "qualidade": "indeterminado", "notas": [], "votos": {"ana": "Abstenção", "bia": "Presidente"}},
+    {"id": "12-3", "sessao": 12, "data": "2025-04-01", "titulo_sessao": "12ª Ordinária", "materia": "pl", "id_documento": null, "documento": "PL 3/2025", "numero": "3/2025", "ementa": "Fiscalização da saúde & educação.", "resultado": "Aprovado", "totais": {"favor": 0, "contra": 0, "abstencao": 0, "ausentes": 1, "branco": 0, "nulo": 0}, "classe": "dividida", "sentido": "favor_aprova", "maioria": null, "qualidade": "ok", "notas": [], "votos": {"ana": "Ausente"}}
+  ],
+  "dic": {
+    "esquema": 1,
+    "votos": [["F", "Favor"], ["C", "Contra"], ["S", "Abstenção"], ["X", "Ausente"], ["R", "Presidente"], ["B", "Branco"], ["N", "Nulo"], ["I", "indeterminado"], [".", "não consta"]],
+    "materias": [["veto", "Vetos", "Veto"], ["pl", "Projetos de lei", "Projeto de lei"]],
+    "classes": [["unanime", "Unânime"], ["dissenso", "Com 1 ou 2 votos diferentes"], ["dividida", "Dividida"]],
+    "sentidos": [["favor_mantem", "votou para manter o veto", "votou para derrubar o veto"], ["favor_derruba", "votou para derrubar o veto", "votou para manter o veto"], ["favor_aprova", "votou a favor da matéria", "votou contra a matéria"], ["favor_rejeita", "votou contra a matéria", "votou a favor da matéria"], ["indeterminado", "Favor ao parecer (sentido não determinado)", "Contra o parecer (sentido não determinado)"], ["inconsistente", "Favor ao parecer (sentido não determinado)", "Contra o parecer (sentido não determinado)"]],
+    "rotulos": {
+      "pl": {
+        "favor_mantem": ["votou para manter o veto", "votou para derrubar o veto", "absteve-se", "ausente nesta votação", "presidia a sessão", "votou em branco", "voto nulo"],
+        "favor_derruba": ["votou para derrubar o veto", "votou para manter o veto", "absteve-se", "ausente nesta votação", "presidia a sessão", "votou em branco", "voto nulo"],
+        "favor_aprova": ["votou a favor do projeto", "votou contra o projeto", "absteve-se", "ausente nesta votação", "presidia a sessão", "votou em branco", "voto nulo"],
+        "favor_rejeita": ["votou contra o projeto", "votou a favor do projeto", "absteve-se", "ausente nesta votação", "presidia a sessão", "votou em branco", "voto nulo"],
+        "indeterminado": ["Favor ao parecer (sentido não determinado)", "Contra o parecer (sentido não determinado)", "absteve-se", "ausente nesta votação", "presidia a sessão", "votou em branco", "voto nulo"],
+        "inconsistente": ["Favor ao parecer (sentido não determinado)", "Contra o parecer (sentido não determinado)", "absteve-se", "ausente nesta votação", "presidia a sessão", "votou em branco", "voto nulo"]
+      },
+      "veto": {
+        "favor_mantem": ["votou para manter o veto", "votou para derrubar o veto", "absteve-se", "ausente nesta votação", "presidia a sessão", "votou em branco", "voto nulo"],
+        "favor_derruba": ["votou para derrubar o veto", "votou para manter o veto", "absteve-se", "ausente nesta votação", "presidia a sessão", "votou em branco", "voto nulo"],
+        "favor_aprova": ["votou a favor da matéria", "votou contra a matéria", "absteve-se", "ausente nesta votação", "presidia a sessão", "votou em branco", "voto nulo"],
+        "favor_rejeita": ["votou contra a matéria", "votou a favor da matéria", "absteve-se", "ausente nesta votação", "presidia a sessão", "votou em branco", "voto nulo"],
+        "indeterminado": ["Favor ao parecer (sentido não determinado)", "Contra o parecer (sentido não determinado)", "absteve-se", "ausente nesta votação", "presidia a sessão", "votou em branco", "voto nulo"],
+        "inconsistente": ["Favor ao parecer (sentido não determinado)", "Contra o parecer (sentido não determinado)", "absteve-se", "ausente nesta votação", "presidia a sessão", "votou em branco", "voto nulo"]
+      }
+    },
+    "qualidade": ["ok", "inconsistente", "indeterminado"],
+    "url_detalhe": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=",
+    "minimo_dividida": 3,
+    "quorum_veto": 11
+  },
+  "fatia": {
+    "esquema": 1, "ano": 2025, "n": 3,
+    "pessoas": [["ana", "Ana Souza", 1, ""], ["bia", "Bia Suplente", 0, "suplente em exercício"]],
+    "colunas": {
+      "id": ["12-3", "11-2", "10-1"], "s": [12, 11, 10], "d": ["2025-04-01", "2025-03-01", "2025-02-01"],
+      "ts": ["12ª Ordinária", "11ª Ordinária", "10ª Ordinária"], "m": ["pl", "veto", "pl"], "doc": [null, 102, 101],
+      "n": ["PL 3/2025", "Veto 2/2025", "PL 1/2025"], "e": ["Fiscalização da saúde & educação.", "Fiscalização da saúde & educação.", "Fiscalização da saúde & educação."],
+      "r": ["Aprovado", "Veto Mantido", "Aprovado"], "t": [[0, 0, 0, 1, 0, 0], [10, 7, 3, 0, 0, 0], [11, 6, 0, 0, 0, 0]], "to": [null, null, null],
+      "cl": ["dividida", "dividida", "dividida"], "sx": ["favor_aprova", "indeterminado", "favor_aprova"], "mj": [null, "F", "F"], "q": [null, null, null],
+      "ql": ["ok", "indeterminado", "ok"], "nt": [[], ["Derrubar o veto exige 11 votos (maioria absoluta dos 21 vereadores); o número para derrubar não pôde ser determinado.", "Favor ao parecer / Contra o parecer: sentido não determinado."], []],
+      "v": ["X.", "SR", "FC"]
+    }
+  }
+}

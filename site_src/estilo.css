@@ -406,6 +406,28 @@ details.bloco summary { cursor: pointer; font: 600 1.2rem/1.3 var(--display); }
 .sessoes .presenca .s-votou-ausente { background-image: repeating-linear-gradient(135deg, transparent 0 5px, var(--superficie) 5px 6px); }
 .sessoes .presenca .s-justificada { background-image: repeating-linear-gradient(45deg, transparent 0 5px, var(--superficie) 5px 6px); }
 .sessoes .leg-presenca { gap: 8px 16px; }
+.sessoes .filtros-sessoes[hidden] { display: none; }
+.sessoes .filtros-sessoes label { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.sessoes .filtros-sessoes fieldset { display: flex; flex-wrap: wrap; gap: 8px 18px; border: 1px solid var(--linha); }
+.sessoes .votacoes { list-style: none; padding: 0; margin: 0; }
+.sessoes .leg-votos .glifo-voto { min-width: 1.2em; text-align: center; }
+.sessoes .faixa-rolagem { overflow-x: auto; max-width: 100%; margin: 12px 0; border: 1px solid var(--linha); }
+.sessoes .faixa { border-collapse: separate; border-spacing: 0; background: var(--superficie); font-variant-numeric: tabular-nums; }
+.sessoes .faixa caption { text-align: left; padding: 8px; color: var(--tinta-suave); }
+.sessoes .faixa th, .sessoes .faixa td { padding: 6px 10px; border-bottom: 1px solid var(--linha); text-align: center; }
+.sessoes .faixa thead th { font-size: .78rem; font-weight: 600; white-space: nowrap; vertical-align: bottom; }
+.sessoes .faixa tr > :first-child { position: sticky; left: 0; z-index: 1; background: var(--superficie); text-align: left; min-width: 150px; max-width: 210px; border-right: 1px solid var(--linha); }
+.sessoes .faixa .status { display: block; font-size: .72rem; }
+.sessoes .faixa .vereador-destaque > * { border-block: 2px solid var(--tinta); }
+.sessoes .faixa .vereador-destaque > :first-child { font-weight: 800; }
+.sessoes .faixa .voto-maioria { font-size: .85rem; }
+.sessoes .faixa .voto-diferente { font-size: 1.2rem; font-weight: 700; }
+.sessoes .voto-maioria { color: var(--voto-maioria); }
+.sessoes .voto-diferente { color: var(--voto-diferente); }
+.sessoes .voto-abstencao { color: var(--voto-abstencao); }
+.sessoes .voto-ausente, .sessoes .voto-presidia, .sessoes .voto-cru { color: var(--tinta-suave); }
+.sessoes .faixa .voto-cru { font-size: .75rem; }
+.sessoes .faixa-sem-comparacao { border-inline: 1px dashed var(--voto-abstencao); }
 .sessoes .votacao { border-left-color: var(--voto-diferente); max-width: none; padding-right: 14px; }
 .sessoes .votacao .ementa { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
 .sessoes .votacao .mini-barra { max-width: 440px; height: 14px; margin: 10px 0 6px; }

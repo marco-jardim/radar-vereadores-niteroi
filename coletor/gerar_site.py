@@ -7,6 +7,7 @@ from __future__ import annotations
 import gzip
 import hashlib
 import json
+import re
 import shutil
 import sys
 from collections import defaultdict
@@ -14,11 +15,12 @@ from pathlib import Path
 
 from coletor import novidades as N
 from coletor import regras_documentos as RD
+from coletor import regras_sessoes as RS
 from coletor.site import modelo_sessoes, pagina_sessoes
 from coletor.site import paginas as P
 from coletor.site.modelo import (
     DESFECHO_GRUPO, NOME_ALERTA, NOME_CATEGORIA, NOME_CATEGORIA_DOC, NOME_DESFECHO, NOME_SINAL, NOME_SUBCATEGORIA_DOC,
-    NOME_TEMA, NOME_TIPO_DOC, TIPOS_COM_DETALHE, TIPOS_DOC, URL_DETALHE, com_efeito, montar_modelo, sem_efeito, slug,
+    NOME_TEMA, NOME_TIPO_DOC, TIPOS_COM_DETALHE, TIPOS_DOC, URL_DETALHE, com_efeito, montar_modelo, nome_curto, sem_efeito, slug,
 )
 
 RAIZ = Path(__file__).resolve().parent.parent
@@ -29,7 +31,7 @@ LIMITE_JSON_GZIP = 200 * 1024
 FATIAS_PL = ("pl-lei", "pl-andamento", "pl-sem_exito")
 # Prévia de projetos.html sem filtros: as primeiras linhas na ordem padrão, no formato das fatias.
 PREVIA_PL = "pl-recentes"
-JSON_BUSCADOS = {f"dados/{nome}.json" for nome in ("manifest", "dic-pl", "dic-doc", *FATIAS_PL, PREVIA_PL)}
+JSON_BUSCADOS = {f"dados/{nome}.json" for nome in ("manifest", "dic-pl", "dic-doc", "dic-ses", *FATIAS_PL, PREVIA_PL)}
 # Documentos: fatiar com alvo de 120 KiB gzip deixa folga para o orçamento oficial de 150 KiB do relatório.
 # As primeiras (mais recentes) de cada tipo/ano são menores, para que a carga inicial de atividades.html
 # (dic-doc + primeiras partes de cada tipo) fique em até 200 KiB.
@@ -40,6 +42,14 @@ LIMITE_INICIAL_GZIP = 200 * 1024
 MARGEM_GZIP = 512  # folga para o nível de compressão do relatório
 AMOSTRA_LINHAS = 256  # linhas comprimidas para estimar os bytes por linha da primeira parte
 COLUNAS_DOC = ("id", "tp", "n", "a", "d", "e", "st", "as", "au", "c", "sc", "h", "rs", "re", "dr", "pu", "pb", "b", "dp")
+LIMITE_PARTE_VOT_GZIP = 150 * 1024
+VOTOS_SESSOES = (("F", "Favor"), ("C", "Contra"), ("S", "Abstenção"), ("X", "Ausente"), ("R", "Presidente"),
+                 ("B", "Branco"), ("N", "Nulo"), ("I", "indeterminado"), (".", "não consta"))
+MATERIAS_SESSOES = (("veto", "Vetos", "Veto"), ("pl", "Projetos de lei", "Projeto de lei"),
+                    ("pdl", "Projetos de decreto legislativo", "Projeto de decreto legislativo"),
+                    ("resolucao", "Projetos de resolução", "Projeto de resolução"), ("outra", "Outras matérias", "Outra matéria"))
+SENTIDOS_SESSOES = ("favor_mantem", "favor_derruba", "favor_aprova", "favor_rejeita", "indeterminado", "inconsistente")
+COLUNAS_VOT = ("id", "s", "d", "ts", "m", "doc", "n", "e", "r", "t", "to", "cl", "sx", "mj", "q", "ql", "nt", "v")
 
 
 def dados_cliente(modelo: dict) -> dict:
@@ -373,6 +383,131 @@ def exportar_documentos(modelo: dict, saida: Path, manifesto: dict) -> dict:
     return manifesto
 
 
+# ------------------------------------------------------------- votações nominais
+def dicionario_sessoes() -> dict:
+    """Enumerações estáveis; a tradução de votos vem das mesmas regras do servidor."""
+    return {
+        "esquema": 1,
+        "votos": [list(v) for v in VOTOS_SESSOES],
+        "materias": [list(m) for m in MATERIAS_SESSOES],
+        "classes": [["unanime", "Unânime"], ["dissenso", "Com 1 ou 2 votos diferentes"], ["dividida", "Dividida"]],
+        # Rótulos genéricos; rotulos especifica o objeto quando depende da matéria.
+        "sentidos": [[s, RS.rotulo_voto("Favor", s, "outra"), RS.rotulo_voto("Contra", s, "outra")]
+                     for s in SENTIDOS_SESSOES],
+        "rotulos": {m: {s: [RS.rotulo_voto(v, s, m) for _, v in VOTOS_SESSOES[:7]]
+                        for s in SENTIDOS_SESSOES} for m, _, _ in MATERIAS_SESSOES},
+        "qualidade": ["ok", "inconsistente", "indeterminado"],
+        "url_detalhe": URL_DETALHE.removesuffix("{id}"),
+        "minimo_dividida": RS.MINIMO_DIVIDIDA,
+        "quorum_veto": RS.QUORUM_DERRUBADA_VETO,
+    }
+
+
+def pessoa_votacao(modelo: dict, s: str, ano: int) -> list:
+    """Metadados locais do ano, inclusive suplentes sem página e nomes não casados."""
+    dados = modelo["sessoes"]
+    pessoa = (modelo.get("pessoas") or {}).get(s) or {}
+    entrada = (dados.get("por_pessoa") or {}).get(s) or {}
+    legs = {str(l["id"]) for l in dados.get("legislaturas") or [] if ano in {int(a) for a in l.get("anos") or []}}
+    registros = [r for leg, r in sorted(entrada.items()) if isinstance(r, dict) and (not legs or str(leg) in legs)]
+    registro = next((r for r in registros if r.get("nome") or r.get("condicao") or r.get("sem_pagina")), {})
+    nome = pessoa.get("nome") or entrada.get("nome") or registro.get("nome") or s
+    condicao = entrada.get("condicao") or registro.get("condicao") or pessoa.get("condicao") or (
+        "suplente em exercício" if registro.get("sem_pagina") else "")
+    return [s, nome_curto(nome), int(s in (modelo.get("pessoas") or {})), condicao]
+
+
+def numero_votacao(votacao: dict) -> str:
+    """Referência curta, sem confundir o PL de um veto com o número da sessão."""
+    referencia = str(votacao.get("documento") or votacao.get("numero") or "Documento não identificado")
+    numero = re.search(r"\b(\d+)\s*/\s*(\d{4})\b", str(votacao.get("numero") or referencia))
+    if not numero:
+        return referencia
+    tipos = (("projeto-de-decreto-legislativo", "PDL"), ("projeto-de-resolucao", "PR"), ("projeto-de-lei", "PL"),
+             ("pdl", "PDL"), ("pl", "PL"), ("pr", "PR"), ("veto", "Veto"),
+             ("substitutivo", "Substitutivo"), ("emenda", "Emenda"))
+    normal = slug(referencia)
+    tipo = next((sigla for nome, sigla in tipos if normal == nome or normal.startswith(nome + "-")), None)
+    tipo = tipo or {"pl": "PL", "pdl": "PDL", "resolucao": "PR", "veto": "Veto"}.get(votacao.get("materia"))
+    return f"{tipo} {int(numero[1])}/{numero[2]}" if tipo else referencia
+
+
+def notas_votacao(votacao: dict) -> list[str]:
+    """Só as explicações visíveis do cartão; as conferências técnicas não vão ao navegador."""
+    notas = [n for n in votacao.get("notas") or [] if pagina_sessoes._nota_leitor(n)]
+    determinada = pagina_sessoes._determinada(votacao)
+    if votacao.get("qualidade") == "inconsistente":
+        notas.insert(0, "Placar inconsistente: exibimos apenas os totais oficiais, sem atribuir votos a nomes.")
+    elif not determinada:
+        notas.insert(0, "Favor ao parecer / Contra o parecer: sentido não determinado.")
+    elif votacao.get("fonte_sentido") == "texto_veto_ambiguo":
+        notas.insert(0, "Sentido definido pelo texto do parecer na tramitação.")
+    if votacao.get("materia") == "veto":
+        houve = (votacao.get("quorum") or {}).get("derrubar") if determinada else None
+        conclusao = f"houve {houve}." if houve is not None else "o número para derrubar não pôde ser determinado."
+        notas.insert(0, "Derrubar o veto exige 11 votos (maioria absoluta dos 21 vereadores); " + conclusao)
+    return notas
+
+
+def fatia_votacoes(modelo: dict, ano: int, votacoes: list[dict]) -> dict:
+    """Uma parte anual, sem build; cada posição de v corresponde a uma pessoa local."""
+    pessoas = sorted({s for v in votacoes for s in v["votos"]})
+    codigos = {v: c for c, v in VOTOS_SESSOES}
+    linhas = []
+    for v in sorted(votacoes, key=lambda v: (v.get("data") or "", str(v["id"])), reverse=True):
+        totais = [v["totais"].get(c, 0) or 0 for c in modelo_sessoes.CAMPOS_TOTAIS]
+        oficiais = v.get("totais_oficiais")
+        publicados = [oficiais.get(c, 0) or 0 for c in modelo_sessoes.CAMPOS_TOTAIS] if oficiais is not None else None
+        quorum = v.get("quorum")
+        linhas.append({
+            "id": v["id"], "s": v["sessao"], "d": v.get("data"), "ts": v.get("titulo_sessao") or "",
+            "m": v["materia"], "doc": v.get("id_documento"), "n": numero_votacao(v), "e": v.get("ementa") or "",
+            "r": v.get("resultado") or "", "t": totais, "to": publicados if publicados != totais else None,
+            "cl": v["classe"], "sx": v["sentido"], "mj": codigos.get(v.get("maioria")),
+            "q": [quorum[c] for c in ("exigido", "derrubar", "manter")] if quorum is not None else None,
+            "ql": v["qualidade"], "nt": notas_votacao(v),
+            "v": "".join(codigos.get(v["votos"][s], "I") if s in v["votos"] else "." for s in pessoas),
+        })
+    return {"esquema": 1, "ano": ano, "n": len(linhas), "pessoas": [pessoa_votacao(modelo, s, ano) for s in pessoas],
+            "colunas": {c: [l[c] for l in linhas] for c in COLUNAS_VOT}}
+
+
+def exportar_sessoes(modelo: dict, saida: Path, manifesto: dict) -> dict:
+    """dic-ses e vot-<ano> por conteúdo; mudar um ano não invalida os demais nem os PLs."""
+    dados = modelo.get("sessoes") or {}
+    votacoes = dados.get("votacoes") or []
+    if not votacoes:
+        return manifesto
+    sessoes = {s["id"]: s for s in dados.get("sessoes") or []}
+    por_ano: dict[int, list[dict]] = defaultdict(list)
+    for v in votacoes:
+        sessao = sessoes.get(v["sessao"]) or {}
+        ano = v.get("ano") or sessao.get("ano")
+        data = v.get("data") or sessao.get("data")
+        if ano is None and data:
+            ano = int(data[:4])
+        if ano is None and len(dados.get("anos") or []) == 1:
+            ano = dados["anos"][0]
+        if ano is None:
+            raise ValueError(f"Votação {v['id']}: sem ano identificável para a exportação")
+        por_ano[int(ano)].append(v)
+    dic = dicionario_sessoes()
+    arquivos = [("dic-ses", dic, {"familia": "dic-ses", "n": len(dic["materias"])})]
+    arquivos += [(f"vot-{ano}", fatia_votacoes(modelo, ano, vs), {"familia": "vot", "ano": ano, "n": len(vs)})
+                 for ano, vs in sorted(por_ano.items(), reverse=True)]
+    (saida / "dados").mkdir(parents=True, exist_ok=True)
+    entradas = {}
+    for nome, dados_arquivo, meta in arquivos:
+        conteudo = json_compacto(dados_arquivo)
+        caminho = f"dados/{nome}.json"
+        (saida / caminho).write_bytes(conteudo)
+        entradas[nome] = {"url": f"{caminho}?v={P.versao_bytes(conteudo)}", "bytes": len(conteudo), **meta}
+    manifesto["build_ses"] = versao_documentos(entradas)
+    manifesto["arquivos"].update(entradas)
+    escrever_manifesto(manifesto, saida)
+    return manifesto
+
+
 # ------------------------------------------------------------------- orçamentos
 def cargas_iniciais(saida: Path, manifesto: dict) -> dict[str, tuple[int, int, int]]:
     """(arquivos, bytes brutos, bytes gzip) do JSON que cada página carrega sem filtros."""
@@ -393,7 +528,7 @@ def cargas_acima_do_orcamento(saida: Path, manifesto: dict) -> list[str]:
 def relatorio_tamanhos(saida: Path, manifesto: dict | None = None) -> None:
     """Lista bytes brutos e gzip; os orçamentos valem por arquivo e, na carga inicial, por página."""
     linhas, vereadores, avisos = [], [], []
-    grupos = {"dados/doc-*.json": [], "dados/ver/*.json": []}
+    grupos = {"dados/doc-*.json": [], "dados/ver/*.json": [], "dados/vot-*.json": []}
     for arq in sorted(saida.rglob("*")):
         if not arq.is_file():
             continue
@@ -401,10 +536,13 @@ def relatorio_tamanhos(saida: Path, manifesto: dict | None = None) -> None:
         conteudo = arq.read_bytes()
         bruto, comprimido = len(conteudo), len(gzip.compress(conteudo, mtime=0))
         parte_doc = (nome.startswith("dados/doc-") or nome.startswith("dados/ver/")) and arq.suffix == ".json"
+        parte_vot = nome.startswith("dados/vot-") and arq.suffix == ".json"
         if arq.parent == saida / "vereadores" and arq.suffix == ".html":
             vereadores.append((bruto, comprimido))
         elif parte_doc:
             grupos["dados/ver/*.json" if nome.startswith("dados/ver/") else "dados/doc-*.json"].append((bruto, comprimido))
+        elif parte_vot:
+            grupos["dados/vot-*.json"].append((bruto, comprimido))
         else:
             linhas.append((nome, bruto, comprimido))
         if arq.suffix == ".html" and comprimido > LIMITE_HTML_GZIP:
@@ -413,6 +551,8 @@ def relatorio_tamanhos(saida: Path, manifesto: dict | None = None) -> None:
             avisos.append(f"{nome}: {comprimido} bytes gzip excedem o orçamento JSON de {LIMITE_JSON_GZIP} bytes")
         if parte_doc and comprimido > LIMITE_PARTE_DOC_GZIP:
             avisos.append(f"{nome}: {comprimido} bytes gzip excedem o orçamento de parte de documentos de {LIMITE_PARTE_DOC_GZIP} bytes")
+        if parte_vot and comprimido > LIMITE_PARTE_VOT_GZIP:
+            avisos.append(f"{nome}: {comprimido} bytes gzip excedem o orçamento de parte de votações de {LIMITE_PARTE_VOT_GZIP} bytes")
     if vereadores:
         linhas.append((f"vereadores/*.html (soma de {len(vereadores)})", sum(b for b, _ in vereadores), sum(g for _, g in vereadores)))
         linhas.append(("vereadores/*.html (máximo)", max(b for b, _ in vereadores), max(g for _, g in vereadores)))
@@ -463,11 +603,16 @@ def main() -> None:
     (SAIDA / "dados/projetos.json").write_bytes(projetos)
     manifesto = exportar_fatias(modelo, cliente, SAIDA)
     exportar_documentos(modelo, SAIDA, manifesto)
+    exportar_sessoes(modelo, SAIDA, manifesto)
     escrever("index.html", P.gerar_index(modelo))
     escrever("leis.html", P.gerar_leis(cliente, manifesto))
     escrever("projetos.html", P.gerar_projetos(cliente, manifesto))
     escrever("atividades.html", P.gerar_atividades(modelo, manifesto))
-    escrever("sessoes.html", pagina_sessoes.gerar_sessoes(modelo))
+    sessoes_html = pagina_sessoes.gerar_sessoes(modelo)
+    # O renderizador recebe só o modelo; a carga de dados é ligada aqui, sem acoplar a apresentação à exportação.
+    if 'id="manifesto-dados"' not in sessoes_html:
+        sessoes_html = sessoes_html.replace("</head>", P.cabecalho_dados(manifesto, "sessoes.html", "") + "\n</head>", 1)
+    escrever("sessoes.html", sessoes_html)
     escrever("ruido.html", P.gerar_ruido(modelo))
     escrever("analises.html", P.gerar_analises(modelo))
     escrever("metodologia.html", P.gerar_metodologia(modelo))
