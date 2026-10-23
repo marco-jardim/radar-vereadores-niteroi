@@ -267,15 +267,18 @@ class TestExportarSessoes(unittest.TestCase):
             GS.main()
         embutido = manifesto_embutido((saida / "sessoes.html").read_text(encoding="utf-8"))
         manifesto = json.loads((saida / "dados/manifest.json").read_bytes())
+        self.assertEqual((saida / "sessoes.js").read_bytes(), (GS.FONTE_ESTATICA / "sessoes.js").read_bytes())
         self.assertEqual(embutido["arquivos"], {n: e for n, e in manifesto["arquivos"].items()
                                                if e.get("familia") in {"dic-ses", "vot"}})
         self.assertEqual(set(embutido["arquivos"]), {"dic-ses", "vot-2025", "vot-2026"})
 
     def test_relatorio_dicionario_soma_maximo_e_aviso_de_150_kib(self):
+        (self.saida / "sessoes.js").write_bytes((GS.FONTE_ESTATICA / "sessoes.js").read_bytes())
         saida, avisos = io.StringIO(), io.StringIO()
         with contextlib.redirect_stdout(saida), contextlib.redirect_stderr(avisos):
             GS.relatorio_tamanhos(self.saida, self.manifesto)
         self.assertIn("dados/dic-ses.json", saida.getvalue())
+        self.assertIn("sessoes.js", saida.getvalue())
         self.assertIn("dados/vot-*.json (soma de 2)", saida.getvalue())
         self.assertIn("dados/vot-*.json (máximo)", saida.getvalue())
         self.assertIn("JSON inicial de sessoes.html (2 arquivos)", saida.getvalue())

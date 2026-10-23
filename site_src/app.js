@@ -433,7 +433,9 @@
         return r.json();
       }).then(function (dados) {
         // As famílias de documentos (com "familia" no manifesto) não levam build: a URL já traz o hash do conteúdo.
-        if (dados.esquema !== m.esquema || (!entrada.familia && dados.build !== m.build) || dados.n !== entrada.n) throw desatualizado();
+        var sessao = entrada.familia === "dic-ses" || entrada.familia === "vot";
+        var n = entrada.familia === "dic-ses" ? (dados.materias || []).length : dados.n;
+        if (dados.esquema !== (sessao ? 1 : m.esquema) || (!entrada.familia && dados.build !== m.build) || n !== entrada.n) throw desatualizado();
         return dados;
       }).catch(function (erro) {
         if (cache.get(url) === promessa) cache.delete(url);
@@ -455,6 +457,11 @@
       return atualizarManifesto().then(function () { return carregarArquivos(nomes, true); });
     });
   }
+  // Interface mínima compartilhada com sessoes.js: mesmas URLs versionadas, cache e renovação.
+  window.RadarArquivos = { carregar: carregarArquivos, manifesto: function () { return manifesto; } };
+  // Os formulários de sessões têm controlador próprio; placar e diálogo acima continuam ativos.
+  if (document.querySelector("form.filtros-sessoes")) return;
+
   function prepararDados(pacote, nomes) {
     var dic = pacote.arquivos[0], linhas = [], dados = { pessoas: {}, temas: {}, sinais: {} };
     dic.pessoas.forEach(function (p) { if (p[0]) dados.pessoas[p[0]] = p[1]; });

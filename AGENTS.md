@@ -37,7 +37,7 @@ Os testes de JavaScript pedem Node 21+ (o CI usa 22).
 | `config/vereadores.json` | Legislaturas, eleitos, partidos, apelidos e afastamentos. |
 | `config/curadoria.json` | Rótulos e correções manuais com fontes públicas. |
 | `data/` | Projetos, documentos e (quando coletadas) sessões por ano, cache da IA e metadados, todos gerados e versionados. |
-| `site_src/` | Fontes estáticas: `app.js`, `dados.js`, `estilo.css` e `favicon.svg`. |
+| `site_src/` | Fontes estáticas: `app.js`, `dados.js`, `sessoes.js`, `estilo.css` e `favicon.svg`. |
 | `tests/` | Testes Python (`test_*.py`), JavaScript (`tests/js/`) e HTML real do SISCAM (`tests/fixtures/siscam/`). |
 | `.github/workflows/` | Testes, coleta semanal e publicação do site. |
 | `site/` | Saída gerada localmente, ignorada pelo Git. |
@@ -252,6 +252,21 @@ Com `GITHUB_ACTIONS` definida, `coletor.validar` emite os problemas como `::erro
   inconsistentes mostram apenas os totais oficiais, sem nomes. Contar presença e votos não mede qualidade.
   O relatório inclui `sessoes.html` no teto oficial de 100 KiB gzip; o alvo de apresentação é 60 KiB nos dados
   reais, e a seção individual tem orçamento de +10 KiB gzip. A coleta de sessões roda semanalmente em `coleta.yml`.
+  `site_src/sessoes.js` melhora só `sessoes.html`: revela os formulários por legislatura, grava filtros com
+  `history.replaceState` (`leg`, `ano`, `classe`, `materia`, `vereador`, `div=1`, `q`, `ordem`; padrões omitidos),
+  pagina de 40 em 40 e exporta CSV UTF-8 com BOM e fórmulas neutralizadas. `div=1` exige vereador e comparação
+  determinada. A ordenação “apertadas” usa a margem absoluta Favor/Contra, não o quórum legal.
+  Sem consulta, preserva os cartões e as notas técnicas do servidor e busca só dicionário + último ano;
+  filtros, Mostrar mais e CSV carregam o recorte completo necessário, sempre pelas URLs do manifesto.
+  `app.js` expõe apenas `RadarArquivos.carregar/manifesto` (cache/renovação compartilhados) e não inicia
+  listas genéricas nos formulários de sessões. Os arquivos de sessões usam esquema 1, dentro do manifesto 2.
+  Ao escolher ano, o cliente refaz a faixa; “todos” restaura a faixa inicial do último ano com divididas.
+  `tr[data-vereador]` preserva a composição do servidor e permite destacar a pessoa sem promover nomes brutos.
+  Preserve o contrato de `cartao_votacao`/`_mapa_votos`, os rótulos de `dic-ses` e a fixture de paridade
+  `tests/js/fixtures/sessoes.json` + `faixa_sessoes.html`, conferida tanto pelo Python como pelo JS.
+  Referências abreviadas e nomes curtos vêm do JSON; notas técnicas não são exportadas (continuam no HTML
+  inicial e em Qualidade dos dados). CSV inclui “não consta”; em placares inconsistentes não atribui votos
+  às pessoas, assim como os cartões. O alvo de `sessoes.js` é até 12 KiB gzip, testado offline.
 - As métricas dos documentos (homenagens em `ruido.html`; requerimentos de informação por vereador e por órgão e
   indicações nos 52 bairros em `atividades.html`; as três na seção "Atividade") são tabelas e gráficos gerados no
   servidor, só com agregados: não há colunas novas nos JSONs do navegador.
@@ -313,7 +328,7 @@ Com `GITHUB_ACTIONS` definida, `coletor.validar` emite os problemas como `::erro
   `.gitattributes` fixa LF em `data/**`. Os JSONs do navegador em `site/dados/` são compactos.
 - No front-end, edite JS/CSS puros em `site_src/`. Preserve o contrato entre `coletor/gerar_site.py`,
   `coletor/site/paginas.py`, `site_src/dados.js` e `app.js`: colunas, manifesto e regras espelhadas nos dois lados
-  (`PASSO_LISTA`/`PASSO`, `plano_docs`/`fatiasDocs`).
+  (`PASSO_LISTA`/`PASSO`, `plano_docs`/`fatiasDocs`, cartões e faixa de `pagina_sessoes.py`/`sessoes.js`).
 - Preserve escape de HTML, tabelas acessíveis dos gráficos, navegação por teclado e a restrição de URL do diálogo do SISCAM.
 
 ## Curadoria e neutralidade editorial

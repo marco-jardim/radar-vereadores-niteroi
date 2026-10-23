@@ -4,6 +4,7 @@ from __future__ import annotations
 import copy
 import gzip
 import hashlib
+import json
 import re
 import unittest
 from collections import Counter, defaultdict
@@ -153,7 +154,7 @@ class TestPaginaSessoes(unittest.TestCase):
         self.modelo = modelo_sintetico()
         self.pessoa = self.modelo["pessoas"]["pessoa-00"]
 
-    def test_pagina_completa_reutiliza_moldura_e_dialogo_sem_js_novo(self):
+    def test_pagina_completa_reutiliza_moldura_dialogo_e_js_progressivo(self):
         with mock.patch.object(P, "pagina", wraps=P.pagina) as pagina:
             html = S.gerar_sessoes(self.modelo)
         self.assertTrue(html.startswith("<!doctype html>"))
@@ -165,8 +166,9 @@ class TestPaginaSessoes(unittest.TestCase):
         self.assertTrue(pagina.call_args.kwargs["dialogo"])
         doc = Documento(html)
         scripts = [n for n in doc.nos if n["tag"] == "script"]
-        self.assertEqual(len(scripts), 2)
-        self.assertTrue(all(n["attrs"].get("src", "").startswith(("app.js?", "dados.js?")) for n in scripts))
+        self.assertEqual(pagina.call_args.kwargs["scripts"], ("sessoes.js",))
+        self.assertEqual(len(scripts), 3)
+        self.assertTrue(all(n["attrs"].get("src", "").startswith(("app.js?", "dados.js?", "sessoes.js?")) for n in scripts))
         self.assertTrue(all(not Documento.texto(n).strip() for n in scripts))
         self.assertIn('id="siscam-dialogo"', html)
         self.assertNotIn('<iframe', html)
@@ -176,6 +178,32 @@ class TestPaginaSessoes(unittest.TestCase):
         self.assertIn("open", blocos[0]["attrs"])
         self.assertNotIn("open", blocos[1]["attrs"])
         self.assertFalse(any("hidden" in b["attrs"] for b in blocos))
+
+    def test_fixture_compartilhada_da_faixa_e_exportacao_do_navegador(self):
+        """A fixture commitada é conferida, nunca regravada durante os testes."""
+        from coletor import gerar_site as GS
+
+        pasta = RAIZ / "tests/js/fixtures"
+        fixture = json.loads((pasta / "sessoes.json").read_text(encoding="utf-8"))
+        leg, membros = fixture["leg"], fixture["membros"]
+        modelo = {"pessoas": {p["slug"]: {"nome": p["nome"], "mandatos": {leg["id"]: {"eleito": True}}}
+                               for p in membros if p["pagina"]},
+                  "sessoes": {"legislaturas": [leg], "votacoes": fixture["votacoes"],
+                              "por_pessoa": {p["slug"]: {"nome": p["nome"], "condicao": p["condicao"],
+                                                        "sem_pagina": not p["pagina"], leg["id"]: {}}
+                                             for p in membros}}}
+        self.assertEqual(GS.fatia_votacoes(modelo, 2025, fixture["votacoes"]), fixture["fatia"])
+        dic = GS.dicionario_sessoes()
+        materias = {m[0] for m in fixture["dic"]["materias"]}
+        dic["materias"] = [m for m in dic["materias"] if m[0] in materias]
+        dic["rotulos"] = {m: r for m, r in dic["rotulos"].items() if m in materias}
+        self.assertEqual(dic, fixture["dic"])
+        html = S._mapa_votos(modelo, modelo["sessoes"], leg)
+        tabela = re.search(r'<table class="faixa">.*?</table>', html).group()
+        self.assertEqual(tabela, (pasta / "faixa_sessoes.html").read_text(encoding="utf-8").strip())
+        # O mesmo HTML cobre caption, cabeçalhos abbr, glifos, so-leitor e nomes sem link.
+        self.assertIn('role="region" tabindex="0"', html)
+        self.assertLessEqual(len(gzip.compress((RAIZ / "site_src/sessoes.js").read_bytes(), mtime=0)), 12 * 1024)
 
     def test_presenca_bases_e_contrato_do_placar(self):
         r = self.modelo["sessoes"]["por_pessoa"]["pessoa-00"]["2025-2028"]

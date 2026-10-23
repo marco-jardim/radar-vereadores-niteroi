@@ -1,4 +1,4 @@
-"""Apresentação estática das sessões, sem carregar votos no navegador.
+"""Apresentação das sessões, com melhoria progressiva opcional no navegador.
 
 Consome apenas o contrato de modelo["sessoes"]. As regras e a agregação ficam
 fora deste módulo; os mesmos sentidos e bases são usados nas duas páginas.
@@ -35,7 +35,8 @@ from coletor.site.modelo import nome_curto
 #   table.faixa e resumo. Só o ano mais recente com divididas vem no HTML.
 #   .faixa-sem-comparacao marca colunas sem maioria/sentido/consistência;
 #   .voto-maioria|diferente|abstencao|ausente|presidia|vazio|cru nas células.
-#   O cliente deve preservar glifos + .so-leitor, cabeçalhos e ordem alfabética.
+#   tr[data-vereador] identifica a composição sem promover nomes brutos dos votos.
+#   O cliente (site_src/sessoes.js) preserva glifos + .so-leitor, cabeçalhos e ordem alfabética.
 
 
 # ---- componentes -------------------------------------------------------------
@@ -464,7 +465,7 @@ def _mapa_votos(modelo: dict, dados: dict, leg: dict) -> str:
             marca = ' faixa-sem-comparacao' if _limite_faixa(v) else ''
             celulas.append(f'<td class="voto-{classe}{marca}"><span aria-hidden="true">{P.esc(glifo)}</span>'
                            f'<span class="so-leitor">{P.esc(rotulo)}</span></td>')
-        linhas.append(f'<tr><th scope="row">{nome}</th>{"".join(celulas)}</tr>')
+        linhas.append(f'<tr data-vereador="{P.esc(slug)}"><th scope="row">{nome}</th>{"".join(celulas)}</tr>')
         resumo.append([nome, *[contagens[c] for c in ("maioria", "diferente", "abstencao", "ausente")]])
     legenda = ''.join(f'<li><span class="glifo-voto voto-{c}" aria-hidden="true">{g}</span>'
                       f'{P.esc(r if g else "Célula vazia: " + r)}</li>' for c, (g, r) in VOTOS_FAIXA.items())
@@ -610,7 +611,8 @@ def gerar_sessoes(modelo: dict) -> str:
                  + _ritmo(dados) + '</section><section id="qualidade-sessoes"><h2 class="h-secao">Qualidade dos dados</h2>'
                  + _qualidade(dados) + '</section></div>')
     return P.pagina("Sessões e votações · Radar dos Vereadores de Niterói", corpo, "sessoes.html",
-                    descricao="Presença nas sessões plenárias e votações nominais da Câmara de Niterói, com fontes e limitações.", dialogo=True)
+                    descricao="Presença nas sessões plenárias e votações nominais da Câmara de Niterói, com fontes e limitações.",
+                    dialogo=True, scripts=("sessoes.js",))
 
 
 # ---- página individual -------------------------------------------------------

@@ -63,8 +63,16 @@ node --test "tests/js/**/*.test.js"
 `sessoes.html` mostra presença por legislatura, votações que dividiram a Câmara, placares por ano,
 ritmo mensal e cobertura da coleta. Cada vereador tem a seção **Presença e votos**, antes de "Atividade".
 Suplentes sem página própria aparecem com nome e a identificação "suplente em exercício", sem link.
-Tudo é gerado no servidor: sem novos JSONs de votos nem JavaScript; os primeiros 40 cartões de cada
-legislatura aparecem na lista e os demais ficam em "Ver mais". Sem `data/sessoes`, o site gera os estados vazios.
+Sem JavaScript, os primeiros 40 cartões de cada legislatura aparecem na lista e os demais ficam em
+"Ver mais", junto ao mapa de votos do ano mais recente com votações divididas. Com JavaScript, os filtros
+por ano, classe, matéria, vereador e busca ficam disponíveis, com ordenação, "Mostrar mais" e CSV seguro
+(UTF-8 com BOM, uma linha por pessoa e votação filtrada). Os filtros ficam na URL, sem os valores padrão;
+selecionar vereador destaca sua linha no mapa e mostra seu voto nos cartões. A opção de votos diferentes
+da maioria exige vereador e comparação determinada; não é uma medida de qualidade.
+O ano escolhido também atualiza o mapa; "todos" mantém o mapa inicial. Os dados vêm de `dic-ses` e
+`vot-<ano>`, pelo manifesto versionado; a carga padrão busca só dicionário e último ano. Referências e nomes
+do JSON são abreviados; notas técnicas continuam no HTML inicial e em "Qualidade dos dados".
+Sem `data/sessoes`, o site gera os estados vazios.
 
 As regras estão em **`metodologia.html#sessoes`**: só sessões deliberativas realizadas com lista entram na
 presença; licenças ficam fora da base individual. Favor/Contra é voto sobre o parecer da comissão;
