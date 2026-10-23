@@ -493,5 +493,101 @@
     }
    }
   }
+ },
+ "sessoes": {
+  "anos": {
+   "2021": {
+    "completa": true,
+    "detalhes_baixados": 102,
+    "detalhes_falhas": 0,
+    "detalhes_pendentes": 0,
+    "falhas": 0,
+    "gravado": true,
+    "listado": 102,
+    "paginas": 11,
+    "preservados": 0,
+    "registros": 102,
+    "segundos": 1,
+    "sem_resposta": false
+   },
+   "2022": {
+    "completa": true,
+    "detalhes_baixados": 90,
+    "detalhes_falhas": 0,
+    "detalhes_pendentes": 0,
+    "falhas": 0,
+    "gravado": true,
+    "listado": 90,
+    "paginas": 10,
+    "preservados": 0,
+    "registros": 90,
+    "segundos": 1,
+    "sem_resposta": false
+   },
+   "2023": {
+    "completa": true,
+    "detalhes_baixados": 119,
+    "detalhes_falhas": 0,
+    "detalhes_pendentes": 0,
+    "falhas": 0,
+    "gravado": true,
+    "listado": 119,
+    "paginas": 12,
+    "preservados": 0,
+    "registros": 119,
+    "segundos": 1,
+    "sem_resposta": false
+   },
+   "2024": {
+    "completa": true,
+    "detalhes_baixados": 118,
+    "detalhes_falhas": 0,
+    "detalhes_pendentes": 0,
+    "falhas": 0,
+    "gravado": true,
+    "listado": 118,
+    "paginas": 12,
+    "preservados": 0,
+    "registros": 118,
+    "segundos": 1,
+    "sem_resposta": false
+   },
+   "2025": {
+    "completa": true,
+    "detalhes_baixados": 109,
+    "detalhes_falhas": 0,
+    "detalhes_pendentes": 0,
+    "falhas": 0,
+    "gravado": true,
+    "listado": 109,
+    "paginas": 11,
+    "preservados": 0,
+    "registros": 109,
+    "segundos": 1,
+    "sem_resposta": false
+   },
+   "2026": {
+    "completa": true,
+    "detalhes_baixados": 89,
+    "detalhes_falhas": 0,
+    "detalhes_pendentes": 0,
+    "falhas": 0,
+    "gravado": true,
+    "listado": 89,
+    "paginas": 9,
+    "preservados": 0,
+    "registros": 89,
+    "segundos": 1,
+    "sem_resposta": false
+   }
+  },
+  "detalhes": {
+   "baixados": 627,
+   "falhas": 0,
+   "fila": 627,
+   "limite": 1000,
+   "pendentes": 0
+  },
+  "em": "2026-10-23T03:54:06+00:00"
  }
 }
