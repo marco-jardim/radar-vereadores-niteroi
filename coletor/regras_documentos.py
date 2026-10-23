@@ -13,6 +13,11 @@ Também deriva, da tramitação completa da página de detalhe, a data em que um
 requerimento consta como respondido e o número e a data de publicação de PDLs e
 resoluções (derivar_resposta e derivar_publicacao).
 
+É a única fonte das regras usadas nas métricas do site: os eixos do perfil de
+atuação (eixos_perfil), o órgão citado num requerimento de informação
+(extrair_orgao) e o estado desse pedido para a taxa de resposta (estado_pedido).
+coletor.site.modelo só agrega o que estas funções devolvem.
+
 Categorias:
   zeladoria     indicações (pedidos de serviço ao Executivo)
   fiscalizacao  requerimentos de informação
@@ -27,7 +32,6 @@ from __future__ import annotations
 import datetime as dt
 import re
 import unicodedata
-from collections.abc import Iterable
 
 CATEGORIAS = ("zeladoria", "fiscalizacao", "homenagem", "manifestacao", "legislacao", "outra")
 SUBCATEGORIAS = {
@@ -374,27 +378,191 @@ def derivar_publicacao(tramitacoes: list[dict] | None) -> dict | None:
 
 
 # ------------------------------------------------------------------------ perfil
-def perfil_atuacao(registros: Iterable[dict], nao_vereador: Iterable[str] = ()) -> dict[int, dict[str, int]]:
-    """Conta, por id de autor, documentos de zeladoria, fiscalização, homenagem e legislação.
+def eixos_perfil(classificacao: dict) -> list[str]:
+    """Eixos do perfil de atuação (EIXOS_PERFIL) em que um documento conta.
 
-    Todo autor listado conta (a listagem não marca o autor principal). Autores cujo
-    nome contém algum termo de nao_vereador (como em config/vereadores.json) ficam de fora.
+    Recebe o resultado de classificar_documento ou qualquer dicionário com "categoria"
+    e "homenagem", como os documentos do modelo do site (coletor.site.modelo, que só
+    agrega). Zeladoria, fiscalização e legislação seguem a categoria; homenagem segue a
+    marca "homenagem": moções de aplauso (inclui congratulação e louvor) e de pesar,
+    títulos de cidadão e honrarias em PDLs e resoluções. Manifestação (repúdio, apoio
+    e outras moções) e "outra" (demais requerimentos) não entram no perfil.
     """
-    termos = [t.upper() for t in nao_vereador]
-    perfil: dict[int, dict[str, int]] = {}
-    for reg in registros:
-        c = classificar_documento(reg)
-        eixos = [e for e in ("zeladoria", "fiscalizacao", "legislacao") if c["categoria"] == e]
-        if c["homenagem"]:
-            eixos.append("homenagem")
-        vistos: set[int] = set()
-        for autor in reg.get("autores") or []:
-            id_autor = autor.get("id")
-            nome = (autor.get("nome") or "").upper()
-            if id_autor is None or id_autor in vistos or any(t in nome for t in termos):
-                continue
-            vistos.add(id_autor)
-            contagem = perfil.setdefault(id_autor, dict.fromkeys(EIXOS_PERFIL, 0))
-            for eixo in eixos:
-                contagem[eixo] += 1
-    return perfil
+    eixos = [e for e in ("zeladoria", "fiscalizacao", "legislacao") if classificacao["categoria"] == e]
+    if classificacao["homenagem"]:
+        eixos.append("homenagem")
+    return eixos
+
+
+# ------------------------------------------------------- requerimentos de informação
+# Órgão a que se dirige um requerimento de informação, só pela ementa e, sem resultado,
+# pelo "assunto" da listagem (que às vezes é o próprio órgão, como "NITTRANS"). O
+# destinatário dos passos da tramitação não serve: é o caminho dentro da Câmara
+# (Plenário, Secretaria Mesa Diretora) e, no envio, quase sempre a Secretaria Municipal
+# de Governo, que repassa o pedido ao órgão responsável.
+ORGAO_NAO_IDENTIFICADO = "Não identificado"
+ORGAO_EXECUTIVO = "Prefeito ou Poder Executivo"
+ORGAO_OUTRA_SECRETARIA = "Outra secretaria municipal"
+ORGAO_ESTADUAL = "Governo do Estado ou órgão estadual"
+ORGAO_CONCESSIONARIA = "Concessionária não especificada"
+# Área depois de "Secretaria (Municipal) de": primeiro as duas primeiras palavras, depois
+# só a primeira; a área que não está aqui vira "Outra secretaria municipal".
+SECRETARIAS: dict[str, str] = {
+    "SAUDE": "Secretaria de Saúde",
+    "EDUCACAO": "Secretaria de Educação",
+    "OBRAS": "Secretaria de Obras",
+    "CONSERVACAO": "Secretaria de Conservação e Serviços Públicos",
+    "URBANISMO": "Secretaria de Urbanismo e Mobilidade",
+    # Nomes mudam entre gestões e os dados não dizem se "Mobilidade Urbana" e "Urbanismo e
+    # Mobilidade" são o mesmo órgão: ficam separados, com o nome citado.
+    "MOBILIDADE URBANA": "Secretaria de Mobilidade Urbana",
+    "MOBILIDADE": "Secretaria de Mobilidade",
+    "MEIO AMBIENTE": "Secretaria de Meio Ambiente",
+    "ASSISTENCIA": "Secretaria de Assistência Social",
+    "FAZENDA": "Secretaria de Fazenda",
+    "PLANEJAMENTO": "Secretaria de Planejamento",
+    "GOVERNO": "Secretaria de Governo",
+    "ORDEM PUBLICA": "Secretaria de Ordem Pública",
+    "ADMINISTRACAO": "Secretaria de Administração",
+    "CULTURA": "Secretaria das Culturas",
+    "CULTURAS": "Secretaria das Culturas",
+    "ESPORTE": "Secretaria de Esporte e Lazer",
+    "ESPORTES": "Secretaria de Esporte e Lazer",
+    "HABITACAO": "Secretaria de Habitação",
+    "DEFESA CIVIL": "Defesa Civil",
+    "DIREITOS HUMANOS": "Secretaria de Direitos Humanos",
+    "DESENVOLVIMENTO ECONOMICO": "Secretaria de Desenvolvimento Econômico",
+    "TURISMO": "Secretaria de Turismo",
+    "CIENCIA": "Secretaria de Ciência e Tecnologia",
+    "TRABALHO": "Secretaria de Trabalho",
+    "MULHER": "Secretaria da Mulher",
+    "MULHERES": "Secretaria da Mulher",
+    "IDOSO": "Secretaria do Idoso",
+    "ACESSIBILIDADE": "Secretaria de Acessibilidade",
+    "SEGURANCA": "Secretaria de Segurança",
+    "COMUNICACAO": "Secretaria de Comunicação",
+    "JUVENTUDE": "Secretaria de Juventude",
+    "PARTICIPACAO": "Secretaria de Participação Social",
+    "EXECUTIVA": "Secretaria Executiva",
+}
+# Depois de "Secretaria": da Câmara (não é órgão do Executivo), federal ou sem área definida.
+_SECRETARIA_IGNORADA = {"MESA", "CAMARA", "NACIONAL", "ESPECIAL", "DE", "DA", "DO", "DAS", "DOS"}
+_SECRETARIA_GENERICA = {"COMPETENTE", "COMPETENTES", "RESPONSAVEL", "RESPONSAVEIS", "PERTINENTE", "PERTINENTES",
+                        "MUNICIPAL", "MUNICIPAIS"}
+_SECRETARIA_ESTADUAL = {"ESTADO", "ESTADUAL", "ESTADUAIS"}
+# Grupos: conector ("de", "da"...), área e a palavra seguinte. Área fora de SECRETARIAS só
+# vale depois do conector: em "ao Secretário Municipal, Sr. Fulano" ou "à Secretaria
+# Municipal e à Fundação" a palavra seguinte ("SR", "E") não é área.
+RE_SECRETARIA = re.compile(r"\bSECRETARI(?:A|O|AS|OS)\s(?:MUNICIPA(?:L|IS)\s)?(?:(D[AEO]S?)\s)?([A-Z]+)(?:\s([A-Z]+))?")
+# Órgão estadual só conta como destinatário: depois de "a", "ao" ou "junto ao", antes do
+# assunto ("sobre", "acerca"...). Citado em outro papel ("baixa junto ao Detran-RJ" no
+# meio do pedido), indica só o Executivo municipal, que é quem responde ao requerimento.
+_ESTADUAL = (r"(?:GOVERNO DO ESTADO|GOVERNADOR[A]?|SECRETARI(?:A|O|AS|OS)\s(?:DE\s)?ESTADO"
+             r"|SECRETARI(?:A|O|AS|OS)\sESTADUA(?:L|IS)|DETRAN|CEDAE|INEA)")
+RE_ESTADUAL = re.compile(r"\b" + _ESTADUAL + r"\b")
+RE_ESTADUAL_DESTINO = re.compile(
+    r"\b(?:A|AO|AOS|AS|JUNTO AO|JUNTO A)\s(?:(?:EXMO|EXMA|EXCELENTISSIM[OA]|SR|SRA|SENHOR[A]?)\s)*" + _ESTADUAL + r"\b"
+)
+RE_FIM_DESTINO = _regex(r"SOBRE", r"ACERCA", r"A RESPEITO", r"REFERENTES?", r"QUANTO", r"RELATIV\w*", r"EM RELACAO")
+# Órgãos com nome próprio e siglas sem ambiguidade; "AMPLA" fica de fora (é adjetivo comum).
+ORGAOS: tuple[tuple[str, re.Pattern[str]], ...] = (
+    ("Secretaria de Conservação e Serviços Públicos", _regex(r"SECONSER")),
+    ("Secretaria de Governo", _regex(r"SEMUG")),
+    ("Secretaria de Planejamento", _regex(r"SEPLAG")),
+    ("Secretaria de Ordem Pública", _regex(r"SEOP")),
+    ("Secretaria de Meio Ambiente", _regex(r"SMARHS")),
+    ("Fundação Municipal de Saúde", _regex(r"FUNDACAO MUNICIPAL DE SAUDE")),
+    ("Fundação Municipal de Educação", _regex(r"FUNDACAO MUNICIPAL DE EDUCACAO", r"FME")),
+    ("Fundação de Arte de Niterói", _regex(r"FUNDACAO DE ARTE DE NITEROI")),
+    ("NitTrans", _regex(r"NITTRANS", r"NITEROI TRANSPORTE E TRANSITO")),
+    ("Clin", _regex(r"CLIN", r"COMPANHIA MUNICIPAL DE LIMPEZA URBANA")),
+    ("ION (antiga Emusa)", _regex(r"EMUSA", r"ION", r"EMPRESA DE INFRAESTRUTURA E OBRAS", r"EMPRESA MUNICIPAL DE MORADIA")),
+    ("Neltur", _regex(r"NELTUR", r"NITEROI EMPRESA DE LAZER E TURISMO")),
+    ("Niterói Prev", _regex(r"NITEROI ?PREV", r"NITPREV")),
+    ("Guarda Municipal", _regex(r"GUARDA (?:CIVIL )?MUNICIPAL")),
+    ("Defesa Civil", _regex(r"DEFESA CIVIL")),
+    ("Procuradoria-Geral do Município", _regex(r"PROCURADORIA GERAL DO MUNICIPIO", r"PGM")),
+    ("Controladoria-Geral do Município", _regex(r"CONTROLADORIA GERAL DO MUNICIPIO", r"CGM")),
+    ("Águas de Niterói (concessionária)", _regex(r"AGUAS DE NITEROI")),
+    ("Enel (concessionária)", _regex(r"ENEL")),
+    ("CCR Barcas (concessionária)", _regex(r"CCR BARCAS")),
+    ("Naturgy (concessionária)", _regex(r"NATURGY")),
+)
+RE_CONCESSIONARIA = _regex(r"CONCESSIONARIAS?")
+RE_EXECUTIVO = _regex(
+    r"PREFEIT[OA]S?", r"PREFEITURA", r"PODER EXECUTIVO", r"EXECUTIVO MUNICIPAL", r"CHEFE DO EXECUTIVO",
+)
+
+
+def _orgao_especifico(texto: str) -> str | None:
+    """Órgão com nome próprio citado primeiro no texto normalizado (secretaria, fundação, empresa, concessionária).
+
+    Órgão estadual só entra como destinatário, no trecho antes do assunto (RE_FIM_DESTINO).
+    """
+    candidatos: list[tuple[int, int, str]] = []
+    for m in RE_SECRETARIA.finditer(texto):
+        conector, area, seguinte = m.groups()
+        if area in _SECRETARIA_IGNORADA or area in _SECRETARIA_GENERICA or area in _SECRETARIA_ESTADUAL:
+            continue
+        nome = SECRETARIAS.get(f"{area} {seguinte or ''}") or SECRETARIAS.get(area)
+        if nome is None and conector:
+            nome = ORGAO_OUTRA_SECRETARIA
+        if nome:
+            candidatos.append((m.start(), -1, nome))
+    for ordem, (nome, padrao) in enumerate(ORGAOS):
+        m = padrao.search(texto)
+        if m:
+            candidatos.append((m.start(), ordem, nome))
+    fim = RE_FIM_DESTINO.search(texto)
+    m = RE_ESTADUAL_DESTINO.search(texto, 0, fim.start() if fim else len(texto))
+    if m:
+        candidatos.append((m.start(), len(ORGAOS), ORGAO_ESTADUAL))
+    return min(candidatos)[2] if candidatos else None
+
+
+def extrair_orgao(ementa: str | None, assunto: str | None = None) -> str:
+    """Órgão a que se dirige um requerimento de informação, pelo texto, com nome normalizado.
+
+    Vale o primeiro órgão específico citado (secretaria, fundação, autarquia, empresa
+    municipal ou concessionária), seja o destinatário direto, o intermediário ("por
+    intermédio da NitTrans") ou a cópia ("ao Prefeito, com cópia à Secretaria de
+    Educação"): é o órgão que responde pelo assunto. Órgão estadual só conta como
+    destinatário ("ao Governo do Estado", "à Secretaria de Estado de Saúde"); citado em
+    outro papel, vale o nível municipal. Sem órgão específico, "Concessionária não
+    especificada" e, depois, "Prefeito ou Poder Executivo" (Prefeito, Prefeitura, Poder
+    Executivo ou órgão estadual citado fora do destinatário); sem nada disso, "Não
+    identificado". Em cada nível a ementa vem antes do assunto da listagem. Siglas
+    ambíguas (SMS, SME, SMU) não são reconhecidas.
+    """
+    textos = (normalizar(ementa), normalizar(assunto))
+    for texto in textos:
+        orgao = _orgao_especifico(texto)
+        if orgao:
+            return orgao
+    if any(RE_CONCESSIONARIA.search(t) for t in textos):
+        return ORGAO_CONCESSIONARIA
+    if any(RE_EXECUTIVO.search(t) or RE_ESTADUAL.search(t) for t in textos):
+        return ORGAO_EXECUTIVO
+    return ORGAO_NAO_IDENTIFICADO
+
+
+ESTADOS_PEDIDO = ("respondido", "aguardando", "encerrado", "retirado")
+
+
+def estado_pedido(respondido: bool, situacao: str | None) -> str:
+    """Estado de um requerimento de informação para as métricas de resposta.
+
+    "respondido" quando consta resposta (veja consta_respondido). Sem resposta,
+    "retirado" se a situação começa com "Retirado" (o autor desistiu do pedido),
+    "encerrado" se começa com "Arquivado", "Rejeitado" ou "Prejudicado", e "aguardando"
+    nos demais casos. Retirados saem da taxa de resposta; encerrados contam como não
+    respondidos.
+    """
+    if respondido:
+        return "respondido"
+    sit = normalizar(situacao)
+    if sit.startswith("RETIRAD"):
+        return "retirado"
+    if sit.startswith(("ARQUIVAD", "REJEITAD", "PREJUDICAD")):
+        return "encerrado"
+    return "aguardando"

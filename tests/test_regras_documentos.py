@@ -12,14 +12,22 @@ from coletor.regras_documentos import (
     BAIRROS_POR_REGIAO,
     CATEGORIAS,
     EIXOS_PERFIL,
+    ESTADOS_PEDIDO,
+    ORGAO_CONCESSIONARIA,
+    ORGAO_ESTADUAL,
+    ORGAO_EXECUTIVO,
+    ORGAO_NAO_IDENTIFICADO,
+    ORGAO_OUTRA_SECRETARIA,
     SUBCATEGORIAS,
     classificar_documento,
     consta_respondido,
     derivar_publicacao,
     derivar_resposta,
+    eixos_perfil,
+    estado_pedido,
     extrair_bairro,
+    extrair_orgao,
     normalizar,
-    perfil_atuacao,
 )
 from tests.apoio import ler_fixture
 
@@ -455,41 +463,169 @@ class TestListagensReais(unittest.TestCase):
 
 
 # -------------------------------------------------------------------------- perfil
-class TestPerfilAtuacao(unittest.TestCase):
-    REGISTROS = [
-        doc("indicacao", "Solicito tapa buraco na Rua X, Icaraí.", autores=[{"id": 237, "nome": "ROBSON"}]),
-        doc("indicacao", "Solicito poda de árvore.", autores=[{"id": 237, "nome": "ROBSON"}, {"id": 237, "nome": "ROBSON"}]),
-        doc("requerimento", "REQUER INFORMAÇÕES SOBRE O CONTRATO.", autores=[{"id": 275, "nome": "MICHEL"}]),
-        doc("pdl", "CONCEDE O TÍTULO DE CIDADÃO NITEROIENSE A FULANO.",
-            autores=[{"id": 272, "nome": "ALLAN PINHO LYRA"}, {"id": 9, "nome": "MILTON CARLOS DA SILVA LOPES"}]),
-        doc("pdl", "Susta o Decreto Legislativo nº 1/2025.", autores=[{"id": 281, "nome": "EDUARDO"}]),
-        doc("resolucao", "Aprova o Orçamento da Câmara Municipal.", autores=[{"id": 278, "nome": "Mesa Diretora 2025/2026"}]),
-        doc("mocao", "Moção de Aplausos ao Sr. Fulano.", autores=[{"id": 285, "nome": "ANTONIO"}]),
-        doc("mocao", "Moção de Repúdio ao ato.", autores=[{"id": 285, "nome": "ANTONIO"}]),
-    ]
+class TestEixosPerfil(unittest.TestCase):
+    """A regra do perfil fica só aqui; coletor.site.modelo a consome (veja tests/test_modelo_documentos.py)."""
 
-    @staticmethod
-    def contagem(**valores: int) -> dict[str, int]:
-        return {**dict.fromkeys(EIXOS_PERFIL, 0), **valores}
-
-    def test_conta_por_autor(self) -> None:
-        self.assertEqual(
-            perfil_atuacao(self.REGISTROS),
-            {
-                237: self.contagem(zeladoria=2),
-                275: self.contagem(fiscalizacao=1),
-                272: self.contagem(homenagem=1),
-                9: self.contagem(homenagem=1),
-                281: self.contagem(legislacao=1),
-                278: self.contagem(legislacao=1),
-                285: self.contagem(homenagem=1),
-            },
+    def test_eixo_de_cada_tipo_de_documento(self) -> None:
+        casos = (
+            ("indicacao", "Solicito tapa buraco na Rua X, Icaraí.", ["zeladoria"]),
+            ("requerimento", "REQUER INFORMAÇÕES SOBRE O CONTRATO.", ["fiscalizacao"]),
+            ("requerimento", "Requer a realização de Sessão Solene.", []),
+            ("mocao", "Moção de Aplausos ao Sr. Fulano.", ["homenagem"]),
+            ("mocao", "Moção de Congratulações à equipe.", ["homenagem"]),
+            ("mocao", "Moção de Pesar pelo falecimento do Sr. Fulano.", ["homenagem"]),
+            ("mocao", "Moção de Repúdio ao ato.", []),
+            ("mocao", "Moção de Apoio à greve.", []),
+            ("pdl", "CONCEDE O TÍTULO DE CIDADÃO NITEROIENSE A FULANO.", ["homenagem"]),
+            ("pdl", "Susta o Decreto Legislativo nº 1/2025, que concedeu o Título de Cidadão.", ["legislacao"]),
+            ("resolucao", "Institui a Medalha Legislativa do Mérito Esportivo.", ["homenagem"]),
+            ("resolucao", "Aprova o Orçamento da Câmara Municipal.", ["legislacao"]),
         )
+        for tipo, ementa, eixos in casos:
+            with self.subTest(ementa=ementa):
+                self.assertEqual(eixos_perfil(classificar_documento(doc(tipo, ementa))), eixos)
 
-    def test_ignora_quem_nao_e_vereador(self) -> None:
-        perfil = perfil_atuacao(self.REGISTROS, nao_vereador=["MESA DIRETORA", "COMISSÃO"])
-        self.assertNotIn(278, perfil)
-        self.assertEqual(perfil[237], self.contagem(zeladoria=2))
+    def test_aceita_documento_do_modelo_e_so_eixos_conhecidos(self) -> None:
+        for categoria in CATEGORIAS:
+            eixos = eixos_perfil({"categoria": categoria, "homenagem": categoria == "homenagem"})
+            self.assertTrue(set(eixos) <= set(EIXOS_PERFIL))
+            self.assertEqual(eixos, [categoria] if categoria in EIXOS_PERFIL else [])
+
+
+# ------------------------------------------------------- requerimentos de informação
+class TestOrgao(unittest.TestCase):
+    def test_ementas_reais(self) -> None:
+        # Ementas de data/documentos/requerimento/2026.json (números entre parênteses).
+        casos = {
+            "REQUER INFORMAÇÕES À SECRETARIA MUNICIPAL DE EDUCAÇÃO E À FUNDAÇÃO MUNICIPAL DE EDUCAÇÃO PARA FINS DE "
+            "FISCALIZAÇÃO PARLAMENTAR DE INDICADORES EDUCACIONAIS (8/2026)": "Secretaria de Educação",
+            "Requer informações ao Prefeito Municipal de Niterói, Sr. Rodrigo Neves, com cópia à Secretaria Municipal de "
+            "Educação, acerca da estrutura da rede municipal de ensino (51/2026)": "Secretaria de Educação",
+            "REQUER INFORMAÇÕES SOBRE CONTRATAÇÕES DE MATERIAL GRÁFICO PELA SECRETARIA MUNICIPAL DAS CULTURAS (61/2026)":
+                "Secretaria das Culturas",
+            "REQUER INFORMAÇÕES AO PODER EXECUTIVO, POR INTERMÉDIO DA NITTRANS, ACERCA DOS CRITÉRIOS TÉCNICOS ADOTADOS "
+            "PARA IMPLANTAÇÃO DE VAGAS DE ESTACIONAMENTO NO ENTORNO DE PONTOS DE ÔNIBUS (50/2026)": "NitTrans",
+            "REQUER INFORMAÇÕES À COMPANHIA MUNICIPAL DE LIMPEZA URBANA DE NITERÓI — CLIN ACERCA DE EVENTUAL PROCESSO DE "
+            "CONTRATAÇÃO DE NOVO PLANO DE SAÚDE (74/2026)": "Clin",
+            "REQUER INFORMAÇÕES AO PODER EXECUTIVO E À EMPRESA DE INFRAESTRUTURA E OBRAS DE NITERÓI – ION (ANTIGA EMUSA) "
+            "ACERCA DA CONTRATAÇÃO (116/2026)": "ION (antiga Emusa)",
+            "REQUER INFORMAÇÕES AO PODER EXECUTIVO MUNICIPAL SOBRE A PARTICIPAÇÃO DE SERVIDORES E AGENTES PÚBLICOS EM "
+            "AGENDA NA ORGANIZAÇÃO DAS NAÇÕES UNIDAS PARA A ALIMENTAÇÃO E A AGRICULTURA (FAO) (6/2026)": ORGAO_EXECUTIVO,
+            "REQUER INFORMAÇÕES SOBRE O SISTEMA INFORMATIZADO DE TALÃO ELETRÔNICO QUE CONSTA HOMOLOGADO PARA O MUNICÍPIO "
+            "DE NITERÓI/NITTRANS NA FORMA DA PORTARIA SENATRAN 997/2022 (84/2026)": "NitTrans",
+            "REQUER À SECRETARIA MUNICIPAL DE DEFESA CIVIL E GEOTECNIA O ENVIO DE CÓPIA INTEGRAL DO AUTO DE INTERDIÇÃO "
+            "(112/2026)": "Defesa Civil",
+            "REQUER AO GABINETE DO PREFEITO, COM CÓPIA PARA A SECONSER, EMUSA/ION E SECRETARIA MUNICIPAL DE "
+            "DESENVOLVIMENTO ECONÔMICO E REVITALIZAÇÃO DO CENTRO, A CÓPIA INTEGRAL (172/2026)":
+                "Secretaria de Conservação e Serviços Públicos",
+            "REQUER INFORMAÇÕES SOBRE A SITUAÇÃO FUNCIONAL DO SERVIDOR FULANO, OCUPANTE DO CARGO DE SUBSECRETÁRIO DA "
+            "SECRETARIA MUNICIPAL DE ORDEM PÚBLICA (108/2026)": "Secretaria de Ordem Pública",
+            # Detran citado no meio do pedido, não como destinatário: vale o nível municipal.
+            "REQUER INFORMAÇÕES SOBRE A APLICAÇÃO DO DECRETO MUNICIPAL 743/2026 QUE INSTITUIU REGIME EXCEPCIONAL PARA "
+            "REGULARIZAÇÃO DE MULTAS DE ESTACIONAMENTO ROTATIVO E OS TRÂMITES PARA O CANCELAMENTO AUTOMÁTICO DE AUTOS DE "
+            "INFRAÇÃO COM RECURSOS PENDENTES E OS PROCEDIMENTOS DE COMUNICAÇÃO E BAIXA JUNTO AO DETRAN-RJ. (122/2026)":
+                ORGAO_EXECUTIVO,
+            "REQUER INFORMAÇÕES SOBRE OS PROCEDIMENTOS DO DECRETO MUNICIPAL Nº 743/2026 E A ARTICULAÇÃO DA NITTRANS JUNTO "
+            "AO DETRAN-RJ (131/2026)": "NitTrans",
+            "REQUER INFORMAÇÕES À SECRETARIA MUNICIPAL DE MOBILIDADE URBANA ACERCA DA ADMINISTRAÇÃO DO FUNDO MUNICIPAL DE "
+            "MOBILIDADE URBANA (90/2026)": "Secretaria de Mobilidade Urbana",
+            "REQUER INFORMAÇÕES AO PODER EXECUTIVO MUNICIPAL, À SECRETARIA MUNICIPAL DE URBANISMO E MOBILIDADE (SMU) E À "
+            "EMPRESA DE INFRAESTRUTURA E OBRAS DE NITERÓI (ION) ACERCA DA EXECUÇÃO DAS OBRAS (153/2026)":
+                "Secretaria de Urbanismo e Mobilidade",
+            "REQUER INFORMAÇÕES AO PODER EXECUTIVO ACERCA DO FINANCIAMENTO DO SERVIÇO DE ATENDIMENTO MÓVEL DE URGÊNCIA – "
+            "SAMU, NO ÂMBITO DA FUNDAÇÃO MUNICIPAL DE SAÚDE DE NITERÓI. (97/2026)": "Fundação Municipal de Saúde",
+            "REQUER À PREFEITURA MUNICIPAL DE NITERÓI E À FUNDAÇÃO MUNICIPAL DE EDUCAÇÃO ESCLARECIMENTOS SOBRE A ANÁLISE "
+            "E A ATRIBUIÇÃO DE PONTUAÇÃO DE TÍTULOS (165/2026)": "Fundação Municipal de Educação",
+        }
+        for ementa, orgao in casos.items():
+            with self.subTest(ementa=ementa[:60]):
+                self.assertEqual(extrair_orgao(ementa), orgao)
+
+    def test_secretarias_normalizadas(self) -> None:
+        casos = {
+            "Requer informações ao Secretário Municipal de Saúde sobre vacinas.": "Secretaria de Saúde",
+            "Requer informações à Secretaria de Saúde de Niterói.": "Secretaria de Saúde",
+            "Requer informações à Secretaria Municipal do Meio Ambiente.": "Secretaria de Meio Ambiente",
+            "Requer informações à Secretaria Municipal de Desenvolvimento Econômico.": "Secretaria de Desenvolvimento Econômico",
+            "Requer informações à Secretaria Municipal de Desenvolvimento Regional.": ORGAO_OUTRA_SECRETARIA,
+            "Requer informações à Secretaria Municipal de Inovação.": ORGAO_OUTRA_SECRETARIA,
+            "Requer informações à Secretaria competente sobre o contrato.": ORGAO_NAO_IDENTIFICADO,
+            "Requer à Secretaria Mesa Diretora a cópia da ata.": ORGAO_NAO_IDENTIFICADO,
+            "Requer informações sobre normas da Secretaria Nacional de Trânsito.": ORGAO_NAO_IDENTIFICADO,
+            "Requer informações sobre a Secretaria Especial de Assuntos Federativos.": ORGAO_NAO_IDENTIFICADO,
+        }
+        for ementa, orgao in casos.items():
+            with self.subTest(ementa=ementa):
+                self.assertEqual(extrair_orgao(ementa), orgao)
+
+    def test_area_sem_conector_nao_vira_secretaria(self) -> None:
+        # "SR" e "E" vinham como área: "Outra secretaria municipal" (e a segunda passava à frente da Fundação).
+        self.assertEqual(extrair_orgao("Requer informações ao Secretário Municipal, Sr. Fulano de Tal, sobre o contrato."),
+                         ORGAO_NAO_IDENTIFICADO)
+        self.assertEqual(extrair_orgao("Requer informações à Secretaria Municipal e à Fundação Municipal de Saúde sobre o SAMU."),
+                         "Fundação Municipal de Saúde")
+        self.assertEqual(extrair_orgao("Requer informações à Secretaria Executiva sobre a agenda."), "Secretaria Executiva")
+
+    def test_orgao_estadual_so_como_destinatario(self) -> None:
+        casos = {
+            "Requer informações à Secretaria de Estado de Saúde sobre leitos.": ORGAO_ESTADUAL,
+            "Requer informações ao Governo do Estado sobre a CEDAE.": ORGAO_ESTADUAL,
+            "Requer, junto ao Governo do Estado, informações sobre a duplicação da RJ-104.": ORGAO_ESTADUAL,
+            "Requer informações ao DETRAN-RJ sobre as vistorias.": ORGAO_ESTADUAL,
+            # Citado em outro papel: o pedido vai ao Executivo municipal.
+            "Requer informações sobre o convênio entre o Município e o DETRAN.": ORGAO_EXECUTIVO,
+            "Requer informações sobre a Secretaria de Estado de Saúde.": ORGAO_EXECUTIVO,
+            "Requer informações à NitTrans sobre o convênio com o Governo do Estado.": "NitTrans",
+        }
+        for ementa, orgao in casos.items():
+            with self.subTest(ementa=ementa):
+                self.assertEqual(extrair_orgao(ementa), orgao)
+
+    def test_vale_o_primeiro_orgao_especifico(self) -> None:
+        self.assertEqual(extrair_orgao("Requer informações à NitTrans e à Secretaria de Obras."), "NitTrans")
+        self.assertEqual(extrair_orgao("Requer informações à Secretaria de Obras e à NitTrans."), "Secretaria de Obras")
+        self.assertEqual(extrair_orgao("Requer informações ao Prefeito sobre o contrato com a concessionária Águas de Niterói."),
+                         "Águas de Niterói (concessionária)")
+        self.assertEqual(extrair_orgao("Requer informações sobre a concessionária de ônibus."), ORGAO_CONCESSIONARIA)
+        self.assertEqual(extrair_orgao("Requer informações ao Prefeito sobre a concessionária de ônibus."), ORGAO_CONCESSIONARIA)
+        self.assertEqual(extrair_orgao("Requer informações à Prefeitura sobre a obra."), ORGAO_EXECUTIVO)
+
+    def test_assunto_so_quando_a_ementa_nao_traz_orgao_especifico(self) -> None:
+        self.assertEqual(extrair_orgao("Requer informações sobre o Hospital Fulano.", "INFORMAÇÕES"), ORGAO_NAO_IDENTIFICADO)
+        self.assertEqual(extrair_orgao("Requer informações sobre vagas de estacionamento.", "NITTRANS"), "NitTrans")
+        self.assertEqual(extrair_orgao("Requer informações ao Poder Executivo sobre vagas.", "NITTRANS"), "NitTrans")
+        self.assertEqual(extrair_orgao("Requer informações à Secretaria de Obras.", "NITTRANS"), "Secretaria de Obras")
+
+    def test_sem_falsos_positivos(self) -> None:
+        for ementa in (
+            "Requer informações sobre a clínica da família do Fonseca.",
+            "Requer informações sobre a ampla divulgação do concurso.",
+            "Requer informações à SMS sobre vacinas.",  # sigla ambígua: não reconhecida
+            "",
+            None,
+        ):
+            with self.subTest(ementa=ementa):
+                self.assertEqual(extrair_orgao(ementa), ORGAO_NAO_IDENTIFICADO)
+
+
+class TestEstadoPedido(unittest.TestCase):
+    def test_estados(self) -> None:
+        casos = (
+            (True, "ARQUIVADO", "respondido"),
+            (True, "RETIRADO", "respondido"),
+            (False, "RETIRADO", "retirado"),
+            (False, "Arquivado", "encerrado"),
+            (False, "REJEITADO", "encerrado"),
+            (False, "Prejudicado", "encerrado"),
+            (False, "ENCAMINHADO À PREFEITURA", "aguardando"),
+            (False, "RECEBIDO PELA SMD", "aguardando"),
+            (False, "", "aguardando"),
+            (False, None, "aguardando"),
+        )
+        for respondido, situacao, esperado in casos:
+            with self.subTest(respondido=respondido, situacao=situacao):
+                self.assertEqual(estado_pedido(respondido, situacao), esperado)
+                self.assertIn(esperado, ESTADOS_PEDIDO)
 
 
 if __name__ == "__main__":

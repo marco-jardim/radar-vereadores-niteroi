@@ -390,10 +390,12 @@ class TestMontarModelo(unittest.TestCase):
         cls.pessoas = cls.modelo["pessoas"]
 
     def test_estrutura(self):
-        self.assertEqual(set(self.modelo), {"legislaturas", "pessoas", "projetos", "meta", "curadoria", "cfg", "documentos", "atividade"})
+        self.assertEqual(set(self.modelo), {"legislaturas", "pessoas", "projetos", "meta", "curadoria", "cfg", "documentos", "atividade",
+                                            "anos_coleta"})
         self.assertEqual(len(self.modelo["projetos"]), 5)
         self.assertEqual(self.modelo["documentos"], [])  # sem data/documentos, nenhum documento
         self.assertEqual(self.modelo["atividade"], {})
+        self.assertEqual(self.modelo["anos_coleta"], {"todos": [], "completos": [], "parciais": []})  # sem documentos, sem anos
         self.assertEqual(self.modelo["meta"], {"coleta": {"em": "2026-10-19T09:17:00+00:00"}})
         self.assertIs(self.modelo["curadoria"], CURADORIA)
 

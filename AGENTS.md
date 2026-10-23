@@ -63,6 +63,17 @@ a partir da tramitação do detalhe, `respondido_em` e `dias_ate_resposta` dos r
 (número e data) de PDLs e resoluções; categoria, bairro e `respondido` são calculados na geração do site.
 `respondido_em` é a data do passo "Respondido" da tramitação, não necessariamente a data da resposta do Executivo.
 
+As regras das métricas dos documentos também ficam só em `coletor/regras_documentos.py`; `coletor/site/modelo.py`
+só agrega. `eixos_perfil` é a única regra do perfil de atuação. Homenagem é a categoria `homenagem` (moções de
+aplauso, inclusive congratulação, e de pesar; títulos e honrarias em PDLs e resoluções; repúdio e apoio não contam), e
+o peso é a contagem e a % da produção do mesmo período (documentos do autor + PLs como autor principal, só em anos de
+coleta completa, com os cinco tipos; `modelo.anos_coleta`, calculado uma vez em `montar_modelo`). `extrair_orgao` dá o
+primeiro órgão específico citado na ementa do requerimento de informação (senão o `assunto`; órgão estadual só como
+destinatário; depois "Prefeito ou Poder Executivo"; senão "Não identificado"): o destinatário da tramitação é
+quase sempre a Secretaria Municipal de Governo, que repassa o pedido. `estado_pedido` separa respondido, aguardando,
+encerrado e retirado; a taxa de resposta exclui os retirados e a mediana de `dias_ate_resposta` usa só os respondidos
+com data (que exige o detalhe baixado), exibida com essa base.
+
 ## Comandos
 
 Execute na raiz. Para verificar um ano, substitua `2026` pelo ano desejado:
@@ -158,6 +169,9 @@ Com `GITHUB_ACTIONS` definida, `coletor.validar` emite os problemas como `::erro
 - `atividades.html` lista os documentos com filtros na URL; cada página de vereador tem a seção "Atividade".
   "Ver no SISCAM" abre um `<dialog>` com iframe em sandbox, aceito só para
   `DetalhesDocumentos.aspx?IdDocumento=<n>`; o link "abrir no SISCAM" fica sempre visível como alternativa.
+- As métricas dos documentos (homenagens em `ruido.html`; requerimentos de informação por vereador e por órgão e
+  indicações nos 52 bairros em `atividades.html`; as três na seção "Atividade") são tabelas e gráficos gerados no
+  servidor, só com agregados: não há colunas novas nos JSONs do navegador.
 
 ## CI/CD
 
