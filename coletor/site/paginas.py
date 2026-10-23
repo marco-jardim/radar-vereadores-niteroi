@@ -18,6 +18,8 @@ from coletor.site.modelo import (
     DESC_CATEGORIA_DOC, DESC_SINAL, DESFECHO_GRUPO, NOME_ALERTA, NOME_CATEGORIA, NOME_CATEGORIA_DOC, NOME_DESFECHO, NOME_EIXO,
     NOME_IMPACTO, NOME_SINAL, NOME_SUBCATEGORIA_DOC, NOME_TEMA, NOME_TIPO_DOC, TIPOS_DOC, com_efeito, mediana_legislatura,
     sem_efeito, situacao_lei, url_lei,
+    anos_documentos, coleta_do_modelo, documentos_por_legislatura, homenagens_do_autor, homenagens_por_ano,
+    indicacoes_por_bairro, menos_citados, ranking_orgaos, resumo_bairros, resumo_informacao,
 )
 
 REPO = "https://github.com/marco-jardim/radar-vereadores-niteroi"
@@ -428,6 +430,142 @@ LEGENDA_BARRA = """<ul class="leg-graf" aria-label="Legenda das barras">
 </ul>"""
 
 
+# ------------------------------------------------- tabelas de métricas dos documentos
+# Tabelas geradas no servidor (sem novas colunas nos JSONs do navegador). Os textos repetem as definições da
+# metodologia; as regras estão em coletor/regras_documentos.py e as contagens em coletor/site/modelo.py.
+EXPLICA_HOMENAGENS = (
+    "Homenagem: moção de aplauso (inclusive congratulação e louvor) ou de pesar, título de cidadão e outras honrarias, "
+    "como medalhas e diplomas, em PDLs e resoluções. Moções de repúdio e de apoio não contam. O peso divide as homenagens "
+    "pela produção do mesmo período: todos os documentos em que o vereador aparece como autor mais os projetos de lei "
+    "como autor principal. Só entram anos com coleta completa (os cinco tipos de documento coletados). Contar documentos "
+    "não mede qualidade nem resultado.")
+EXPLICA_INFORMACAO = (
+    "Requerimentos de informação pedem dados ou cópias de processos e contratos. Por vereador, contam também os pedidos "
+    "assinados em conjunto (coautoria). Respondido: o SISCAM registra resposta na "
+    "situação ou na tramitação. Os dias até a resposta vão até a data do passo “Respondido” da tramitação, quando a Câmara "
+    "registrou a resposta, que não é necessariamente o dia em que o Executivo respondeu, e só existem para os respondidos "
+    "cuja página de detalhe, com a tramitação completa, já foi baixada: a mediana usa só esses (a base aparece ao lado). "
+    "A taxa de resposta exclui os pedidos retirados pelo autor. Aguardando: sem resposta registrada e sem arquivamento; "
+    "pedidos recentes ainda podem ser respondidos. Contar pedidos não mede a qualidade nem a relevância deles.")
+EXPLICA_ORGAOS = (
+    "Órgão: o primeiro órgão específico citado na ementa (secretaria, fundação, empresa municipal ou concessionária), "
+    "mesmo como intermediário ou cópia; órgão estadual, só quando é o destinatário. Sem órgão na ementa, vale o assunto "
+    "da listagem do SISCAM. Sem órgão específico, “Prefeito ou Poder Executivo”; sem nenhum, “Não identificado”. Os "
+    "nomes de secretarias mudam entre gestões e aparecem como citados. A tramitação não indica o órgão: os pedidos "
+    "seguem para a Secretaria Municipal de Governo, que os repassa.")
+EXPLICA_BAIRROS = (
+    "Bairro: o último dos 52 bairros oficiais citado na ementa da indicação; sub-bairros, comunidades e nomes de rua não "
+    "são reconhecidos. Por vereador, contam também as indicações assinadas em conjunto (coautoria). Concentração: parte "
+    "das indicações com bairro que vai para o bairro mais citado. Sem dado de "
+    "população, não há taxa por habitante. Contar indicações não mede se o serviço foi feito.")
+CAB_INFORMACAO = ["Pedidos", "Respondidos", "Taxa de resposta", "Mediana de dias até “Respondido”",
+                  "Base da mediana (respondidos com data)", "Aguardando", "Encerrados sem resposta", "Retirados"]
+CAB_BAIRROS = ["Indicações", "Com bairro", "Bairros distintos", "Mais citado (concentração)", "5 bairros mais citados"]
+TEXTO_BAIRROS = (4, 5)  # colunas de texto da tabela de bairros (índices na linha, com o cabeçalho da linha em 0)
+
+
+def pct_txt(v: int | None) -> str:
+    return "—" if v is None else f"{v}%"
+
+
+def _celula(v) -> str:
+    """Número formatado (None vira "—") ou texto já escapado, que pode trazer um link."""
+    if v is None:
+        return "—"
+    if isinstance(v, (int, float)) and not isinstance(v, bool):
+        return G._fmt(v)
+    return str(v)
+
+
+def tabela_resumo(legenda: str, cabecalho: list[str], linhas: list[list], texto: tuple[int, ...] = ()) -> str:
+    """Tabela com legenda, cabeçalhos de coluna e, na primeira célula de cada linha, cabeçalho de linha.
+
+    texto: índices das colunas de texto (classe "txt", alinhadas à esquerda). O contêiner rola na horizontal e
+    recebe foco pelo teclado (região rotulada pela legenda).
+    """
+    cls = lambda i: ' class="txt"' if i in texto else ""
+    th = "".join(f'<th scope="col"{cls(i)}>{esc(c)}</th>' for i, c in enumerate(cabecalho))
+    corpo = "".join(f'<tr><th scope="row">{_celula(l[0])}</th>'
+                    + "".join(f"<td{cls(i)}>{_celula(c)}</td>" for i, c in enumerate(l[1:], start=1)) + "</tr>"
+                    for l in linhas)
+    return (f'<div class="tabela-graf tabela-resumo" role="region" tabindex="0" aria-label="{esc(legenda)}">'
+            f'<table><caption>{esc(legenda)}</caption><thead><tr>{th}</tr></thead><tbody>{corpo}</tbody></table></div>')
+
+
+def nome_autor(modelo: dict, s: str) -> str:
+    """Nome de exibição de um autor vereador: o da página dele ou, sem página, o dos documentos."""
+    pessoa = modelo["pessoas"].get(s)
+    if pessoa:
+        return pessoa["nome"]
+    docs = ((modelo.get("atividade") or {}).get(s) or {}).get("documentos") or []
+    return next((a["exibicao"] for d in docs for a in d["autores"] if a["slug"] == s), s)
+
+
+def link_autor(modelo: dict, s: str, prefixo: str) -> str:
+    nome = esc(nome_autor(modelo, s))
+    return f'<a href="{prefixo}vereadores/{esc(s)}.html">{nome}</a>' if s in modelo["pessoas"] else nome
+
+
+def celulas_informacao(r: dict) -> list:
+    """Células de CAB_INFORMACAO para um resumo_informacao."""
+    return [r["pedidos"], r["respondidos"], pct_txt(r["taxa"]), r["mediana_dias"], r["com_dias"], r["aguardando"],
+            r["encerrados"], r["retirados"]]
+
+
+def celulas_bairros(r: dict) -> list:
+    """Células de CAB_BAIRROS para um resumo_bairros."""
+    return [r["indicacoes"], r["com_bairro"], r["distintos"], mais_citado_txt(r), top_bairros_txt(r)]
+
+
+def top_bairros_txt(r: dict) -> str:
+    return esc(", ".join(f"{b} ({n})" for b, n in r["top"])) or "—"
+
+
+def mais_citado_txt(r: dict) -> str:
+    """Bairro mais citado e a concentração; com empate no topo, "empate: A, B (n% cada)"."""
+    nomes = r.get("mais_citados") or [b for b, _ in r["top"][:1]]
+    if not nomes:
+        return "—"
+    if len(nomes) == 1:
+        return esc(f"{nomes[0]} ({r['concentracao']}%)")
+    lista = ", ".join(nomes[:3]) + (f" e mais {len(nomes) - 3}" if len(nomes) > 3 else "")
+    return esc(f"empate: {lista} ({r['concentracao']}% cada)")
+
+
+def base_mediana_txt(r: dict) -> str:
+    """Nota da mediana com a sua base: os respondidos que têm data no detalhe."""
+    return f"mediana entre {plural(r['com_dias'], 'respondido com data', 'respondidos com data')}"
+
+
+def pendentes_txt(r: dict) -> str:
+    """Frase com os requerimentos de informação ainda sem detalhe (sem tramitação, não têm dias até a resposta)."""
+    n = r["pendentes"]
+    if not n:
+        return "Nenhum requerimento de informação está com o detalhe pendente."
+    return f"{plural(n, 'requerimento de informação ainda está', 'requerimentos de informação ainda estão')} com o detalhe pendente."
+
+
+def periodo_txt(anos) -> str:
+    anos = sorted(anos)
+    if not anos:
+        return ""
+    return str(anos[0]) if len(anos) == 1 else f"{anos[0]} a {anos[-1]}"
+
+
+def periodo_docs(modelo: dict) -> str:
+    """Período de todos os anos com documentos (os resumos de atividades.html usam todos)."""
+    return periodo_txt(coleta_do_modelo(modelo)["todos"])
+
+
+def nota_parciais(modelo: dict) -> str:
+    """Nota sobre os anos com coleta parcial, que ficam fora do peso das homenagens; vazia se não houver."""
+    parciais = coleta_do_modelo(modelo)["parciais"]
+    if not parciais:
+        return ""
+    return (f'<p class="nota">Anos com coleta parcial (falta algum dos cinco tipos de documento), fora destas contas: '
+            f'{esc(", ".join(str(a) for a in parciais))}.</p>')
+
+
 # ------------------------------------------------------------------------- início
 PLACAR_DOCS = (("indicacao", "indicacoes", "indicação", "indicações"), ("mocao", "mocoes", "moção", "moções"),
                ("requerimento", "requerimentos", "requerimento", "requerimentos"))
@@ -762,8 +900,15 @@ def gerar_atividades(modelo: dict, manifesto: dict | None = None) -> str:
     op_bairros = opcoes((b, f"{b} ({milhar(n)})") for b, n in sorted(bairros.items(), key=lambda bn: (_chave_nome(bn[0]), bn[0])))
     op_sit = opcoes((s, f"{situacao_legivel(s)} ({milhar(n)})") for s, n in sorted(situacoes.items(), key=lambda sn: (-sn[1], sn[0])))
     n_inicial = por_ano[ano_padrao]
+    resumos = secao_resumos_atividades(modelo)
+    destinos = [(i, t) for i, t in (("pedidos-informacao", "Requerimentos de informação"), ("bairros", "Bairros das indicações"))
+                if f'id="{i}"' in resumos]
+    indice = ""
+    if destinos:
+        indice = ('\n<nav class="indice" aria-label="Nesta página"><a href="#resultados">Lista de documentos</a>'
+                  + "".join(f'<a href="#{i}">{esc(t)}</a>' for i, t in destinos) + "</nav>")
 
-    corpo = f"""{abertura}
+    corpo = f"""{abertura}{indice}
 <form class="filtros" role="search" onsubmit="return false" data-modo="atividades" data-ano-padrao="{ano_padrao}">
  <div class="linha-busca"><label class="busca-q">Buscar <input type="search" id="q" placeholder="rua, bairro, número, assunto, vereador…" autocomplete="off"></label>
   <label>Ordenar <select id="f-ordem"><option value="recente">Mais recentes</option><option value="antigo">Mais antigos</option></select></label></div>
@@ -786,8 +931,94 @@ def gerar_atividades(modelo: dict, manifesto: dict | None = None) -> str:
 <p id="anuncio" class="so-leitor" aria-live="polite"></p>
 <ol id="resultados" class="projetos documentos"></ol>
 <button type="button" id="mais" class="mais" hidden>Mostrar mais</button>
-<noscript><p class="vazio">A lista de documentos precisa de JavaScript. Os documentos mais recentes de cada vereador também aparecem na página dele.</p></noscript>"""
+<noscript><p class="vazio">A lista de documentos precisa de JavaScript. Os documentos mais recentes de cada vereador também aparecem na página dele.</p></noscript>
+{resumos}"""
     return pagina(titulo, corpo, "atividades.html", descricao=descricao, manifesto=manifesto, dialogo=True)
+
+
+def secao_resumos_atividades(modelo: dict) -> str:
+    """Resumos de atividades.html gerados no servidor, sobre todos os anos coletados e sem os filtros da lista.
+
+    Requerimentos de informação por vereador (por legislatura) e por órgão; bairros das indicações nos 52 bairros
+    oficiais e por vereador. Só agregados: o volume não cresce com o número de documentos.
+    """
+    docs = modelo.get("documentos") or []
+    if not docs:
+        return ""
+    por_leg = documentos_por_legislatura(modelo)
+    legs = [leg["id"] for leg in reversed(modelo["legislaturas"]) if leg["id"] in por_leg]
+    periodo = periodo_docs(modelo)
+
+    def ordem_nome(s: str) -> str:
+        return _chave_nome(nome_autor(modelo, s))
+
+    blocos_info, blocos_bairro = [], []
+    for leg in legs:
+        info = [(s, resumo_informacao(ds)) for s, ds in por_leg[leg].items()]
+        info = sorted(((s, r) for s, r in info if r["pedidos"]), key=lambda sr: (-sr[1]["pedidos"], ordem_nome(sr[0])))
+        if info:
+            tab = tabela_resumo(f"Requerimentos de informação por vereador, legislatura {leg}", ["Vereador", *CAB_INFORMACAO],
+                                [[link_autor(modelo, s, ""), *celulas_informacao(r)] for s, r in info])
+            blocos_info.append(f'<details class="bloco"{" open" if not blocos_info else ""}><summary>Legislatura {esc(leg)} '
+                               f'({plural(len(info), "vereador", "vereadores")})</summary>{tab}</details>')
+        bairros = [(s, resumo_bairros(ds)) for s, ds in por_leg[leg].items()]
+        bairros = sorted(((s, r) for s, r in bairros if r["indicacoes"]), key=lambda sr: (-sr[1]["indicacoes"], ordem_nome(sr[0])))
+        if bairros:
+            tab = tabela_resumo(f"Bairros das indicações por vereador, legislatura {leg}", ["Vereador", *CAB_BAIRROS],
+                                [[link_autor(modelo, s, ""), *celulas_bairros(r)] for s, r in bairros], texto=TEXTO_BAIRROS)
+            blocos_bairro.append(f'<details class="bloco"{" open" if not blocos_bairro else ""}><summary>Legislatura {esc(leg)} '
+                                 f'({plural(len(bairros), "vereador", "vereadores")})</summary>{tab}</details>')
+
+    geral = resumo_informacao(docs)
+    orgaos = ranking_orgaos(docs)
+    secao_info = ""
+    if geral["pedidos"]:
+        tab_orgaos = tabela_resumo(f"Requerimentos de informação por órgão citado, {periodo}", ["Órgão", *CAB_INFORMACAO],
+                                   [[esc(o["orgao"]), *celulas_informacao(o)] for o in orgaos])
+        secao_info = f"""<section id="pedidos-informacao" aria-labelledby="t-pedidos-informacao">
+ <h2 id="t-pedidos-informacao" class="h-secao">Requerimentos de informação</h2>
+ <p class="explica">{esc(EXPLICA_INFORMACAO)} {esc(pendentes_txt(geral))}</p>
+ <div class="tiles">
+  {tile(milhar(geral['pedidos']), "requerimentos de informação", periodo)}
+  {tile(pct_txt(geral['taxa']), "têm resposta registrada", f"{milhar(geral['respondidos'])} respondidos", "tile-efeito")}
+  {tile(f"{G._fmt(geral['mediana_dias'])} dias" if geral['mediana_dias'] is not None else "—", "é a mediana até o passo “Respondido”", base_mediana_txt(geral))}
+  {tile(milhar(geral['aguardando']), "aguardam resposta", "sem resposta registrada e sem arquivamento")}
+ </div>
+ {''.join(blocos_info)}
+ <h3>Por órgão citado</h3>
+ <p class="explica">{esc(EXPLICA_ORGAOS)}</p>
+ {tab_orgaos}
+</section>"""
+
+    por_bairro = indicacoes_por_bairro(docs)
+    rb = resumo_bairros(docs)
+    secao_bairros = ""
+    if rb["indicacoes"]:
+        itens = [{"rotulo": b["bairro"], "v": b["indicacoes"]} for b in sorted(por_bairro, key=lambda b: (-b["indicacoes"], _chave_nome(b["bairro"])))]
+        graf = G.barras_horizontais(f"Indicações por bairro, {periodo}",
+                                    "Os 52 bairros oficiais de Niterói, inclusive os que não aparecem em nenhuma indicação.",
+                                    itens, [("Indicações", "c-t-indicacao", "v")], max_itens=len(itens))
+        menos = menos_citados(por_bairro)
+        sem_nenhuma = sum(1 for b in por_bairro if not b["indicacoes"])
+        secao_bairros = f"""<section id="bairros" aria-labelledby="t-bairros">
+ <h2 id="t-bairros" class="h-secao">Bairros das indicações</h2>
+ <p class="explica">{esc(EXPLICA_BAIRROS)}</p>
+ <div class="tiles">
+  {tile(milhar(rb['indicacoes']), "indicações", periodo)}
+  {tile(pct_txt(rb['pct_sem_bairro']), "sem bairro identificado", f"{milhar(rb['sem_bairro'])} indicações", "tile-sem")}
+  {tile(rb['distintos'], "dos 52 bairros aparecem", plural(sem_nenhuma, "bairro sem indicação", "bairros sem indicação"))}
+ </div>
+ <p class="nota">Menos citados: {esc(", ".join(f"{b['bairro']} ({b['indicacoes']})" for b in menos))}.</p>
+ {graf}
+ {''.join(blocos_bairro)}
+</section>"""
+    if not (secao_info or secao_bairros):
+        return ""
+    return f"""<section class="resumos-atividades" aria-label="Resumos de todos os anos coletados">
+<p class="explica">Os resumos abaixo cobrem todos os documentos coletados ({esc(periodo)}) e não mudam com os filtros da lista. <a href="metodologia.html#metricas-documentos">Como contamos</a>.</p>
+{secao_info}
+{secao_bairros}
+</section>"""
 
 
 # --------------------------------------------------------------------- ruído
@@ -830,6 +1061,9 @@ def gerar_ruido(modelo: dict) -> str:
     graf_tipo = G.barras_horizontais("Leis simbólicas de vereadores desde 2021, por tipo", "",
                                      [{"rotulo": k, "v": v} for k, v in por_tipo.most_common()], [("Leis", "c-sem-efeito", "v")])
 
+    homenagens = secao_homenagens(modelo)
+    link_homenagens = '<a href="#homenagens">Homenagens</a>' if homenagens else ""
+
     def lista(ps: list[dict], vazio: str, consulta: str) -> str:
         itens = "".join(item_projeto(p, "") for p in ps[:LIMITE_ITENS_RUIDO]) or f'<li class="vazio">{esc(vazio)}</li>'
         return (f'<ol class="projetos">{itens}</ol><p>Exibindo {min(len(ps), LIMITE_ITENS_RUIDO)} de {len(ps)}. '
@@ -845,13 +1079,75 @@ def gerar_ruido(modelo: dict) -> str:
  {tile(len(rep), "projetos repetem um anterior", "ementa quase idêntica", "")}
  {tile(sum(1 for p in projs if p['polemico']), "projetos com alerta de polêmica", f"{len(curados)} revisados por curadoria", "tile-alerta")}
 </div>
-<nav class="indice" aria-label="Nesta página"><a href="#por-vereador">Por vereador</a><a href="#polemicas">Polêmicas revisadas</a><a href="#ia">Marcadas por IA</a><a href="#autorizativas">Autorizativas</a><a href="#repetidos">Repetidos</a></nav>
-<section id="por-vereador">{graf}{graf_tipo}</section>
+<nav class="indice" aria-label="Nesta página"><a href="#por-vereador">Por vereador</a>{link_homenagens}<a href="#polemicas">Polêmicas revisadas</a><a href="#ia">Marcadas por IA</a><a href="#autorizativas">Autorizativas</a><a href="#repetidos">Repetidos</a></nav>
+<section id="por-vereador">{graf}{graf_tipo}</section>{homenagens}
 <section id="polemicas"><h2 class="h-secao">Polêmicas revisadas por curadoria ({len(curados)})</h2><p class="explica">Cada item tem fonte pública em <a href="{REPO}/blob/main/config/curadoria.json">config/curadoria.json</a>.</p>{lista(curados, "Nenhum projeto revisado.", "sinal=curadoria")}</section>
 <section id="ia"><h2 class="h-secao">Marcadas por IA ({len(ia)})</h2><p class="explica">Alertas sugeridos pela IA a partir da ementa, com confiança mínima de {int(CONFIANCA_MINIMA * 100)}%. Podem conter erros; cada um tem link para contestar.</p>{lista(ia, "Nenhum projeto marcado por IA ainda.", "sinal=alerta_ia")}</section>
 <section id="autorizativas"><h2 class="h-secao">Leis autorizativas aprovadas ({len(autoriz_leis)})</h2><p class="explica">{esc(DESC_SINAL['autorizativa'])}</p>{lista(autoriz_leis, "Nenhuma.", "origem=vereador&desfecho=lei&sinal=autorizativa")}</section>
 <section id="repetidos"><h2 class="h-secao">Projetos que repetem outro ({len(rep)})</h2><p class="explica">{esc(DESC_SINAL['repete_projeto'])} Reapresentar um projeto arquivado é legítimo; o sinal serve para ver o quanto da produção é reaproveitada.</p>{lista(sorted(rep, key=lambda p: p['data'] or '', reverse=True), "Nenhum.", "origem=vereador&sinal=repete_projeto")}</section>"""
     return pagina("Sem efeito e polêmicas · Radar dos Vereadores de Niterói", corpo, "ruido.html")
+
+
+def secao_homenagens(modelo: dict) -> str:
+    """Homenagens em documentos: evolução por ano na Câmara e, por legislatura, contagem e peso de cada vereador.
+
+    Vazia sem documentos coletados. As tabelas por vereador agregam; o tamanho não cresce com os documentos.
+    """
+    docs = modelo.get("documentos") or []
+    if not docs:
+        return ""
+    anos = anos_documentos(modelo)
+    if not anos:
+        return f"""
+<section id="homenagens" aria-labelledby="t-homenagens">
+ <h2 id="t-homenagens" class="h-secao">Homenagens em moções, PDLs e resoluções</h2>
+ <p class="vazio">Sem dados: nenhum ano tem os cinco tipos de documento coletados, e o peso das homenagens só é calculado em anos de coleta completa.</p>
+ {nota_parciais(modelo)}
+</section>"""
+    periodo = periodo_txt(anos)
+    por_ano = homenagens_por_ano(docs, modelo["projetos"], anos)
+    rotulos = [str(l["ano"]) for l in por_ano]
+    tipos = [t for t in TIPOS_DOC if any(l["por_tipo"][t] for l in por_ano)]
+    graf = ""
+    if tipos:
+        graf = G.colunas_empilhadas(
+            "Homenagens por ano e tipo de documento",
+            "Moções de aplauso e de pesar, títulos de cidadão e honrarias em PDLs e resoluções, de qualquer autor, pelo ano do número.",
+            rotulos, [(NOME_TIPO_DOC[t][1], f"c-t-{t}", [l["por_tipo"][t] for l in por_ano]) for t in tipos], altura=220)
+    tab_anos = tabela_resumo(
+        "Peso das homenagens na produção total da Câmara, por ano",
+        ["Ano", "Homenagens", "Documentos", "Projetos de lei", "% da produção"],
+        [[str(l["ano"]), l["homenagens"], l["documentos"], l["projetos"], pct_txt(l["pct"])] for l in por_ano])
+    slugs = set(modelo.get("atividade") or {}) | set(modelo["pessoas"])
+    por_autor = {s: homenagens_do_autor(modelo, s, anos)["por_leg"] for s in slugs}
+    blocos = []
+    for leg in reversed(modelo["legislaturas"]):
+        linhas = [(s, pl[leg["id"]]) for s, pl in por_autor.items() if leg["id"] in pl and pl[leg["id"]]["producao"]]
+        if not linhas:
+            continue
+        linhas.sort(key=lambda sr: (-sr[1]["homenagens"], -(sr[1]["pct"] or 0), _chave_nome(nome_autor(modelo, sr[0]))))
+        tab = tabela_resumo(f"Homenagens por vereador, legislatura {leg['id']}",
+                            ["Vereador", "Homenagens", "Documentos", "Projetos de lei (autor principal)", "% da produção"],
+                            [[link_autor(modelo, s, ""), r["homenagens"], r["documentos"], r["projetos"], pct_txt(r["pct"])]
+                             for s, r in linhas])
+        blocos.append(f'<details class="bloco"{" open" if not blocos else ""}><summary>Legislatura {esc(leg["id"])} '
+                      f'({plural(len(linhas), "vereador", "vereadores")})</summary>{tab}</details>')
+    total = sum(l["homenagens"] for l in por_ano)
+    producao = sum(l["producao"] for l in por_ano)
+    return f"""
+<section id="homenagens" aria-labelledby="t-homenagens">
+ <h2 id="t-homenagens" class="h-secao">Homenagens em moções, PDLs e resoluções ({milhar(total)})</h2>
+ <p class="explica">{esc(EXPLICA_HOMENAGENS)} Na Câmara, a produção total soma documentos e projetos de lei de qualquer autor. Período: {esc(periodo)}. <a href="metodologia.html#metricas-documentos">Como contamos</a>.</p>
+ {nota_parciais(modelo)}
+ <div class="tiles">
+  {tile(milhar(total), "homenagens em documentos", periodo, "tile-sem")}
+  {tile(pct_txt(round(100 * total / producao) if producao else None), "da produção total da Câmara", "documentos e projetos de lei de qualquer autor")}
+ </div>
+ {graf}
+ {tab_anos}
+ <h3>Por vereador</h3>
+ {''.join(blocos) or '<p class="vazio">Nenhum vereador com documentos ou projetos no período.</p>'}
+</section>"""
 
 
 # ------------------------------------------------------------------- análises
@@ -1073,6 +1369,7 @@ def secao_atividade(modelo: dict, pessoa: dict) -> str:
                 ("Respondidos", "c-efeito", [resp.get(a, 0) for a in anos_i]),
                 ("Sem resposta registrada", "c-sem-exito", [sem_resp.get(a, 0) for a in anos_i]),
             ], altura=200)
+    metricas = metricas_atividade(modelo, pessoa)
     recentes = "".join(item_documento(d, "../") for d in docs[:10])
     return f"""
 <section class="mandato atividade" aria-labelledby="t-atividade">
@@ -1080,10 +1377,67 @@ def secao_atividade(modelo: dict, pessoa: dict) -> str:
  <div class="tiles">{tiles}</div>
  <div class="graficos duas">{graf_tipos}{graf_perfil}</div>
  {graf_info}
+ {metricas}
  <h3>Documentos mais recentes</h3>
  <ol class="projetos documentos">{recentes}</ol>
  <p><a href="../atividades.html?autor={esc(pessoa['slug'])}">{'Ver o documento' if len(docs) == 1 else f'Ver todos os {milhar(len(docs))} documentos'} de {esc(pessoa['nome'])} em Atividades</a></p>
 </section>"""
+
+
+def metricas_atividade(modelo: dict, pessoa: dict) -> str:
+    """Homenagens (contagem e peso), requerimentos de informação e bairros das indicações da pessoa, em tabelas.
+
+    Mesmas definições e funções de ruido.html e atividades.html, restritas aos documentos da pessoa.
+    """
+    s = pessoa["slug"]
+    docs = (pessoa.get("atividade") or {}).get("documentos") or []
+    ordem_legs = [leg["id"] for leg in reversed(modelo["legislaturas"])]
+    por_leg: dict[str, list[dict]] = defaultdict(list)
+    for d in docs:
+        if d["legislatura"]:
+            por_leg[d["legislatura"]].append(d)
+    blocos = []
+
+    hom = homenagens_do_autor(modelo, s)
+    legs_h = [leg for leg in ordem_legs if leg in hom["por_leg"] and hom["por_leg"][leg]["producao"]]
+    if legs_h:
+        colunas = ["Homenagens", "Documentos", "Projetos de lei (autor principal)", "% da produção"]
+        celulas = lambda r: [r["homenagens"], r["documentos"], r["projetos"], pct_txt(r["pct"])]
+        tab_leg = tabela_resumo("Homenagens por legislatura", ["Legislatura", *colunas],
+                                [[esc(leg), *celulas(hom["por_leg"][leg])] for leg in legs_h])
+        tab_ano = tabela_resumo("Homenagens por ano", ["Ano", *colunas],
+                                [[str(a), *celulas(r)] for a, r in sorted(hom["por_ano"].items(), reverse=True) if r["producao"]])
+        recente = hom["por_leg"][legs_h[0]]
+        tiles = (tile(milhar(recente["homenagens"]), f"homenagens na legislatura {legs_h[0]}", "moções de aplauso e pesar, títulos e honrarias", "tile-sem")
+                 + tile(pct_txt(recente["pct"]), "da produção são homenagens",
+                        f"de {plural(recente['producao'], 'documento ou projeto', 'documentos e projetos')}"))
+        blocos.append(f"""<h3 id="homenagens">Homenagens</h3>
+ <p class="explica">{esc(EXPLICA_HOMENAGENS)}</p>
+ {nota_parciais(modelo)}
+ <div class="tiles">{tiles}</div>
+ {tab_leg}{tab_ano}""")
+
+    info = [(leg, resumo_informacao(por_leg[leg])) for leg in ordem_legs if leg in por_leg]
+    info = [(leg, r) for leg, r in info if r["pedidos"]]
+    if info:
+        tab = tabela_resumo("Requerimentos de informação por legislatura", ["Legislatura", *CAB_INFORMACAO],
+                            [[esc(leg), *celulas_informacao(r)] for leg, r in info])
+        orgaos = ranking_orgaos(docs)[:5]
+        tab_org = tabela_resumo("Órgãos mais citados nos requerimentos de informação", ["Órgão", "Pedidos", "Respondidos", "Taxa de resposta"],
+                                [[esc(o["orgao"]), o["pedidos"], o["respondidos"], pct_txt(o["taxa"])] for o in orgaos])
+        blocos.append(f"""<h3 id="pedidos-informacao">Requerimentos de informação</h3>
+ <p class="explica">{esc(EXPLICA_INFORMACAO)} {esc(EXPLICA_ORGAOS)}</p>
+ {tab}{tab_org}""")
+
+    bairros = [(leg, resumo_bairros(por_leg[leg])) for leg in ordem_legs if leg in por_leg]
+    bairros = [(leg, r) for leg, r in bairros if r["indicacoes"]]
+    if bairros:
+        tab = tabela_resumo("Bairros das indicações por legislatura", ["Legislatura", *CAB_BAIRROS],
+                            [[esc(leg), *celulas_bairros(r)] for leg, r in bairros], texto=TEXTO_BAIRROS)
+        blocos.append(f"""<h3 id="bairros">Bairros das indicações</h3>
+ <p class="explica">{esc(EXPLICA_BAIRROS)}</p>
+ {tab}""")
+    return "\n ".join(blocos)
 
 
 # -------------------------------------------------------------------- metodologia
@@ -1164,11 +1518,19 @@ def gerar_metodologia(modelo: dict) -> str:
 <ul>
  <li>A listagem do SISCAM traz número, data, ementa, situação, autores e o último passo da tramitação. <b>Indicações e moções são coletadas só pela listagem</b>: a autoria aparece na ordem do SISCAM, sem separar autor de coautor, e por isso o site não destaca autor principal nesses documentos.</li>
  <li><b>Requerimentos, PDLs e resoluções</b>, e documentos de qualquer tipo com mais de um autor, têm também a página de detalhe consultada, com o papel de cada autor e a tramitação completa. Enquanto o detalhe não é baixado, o documento aparece como "detalhe ainda não coletado".</li>
- <li><b>Respondido</b> vale só para requerimentos com situação "Respondido". A data de resposta (<code>respondido_em</code>) é a do passo "Respondido" da tramitação: é quando a Câmara registrou a resposta, não necessariamente o dia em que o Executivo respondeu. Os dias até a resposta também são contados até esse passo.</li>
+ <li><b>Respondido</b> vale só para requerimentos: basta a situação "Respondido", a data de resposta vinda do detalhe ou o último passo da listagem com objetivo ou resultado "Respondido" ("Não respondido" não conta). A data de resposta (<code>respondido_em</code>) é a do passo "Respondido" da tramitação: é quando a Câmara registrou a resposta, não necessariamente o dia em que o Executivo respondeu. Os dias até a resposta também são contados até esse passo.</li>
  <li><b>Publicado</b> vale para documentos com situação "Publicado"; nos PDLs e resoluções, o número e a data da publicação vêm da tramitação.</li>
  <li><b>Bairro</b> é procurado só nas indicações, comparando a ementa com os 52 bairros oficiais de Niterói, sem diferenciar acentos nem maiúsculas, e vale a última menção. Sub-bairros, comunidades e nomes de rua não são reconhecidos, e um nome de bairro usado em outro sentido pode gerar um bairro errado; indicações sem bairro reconhecido ficam sem bairro.</li>
 </ul>
 <p>Cada item das listas tem o botão "Ver no SISCAM", que abre a página oficial do documento dentro do site, e o link "abrir no SISCAM", que a abre numa nova aba.</p>
+<h3 id="metricas-documentos">Homenagens, pedidos de informação e bairros</h3>
+<p>Três métricas resumem os documentos, sempre com as mesmas regras para qualquer autor, partido ou espectro político. Aparecem em {'<a href="ruido.html#homenagens">Sem efeito e polêmicas</a>' if modelo.get('documentos') else 'Sem efeito e polêmicas'}, em <a href="atividades.html">Atividades</a> e na seção "Atividade" de cada vereador. Por vereador, contam todos os documentos em que ele aparece como autor, inclusive os assinados em conjunto.</p>
+<ul>
+ <li><b>Homenagens</b>: documentos da categoria homenagem, a mesma do perfil de atuação. Contam moções de aplauso (inclusive congratulação, louvor e agradecimento) e de pesar, títulos de cidadão e outras honrarias, como medalhas, diplomas e comendas, em PDLs e resoluções; aplauso e congratulação são uma única classe. Moções de repúdio e de apoio e PDLs que sustam uma homenagem não contam. O <b>peso</b> aparece de duas formas: o número de homenagens e a porcentagem da produção do mesmo período (legislatura ou ano), em que a produção soma todos os documentos em que o vereador aparece como autor e os projetos de lei em que é autor principal. Na Câmara, a produção soma documentos e projetos de lei de qualquer autor. Só entram anos de coleta completa, em que os cinco tipos de documento têm ao menos um registro; anos com coleta parcial ficam fora da conta e são citados numa nota.</li>
+ <li><b>Requerimentos de informação</b>: por vereador e por órgão, contam os pedidos, os respondidos, a taxa de resposta (respondidos entre os pedidos não retirados pelo autor), a mediana dos dias até o passo "Respondido", com a sua base, e os que aguardam resposta (sem resposta registrada e sem arquivamento; os arquivados, rejeitados ou prejudicados sem resposta aparecem como encerrados). Como <code>respondido_em</code> é a data do passo "Respondido" da tramitação, a mediana mede o tempo até a Câmara registrar a resposta, não necessariamente até o Executivo responder. Os dias só existem para os respondidos cuja página de detalhe, com a tramitação completa, já foi baixada; por isso a mediana usa só esses respondidos com data, e o número deles aparece ao lado. {esc(pendentes_txt(resumo_informacao(modelo.get('documentos') or [])))} Pedidos recentes ainda podem ser respondidos.</li>
+ <li><b>Órgão citado</b>: o primeiro órgão específico citado na ementa do requerimento (secretaria, fundação, empresa municipal como NitTrans, Clin ou ION, ou concessionária), mesmo como intermediário ("por intermédio da NitTrans") ou cópia ("ao Prefeito, com cópia à Secretaria de Educação"), com o nome normalizado; sem órgão na ementa, vale o assunto da listagem. Órgão estadual só conta quando é o destinatário ("ao Governo do Estado", "à Secretaria de Estado de Saúde"); citado em outro papel ("baixa junto ao Detran-RJ"), vale o nível municipal. Sem órgão específico, o pedido fica como "Prefeito ou Poder Executivo"; sem nenhum, "Não identificado". Siglas ambíguas não são reconhecidas. Os nomes das secretarias mudam entre gestões e aparecem como citados, sem juntar nomes diferentes: "Secretaria de Mobilidade Urbana" e "Secretaria de Urbanismo e Mobilidade" ficam separadas, porque os dados não dizem se são o mesmo órgão. A tramitação não serve para isso: os pedidos seguem para a Secretaria Municipal de Governo, que os repassa.</li>
+ <li><b>Bairros das indicações</b>: para cada vereador, os cinco bairros mais citados, o número de bairros distintos e a concentração (parte das indicações com bairro que vai para o bairro mais citado; com empate no topo, os empatados aparecem juntos); para a cidade, as indicações em cada um dos 52 bairros oficiais, inclusive os sem nenhuma, os menos citados e a parte das indicações sem bairro identificado. Não há dado de população no site, por isso não há taxa por habitante.</li>
+</ul>
 
 <h2>Limitações</h2>
 <ul>

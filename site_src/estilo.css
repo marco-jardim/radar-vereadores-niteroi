@@ -299,6 +299,9 @@ li.projeto { content-visibility: auto; contain-intrinsic-size: auto 220px; }
 .tabela-graf table { border-collapse: collapse; margin-top: 8px; width: 100%; font-variant-numeric: tabular-nums; }
 .tabela-graf th, .tabela-graf td { text-align: left; padding: 4px 8px; border-bottom: 1px solid var(--linha); }
 .tabela-graf td:not(:first-child), .tabela-graf th:not(:first-child) { text-align: right; }
+.tabela-resumo { overflow-x: auto; margin: 10px 0 16px; }
+.tabela-resumo caption { text-align: left; font-weight: 600; padding-bottom: 4px; }
+.tabela-resumo td.txt, .tabela-resumo th.txt { text-align: left; }
 #tip { position: fixed; z-index: 20; pointer-events: none; background: var(--tinta); color: var(--fundo); font-size: .82rem; padding: 6px 9px; border-radius: 3px; max-width: 280px; line-height: 1.35; }
 
 /* ------------------------------------------------------- vereador e outros */

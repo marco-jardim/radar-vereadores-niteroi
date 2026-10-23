@@ -339,6 +339,7 @@ def montar_documentos(registros: list[dict], cfg: dict, pessoas: dict, legs: lis
         if "dias_ate_resposta" not in r and respondido_em:
             dias = dias_entre(r.get("data"), respondido_em)
         pub = r.get("publicacao")
+        informacao = r["tipo"] == "requerimento" and cls["subcategoria"] == "informacao"
         documentos.append({
             "id": r["id"], "tipo": r["tipo"], "numero": r["numero"], "ano": r["ano"], "data": r.get("data"),
             "ementa": r.get("ementa") or "", "situacao": r.get("situacao") or "", "assunto": r.get("assunto") or None,
@@ -350,24 +351,21 @@ def montar_documentos(registros: list[dict], cfg: dict, pessoas: dict, legs: lis
             "respondido_em": respondido_em, "dias_ate_resposta": dias,
             "publicacao": {"numero": pub.get("numero"), "data": pub.get("data")} if isinstance(pub, dict) else None,
             "detalhe_pendente": bool(r.get("detalhe_pendente")),
+            # Só nos requerimentos de informação; não vai para os JSONs do navegador (tabelas geradas no servidor).
+            "orgao": RD.extrair_orgao(r.get("ementa"), r.get("assunto")) if informacao else None,
         })
     documentos.sort(key=chave_documento, reverse=True)
     return documentos
 
 
-def eixos_perfil(d: dict) -> list[str]:
-    """Eixos do perfil de atuação de um documento, como em regras_documentos.perfil_atuacao."""
-    eixos = [e for e in ("zeladoria", "fiscalizacao", "legislacao") if d["categoria"] == e]
-    if d["homenagem"]:
-        eixos.append("homenagem")
-    return eixos
-
-
 def atividade_por_autor(documentos: list[dict]) -> dict[str, dict]:
-    """Documentos de cada autor vereador e contagens por legislatura; todo autor listado conta."""
+    """Documentos de cada autor vereador e contagens por legislatura; todo autor listado conta.
+
+    Os eixos do perfil vêm de regras_documentos.eixos_perfil, a única regra do perfil.
+    """
     atividade: dict[str, dict] = {}
     for d in documentos:
-        eixos = eixos_perfil(d)
+        eixos = RD.eixos_perfil(d)
         for a in d["autores"]:
             if not a["vereador"]:
                 continue
@@ -386,6 +384,196 @@ def atividade_por_autor(documentos: list[dict]) -> dict[str, dict]:
             if d["tipo"] == "requerimento" and d["subcategoria"] == "informacao":
                 leg["informacao"]["respondidos" if d["respondido"] else "sem_resposta"] += 1
     return atividade
+
+
+# ------------------------------------------------------- métricas dos documentos
+# Agregações sobre os documentos já classificados: as regras (homenagem, órgão, estado do
+# pedido, bairro) ficam em regras_documentos; aqui só se conta. Valem para qualquer
+# intervalo de anos e geram tabelas no servidor, sem mudar os JSONs do navegador.
+# Contar documentos não mede qualidade nem resultado.
+def _pct(parte: int, total: int) -> int | None:
+    return round(100 * parte / total) if total else None
+
+
+def _chave_texto(texto: str) -> tuple[str, str]:
+    return (_sem_acento(texto), texto)
+
+
+def e_pedido_informacao(d: dict) -> bool:
+    return d["tipo"] == "requerimento" and d["subcategoria"] == "informacao"
+
+
+def anos_coleta(documentos: list[dict]) -> dict[str, list[int]]:
+    """Anos com documentos: "todos", "completos" (cada tipo de TIPOS_DOC tem ao menos um registro) e "parciais".
+
+    Calculado uma vez em montar_modelo (modelo["anos_coleta"]). Num ano parcial faltam tipos inteiros, e o peso das
+    homenagens dividiria por uma produção incompleta; por isso só os completos entram nele.
+    """
+    tipos: dict[int, set[str]] = defaultdict(set)
+    for d in documentos:
+        tipos[d["ano"]].add(d["tipo"])
+    todos = sorted(tipos)
+    completos = [a for a in todos if set(TIPOS_DOC) <= tipos[a]]
+    return {"todos": todos, "completos": completos, "parciais": [a for a in todos if a not in completos]}
+
+
+def coleta_do_modelo(modelo: dict) -> dict[str, list[int]]:
+    """anos_coleta já calculado no modelo; só recalcula num modelo montado à mão (testes)."""
+    return modelo.get("anos_coleta") or anos_coleta(modelo.get("documentos") or [])
+
+
+def anos_documentos(modelo: dict) -> set[int]:
+    """Anos com coleta completa (anos_coleta); fora deles, nem documentos nem projetos entram no peso das homenagens."""
+    return set(coleta_do_modelo(modelo)["completos"])
+
+
+def projetos_do_autor(modelo: dict, s: str) -> list[dict]:
+    """Projetos de lei da pessoa como autora principal, em todas as legislaturas (mesma base de "apresentados")."""
+    pessoa = modelo["pessoas"].get(s) or {}
+    return [p for m in (pessoa.get("mandatos") or {}).values() for p in m["projetos_autor"]]
+
+
+def resumo_homenagens(docs: list[dict], n_projetos: int) -> dict:
+    """Homenagens entre `docs` (marca "homenagem" de regras_documentos) e o peso na produção.
+
+    producao = len(docs) + n_projetos (documentos de todos os tipos mais projetos de lei do
+    mesmo período); pct = homenagens / producao, em % inteiro.
+    """
+    homenagens = sum(1 for d in docs if d["homenagem"])
+    producao = len(docs) + n_projetos
+    return {"homenagens": homenagens, "documentos": len(docs), "projetos": n_projetos, "producao": producao,
+            "pct": _pct(homenagens, producao)}
+
+
+def homenagens_por_periodo(docs: list[dict], projetos: list[dict], anos: set[int] | None = None) -> dict:
+    """Homenagens de um conjunto de documentos e projetos, por legislatura e por ano.
+
+    Só entram anos de `anos` (padrão: os anos dos próprios documentos), para não dividir
+    as homenagens por projetos de anos cujos documentos ainda não foram coletados.
+    Devolve {"por_leg": {leg: resumo}, "por_ano": {ano: resumo}}, em ordem crescente.
+    """
+    anos = {d["ano"] for d in docs} if anos is None else anos
+    docs = [d for d in docs if d["ano"] in anos]
+    projetos = [p for p in projetos if p["ano"] in anos]
+    saida: dict[str, dict] = {}
+    for chave, campo in (("por_leg", "legislatura"), ("por_ano", "ano")):
+        grupos_d, grupos_p = defaultdict(list), Counter(p[campo] for p in projetos if p[campo] is not None)
+        for d in docs:
+            if d[campo] is not None:
+                grupos_d[d[campo]].append(d)
+        saida[chave] = {k: resumo_homenagens(grupos_d.get(k, []), grupos_p.get(k, 0)) for k in sorted(set(grupos_d) | set(grupos_p))}
+    return saida
+
+
+def homenagens_do_autor(modelo: dict, s: str, anos: set[int] | None = None) -> dict:
+    """homenagens_por_periodo da pessoa: documentos em que aparece como autora e projetos como autora principal.
+
+    anos: anos com coleta completa; padrão, anos_documentos(modelo), já calculado no modelo.
+    """
+    docs = ((modelo.get("atividade") or {}).get(s) or {}).get("documentos") or []
+    return homenagens_por_periodo(docs, projetos_do_autor(modelo, s), anos_documentos(modelo) if anos is None else anos)
+
+
+def homenagens_por_ano(documentos: list[dict], projetos: list[dict], anos: set[int] | None = None) -> list[dict]:
+    """Homenagens da Câmara por ano, por tipo, e o peso na produção total (documentos e projetos de lei de qualquer autor).
+
+    Só os anos de `anos` (no site, os de coleta completa; padrão, os anos dos documentos); tipos em TIPOS_DOC, com
+    zero quando não há.
+    """
+    anos_ord = sorted({d["ano"] for d in documentos} if anos is None else anos)
+    tipos = Counter((d["ano"], d["tipo"]) for d in documentos if d["homenagem"])
+    resumo = homenagens_por_periodo(documentos, projetos, set(anos_ord))["por_ano"]
+    return [{"ano": a, "por_tipo": {t: tipos.get((a, t), 0) for t in TIPOS_DOC}, **(resumo.get(a) or resumo_homenagens([], 0))}
+            for a in anos_ord]
+
+
+def resumo_informacao(docs: list[dict]) -> dict:
+    """Requerimentos de informação entre `docs`, pelo estado de regras_documentos.estado_pedido.
+
+    taxa: % de respondidos entre os pedidos não retirados; mediana_dias: mediana de
+    dias_ate_resposta só entre os respondidos que têm esse número (com_dias, a base da
+    mediana: os dias só existem quando o detalhe, com a tramitação, foi baixado);
+    pendentes: pedidos com detalhe_pendente.
+    """
+    estados: Counter = Counter()
+    dias = []
+    pendentes = 0
+    for d in docs:
+        if not e_pedido_informacao(d):
+            continue
+        estado = RD.estado_pedido(d["respondido"], d["situacao"])
+        estados[estado] += 1
+        pendentes += bool(d.get("detalhe_pendente"))
+        if estado == "respondido" and d["dias_ate_resposta"] is not None:
+            dias.append(d["dias_ate_resposta"])
+    pedidos = sum(estados.values())
+    return {
+        "pedidos": pedidos, "respondidos": estados["respondido"], "aguardando": estados["aguardando"],
+        "encerrados": estados["encerrado"], "retirados": estados["retirado"],
+        "taxa": _pct(estados["respondido"], pedidos - estados["retirado"]),
+        "mediana_dias": statistics.median(dias) if dias else None, "com_dias": len(dias), "pendentes": pendentes,
+    }
+
+
+def orgao_do_documento(d: dict) -> str:
+    return d.get("orgao") or RD.extrair_orgao(d.get("ementa"), d.get("assunto"))
+
+
+def ranking_orgaos(docs: list[dict]) -> list[dict]:
+    """resumo_informacao por órgão citado (regras_documentos.extrair_orgao), do mais pedido ao menos pedido.
+
+    Empates pelo nome; "Não identificado" fica por último.
+    """
+    grupos: dict[str, list[dict]] = defaultdict(list)
+    for d in docs:
+        if e_pedido_informacao(d):
+            grupos[orgao_do_documento(d)].append(d)
+    linhas = [{"orgao": o, **resumo_informacao(ds)} for o, ds in grupos.items()]
+    linhas.sort(key=lambda l: (l["orgao"] == RD.ORGAO_NAO_IDENTIFICADO, -l["pedidos"], _chave_texto(l["orgao"])))
+    return linhas
+
+
+def resumo_bairros(docs: list[dict], top: int = 5) -> dict:
+    """Bairros das indicações entre `docs` (regras_documentos.extrair_bairro).
+
+    top: os `top` bairros mais citados, (bairro, indicações), empates pelo nome;
+    mais_citados: todos os empatados no topo; concentracao: % das indicações com bairro
+    que caem no mais citado (em cada um, se houver empate); pct_sem_bairro: % das
+    indicações sem bairro reconhecido.
+    """
+    indicacoes = [d for d in docs if d["tipo"] == "indicacao"]
+    cont = Counter(d["bairro"] for d in indicacoes if d["bairro"])
+    com_bairro = sum(cont.values())
+    ordem = sorted(cont.items(), key=lambda bn: (-bn[1], _chave_texto(bn[0])))
+    return {"indicacoes": len(indicacoes), "com_bairro": com_bairro, "sem_bairro": len(indicacoes) - com_bairro,
+            "pct_sem_bairro": _pct(len(indicacoes) - com_bairro, len(indicacoes)), "distintos": len(cont),
+            "top": ordem[:top], "mais_citados": [b for b, n in ordem if n == ordem[0][1]] if ordem else [],
+            "concentracao": _pct(ordem[0][1], com_bairro) if ordem else None}
+
+
+def indicacoes_por_bairro(docs: list[dict]) -> list[dict]:
+    """Os 52 bairros oficiais, na ordem de BAIRROS_POR_REGIAO, com as indicações de cada um, inclusive zero."""
+    cont = Counter(d["bairro"] for d in docs if d["tipo"] == "indicacao" and d["bairro"])
+    return [{"regiao": r, "bairro": b, "indicacoes": cont.get(b, 0)} for r, bs in RD.BAIRROS_POR_REGIAO.items() for b in bs]
+
+
+def menos_citados(por_bairro: list[dict], n: int = 10) -> list[dict]:
+    """Os `n` bairros com menos indicações, mais os empatados com o último deles; do menor ao maior."""
+    ordem = sorted(por_bairro, key=lambda b: (b["indicacoes"], _chave_texto(b["bairro"])))
+    if len(ordem) <= n:
+        return ordem
+    corte = ordem[n - 1]["indicacoes"]
+    return [b for b in ordem if b["indicacoes"] <= corte]
+
+
+def documentos_por_legislatura(modelo: dict) -> dict[str, dict[str, list[dict]]]:
+    """Documentos de cada autor vereador por legislatura: {leg: {slug: [docs]}}; sem legislatura não entra."""
+    saida: dict[str, dict[str, list[dict]]] = defaultdict(dict)
+    for s, reg in (modelo.get("atividade") or {}).items():
+        for d in reg["documentos"]:
+            if d["legislatura"]:
+                saida[d["legislatura"]].setdefault(s, []).append(d)
+    return saida
 
 
 # ------------------------------------------------------------------------ modelo
@@ -570,7 +758,7 @@ def montar_modelo() -> dict:
         pessoa["atividade"] = atividade.get(s) or {"documentos": [], "por_leg": {}}
 
     return {"legislaturas": legs, "pessoas": pessoas, "projetos": projetos, "meta": meta, "curadoria": curadoria, "cfg": cfg,
-            "documentos": documentos, "atividade": atividade}
+            "documentos": documentos, "atividade": atividade, "anos_coleta": anos_coleta(documentos)}
 
 
 def mediana_legislatura(modelo: dict, leg_id: str, chave: str) -> float | None:
