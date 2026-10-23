@@ -30,6 +30,7 @@ NAV = [
     ("leis.html", "Leis aprovadas"),
     ("projetos.html", "Projetos"),
     ("atividades.html", "Atividades"),
+    ("sessoes.html", "Sessões"),
     ("ruido.html", "Sem efeito e polêmicas"),
     ("analises.html", "Análises"),
     ("metodologia.html", "Metodologia"),
@@ -1284,6 +1285,8 @@ def comparacao(valor, mediana, maior_melhor: bool = True, sufixo: str = "") -> s
 
 
 def gerar_vereador(modelo: dict, pessoa: dict) -> str:
+    from coletor.site import pagina_sessoes
+
     secoes = []
     for leg in reversed(modelo["legislaturas"]):
         m = pessoa["mandatos"].get(leg["id"])
@@ -1343,7 +1346,7 @@ def gerar_vereador(modelo: dict, pessoa: dict) -> str:
  <p class="siscam">Nome no SISCAM: {esc(pessoa['nome_siscam'])}</p>
 </section>
 {LEGENDA_BARRA}
-{''.join(secoes)}{secao_atividade(modelo, pessoa) if tem_docs else ''}"""
+{''.join(secoes)}{pagina_sessoes.secao_sessoes_vereador(modelo, pessoa)}{secao_atividade(modelo, pessoa) if tem_docs else ''}"""
     return pagina(f"{pessoa['nome']} · Radar dos Vereadores de Niterói", corpo, "", "../",
                   f"Leis e projetos de {pessoa['nome']} na Câmara de Niterói: quantas leis com efeito, quantas sem efeito prático e quais pautas polêmicas.",
                   dialogo=tem_docs)
@@ -1463,6 +1466,8 @@ def metricas_atividade(modelo: dict, pessoa: dict) -> str:
 
 # -------------------------------------------------------------------- metodologia
 def gerar_metodologia(modelo: dict) -> str:
+    from coletor.site import pagina_sessoes
+
     cls = modelo["meta"].get("classificacao") or {}
     defs_cat = "".join(f"<dt>{esc(NOME_CATEGORIA[k])}</dt><dd>{esc(v)}</dd>" for k, v in CATEGORIAS.items())
     defs_al = "".join(f"<dt>{esc(NOME_ALERTA[k])}</dt><dd>{esc(v)}</dd>" for k, v in ALERTAS.items())
@@ -1470,7 +1475,7 @@ def gerar_metodologia(modelo: dict) -> str:
     defs_doc = "".join(f"<dt>{esc(v)}</dt><dd>{esc(DESC_CATEGORIA_DOC.get(k, ''))}</dd>" for k, v in NOME_CATEGORIA_DOC.items())
     corpo = f"""<section class="abertura texto">
 <h1>Metodologia</h1>
-<p>Este site mede a produção de cada vereador em projetos de lei, não seu trabalho inteiro. Indicações, moções, requerimentos, projetos de decreto legislativo e de resolução aparecem à parte, na página <a href="atividades.html">Atividades</a>, e não entram nos números de projetos e leis. Comissões, fiscalização fora do SISCAM e atendimento à população não aparecem no site.</p>
+<p>Este site mede a produção de cada vereador em projetos de lei, não seu trabalho inteiro. Indicações, moções, requerimentos, projetos de decreto legislativo e de resolução aparecem à parte, na página <a href="atividades.html">Atividades</a>, e não entram nos números de projetos e leis. A página <a href="sessoes.html">Sessões e votações</a> e a seção "Presença e votos" de cada vereador mostram os registros plenários, com as <a href="#sessoes">regras de contagem e limitações</a>. Comissões, fiscalização fora do SISCAM e atendimento à população não aparecem no site.</p>
 
 <h2>De onde vêm os dados</h2>
 <p>Toda semana, uma GitHub Action baixa do <a href="https://consultaniteroi.siscam.com.br/">SISCAM</a> os projetos de lei de cada ano desde 2021 e, para os novos ou com tramitação alterada, a autoria e a tramitação completa. Só a composição das legislaturas e a curadoria são editadas à mão, em arquivos públicos.</p>
@@ -1556,6 +1561,8 @@ def gerar_metodologia(modelo: dict) -> str:
 <h3 id="mapa-bairros">Mapa das indicações por bairro</h3>
 <p>O mapa usa valores absolutos, sem ajuste por população: não mede necessidade, atendimento nem qualidade. O bairro é inferido da ementa pelas mesmas regras das tabelas; a porcentagem sem bairro identificado aparece junto ao mapa, e essas indicações ficam fora dele. Os resumos cobrem todos os anos coletados e não mudam com os filtros da lista. Os bairros com indicações são divididos em até cinco faixas por quantis: os cortes buscam grupos de tamanhos semelhantes, sem separar bairros empatados, e há menos faixas quando há poucos valores distintos. Os limites são arredondados para números simples apenas no intervalo entre valores observados, sem alterar os grupos ou criar faixas vazias. Zero tem uma faixa própria hachurada, só quando há bairros sem indicações. A legenda mostra os limites e o número de bairros em cada faixa; a tabela alternativa inclui os 52 bairros, inclusive zeros, com os valores exatos. As faixas dependem dos dados: cores de mapas com limites diferentes não são diretamente comparáveis.</p>
 <p>Limites: © contribuidores do OpenStreetMap, sob <a href="https://www.openstreetmap.org/copyright">ODbL 1.0</a>, obtidos pelo Overpass das relações administrativas dos bairros (nível 10) dentro do município de Niterói (<a href="https://www.openstreetmap.org/relation/2220789">relação 2220789</a>). A data da base OSM aparece junto a cada mapa; as tags de origem dos limites indicam IBGE. A geometria é projetada localmente, simplificada e arredondada para exibição: não é um mapa cadastral nem uma confirmação municipal dos limites. Nas páginas dos vereadores, o mapa só pode aparecer se SVG, legenda, tabela e atribuição somarem no máximo 12 KiB gzip. Com a geometria atual (base OSM de 23/10/2026), esse orçamento é excedido: o mapa por vereador não é exibido, e ficam as tabelas por legislatura. O <a href="atividades.html#bairros">mapa geral está em Atividades</a>. Sem o arquivo de geometria, a geração mantém os gráficos e tabelas existentes, sem mapa.</p>
+
+{pagina_sessoes.metodologia_sessoes(modelo)}
 
 <h2>Limitações</h2>
 <ul>

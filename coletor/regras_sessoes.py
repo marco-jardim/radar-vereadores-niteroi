@@ -22,6 +22,12 @@ from coletor.site.modelo import e_autor_vereador_doc, indice_pessoas, legislatur
 MINIMO_DIVIDIDA = 3
 """Limiar decidido de votação dividida; auditoria conserva a comparação 2–5."""
 
+MINIMO_BASE_PRESENCA = 10
+"""Abaixo desta base individual, o site informa contagens, não percentual."""
+
+MINIMO_SESSOES_SUPLENTE = 3
+"""Frequência em três deliberativas ou voto substantivo comprova exercício observado."""
+
 QUORUM_DERRUBADA_VETO = 11
 """Maioria absoluta dos 21 vereadores (art. 54 da Lei Orgânica:
 "voto da maioria dos Vereadores"). Não é maioria dos presentes.
@@ -183,6 +189,45 @@ def divergencia(voto: str, totais: dict) -> bool:
     """Só Favor/Contra na opção minoritária; empate não produz divergência."""
     maior = maioria(totais)
     return voto in {"Favor", "Contra"} and maior is not None and voto != maior
+
+
+def indicadores_sessao(sessao: dict) -> dict:
+    """Realização observada por frequência, votos ou ata; pauta sozinha não prova.
+
+    Sem evidência não significa cancelamento. Não se usa o relógio nem se corrige
+    uma data fora do ano da listagem; a discrepância fica marcada para conferência.
+    """
+    deliberativa = sessao.get("tipo") in TIPOS_DELIBERATIVOS
+    realizada = bool(sessao.get("frequencia") or any(v.get("votos") for v in sessao.get("votacoes") or [])
+                     or any(_normalizar(d.get("rotulo")) == "ata" for d in sessao.get("documentos_sessao") or []))
+    marcas = []
+    if sessao.get("detalhe_pendente"):
+        marcas.append("detalhe pendente")
+    if deliberativa and not sessao.get("frequencia"):
+        marcas.append("sem lista de frequência")
+    if not realizada:
+        marcas.append("realização não comprovada nos dados")
+    if data_valida(sessao.get("data")) and int(sessao["data"][:4]) != sessao["ano"]:
+        marcas.append("data fora do ano da listagem")
+    return {"deliberativa": deliberativa, "realizada": realizada, "marcas": marcas}
+
+
+def pessoas_em_exercicio(sessao: dict, indice: dict[str, str] | None = None,
+                        *, presencas: dict | None = None) -> set[str]:
+    """Base observada na sessão, não o mandato inteiro de eleitos ou suplentes.
+
+    Frequência com denominador ou voto substantivo/presidência comprova exercício.
+    Licença explícita fica fora; ausência só na votação não inventa exercício para
+    um suplente. A evidência em uma votação vale para as demais da mesma sessão.
+    """
+    presencas = presencas if presencas is not None else presencas_da_sessao(sessao, indice)
+    registros = presencas["pessoas"]
+    pessoas = {p for p, r in registros.items() if r["denominador"]}
+    licencas = {p for p, r in registros.items() if r["licenca"]}
+    for votacao in sessao.get("votacoes") or []:
+        pessoas.update(p for p, voto in deduplicar_votos(votacao, indice)["votos"].items()
+                       if voto in VOTOS_SUBSTANTIVOS or voto == "Presidente")
+    return pessoas - licencas
 
 
 # ---- matéria, parecer e consistência -------------------------------------------
@@ -414,6 +459,38 @@ def rotulo_voto(voto: str, sentido: str, materia: str) -> str:
     return f"{opcao} (sentido não determinado)"
 
 
+def quorum_veto(analise: dict) -> dict | None:
+    """Contagens para derrubar/manter só com sentido de veto determinado."""
+    if analise["materia"] != "veto" or analise["sentido"] not in {"favor_mantem", "favor_derruba"}:
+        return None
+    totais = analise["totais"]
+    manter = totais["favor"] if analise["sentido"] == "favor_mantem" else totais["contra"]
+    derrubar = totais["contra"] if analise["sentido"] == "favor_mantem" else totais["favor"]
+    return {"exigido": QUORUM_DERRUBADA_VETO, "derrubar": derrubar, "manter": manter}
+
+
+def resumo_placar(analise: dict) -> str:
+    """Placar deduplicado, sem traduzir Favor/Contra de sentido desconhecido."""
+    totais = analise["totais"]
+    quorum = quorum_veto(analise)
+    if quorum is not None:
+        partes = [f"{quorum['manter']} para manter", f"{quorum['derrubar']} para derrubar"]
+    else:
+        partes = []
+        for voto in ("Favor", "Contra"):
+            quantidade = totais[CHAVES_TOTAIS[voto]]
+            if quantidade:
+                rotulo = rotulo_voto(voto, analise["sentido"], analise["materia"]).removeprefix("votou ")
+                partes.append(f"{quantidade} {rotulo}")
+    for chave, singular, plural in (("abstencao", "abstenção", "abstenções"), ("ausentes", "ausente", "ausentes"),
+                                    ("branco", "em branco", "em branco"), ("nulo", "nulo", "nulos"),
+                                    ("indeterminado", "voto não determinado", "votos não determinados")):
+        quantidade = totais.get(chave, 0)
+        if quantidade:
+            partes.append(f"{quantidade} {singular if quantidade == 1 else plural}")
+    return " · ".join(partes) or "sem votos substantivos"
+
+
 # ---- leitura até votação -------------------------------------------------------
 LEITURA_VOTACAO_CONFIAVEL = False
 """Indicador suspenso: a pauta HTML não cobre a votação legislativa dos anexos."""
@@ -566,16 +643,62 @@ def indice_nomes(cfg: dict, documentos: list[dict]) -> tuple[dict, dict[str, str
     return pessoas, indice_pessoas(pessoas)
 
 
-def indice_membros(sessao: dict, pessoas: dict, cfg: dict) -> dict[str, str]:
-    """Eleitos ou suplentes com autoria de vereador na legislatura, sem inferir pelo rol da sessão.
+def suplentes_das_sessoes(sessoes: list[dict], pessoas: dict, cfg: dict) -> dict:
+    """Reconhece exercício por legislatura, sem fuzzy nem aliases novos.
 
-    Nome desconhecido não prova mandato: fica fora das métricas e na qualidade.
-    Apelido de exibição, sozinho, também não comprova exercício numa legislatura.
-    Não pretende resolver afastamentos por dia, que exigem outra fonte temporal.
+    Só candidatos fora da composição conhecida: frequência em pelo menos três
+    sessões deliberativas distintas OU voto substantivo nominal deduplicado.
+    Eleito de outra legislatura segue o mesmo limiar. A contagem não distingue
+    presença/ausência, nem duplica uma sessão com várias linhas de frequência.
+    Apelidos da configuração são exclusivamente nomes de exibição.
+    Retorna candidatos e motivos, inclusive os que ficam fora das métricas.
+    """
+    candidatos = {}
+    apelidos = {slug(n): exibicao for n, exibicao in (cfg.get("apelidos") or {}).items() if not n.startswith("_")}
+    for sessao in sorted(sessoes, key=_chave_sessao):
+        leg = legislatura_de(sessao.get("data"), sessao["ano"], cfg.get("legislaturas") or [])
+        if not leg:
+            continue
+        membros = indice_membros(sessao, pessoas, cfg)
+        frequencia = {slug(l["nome"]): l["nome"] for l in sorted(sessao.get("frequencia") or [], key=lambda l: l["nome"], reverse=True)}
+        votos, nomes = {}, {}
+        for votacao in sessao.get("votacoes") or []:
+            dedup = deduplicar_votos(votacao)
+            for s, voto in dedup["votos"].items():
+                nomes[s] = min(nomes.get(s, dedup["nomes"][s]), dedup["nomes"][s])
+                if voto in VOTOS_SUBSTANTIVOS:
+                    votos[s] = True
+        for s in sorted(set(frequencia) | set(nomes)):
+            if s in membros:
+                continue
+            nome = min(n for n in (frequencia.get(s), nomes.get(s)) if n is not None)
+            candidato = candidatos.setdefault((s, leg), {"nome_siscam": nome, "sessoes": set(), "voto_substantivo": False})
+            candidato["nome_siscam"] = min(candidato["nome_siscam"], nome)
+            if s in frequencia and sessao.get("tipo") in TIPOS_DELIBERATIVOS:
+                candidato["sessoes"].add(sessao["id"])
+            candidato["voto_substantivo"] |= s in votos
+    for (s, _), candidato in candidatos.items():
+        quantidade = len(candidato.pop("sessoes"))
+        candidato["sessoes_deliberativas"] = quantidade
+        candidato["incluido"] = quantidade >= MINIMO_SESSOES_SUPLENTE or candidato["voto_substantivo"]
+        candidato["nome"] = apelidos.get(s) or nome_curto(candidato["nome_siscam"])
+        candidato["motivo"] = ("suplente em exercício" if candidato["incluido"] else
+                               f"aparece em {quantidade} sessão(ões) sem voto; não consta da composição")
+    return dict(sorted(candidatos.items()))
+
+
+def indice_membros(sessao: dict, pessoas: dict, cfg: dict) -> dict[str, str]:
+    """Composição conhecida e suplências explicitamente reconhecidas nas regras.
+
+    A composição não filtra o placar da votação: só métricas individuais. Nomes
+    reconhecidos por sessões não ganham aliases a partir do nome de exibição.
+    Não resolve afastamentos por dia, que exigem outra fonte temporal.
     """
     leg = legislatura_de(sessao.get("data"), sessao["ano"], cfg.get("legislaturas") or [])
-    return {nome: pessoa for nome, pessoa in indice_pessoas(pessoas).items()
-            if leg and leg in pessoas[pessoa]["legislaturas"]}
+    conhecidas = {s: p for s, p in pessoas.items() if leg and leg in p["legislaturas"] and leg not in p.get("suplencias_sessoes", set())}
+    indice = indice_pessoas(conhecidas)
+    indice.update({s: s for s, p in pessoas.items() if leg and leg in p.get("suplencias_sessoes", set())})
+    return indice
 
 
 def resumo_presencas(

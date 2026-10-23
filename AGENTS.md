@@ -20,7 +20,8 @@ Os testes de JavaScript pedem Node 21+ (o CI usa 22).
 | --- | --- |
 | `coletor/siscam.py` | HTTP, parsing do SISCAM, autoria, tramitação e desfechos dos projetos de lei. |
 | `coletor/documentos.py` | Listagem e detalhe seletivo de requerimentos, indicações, moções, PDLs e resoluções. |
-| `coletor/sessoes.py` | Sessões plenárias: listagem por ano, pauta, fases, frequência e votações nominais (ainda fora do workflow e do site). |
+| `coletor/sessoes.py` | Sessões plenárias: listagem por ano, pauta, fases, frequência e votações nominais (ainda fora de `coleta.yml`). |
+| `coletor/regras_sessoes.py` | Regras determinísticas de presença, votos, sentido do parecer, quórum e qualidade, sem IA. |
 | `coletor/regras_documentos.py` | Categorias, bairro, resposta e publicação dos documentos, por regras determinísticas. |
 | `coletor/geo.py` | Conversão offline do Overpass em limites simplificados dos 52 bairros, com fonte OSM/ODbL. |
 | `coletor/classificar.py` | Taxonomia, regras, prompt, chamadas à IA, cache e curadoria dos projetos de lei. |
@@ -29,6 +30,8 @@ Os testes de JavaScript pedem Node 21+ (o CI usa 22).
 | `coletor/gerar_site.py` | Entrada da geração; exporta os JSONs do navegador, o manifesto e o relatório de tamanhos. |
 | `coletor/novidades.py` | Eventos dos PLs (apresentado, lei, veto, veto derrubado) pelas datas dos dados, semanas e feed RSS. |
 | `coletor/site/modelo.py` | Enriquecimento, pessoas, mandatos, métricas, projetos repetidos e documentos por autor. |
+| `coletor/site/modelo_sessoes.py` | Agregação das sessões coletadas, cobertura e métricas da Câmara e de cada pessoa. |
+| `coletor/site/pagina_sessoes.py` | `sessoes.html`, seção "Presença e votos" dos vereadores e metodologia `#sessoes`. |
 | `coletor/site/graficos.py` | Gráficos SVG com tabelas acessíveis. |
 | `coletor/site/paginas.py` | HTML, componentes, diálogo do SISCAM e metodologia publicada. |
 | `config/vereadores.json` | Legislaturas, eleitos, partidos, apelidos e afastamentos. |
@@ -57,9 +60,10 @@ Os testes de JavaScript pedem Node 21+ (o CI usa 22).
 4. `coletor.validar` confere a forma de `data/` e `config/`, inclusive o formato byte a byte de `data/documentos`
    e de `data/sessoes` (pastas opcionais), e sai com código 1 se encontrar problema.
 5. `coletor.gerar_site` combina curadoria, regras e cache, classifica os documentos, calcula métricas e recria `site/`,
-   inclusive `novidades.html` e `feed.xml`, com eventos derivados na hora (não há `data/novidades.json`).
+   inclusive `sessoes.html`, `novidades.html` e `feed.xml`, com eventos derivados na hora (não há `data/novidades.json`).
 
-Passo opcional, **ainda não ligado a `coleta.yml` nem ao site**: `coletor.sessoes` lista as sessões plenárias de cada ano
+Passo opcional, **ainda não ligado a `coleta.yml`** (a inclusão no workflow fica para uma etapa posterior):
+`coletor.sessoes` lista as sessões plenárias de cada ano
 (`ResultadoSessao.aspx?Ano=<ano>&pagina=<n>`, 10 por página, sem total) e baixa o detalhe de cada uma
 (`DetalhesSessao.aspx`): observações, documentos da sessão (rótulo e arquivo), itens de pauta, frequência por
 momento ("Abertura - 14:10") e votações com totais e votos nominais.
@@ -90,8 +94,8 @@ Salva `data/sessoes/<ano>.json`, ordenado por data, hora, número e id, e atuali
   a página 1 de novo, o que se detecta pelo paginador (`currentPage`) e pelos ids repetidos. `PAGINAS_MAX = 50` é o
   limite do SISCAM: se a página 50 vier cheia, a listagem do ano fica marcada como incompleta, com aviso.
 - Os textos ficam como no SISCAM: situação de frequência ("Consignado", "Ausência Justificada"), voto ("Favor",
-  "Ausente", "Presidente") e resultado ("Veto Mantido") não são interpretados; num veto, o sentido de "Favor" ainda
-  precisa ser definido com fonte pública.
+  "Ausente", "Presidente") e resultado ("Veto Mantido") não são interpretados na coleta. Na geração do site,
+  `regras_sessoes.py` deriva o sentido quando há evidência suficiente; o resto aparece como não determinado.
 - O `IdDocumento` dos itens de pauta e das votações é o mesmo id de `data/proposicoes` e `data/documentos`; o id da
   própria sessão é de outra numeração (`DetalhesSessao.aspx`).
 - Detalhe baixado para sessões novas, sem detalhe, pendentes, com cabeçalho alterado, dos últimos 60 dias ou com
@@ -227,6 +231,16 @@ Com `GITHUB_ACTIONS` definida, `coletor.validar` emite os problemas como `::erro
 - `atividades.html` lista os documentos com filtros na URL; cada página de vereador tem a seção "Atividade".
   "Ver no SISCAM" abre um `<dialog>` com iframe em sandbox, aceito só para
   `DetalhesDocumentos.aspx?IdDocumento=<n>`; o link "abrir no SISCAM" fica sempre visível como alternativa.
+- `sessoes.html` e a seção "Presença e votos" de cada vereador são HTML gerado no servidor, sem JSON de votos
+  nem JS novo. O gerador chama `modelo_sessoes.montar_sessoes` quando existe `data/sessoes`; sem a pasta, gera
+  o estado vazio. A página mostra presença por legislatura, votações divididas (40 cartões iniciais e o resto
+  em `<details>`), placares por ano, ritmo e qualidade. Suplentes sem página aparecem sem link, identificados
+  como "suplente em exercício". As regras e limitações estão em `metodologia.html#sessoes`: só deliberativas
+  realizadas com lista entram na presença; licenças ficam fora da base individual; Favor/Contra é voto sobre
+  o parecer, não automaticamente sobre a matéria. Sentidos não determinados ficam explícitos e placares
+  inconsistentes mostram apenas os totais oficiais, sem nomes. Contar presença e votos não mede qualidade.
+  O relatório inclui `sessoes.html` no teto oficial de 100 KiB gzip; o alvo de apresentação é 60 KiB nos dados
+  reais, e a seção individual tem orçamento de +10 KiB gzip. A coleta de sessões continua fora de `coleta.yml`.
 - As métricas dos documentos (homenagens em `ruido.html`; requerimentos de informação por vereador e por órgão e
   indicações nos 52 bairros em `atividades.html`; as três na seção "Atividade") são tabelas e gráficos gerados no
   servidor, só com agregados: não há colunas novas nos JSONs do navegador.
