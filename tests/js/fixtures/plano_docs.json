@@ -40,5 +40,32 @@
      "nomes": ["doc-pdl-2026"]},
     {"nome": "2025, primeira tela", "tipo": null, "ano": 2025, "alvo": 40,
      "nomes": ["doc-indicacao-2025", "doc-resolucao-2025"]}
+  ],
+  "refatiamentos": [
+    {
+      "nota": "Partes menores, com a data mais recente das indicações dividida em duas partes pequenas. O planejador usa só n/ate/de do manifesto, não o alvo gzip do gerador.",
+      "manifesto": {
+        "esquema": 2, "build": "pl", "build_doc": "doc-menor",
+        "arquivos": {
+          "dic-doc": {"url": "dados/dic-doc.json?v=1", "n": 5, "bytes": 1, "familia": "dic-doc"},
+          "doc-indicacao-2026": {"url": "dados/doc-indicacao-2026.json?v=2", "n": 25, "bytes": 1, "familia": "doc", "tipo": "indicacao", "ano": 2026, "parte": 0, "ate": "2026-10-20", "de": "2026-10-20"},
+          "doc-indicacao-2026-1": {"url": "dados/doc-indicacao-2026-1.json?v=2", "n": 25, "bytes": 1, "familia": "doc", "tipo": "indicacao", "ano": 2026, "parte": 1, "ate": "2026-10-20", "de": "2026-10-20"},
+          "doc-indicacao-2026-2": {"url": "dados/doc-indicacao-2026-2.json?v=2", "n": 200, "bytes": 1, "familia": "doc", "tipo": "indicacao", "ano": 2026, "parte": 2, "ate": "2026-10-19", "de": "2026-07-01"},
+          "doc-indicacao-2026-3": {"url": "dados/doc-indicacao-2026-3.json?v=2", "n": 200, "bytes": 1, "familia": "doc", "tipo": "indicacao", "ano": 2026, "parte": 3, "ate": "2026-06-30", "de": "2026-01-01"},
+          "doc-mocao-2026": {"url": "dados/doc-mocao-2026.json?v=2", "n": 10, "bytes": 1, "familia": "doc", "tipo": "mocao", "ano": 2026, "parte": 0, "ate": "2026-10-21", "de": "2026-10-21"},
+          "doc-mocao-2026-1": {"url": "dados/doc-mocao-2026-1.json?v=2", "n": 70, "bytes": 1, "familia": "doc", "tipo": "mocao", "ano": 2026, "parte": 1, "ate": "2026-10-20", "de": "2026-01-01"}
+        }
+      },
+      "casos": [
+        {"nome": "partes menores, primeira tela sem exibir uma data incompleta", "tipo": null, "ano": 2026, "alvo": 40,
+         "nomes": ["doc-mocao-2026", "doc-indicacao-2026", "doc-indicacao-2026-1", "doc-mocao-2026-1"]},
+        {"nome": "partes menores, mais itens acrescentam a próxima parte", "tipo": null, "ano": 2026, "alvo": 100,
+         "nomes": ["doc-mocao-2026", "doc-indicacao-2026", "doc-indicacao-2026-1", "doc-mocao-2026-1", "doc-indicacao-2026-2"]},
+        {"nome": "partes menores, recorte inteiro", "tipo": null, "ano": 2026, "alvo": 1000000000,
+         "nomes": ["doc-mocao-2026", "doc-indicacao-2026", "doc-indicacao-2026-1", "doc-mocao-2026-1", "doc-indicacao-2026-2", "doc-indicacao-2026-3"]},
+        {"nome": "partes menores, tipo com a mesma data em duas partes", "tipo": ["indicacao"], "ano": 2026, "alvo": 40,
+         "nomes": ["doc-indicacao-2026", "doc-indicacao-2026-1"]}
+      ]
+    }
   ]
 }

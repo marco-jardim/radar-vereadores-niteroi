@@ -233,6 +233,28 @@ test("depois de renovar o manifesto, filtrarD replaneja com as partes do novo bu
   assert.equal(app.resultados["aria-busy"], "false");
 });
 
+test("refatiar em partes menores mantém Mostrar mais incremental e o CSV completo", async () => {
+  const s = servidor("menor", [50, 75, 100]);
+  const app = iniciar({ manifesto: s.manifesto, buscar: (url) => s.responder(url) });
+  await assentar();
+  for (const n of [40, 80, 120, 130]) {
+    assert.equal(itens(app), n);
+    assert.equal(app.resumo.innerHTML, RESUMO_2026);
+    if (n < 130) {
+      const antes = app.resultados.innerHTML;
+      app.clicarMais();
+      await assentar();
+      assert.ok(app.resultados.innerHTML.startsWith(antes), "nenhum item anterior é reordenado ou repetido");
+    }
+  }
+  assert.equal(app.mais.hidden, true);
+  assert.equal(app.requisicoes.length, 6, "dicionário, quatro partes de indicação e uma de moção");
+  assert.equal(new Set(app.requisicoes).size, app.requisicoes.length, "cada URL só é buscada uma vez");
+  const arquivo = await app.csv();
+  assert.equal(arquivo.texto.split("\n").length, 131);
+  assert.equal(app.requisicoes.length, 6, "CSV reutiliza todas as partes já carregadas");
+});
+
 test("CSV carrega o recorte inteiro, neutraliza fórmulas e não mexe na lista", async () => {
   const s = servidor("v1");
   const app = iniciar({ manifesto: s.manifesto, buscar: (url) => s.responder(url) });

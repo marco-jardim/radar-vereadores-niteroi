@@ -151,6 +151,8 @@ Com `GITHUB_ACTIONS` definida, `coletor.validar` emite os problemas como `::erro
 - Documentos: `dic-doc` só com enumerações estáveis (tipos, categorias, subcategorias e URL de detalhe);
   `doc-<tipo>-<ano>[-k]` e `ver/<slug>[-<tipo>][-k]` têm dicionários locais (pessoas, situações, bairros) e não
   levam build, então uma parte sem mudança mantém os mesmos bytes e a mesma URL.
+  O fatiamento usa alvo de 120 KiB gzip (com margem de 512 bytes), sem mudar o orçamento oficial de 150 KiB;
+  as primeiras partes de cada tipo/ano usam 24 KiB, até cobrir `PASSO_LISTA` itens e terminar numa troca de data.
 - As URLs levam `?v=` com os 10 primeiros caracteres do SHA-1 do conteúdo.
 - Orçamentos em gzip: JSON inicial de cada página e cada JSON de PL ou dicionário ≤ 200 KiB; cada parte de
   documentos ≤ 150 KiB; cada HTML ≤ 100 KiB. O gerador imprime um relatório de tamanhos e `::warning::` ao exceder.
