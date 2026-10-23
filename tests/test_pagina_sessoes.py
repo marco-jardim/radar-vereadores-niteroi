@@ -142,6 +142,11 @@ class Documento(HTMLParser):
     def texto(no: dict) -> str:
         return "".join(Documento.texto(f) if isinstance(f, dict) else f for f in no["filhos"])
 
+    @staticmethod
+    def descendentes(no: dict, tag: str) -> list[dict]:
+        return [n for f in no["filhos"] if isinstance(f, dict)
+                for n in ([f] if f["tag"] == tag else []) + Documento.descendentes(f, tag)]
+
 
 class TestPaginaSessoes(unittest.TestCase):
     def setUp(self):
@@ -280,6 +285,235 @@ class TestPaginaSessoes(unittest.TestCase):
         self.assertIn("11 para manter · 6 para derrubar", html)
         self.assertIn("1 ou 2 votos diferentes", html)
         self.assertIn("ao menos 3 votos no lado menor ou 3 abstenções", html)
+
+    def test_contrato_filtros_ocultos_listas_contadores_e_botao_mais(self):
+        doc = Documento(S.gerar_sessoes(self.modelo))
+        por_id = {n["attrs"]["id"]: n for n in doc.nos if "id" in n["attrs"]}
+        formularios = doc.com_classe("filtros-sessoes")
+        self.assertEqual(len(formularios), 2)
+        for leg in self.modelo["sessoes"]["legislaturas"]:
+            ident = leg["id"]
+            form = por_id[f"filtros-sessoes-{ident}"]
+            self.assertEqual(form["tag"], "form")
+            self.assertEqual(form["attrs"]["class"], "filtros filtros-sessoes")
+            self.assertEqual(form["attrs"]["data-leg"], ident)
+            self.assertIn("hidden", form["attrs"])
+            selects = {n["attrs"]["name"]: n for n in Documento.descendentes(form, "select")}
+            opcoes = {nome: [o["attrs"]["value"] for o in Documento.descendentes(n, "option")]
+                      for nome, n in selects.items()}
+            self.assertEqual(opcoes["ano"], ["todos", *map(str, sorted(leg["anos"], reverse=True))])
+            self.assertEqual(opcoes["materia"], ["todas", "veto", "pl", "pdl", "resolucao", "outra"])
+            self.assertEqual(opcoes["vereador"], ["", *self.modelo["pessoas"]])
+            self.assertEqual(opcoes["ordem"], ["recente", "antigo", "apertada"])
+            entradas = Documento.descendentes(form, "input")
+            radios = [n for n in entradas if n["attrs"].get("type") == "radio"]
+            self.assertEqual([r["attrs"]["value"] for r in radios], ["dividida", "dissenso", "todas"])
+            self.assertTrue(all(r["attrs"]["name"] == "classe" for r in radios))
+            self.assertEqual([r["attrs"]["value"] for r in radios if "checked" in r["attrs"]], ["dividida"])
+            self.assertTrue(any(n["attrs"].get("name") == "div" and n["attrs"].get("type") == "checkbox" for n in entradas))
+            self.assertTrue(any(n["attrs"].get("name") == "q" and n["attrs"].get("type") == "search" for n in entradas))
+            self.assertEqual([b["attrs"]["data-acao"] for b in Documento.descendentes(form, "button")], ["limpar", "csv"])
+            self.assertTrue(all(b["attrs"]["type"] == "button" for b in Documento.descendentes(form, "button")))
+            self.assertIn("Só onde o vereador escolhido votou diferente da maioria", Documento.texto(form))
+            lista = por_id[f"lista-votacoes-{ident}"]
+            self.assertEqual(lista["tag"], "ol")
+            self.assertIn("votacoes", lista["attrs"]["class"].split())
+            contador = por_id[f"contagem-votacoes-{ident}"]
+            self.assertEqual(contador["attrs"]["aria-live"], "polite")
+            self.assertIn("contagem", contador["attrs"]["class"])
+            self.assertIn(str(len(lista["filhos"])), Documento.texto(contador))
+            self.assertLess(form["pai"]["filhos"].index(form), lista["pai"]["filhos"].index(lista))
+        mais = [n for n in doc.nos if n["attrs"].get("data-acao") == "mais"]
+        self.assertEqual(len(mais), 2)
+        self.assertTrue(all(n["tag"] == "button" and "hidden" in n["attrs"] for n in mais))
+        self.assertTrue(all(Documento.texto(n) == "Mostrar mais" for n in mais))
+
+    def test_cartao_publico_estavel_com_metadados_escapados(self):
+        v = copy.deepcopy(self.modelo["sessoes"]["votacoes"][0])
+        self.assertIs(S._cartao, S.cartao_votacao)
+        doc = Documento(S.cartao_votacao(self.modelo, v))
+        cartao = doc.com_classe("votacao")[0]
+        self.assertEqual(cartao["attrs"], {"class": "projeto votacao", "id": f'v-{v["id"]}',
+                                         "data-ano": "2021", **{f"data-{c}": v[c] for c in
+                                         ("materia", "classe", "sentido", "qualidade")}})
+        self.assertTrue(all(doc.com_classe(c) for c in ("cab", "desfecho", "ementa", "mini-barra", "mini-n", "votos-nomes")))
+        for campo in ("id", "materia", "classe", "sentido", "qualidade"):
+            v[campo] = f'{campo}" <script> & teste'
+        html = S.cartao_votacao(self.modelo, v)
+        self.assertNotIn("<script>", html)
+        cartao = Documento(html).com_classe("votacao")[0]
+        for campo in ("materia", "classe", "sentido", "qualidade"):
+            self.assertEqual(cartao["attrs"][f"data-{campo}"], v[campo])
+
+    def test_mapa_estrutura_acessivel_ano_colunas_cronologicas_e_linhas_alfabeticas(self):
+        modelo = modelo_sintetico(12, 18)
+        modelo["pessoas"]["pessoa-00"]["nome"] = "Zélia"
+        modelo["pessoas"]["pessoa-01"]["nome"] = "Ana"
+        v = next(v for v in modelo["sessoes"]["votacoes"] if v["data"].startswith("2026"))
+        v.update(materia="pl", numero="280/2025", documento="PL 280/2025", data="2026-03-25")
+        doc = Documento(S.gerar_sessoes(modelo))
+        faixas = doc.com_classe("faixa-votos")
+        self.assertEqual([n["attrs"]["data-ano"] for n in faixas], ["2026", "2024"])
+        ids_cartoes = {n["attrs"]["id"] for n in doc.com_classe("votacao")}
+        for faixa in faixas:
+            ano = faixa["attrs"]["data-ano"]
+            self.assertEqual(faixa["attrs"]["id"], "faixa-2025-2028" if ano == "2026" else "faixa-2021-2024")
+            tabela = Documento.descendentes(faixa, "table")[0]
+            self.assertEqual(tabela["attrs"]["class"], "faixa")
+            regiao = tabela["pai"]
+            self.assertEqual(regiao["attrs"]["role"], "region")
+            self.assertEqual(regiao["attrs"]["tabindex"], "0")
+            self.assertIn(ano, regiao["attrs"]["aria-label"])
+            self.assertIn("rolagem horizontal", regiao["attrs"]["aria-label"])
+            caption = Documento.descendentes(tabela, "caption")[0]
+            self.assertIn("ordem cronológica", Documento.texto(caption))
+            cab = Documento.descendentes(tabela, "thead")[0]
+            self.assertEqual(len(Documento.descendentes(cab, "th")), 4)
+            links = Documento.descendentes(cab, "a")
+            esperadas = sorted([v for v in modelo["sessoes"]["votacoes"] if v["data"].startswith(ano)],
+                               key=lambda v: (v["data"], v["id"]))
+            self.assertEqual([n["attrs"]["href"] for n in links], [f'#v-{v["id"]}' for v in esperadas])
+            self.assertTrue(all(n["attrs"]["href"][1:] in ids_cartoes for n in links))
+            corpo = Documento.descendentes(tabela, "tbody")[0]
+            linhas = Documento.descendentes(corpo, "tr")
+            self.assertEqual(len(linhas), 21)
+            self.assertTrue(all(len(Documento.descendentes(n, "td")) == 3 for n in linhas))
+            nomes = [Documento.texto(n["filhos"][0]).removesuffix("suplente em exercício") for n in linhas]
+            self.assertEqual(nomes, sorted(nomes, key=str.casefold))
+            self.assertTrue(all(n["filhos"][0]["attrs"]["scope"] == "row" for n in linhas))
+            self.assertFalse(any("tabindex" in n["attrs"] for n in Documento.descendentes(corpo, "td")))
+            self.assertFalse(Documento.descendentes(corpo, "button"))
+            self.assertTrue(all(Documento.descendentes(n, "span")[-1]["attrs"]["class"] == "so-leitor"
+                                for n in Documento.descendentes(corpo, "td")))
+            # A faixa vem depois da lista, sem JavaScript ou dados adicionais.
+            self.assertEqual(faixa["pai"]["attrs"]["id"], "mapa-votos-" + faixa["attrs"]["id"][6:])
+        abbr = next(n for n in doc.nos if n["tag"] == "abbr" and n["attrs"].get("title") == "PL 280/2025, 25/03/2026")
+        self.assertEqual(Documento.texto(abbr), "25/03")
+        self.assertIn("PL 280", Documento.texto(abbr["pai"]))
+        css = (RAIZ / "site_src/estilo.css").read_text(encoding="utf-8")
+        self.assertRegex(css, r"\.sessoes \.faixa-rolagem\s*\{[^}]*overflow-x:\s*auto")
+        self.assertRegex(css, r"\.sessoes \.faixa tr > :first-child\s*\{[^}]*position:\s*sticky;[^}]*left:\s*0")
+        self.assertRegex(css, r"\.sessoes \.filtros-sessoes\[hidden\]\s*\{\s*display:\s*none;")
+        for classe in ("maioria", "diferente", "abstencao"):
+            self.assertRegex(css, rf"\.sessoes \.voto-{classe}\s*\{{\s*color:\s*var\(--voto-{classe}\)")
+
+    def test_mapa_glifos_alternativas_e_resumo_por_vereador_sem_interpretar_favor(self):
+        dados = self.modelo["sessoes"]
+        leg = dados["legislaturas"][1]
+        v = dados["votacoes"][-1]
+        v["votos"].update({f"pessoa-{i:02}": voto for i, voto in enumerate(
+            ("Favor", "Contra", "Abstenção", "Ausente", "Presidente", "Branco", "Nulo", "indeterminado"))})
+        del v["votos"]["pessoa-08"]
+        doc = Documento(S._mapa_votos(self.modelo, dados, leg))
+        tabela = doc.com_classe("faixa")[0]
+        celulas = Documento.descendentes(tabela, "td")
+        esperadas = [("maioria", "■", "com a maioria"), ("diferente", "◆", "diferente da maioria"),
+                     ("abstencao", "◐", "abstenção"), ("ausente", "·", "ausente"),
+                     ("presidia", "P", "presidia"), ("cru", "Branco", "Branco"),
+                     ("cru", "Nulo", "Nulo"), ("cru", "indeterminado", "indeterminado"),
+                     ("vazio", "", "fora do mandato/não consta")]
+        for celula, (classe, glifo, rotulo) in zip(celulas, esperadas):
+            self.assertEqual(celula["attrs"]["class"], f"voto-{classe}")
+            self.assertEqual(celula["filhos"][0]["attrs"]["aria-hidden"], "true")
+            self.assertEqual(Documento.texto(celula["filhos"][0]), glifo)
+            self.assertEqual(celula["filhos"][1]["attrs"]["class"], "so-leitor")
+            self.assertEqual(Documento.texto(celula["filhos"][1]), rotulo)
+        resumo = [n for n in doc.nos if n["tag"] == "table"][1]
+        self.assertIn("Resumo por vereador · votações divididas de 2026", Documento.texto(resumo))
+        colunas = [Documento.texto(n) for n in Documento.descendentes(resumo, "th") if n["attrs"].get("scope") == "col"]
+        self.assertEqual(colunas, ["Vereador", "Com a maioria", "Diferente da maioria", "Abstenção", "Ausente"])
+        linhas = Documento.descendentes(Documento.descendentes(resumo, "tbody")[0], "tr")
+        self.assertEqual([[Documento.texto(c) for c in n["filhos"]][1:] for n in linhas[:9]],
+                         [["1", "0", "0", "0"], ["0", "1", "0", "0"], ["0", "0", "1", "0"], ["0", "0", "0", "1"],
+                          *[["0", "0", "0", "0"] for _ in range(5)]])
+        legenda = doc.com_classe("leg-votos")[0]
+        for _, glifo, rotulo in esperadas[:5]:
+            self.assertIn(glifo, Documento.texto(legenda))
+            self.assertIn(rotulo, Documento.texto(legenda))
+        self.assertIn("Célula vazia: fora do mandato/não consta", Documento.texto(legenda))
+        extra = {**v, "id": "segunda-votacao", "data": "2026-02-01"}
+        dados["votacoes"].append(extra)
+        doc_duas = Documento(S._mapa_votos(self.modelo, dados, leg))
+        resumo_duas = Documento.descendentes(doc_duas.raiz, "table")[1]
+        linhas_duas = Documento.descendentes(Documento.descendentes(resumo_duas, "tbody")[0], "tr")
+        self.assertEqual([Documento.texto(c) for c in linhas_duas[0]["filhos"]][1:], ["2", "0", "0", "0"])
+        self.assertEqual([Documento.texto(c) for c in linhas_duas[1]["filhos"]][1:], ["0", "2", "0", "0"])
+        dados["votacoes"].pop()
+        v.update(maioria="Contra", sentido="favor_derruba")
+        doc = Documento(S._mapa_votos(self.modelo, dados, leg))
+        celulas = Documento.descendentes(doc.com_classe("faixa")[0], "td")
+        self.assertEqual(celulas[0]["attrs"]["class"], "voto-diferente")
+        self.assertEqual(celulas[1]["attrs"]["class"], "voto-maioria")
+        self.assertIn("Linhas parecidas indicam votos parecidos nas votações divididas deste ano; não indicam grupo político", Documento.texto(doc.raiz))
+
+    def test_mapa_colunas_sem_comparacao_nao_coloridas_nem_contadas(self):
+        dados = self.modelo["sessoes"]
+        leg = dados["legislaturas"][1]
+        v = dados["votacoes"][-1]
+        for extra, motivo in (({"maioria": None}, "empate"),
+                              ({"maioria": "Favor", "qualidade": "indeterminado", "sentido": "indeterminado"}, "sentido não determinado"),
+                              ({"qualidade": "inconsistente"}, "placar inconsistente")):
+            with self.subTest(motivo=motivo):
+                v.update(extra)
+                doc = Documento(S._mapa_votos(self.modelo, dados, leg))
+                tabela = doc.com_classe("faixa")[0]
+                cab = Documento.descendentes(tabela, "th")[1]
+                self.assertEqual(cab["attrs"]["class"], "faixa-sem-comparacao")
+                self.assertIn(motivo, Documento.texto(cab))
+                celulas = Documento.descendentes(tabela, "td")
+                self.assertTrue(all(c["attrs"]["class"] == "voto-cru faixa-sem-comparacao" for c in celulas))
+                if motivo == "placar inconsistente":
+                    self.assertTrue(all(Documento.texto(c["filhos"][0]) == "—" for c in celulas))
+                    self.assertTrue(all("sem atribuição nominal" in Documento.texto(c) for c in celulas))
+                else:
+                    self.assertIn("Favor", Documento.texto(celulas[0]) + Documento.texto(celulas[-1]))
+                resumo = Documento.descendentes(doc.raiz, "table")[1]
+                self.assertTrue(all(Documento.texto(c) == "0" for c in Documento.descendentes(resumo, "td")))
+        v.update(qualidade="indeterminado", sentido="indeterminado")
+        v["votos"]["pessoa-00"] = '<voto> & "fonte"'
+        html = S._mapa_votos(self.modelo, dados, leg)
+        self.assertIn(P.esc(v["votos"]["pessoa-00"]), html)
+        self.assertNotIn("<voto>", html)
+
+    def test_mapa_composicao_eleitos_e_suplentes_sem_promover_nao_membros(self):
+        dados = self.modelo["sessoes"]
+        leg = dados["legislaturas"][1]
+        dados["por_pessoa"]["ana-suplente"] = {leg["id"]: {"nome": "Ana Suplente", "sem_pagina": True}}
+        dados["por_pessoa"]["sem-voto"] = {leg["id"]: {"nome": "Sem voto", "sem_pagina": True}}
+        dados["votacoes"][-2]["classe"] = "unanime"
+        dados["votacoes"][-2]["votos"]["ana-suplente"] = "Favor"
+        dados["votacoes"][-1]["votos"]["nao-membro"] = "Favor"
+        for v in dados["votacoes"]:
+            v["votos"].pop("pessoa-19", None)  # eleito continua na matriz, com células vazias
+            v["votos"].pop("pessoa-20", None)  # suplente sem voto não cria linha
+        doc = Documento(S._mapa_votos(self.modelo, dados, leg))
+        tabela = doc.com_classe("faixa")[0]
+        linhas = Documento.descendentes(Documento.descendentes(tabela, "tbody")[0], "tr")
+        self.assertEqual(len(linhas), 21)
+        self.assertIn("Ana Suplente", Documento.texto(linhas[0]))
+        self.assertIn("suplente em exercício", Documento.texto(linhas[0]))
+        self.assertFalse(Documento.descendentes(linhas[0], "a"))
+        self.assertIn("Pessoa 19", Documento.texto(tabela))
+        for ausente in ("nao-membro", "Sem voto", "Pessoa 20"):
+            self.assertNotIn(ausente, Documento.texto(tabela))
+        self.assertTrue(all(c["attrs"]["class"] == "voto-vazio" for c in Documento.descendentes(linhas[0], "td")))
+
+    def test_mapa_usa_ultimo_ano_com_divididas_e_preserva_contrato_vazio(self):
+        for v in self.modelo["sessoes"]["votacoes"]:
+            if v["data"].startswith(("2024", "2026")):
+                v["classe"] = "unanime"
+        doc = Documento(S.gerar_sessoes(self.modelo))
+        self.assertEqual([n["attrs"]["data-ano"] for n in doc.com_classe("faixa-votos")], ["2025", "2023"])
+        for leg in self.modelo["sessoes"]["legislaturas"]:
+            self.assertIn(f'href="#divididas-{leg["id"]}">Ver outros anos', S.gerar_sessoes(self.modelo))
+        for v in self.modelo["sessoes"]["votacoes"]:
+            v["classe"] = "unanime"
+        doc = Documento(S.gerar_sessoes(self.modelo))
+        self.assertFalse(doc.com_classe("faixa"))
+        self.assertEqual([n["attrs"]["data-ano"] for n in doc.com_classe("faixa-votos")], ["", ""])
+        self.assertEqual(len(doc.com_classe("filtros-sessoes")), 2)
+        self.assertTrue(all(not n["filhos"] for n in doc.com_classe("votacoes")))
+        self.assertEqual(len(doc.com_classe("contagem")), 2)
 
     def test_veto_mantido_nao_inventa_maioria_e_mostra_nota(self):
         v = self.modelo["sessoes"]["votacoes"][0]
@@ -665,6 +899,28 @@ class TestPaginaSessoes(unittest.TestCase):
         for token in TOKENS:
             self.assertEqual(temas["escuro-auto"][token], temas["escuro-explicito"][token])
 
+    def test_orcamento_mapa_21_por_25_em_duas_legislaturas(self):
+        # 150 divididas distribuídas por seis anos: 25 em cada ano mais recente.
+        # Mede o acréscimo isolado e a página completa, não só uma tabela repetida.
+        modelo = modelo_sintetico(600, 150)
+        html = S.gerar_sessoes(modelo).encode("utf-8")
+        doc = Documento(html.decode("utf-8"))
+        faixas = doc.com_classe("faixa")
+        self.assertEqual(len(faixas), 2)
+        for faixa in faixas:
+            self.assertEqual(len(Documento.descendentes(faixa, "td")), 21 * 25)
+            corpo = Documento.descendentes(faixa, "tbody")[0]
+            self.assertEqual(len(Documento.descendentes(corpo, "tr")), 21)
+            self.assertEqual(len(Documento.descendentes(Documento.descendentes(faixa, "thead")[0], "th")), 26)
+        with mock.patch.object(S, "_mapa_votos", return_value=""):
+            sem_mapa = S.gerar_sessoes(modelo).encode("utf-8")
+        tamanho = len(gzip.compress(html, mtime=0))
+        aumento = tamanho - len(gzip.compress(sem_mapa, mtime=0))
+        print(f"\nMapa de votos (sintético: 21 × 25 × 2): acréscimo {len(html) - len(sem_mapa)} B brutos / "
+              f"{aumento} B gzip; página completa {tamanho} B gzip.")
+        self.assertLessEqual(tamanho, 65 * 1024, "alvo de apresentação com o mapa: 65 KiB gzip")
+        self.assertLessEqual(aumento, 12 * 1024, "margem para o mapa sobre a página publicada (~48 KiB gzip)")
+
     def test_orcamento_gzip_com_600_sessoes_500_votacoes_21_pessoas(self):
         modelo = modelo_sintetico(600, 500, distribuicao_realista=True)
         self.assertEqual(len(modelo["sessoes"]["sessoes"]), 600)
@@ -678,7 +934,7 @@ class TestPaginaSessoes(unittest.TestCase):
         secoes = [len(gzip.compress(S.secao_sessoes_vereador(modelo, p).encode("utf-8"), mtime=0)) for p in modelo["pessoas"].values()]
         maior = max(secoes)
         print(f"\nSessões (sintético: 600/500/21/2, 30% divididas): página {len(html)} B brutos / {tamanho} B gzip; maior seção individual {maior} B gzip.")
-        self.assertLessEqual(tamanho, 100 * 1024, "teto oficial: 100 KiB gzip; alvo de 60 KiB medido com os dados reais")
+        self.assertLessEqual(tamanho, 100 * 1024, "teto oficial: 100 KiB gzip; alvo com o mapa: 65 KiB nos dados reais")
         self.assertLessEqual(maior, 10 * 1024, "seção individual: até +10 KiB gzip")
 
 

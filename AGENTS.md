@@ -234,9 +234,17 @@ Com `GITHUB_ACTIONS` definida, `coletor.validar` emite os problemas como `::erro
 - `atividades.html` lista os documentos com filtros na URL; cada página de vereador tem a seção "Atividade".
   "Ver no SISCAM" abre um `<dialog>` com iframe em sandbox, aceito só para
   `DetalhesDocumentos.aspx?IdDocumento=<n>`; o link "abrir no SISCAM" fica sempre visível como alternativa.
-- `sessoes.html` e a seção "Presença e votos" de cada vereador são HTML gerado no servidor, sem JSON de votos
-  nem JS novo. O gerador chama `modelo_sessoes.montar_sessoes` quando existe `data/sessoes`; sem a pasta, gera
-  o estado vazio. A página mostra presença por legislatura, votações divididas (40 cartões iniciais e o resto
+- `sessoes.html` e a seção "Presença e votos" de cada vereador mantêm HTML gerado no servidor. Para consultas
+  no navegador, `dados/dic-ses.json` exporta enumerações e os mesmos rótulos de `regras_sessoes.rotulo_voto`;
+  `dados/vot-<ano>.json` guarda as votações nominais em colunas, com pessoas locais e um caractere por pessoa
+  em cada string de votos (`.` significa que não consta, diferente de ausência ou voto indeterminado).
+  Esses JSONs não levam build; as famílias `dic-ses` e `vot` entram no manifesto com `?v=` por conteúdo,
+  preservando a URL de um ano sem mudança. O manifesto embutido de `sessoes.html` lista todos os anos, com
+  carga inicial prevista de dicionário + ano mais recente; só o dicionário recebe preload fixo, pois a consulta
+  pode pedir outro ano. Cada parte anual tem teto de 150 KiB gzip (estimativa: cerca de 8 KiB para 70 votações);
+  o relatório mostra o dicionário, a soma e o máximo das partes, com aviso ao exceder o orçamento.
+  O gerador chama `modelo_sessoes.montar_sessoes` quando existe `data/sessoes`; sem a pasta, gera o estado vazio
+  e não cria partes `vot-*`. A página mostra presença por legislatura, votações divididas (40 cartões iniciais e o resto
   em `<details>`), placares por ano, ritmo e qualidade. Suplentes sem página aparecem sem link, identificados
   como "suplente em exercício". As regras e limitações estão em `metodologia.html#sessoes`: só deliberativas
   realizadas com lista entram na presença; licenças ficam fora da base individual; Favor/Contra é voto sobre

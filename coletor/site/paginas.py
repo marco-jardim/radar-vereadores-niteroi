@@ -147,6 +147,10 @@ def iniciais_por_pagina(manifesto: dict) -> dict[str, list[str]]:
     ano = ano_padrao_doc(manifesto["arquivos"])
     if ano is not None and "dic-doc" in manifesto["arquivos"]:
         iniciais["atividades.html"] = ["dic-doc", *plano_docs(manifesto["arquivos"], ano=ano)]
+    votacoes = sorted(((n, e) for n, e in manifesto["arquivos"].items() if e.get("familia") == "vot"),
+                      key=lambda item: (-item[1]["ano"], item[0]))
+    if "dic-ses" in manifesto["arquivos"]:
+        iniciais["sessoes.html"] = ["dic-ses", *[n for n, _ in votacoes[:1]]]
     return iniciais
 
 
@@ -159,8 +163,12 @@ def cabecalho_dados(manifesto: dict | None, ativo: str, prefixo: str) -> str:
     inicial = iniciais[ativo]
     if ativo == "atividades.html":
         # Só as famílias de documentos; o PL continua com o seu build.
-        arquivos = {n: e for n, e in manifesto["arquivos"].items() if e.get("familia")}
+        arquivos = {n: e for n, e in manifesto["arquivos"].items() if e.get("familia") in {"dic-doc", "doc", "ver"}}
         dados = {"esquema": manifesto["esquema"], "build": manifesto["build"], "build_doc": manifesto["build_doc"],
+                 "inicial": inicial, "arquivos": arquivos}
+    elif ativo == "sessoes.html":
+        arquivos = {n: e for n, e in manifesto["arquivos"].items() if e.get("familia") in {"dic-ses", "vot"}}
+        dados = {"esquema": manifesto["esquema"], "build_ses": manifesto["build_ses"],
                  "inicial": inicial, "arquivos": arquivos}
     else:
         arquivos = {n: e for n, e in manifesto["arquivos"].items() if not e.get("familia")}
@@ -207,12 +215,14 @@ def cabecalho_dados(manifesto: dict | None, ativo: str, prefixo: str) -> str:
 
 
 def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: str = "", manifesto: dict | None = None,
-           dialogo: bool = False) -> str:
+           dialogo: bool = False, scripts: tuple[str, ...] = ()) -> str:
     desc = esc(descricao or "Quais leis de Niterói mudam a cidade, quem as escreveu, e quanto da produção da Câmara é homenagem, "
                "lei sem efeito ou pauta polêmica. Dados do SISCAM atualizados toda semana.")
     nav = "".join(
         f'<a href="{prefixo}{href}"{" aria-current=\"page\"" if href == ativo else ""}>{esc(nome)}</a>' for href, nome in NAV
     )
+    extras = "\n".join(f'<script src="{esc(prefixo + nome)}?v={versao_estatica(nome)}" defer></script>'
+                       for nome in scripts if (FONTE_ESTATICA / nome).is_file())
     return f"""<!doctype html>
 <html lang="pt-BR">
 <head>
@@ -245,6 +255,7 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
 {(DIALOGO_SISCAM + chr(10)) if dialogo else ''}<div id="tip" role="tooltip" hidden></div>
 <script src="{prefixo}dados.js?v={versao_estatica('dados.js')}" defer></script>
 <script src="{prefixo}app.js?v={versao_estatica('app.js')}" defer></script>
+{extras}
 </body>
 </html>
 """

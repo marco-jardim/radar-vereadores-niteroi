@@ -88,6 +88,10 @@ class TestGerarSite(unittest.TestCase):
             self.assertIn("Nenhum registro de frequência com este nome", ficha)
             for nome in PAGINAS:
                 self.assertTrue((saida / nome).is_file(), nome)
+            self.assertEqual(list((saida / "dados").glob("vot-*.json")), [])
+            manifesto = json.loads((saida / "dados/manifest.json").read_bytes())
+            self.assertNotIn("build_ses", manifesto)
+            self.assertFalse(any(e.get("familia") in {"dic-ses", "vot"} for e in manifesto["arquivos"].values()))
             self.assertIn("sessoes.html", mensagem.getvalue())
 
     def test_novidades_e_feed_rss(self):
@@ -177,7 +181,7 @@ class TestGerarSite(unittest.TestCase):
 
     def test_manifesto_e_documentos(self):
         manifesto = json.loads((self.saida / "dados" / "manifest.json").read_text(encoding="utf-8"))
-        familias = {e.get("familia") for e in manifesto["arquivos"].values()}
+        familias = {e.get("familia") for e in manifesto["arquivos"].values() if e.get("familia") not in {"dic-ses", "vot"}}
         self.assertTrue({"dic-pl", "pl-lei", "pl-andamento", "pl-sem_exito"} <= set(manifesto["arquivos"]))
         for nome in ("dic-pl", "pl-lei", "pl-andamento", "pl-sem_exito"):
             self.assertNotIn("familia", manifesto["arquivos"][nome])  # entradas de PL inalteradas
@@ -197,6 +201,31 @@ class TestGerarSite(unittest.TestCase):
             self.assertEqual(familias, {None})
             self.assertNotIn("build_doc", manifesto)
             self.assertNotIn('data-modo="atividades"', atividades)
+
+    def test_manifesto_e_partes_anuais_de_sessoes(self):
+        manifesto = self.manifesto()
+        partes = list((self.saida / "dados").glob("vot-*.json"))
+        html = (self.saida / "sessoes.html").read_text(encoding="utf-8")
+        if not partes:
+            self.assertNotIn("dic-ses", manifesto["arquivos"])
+            self.assertNotIn('id="manifesto-dados"', html)
+            return
+        self.assertIn("dic-ses", manifesto["arquivos"])
+        self.assertIn("dados/dic-ses.json", self.mensagem)
+        self.assertIn(f"dados/vot-*.json (soma de {len(partes)})", self.mensagem)
+        self.assertIn("dados/vot-*.json (máximo)", self.mensagem)
+        texto = html.split('<script type="application/json" id="manifesto-dados">', 1)[1].split("</script>", 1)[0]
+        embutido = json.loads(texto)
+        self.assertEqual(set(embutido["arquivos"]), {"dic-ses", *(arq.stem for arq in partes)})
+        for arq in partes:
+            with self.subTest(arquivo=arq.name):
+                dados = json.loads(arq.read_bytes())
+                entrada = manifesto["arquivos"][arq.stem]
+                self.assertEqual(entrada["familia"], "vot")
+                self.assertEqual((entrada["ano"], entrada["n"]), (dados["ano"], dados["n"]))
+                self.assertNotIn("build", dados)
+                self.assertEqual(entrada["url"], f"dados/{arq.name}?v={P.versao_bytes(arq.read_bytes())}")
+                self.assertLessEqual(gerar_site.tamanho_gzip(arq.read_bytes()), gerar_site.LIMITE_PARTE_VOT_GZIP)
 
     def test_paginas_de_vereadores(self):
         dados = json.loads((self.saida / "dados" / "vereadores.json").read_text(encoding="utf-8"))

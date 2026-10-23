@@ -15,6 +15,29 @@ from coletor.site import paginas as P
 from coletor.site.modelo import nome_curto
 
 
+# Contrato de melhoria progressiva (o servidor não depende de JS):
+# - #filtros-sessoes-<leg>.filtros.filtros-sessoes[data-leg] nasce hidden.
+#   Nomes: ano (todos|ano), classe (dividida|dissenso|todas), materia
+#   (todas|veto|pl|pdl|resolucao|outra), vereador (vazio|slug), div, q,
+#   ordem (recente|antigo|apertada); botões data-acao=limpar|csv|mais.
+# - #lista-votacoes-<leg>.votacoes contém as primeiras LIMITE_CARTOES
+#   divididas, recentes primeiro, de todos os anos; .mais-votacoes guarda
+#   a continuação sem JS. Ao hidratar, substituir a lista e essa continuação.
+#   #contagem-votacoes-<leg>[aria-live=polite]; botão mais começa hidden.
+# - cartao_votacao(modelo, v) é o componente público a espelhar no cliente:
+#   li.projeto.votacao#v-<id>[data-ano|materia|classe|sentido|qualidade];
+#   p.cab (documento, data, sessão), p.desfecho, p.ementa, .mini-barra,
+#   p.mini-n; opcionais p.quorum, p.fonte-sentido, p.qualidade-voto;
+#   details.votos-nomes > summary + .grupo-votos (h4 e p com .chip),
+#   ações SISCAM, a.contestar e details.notas-conferencia. Inconsistentes
+#   nunca atribuem votos a nomes. Textos e atributos sempre escapados.
+# - #faixa-<leg>.faixa-votos[data-ano] contém legenda, região rolável com
+#   table.faixa e resumo. Só o ano mais recente com divididas vem no HTML.
+#   .faixa-sem-comparacao marca colunas sem maioria/sentido/consistência;
+#   .voto-maioria|diferente|abstencao|ausente|presidia|vazio|cru nas células.
+#   O cliente deve preservar glifos + .so-leitor, cabeçalhos e ordem alfabética.
+
+
 # ---- componentes -------------------------------------------------------------
 LIMITE_CARTOES = 40
 PRESENCA = (
@@ -26,6 +49,11 @@ PRESENCA = (
 )
 MATERIAS = {"veto": "Vetos", "pl": "Projetos de lei", "pdl": "Projetos de decreto legislativo",
             "resolucao": "Projetos de resolução", "outra": "Outras matérias"}
+VOTOS_FAIXA = {
+    "maioria": ("■", "com a maioria"), "diferente": ("◆", "diferente da maioria"),
+    "abstencao": ("◐", "abstenção"), "ausente": ("·", "ausente"),
+    "presidia": ("P", "presidia"), "vazio": ("", "fora do mandato/não consta"),
+}
 TIPOS = {"ordinaria": "Ordinárias", "extraordinaria": "Extraordinárias", "solene": "Solenes",
          "especial": "Especiais", "desconhecido": "Tipo não identificado"}
 SENTIDOS = {"favor_mantem", "favor_derruba", "favor_aprova", "favor_rejeita"}
@@ -255,7 +283,8 @@ def _nota_leitor(nota: str) -> bool:
                                         "placar inconsistente", "sentido não determinado")))
 
 
-def _cartao(modelo: dict, v: dict) -> str:
+def cartao_votacao(modelo: dict, v: dict) -> str:
+    """Cartão nominal reutilizável; estrutura pública descrita no contrato acima."""
     inconsistente = v.get("qualidade") == "inconsistente"
     documento = _documento(v)
     url = v.get("url_documento")
@@ -280,7 +309,11 @@ def _cartao(modelo: dict, v: dict) -> str:
     notas_html = "".join(f'<p class="nota qualidade-voto">ⓘ {P.esc(n)}</p>' for n in notas)
     conferencia = (f'<details class="notas-conferencia"><summary>Notas de conferência ({len(tecnicas)})</summary><ul>'
                    + "".join(f'<li>{P.esc(n)}</li>' for n in tecnicas) + '</ul></details>') if tecnicas else ''
-    return (f'<li class="projeto votacao" id="v-{P.esc(v["id"])}"><p class="cab">{titulo}'
+    atributos = " ".join(f'data-{chave}="{P.esc(valor)}"' for chave, valor in (
+        ("ano", _ano(v) or ""), ("materia", v.get("materia") or "outra"),
+        ("classe", v.get("classe") or ""), ("sentido", v.get("sentido") or "indeterminado"),
+        ("qualidade", v.get("qualidade") or "indeterminado")))
+    return (f'<li class="projeto votacao" id="v-{P.esc(v["id"])}" {atributos}><p class="cab">{titulo}'
             f'<span>{P.esc(P.data_br(v.get("data")))}</span><span>{P.esc(v.get("titulo_sessao") or "Sessão não identificada")}</span></p>'
             f'<p class="desfecho">Resultado oficial: {P.esc(v.get("resultado") or "não informado")}</p>'
             f'<p class="ementa">{P.esc(P.legivel(v.get("ementa") or "Ementa não disponível na base coletada."))}</p>'
@@ -289,6 +322,10 @@ def _cartao(modelo: dict, v: dict) -> str:
             + (P.botoes_siscam(url, documento) if url else '<p class="nota">Sem link do documento no SISCAM.</p>')
             + _contestar(documento, f'Sessão: {v.get("titulo_sessao") or ""}\nVotação: {v["id"]}\n{url or ""}')
             + conferencia + '</li>')
+
+
+# Compatibilidade com os consumidores anteriores; usar cartao_votacao em código novo.
+_cartao = cartao_votacao
 
 
 def _resumo_placares(dados: dict, anos: list[int]) -> str:
@@ -306,19 +343,146 @@ def _resumo_placares(dados: dict, anos: list[int]) -> str:
     return "".join(f'<p class="explica">{P.esc(f)}</p>' for f in frases)
 
 
+def _pessoas_leg(modelo: dict, dados: dict, leg: dict) -> list[str]:
+    """Composição conhecida, sem promover não membros dos votos brutos a vereadores."""
+    slugs = {s for s, r in (dados.get("por_pessoa") or {}).items() if leg["id"] in r}
+    slugs.update(s for s, p in (modelo.get("pessoas") or {}).items()
+                 if leg["id"] in (p.get("mandatos") or {}) or leg["id"] in (p.get("legislaturas") or []))
+    return sorted(slugs, key=lambda s: ((_pessoa(modelo, s, leg["id"]).get("nome") or s).casefold(), s))
+
+
+def _filtros_votacoes(modelo: dict, dados: dict, leg: dict) -> str:
+    ident = P.esc(leg["id"])
+    anos = ''.join(f'<option value="{a}">{a}</option>' for a in sorted({int(a) for a in leg.get("anos") or []}, reverse=True))
+    materias = ''.join(f'<option value="{chave}">{P.esc(nome)}</option>' for chave, nome in MATERIAS.items())
+    pessoas = ''.join(f'<option value="{P.esc(s)}">{P.esc(_pessoa(modelo, s, leg["id"]).get("nome") or s)}</option>'
+                      for s in _pessoas_leg(modelo, dados, leg))
+    classes = ''.join(f'<label><input type="radio" name="classe" value="{chave}"'
+                      f'{" checked" if chave == "dividida" else ""}>{nome}</label>'
+                      for chave, nome in (("dividida", "Divididas"), ("dissenso", "Dissenso isolado"), ("todas", "Todas")))
+    return (f'<form class="filtros filtros-sessoes" id="filtros-sessoes-{ident}" data-leg="{ident}" hidden>'
+            f'<label>Ano<select name="ano"><option value="todos">Todos os anos</option>{anos}</select></label>'
+            f'<fieldset><legend>Classe de votação</legend>{classes}</fieldset>'
+            f'<label>Matéria<select name="materia"><option value="todas">Todas as matérias</option>{materias}</select></label>'
+            f'<label>Vereador<select name="vereador"><option value="">Todos os vereadores</option>{pessoas}</select></label>'
+            '<label><input type="checkbox" name="div">Só onde o vereador escolhido votou diferente da maioria</label>'
+            '<label>Buscar votação<input type="search" name="q"></label>'
+            '<label>Ordenar<select name="ordem"><option value="recente">Mais recentes</option>'
+            '<option value="antigo">Mais antigas</option><option value="apertada">Mais apertadas</option></select></label>'
+            '<div class="acoes-item"><button type="button" data-acao="limpar">Limpar filtros</button>'
+            '<button type="button" data-acao="csv">Baixar CSV</button></div></form>')
+
+
 def _divididas(modelo: dict, dados: dict, leg: dict) -> str:
     votacoes = _recentes([v for v in _da_leg(dados.get("votacoes") or [], leg) if v.get("classe") == "dividida"])
     texto = _resumo_placares(dados, leg.get("anos") or [])
     texto += ('<p class="nota">A opção mais votada não é o quórum legal. Um veto mantido não significa que '
               'a maioria votou para mantê-lo. Casos inconsistentes e sentidos não determinados estão identificados.</p>')
+    ident = P.esc(leg["id"])
+    texto += _filtros_votacoes(modelo, dados, leg)
+    texto += (f'<p class="contagem" id="contagem-votacoes-{ident}" aria-live="polite">'
+              f'{P.plural(len(votacoes), "votação dividida", "votações divididas")} nesta legislatura.</p>')
     if not votacoes:
-        return texto + '<p class="vazio">Nenhuma votação dividida registrada nesta legislatura.</p>'
-    cartoes = [_cartao(modelo, v) for v in votacoes]
-    texto += '<ol class="projetos votacoes">' + "".join(cartoes[:LIMITE_CARTOES]) + '</ol>'
+        texto += '<p class="vazio">Nenhuma votação dividida registrada nesta legislatura.</p>'
+    cartoes = [cartao_votacao(modelo, v) for v in votacoes]
+    texto += f'<ol class="votacoes" id="lista-votacoes-{ident}">' + "".join(cartoes[:LIMITE_CARTOES]) + '</ol>'
     if len(cartoes) > LIMITE_CARTOES:
         texto += (f'<details class="bloco mais-votacoes"><summary>Ver mais {len(cartoes) - LIMITE_CARTOES}</summary>'
-                  + '<ol class="projetos votacoes">' + "".join(cartoes[LIMITE_CARTOES:]) + '</ol></details>')
-    return texto
+                  + '<ol class="votacoes">' + "".join(cartoes[LIMITE_CARTOES:]) + '</ol></details>')
+    return texto + f'<button type="button" data-acao="mais" data-leg="{ident}" hidden>Mostrar mais</button>'
+
+
+# ---- mapa de votos ------------------------------------------------------------
+def _limite_faixa(v: dict) -> str:
+    if v.get("qualidade") == "inconsistente":
+        return "placar inconsistente; sem atribuição nominal"
+    if not _determinada(v):
+        return "sentido não determinado"
+    if v.get("maioria") not in {"Favor", "Contra"}:
+        return "sem maioria (empate)"
+    return ""
+
+
+def _voto_faixa(v: dict, slug: str) -> tuple[str, str, str]:
+    """Classe, glifo e alternativa textual; cores nunca interpretam Favor/Contra."""
+    limite = _limite_faixa(v)
+    if v.get("qualidade") == "inconsistente":
+        return "cru", "—", limite
+    voto = (v.get("votos") or {}).get(slug)
+    if voto is None:
+        classe = "vazio"
+    elif limite:
+        return "cru", str(voto), f"{voto}; {limite}; sem comparação com a maioria"
+    elif voto in {"Favor", "Contra"}:
+        classe = "maioria" if voto == v["maioria"] else "diferente"
+    else:
+        classe = {"Abstenção": "abstencao", "Ausente": "ausente", "Presidente": "presidia"}.get(voto)
+        if classe is None:
+            return "cru", str(voto), str(voto)
+    return classe, *VOTOS_FAIXA[classe]
+
+
+def _cabecalho_faixa(v: dict) -> str:
+    documento = _documento(v)
+    numero = str(v.get("numero") or "").split("/")[0]
+    sigla = {"pl": "PL", "pdl": "PDL", "resolucao": "PR", "veto": "Veto"}.get(v.get("materia"))
+    curto = f"{sigla} {numero}" if sigla and numero else re.sub(r"/\d{4}\b", "", documento)
+    data = P.data_br(v.get("data"))
+    limite = _limite_faixa(v)
+    marca = (f'<span aria-hidden="true"> *</span><span class="so-leitor"> · {P.esc(limite)}</span>' if limite else '')
+    classe = ' class="faixa-sem-comparacao"' if limite else ''
+    return (f'<th scope="col"{classe}><a href="#v-{P.esc(v["id"])}">'
+            f'<abbr title="{P.esc(documento + ", " + data)}">{P.esc(data[:5])}</abbr><br>'
+            f'{P.esc(curto)}{marca}</a></th>')
+
+
+def _mapa_votos(modelo: dict, dados: dict, leg: dict) -> str:
+    nominais = _da_leg(dados.get("votacoes") or [], leg)
+    divididas = [v for v in nominais if v.get("classe") == "dividida"]
+    ident = P.esc(leg["id"])
+    if not divididas:
+        return (f'<div class="faixa-votos" id="faixa-{ident}" data-ano="">'
+                '<p class="vazio">Nenhuma votação dividida disponível para o mapa nesta legislatura.</p></div>')
+    ano = max(_ano(v) for v in divididas)
+    votacoes = list(reversed(_recentes([v for v in divididas if _ano(v) == ano])))
+    membros = _pessoas_leg(modelo, dados, leg)
+    linhas, resumo = [], []
+    for slug in membros:
+        pessoa = _pessoa(modelo, slug, leg["id"])
+        eleito = ((pessoa.get("mandatos") or {}).get(leg["id"]) or {}).get("eleito")
+        # Suplências sem nenhum voto substantivo/presidência não criam linhas.
+        if not eleito and not any((v.get("votos") or {}).get(slug) in
+                                  {"Favor", "Contra", "Abstenção", "Branco", "Nulo", "Presidente"} for v in nominais):
+            continue
+        nome = _nome(modelo, slug)
+        if not eleito and slug in (modelo.get("pessoas") or {}):
+            nome += '<span class="status">suplente em exercício</span>'
+        celulas, contagens = [], defaultdict(int)
+        for v in votacoes:
+            classe, glifo, rotulo = _voto_faixa(v, slug)
+            contagens[classe] += 1
+            marca = ' faixa-sem-comparacao' if _limite_faixa(v) else ''
+            celulas.append(f'<td class="voto-{classe}{marca}"><span aria-hidden="true">{P.esc(glifo)}</span>'
+                           f'<span class="so-leitor">{P.esc(rotulo)}</span></td>')
+        linhas.append(f'<tr><th scope="row">{nome}</th>{"".join(celulas)}</tr>')
+        resumo.append([nome, *[contagens[c] for c in ("maioria", "diferente", "abstencao", "ausente")]])
+    legenda = ''.join(f'<li><span class="glifo-voto voto-{c}" aria-hidden="true">{g}</span>'
+                      f'{P.esc(r if g else "Célula vazia: " + r)}</li>' for c, (g, r) in VOTOS_FAIXA.items())
+    return (f'<div class="faixa-votos" id="faixa-{ident}" data-ano="{ano}"><h3>Votações divididas de {ano}</h3>'
+            f'<ul class="leg-graf leg-votos" aria-label="Legenda do mapa de votos">{legenda}</ul>'
+            '<p class="nota">Linhas parecidas indicam votos parecidos nas votações divididas deste ano; '
+            'não indicam grupo político. Nomes em ordem alfabética, sem agrupamento por voto.</p>'
+            f'<div class="faixa-rolagem" role="region" tabindex="0" aria-label="Mapa de votos de {ano}, legislatura {P.esc(leg["rotulo"])}: tabela com rolagem horizontal">'
+            f'<table class="faixa"><caption>Vereador × votação dividida de {ano}, em ordem cronológica. '
+            'A cor compara o voto à opção mais votada entre Favor e Contra, independentemente do sentido do parecer. '
+            '* Coluna sem comparação: empate, sentido não determinado ou placar inconsistente.</caption>'
+            '<thead><tr><th scope="col">Vereador</th>' + ''.join(_cabecalho_faixa(v) for v in votacoes)
+            + '</tr></thead><tbody>' + ''.join(linhas) + '</tbody></table></div>'
+            + P.tabela_resumo(f'Resumo por vereador · votações divididas de {ano}',
+                              ["Vereador", "Com a maioria", "Diferente da maioria", "Abstenção", "Ausente"], resumo)
+            + '<p class="nota">O resumo conta apenas as colunas com comparação determinada. Presidência, células vazias, '
+            'votos em branco/nulos e colunas marcadas não entram nessas quatro contagens. '
+            f'<a href="#divididas-{ident}">Ver outros anos nas listas de votações</a>.</p></div>')
 
 
 def _grafico(titulo: str, subtitulo: str, rotulos: list[str], series: list[tuple], eixo: str) -> str:
@@ -425,6 +589,7 @@ def gerar_sessoes(modelo: dict) -> str:
                               "ao menos 3 no lado menor ou 3 abstenções"))
             indice_html = (f'<nav class="indice" aria-label="Nesta legislatura: {P.esc(leg["rotulo"])}">'
                            f'<a href="#presenca-{ident}">Presença</a><a href="#divididas-{ident}">Votações divididas</a>'
+                           f'<a href="#mapa-votos-{ident}">Mapa de votos</a>'
                            f'<a href="#placares-{ident}">Placares por ano</a><a href="#ritmo-sessoes">Ritmo</a>'
                            '<a href="#qualidade-sessoes">Qualidade dos dados</a></nav>')
             blocos.append(f'<details class="bloco" id="sessoes-leg-{ident}"{" open" if indice == 0 else ""}>'
@@ -432,10 +597,12 @@ def gerar_sessoes(modelo: dict) -> str:
                           f'<section id="presenca-{ident}"><h2 class="h-secao">Presença nas sessões deliberativas</h2>'
                           '<p class="explica">O percentual usa a base de cada vereador, sem licenças. Com menos de 10 sessões, '
                           'mostramos só a contagem. Partido é o da eleição; nomes em ordem alfabética.</p>'
-                          + _presencas(modelo, dados, leg, ordenar=indice == 0) + '</section>'
-                          f'<section id="divididas-{ident}"><h2 class="h-secao">Votações que dividiram a Câmara</h2>'
-                          + _divididas(modelo, dados, leg) + '</section>'
-                          f'<section id="placares-{ident}"><h2 class="h-secao">Placares por ano</h2>'
+                           + _presencas(modelo, dados, leg, ordenar=indice == 0) + '</section>'
+                           f'<section id="divididas-{ident}"><h2 class="h-secao">Votações que dividiram a Câmara</h2>'
+                           + _divididas(modelo, dados, leg) + '</section>'
+                           f'<section id="mapa-votos-{ident}"><h2 class="h-secao">Mapa de votos</h2>'
+                           + _mapa_votos(modelo, dados, leg) + '</section>'
+                           f'<section id="placares-{ident}"><h2 class="h-secao">Placares por ano</h2>'
                           + _grafico_placares(dados, leg) + '</section></details>')
         corpo = (abertura + '<div class="sessoes"><h2 class="h-secao">Legislaturas</h2>'
                  '<p class="explica">A mais recente está aberta. Abra as demais legislaturas para comparar os períodos.</p>'
