@@ -20,6 +20,7 @@ Os testes de JavaScript pedem Node 21+ (o CI usa 22).
 | --- | --- |
 | `coletor/siscam.py` | HTTP, parsing do SISCAM, autoria, tramitação e desfechos dos projetos de lei. |
 | `coletor/documentos.py` | Listagem e detalhe seletivo de requerimentos, indicações, moções, PDLs e resoluções. |
+| `coletor/sessoes.py` | Sessões plenárias: listagem por ano, pauta, fases, frequência e votações nominais (ainda fora do workflow e do site). |
 | `coletor/regras_documentos.py` | Categorias, bairro, resposta e publicação dos documentos, por regras determinísticas. |
 | `coletor/classificar.py` | Taxonomia, regras, prompt, chamadas à IA, cache e curadoria dos projetos de lei. |
 | `coletor/arquivos.py` | Gravação atômica dos JSONs de `data/`, com um registro por linha. |
@@ -31,7 +32,7 @@ Os testes de JavaScript pedem Node 21+ (o CI usa 22).
 | `coletor/site/paginas.py` | HTML, componentes, diálogo do SISCAM e metodologia publicada. |
 | `config/vereadores.json` | Legislaturas, eleitos, partidos, apelidos e afastamentos. |
 | `config/curadoria.json` | Rótulos e correções manuais com fontes públicas. |
-| `data/` | Projetos e documentos por ano, cache da IA e metadados, todos gerados e versionados. |
+| `data/` | Projetos, documentos e (quando coletadas) sessões por ano, cache da IA e metadados, todos gerados e versionados. |
 | `site_src/` | Fontes estáticas: `app.js`, `dados.js`, `estilo.css` e `favicon.svg`. |
 | `tests/` | Testes Python (`test_*.py`), JavaScript (`tests/js/`) e HTML real do SISCAM (`tests/fixtures/siscam/`). |
 | `.github/workflows/` | Testes, coleta semanal e publicação do site. |
@@ -52,10 +53,49 @@ Os testes de JavaScript pedem Node 21+ (o CI usa 22).
    inclusive numa interrupção.
 3. `coletor.classificar` consulta a IA para ementas de projetos de lei ainda não cobertas pelo cache válido.
    Atualiza `data/classificacao_ia.json` quando usa IA e registra estatísticas em `data/meta.json`.
-4. `coletor.validar` confere a forma de `data/` e `config/`, inclusive o formato byte a byte de `data/documentos`,
-   e sai com código 1 se encontrar problema.
+4. `coletor.validar` confere a forma de `data/` e `config/`, inclusive o formato byte a byte de `data/documentos`
+   e de `data/sessoes` (pastas opcionais), e sai com código 1 se encontrar problema.
 5. `coletor.gerar_site` combina curadoria, regras e cache, classifica os documentos, calcula métricas e recria `site/`,
    inclusive `novidades.html` e `feed.xml`, com eventos derivados na hora (não há `data/novidades.json`).
+
+Passo opcional, **ainda não ligado a `coleta.yml` nem ao site**: `coletor.sessoes` lista as sessões plenárias de cada ano
+(`ResultadoSessao.aspx?Ano=<ano>&pagina=<n>`, 10 por página, sem total) e baixa o detalhe de cada uma
+(`DetalhesSessao.aspx`): observações, documentos da sessão (rótulo e arquivo), itens de pauta, frequência por
+momento ("Abertura - 14:10") e votações com totais e votos nominais.
+Salva `data/sessoes/<ano>.json`, ordenado por data, hora, número e id, e atualiza a chave `sessoes` de `data/meta.json`.
+- A pauta guarda só referências: `id_documento`, `fase`, `prioridade`, `secao` (rótulo do documento da sessão em que
+  o item aparece) e `secao_indice` (a posição dele em `documentos_sessao`, porque pode haver duas "Ordem do Dia").
+  Tipo, número, ano e ementa vêm de `data/proposicoes` e `data/documentos` pelo id. Só o item cujo id não está
+  nesses arquivos no momento da coleta, ou sem id (linha sem link, gravada com `id_documento` null), guarda também
+  `tipo_documento`, `numero`, `ano` e `ementa`, para não perder informação; os ids conhecidos são lidos uma vez por
+  execução (`sessoes.ids_conhecidos`). As votações, poucas, continuam com `documento`, `tipo_documento`, `numero` e
+  `ano`, que servem de conferência; votação sem link também fica com `id_documento` null.
+- Quando entrar no workflow, a ordem é obrigatória: `siscam` → `documentos` → `sessoes`, para que os ids da pauta já
+  estejam em `data/`. Risco: um item enxuto cujo documento depois some de `data/proposicoes` ou `data/documentos`
+  (removido ou renumerado no SISCAM) perde tipo, número e ementa. Recuperação: rode `python -m coletor.sessoes
+  --anos <ano> --forcar` (o item volta completo se o id não for mais conhecido); o SISCAM ainda mostra a pauta.
+- Dado bruto: um mesmo nome pode se repetir numa votação ou num momento da frequência (na 95ª Ordinária de 2025, o
+  presidente aparece como "Ausente" e como "Presidente"). A linha é mantida e o nome vai para `nomes_repetidos` da
+  votação ou `frequencia_nomes_repetidos` da sessão (omitidos se vazios), com aviso simples em stderr; somas por
+  vereador precisam deduplicar. O nome é gravado como vem, sem separar cargo (nenhuma página real traz cargo no nome).
+- Layout alterado: rótulo de seção ("[ Votações ]", "[ Frequência ]", "[ Documentos da Sessão ]") na página sem a
+  linha esperada (`trVotacoes`, `trFrequencia`, `trDocumentosSessao`), ou linha sem a grade principal, gera
+  `::warning::` e a sessão não é gravada como detalhada: fica pendente. Ordinária ou extraordinária sem frequência só
+  avisa. Totais que divergem da contagem dos votos, ou com rótulo desconhecido, também só avisam.
+- O `ano` da sessão é o da listagem (o do arquivo); título de outro ano só gera aviso e fica como está em `titulo`.
+  Sessão sem tipo na listagem nem no título fica `"tipo": "desconhecido"`, com aviso. `detalhe_em` só muda quando o
+  conteúdo do registro muda, para não gerar diffs semanais vazios.
+- Paginação: para numa página curta, vazia ou fora do intervalo — o SISCAM responde a uma página além da última com
+  a página 1 de novo, o que se detecta pelo paginador (`currentPage`) e pelos ids repetidos. `PAGINAS_MAX = 50` é o
+  limite do SISCAM: se a página 50 vier cheia, a listagem do ano fica marcada como incompleta, com aviso.
+- Os textos ficam como no SISCAM: situação de frequência ("Consignado", "Ausência Justificada"), voto ("Favor",
+  "Ausente", "Presidente") e resultado ("Veto Mantido") não são interpretados; num veto, o sentido de "Favor" ainda
+  precisa ser definido com fonte pública.
+- O `IdDocumento` dos itens de pauta e das votações é o mesmo id de `data/proposicoes` e `data/documentos`; o id da
+  própria sessão é de outra numeração (`DetalhesSessao.aspx`).
+- Detalhe baixado para sessões novas, sem detalhe, pendentes, com cabeçalho alterado, dos últimos 60 dias ou com
+  `--forcar`; o resto recebe `"detalhe_pendente": true`. Falha de listagem ou listagem menor mantêm as sessões
+  anteriores, e uma lista que tinha itens e veio vazia num novo download mantém os itens anteriores, com aviso.
 
 `coletor/regras_documentos.py` não usa IA nem rede: categoria e subcategoria saem da ementa normalizada (o `assunto`
 da listagem só desempata), e o bairro é o último bairro oficial citado na ementa das indicações. A coleta grava,
@@ -89,7 +129,7 @@ python -m http.server -d site 8000
 
 - `--anos` aceita um ano ou intervalo inclusivo, como `2025-2026`. Padrão: 2021 até o ano atual em `coletor.siscam`;
   ano anterior e atual em `coletor.documentos`.
-- `--workers 4` controla a concorrência dos dois coletores. Em `coletor.siscam`, `--forcar` baixa novamente
+- `--workers 4` controla a concorrência dos coletores (no de sessões, só dos detalhes). Em `coletor.siscam`, `--forcar` baixa novamente
   todos os detalhes, mesmo sem mudança; `--max-detalhes 400` limita, por execução e do mais recente ao mais antigo,
   os detalhes pedidos só pelos substitutivos (PL ainda sem a chave `substitutivos` ou sem lei com substitutivo
   ainda sem lei, cuja tramitação não muda a listagem do PL); o resto fica para a próxima execução.
@@ -98,6 +138,9 @@ python -m http.server -d site 8000
   não relista e só esvazia a fila de pendentes (não combina com `--sem-detalhe` nem `--forcar`); `--forcar`
   rebaixa o detalhe de todos os elegíveis, ainda dentro de `--max-detalhes`; `--max-minutos 100` encerra de forma
   limpa no prazo e deixa o resto pendente.
+- Sessões (opcional, fora do workflow): `python -m coletor.sessoes --anos 2021-2026 --workers 4`; padrão: ano anterior
+  e atual. `--max-detalhes 400` limita as páginas de detalhe por execução, as mais recentes primeiro; `--forcar`
+  rebaixa o detalhe de todas as sessões listadas, ainda dentro do limite; `--max-minutos` encerra de forma limpa.
 - No classificador, `--sem-ia` evita novas chamadas; `--limite 15` limita a 15 projetos novos classificados por IA.
 - Mesmo após classificar com `--sem-ia`, o gerador lê o cache existente; a opção não limpa classificações anteriores.
 - `python -m coletor.arquivos --reformatar` regrava `data/proposicoes/*.json` e `data/classificacao_ia.json` no
@@ -128,7 +171,7 @@ Não exponha chaves em commits, exemplos reais ou logs.
 | Variável | Padrão / função |
 | --- | --- |
 | `COLETOR_USER_AGENT` | Identificação do projeto com URL do repositório nas requisições ao SISCAM. |
-| `COLETOR_WORKERS` | `4`; padrão de `--workers` nos dois coletores, que pode sobrescrevê-lo. |
+| `COLETOR_WORKERS` | `4`; padrão de `--workers` nos coletores, que pode sobrescrevê-lo. |
 | `OPENCODE_API_KEY` | Sem padrão; sem chave, não há novas chamadas à IA. |
 | `OPENCODE_MODEL` | `deepseek-v4.1-flash`; modelo usado pelo classificador. |
 | `OPENCODE_BASE_URL` | `https://opencode.ai/zen/go/v1`; base da API compatível com chat completions. |
@@ -194,7 +237,7 @@ Com `GITHUB_ACTIONS` definida, `coletor.validar` emite os problemas como `::erro
 
 ## Arquivos gerados vs. editados à mão
 
-- **Nunca edite à mão** `data/` (`data/proposicoes/`, `data/documentos/`, `data/classificacao_ia.json`,
+- **Nunca edite à mão** `data/` (`data/proposicoes/`, `data/documentos/`, `data/sessoes/`, `data/classificacao_ia.json`,
   `data/meta.json`) nem `site/`. Corrija a coleta, as regras ou a configuração e regenere; correções editoriais
   cabem em `config/curadoria.json`.
 - Edite as fontes em `coletor/`, `config/` e `site_src/`, conforme a responsabilidade da mudança.
@@ -238,7 +281,8 @@ Com `GITHUB_ACTIONS` definida, `coletor.validar` emite os problemas como `::erro
 - Mantenha um `User-Agent` identificável, timeout e tentativas com espera progressiva (retry/backoff).
 - Use concorrência baixa: o padrão é **4 workers**. Evite `--forcar` e aumentos de paralelismo sem necessidade.
 - O SISCAM só pagina até a **página 50** (500 registros); preserve a divisão por faixas de número (`FAIXA = 400`),
-  usada pelos dois coletores.
+  usada pelos coletores de projetos e de documentos. O de sessões lista por ano sem faixa (cerca de 120 sessões por
+  ano, 12 páginas) e para na página 50 (`sessoes.PAGINAS_MAX`), marcando a listagem como incompleta se ela vier cheia.
 - O parsing de HTML por regex e divisões de texto é frágil: confira o HTML real antes de ajustar os padrões.
 - Compare contagens esperadas, autoria, situação e tramitação; não transforme falhas de parsing em dados vazios silenciosos.
   Preserve dados anteriores em falhas de listagem ou detalhe e investigue avisos de listagem incompleta.

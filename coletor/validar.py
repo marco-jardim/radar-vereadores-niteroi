@@ -2,10 +2,11 @@
 
 Confere, sem alterar nada, a forma de data/proposicoes/<ano>.json (inclusive os
 substitutivos e a coerência de lei_substitutivo), de
-data/documentos/<tipo>/<ano>.json (inclusive o formato byte a byte gravado por
-coletor.arquivos), do cache da IA (data/classificacao_ia.json), de data/meta.json e
-dos arquivos config/curadoria.json e config/vereadores.json, e acusa temporários de
-gravação interrompida em data/. Cada verificação é uma função que recebe os dados já
+data/documentos/<tipo>/<ano>.json e de data/sessoes/<ano>.json (inclusive o formato
+byte a byte gravado por coletor.arquivos; as duas pastas são opcionais), do cache da
+IA (data/classificacao_ia.json), de data/meta.json e dos arquivos
+config/curadoria.json e config/vereadores.json, e acusa temporários de gravação
+interrompida em data/. Cada verificação é uma função que recebe os dados já
 carregados e devolve a lista de problemas encontrados (vazia quando está tudo certo).
 
 Uso: python -m coletor.validar
@@ -23,6 +24,7 @@ from datetime import date
 from pathlib import Path
 
 from coletor import documentos as D
+from coletor import sessoes as S
 from coletor.arquivos import texto_lista
 from coletor.site.modelo import DESFECHO_GRUPO
 
@@ -34,6 +36,8 @@ RE_DATA = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 RE_HASH = re.compile(r"^[0-9a-f]{16}$")  # hexdigest() do SHA-1 é minúsculo; ver classificar._hash
 RE_URL = re.compile(r"^https?://\S+$", re.I)
 RE_ANO = re.compile(r"\d{4}")
+RE_HORA = re.compile(r"^\d{2}:\d{2}$")
+RE_TIPO_SESSAO = re.compile(r"^[a-z0-9_]+$")  # sessoes.normalizar: "audiencia_publica"
 CAMPOS_DATA = ("data", "data_protocolo")
 # "enviado" é gravado só com a data (siscam.data_iso descarta a hora "13:47" do SISCAM)
 CAMPOS_DATA_TRAMITACAO = ("enviado", "data_resposta")
@@ -388,16 +392,249 @@ def validar_documentos(raiz: Path | None = None, ids_proposicoes: set[int] | Non
     return problemas
 
 
+# ------------------------------------------------------------------------- sessões
+def _textos(item: dict, chaves: tuple[str, ...], rotulo: str) -> list[str]:
+    return [f"{rotulo}: '{chave}' ausente ou não textual" for chave in chaves if not isinstance(item.get(chave), str)]
+
+
+def _referencia_documento(item: dict, rotulo: str) -> list[str]:
+    """tipo_documento, numero (<n>/<ano> ou null) e ano de uma votação ou de um item de pauta completo."""
+    problemas = _textos(item, ("tipo_documento",), rotulo)
+    numero, ano = item.get("numero"), item.get("ano")
+    m = RE_NUMERO.match(numero) if isinstance(numero, str) else None
+    if numero is not None and not m:
+        problemas.append(f"{rotulo}: 'numero' {numero!r} fora do formato <n>/<ano>")
+    if ano is not None and not _e_inteiro(ano):
+        problemas.append(f"{rotulo}: 'ano' {ano!r} não é inteiro nem null")
+    elif m and ano != int(m.group(2)):
+        problemas.append(f"{rotulo}: 'ano' {ano!r} difere do ano do número {numero!r}")
+    return problemas
+
+
+def _pessoa(item: object, rotulo: str, campo: str) -> list[str]:
+    """Vereador da frequência ou de uma votação: nome não vazio (como vem do SISCAM) e o campo do valor."""
+    if not isinstance(item, dict):
+        return [f"{rotulo} deveria ser um objeto"]
+    problemas = _textos(item, (campo,), rotulo)
+    if not isinstance(item.get("nome"), str) or not item["nome"].strip():
+        problemas.append(f"{rotulo}: 'nome' ausente ou vazio")
+    return problemas
+
+
+def _nomes_repetidos(item: dict, chave: str, rotulo: str) -> list[str]:
+    """Lista opcional de nomes repetidos (sessoes.nomes_repetidos): omitida quando vazia."""
+    if chave not in item:
+        return []
+    valor = item[chave]
+    if not isinstance(valor, list) or not valor or not all(isinstance(n, str) and n.strip() for n in valor):
+        return [f"{rotulo}: '{chave}' deveria ser uma lista não vazia de nomes (ou ausente)"]
+    return []
+
+
+def _item_pauta(p: object, rotulo: str, documentos: list | None = None) -> list[str]:
+    """Item de pauta como sessoes.enxugar_pauta grava.
+
+    Sempre id_documento (inteiro, ou null numa linha sem link), fase, prioridade e secao;
+    secao_indice, se presente, é a posição em `documentos` (documentos_sessao) de um
+    documento com o rótulo `secao`. tipo_documento, numero, ano e ementa vêm todos juntos
+    ou nenhum, e são obrigatórios sem id. Não se confere se o id está em data/proposicoes
+    ou data/documentos: o que vale é o conjunto de ids do momento da coleta, e um
+    documento coletado depois não torna o item inválido.
+    """
+    if not isinstance(p, dict):
+        return [f"{rotulo} deveria ser um objeto"]
+    problemas = _textos(p, ("secao", "prioridade", "fase"), rotulo)
+    id_doc = p.get("id_documento")
+    if "id_documento" not in p or not (id_doc is None or _e_inteiro(id_doc)):
+        problemas.append(f"{rotulo}: 'id_documento' deveria ser inteiro ou null")
+    if "secao_indice" in p:
+        indice = p["secao_indice"]
+        documentos = documentos or []
+        if not _e_inteiro(indice) or not 0 <= indice < len(documentos):
+            problemas.append(f"{rotulo}: 'secao_indice' {indice!r} não é a posição de um documento da sessão")
+        elif not isinstance(documentos[indice], dict) or documentos[indice].get("rotulo") != p.get("secao"):
+            problemas.append(f"{rotulo}: 'secao_indice' {indice} aponta para um documento de outro rótulo que 'secao'")
+    inesperadas = sorted(set(p) - set(S.CAMPOS_PAUTA) - set(S.CAMPOS_PAUTA_DOCUMENTO))
+    if inesperadas:
+        problemas.append(f"{rotulo}: chave(s) inesperada(s) {', '.join(inesperadas)}")
+    presentes = [chave for chave in S.CAMPOS_PAUTA_DOCUMENTO if chave in p]
+    if presentes and len(presentes) < len(S.CAMPOS_PAUTA_DOCUMENTO):
+        problemas.append(f"{rotulo}: {', '.join(S.CAMPOS_PAUTA_DOCUMENTO)} deveriam vir juntos (há só {', '.join(presentes)})")
+    elif presentes:
+        problemas += _textos(p, ("ementa",), rotulo) + _referencia_documento(p, rotulo)
+    elif id_doc is None:
+        problemas.append(f"{rotulo}: item sem 'id_documento' precisa de {', '.join(S.CAMPOS_PAUTA_DOCUMENTO)}")
+    return problemas
+
+
+def _lista(s: dict, chave: str, rotulo: str) -> tuple[list, list[str]]:
+    valor = s.get(chave)
+    if not isinstance(valor, list):
+        return [], [f"{rotulo}: '{chave}' deveria ser uma lista"]
+    return valor, []
+
+
+def _detalhe_sessao(s: dict, rotulo: str) -> list[str]:
+    """Campos da página de detalhe, como coletor.sessoes.aplicar_detalhe grava."""
+    problemas = _textos(s, ("observacoes",), rotulo)
+    documentos, erros = _lista(s, "documentos_sessao", rotulo)
+    problemas += erros
+    for i, d in enumerate(documentos, 1):
+        r = f"{rotulo}: documento da sessão {i}"
+        if not isinstance(d, dict):
+            problemas.append(f"{r} deveria ser um objeto")
+            continue
+        problemas += _textos(d, ("rotulo",), r)
+        if "url" not in d or not (d["url"] is None or (isinstance(d["url"], str) and RE_URL.match(d["url"]))):
+            problemas.append(f"{r}: 'url' deveria ser uma URL http(s) ou null")
+    pauta, erros = _lista(s, "pauta", rotulo)
+    problemas += erros
+    for i, p in enumerate(pauta, 1):
+        problemas += _item_pauta(p, f"{rotulo}: item de pauta {i}", documentos)
+    frequencia, erros = _lista(s, "frequencia", rotulo)
+    problemas += erros + _nomes_repetidos(s, "frequencia_nomes_repetidos", rotulo)
+    for i, f in enumerate(frequencia, 1):
+        r = f"{rotulo}: frequência {i}"
+        problemas += _pessoa(f, r, "situacao")
+        if isinstance(f, dict):
+            problemas += _textos(f, ("momento",), r)
+    votacoes, erros = _lista(s, "votacoes", rotulo)
+    problemas += erros
+    for i, v in enumerate(votacoes, 1):
+        r = f"{rotulo}: votação {i}"
+        if not isinstance(v, dict):
+            problemas.append(f"{r} deveria ser um objeto")
+            continue
+        problemas += _textos(v, ("documento", "resultado", "tipo_votacao"), r) + _referencia_documento(v, r)
+        problemas += _nomes_repetidos(v, "nomes_repetidos", r)
+        # null numa votação sem link de documento: documento e tipo_documento guardam o rótulo
+        if "id_documento" not in v or not (v["id_documento"] is None or _e_inteiro(v["id_documento"])):
+            problemas.append(f"{r}: 'id_documento' deveria ser inteiro ou null")
+        totais = v.get("totais")
+        if totais is not None and (
+            not isinstance(totais, dict)
+            or set(totais) != set(S.CHAVES_TOTAIS)
+            or any(t is not None and (not _e_inteiro(t) or t < 0) for t in totais.values())
+        ):
+            problemas.append(f"{r}: 'totais' deveria ser null ou um objeto com {', '.join(S.CHAVES_TOTAIS)} (inteiros ≥ 0 ou null)")
+        votos, erros = _lista(v, "votos", r)
+        problemas += erros
+        for j, voto in enumerate(votos, 1):
+            problemas += _pessoa(voto, f"{r}: voto {j}", "voto")
+    return problemas
+
+
+def validar_sessao(s: object, ano: int, arquivo: str) -> list[str]:
+    """Confere um registro de data/sessoes/<ano>.json, como coletor.sessoes grava."""
+    if not isinstance(s, dict):
+        return [f"{arquivo}: registro deveria ser um objeto, não {type(s).__name__}"]
+    rotulo = f"{arquivo}: sessão {s.get('id')!r} ({s.get('titulo')!r})"
+    problemas = _textos(s, ("titulo", "tipo_texto", "url"), rotulo)
+    if not _e_inteiro(s.get("id")):
+        problemas.append(f"{rotulo}: 'id' ausente ou não inteiro")
+    # o ano é o da listagem em que a sessão apareceu (o do arquivo), mesmo que o título cite outro
+    if not _e_inteiro(s.get("ano")) or s["ano"] != ano:
+        problemas.append(f"{rotulo}: 'ano' {s.get('ano')!r} difere do ano do arquivo ({ano})")
+    numero = s.get("numero")
+    if numero is not None and (not _e_inteiro(numero) or numero < 1):
+        problemas.append(f"{rotulo}: 'numero' {numero!r} deveria ser um inteiro positivo ou null")
+    if not isinstance(s.get("tipo"), str) or not RE_TIPO_SESSAO.match(s["tipo"]):
+        problemas.append(f"{rotulo}: 'tipo' {s.get('tipo')!r} deveria ser o tipo normalizado (minúsculas, sem acentos)")
+    for chave in ("data", "detalhe_em"):
+        if not data_valida(s.get(chave)):
+            problemas.append(f"{rotulo}: '{chave}' {s.get(chave)!r} não é data AAAA-MM-DD nem null")
+    if s.get("hora") is not None and not (isinstance(s["hora"], str) and RE_HORA.match(s["hora"])):
+        problemas.append(f"{rotulo}: 'hora' {s.get('hora')!r} deveria ser hh:mm ou null")
+    tem_detalhe = bool(s.get("detalhe_em"))
+    if tem_detalhe or any(chave in s for chave in S.CAMPOS_DETALHE if chave != "detalhe_em"):
+        problemas += _detalhe_sessao(s, rotulo)
+    if "detalhe_pendente" in s and s["detalhe_pendente"] is not True:
+        problemas.append(f"{rotulo}: 'detalhe_pendente' deveria ser true ou ausente, não {s['detalhe_pendente']!r}")
+    elif "detalhe_pendente" not in s and not tem_detalhe:
+        problemas.append(f"{rotulo}: sem 'detalhe_em' e sem 'detalhe_pendente'")
+    return problemas
+
+
+def _sessao_ordenavel(s: object) -> bool:
+    """Se o registro tem o que sessoes.chave_arquivo precisa para ordenar o arquivo."""
+    return (
+        isinstance(s, dict) and _e_inteiro(s.get("id"))
+        and (s.get("numero") is None or _e_inteiro(s["numero"]))
+        and all(s.get(chave) is None or isinstance(s[chave], str) for chave in ("data", "hora"))
+    )
+
+
+def validar_arquivo_sessoes(bruto: bytes, ano: int, arquivo: str, origem_id: dict[int, str]) -> list[str]:
+    """Confere um arquivo de sessões já lido em bytes.
+
+    `origem_id` acumula, entre os arquivos, o primeiro arquivo de cada id de sessão. O
+    conteúdo precisa ser, byte a byte, o que coletor.sessoes.salvar_ano gravaria: um
+    registro por linha, chaves ordenadas, LF e ordem por data, hora, número e id. O id
+    da sessão é de outra numeração (DetalhesSessao.aspx) e não se compara aos de
+    data/proposicoes e data/documentos.
+    """
+    try:
+        registros = json.loads(bruto.decode("utf-8"))
+    except ValueError as e:  # inclui UnicodeDecodeError
+        return [f"{arquivo}: não foi possível ler o JSON ({e})"]
+    if not isinstance(registros, list):
+        return [f"{arquivo}: deveria conter uma lista, não {type(registros).__name__}"]
+    problemas = []
+    for s in registros:
+        problemas += validar_sessao(s, ano, arquivo)
+        if isinstance(s, dict) and _e_inteiro(s.get("id")):
+            if s["id"] in origem_id:
+                problemas.append(f"{arquivo}: sessão {s['id']} repetida (já aparece em {origem_id[s['id']]})")
+            else:
+                origem_id[s["id"]] = arquivo
+    if all(_sessao_ordenavel(s) for s in registros):
+        canonico = texto_lista(sorted(registros, key=S.chave_arquivo)).encode("utf-8")
+        if canonico != bruto:
+            problemas.append(
+                f"{arquivo}: fora do formato gravado por coletor.sessoes (um registro por linha, chaves ordenadas, "
+                "quebras de linha LF, ordem por data, hora, número e id); regenere com python -m coletor.sessoes"
+            )
+    return problemas
+
+
+def validar_sessoes(raiz: Path | None = None) -> list[str]:
+    """Confere data/sessoes/<ano>.json; a pasta é opcional (a coleta de sessões ainda não roda no CI)."""
+    raiz = raiz or RAIZ
+    pasta = raiz / "data" / "sessoes"
+    if not pasta.exists():
+        return []
+    if not pasta.is_dir():
+        return ["data/sessoes: deveria ser um diretório"]
+    problemas = []
+    origem_id: dict[int, str] = {}
+    for arq in sorted(pasta.glob("*.json")):
+        arquivo = f"data/sessoes/{arq.name}"
+        if not RE_ANO.fullmatch(arq.stem):
+            problemas.append(f"{arquivo}: nome de arquivo deveria ser <ano>.json")
+            continue
+        try:
+            bruto = arq.read_bytes()
+        except OSError as e:
+            problemas.append(f"{arquivo}: não foi possível ler o arquivo ({e})")
+            continue
+        problemas += validar_arquivo_sessoes(bruto, int(arq.stem), arquivo, origem_id)
+    return problemas
+
+
 # ------------------------------------------------------------- meta e temporários
 def validar_meta(meta: object) -> list[str]:
-    """Confere a forma geral de data/meta.json (escrito pela coleta, pela classificação e pelos documentos)."""
+    """Confere a forma geral de data/meta.json (escrito pela coleta, pela classificação, pelos documentos e pelas sessões)."""
     arquivo = "data/meta.json"
     if not isinstance(meta, dict):
         return [f"{arquivo}: deveria conter um objeto, não {type(meta).__name__}"]
+    problemas = []
     docs = meta.get("documentos")
     if docs is not None and (not isinstance(docs, dict) or not isinstance(docs.get("tipos"), dict)):
-        return [f"{arquivo}: 'documentos' deveria ser um objeto com o mapa 'tipos'"]
-    return []
+        problemas.append(f"{arquivo}: 'documentos' deveria ser um objeto com o mapa 'tipos'")
+    sessoes = meta.get("sessoes")
+    if sessoes is not None and (not isinstance(sessoes, dict) or not isinstance(sessoes.get("anos"), dict)):
+        problemas.append(f"{arquivo}: 'sessoes' deveria ser um objeto com o mapa 'anos'")
+    return problemas
 
 
 def validar_temporarios(raiz: Path | None = None) -> list[str]:
@@ -527,6 +764,7 @@ def validar_tudo(raiz: Path | None = None) -> list[str]:
     problemas += validar_proposicoes(arquivos)
     ids, numeros = indices(arquivos)
     problemas += validar_documentos(raiz, ids)
+    problemas += validar_sessoes(raiz)
 
     arq_meta = raiz / "data" / "meta.json"
     if arq_meta.exists():  # escrito pelos coletores; num repositório recém-criado pode faltar
