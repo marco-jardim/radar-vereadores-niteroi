@@ -168,7 +168,7 @@ def cabecalho_dados(manifesto: dict | None, ativo: str, prefixo: str) -> str:
                  "inicial": inicial, "arquivos": arquivos}
     elif ativo == "sessoes.html":
         arquivos = {n: e for n, e in manifesto["arquivos"].items() if e.get("familia") in {"dic-ses", "vot"}}
-        dados = {"esquema": manifesto["esquema"], "build_ses": manifesto["build_ses"],
+        dados = {"esquema": manifesto["esquema"], "build": manifesto["build"], "build_ses": manifesto["build_ses"],
                  "inicial": inicial, "arquivos": arquivos}
     else:
         arquivos = {n: e for n, e in manifesto["arquivos"].items() if not e.get("familia")}

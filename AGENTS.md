@@ -261,11 +261,9 @@ Esta é a referência única para sessões; a CLI está em "Pipeline e comandos"
   `build_ses` fica no manifesto. Uma parte anual sem mudança mantém seus bytes e URL por conteúdo.
   `dic-ses` usa os rótulos de `regras_sessoes.rotulo_voto`. Votos ficam em colunas, com pessoas locais e
   um caractere por pessoa; `.` é "não consta", diferente de ausência ou voto indeterminado.
-- O manifesto embutido lista os anos com votações. O relatório **prevê** dicionário + ano mais recente como
-  carga inicial; só o dicionário tem preload fixo. Atenção à implementação atual: `cabecalho_dados` embute
-  `build_ses`, sem `build`, mas `app.js.validarManifesto` exige `build`. Esse manifesto é rejeitado pelo
-  carregador; `carregarArquivos` renova via `dados/manifest.json` na primeira ação que pede dados.
-  Não afirme que a carga prevista acontece sem consulta: `sessoes.js` só a inicia se já houver manifesto válido.
+- O manifesto embutido lista os anos com votações e inclui `build` global e `build_ses`, sem exigir `build`
+  nos arquivos de sessões. Sem consulta, o carregador usa esse manifesto e busca dicionário + ano mais
+  recente, como no relatório, sem buscar `dados/manifest.json`; só o dicionário tem preload fixo.
 - `sessoes.js` controla só a página de sessões. `app.js` fornece `RadarArquivos.carregar/manifesto`, com cache
   e renovação compartilhados, sem iniciar listas genéricas nos formulários de sessões.
 - Revele os formulários por legislatura, mantenha filtros via `history.replaceState` (`leg`, `ano`, `classe`,

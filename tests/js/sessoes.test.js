@@ -11,6 +11,8 @@ const RadarDados = require("../../site_src/dados.js");
 const fixture = require("./fixtures/sessoes.json");
 const fonte = fs.readFileSync(path.join(__dirname, "../../site_src/sessoes.js"), "utf8");
 const app = fs.readFileSync(path.join(__dirname, "../../site_src/app.js"), "utf8");
+// Paridade byte a byte com cabecalho_dados conferida por test_exportar_sessoes.py.
+const cabecalhoSessoes = fs.readFileSync(path.join(__dirname, "fixtures/cabecalho_sessoes.html"), "utf8");
 const copiar = (x) => JSON.parse(JSON.stringify(x));
 const legs = [{ ...fixture.leg, pessoas: ["ana", "bia"] }, { id: "2021-2024", anos: [2021, 2022, 2023, 2024], pessoas: ["caio"] }];
 const dados = () => S.hidratar(fixture.dic, copiar(fixture.fatia));
@@ -156,7 +158,7 @@ test("Mostrar mais trabalha em passos de 40 sem duplicar nem alterar a entrada; 
 });
 
 // DOM mínimo para executar os dois scripts reais, sem navegador, rede nem dependências.
-function iniciar({ query = "", numero = 3, falhar = false, semVotos = false } = {}) {
+function iniciar({ query = "", numero = 3, falhar = false, semVotos = false, cabecalho = "" } = {}) {
   function el(extra = {}) {
     return { value: "", checked: false, hidden: false, disabled: false, dataset: {}, eventos: {}, innerHTML: "", textContent: "",
       addEventListener(k, fn) { this.eventos[k] = fn; }, setAttribute(k, v) { this[k] = v; },
@@ -192,10 +194,11 @@ function iniciar({ query = "", numero = 3, falhar = false, semVotos = false } = 
       for (const k of Object.keys(base)) f.colunas[k] = Array.from({ length: numero }, (_, i) => k === "id" ? nome + "-" + i : copiar(base[k][2]));
     }
   }
-  const manifesto = { esquema: 2, build: "fixture", arquivos: Object.fromEntries(Object.entries(arquivos).map(([nome, f]) =>
+  const textoEmbutido = cabecalho && cabecalho.match(/<script type="application\/json" id="manifesto-dados">(.*?)<\/script>/s)[1];
+  const manifesto = textoEmbutido ? JSON.parse(textoEmbutido) : { esquema: 2, build: "fixture", arquivos: Object.fromEntries(Object.entries(arquivos).map(([nome, f]) =>
     [nome, { familia: nome === "dic-ses" ? "dic-ses" : "vot", ano: f.ano, n: f.n === undefined ? f.materias.length : f.n, url: "dados/" + nome + ".json?v=fixture" }])) };
   if (semVotos) manifesto.arquivos = {};
-  const elementos = { conteudo: el(), "manifesto-dados": el({ textContent: JSON.stringify(manifesto) }),
+  const elementos = { conteudo: el(), "manifesto-dados": el({ textContent: textoEmbutido || JSON.stringify(manifesto) }),
     "sessoes-leg-2025-2028": bloco, "divididas-2025-2028": secao, "lista-votacoes-2025-2028": lista,
     "contagem-votacoes-2025-2028": contador, "faixa-2025-2028": mapa };
   const requisicoes = [], urls = [];
@@ -220,21 +223,34 @@ function iniciar({ query = "", numero = 3, falhar = false, semVotos = false } = 
   vm.runInNewContext(app, contexto, { filename: "app.js" });
   vm.runInNewContext(fonte, contexto, { filename: "sessoes.js" });
   return { formulario, lista, contador, mapa, mais, linhas, continuacao, botaoCsv, requisicoes, urls,
+    manifesto: () => window.RadarArquivos.manifesto(),
     alterar(k, value) { formulario.elements[k].value = value; formulario.eventos.change(); },
     clicar(acao) { secao.eventos.click({ target: { closest: () => acao === "mais" ? mais : acao === "csv" ? botaoCsv : { dataset: { acao } } } }); },
     async csv() { this.clicar("csv"); await assentar(); return { nome: nomeCsv, texto: blob ? await blob.text() : null }; }
   };
 }
 
-test("VM: guarda do app, formulário progressivo, carga padrão só dic + ano recente e HTML preservado", async () => {
-  const tela = iniciar();
+test("VM: manifesto do HTML gerado é aceito; sem consulta só dic + ano recente, sem renovar manifesto", async () => {
+  const tela = iniciar({ cabecalho: cabecalhoSessoes });
+  const manifesto = tela.manifesto();
+  assert.ok(manifesto, "validarManifesto aceita o manifesto embutido de sessoes.html");
+  assert.equal(manifesto.esquema, 2);
+  assert.equal(manifesto.build, "fixture");
+  assert.equal(manifesto.build_ses, "sessoes-fixture");
   await assentar();
   assert.equal(tela.formulario.hidden, false);
   assert.equal(tela.formulario.elements.div.disabled, true);
   assert.deepEqual(tela.requisicoes, ["dados/dic-ses.json?v=fixture", "dados/vot-2026.json?v=fixture"]);
+  assert.deepEqual(tela.requisicoes, Array.from(manifesto.inicial, (n) => manifesto.arquivos[n].url),
+    "a carga efetiva coincide com a prevista pelo relatório do gerador");
+  assert.ok(!tela.requisicoes.includes("dados/manifest.json"));
   assert.equal(tela.lista.innerHTML, "Cartões do servidor");
   assert.equal(tela.mapa.innerHTML, "Mapa do servidor");
   assert.equal(tela.contador.textContent, "3 votações · 1 veto · 2 projetos de lei");
+  tela.alterar("ano", "2025");
+  await assentar();
+  assert.deepEqual(tela.requisicoes, ["dados/dic-ses.json?v=fixture", "dados/vot-2026.json?v=fixture", "dados/vot-2025.json?v=fixture"],
+    "a primeira ação também reutiliza o manifesto embutido e o dicionário já carregado");
 });
 
 test("VM: ano redesenha faixa; vereador destaca linha, rotula cartão e div depende da seleção", async () => {
