@@ -54,7 +54,7 @@ Interrupção: --max-minutos é um prazo interno que encerra a execução de for
 que falta fica pendente). Num SIGTERM ou Ctrl+C, os detalhes já aplicados são gravados e
 a chave "sessoes" de data/meta.json é atualizada antes de sair.
 
-Ainda não faz parte da coleta semanal (.github/workflows/coleta.yml) nem do site.
+Faz parte da coleta semanal (.github/workflows/coleta.yml), depois de coletor.documentos.
 
 Uso: python -m coletor.sessoes [--anos 2025-2026] [--workers 4] [--forcar]
          [--max-detalhes 400] [--max-minutos 30]

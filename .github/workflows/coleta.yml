@@ -14,8 +14,12 @@ on:
         description: "Anos dos documentos (ex.: 2021-2022). Vazio = ano anterior e atual."
         required: false
         default: ""
+      anos_sessoes:
+        description: "Anos das sessões (ex.: 2021-2022). Vazio = ano anterior e atual."
+        required: false
+        default: ""
       forcar:
-        description: "Rebaixar todos os detalhes, mesmo sem mudança"
+        description: "Rebaixar detalhes de projetos, documentos e sessões, respeitando os limites de cada coletor"
         type: boolean
         default: false
 
@@ -51,9 +55,9 @@ jobs:
       - name: Listar demais documentos do SISCAM (requerimentos, indicações, moções, PDLs e resoluções)
         # um problema no SISCAM com estes tipos (falha ou lentidão) não pode impedir a
         # gravação semanal dos projetos de lei: se a validação ou os testes falharem, as
-        # mudanças em data/documentos são descartadas e os projetos de lei são validados
-        # de novo sem elas. Os arquivos são gravados de forma atômica e o detalhe que
-        # faltar fica marcado como pendente para a próxima execução. O prazo interno
+        # mudanças em data/documentos e data/sessoes são descartadas e os projetos de lei
+        # são validados de novo sem elas. Os arquivos são gravados de forma atômica e o
+        # detalhe que faltar fica marcado como pendente para a próxima execução. O prazo interno
         # (--max-minutos) encerra a coleta de forma limpa; o `timeout` (SIGTERM, que o
         # coletor trata gravando o que já baixou) e o limite do passo ficam como reserva.
         id: documentos
@@ -67,6 +71,22 @@ jobs:
           if [ -n "$ANOS" ]; then args="$args --anos $ANOS"; fi
           if [ "$FORCAR" = "true" ]; then args="$args --forcar"; fi
           timeout --kill-after=2m 110m python -m coletor.documentos $args
+
+      - name: Coletar sessões plenárias do SISCAM
+        # depois de projetos e documentos, para resolver os ids dos itens de pauta.
+        # como nos documentos, falhas não impedem a gravação dos projetos de lei;
+        # o prazo interno deixa margem para gravar dados parciais antes dos timeouts.
+        id: sessoes
+        continue-on-error: true
+        timeout-minutes: 30
+        env:
+          ANOS: ${{ inputs.anos_sessoes }}
+          FORCAR: ${{ inputs.forcar }}
+        run: |
+          args="--max-minutos 20"
+          if [ -n "$ANOS" ]; then args="$args --anos $ANOS"; fi
+          if [ "$FORCAR" = "true" ]; then args="$args --forcar"; fi
+          timeout --kill-after=2m 25m python -m coletor.sessoes $args
 
       - name: Classificar projetos (regras, curadoria e IA)
         timeout-minutes: 90
@@ -86,19 +106,20 @@ jobs:
           python -m coletor.validar
           python -m unittest discover -s tests -t .
 
-      - name: Descartar documentos e validar novamente os projetos de lei
+      - name: Descartar documentos e sessões e validar novamente os projetos de lei
         # barreira obrigatória: sem continue-on-error, uma falha aqui impede o commit
         id: fallback
         if: steps.validar.outcome == 'failure'
         env:
           RADAR_COLETA: "1"
         run: |
-          echo "::warning::validação ou testes falharam; mudanças em data/documentos descartadas, gravando somente os demais dados"
+          echo "::warning::validação ou testes falharam; mudanças em data/documentos e data/sessoes descartadas, gravando somente os demais dados"
           git checkout -- data/documentos 2>/dev/null || true
-          git clean -fdq -- data/documentos
+          git checkout -- data/sessoes 2>/dev/null || true
+          git clean -fdq -- data/documentos data/sessoes
           # temporários de uma gravação interrompida (o arquivo de destino segue intacto)
           find data -name '.*.tmp' -delete
-          # a chave "documentos" de data/meta.json fica com as estatísticas desta execução:
+          # as chaves "documentos" e "sessoes" de data/meta.json ficam com as estatísticas desta execução:
           # o arquivo também é escrito pela coleta e pela classificação dos projetos de lei
           python -m coletor.validar
           python -m unittest discover -s tests -t .
@@ -138,3 +159,7 @@ jobs:
       - name: Avisar falha na coleta de documentos
         if: always() && steps.documentos.outcome == 'failure'
         run: echo "::warning::coleta de documentos falhou nesta execução"
+
+      - name: Avisar falha na coleta de sessões
+        if: always() && steps.sessoes.outcome == 'failure'
+        run: echo "::warning::coleta de sessões falhou nesta execução"
