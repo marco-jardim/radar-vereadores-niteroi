@@ -1,8 +1,8 @@
 {
  "classificacao": {
-  "ia_cache": 0,
+  "ia_cache": 2053,
   "ia_desligada": false,
-  "ia_novos": 2053,
+  "ia_novos": 2,
   "modelo": "deepseek-v4.1-flash",
   "total": 2055,
   "versao_prompt": "2026-10-v2"
@@ -11,56 +11,56 @@
   "anos": {
    "2021": {
     "atualizados": 0,
-    "por_substitutivos": 448,
-    "segundos": 122,
+    "por_substitutivos": 7,
+    "segundos": 83,
     "total": 448
    },
    "2022": {
     "atualizados": 0,
-    "por_substitutivos": 188,
-    "segundos": 47,
+    "por_substitutivos": 4,
+    "segundos": 38,
     "total": 188
    },
    "2023": {
     "atualizados": 0,
-    "por_substitutivos": 265,
-    "segundos": 76,
+    "por_substitutivos": 4,
+    "segundos": 53,
     "total": 265
    },
    "2024": {
     "atualizados": 0,
-    "por_substitutivos": 241,
-    "segundos": 69,
+    "por_substitutivos": 3,
+    "segundos": 51,
     "total": 241
    },
    "2025": {
     "atualizados": 0,
-    "por_substitutivos": 506,
-    "segundos": 141,
+    "por_substitutivos": 5,
+    "segundos": 93,
     "total": 506
    },
    "2026": {
     "atualizados": 1,
-    "por_substitutivos": 406,
-    "segundos": 126,
+    "por_substitutivos": 3,
+    "segundos": 71,
     "total": 407
    }
   },
-  "detalhes_baixados": 2055,
-  "em": "2026-10-22T21:19:22+00:00",
+  "detalhes_baixados": 27,
+  "em": "2026-10-26T09:50:10+00:00",
   "falhas": 0,
-  "por_substitutivos": 2054,
+  "por_substitutivos": 26,
   "substitutivos_adiados": 0
  },
  "documentos": {
   "detalhes": {
-   "baixados": 2619,
+   "baixados": 1,
    "falhas": 0,
-   "fila": 2619,
-   "limite": 3000,
+   "fila": 1,
+   "limite": 1500,
    "pendentes": 0
   },
-  "em": "2026-10-23T01:50:08+00:00",
+  "em": "2026-10-26T10:51:44+00:00",
   "tipos": {
    "indicacao": {
     "2021": {
@@ -120,7 +120,7 @@
      "total_ano": 4532
     },
     "2025": {
-     "detalhes_baixados": 11,
+     "detalhes_baixados": 0,
      "detalhes_falhas": 0,
      "detalhes_pendentes": 0,
      "esperado": 7209,
@@ -129,23 +129,23 @@
      "listado": 7209,
      "preservados": 0,
      "registros": 7209,
-     "segundos": 1099,
+     "segundos": 1425,
      "sem_resposta": false,
      "total_ano": 7209
     },
     "2026": {
-     "detalhes_baixados": 6,
+     "detalhes_baixados": 0,
      "detalhes_falhas": 0,
      "detalhes_pendentes": 0,
-     "esperado": 5063,
+     "esperado": 5207,
      "falhas": 0,
      "gravado": true,
-     "listado": 5063,
+     "listado": 5207,
      "preservados": 0,
-     "registros": 5063,
-     "segundos": 823,
+     "registros": 5207,
+     "segundos": 900,
      "sem_resposta": false,
-     "total_ano": 5063
+     "total_ano": 5207
     }
    },
    "mocao": {
@@ -206,7 +206,7 @@
      "total_ano": 3043
     },
     "2025": {
-     "detalhes_baixados": 4,
+     "detalhes_baixados": 0,
      "detalhes_falhas": 0,
      "detalhes_pendentes": 0,
      "esperado": 3512,
@@ -215,23 +215,23 @@
      "listado": 3512,
      "preservados": 0,
      "registros": 3512,
-     "segundos": 513,
+     "segundos": 577,
      "sem_resposta": false,
      "total_ano": 3512
     },
     "2026": {
-     "detalhes_baixados": 2,
+     "detalhes_baixados": 0,
      "detalhes_falhas": 0,
      "detalhes_pendentes": 0,
-     "esperado": 2969,
+     "esperado": 2974,
      "falhas": 0,
      "gravado": true,
-     "listado": 2969,
+     "listado": 2974,
      "preservados": 0,
-     "registros": 2969,
-     "segundos": 458,
+     "registros": 2974,
+     "segundos": 589,
      "sem_resposta": false,
-     "total_ano": 2969
+     "total_ano": 2974
     }
    },
    "pdl": {
@@ -292,7 +292,7 @@
      "total_ano": 415
     },
     "2025": {
-     "detalhes_baixados": 315,
+     "detalhes_baixados": 0,
      "detalhes_falhas": 0,
      "detalhes_pendentes": 0,
      "esperado": 315,
@@ -301,23 +301,23 @@
      "listado": 315,
      "preservados": 0,
      "registros": 315,
-     "segundos": 52,
+     "segundos": 54,
      "sem_resposta": false,
      "total_ano": 315
     },
     "2026": {
-     "detalhes_baixados": 248,
+     "detalhes_baixados": 1,
      "detalhes_falhas": 0,
      "detalhes_pendentes": 0,
-     "esperado": 248,
+     "esperado": 249,
      "falhas": 0,
      "gravado": true,
-     "listado": 248,
+     "listado": 249,
      "preservados": 0,
-     "registros": 248,
-     "segundos": 38,
+     "registros": 249,
+     "segundos": 44,
      "sem_resposta": false,
-     "total_ano": 248
+     "total_ano": 249
     }
    },
    "requerimento": {
@@ -378,7 +378,7 @@
      "total_ano": 77
     },
     "2025": {
-     "detalhes_baixados": 253,
+     "detalhes_baixados": 0,
      "detalhes_falhas": 0,
      "detalhes_pendentes": 0,
      "esperado": 253,
@@ -387,12 +387,12 @@
      "listado": 253,
      "preservados": 0,
      "registros": 253,
-     "segundos": 39,
+     "segundos": 46,
      "sem_resposta": false,
      "total_ano": 253
     },
     "2026": {
-     "detalhes_baixados": 181,
+     "detalhes_baixados": 0,
      "detalhes_falhas": 0,
      "detalhes_pendentes": 0,
      "esperado": 181,
@@ -401,7 +401,7 @@
      "listado": 181,
      "preservados": 0,
      "registros": 181,
-     "segundos": 33,
+     "segundos": 39,
      "sem_resposta": false,
      "total_ano": 181
     }
@@ -464,7 +464,7 @@
      "total_ano": 19
     },
     "2025": {
-     "detalhes_baixados": 22,
+     "detalhes_baixados": 0,
      "detalhes_falhas": 0,
      "detalhes_pendentes": 0,
      "esperado": 22,
@@ -473,12 +473,12 @@
      "listado": 22,
      "preservados": 0,
      "registros": 22,
-     "segundos": 9,
+     "segundos": 10,
      "sem_resposta": false,
      "total_ano": 22
     },
     "2026": {
-     "detalhes_baixados": 17,
+     "detalhes_baixados": 0,
      "detalhes_falhas": 0,
      "detalhes_pendentes": 0,
      "esperado": 17,
@@ -487,7 +487,7 @@
      "listado": 17,
      "preservados": 0,
      "registros": 17,
-     "segundos": 6,
+     "segundos": 8,
      "sem_resposta": false,
      "total_ano": 17
     }
@@ -554,7 +554,7 @@
    },
    "2025": {
     "completa": true,
-    "detalhes_baixados": 109,
+    "detalhes_baixados": 0,
     "detalhes_falhas": 0,
     "detalhes_pendentes": 0,
     "falhas": 0,
@@ -563,12 +563,12 @@
     "paginas": 11,
     "preservados": 0,
     "registros": 109,
-    "segundos": 1,
+    "segundos": 5,
     "sem_resposta": false
    },
    "2026": {
     "completa": true,
-    "detalhes_baixados": 89,
+    "detalhes_baixados": 25,
     "detalhes_falhas": 0,
     "detalhes_pendentes": 0,
     "falhas": 0,
@@ -577,17 +577,17 @@
     "paginas": 9,
     "preservados": 0,
     "registros": 89,
-    "segundos": 1,
+    "segundos": 5,
     "sem_resposta": false
    }
   },
   "detalhes": {
-   "baixados": 627,
+   "baixados": 25,
    "falhas": 0,
-   "fila": 627,
-   "limite": 1000,
+   "fila": 25,
+   "limite": 400,
    "pendentes": 0
   },
-  "em": "2026-10-23T03:54:06+00:00"
+  "em": "2026-10-26T10:52:06+00:00"
  }
 }
