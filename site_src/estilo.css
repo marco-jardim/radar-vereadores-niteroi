@@ -543,6 +543,8 @@ li.projeto { content-visibility: auto; contain-intrinsic-size: auto 220px; }
     var(--superficie);
 }
 .tabela-rolavel:focus-visible, .tabela-resumo:focus-visible, .sessoes .faixa-rolagem:focus-visible { outline: 3px solid var(--foco); outline-offset: 2px; }
+/* Bloco de contenção: sem ele, os .so-leitor absolutos das células escapam do recorte e alargam a página. */
+.tabela-rolavel, .tabela-resumo, .sessoes .faixa-rolagem { position: relative; }
 
 /* ------------------------------------------------------- vereador e outros */
 .mandato { margin: var(--esp-6) 0 var(--esp-7); }
