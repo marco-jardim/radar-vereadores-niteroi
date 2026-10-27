@@ -1,7 +1,8 @@
 # Fixtures dos extratores de texto
 
-Todas as fixtures desta pasta são **sintéticas**: o texto foi escrito para os testes, sem
-documentos reais do SISCAM e sem dados pessoais. Os CPFs dos testes da máscara
+As fixtures desta pasta são **sintéticas** (texto escrito para os testes, sem dados
+pessoais), com uma exceção: um documento público real do SISCAM, sem dados de terceiros
+(veja "Fixture real" abaixo). Os CPFs dos testes da máscara
 (`tests/test_mascara.py`) são exemplos públicos de dígitos verificadores válidos, sem
 relação com pessoas; telefones e e-mails são inventados.
 
@@ -24,6 +25,8 @@ O gerador recusa qualquer fixture acima de 50 KB, e `tests/test_extratores.py`
 | `doc_curto.doc` | `doc_curto` | Compound File v3 escrito pelo gerador (cabeçalho, FAT, diretório) com stream `WordDocument` (FIB Word 97, `nFib` 0x00C1) e `1Table` com o Clx (um Prc e o Pcdt). Uma peça compactada em cp1252. Streams completados até 4096 bytes, lidos pela FAT. |
 | `doc_fragmentado.doc` | `doc_fragmentado` | Seis peças alternando cp1252 (bit 30 do fc) e UTF-16LE, com caracteres fora do cp1252 numa peça Unicode no meio, campo `HYPERLINK` (\x13 código \x14 resultado \x15), tabela (\x07) e quebras \x0b/\x0c. |
 | `doc_minifat.doc` | `doc_minifat` | Streams `WordDocument` e `0Table` menores que 4096 bytes, guardados no mini stream e lidos pela MiniFAT. |
+| `doc_word95.doc` | `doc_antigo` | Word 6/95 não complexo: FIB antigo (`nFib` 0x65) e texto cp1252 entre fcMin e fcMac. |
+| (em memória) | `doc_word97(..., ttp=...)` | Linhas de tabela: uma FKP de PAPX com sprmPFTtp, apontada pela PlcBtePapx, marca o \x07 de fim de linha; `repetir` gera piece tables com peças repetidas e `cabecalho` uma história de cabeçalho (ccpHdd). |
 | `exemplo.rtf` | `rtf_exemplo` | RTF escrito à mão no gerador: tabelas de fontes/cores, `\info`, `\*\generator`, `\'hh` em cp1252, `\uN` com `\ucN`, campo com `\fldinst`/`\fldrslt`, imagem `\pict`, linha de tabela e `\binN` com bytes que imitam chaves. |
 | `exemplo.html` | `html_exemplo` | HTML com `script`, `style`, comentário, entidades, `&nbsp;`, tabela e `<br>`. |
 | `pdf_texto.pdf` | `pdf_texto` | PDF 1.4 escrito pelo gerador, uma página com Helvetica/WinAnsiEncoding (texto com acentos e “nº”). |
@@ -34,6 +37,13 @@ O gerador recusa qualquer fixture acima de 50 KB, e `tests/test_extratores.py`
 | `zip_docx_pdf.zip` | `zip_docx_pdf` | Zip com `documento.docx` (docx simples) e `anexo.pdf` (PDF com texto). |
 | `zip_aninhado.zip` | `zip_aninhado` | Zip com um RTF e um zip interno, que contém um docx e um terceiro nível de zip (além do limite de 2 níveis). |
 | JPEG | — | Gerado durante `TestOcrReal` com `pdftoppm -jpeg` a partir de `pdf_escaneado`; não é gravado nesta pasta. |
+
+## Fixture real
+
+| Fixture | Origem e conteúdo |
+| --- | --- |
+| `real_pl_127510.doc` | Arquivo público do SISCAM: Projeto de Lei do documento `IdDocumento=127510` (`https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=127510`), arquivo `https://consultaniteroi.siscam.com.br/Download.aspx?id=231695`, Word 97–2003. Texto de lei e justificativa, com os nomes públicos dos vereadores autores; sem dados pessoais de terceiros. Bytes preservados. |
+| `real_pl_127510.esperado.txt` | Texto extraído pelo parser e conferido por pessoa (artigos, parágrafos e justificativa). O teste compara o corpo até as assinaturas; o papel timbrado que vinha depois (histórias de cabeçalho do Word) deixou de entrar no texto na versão 2 dos extratores. |
 
 Casos de malformação (CFB com ciclo na FAT, CFB truncado, tamanho declarado maior que o
 arquivo, documento criptografado, zip bomb e tamanho descompactado falso) são derivados

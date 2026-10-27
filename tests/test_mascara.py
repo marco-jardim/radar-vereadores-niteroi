@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import tempfile
+import time
 import unittest
 from pathlib import Path
 
@@ -24,7 +25,6 @@ def _sem_mudanca(teste: unittest.TestCase, texto: str, lib=frozenset()) -> None:
     saida, contagens = mascarar(texto, lib)
     teste.assertEqual(saida, texto)
     teste.assertEqual(sum(contagens.values()), 0, contagens)
-    teste.assertEqual(varrer(texto, lib), [])
 
 
 class TestCpf(unittest.TestCase):
@@ -78,6 +78,50 @@ class TestRg(unittest.TestCase):
         _sem_mudanca(self, "Código 12.345.678-9 do item.")
         _sem_mudanca(self, "RG emitido pelo órgão estadual competente 12.345.678-9")
         _sem_mudanca(self, "Organização 12.345.678-9 e ORG 1234567")
+
+    def test_identidade_sem_marca_nao_e_rotulo(self) -> None:
+        _sem_mudanca(self, "identidade de gênero, conforme Lei 13.709/2018")
+        _sem_mudanca(self, "Identidade, 22.11.2020")
+        _sem_mudanca(self, "a identidade 2024 do evento 12345")
+        saida, _ = mascarar("cédula de identidade 12.345.678-9")
+        self.assertEqual(saida, "cédula de identidade [RG omitido]")
+        saida, _ = mascarar("Identidade nº 123456789")
+        self.assertEqual(saida, "Identidade nº [RG omitido]")
+
+    def test_rg_respeita_protecoes(self) -> None:
+        _sem_mudanca(self, "RG: Lei nº 12.345/2020")
+        _sem_mudanca(self, "RG 12.03.2024")
+
+
+class TestTelefoneColado(unittest.TestCase):
+    def test_telefones_colados_a_pontuacao(self) -> None:
+        casos = {
+            "(21) 2620-1234/2620-5678": "[telefone omitido]/[telefone omitido]",
+            "2620-1234,2620-5678": "[telefone omitido],[telefone omitido]",
+            "Tel.2620-1234": "Tel.[telefone omitido]",
+            "Cel.98765-4321": "Cel.[telefone omitido]",
+        }
+        for texto, esperado in casos.items():
+            with self.subTest(texto=texto):
+                self.assertEqual(mascarar(texto)[0], esperado)
+                self.assertTrue(varrer(texto))
+
+    def test_sei_so_no_formato_do_sei(self) -> None:
+        saida, contagens = mascarar("Acesso ao SEI, ligue 2620-1234")
+        self.assertEqual((saida, contagens["telefone"]), ("Acesso ao SEI, ligue [telefone omitido]", 1))
+        saida, contagens = mascarar("SEI: CPF 12345678909")
+        self.assertEqual((saida, contagens["cpf"]), ("SEI: CPF [CPF omitido]", 1))
+        _sem_mudanca(self, "SEI nº 9900.000123/2024-91 e SEI 12345678")
+
+    def test_sem_retrocesso_em_linhas_com_muitos_espacos(self) -> None:
+        linha = ("Processo" + " " * 80 + "Lei" + " " * 60 + "matrícula" + " " * 70 + "Valor"
+                 + " " * 50 + "R$ 1.234,56" + " " * 40 + "nº" + " " * 30 + ":\n")
+        texto = linha * (5_000_000 // len(linha))
+        inicio = time.perf_counter()
+        saida, contagens = mascarar(texto)
+        self.assertLess(time.perf_counter() - inicio, 3.0)
+        self.assertEqual(sum(contagens.values()), 0)
+        self.assertEqual(saida, texto)
 
 
 class TestTelefone(unittest.TestCase):
@@ -207,6 +251,18 @@ class TestLiberados(unittest.TestCase):
                          .replace("(21) 98888-7777", "[telefone omitido]"))
         self.assertEqual(contagens["telefone"], 2)
 
+    def test_email_liberado_precisa_ser_endereco_completo(self) -> None:
+        fonte = "https://www.camaraniteroi.rj.gov.br/x"
+        contatos = [{"tipo": "email", "valor": v, "fonte": fonte}
+                    for v in ("@exemplo.com", "exemplo.com", "a@b@c.com", "ok@exemplo.com")]
+        with tempfile.TemporaryDirectory() as nome:
+            pasta = Path(nome)
+            self._config(pasta, backend={"contatos_institucionais": contatos})
+            lib = liberados(pasta)
+        self.assertEqual(lib - {"@camaraniteroi.rj.gov.br", "@niteroi.rj.gov.br"}, {"ok@exemplo.com"})
+        saida, _ = mascarar("x@exemplo.com e ok@exemplo.com", lib)
+        self.assertEqual(saida, "[e-mail omitido] e ok@exemplo.com")
+
     def test_arquivos_ausentes(self) -> None:
         with tempfile.TemporaryDirectory() as nome:
             pasta = Path(nome)
@@ -255,6 +311,27 @@ class TestIdempotenciaVarrer(unittest.TestCase):
     def test_texto_vazio(self) -> None:
         self.assertEqual(mascarar(""), ("", {"cpf": 0, "rg": 0, "telefone": 0, "email": 0}))
         self.assertEqual(varrer(""), [])
+
+    def test_varrer_e_mais_amplo_que_mascarar(self) -> None:
+        texto = "Protocolo nº 2026-1234, telefone 26201234 e CPF 529 982 247 25"
+        saida, contagens = mascarar(texto)
+        self.assertEqual(sum(contagens.values()), 0)  # protegidos ou ambíguos para mascarar
+        tipos = [a["tipo"] for a in varrer(texto)]
+        self.assertEqual(tipos, ["telefone", "telefone", "cpf"])
+
+    def test_varrer_ignora_so_as_protecoes_explicitas(self) -> None:
+        texto = ("em 12/03/2024, mandato 2021-2024, CEP 24020-000, CNPJ 11.222.333/0001-81, "
+                 "Lei nº 2620-1234, R$ 2620-1234 e processo 0001234-56.2024.8.19.0002")
+        self.assertEqual(varrer(texto), [])
+        self.assertTrue(mascara.cnpj_valido("11222333000181"))
+        self.assertFalse(mascara.cnpj_valido("11222333000182"))
+
+    def test_varrer_usa_os_liberados(self) -> None:
+        self.assertEqual(varrer("Ligue 3333-4444", {"2133334444"}), [])
+        self.assertEqual(varrer("Ligue (11) 3333-4444", {"1133334444"}), [])
+        self.assertEqual(varrer("gabinete@camaraniteroi.rj.gov.br e x@niteroi.rj.gov.br"), [])
+        self.assertEqual([a["tipo"] for a in varrer("Ligue (11) 3333-4444")], ["telefone"])
+        self.assertEqual([a["tipo"] for a in varrer("Escreva para (fulano@exemplo.org).")], ["email"])
 
 
 if __name__ == "__main__":

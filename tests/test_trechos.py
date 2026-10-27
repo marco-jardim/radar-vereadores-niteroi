@@ -5,6 +5,7 @@ Uso: python -m unittest tests.test_trechos
 from __future__ import annotations
 
 import hashlib
+import time
 import unicodedata
 import unittest
 
@@ -22,10 +23,19 @@ class TestNormalizar(unittest.TestCase):
     def test_regras(self) -> None:
         bruto = ("\n\n  \nLinha\u200b um\u00a0\u00a0 \r\nLinha\tdois\r\r\n\n\n\n"
                  "Niteroi\u0301\fpágina\u00ad nova\x01\u2028fim   \n\n\n")
-        self.assertEqual(normalizar(bruto), "Linha um\nLinha\tdois\n\nNiteroí\npágina nova\nfim")
+        self.assertEqual(normalizar(bruto), "Linha um\nLinha\tdois\n\nNiteroí\n\f\npágina nova\nfim")
+
+    def test_paginas_preservadas(self) -> None:
+        bruto = "Página um  \n\n\fPágina dois\n\n\n\f\n\fQuatro"
+        texto = normalizar(bruto)
+        self.assertEqual(texto, "Página um\n\f\nPágina dois\n\f\n\n\f\nQuatro")
+        self.assertEqual(trechos.paginas(texto), ["Página um", "Página dois", "", "Quatro"])
+        self.assertEqual(normalizar(texto), texto)
+        self.assertEqual(trechos.paginas("sem quebra"), ["sem quebra"])
 
     def test_idempotente(self) -> None:
-        for bruto in ("a\r\n\r\n\r\nb  ", "  recuo\n\n\n\n", "\ufeffBOM", "x\u3000y", ""):
+        for bruto in ("a\r\n\r\n\r\nb  ", "  recuo\n\n\n\n", "\ufeffBOM", "x\u3000y", "",
+                      "\fcomeça na quebra", "a\f\f\fb\n\f"):
             with self.subTest(bruto=bruto):
                 uma = normalizar(bruto)
                 self.assertEqual(normalizar(uma), uma)
@@ -83,8 +93,48 @@ class TestDividir(unittest.TestCase):
             "posicao": 0,
             "inicio": 0,
             "fim": len(texto),
+            "inicio_utf16": 0,
+            "fim_utf16": len(texto),
             "sha256": sha,
+            "vetorizavel": False,  # menos de 80 letras e dígitos
         })
+
+    def test_offsets_utf16(self) -> None:
+        texto = trechos.normalizar("Emoji 😀 no começo. " + FRASE * 30 + "\n\n" + "Outro 𝄞 símbolo. " + FRASE * 30)
+        lista = dividir(texto, "doc:1", "siscam:2")
+        self.assertGreater(len(lista), 2)
+        utf16 = texto.encode("utf-16-le")
+        for t in lista:
+            parte = texto[t["inicio"]:t["fim"]]
+            fatia = utf16[2 * t["inicio_utf16"]:2 * t["fim_utf16"]].decode("utf-16-le")
+            self.assertEqual(fatia, parte)
+        self.assertEqual(lista[0]["inicio_utf16"], 0)
+        self.assertEqual(lista[-1]["fim_utf16"], len(utf16) // 2)
+        self.assertEqual(lista[-1]["fim_utf16"], lista[-1]["fim"] + 2)
+
+    def test_vetorizavel(self) -> None:
+        self.assertEqual(trechos.MIN_CARACTERES_VETOR, 80)
+        self.assertTrue(trechos.vetorizavel("a" * 80))
+        self.assertFalse(trechos.vetorizavel("a" * 79 + " - . , " * 30))
+        lista = dividir("Página 3 de 10\n\n- - - - -", "doc:1", "siscam:2")
+        self.assertEqual([t["vetorizavel"] for t in lista], [False])
+        lista = dividir(_paragrafo(3), "doc:1", "siscam:2")
+        self.assertEqual([t["vetorizavel"] for t in lista], [True])
+
+    def test_paragrafos_nao_cruzam_quebra_de_pagina(self) -> None:
+        texto = normalizar(_paragrafo(10) + "\f" + _paragrafo(10, "Segunda página."))
+        lista = dividir(texto, "doc:1", "siscam:2")
+        self.assertTrechosValidos(texto, lista)
+        self.assertNotIn("\f", texto[lista[0]["inicio"]:lista[0]["fim"]])
+
+    def test_texto_grande_rapido(self) -> None:
+        linha = "Coluna um" + " " * 40 + FRASE.strip() + " " * 30 + "R$ 1.234,56"
+        texto = "\n".join(linha for _ in range(5_000_000 // len(linha)))
+        self.assertGreater(len(texto), 4_900_000)
+        inicio = time.perf_counter()
+        lista = dividir(texto, "doc:1", "siscam:2")
+        self.assertLess(time.perf_counter() - inicio, 2.0)
+        self.assertGreater(len(lista), 3000)
 
     def test_agrupa_paragrafos_ate_o_alvo(self) -> None:
         texto = "\n\n".join(_paragrafo(4, f"Parágrafo {i}.") for i in range(30))
@@ -138,7 +188,7 @@ class TestDividir(unittest.TestCase):
         c = dividir(texto, "doc:9", "siscam:2")
         self.assertEqual([t["sha256"] for t in a], [t["sha256"] for t in c])
         self.assertTrue(all(x["id"] != y["id"] for x, y in zip(a, c)))
-        self.assertEqual(trechos.VERSAO_TRECHOS, "1")
+        self.assertEqual(trechos.VERSAO_TRECHOS, "2")
 
     def test_acentos_e_nfc(self) -> None:
         bruto = unicodedata.normalize("NFD", "\n\n".join(_paragrafo(10, f"Ação {i}.") for i in range(5)))

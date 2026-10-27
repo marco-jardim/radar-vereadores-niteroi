@@ -75,7 +75,10 @@ def detectar(dados: bytes) -> str:
         return "vazio"
     if dados.startswith((b"PK\x03\x04", b"PK\x05\x06")):
         return "docx" if _eh_docx(dados) else "zip"
-    if b"%PDF-" in dados[:1024]:
+    inicio = dados[:64]
+    if inicio.startswith(b"\xef\xbb\xbf"):
+        inicio = inicio[3:]
+    if inicio.lstrip().startswith(b"%PDF-"):  # só no começo: um HTML que cite %PDF- não é PDF
         return "pdf"
     if dados.startswith(MAGICO_CFB):
         return "doc"

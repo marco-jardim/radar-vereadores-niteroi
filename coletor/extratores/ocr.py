@@ -11,6 +11,8 @@ Somente biblioteca padrão do Python; as ferramentas rodam por subprocess, sem s
 from __future__ import annotations
 
 import tempfile
+import time
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from . import ferramentas as _ferr
@@ -18,6 +20,9 @@ from .base import CONFIANCA_MINIMA, ErroFerramenta, FerramentaAusente, Resultado
 
 IDIOMA = "por"
 RESOLUCAO = "300"
+# Orçamento por documento: o que passar fica `escaneado_sem_ocr`, para outra execução.
+MAX_PAGINAS_OCR = 300
+OCR_SEGUNDOS_DOCUMENTO = 1800
 _EXTENSOES = {"jpeg": ".jpg", "png": ".png", "tiff": ".tif"}
 
 
@@ -68,32 +73,71 @@ def ocr_imagem(caminho: Path, pasta: Path, ferramentas=None) -> tuple[str, float
     arq_tsv = base.with_name(base.name + ".tsv")
     if not arq_txt.exists() or not arq_tsv.exists():
         raise ErroFerramenta("tesseract não gravou as saídas txt/tsv")
-    texto = arq_txt.read_bytes().decode("utf-8", "replace")
+    # o tesseract encerra cada página com \f; aqui a página é uma só
+    texto = arq_txt.read_bytes().decode("utf-8", "replace").replace("\f", "\n")
     conf, palavras = confianca_tsv(arq_tsv.read_bytes().decode("utf-8", "replace"))
     for arq in (arq_txt, arq_tsv):
         arq.unlink(missing_ok=True)
     return texto, conf, palavras
 
 
+@dataclass
+class OcrPaginas:
+    """Resultado do OCR de um PDF: páginas lidas, com falha e não tentadas (orçamento)."""
+
+    lidas: dict[int, tuple[str, float | None, int]] = field(default_factory=dict)
+    falhas: dict[int, str] = field(default_factory=dict)
+    adiadas: list[int] = field(default_factory=list)
+
+
+def _ocr_pagina(caminho_pdf: Path, n: int, pasta: Path, ferramentas) -> tuple[str, float | None, int]:
+    prefixo = pasta / f"pagina-{n}"
+    _ferr.executar("pdftoppm", ["-r", RESOLUCAO, "-gray", "-f", str(n), "-l", str(n), "-png",
+                                "-singlefile", str(caminho_pdf), str(prefixo)], ferramentas)
+    imagem = prefixo.with_name(prefixo.name + ".png")
+    if not imagem.exists():
+        candidatas = sorted(pasta.glob(f"pagina-{n}*.png"))
+        if not candidatas:
+            raise ErroFerramenta(f"pdftoppm não gravou a página {n}")
+        imagem = candidatas[0]
+    try:
+        return ocr_imagem(imagem, pasta, ferramentas)
+    finally:
+        imagem.unlink(missing_ok=True)
+
+
 def ocr_paginas_pdf(caminho_pdf: Path, paginas: list[int], pasta: Path,
-                    ferramentas=None) -> dict[int, tuple[str, float | None, int]]:
-    """OCR das páginas indicadas (base 1): {página: (texto, confiança, palavras)}."""
-    resultado: dict[int, tuple[str, float | None, int]] = {}
-    for n in paginas:
-        prefixo = pasta / f"pagina-{n}"
-        _ferr.executar("pdftoppm", ["-r", RESOLUCAO, "-gray", "-f", str(n), "-l", str(n), "-png",
-                                    "-singlefile", str(caminho_pdf), str(prefixo)], ferramentas)
-        imagem = prefixo.with_name(prefixo.name + ".png")
-        if not imagem.exists():
-            candidatas = sorted(pasta.glob(f"pagina-{n}*.png"))
-            if not candidatas:
-                raise ErroFerramenta(f"pdftoppm não gravou a página {n}")
-            imagem = candidatas[0]
+                    ferramentas=None) -> OcrPaginas:
+    """OCR das páginas indicadas (base 1), página a página.
+
+    Erro de ferramenta numa página (código de saída ou tempo esgotado) não perde as
+    demais: a página fica em `falhas`. Páginas além de `MAX_PAGINAS_OCR` ou depois de
+    `OCR_SEGUNDOS_DOCUMENTO` segundos não são tentadas e ficam em `adiadas`.
+    """
+    resultado = OcrPaginas()
+    inicio = time.monotonic()
+    for posicao, n in enumerate(paginas):
+        if posicao >= MAX_PAGINAS_OCR or time.monotonic() - inicio >= OCR_SEGUNDOS_DOCUMENTO:
+            resultado.adiadas = list(paginas[posicao:])
+            break
         try:
-            resultado[n] = ocr_imagem(imagem, pasta, ferramentas)
-        finally:
-            imagem.unlink(missing_ok=True)
+            resultado.lidas[n] = _ocr_pagina(caminho_pdf, n, pasta, ferramentas)
+        except ErroFerramenta as exc:
+            resultado.falhas[n] = str(exc)[:200]
     return resultado
+
+
+def descrever_pendencias(ocr: OcrPaginas) -> str:
+    """Texto do `detalhe` com as páginas com falha e as adiadas (a refazer)."""
+    partes = []
+    if ocr.falhas:
+        partes.append("OCR falhou nas páginas " + ", ".join(map(str, sorted(ocr.falhas))))
+    if ocr.adiadas:
+        partes.append(f"OCR adiado (orçamento de {MAX_PAGINAS_OCR} páginas ou "
+                      f"{OCR_SEGUNDOS_DOCUMENTO} s) nas páginas "
+                      + ", ".join(map(str, ocr.adiadas[:20]))
+                      + (" e outras" if len(ocr.adiadas) > 20 else ""))
+    return "; ".join(partes)
 
 
 def status_ocr(confianca: float | None) -> str:

@@ -14,7 +14,7 @@ import io
 import zipfile
 from collections.abc import Callable
 
-from .base import VERSAO_EXTRATORES, ErroFormato, Resultado, ler_membro_zip
+from .base import VERSAO_EXTRATORES, ErroFormato, ErroLimite, Resultado, ler_membro_zip
 
 PROFUNDIDADE_MAXIMA = 2
 
@@ -39,7 +39,7 @@ def extrair_zip(dados: bytes, ocr: bool, ferramentas, profundidade: int, orcamen
     with zf:
         infos = [i for i in zf.infolist() if not i.is_dir()]
         if sum(i.file_size for i in infos) > orcamento[0]:
-            raise ErroFormato("zip recusado: tamanho descompactado acima do limite")
+            raise ErroLimite("zip recusado: tamanho descompactado acima do limite")
         secoes: list[str] = []
         status_membros: list[str] = []
         detalhes: list[str] = []
@@ -48,9 +48,9 @@ def extrair_zip(dados: bytes, ocr: bool, ferramentas, profundidade: int, orcamen
             nome = _nome_seguro(info.filename)
             try:
                 conteudo = ler_membro_zip(zf, info, orcamento)
+            except ErroLimite:
+                raise  # zip bomb: o arquivo inteiro é recusado
             except ErroFormato as exc:
-                if "limite" in str(exc):
-                    raise
                 status_membros.append("erro_formato")
                 detalhes.append(f"{nome}: {exc}")
                 continue
@@ -60,6 +60,7 @@ def extrair_zip(dados: bytes, ocr: bool, ferramentas, profundidade: int, orcamen
                 detalhes.append(f"{nome}: {membro.detalhe}")
             resultado.paginas += membro.paginas
             resultado.paginas_ocr += membro.paginas_ocr
+            resultado.cabecalhos_omitidos += membro.cabecalhos_omitidos
             if membro.confianca is not None:
                 confiancas.append(membro.confianca)
             if membro.texto:

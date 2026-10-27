@@ -10,6 +10,7 @@ Uso: python -m unittest tests.test_extratores
 from __future__ import annotations
 
 import importlib.util
+import io
 import json
 import os
 import shutil
@@ -19,6 +20,7 @@ import sys
 import tempfile
 import time
 import unittest
+import zipfile
 from pathlib import Path
 from unittest import mock
 
@@ -67,6 +69,9 @@ if ferramenta == "pdftotext":
 if ferramenta == "pdftoppm":
     n = args[args.index("-f") + 1]
     registrar("pdftoppm " + n)
+    if int(n) in cfg.get("falhar_paginas", []):
+        sys.stderr.write("Syntax Error: pagina falsa\n")
+        sys.exit(1)
     Path(args[-1] + ".png").write_bytes(b"\x89PNG falso")
     sys.exit(0)
 if ferramenta == "tesseract":
@@ -149,6 +154,12 @@ class TestDetectar(unittest.TestCase):
         self.assertEqual(extratores.detectar(fx.docx_sem_documento()), "docx")
         self.assertEqual(extratores.detectar(b"   \n\t "), "vazio")
 
+    def test_pdf_so_no_inicio(self) -> None:
+        self.assertEqual(extratores.detectar(b"\xef\xbb\xbf %PDF-1.7\n..."), "pdf")
+        html = b"<html><body><p>Baixe o arquivo (formato %PDF-1.4)</p></body></html>"
+        self.assertEqual(extratores.detectar(html), "html")
+        self.assertEqual(extratores.detectar(b"Texto que cita %PDF-1.4 no meio"), "texto")
+
 
 # ------------------------------------------------------------------- docx
 class TestDocx(unittest.TestCase):
@@ -164,16 +175,18 @@ class TestDocx(unittest.TestCase):
         r = extratores.extrair(fx.docx_completo())
         self.assertEqual(r.status, "ok")
         self.assertIn("Item | Quantidade\nBancos de praça | 12\nLixeiras | 30", r.texto)
-        self.assertEqual(r.texto.count("CABEÇALHO SINTÉTICO DA CÂMARA"), 1)
-        self.assertIn("Rodapé sintético – página", r.texto)
+        # cabeçalhos e rodapés ficam fora do texto, só contados (header1, header2, footer1)
+        self.assertNotIn("CABEÇALHO SINTÉTICO", r.texto)
+        self.assertNotIn("Rodapé sintético", r.texto)
+        self.assertEqual(r.cabecalhos_omitidos, 3)
         self.assertIn("Nota de rodapé sintética.", r.texto)
         self.assertIn("Texto mantido7", r.texto)
         self.assertNotIn("TEXTO APAGADO", r.texto)
         self.assertNotIn("PAGE", r.texto)
         self.assertNotIn("SEPARADOR", r.texto)
         self.assertEqual(r.texto.count("Caixa de texto sintética"), 1)
-        # corpo antes do cabeçalho, do rodapé e das notas
-        self.assertLess(r.texto.index("Indicação sintética"), r.texto.index("CABEÇALHO"))
+        # corpo antes das notas
+        self.assertLess(r.texto.index("Indicação sintética"), r.texto.index("Nota de rodapé"))
 
     def test_docx_sem_document_xml(self) -> None:
         r = extratores.extrair(fx.docx_sem_documento())
@@ -293,16 +306,70 @@ class TestDoc(unittest.TestCase):
         r = extratores.extrair(bytes(bruto))
         self.assertEqual((r.status, r.texto), ("ok", "texto"))
 
-    def test_doc_grande_rapido(self) -> None:
-        texto = ("Parágrafo sintético de um documento grande da Câmara. " * 20 + "\r") * 4000
-        dados = fx.doc_word97([(texto, True)])
+    def test_doc_grande_rapido_com_muitas_pecas(self) -> None:
+        bloco = "Parágrafo sintético de um documento grande da Câmara, com ação. " * 23 + "\r"
+        pecas = [(f"{i:04d} {bloco}", i % 2 == 0) for i in range(2000)]  # cp1252 e UTF-16
+        dados = fx.doc_word97(pecas)
         self.assertGreater(len(dados), 4_000_000)
         inicio = time.perf_counter()
         r = extratores.extrair(dados)
         duracao = time.perf_counter() - inicio
         self.assertEqual(r.status, "ok")
-        self.assertTrue(r.texto.startswith("Parágrafo sintético"))
-        self.assertLess(duracao, 5.0, "alvo da QA: ≤ 2 s em 5 MB sem OCR")
+        self.assertTrue(r.texto.startswith("0000 Parágrafo sintético"))
+        self.assertIn("1999 Parágrafo", r.texto)
+        self.assertLess(duracao, 2.0, "QA: ≤ 2 s em 5 MB sem OCR")
+
+    def test_pecas_repetidas_recusadas(self) -> None:
+        texto = "Trecho repetido da piece table. " * 100 + "\r"
+        self.assertEqual(extratores.extrair(fx.doc_word97([(texto, True)])).status, "ok")
+        r = extratores.extrair(fx.doc_word97([(texto, True)], repetir=50))
+        self.assertEqual(r.status, "erro_formato")
+        self.assertIn("WordDocument", r.detalhe)
+
+    def test_tabela_com_celula_vazia_e_linhas_ttp(self) -> None:
+        texto = "Tabela\rA\x07\x07C\x07\x07D\x07E\x07F\x07\x07Fim\r"
+        # marcas de fim de linha: a \x07 depois de C (posição 12) e a depois de F (posição 19)
+        fins = [i for i, c in enumerate(texto) if c == "\x07"]
+        r = extratores.extrair(fx.doc_word97([(texto, True)], ttp=[fins[3], fins[7]]))
+        self.assertEqual(r.texto, "Tabela\nA |  | C\nD | E | F\nFim")
+
+    def test_tabela_sem_papx_vira_celulas(self) -> None:
+        texto = "A\x07B\x07\x07Fim\r"
+        r = extratores.extrair(fx.doc_word97([(texto, True)], ttp=[]))
+        self.assertEqual(r.texto, "A | B |  | Fim")
+
+    def test_campo_sem_fim_mantem_texto(self) -> None:
+        r = extratores.extrair(fx.doc_word97([("Antes \x13 PAGE \x14 depois do campo aberto\r", True),
+                                              ("Outro \x13 HYPERLINK sem fim e texto final\r", True)]))
+        self.assertEqual(r.status, "ok")
+        self.assertIn("Antes  depois do campo aberto", r.texto)
+        self.assertIn("texto final", r.texto)
+        self.assertIn("campo do Word sem fim", r.detalhe)
+
+    def test_cabecalho_do_doc_fica_fora(self) -> None:
+        r = extratores.extrair(fx.doc_word97([("Corpo do requerimento.\r", True)],
+                                             cabecalho="CÂMARA MUNICIPAL DE NITERÓI\r"))
+        self.assertEqual((r.texto, r.cabecalhos_omitidos), ("Corpo do requerimento.", 1))
+
+    def test_word95(self) -> None:
+        r = extratores.extrair(fx.doc_word95("Indicação antiga em Word 95.\rSegunda linha.\r"))
+        self.assertEqual((r.formato, r.status), ("doc", "ok"))
+        self.assertEqual(r.texto, "Indicação antiga em Word 95.\nSegunda linha.")
+
+    def test_real_pl_127510(self) -> None:
+        pasta = Path(__file__).resolve().parent / "fixtures" / "textos"
+        dados = (pasta / "real_pl_127510.doc").read_bytes()
+        esperado = (pasta / "real_pl_127510.esperado.txt").read_text(encoding="utf-8")
+        r = extratores.extrair(dados)
+        self.assertEqual((r.formato, r.status), ("doc", "ok"))
+        self.assertIn("Art. 1º - Fica vedada a circulação", r.texto)
+        self.assertIn("JUSTIFICATIVA", r.texto)
+        self.assertIn("§ 1º - Para efeitos desta Lei", r.texto)
+        # o corpo é idêntico ao texto conferido; o papel timbrado (histórias de cabeçalho)
+        # que vinha depois das assinaturas agora fica fora do texto
+        corpo = esperado[:esperado.index("Benny Briolly") + len("Benny Briolly")]
+        self.assertTrue(r.texto.startswith(corpo), r.texto[:200])
+        self.assertEqual(r.texto, normalizar(r.texto))
 
 
 # ------------------------------------------------------------------- RTF, HTML, texto
@@ -323,6 +390,10 @@ class TestRtfHtmlTexto(unittest.TestCase):
         )
         for oculto in ("Arial", "Título oculto", "Autor oculto", "HYPERLINK", "89504e47", "Gerador"):
             self.assertNotIn(oculto, r.texto)
+
+    def test_rtf_par_de_surrogates(self) -> None:
+        r = extratores.extrair(b"{\\rtf1 Emoji \\u-10179?\\u-8704? fim \\u-10179? solto}")
+        self.assertEqual(r.texto, "Emoji \U0001F600 fim  solto")
 
     def test_rtf_malformado(self) -> None:
         self.assertEqual(extratores.extrair(b"{\\rtf1 sem fechar {\\b grupo").status, "ok")
@@ -402,6 +473,18 @@ class TestZip(ComFerramentasFalsas):
         self.assertNotEqual(r.status, "ok")
         self.assertLess(len(r.texto), 1000)
 
+    def test_membro_corrompido_com_limite_no_nome(self) -> None:
+        dados = bytearray(fx.zip_bytes({"leia.txt": "Texto do anexo".encode(),
+                                        "limite_gastos.pdf": fx.pdf_texto()}, comprimir=False))
+        with zipfile.ZipFile(io.BytesIO(bytes(dados))) as zf:
+            info = zf.getinfo("limite_gastos.pdf")
+        inicio = info.header_offset + 30 + len(info.filename.encode()) + len(info.extra)
+        dados[inicio + 20] ^= 0xFF  # dado corrompido: CRC não confere
+        r = extratores.extrair(bytes(dados))
+        self.assertEqual((r.formato, r.status), ("zip", "ok"))
+        self.assertIn("=== leia.txt ===\nTexto do anexo", r.texto)
+        self.assertIn("limite_gastos.pdf", r.detalhe)
+
     def test_zip_invalido_e_vazio(self) -> None:
         self.assertEqual(extratores.extrair(b"PK\x03\x04" + b"\x00" * 30).status, "erro_formato")
         r = extratores.extrair(fx.zip_bytes({}))
@@ -441,9 +524,49 @@ class TestPdfFalso(ComFerramentasFalsas):
         self.assertEqual(r.confianca, 87.5)
         self.assertEqual(r.confianca_paginas, {2: 87.5})
         self.assertEqual((r.extrator, r.versao_extrator), ("pdftotext+tesseract", "99.1.0+9.9.9"))
-        partes = r.texto.split("\n\n")
+        partes = r.texto.split("\n\f\n")  # páginas separadas por uma linha só com \f
+        self.assertEqual(len(partes), 3)
         self.assertEqual(partes[1], "Texto escaneado da segunda")
         self.assertTrue(partes[0].startswith("Página com texto"))
+
+    def test_falha_de_ocr_numa_pagina_nao_perde_as_outras(self) -> None:
+        self.configurar(paginas=[PAGINA_LONGA, "", "", PAGINA_LONGA], ocr_texto="Texto lido da página",
+                        falhar_paginas=[3])
+        r = extratores.extrair(fx.pdf_misto(), ocr=True, ferramentas=self.ferr)
+        self.assertEqual(r.status, "escaneado_sem_ocr")
+        self.assertIn("OCR falhou nas páginas 3", r.detalhe)
+        self.assertEqual((r.paginas_escaneadas, r.paginas_ocr, list(r.confianca_paginas)), ([2, 3], 1, [2]))
+        partes = r.texto.split("\n\f\n")
+        self.assertEqual(partes[1], "Texto lido da página")
+        self.assertTrue(partes[0].startswith("Página com texto") and partes[3].startswith("Página com texto"))
+
+    def test_orcamento_de_paginas_de_ocr(self) -> None:
+        from coletor.extratores import ocr
+        self.configurar(paginas=["", "", ""], ocr_texto="Texto lido")
+        with mock.patch.object(ocr, "MAX_PAGINAS_OCR", 1):
+            r = extratores.extrair(fx.pdf_escaneado(), ocr=True, ferramentas=self.ferr)
+        self.assertEqual(r.status, "escaneado_sem_ocr")
+        self.assertIn("OCR adiado", r.detalhe)
+        self.assertIn("páginas 2, 3", r.detalhe)
+        self.assertEqual((r.paginas_ocr, r.texto.split("\n\f\n")), (1, ["Texto lido", "", ""]))
+        self.assertEqual(self.registro(), ["pdftoppm 1", "tesseract pagina-1.png"])
+
+    def test_orcamento_de_tempo_de_ocr(self) -> None:
+        from coletor.extratores import ocr
+        self.configurar(paginas=["", ""])
+        with mock.patch.object(ocr, "OCR_SEGUNDOS_DOCUMENTO", 0):
+            r = extratores.extrair(fx.pdf_escaneado(), ocr=True, ferramentas=self.ferr)
+        self.assertEqual((r.status, r.paginas_ocr), ("escaneado_sem_ocr", 0))
+        self.assertIn("páginas 1, 2", r.detalhe)
+        self.assertEqual(self.registro(), [])
+
+    def test_ocr_pior_que_o_texto_embutido_nao_conta(self) -> None:
+        embutido = "Texto curto embutido com 40 letras ou mais aqui"
+        self.configurar(paginas=[embutido], ocr_texto="ruim", confs=[10])
+        r = extratores.extrair(fx.pdf_escaneado(), ocr=True, ferramentas=self.ferr)
+        self.assertEqual(r.texto, embutido)
+        self.assertEqual((r.confianca, r.confianca_paginas, r.paginas_ocr), (None, {}, 1))
+        self.assertEqual(r.status, "ok")
 
     def test_ocr_baixa_confianca(self) -> None:
         self.configurar(paginas=[""], ocr_texto="ruído ilegível aqui", confs=[40, 50, 30])

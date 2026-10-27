@@ -44,6 +44,7 @@ from .base import (
     VERSAO_EXTRATORES,
     ErroFerramenta,
     ErroFormato,
+    ErroLimite,
     FerramentaAusente,
     Resultado,
 )
@@ -55,6 +56,7 @@ __all__ = [
     "VERSAO_EXTRATORES",
     "ErroCFB",
     "ErroFormato",
+    "ErroLimite",
     "Resultado",
     "detectar",
     "extrair",
@@ -64,6 +66,7 @@ __all__ = [
 _ERROS_FORMATO = (
     ErroFormato, ValueError, KeyError, IndexError, struct.error, zipfile.BadZipFile,
     zlib.error, ET.ParseError, EOFError, RecursionError, OverflowError, LookupError,
+    MemoryError,
 )
 _STATUS_COM_TEXTO = ("ok", "ok_ocr", "ocr_baixa_confianca")
 
@@ -99,9 +102,16 @@ def _por_formato(formato: str, dados: bytes, ocr: bool, ferramentas, profundidad
     if formato == "vazio":
         return Resultado(formato="vazio", status="vazio_legitimo", detalhe="arquivo sem conteúdo")
     if formato == "docx":
-        return _interno("docx", _docx.extrair_docx(dados, orcamento))
+        texto, cabecalhos = _docx.extrair_docx(dados, orcamento)
+        resultado = _interno("docx", texto)
+        resultado.cabecalhos_omitidos = cabecalhos
+        return resultado
     if formato == "doc":
-        return _interno("doc", _doc.extrair_doc(dados))
+        texto, avisos, cabecalhos = _doc.extrair_doc(dados)
+        resultado = _interno("doc", texto)
+        resultado.cabecalhos_omitidos = cabecalhos
+        resultado.detalhe = "; ".join(avisos)
+        return resultado
     if formato == "rtf":
         return _interno("rtf", _rtf.extrair_rtf(dados))
     if formato == "html":

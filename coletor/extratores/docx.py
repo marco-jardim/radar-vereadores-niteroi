@@ -1,7 +1,8 @@
 """Texto de documentos Word 2007+ (docx, WordprocessingML).
 
 Lê o documento principal indicado em `_rels/.rels` (ou `word/document.xml`),
-depois cabeçalhos, rodapés, notas de rodapé e notas de fim. Cada parágrafo `w:p`
+depois as notas de rodapé e as notas de fim. Cabeçalhos e rodapés só são contados,
+não entram no texto. Cada parágrafo `w:p`
 vira uma linha; `w:tab` vira tabulação; `w:br`/`w:cr` viram quebra de linha.
 Tabelas saem linha a linha, com as células separadas por " | ". Texto excluído
 em revisão (`w:delText`), códigos de campo (`w:instrText`) e o conteúdo
@@ -17,7 +18,7 @@ import xml.etree.ElementTree as ET
 import zipfile
 
 from . import base
-from .base import ErroFormato, ler_membro_zip
+from .base import ErroFormato, ErroLimite, ler_membro_zip
 
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 MC = "{http://schemas.openxmlformats.org/markup-compatibility/2006}"
@@ -147,8 +148,13 @@ def _ordem_cabecalho(nome: str) -> tuple:
     return (m.group(1) != "header", int(m.group(2) or 0), nome)
 
 
-def extrair_docx(dados: bytes, orcamento: list[int] | None = None) -> str:
-    """Texto do docx; ErroFormato se não há documento principal ou o XML é inválido."""
+def extrair_docx(dados: bytes, orcamento: list[int] | None = None) -> tuple[str, int]:
+    """Texto do docx e quantas partes de cabeçalho/rodapé com texto ficaram de fora.
+
+    O texto tem o corpo e as notas de rodapé e de fim; cabeçalhos e rodapés não entram
+    (são repetição de papel timbrado). ErroFormato se não há documento principal ou o
+    XML é inválido.
+    """
     if orcamento is None:
         orcamento = [base.LIMITE_DESCOMPACTADO]
     try:
@@ -158,19 +164,17 @@ def extrair_docx(dados: bytes, orcamento: list[int] | None = None) -> str:
     with zf:
         infos = [i for i in zf.infolist() if not i.is_dir()]
         if sum(i.file_size for i in infos) > orcamento[0]:
-            raise ErroFormato("limite de bytes descompactados excedido")
+            raise ErroLimite("limite de bytes descompactados excedido")
         nomes = {i.filename: i for i in infos}
         principal = _parte_principal(zf, nomes, orcamento)
         if principal not in nomes:
             raise ErroFormato("docx sem document.xml")
         secoes = [_texto_parte(ler_membro_zip(zf, nomes[principal], orcamento))]
-        vistos: set[str] = set()
+        cabecalhos = 0
         for nome in sorted((n for n in nomes if _RE_CABECALHO.match(n)), key=_ordem_cabecalho):
-            texto = _texto_parte(ler_membro_zip(zf, nomes[nome], orcamento)).strip()
-            if texto and texto not in vistos:  # cabeçalhos repetidos por seção
-                vistos.add(texto)
-                secoes.append(texto)
+            if _texto_parte(ler_membro_zip(zf, nomes[nome], orcamento)).strip():
+                cabecalhos += 1
         for nome in ("word/footnotes.xml", "word/endnotes.xml"):
             if nome in nomes:
                 secoes.append(_texto_parte(ler_membro_zip(zf, nomes[nome], orcamento), notas=True))
-    return "\n\n".join(s for s in secoes if s.strip())
+    return "\n\n".join(s for s in secoes if s.strip()), cabecalhos

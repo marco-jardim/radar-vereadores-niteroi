@@ -67,7 +67,11 @@ def _codec(numero: int) -> str:
 
 
 def extrair_rtf(dados: bytes) -> str:
-    """Texto do RTF; ErroFormato se não começa por {\\rtf ou os grupos não fecham."""
+    """Texto do RTF; ErroFormato se não começa por {\\rtf.
+
+    Grupos não fechados no fim do arquivo são tolerados. Pares de surrogates em
+    \\uN (emoji e outros caracteres fora do plano básico) são combinados.
+    """
     inicio = dados.find(b"{\\rtf")
     if inicio < 0 or inicio > 64:
         raise ErroFormato("RTF sem cabeçalho {\\rtf")
@@ -177,4 +181,6 @@ def extrair_rtf(dados: bytes) -> str:
             continue
         # quebras de linha do próprio arquivo: sem efeito
     descarregar()
-    return "".join(saida)
+    # \uN com pares de surrogates (D800–DBFF seguido de DC00–DFFF) vira um caractere só;
+    # surrogates soltos continuam e são removidos na normalização.
+    return "".join(saida).encode("utf-16-le", "surrogatepass").decode("utf-16-le", "surrogatepass")

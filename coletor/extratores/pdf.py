@@ -6,7 +6,8 @@ pdftotext grava ao fim de cada uma. Página com menos de `LIMIAR_UTEIS` caracter
 passam pelo OCR (`coletor.extratores.ocr`); as demais mantêm o texto do PDF.
 
 Status: `ok` (todas as páginas com texto), `escaneado_sem_ocr` (há páginas
-escaneadas e o OCR não foi pedido; o texto parcial é mantido), `ok_ocr` ou
+escaneadas e o OCR não foi pedido, falhou em alguma página ou passou do orçamento
+por documento; o texto parcial é mantido e `detalhe` lista as páginas), `ok_ocr` ou
 `ocr_baixa_confianca` (conforme a confiança média), `pendente_ferramenta`
 (pdftotext, pdftoppm, tesseract ou o idioma `por` ausente).
 
@@ -22,6 +23,9 @@ from . import ocr as _ocr
 from .base import ErroFormato, FerramentaAusente, Resultado
 
 LIMIAR_UTEIS = 100
+# As páginas ficam separadas por uma linha só com \f (preservada pela normalização),
+# para a limpeza de cabeçalhos e rodapés por página.
+SEPARADOR = "\n\f\n"
 
 
 def caracteres_uteis(texto: str) -> int:
@@ -57,35 +61,42 @@ def extrair_pdf(dados: bytes, ocr: bool, ferramentas=None) -> Resultado:
         escaneadas = [i + 1 for i, p in enumerate(paginas) if caracteres_uteis(p) < LIMIAR_UTEIS]
         resultado.paginas_escaneadas = escaneadas
         if not escaneadas:
-            resultado.texto = "\n\n".join(paginas)
+            resultado.texto = SEPARADOR.join(paginas)
             resultado.status = "ok"
             return resultado
         if not ocr:
-            resultado.texto = "\n\n".join(paginas)
+            resultado.texto = SEPARADOR.join(paginas)
             resultado.status = "escaneado_sem_ocr"
             return resultado
         try:
             _ocr.verificar(ferramentas, pdf=True)
         except FerramentaAusente as exc:
-            resultado.texto = "\n\n".join(paginas)
+            resultado.texto = SEPARADOR.join(paginas)
             resultado.status, resultado.detalhe = "pendente_ferramenta", f"ferramenta ausente: {exc}"
             return resultado
-        lidas = _ocr.ocr_paginas_pdf(arquivo, escaneadas, pasta, ferramentas)
+        lido = _ocr.ocr_paginas_pdf(arquivo, escaneadas, pasta, ferramentas)
 
+    # A confiança só considera as páginas cujo texto do OCR foi usado, isto é, que
+    # trouxe mais caracteres úteis que o texto embutido no PDF.
     soma = 0.0
     palavras_total = 0
-    for n, (texto, conf, palavras) in sorted(lidas.items()):
-        if caracteres_uteis(texto) >= caracteres_uteis(paginas[n - 1]):
-            paginas[n - 1] = texto
+    for n, (texto, conf, palavras) in sorted(lido.lidas.items()):
+        if caracteres_uteis(texto) <= caracteres_uteis(paginas[n - 1]):
+            continue
+        paginas[n - 1] = texto
         if conf is not None and palavras:
             resultado.confianca_paginas[n] = round(conf, 2)
             soma += conf * palavras
             palavras_total += palavras
-    resultado.texto = "\n\n".join(paginas)
-    resultado.paginas_ocr = len(lidas)
+    resultado.texto = SEPARADOR.join(paginas)
+    resultado.paginas_ocr = len(lido.lidas)
     resultado.extrator = "pdftotext+tesseract"
     resultado.versao_extrator = f"{resultado.versao_extrator}+{_ferr.versao('tesseract', ferramentas) or ''}"
     if palavras_total:
         resultado.confianca = round(soma / palavras_total, 2)
-    resultado.status = _ocr.status_ocr(resultado.confianca)
+    pendencias = _ocr.descrever_pendencias(lido)
+    if pendencias:
+        resultado.status, resultado.detalhe = "escaneado_sem_ocr", pendencias
+    else:
+        resultado.status = _ocr.status_ocr(resultado.confianca)
     return resultado

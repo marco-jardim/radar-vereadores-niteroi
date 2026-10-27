@@ -289,18 +289,45 @@ def cfb_com_ciclo(dados: bytes) -> bytes:
 INICIO_TEXTO = 1024
 
 
+def _fkp_papx(limites: list[int], fins_ttp: set[int]) -> bytes:
+    """Página FKP de PAPX: parágrafos entre `limites`; os que terminam em `fins_ttp`
+    recebem sprmPFInTable e sprmPFTtp (fim de linha de tabela)."""
+    cpara = len(limites) - 1
+    if not 0 < cpara <= 27:
+        raise ValueError("fixture com parágrafos demais para uma FKP")
+    pagina = bytearray(512)
+    struct.pack_into(f"<{cpara + 1}I", pagina, 0, *limites)
+    # PapxInFkp em 480 (bOffset 240): cb = 0, cb' = 4 → 8 bytes: istd + 2 sprms
+    pagina[480:490] = (b"\x00\x04" + b"\x00\x00" + struct.pack("<HB", 0x2416, 1)
+                       + struct.pack("<HB", 0x2417, 1))
+    for i in range(cpara):
+        if limites[i + 1] in fins_ttp:
+            pagina[(cpara + 1) * 4 + i * 13] = 240
+    pagina[511] = cpara
+    return bytes(pagina)
+
+
 def doc_word97(pecas: list[tuple[str, bool]], *, tabela: str = "1Table", minifat: bool = False,
-               criptografado: bool = False, extras: dict[str, bytes] | None = None) -> bytes:
+               criptografado: bool = False, extras: dict[str, bytes] | None = None,
+               ttp: list[int] | None = None, repetir: int = 1, cabecalho: str = "") -> bytes:
     """Documento Word 97 mínimo: FIB, piece table (com um Prc antes do Pcdt) e as peças.
 
     `pecas` é a lista de (texto, compactada): compactada em cp1252 (bit 30 do fc) ou
     Unicode em UTF-16LE. Sem `minifat`, os streams são completados até 4096 bytes e
     ficam na FAT; com `minifat`, ficam pequenos e vão para o mini stream.
+
+    `ttp` lista os CPs das marcas \\x07 que encerram linhas de tabela; sem ele, a
+    segunda marca de cada "\\x07\\x07" é a de fim de linha. As marcas viram uma FKP de
+    PAPX com sprmPFTtp, apontada pela PlcBtePapx. `repetir` repete a lista de peças
+    (todas apontando para os mesmos bytes), para testar piece tables malformadas.
+    `cabecalho` vira uma história de cabeçalho (ccpHdd) depois do texto principal.
     """
     texto = bytearray()
     cps = [0]
     pcds = []
-    for conteudo, compactada in pecas:
+    posicoes = []  # (cp inicial, cp final, byte inicial, largura) de cada peça
+    todas = list(pecas) + ([(cabecalho, True)] if cabecalho else [])
+    for conteudo, compactada in todas:
         deslocamento = INICIO_TEXTO + len(texto)
         if compactada:
             bruto = conteudo.encode("cp1252")
@@ -312,12 +339,30 @@ def doc_word97(pecas: list[tuple[str, bool]], *, tabela: str = "1Table", minifat
             bruto = conteudo.encode("utf-16-le")
             fc = deslocamento
         texto += bruto
+        posicoes.append((cps[-1], cps[-1] + len(conteudo), deslocamento, 1 if compactada else 2))
         cps.append(cps[-1] + len(conteudo))
         pcds.append(struct.pack("<HIH", 0, fc, 0))
+    if repetir > 1:
+        tamanhos = [b - a for a, b in zip(cps, cps[1:])]
+        for _ in range(repetir - 1):
+            for tamanho in tamanhos:
+                cps.append(cps[-1] + tamanho)
+        pcds = pcds * repetir
     plc = struct.pack(f"<{len(cps)}I", *cps) + b"".join(pcds)
     clx = b"\x01" + struct.pack("<h", 2) + b"\x00\x00" + b"\x02" + struct.pack("<I", len(plc)) + plc
     prefixo = b"\x00" * 16
     stream_tabela = prefixo + clx
+
+    principal = "".join(c for c, _ in pecas)
+    if ttp is None:
+        ttp = [i + 1 for i in range(len(principal) - 1)
+               if principal[i] == "\x07" and principal[i + 1] == "\x07"
+               and (i == 0 or principal[i - 1] != "\x07")]
+    fins_ttp = set()
+    for cp in ttp:
+        for cp_a, cp_b, inicio, largura in posicoes:
+            if cp_a <= cp < cp_b:
+                fins_ttp.add(inicio + (cp - cp_a + 1) * largura)
 
     fib = bytearray(INICIO_TEXTO)
     flags = 0x0004 | (0x0200 if tabela == "1Table" else 0) | (0x0100 if criptografado else 0)
@@ -325,10 +370,19 @@ def doc_word97(pecas: list[tuple[str, bool]], *, tabela: str = "1Table", minifat
     struct.pack_into("<H", fib, 0x0C, 0x00BF)
     struct.pack_into("<H", fib, 0x20, 14)       # csw
     struct.pack_into("<H", fib, 0x3E, 22)       # cslw
-    struct.pack_into("<i", fib, 0x40 + 3 * 4, cps[-1])  # ccpText
+    struct.pack_into("<i", fib, 0x40 + 3 * 4, cps[-1] - len(cabecalho) * repetir)  # ccpText
+    struct.pack_into("<i", fib, 0x40 + 5 * 4, len(cabecalho))  # ccpHdd
     struct.pack_into("<H", fib, 0x98, 0x5D)     # cbRgFcLcb
     struct.pack_into("<II", fib, 0x9A + 33 * 8, len(prefixo), len(clx))  # fcClx, lcbClx
     palavra = bytearray(fib) + texto
+    if fins_ttp:
+        limites = sorted({INICIO_TEXTO, INICIO_TEXTO + len(texto), *fins_ttp})
+        palavra += b"\x00" * (-len(palavra) % 512)
+        pn = len(palavra) // 512
+        palavra += _fkp_papx(limites, fins_ttp)
+        fc_bte = len(stream_tabela)
+        stream_tabela += struct.pack("<III", limites[0], limites[-1], pn)
+        struct.pack_into("<II", palavra, 0x9A + 13 * 8, fc_bte, 12)  # fcPlcfBtePapx
     if not minifat:
         palavra += b"\x00" * max(0, 4096 - len(palavra))
         stream_tabela += b"\x00" * max(0, 4096 - len(stream_tabela))
@@ -336,6 +390,17 @@ def doc_word97(pecas: list[tuple[str, bool]], *, tabela: str = "1Table", minifat
     streams = {"WordDocument": bytes(palavra), tabela: stream_tabela}
     streams.update(extras or {})
     return cfb(streams)
+
+
+def doc_word95(texto: str) -> bytes:
+    """Word 6/95 não complexo: FIB antigo (nFib 0x65) e texto cp1252 entre fcMin e fcMac."""
+    bruto = texto.encode("cp1252")
+    fib = bytearray(0x300)
+    struct.pack_into("<HHHHHH", fib, 0, 0xA5EC, 0x0065, 0, 0x0416, 0, 0)
+    struct.pack_into("<II", fib, 0x18, 0x300, 0x300 + len(bruto))
+    palavra = bytes(fib) + bruto
+    palavra += b"\x00" * max(0, 4096 - len(palavra))
+    return cfb({"WordDocument": palavra})
 
 
 def doc_curto() -> bytes:
@@ -352,6 +417,10 @@ def doc_fragmentado() -> bytes:
         ("Coluna A\x07Coluna B\x07\x07Valor 1\x07Valor 2\x07\x07", True),
         ("Fim\x0bcom quebra manual\x0cnova página\r", False),
     ])
+
+
+def doc_antigo() -> bytes:
+    return doc_word95("Indicação antiga em Word 95.\rSegunda linha.\r")
 
 
 def doc_minifat() -> bytes:
@@ -581,6 +650,7 @@ FIXTURES = {
     "doc_curto.doc": doc_curto,
     "doc_fragmentado.doc": doc_fragmentado,
     "doc_minifat.doc": doc_minifat,
+    "doc_word95.doc": doc_antigo,
     "exemplo.rtf": rtf_exemplo,
     "exemplo.html": html_exemplo,
     "pdf_texto.pdf": pdf_texto,
