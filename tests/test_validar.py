@@ -507,6 +507,10 @@ class TestExecucao(Afirmacoes):
         escrever("data/classificacao_ia.json", {"275545": {"hash": "95106c8c2765e0cf"}} if cache is None else cache)
         escrever("config/curadoria.json", CURADORIA if curadoria is None else curadoria)
         escrever("config/vereadores.json", VEREADORES)
+        (raiz / "config" / "memoria.json").write_bytes(
+            (json.dumps({"criterios": "Critérios de memória", "homenageados": [], "linha_do_tempo": []},
+                        ensure_ascii=False, indent=1) + "\n").encode("utf-8")
+        )
         return raiz
 
     def rodar_main(self, raiz: Path, ambiente: dict) -> tuple[int, str, str]:
