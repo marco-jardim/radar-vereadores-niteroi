@@ -1,0 +1,66 @@
+/* Fontes e composição exclusivas da memória; arquivos auto-hospedados, SIL OFL 1.1. */
+@font-face {
+  font-family: "Fraunces"; font-style: normal; font-weight: 100 900; font-display: swap;
+  src: url(fontes/fraunces-latin-wght-normal.woff2) format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "Fraunces"; font-style: normal; font-weight: 100 900; font-display: swap;
+  src: url(fontes/fraunces-latin-ext-wght-normal.woff2) format("woff2");
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+.memoria { overflow-wrap: anywhere; }
+.memoria-abertura h1, .homenageado h2, .memoria-secao > h2 {
+  font-family: "Fraunces", Georgia, serif; font-weight: 600; line-height: 1.4;
+}
+.memoria-abertura {
+  position: relative; isolation: isolate; padding: var(--esp-7) var(--esp-5);
+  margin-bottom: var(--esp-6); border-radius: var(--raio-2);
+}
+.memoria-abertura::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-color: var(--baia); opacity: .08; border-radius: inherit;
+  -webkit-mask-image: url(memoria/azulejo.svg); -webkit-mask-repeat: repeat;
+  mask-image: url(memoria/azulejo.svg); mask-repeat: repeat;
+}
+.memoria-abertura h1 { font-size: var(--fs-6); margin-top: 0; }
+.memoria-abertura p { max-width: 65ch; margin-bottom: 0; }
+.memoria-pessoas {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  gap: var(--esp-5); align-items: start;
+}
+.homenageado {
+  min-width: 0; padding: var(--esp-5); border: 1px solid var(--linha);
+  border-radius: var(--raio-2); background: var(--superficie); scroll-margin-top: var(--esp-5);
+}
+.homenageado h2 { font-size: var(--fs-3); margin-top: var(--esp-3); }
+.homenageado h3 { font-size: var(--fs-1); }
+.homenageado .emblema {
+  display: block; width: 160px; max-width: 100%; height: auto; aspect-ratio: 1;
+  color: var(--baia); --acento: var(--por-do-sol);
+}
+.memoria .nome-completo, .memoria .datas-vida, .memoria-fontes {
+  font-size: var(--fs--1); line-height: 1.55;
+}
+.memoria .datas-vida { color: var(--tinta-suave); }
+.memoria ul, .linha-tempo-completa { padding-left: var(--esp-5); }
+.memoria li + li { margin-top: var(--esp-2); }
+.memoria-fontes a { display: inline-block; min-height: 24px; }
+.memoria-secao { margin-block: var(--esp-7); }
+.memoria-secao > h2 { font-size: var(--fs-3); }
+.linha-tempo-completa > li { padding: var(--esp-4); border-left: 2px solid var(--linha); }
+.linha-tempo-completa time { font-weight: 600; }
+.linha-tempo-completa h3 { font-size: var(--fs-1); margin-block: var(--esp-2); }
+.linha-tempo-completa .fontes-rotulo { margin-bottom: 0; }
+@media (forced-colors: active) {
+  .memoria-abertura::before { display: none; }
+  .homenageado, .linha-tempo-completa > li { border-color: CanvasText; }
+  .memoria a:focus-visible { outline-color: Highlight; }
+}
+@media print {
+  .memoria-abertura::before { display: none; }
+  .memoria-pessoas { display: block; }
+  .homenageado { break-inside: avoid; background: transparent; box-shadow: none; margin-bottom: var(--esp-5); }
+  .memoria .datas-vida, .homenageado .emblema { color: inherit; --acento: currentColor; }
+  .memoria-abertura { padding: 0; }
+}
