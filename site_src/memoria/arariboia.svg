@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <symbol id="emblema" viewBox="0 0 96 96">
+    <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M30 14L55 29L30 44M23 29H72M64 22L72 29L64 36"/>
+      <path d="M12 49Q48 58 84 49Q74 66 48 66Q22 66 12 49Z"/>
+      <path d="M10 75Q19 69 29 75T48 75T67 75T86 75M10 84Q19 78 29 84T48 84T67 84T86 84"/>
+    </g>
+    <path d="M30 14Q57 29 30 44" fill="none" stroke="var(--acento)" stroke-width="4" stroke-linecap="round"/>
+  </symbol>
+</svg>
