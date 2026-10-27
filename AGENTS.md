@@ -26,6 +26,7 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `coletor/arquivos.py` | Serialização e gravação atômica dos JSONs versionados. |
 | `coletor/validar.py` | Validação de dados, configuração e temporários, sem alterar arquivos. |
 | `coletor/geo.py` | Conversão offline do Overpass em limites simplificados dos bairros, com fonte OSM/ODbL. |
+| `coletor/paisagem.py` | Geometria única da marca e do favicon; `python -m coletor.paisagem --marca` regrava os dois SVGs em `site_src/`; testes exigem bytes iguais aos gerados. |
 | `coletor/novidades.py` | Eventos dos PLs pelas datas dos dados, semanas e feed RSS. |
 | `coletor/gerar_site.py` | Geração de `site/`, JSONs do navegador, manifesto e relatório de tamanhos. |
 | `coletor/site/modelo.py` | Enriquecimento, pessoas, mandatos, métricas, repetidos e documentos por autor. |
@@ -40,9 +41,12 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `data/classificacao_ia.json`, `data/meta.json` | Cache da IA e metadados das execuções. |
 | `data/geo/bairros.json` | Geometria opcional gerada por `coletor.geo`. |
 | `site_src/app.js` | Listas de PLs/documentos, carregador compartilhado e diálogo SISCAM. |
+| `site_src/navegacao.js` | Menu móvel e tema, até 4 KiB gzip; um listener por tipo no documento em cada script, sem alterar `app.js` para essas funções. |
 | `site_src/dados.js` | Hidratação das colunas e planejamento das partes de PLs/documentos. |
 | `site_src/sessoes.js` | Filtros, mapa de votos, paginação e CSV de sessões. |
-| `site_src/estilo.css`, `site_src/favicon.svg` | Estilos, tokens, paleta, `@font-face` e ícone. |
+| `site_src/estilo.css` | Estilos, tokens, paleta e `@font-face`. |
+| `site_src/favicon.svg` | Ícone gerado por `coletor.paisagem`; não editar à mão. |
+| `site_src/marca.svg` | Símbolo `#marca`: ondas com `currentColor`, sol com `fill` herdado do `<use>` via token `--marca-sol`; gerado, não editar à mão. |
 | `site_src/fontes/` | WOFF2 auto-hospedadas Barlow Condensed, Public Sans e Fraunces; licenças `OFL-*.txt`; `FONTES.md` não publicado. |
 | `tests/` | Testes Python, JS em `tests/js/` e HTML real em `tests/fixtures/siscam/`. |
 | `.github/workflows/` | Testes, coleta semanal e publicação. |
@@ -93,7 +97,9 @@ Os três primeiros e a classificação rodam na coleta; a geração fica no work
 6. `gerar_site` combina curadoria, regras e cache, calcula métricas e recria `site/`. As páginas principais
    seguem `paginas.NAV`: início, novidades, leis, projetos, atividades, sessões, sem efeito e polêmicas
    (`ruido.html`), análises e metodologia. Também gera `vereadores/*.html`, `feed.xml`, o redirect
-   `alertas.html` → `ruido.html`, `dados/*`, estáticos e `.nojekyll`.
+   `alertas.html` → `ruido.html`, `404.html`, `dados/*`, estáticos e `.nojekyll`. A 404 usa o template comum,
+   prefixo de caminho absoluto extraído de `URL_SITE`, `noindex`, sem canônica, e lista de vereadores da
+   legislatura atual.
 
 Execute na raiz, trocando o ano conforme necessário:
 
@@ -108,6 +114,12 @@ python -m http.server -d site 8000
 ```
 
 Para usar só os dados versionados, comece por `validar` e `gerar_site`, sem rede nem chave.
+
+Para regenerar a marca e o favicon após mudar sua geometria, execute separadamente, offline:
+
+```text
+python -m coletor.paisagem --marca
+```
 
 ### Validação da memória
 
@@ -205,6 +217,23 @@ Não há carregamento automático de `.env`. A IA usa `POST /chat/completions`, 
 - Preserve colunas, escape de HTML e os espelhos `PASSO_LISTA`/`PASSO`, `plano_docs`/`fatiasDocs` e as fixtures
   de paridade. Sessões têm contrato próprio, consolidado na próxima seção.
 
+### Cabeçalho, tema e metadados
+
+- `paginas.SCRIPT_CABECA` roda inline antes do CSS: adiciona `js` só com `matchMedia` e `addEventListener`,
+  e aplica `localStorage['radar-tema']` se for `claro` ou `escuro`. Cabe em 400 bytes; os testes comparam
+  seu conteúdo byte a byte com a constante de `tests/js/tema.test.js`.
+- Abaixo de 760 px, sem JS, a navegação é uma grade de duas colunas com links de altura mínima de 44 px.
+  Com `js`, começa recolhida no próprio CSS, sem salto de layout. O `onerror` de `navegacao.js` e os retornos
+  sem menu funcional removem `js`, restaurando os links. Clique fora fecha; `focusout` fecha ao sair do
+  cabeçalho só sem pressão de ponteiro em curso; Esc fecha e devolve o foco ao botão Menu.
+- `.tema` tem três botões com `aria-pressed`: Automático, Claro e Escuro; fica oculto sem JS.
+  `navegacao.js` cuida do menu e do tema, separado de `app.js`. Preserve um listener por tipo no documento
+  em cada script. A ordem dos scripts com `defer` é `navegacao.js` → `dados.js` → `app.js` → extras.
+- `pagina()` recebe `caminho` e `indexavel`: canônica e `og:url` usam `URL_SITE` + caminho (`index.html`
+  vira a raiz); com `indexavel=False`, saem ambas e entra `noindex`. O template também emite `og:type`,
+  `og:site_name`, `og:locale`, `twitter:card` e `theme-color` claro/escuro. O redirect `alertas.html` é
+  separado e não recebe os metadados do template.
+
 ### Tokens e fontes
 
 - Os tokens de cor do contrato são literais hexadecimais de seis dígitos em `:root`, no bloco `@media`
@@ -224,6 +253,9 @@ Não há carregamento automático de `.env`. A IA usa `POST /chat/completions`, 
 | Apresentação de `sessoes.html` | Alvo de 60 KiB nos dados reais, não teto imposto pelo gerador. |
 | Seção individual de sessões | Até +10 KiB, verificada em teste sintético. |
 | `sessoes.js` | Até 12 KiB, testado offline. |
+| `navegacao.js` | Até 4 KiB. |
+| Script inline `paginas.SCRIPT_CABECA` | Até 400 bytes **brutos**. |
+| `favicon.svg` e `marca.svg` | Até 2 KiB **brutos** cada. |
 | Mapa individual de indicações completo | Até 12 KiB, medidos deterministicamente na geração. |
 | Geometria `data/geo/bairros.json` | Até 60 KiB **brutos**, conferidos pelo conversor. |
 

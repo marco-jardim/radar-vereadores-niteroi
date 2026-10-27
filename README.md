@@ -26,6 +26,9 @@ As páginas em `vereadores/` reúnem projetos, **Presença e votos** e, quando h
 **Atividade**. Os demais documentos não entram nos números de projetos de lei e leis.
 O endereço antigo `alertas.html` redireciona para `ruido.html`; `dados/` contém os JSONs de consulta e exportação.
 
+Com JavaScript, o cabeçalho oferece os temas Automático, Claro e Escuro e um menu recolhível no celular.
+Sem JavaScript, os links de navegação permanecem visíveis.
+
 **Limites importantes:** impacto é estimado pela ementa, não resultado comprovado. Contar documentos,
 presenças ou votos não mede a qualidade do mandato. Os critérios valem igualmente para qualquer autor,
 partido ou espectro político; classificações e dados podem ser contestados.
