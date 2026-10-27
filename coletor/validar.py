@@ -92,6 +92,42 @@ def validar_autoria(autoria: object, rotulo: str) -> list[str]:
     return problemas
 
 
+CAMPOS_ARQUIVO = {"id", "descricao", "versao", "data", "icone"}
+
+
+def validar_arquivos(registro: dict, rotulo: str) -> list[str]:
+    """Confere a chave opcional 'arquivos' (tabela de arquivos do detalhe no SISCAM).
+
+    Registros coletados antes do suporte não têm a chave; arquivo ainda sem texto extraído não é erro.
+    """
+    if "arquivos" not in registro:
+        return []
+    arquivos = registro["arquivos"]
+    if not isinstance(arquivos, list):
+        return [f"{rotulo}: 'arquivos' deveria ser uma lista"]
+    problemas, vistos = [], set()
+    for i, a in enumerate(arquivos, 1):
+        r = f"{rotulo}: arquivo {i}"
+        if not isinstance(a, dict):
+            problemas.append(f"{r} deveria ser um objeto")
+            continue
+        if set(a) != CAMPOS_ARQUIVO:
+            problemas.append(f"{r}: campos {sorted(a)} diferem de {sorted(CAMPOS_ARQUIVO)}")
+        aid = a.get("id")
+        if not _e_inteiro(aid) or aid <= 0:
+            problemas.append(f"{r}: 'id' {aid!r} deveria ser inteiro positivo")
+        elif aid in vistos:
+            problemas.append(f"{r}: id {aid} repetido")
+        else:
+            vistos.add(aid)
+        for chave in ("descricao", "versao", "icone"):
+            if not isinstance(a.get(chave), str):
+                problemas.append(f"{r}: '{chave}' deveria ser texto")
+        if not data_valida(a.get("data")):
+            problemas.append(f"{r}: 'data' {a.get('data')!r} não é data AAAA-MM-DD nem null")
+    return problemas
+
+
 def validar_registro(p: object, ano: int, arquivo: str) -> list[str]:
     """Confere um registro de data/proposicoes/<ano>.json."""
     if not isinstance(p, dict):
@@ -117,6 +153,7 @@ def validar_registro(p: object, ano: int, arquivo: str) -> list[str]:
     problemas += validar_autoria(p.get("autoria"), rotulo)
     problemas += validar_tramitacoes(p.get("tramitacoes", []), rotulo)
     problemas += validar_substitutivos(p, rotulo)
+    problemas += validar_arquivos(p, rotulo)
     return problemas
 
 
@@ -186,6 +223,7 @@ def validar_substitutivos(p: dict, rotulo: str) -> list[str]:
             if "lei" not in s:
                 problemas.append(f"{r}: sem a chave 'lei'")
             problemas += _validar_lei(s.get("lei"), r)
+            problemas += validar_arquivos(s, r)
     if "lei_substitutivo" in p:
         ls = p["lei_substitutivo"]
         if not _e_inteiro(ls):
@@ -309,6 +347,7 @@ def validar_documento(d: object, tipo: str, ano: int, arquivo: str) -> list[str]
         problemas.append(f"{rotulo}: 'detalhe_pendente' deveria ser true ou ausente, não {d['detalhe_pendente']!r}")
     elif "detalhe_pendente" not in d and not tem_detalhe and isinstance(autores, list) and D.elegivel_detalhe(d):
         problemas.append(f"{rotulo}: elegível para a página de detalhe, mas sem 'detalhe_em' e sem 'detalhe_pendente'")
+    problemas += validar_arquivos(d, rotulo)
     return problemas
 
 

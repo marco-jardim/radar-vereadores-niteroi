@@ -981,3 +981,32 @@ class TestExecucao(Afirmacoes):
 
 if __name__ == "__main__":
     unittest.main()
+
+class TestValidarArquivos(unittest.TestCase):
+    def setUp(self):
+        self.item = {"id": 404139, "descricao": "", "versao": "Anexos", "data": "2025-12-10", "icone": "doc"}
+
+    def problemas(self, arquivos):
+        return V.validar_arquivos({"arquivos": arquivos}, "r")
+
+    def test_ausente_e_lista_valida(self):
+        self.assertEqual(V.validar_arquivos({}, "r"), [])
+        self.assertEqual(self.problemas([]), [])
+        self.assertEqual(self.problemas([self.item, {**self.item, "id": 404140, "data": None, "icone": "pdf"}]), [])
+
+    def test_formas_invalidas(self):
+        casos = {
+            "nao lista": ("x", "deveria ser uma lista"),
+            "nao objeto": (["x"], "deveria ser um objeto"),
+            "campo extra": ([{**self.item, "url": "https://x"}], "diferem"),
+            "campo faltando": ([{k: v for k, v in self.item.items() if k != "icone"}], "diferem"),
+            "id texto": ([{**self.item, "id": "1"}], "inteiro positivo"),
+            "id zero": ([{**self.item, "id": 0}], "inteiro positivo"),
+            "id repetido": ([self.item, dict(self.item)], "repetido"),
+            "data invalida": ([{**self.item, "data": "10/12/2025"}], "'data'"),
+            "versao nao texto": ([{**self.item, "versao": None}], "'versao'"),
+        }
+        for nome, (arquivos, trecho) in casos.items():
+            with self.subTest(nome):
+                problemas = self.problemas(arquivos)
+                self.assertTrue(any(trecho in p for p in problemas), problemas)

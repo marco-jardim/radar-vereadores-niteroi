@@ -57,6 +57,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from coletor.arquivos import salvar_json, salvar_lista
+from coletor.arquivos_siscam import preencher_arquivos_cache, preservar_arquivos
 from coletor.regras_documentos import derivar_publicacao, derivar_resposta
 from coletor.siscam import BASE, DETALHE, FAIXA, baixar, campo, data_iso, limpar, montar_registro, parse_detalhe
 
@@ -87,7 +88,7 @@ MAX_DETALHES = 1500  # páginas de detalhe por execução: a carga inicial se di
 SALVAR_A_CADA = 100  # detalhes baixados entre gravações parciais
 FALHAS_SEGUIDAS_MAX = 20  # interrompe os detalhes da execução depois de tantas falhas seguidas
 # campos vindos da página de detalhe, preservados quando o documento é relistado
-CAMPOS_DETALHE = ("autoria", "tramitacoes", "processo", "protocolo", "data_protocolo", "detalhe_em")
+CAMPOS_DETALHE = ("autoria", "tramitacoes", "processo", "protocolo", "data_protocolo", "detalhe_em", "arquivos")
 RAIZ = Path(__file__).resolve().parent.parent
 DIR_DOCUMENTOS = RAIZ / "data" / "documentos"
 META = RAIZ / "data" / "meta.json"
@@ -494,8 +495,9 @@ def aplicar_detalhe(registro: dict, detalhe: dict, em: str) -> dict:
     }
     montado = montar_registro(resumo, detalhe)
     novo = {k: v for k, v in registro.items() if k != "detalhe_pendente"}
-    for chave in ("autoria", "tramitacoes", "processo", "protocolo", "data_protocolo"):
+    for chave in ("autoria", "tramitacoes", "processo", "protocolo", "data_protocolo", "arquivos"):
         novo[chave] = montado[chave]
+    preservar_arquivos(registro, novo)
     novo["detalhe_em"] = em
     derivar_campos(novo)
     registro.clear()
@@ -860,6 +862,27 @@ def atualizar_meta(estat: dict, caminho: Path | None = None) -> dict:
 
 
 # ---------------------------------------------------------------------- execução
+def arquivos_do_cache(pasta: Path, anos: list[int] | None = None) -> None:
+    """Preenche só arquivos dos documentos elegíveis; cache ausente deixa pendência, sem rede."""
+    for tipo, ano in arquivos_existentes():
+        if anos is not None and ano not in anos:
+            continue
+        caminho = caminho_ano(tipo, ano)
+        registros = carregar_ano(caminho)
+        for reg in registros.values():
+            if not elegivel_detalhe(reg):
+                continue
+            disponivel = False
+            if tipo in TIPOS_COM_DETALHE or tem_detalhe(reg):
+                try:
+                    disponivel = preencher_arquivos_cache(reg, pasta)
+                except ValueError as e:
+                    print(f"::warning::documento {reg['id']}: cache não aplicado ({e})", file=sys.stderr)
+            if not disponivel and "arquivos" not in reg:
+                reg["detalhe_pendente"] = True
+        salvar_ano(caminho, registros)
+
+
 def intervalo_anos(texto: str) -> list[int]:
     """Converte "2025-2026" em [2025, 2026] e "2025" em [2025]."""
     ini, _, fim = texto.strip().partition("-")
@@ -878,7 +901,8 @@ def _interromper(sinal: int, _quadro: object) -> None:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     hoje = dt.date.today().year
-    ap.add_argument("--anos", default=f"{hoje - 1}-{hoje}", help="ano ou intervalo inclusivo (padrão: anterior e atual)")
+    ap.add_argument("--anos", default=None, help="ano ou intervalo inclusivo (padrão: anterior e atual)")
+    ap.add_argument("--arquivos-do-cache", type=Path, metavar="DIR", help="preenche arquivos do HTML local, sem rede")
     ap.add_argument("--tipos", default=",".join(TIPOS), help="tipos separados por vírgula: " + ",".join(TIPOS))
     ap.add_argument("--workers", type=int, default=int(os.environ.get("COLETOR_WORKERS", 4)))
     ap.add_argument(
@@ -910,9 +934,12 @@ def main() -> None:
     if args.max_minutos is not None and args.max_minutos <= 0:
         ap.error("--max-minutos precisa ser positivo")
     try:
-        anos = intervalo_anos(args.anos)
+        anos = intervalo_anos(args.anos or f"{hoje - 1}-{hoje}")
     except ValueError as e:
         ap.error(f"--anos inválido: {e}")
+    if args.arquivos_do_cache:
+        arquivos_do_cache(args.arquivos_do_cache, anos if args.anos is not None else None)
+        return
     prazo = _agora() + 60 * args.max_minutos if args.max_minutos else None
     signal.signal(signal.SIGTERM, _interromper)
     estat: dict = {"tipos": {}}

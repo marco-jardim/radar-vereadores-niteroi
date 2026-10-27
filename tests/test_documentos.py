@@ -23,6 +23,7 @@ from urllib.parse import parse_qs, urlsplit
 
 from coletor import arquivos, documentos, validar
 from tests.apoio import SaidaQueSinaliza, ler_fixture
+from tests.test_arquivos_siscam import ESPERADOS
 
 TOTAIS = {"requerimento": 253, "indicacao": 400, "mocao": 400, "pdl": 315, "resolucao": 22}
 VAZIA = "<html><body><table><tr><td>Nenhum registro encontrado.</td></tr></table></body></html>"
@@ -131,7 +132,7 @@ def pagina_minima(reg: dict, rotulo: str = "Projeto de Resolução") -> str:
     return (
         f'<table><tr><td colspan="2" class="form-task">{rotulo} Nº {int(numero):05d}/{ano}</td></tr>'
         f"<tr><td><strong>Protocolo: </strong>{reg['id']}/{ano}</td></tr></table>"
-        f'<table id="autores_grdMembros">{autores}</table><tr id="trArquivos"></tr>'
+        f'<table id="autores_grdMembros">{autores}</table><tr id="trArquivos"><td>Nenhum Registro</td></tr>'
         f'<table id="tramitacoes_gvTramitacoes">{passos}</table>'
     )
 
@@ -1166,6 +1167,84 @@ class TestIntervaloAnos(unittest.TestCase):
         self.assertEqual(documentos.intervalo_anos("2025"), [2025])
         with self.assertRaises(ValueError):
             documentos.intervalo_anos("2026-2025")
+
+
+class TestArquivos(unittest.TestCase):
+    def test_aplicar_e_relistar_preservam_arquivos(self):
+        anterior = com_detalhe("pdl", 290379, "pdl_290379")
+        self.assertEqual(anterior["arquivos"], ESPERADOS["pdl_290379"])
+        relistado = por_id(documentos.parse_listagem(fixture("pdl"), "pdl"), 290379)
+        documentos.herdar_detalhe(relistado, anterior)
+        self.assertEqual(relistado["arquivos"], anterior["arquivos"])
+        documentos.marcar_detalhes({290379: relistado}, {290379: anterior})
+        self.assertEqual(relistado["arquivos"], anterior["arquivos"])
+
+    def test_vazio_mantem_anterior_com_aviso(self):
+        reg = com_detalhe("resolucao", 289947, "resolucao_289947")
+        detalhe = documentos.ler_detalhe(detalhe_html("resolucao_289947"), reg)
+        detalhe["arquivos"] = []
+        with contextlib.redirect_stderr(io.StringIO()) as erros:
+            documentos.aplicar_detalhe(reg, detalhe, "2026-10-27")
+        self.assertEqual(reg["arquivos"], ESPERADOS["resolucao_289947"])
+        self.assertIn("::warning::", erros.getvalue())
+
+    def test_layout_alterado_preserva_detalhe_pendente(self):
+        with tempfile.TemporaryDirectory() as temp:
+            pasta = Path(temp)
+            caminho = documentos.caminho_ano("resolucao", 2025, pasta)
+            reg = com_detalhe("resolucao", 289947, "resolucao_289947")
+            reg["detalhe_pendente"] = True
+            documentos.salvar_ano(caminho, {reg["id"]: reg})
+            antes = caminho.read_bytes()
+            pagina = detalhe_html("resolucao_289947").replace('id="arquivos_gvListagem"', 'id="grade_alterada"')
+            with mock.patch.object(documentos, "baixar", return_value=pagina), \
+                    contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+                estat = documentos.coletar_detalhes([], [], 1, pasta)
+            self.assertEqual(estat[("resolucao", 2025)]["detalhes_falhas"], 1)
+            self.assertEqual(caminho.read_bytes(), antes)
+
+    def test_cli_cache_offline_e_idempotente(self):
+        with tempfile.TemporaryDirectory() as temp:
+            raiz = Path(temp)
+            dados, cache = raiz / "documentos", raiz / "cache"
+            cache.mkdir()
+            reg = registro(289947, 22)
+            ausente = {**registro(9, 1), "detalhe_em": "2026-10-01"}
+            conhecido = {**registro(10, 2), "arquivos": []}
+            simples = registro(11, 3, tipo="indicacao")
+            multiplo = {**registro(12, 4, tipo="mocao"), "detalhe_em": "2026-10-01",
+                        "autores": [{"id": 1, "nome": "A"}, {"id": 2, "nome": "B"}]}
+            nao_baixado = {**multiplo, "id": 13, "numero": "5/2025"}
+            nao_baixado.pop("detalhe_em")
+            for id_ in (289947, 11, 12, 13):
+                (cache / f"{id_}.html").write_text(detalhe_html("resolucao_289947"), encoding="utf-8")
+            with mock.patch.object(documentos, "DIR_DOCUMENTOS", dados), \
+                    mock.patch.object(documentos, "baixar") as baixar, \
+                    mock.patch.object(documentos, "atualizar_meta") as meta, \
+                    mock.patch.object(sys, "argv", ["documentos", "--arquivos-do-cache", str(cache)]):
+                for tipo, regs in [("resolucao", [reg, ausente, conhecido]), ("indicacao", [simples]),
+                                   ("mocao", [multiplo, nao_baixado])]:
+                    documentos.salvar_ano(documentos.caminho_ano(tipo, 2025), {r["id"]: r for r in regs})
+                documentos.main()
+                primeira = {p: p.read_bytes() for p in dados.rglob("*.json")}
+                documentos.main()
+                self.assertEqual({p: p.read_bytes() for p in dados.rglob("*.json")}, primeira)
+                lidos = documentos.carregar_ano(documentos.caminho_ano("resolucao", 2025))
+                mocoes = documentos.carregar_ano(documentos.caminho_ano("mocao", 2025))
+                self.assertEqual(documentos.carregar_ano(documentos.caminho_ano("indicacao", 2025))[11], simples)
+                baixar.assert_not_called()
+                meta.assert_not_called()
+            self.assertEqual(lidos[289947], {**reg, "arquivos": ESPERADOS["resolucao_289947"]})
+            self.assertEqual(lidos[9], {**ausente, "detalhe_pendente": True})
+            self.assertEqual(lidos[10], conhecido)
+            self.assertEqual(mocoes[12], {**multiplo, "arquivos": ESPERADOS["resolucao_289947"]})
+            self.assertEqual(mocoes[13], {**nao_baixado, "detalhe_pendente": True})
+
+    def test_cli_cache_respeita_anos(self):
+        with mock.patch.object(sys, "argv", ["documentos", "--arquivos-do-cache", "cache", "--anos", "2024"]), \
+                mock.patch.object(documentos, "arquivos_do_cache") as preencher:
+            documentos.main()
+        preencher.assert_called_once_with(Path("cache"), [2024])
 
 
 if __name__ == "__main__":

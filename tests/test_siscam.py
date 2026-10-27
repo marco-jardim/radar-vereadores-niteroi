@@ -4,11 +4,15 @@ from __future__ import annotations
 import contextlib
 import copy
 import io
+import sys
+import tempfile
 import unittest
+from pathlib import Path
 from unittest import mock
 
 from coletor import siscam
 from tests.apoio import ler_fixture, registro_versionado
+from tests.test_arquivos_siscam import ESPERADOS
 
 # Resumo do PL 1/2025 como aparece na listagem (id 275545, virou a Lei 3.987/2025)
 RESUMO_275545 = {
@@ -156,6 +160,9 @@ class TestDetalhe(unittest.TestCase):
             self.skipTest("registro 275545 ausente de data/proposicoes/2025.json")
         reg = siscam.montar_registro(RESUMO_275545, self.detalhe)
         for chave, valor in reg.items():
+            if chave == "arquivos":  # metadados novos, ainda ausentes da base histórica
+                self.assertEqual(valor, ESPERADOS["pl_275545"])
+                continue
             with self.subTest(campo=chave):
                 self.assertEqual(valor, self.versionado.get(chave))
 
@@ -427,7 +434,8 @@ class TestRegistroComSubstitutivo(unittest.TestCase):
 
     def test_forma_do_substitutivo_gravado(self):
         [s] = self.montar()["substitutivos"]
-        self.assertEqual(set(s), {"id", "numero", "data", "situacao", "autoria", "tramitacoes", "lei"})
+        self.assertEqual(set(s), {"id", "numero", "data", "situacao", "autoria", "tramitacoes", "lei", "arquivos"})
+        self.assertEqual(s["arquivos"], ESPERADOS["substitutivo_266596"])
         self.assertEqual((s["id"], s["numero"], s["data"], s["situacao"]), (266596, "1", "2024-03-14", "RECEBIDO PELA SMD"))
         self.assertEqual(s["lei"], LEI_3958)
         self.assertEqual(len(s["tramitacoes"]), 12)
@@ -547,7 +555,7 @@ class TestColetarComSubstitutivos(unittest.TestCase):
             2025: [self.par(501, 1, 2025), self.par(502, 2, 2025), self.par(503, 3, 2025)],
             2024: [self.par(401, 1, 2024), self.par(402, 2, 2024),
                    self.par(403, 3, 2024, substitutivos=[], n_tramitacoes=0),  # mudou na listagem: fora do limite
-                   self.par(404, 4, 2024, substitutivos=[])],                  # já conferido e sem mudança
+                   self.par(404, 4, 2024, substitutivos=[], arquivos=[])],     # já conferido e sem mudança
         }
         estat, salvos, baixados = self.rodar(pares, 4, lambda url: "<html></html>")
         # do mais recente ao mais antigo; a mudança da listagem vem antes e não gasta o limite
@@ -590,6 +598,83 @@ class TestColetarComSubstitutivos(unittest.TestCase):
         self.assertEqual(baixados, [])
         self.assertEqual((estat["por_substitutivos"], estat["substitutivos_adiados"]), (0, 1))
         self.assertNotIn("substitutivos", salvos[2025][501])
+
+
+class TestArquivos(unittest.TestCase):
+    def test_parse_e_montagem(self):
+        detalhe = siscam.parse_detalhe(ler_fixture("siscam", "detalhe_pl_275545.html"))
+        self.assertEqual(detalhe["arquivos"], ESPERADOS["pl_275545"])
+        self.assertEqual(siscam.montar_registro(RESUMO_275545, detalhe)["arquivos"], detalhe["arquivos"])
+
+    def test_precisa_arquivos(self):
+        self.assertTrue(siscam.precisa_arquivos({"id": 1}))
+        self.assertFalse(siscam.precisa_arquivos({"arquivos": []}))
+        self.assertFalse(siscam.precisa_arquivos({"arquivos": ESPERADOS["pl_275545"]}))
+        self.assertFalse(siscam.precisa_arquivos(None))
+        self.assertTrue(siscam.precisa_arquivos({"arquivos": [], "substitutivos": [{"id": 1}]}))
+        self.assertFalse(siscam.precisa_arquivos({"arquivos": [], "substitutivos": [{"id": 1, "arquivos": []}]}))
+
+    def test_fila_compartilha_limite_sem_duplicar(self):
+        ajuda = TestColetarComSubstitutivos()
+        pares = {2025: [ajuda.par(501, 1, 2025, substitutivos=[]), ajuda.par(502, 2, 2025)]}
+        for limite, esperado in [(0, []), (1, [502]), (2, [502, 501])]:
+            with self.subTest(limite=limite):
+                _, _, baixados = ajuda.rodar(pares, limite, lambda url: "<html></html>")
+                self.assertEqual(baixados, esperado)
+
+    def test_lista_vazia_preserva_arquivos_do_pl_com_aviso(self):
+        ajuda = TestColetarComSubstitutivos()
+        pares = {2025: [ajuda.par(501, 1, 2025, arquivos=ESPERADOS["pl_275545"])]}
+        # rodar silencia stderr; captura o print para conferir o aviso sem depender da saída.
+        with mock.patch("builtins.print") as imprimir:
+            _, salvos, _ = ajuda.rodar(pares, 1, lambda url: "<html></html>")
+        self.assertEqual(salvos[2025][501]["arquivos"], ESPERADOS["pl_275545"])
+        self.assertTrue(any("::warning::" in str(c) for c in imprimir.call_args_list))
+
+    def test_layout_alterado_mantem_o_pl(self):
+        ajuda = TestColetarComSubstitutivos()
+        pares = {2025: [ajuda.par(501, 1, 2025)]}
+        estat, salvos, _ = ajuda.rodar(pares, 1, lambda url: ler_fixture("siscam", "detalhe_arquivos_layout_alterado.html"))
+        self.assertEqual(estat["falhas"], 1)
+        self.assertEqual(salvos[2025][501], pares[2025][0][1])
+
+    def test_substitutivo_preserva_arquivos_vazios_e_falha_de_layout(self):
+        anterior = substitutivo(arquivos=ESPERADOS["substitutivo_266596"])
+        ref = TestColetarSubstitutivos.REF
+        with contextlib.redirect_stderr(io.StringIO()) as erros, mock.patch.object(siscam, "baixar", return_value=""):
+            [obtido] = siscam.coletar_substitutivos([ref], [anterior])
+        self.assertEqual(obtido["arquivos"], anterior["arquivos"])
+        self.assertIn("::warning::", erros.getvalue())
+        with silencioso(), mock.patch.object(siscam, "baixar", return_value=ler_fixture("siscam", "detalhe_arquivos_layout_alterado.html")):
+            self.assertEqual(siscam.coletar_substitutivos([ref], [anterior]), [anterior])
+
+    def test_cli_cache_offline_idempotente_e_sem_outros_campos(self):
+        with tempfile.TemporaryDirectory() as temp:
+            raiz = Path(temp)
+            dados, cache = raiz / "proposicoes", raiz / "cache"
+            cache.mkdir()
+            _, reg = TestColetarComSubstitutivos.par(127858, 140, 2021, substitutivos=[substitutivo()])
+            _, ausente = TestColetarComSubstitutivos.par(9, 2, 2021)
+            for id_, nome in FIXTURES_DETALHE.items():
+                (cache / f"{id_}.html").write_text(ler_fixture("siscam", nome), encoding="utf-8")
+            with mock.patch.object(siscam, "DIR_DADOS", dados), mock.patch.object(siscam, "baixar") as baixar, \
+                    mock.patch.object(sys, "argv", ["siscam", "--arquivos-do-cache", str(cache)]):
+                siscam.salvar_ano(2021, {127858: reg, 9: ausente})
+                siscam.main()
+                primeira = (dados / "2021.json").read_bytes()
+                siscam.main()
+                self.assertEqual((dados / "2021.json").read_bytes(), primeira)
+                lidos = siscam.carregar_ano(2021)
+                baixar.assert_not_called()
+            self.assertEqual(lidos[9], ausente)
+            self.assertEqual(lidos[127858], {**reg, "arquivos": ESPERADOS["pl_127858"],
+                             "substitutivos": [{**reg["substitutivos"][0], "arquivos": ESPERADOS["substitutivo_266596"]}]})
+
+    def test_cli_cache_respeita_anos(self):
+        with mock.patch.object(sys, "argv", ["siscam", "--arquivos-do-cache", "cache", "--anos", "2024-2025"]), \
+                mock.patch.object(siscam, "arquivos_do_cache") as preencher:
+            siscam.main()
+        preencher.assert_called_once_with(Path("cache"), [2024, 2025])
 
 
 if __name__ == "__main__":
