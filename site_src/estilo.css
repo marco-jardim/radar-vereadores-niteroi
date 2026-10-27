@@ -1,10 +1,11 @@
-/* Paleta de dados validada (scripts/validate_palette.js) em claro e escuro:
-   efeito #0F8A6A · sem efeito #B8860B · alerta #C2364A · prefeitura #2F6FB8 */
+/* Paleta "Água Escondida": hex literais de 6 dígitos nos tokens de contrato, com os pares de contraste WCAG
+   conferidos em tests/test_design_tokens.py. As cores de dados mantêm a semântica nos dois temas:
+   efeito (verde) · sem efeito (ocre) · alerta (vermelho) · prefeitura (azul). */
 :root {
-  --tinta: #16324A;
+  --tinta: #0B2A3F;
   --tinta-suave: #4A6276;
-  --tinta-fraca: #6B7F8E;
-  --fundo: #F3F6F7;
+  --tinta-fraca: #5A6C7A;
+  --fundo: #F7F2E9;
   --superficie: #FFFFFF;
   --linha: #D5DEE3;
   --grade: #E3E9EC;
@@ -26,34 +27,135 @@
   --mapa-1: #F7FBFF; --mapa-2: #C6DBEF; --mapa-3: #6BAED6; --mapa-4: #2171B5; --mapa-5: #08306B;
   --mapa-borda: #16324A;
   --mapa-borda-clara: #FFFFFF; --mapa-borda-escura: #16324A;
-  --display: "Barlow Condensed", "Arial Narrow", sans-serif;
-  --texto: "Public Sans", system-ui, sans-serif;
+  /* Identidade: links e destaques (baía), acento secundário (mar) e acento quente, que nunca indica dado.
+     As versões "área" e o dourado servem a superfícies e realces, não a texto. */
+  --baia: #13476B;
+  --mar: #1F6F8B;
+  --por-do-sol: #B4491A;
+  --por-do-sol-area: #E8743B;
+  --dourado: #F2B544;
+  /* Selo de impacto alto (texto ≥ 4,5:1 sobre o fundo do selo) e borda de campos (≥ 3:1). */
+  --selo-alto-fundo: #0B7A5E;
+  --selo-alto-texto: #FFFFFF;
+  --borda-campo: #7A8A97;
+  --display: "Barlow Condensed", "Barlow Condensed fallback", "Arial Narrow", sans-serif;
+  --texto: "Public Sans", "Public Sans fallback", system-ui, sans-serif;
+  /* Escala tipográfica de razão 1,2, fluida entre telas pequenas e grandes. */
+  --fs--1: clamp(.8125rem, .8rem + .08vw, .8333rem);
+  --fs-0: clamp(1rem, .97rem + .15vw, 1.0625rem);
+  --fs-1: clamp(1.125rem, 1.08rem + .25vw, 1.2rem);
+  --fs-2: clamp(1.25rem, 1.17rem + .4vw, 1.44rem);
+  --fs-3: clamp(1.44rem, 1.3rem + .7vw, 1.728rem);
+  --fs-4: clamp(1.6rem, 1.4rem + 1vw, 2.074rem);
+  --fs-5: clamp(1.85rem, 1.5rem + 1.6vw, 2.488rem);
+  --fs-6: clamp(2.2rem, 1.6rem + 2.8vw, 2.986rem);
+  /* Espaçamento, raios, sombras e movimento. */
+  --esp-1: 4px; --esp-2: 8px; --esp-3: 12px; --esp-4: 16px; --esp-5: 24px; --esp-6: 32px; --esp-7: 48px; --esp-8: 64px;
+  --raio-1: 3px;
+  --raio-2: 8px;
+  --raio-pilula: 999px;
+  --sombra-1: 0 1px 2px rgba(11, 42, 63, .08), 0 1px 1px rgba(11, 42, 63, .06);
+  --sombra-2: 0 4px 12px rgba(11, 42, 63, .12), 0 2px 4px rgba(11, 42, 63, .08);
+  --dur-curta: 150ms;
+  --dur-media: 300ms;
+  --ease-mar: cubic-bezier(.2, .7, .2, 1);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --tinta: #E3ECF2; --tinta-suave: #A9BBC8; --tinta-fraca: #8296A5; --fundo: #0F1C27; --superficie: #152634;
+    --tinta: #E6EEF4; --tinta-suave: #A9BBC8; --tinta-fraca: #8296A5; --fundo: #0E1B26; --superficie: #14283A;
     --linha: #26394A; --grade: #1E3141; --efeito: #22A07D; --efeito-fundo: #133A33; --baixo: #3D8A75;
     --sem-efeito: #B68A14; --sem-efeito-fundo: #3A3119; --andamento: #5D6F7D; --sem-exito: #1B2C3A; --sem-exito-borda: #3A4C5B;
-    --alerta: #DA4F63; --alerta-fundo: #3D1E26; --exec: #4C88D4; --foco: #7DB8E8;
+    --alerta: #EC6A7C; --alerta-fundo: #3D1E26; --exec: #4C88D4; --foco: #7DB8E8;
     --legislacao: #A784CF; --resolucao: #6F5A8C;
     --mapa-borda: #E3ECF2;
+    --baia: #9CC6E4; --mar: #5FB3CF; --por-do-sol: #F08A55;
+    --selo-alto-fundo: #22A07D; --selo-alto-texto: #0E1B26; --borda-campo: #6F8496;
   }
 }
 :root[data-theme="dark"] {
-  --tinta: #E3ECF2; --tinta-suave: #A9BBC8; --tinta-fraca: #8296A5; --fundo: #0F1C27; --superficie: #152634;
+  --tinta: #E6EEF4; --tinta-suave: #A9BBC8; --tinta-fraca: #8296A5; --fundo: #0E1B26; --superficie: #14283A;
   --linha: #26394A; --grade: #1E3141; --efeito: #22A07D; --efeito-fundo: #133A33; --baixo: #3D8A75;
   --sem-efeito: #B68A14; --sem-efeito-fundo: #3A3119; --andamento: #5D6F7D; --sem-exito: #1B2C3A; --sem-exito-borda: #3A4C5B;
-  --alerta: #DA4F63; --alerta-fundo: #3D1E26; --exec: #4C88D4; --foco: #7DB8E8;
+  --alerta: #EC6A7C; --alerta-fundo: #3D1E26; --exec: #4C88D4; --foco: #7DB8E8;
   --legislacao: #A784CF; --resolucao: #6F5A8C;
   --mapa-borda: #E3ECF2;
+  --baia: #9CC6E4; --mar: #5FB3CF; --por-do-sol: #F08A55;
+  --selo-alto-fundo: #22A07D; --selo-alto-texto: #0E1B26; --borda-campo: #6F8496;
+}
+/* Controles nativos e barras de rolagem acompanham o tema. Estes blocos não declaram cores. */
+:root { color-scheme: light dark; }
+:root[data-theme="dark"] { color-scheme: dark; }
+:root[data-theme="light"] { color-scheme: light; }
+
+/* Fontes auto-hospedadas (SIL OFL 1.1, site_src/fontes/FONTES.md). A Fraunces fica só na página de memória. */
+@font-face {
+  font-family: "Barlow Condensed"; font-style: normal; font-weight: 500; font-display: swap;
+  src: url(fontes/barlow-condensed-latin-500-normal.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Barlow Condensed"; font-style: normal; font-weight: 500; font-display: swap;
+  src: url(fontes/barlow-condensed-latin-ext-500-normal.woff2) format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Barlow Condensed"; font-style: normal; font-weight: 600; font-display: swap;
+  src: url(fontes/barlow-condensed-latin-600-normal.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Barlow Condensed"; font-style: normal; font-weight: 600; font-display: swap;
+  src: url(fontes/barlow-condensed-latin-ext-600-normal.woff2) format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Barlow Condensed"; font-style: normal; font-weight: 700; font-display: swap;
+  src: url(fontes/barlow-condensed-latin-700-normal.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Barlow Condensed"; font-style: normal; font-weight: 700; font-display: swap;
+  src: url(fontes/barlow-condensed-latin-ext-700-normal.woff2) format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Public Sans"; font-style: normal; font-weight: 100 900; font-display: swap;
+  src: url(fontes/public-sans-latin-wght-normal.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Public Sans"; font-style: normal; font-weight: 100 900; font-display: swap;
+  src: url(fontes/public-sans-latin-ext-wght-normal.woff2) format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Public Sans"; font-style: italic; font-weight: 100 900; font-display: swap;
+  src: url(fontes/public-sans-latin-wght-italic.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Public Sans"; font-style: italic; font-weight: 100 900; font-display: swap;
+  src: url(fontes/public-sans-latin-ext-wght-italic.woff2) format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* Fallbacks métricos aproximados: reduzem o deslocamento do layout enquanto as fontes carregam. */
+@font-face {
+  font-family: "Public Sans fallback"; src: local("Arial");
+  size-adjust: 107%; ascent-override: 88.8%; descent-override: 23.4%; line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Barlow Condensed fallback"; src: local("Arial Narrow"), local("Arial");
+  size-adjust: 92%; ascent-override: 108.7%; descent-override: 21.7%; line-gap-override: 0%;
 }
 
 * { box-sizing: border-box; }
 .so-leitor { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 html { -webkit-text-size-adjust: 100%; }
 body { margin: 0; background: var(--fundo); color: var(--tinta); font: 400 1rem/1.55 var(--texto); }
-a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a { color: var(--baia); text-decoration-thickness: 1px; text-underline-offset: 3px; }
 a:hover { text-decoration-thickness: 2px; }
+/* Navegação, marca, nomes e cartões-link mantêm a cor do texto; a baía marca os links do conteúdo. */
+.marca, .topo nav a, a.chip, .quem, .convite a, .cartao h3 a { color: inherit; }
 :focus-visible { outline: 3px solid var(--foco); outline-offset: 2px; border-radius: 2px; }
 .pular { position: absolute; left: -999px; }
 .pular:focus { left: 16px; top: 8px; background: var(--superficie); padding: 8px 12px; z-index: 10; }
@@ -124,8 +226,8 @@ section { margin-top: 36px; }
 .cartao-autor { margin-top: auto !important; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .publico { font-size: .86rem; color: var(--tinta-suave); margin: 2px 0 4px; }
 
-.selo { display: inline-block; font-size: .74rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
-.selo.imp-3 { background: var(--efeito); color: #fff; }
+.selo { display: inline-block; font-size: .74rem; font-weight: 700; padding: 2px 8px; border-radius: var(--raio-pilula); white-space: nowrap; }
+.selo.imp-3 { background: var(--selo-alto-fundo); color: var(--selo-alto-texto); }
 .selo.imp-2 { background: var(--efeito-fundo); color: var(--tinta); box-shadow: inset 0 0 0 1px var(--efeito); }
 .selo.imp-1 { background: transparent; color: var(--tinta-suave); box-shadow: inset 0 0 0 1px var(--sem-exito-borda); }
 .selo.imp-0 { background: var(--sem-efeito-fundo); color: var(--tinta); box-shadow: inset 0 0 0 1px var(--sem-efeito); }
@@ -145,7 +247,7 @@ a.chip:hover { border-color: var(--tinta); }
 .abas button[aria-selected="true"] { background: var(--tinta); color: var(--fundo); }
 label { color: var(--tinta-suave); font-size: .9rem; }
 .controles label, .grade-filtros label, .linha-busca label { display: flex; align-items: center; gap: 8px; }
-select, input[type="search"] { font: inherit; font-size: .93rem; color: var(--tinta); background: var(--superficie); border: 1px solid var(--sem-exito-borda); padding: 7px 9px; border-radius: 3px; max-width: 100%; }
+select, input[type="search"] { font: inherit; font-size: .93rem; color: var(--tinta); background: var(--superficie); border: 1px solid var(--borda-campo); padding: 7px 9px; border-radius: var(--raio-1); max-width: 100%; }
 select:disabled { color: var(--tinta-suave); opacity: .65; cursor: not-allowed; }
 input[type="checkbox"] { accent-color: var(--tinta); width: 18px; height: 18px; }
 
@@ -232,7 +334,7 @@ li.projeto { content-visibility: auto; contain-intrinsic-size: auto 220px; }
 .selo.cat-zeladoria, .selo.cat-fiscalizacao, .selo.cat-homenagem, .selo.cat-manifestacao, .selo.cat-legislacao, .selo.cat-outra { background: transparent; color: var(--tinta-suave); box-shadow: inset 0 0 0 1px var(--sem-exito-borda); }
 .assunto { font-size: .86rem; color: var(--tinta); margin: 4px 0 0; }
 .acoes-item { margin: 6px 0 0; display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; font-size: .82rem; }
-.ver-siscam { display: none; background: transparent; border: 1px solid var(--sem-exito-borda); padding: 3px 10px; border-radius: 3px; cursor: pointer; font-size: .82rem; }
+.ver-siscam { display: none; background: transparent; border: 1px solid var(--borda-campo); padding: 3px 10px; border-radius: var(--raio-1); cursor: pointer; font-size: .82rem; }
 .com-dialogo .ver-siscam { display: inline-block; }
 .ver-siscam:hover { border-color: var(--tinta); }
 .abrir-siscam { color: var(--tinta-suave); }
@@ -266,7 +368,7 @@ li.projeto { content-visibility: auto; contain-intrinsic-size: auto 220px; }
 .grade-filtros label { justify-content: space-between; }
 .grade-filtros select { flex: 1; min-width: 0; }
 .acoes-filtro { margin: 0; display: flex; gap: 10px; }
-.acoes-filtro button { background: transparent; border: 1px solid var(--sem-exito-borda); padding: 6px 12px; border-radius: 3px; cursor: pointer; font-size: .88rem; }
+.acoes-filtro button { background: transparent; border: 1px solid var(--borda-campo); padding: 6px 12px; border-radius: var(--raio-1); cursor: pointer; font-size: .88rem; }
 .acoes-filtro button:hover { border-color: var(--tinta); }
 .resumo-filtro { margin: 8px 0 12px; }
 .contagem { font-size: .95rem; color: var(--tinta-suave); margin: 0 0 10px; }

@@ -301,6 +301,10 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
     extras = "\n".join(f'<script src="{esc(prefixo + nome)}?v={versao_estatica(nome)}" defer></script>'
                        for nome in scripts if (FONTE_ESTATICA / nome).is_file())
     icone = f'<link rel="icon" href="{esc(url_estatica("favicon.svg", prefixo))}" type="image/svg+xml">' if (FONTE_ESTATICA / "favicon.svg").is_file() else ""
+    # Fontes críticas auto-hospedadas: a URL do preload é a mesma da url() publicada em estilo.css (com ?v=).
+    fontes = "".join(f'<link rel="preload" as="font" type="font/woff2" crossorigin href="{esc(url_estatica(nome, prefixo))}">\n'
+                     for nome in ("fontes/public-sans-latin-wght-normal.woff2", "fontes/barlow-condensed-latin-700-normal.woff2")
+                     if (FONTE_ESTATICA / nome).is_file())
     return f"""<!doctype html>
 <html lang="pt-BR">
 <head>
@@ -310,10 +314,7 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
 <meta name="description" content="{desc}">
 <meta property="og:title" content="{esc(titulo)}">
 <meta property="og:description" content="{desc}">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{prefixo}estilo.css?v={versao_estatica('estilo.css')}">
+{fontes}<link rel="stylesheet" href="{prefixo}estilo.css?v={versao_estatica('estilo.css')}">
 {icone}
 <link rel="alternate" type="application/rss+xml" title="Novidades · Radar dos Vereadores de Niterói" href="{prefixo}{N.FEED}">
 {cabecalho_dados(manifesto, ativo, prefixo)}
