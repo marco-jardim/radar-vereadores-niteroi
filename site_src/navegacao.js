@@ -74,6 +74,43 @@
     grupo.removeAttribute("hidden");
   }
 
+  function iniciarGlossario(doc, win) {
+    if (!win || !win.HTMLElement || typeof win.HTMLElement.prototype.showPopover !== "function" ||
+        !doc || typeof doc.getElementById !== "function" || typeof doc.querySelectorAll !== "function" ||
+        typeof doc.createElement !== "function") return;
+    var modelo = doc.getElementById("glossario-defs");
+    if (!modelo || !modelo.content || typeof modelo.content.querySelectorAll !== "function") return;
+    var definicoes = Object.create(null), numero = 0;
+    modelo.content.querySelectorAll("p[data-termo]").forEach(function (p) {
+      definicoes[p.getAttribute("data-termo")] = p.textContent;
+    });
+    doc.querySelectorAll("a.glossario").forEach(function (link) {
+      var texto = definicoes[link.getAttribute("data-termo")];
+      if (!texto || typeof link.insertAdjacentElement !== "function" ||
+          typeof link.addEventListener !== "function" || typeof link.getBoundingClientRect !== "function") return;
+      var pop = doc.createElement("span"), id;
+      if (typeof pop.togglePopover !== "function") return;
+      do { id = "gl-" + (++numero); } while (doc.getElementById(id));
+      pop.setAttribute("id", id);
+      pop.setAttribute("popover", "auto");
+      pop.setAttribute("class", "glossario-pop");
+      pop.setAttribute("role", "tooltip");
+      pop.textContent = texto;
+      link.insertAdjacentElement("afterend", pop);
+      link.setAttribute("aria-describedby", id);
+      link.addEventListener("click", function (evento) {
+        if (evento.defaultPrevented || evento.ctrlKey || evento.metaKey || evento.shiftKey || evento.altKey ||
+            (evento.button != null && evento.button !== 0)) return;
+        var alvo = link.getBoundingClientRect();
+        try { pop.togglePopover(); } catch (e) { return; }
+        evento.preventDefault();
+        var caixa = pop.getBoundingClientRect();
+        pop.style.left = Math.max(8, Math.min(alvo.left, win.innerWidth - caixa.width - 8)) + "px";
+        pop.style.top = Math.max(8, Math.min(alvo.bottom + 8, win.innerHeight - caixa.height - 8)) + "px";
+      });
+    });
+  }
+
   // Todo caminho sem menu funcional (retorno antecipado ou exceção) tira a classe js.
   function iniciar(doc, win) {
     var menu = null;
@@ -166,6 +203,7 @@
     var janela = typeof window !== "undefined" ? window : null;
     // Falha no tema não impede o menu nem deixa a navegação recolhida.
     try { iniciarTema(document, janela); } catch (e) {}
+    try { iniciarGlossario(document, janela); } catch (e) {}
     iniciar(document, janela);
   }
 })();

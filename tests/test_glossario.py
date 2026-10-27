@@ -2,11 +2,57 @@
 from __future__ import annotations
 
 from html import escape
+from html.parser import HTMLParser
+import gzip
+from pathlib import Path
 import re
 import unittest
 from unittest.mock import patch
 
 from coletor.site.glossario import ColetorGlossario, TERMOS, secao_glossario
+
+
+class PaginaGlossario(HTMLParser):
+    """Inspeciona ancestrais sem a correção automática de links aninhados do navegador."""
+
+    PROIBIDOS = {"summary", "label", "th", "button", "a", "caption", *(
+        f"h{i}" for i in range(1, 7))}
+    VAZIOS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link",
+              "meta", "param", "source", "track", "wbr"}
+
+    def __init__(self, texto: str):
+        super().__init__()
+        self.pilha: list[tuple[str, dict]] = []
+        self.usados: set[str] = set()
+        self.definidos: set[str] = set()
+        self.ids: set[str] = set()
+        self.templates = 0
+        self.invalidos: list[str] = []
+        self.feed(texto)
+
+    def handle_starttag(self, tag, attrs):
+        atributos = dict(attrs)
+        ancestrais = [t for t, _ in self.pilha]
+        if atributos.get("id"):
+            self.ids.add(atributos["id"])
+        if tag == "template" and atributos.get("id") == "glossario-defs":
+            self.templates += 1
+            if "main" not in ancestrais:
+                self.invalidos.append("template fora de main")
+        if tag == "a" and "glossario" in (atributos.get("class") or "").split():
+            self.usados.add(atributos.get("data-termo", ""))
+            self.invalidos.extend(t for t in ancestrais if t in self.PROIBIDOS)
+        if tag == "p" and any(t == "template" and a.get("id") == "glossario-defs"
+                               for t, a in self.pilha):
+            self.definidos.add(atributos.get("data-termo", ""))
+        if tag not in self.VAZIOS:
+            self.pilha.append((tag, atributos))
+
+    def handle_endtag(self, tag):
+        for i in range(len(self.pilha) - 1, -1, -1):
+            if self.pilha[i][0] == tag:
+                del self.pilha[i:]
+                break
 
 
 class TestGlossario(unittest.TestCase):
@@ -115,6 +161,43 @@ class TestGlossario(unittest.TestCase):
         for chave, (rotulo, definicao) in TERMOS.items():
             with self.subTest(chave=chave):
                 self.assertIsNone(proibidas.search(f"{rotulo} {definicao}".casefold()))
+
+
+class TestGlossarioPublicado(unittest.TestCase):
+    def test_inspecao_detecta_ancestrais_proibidos(self):
+        for tag in PaginaGlossario.PROIBIDOS:
+            with self.subTest(tag=tag):
+                doc = PaginaGlossario(f'<{tag}><a class="glossario" data-termo="veto">veto</a></{tag}>')
+                self.assertIn(tag, doc.invalidos)
+
+    def test_glossario_nas_paginas_geradas(self):
+        raiz = Path(__file__).resolve().parents[1]
+        saida = raiz / "site"
+        paginas = sorted(saida.rglob("*.html")) if saida.is_dir() else []
+        fontes = [raiz / "coletor/gerar_site.py", *sorted((raiz / "coletor/site").glob("*.py")),
+                  raiz / "site_src/estilo.css", raiz / "site_src/navegacao.js"]
+        atualizado_em = max(p.stat().st_mtime_ns for p in fontes)
+        if not paginas or any(p.stat().st_mtime_ns <= atualizado_em for p in paginas):
+            self.skipTest("site/ ausente ou desatualizado; rode python -m coletor.gerar_site")
+        documentos = {}
+        for caminho in paginas:
+            with self.subTest(pagina=str(caminho.relative_to(saida))):
+                bruto = caminho.read_bytes()
+                doc = PaginaGlossario(bruto.decode("utf-8"))
+                documentos[caminho.relative_to(saida).as_posix()] = doc
+                self.assertFalse(doc.invalidos)
+                self.assertLessEqual(doc.templates, 1)
+                self.assertTrue(doc.usados <= doc.definidos, doc.usados - doc.definidos)
+                self.assertTrue(doc.usados <= TERMOS.keys())
+                self.assertLessEqual(len(gzip.compress(bruto, mtime=0)), 100 * 1024)
+        for nome in ("leis.html", "projetos.html", "atividades.html", "ruido.html", "sessoes.html"):
+            with self.subTest(pagina=nome):
+                self.assertIn(nome, documentos)
+                self.assertTrue(documentos[nome].usados)
+                self.assertEqual(documentos[nome].templates, 1)
+        self.assertIn("metodologia.html", documentos)
+        for chave in TERMOS:
+            self.assertIn(f"g-{chave}", documentos["metodologia.html"].ids)
 
 
 if __name__ == "__main__":

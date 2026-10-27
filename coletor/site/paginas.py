@@ -17,6 +17,7 @@ from xml.etree import ElementTree
 from coletor import novidades as N
 from coletor.classificar import ALERTAS, CATEGORIAS, CONFIANCA_MINIMA
 from coletor.site import graficos as G
+from coletor.site.glossario import ColetorGlossario, secao_glossario
 from coletor.site.modelo import (
     DESC_CATEGORIA_DOC, DESC_SINAL, DESFECHO_GRUPO, NOME_ALERTA, NOME_CATEGORIA, NOME_CATEGORIA_DOC, NOME_DESFECHO, NOME_EIXO,
     NOME_IMPACTO, NOME_SINAL, NOME_SUBCATEGORIA_DOC, NOME_TEMA, NOME_TIPO_DOC, TIPOS_DOC, com_efeito, mediana_legislatura,
@@ -967,20 +968,24 @@ def filtros_lista(modo: str, cliente: dict | None = None) -> str:
 
 
 def gerar_leis(cliente: dict | None = None, manifesto: dict | None = None) -> str:
+    glossario = ColetorGlossario()
     corpo = f"""<section class="abertura">
  <h1>Leis aprovadas</h1>
  <p>Todas as leis que saíram de projetos apresentados desde 2021, com o impacto estimado e um resumo em linguagem simples. Filtre por impacto, tema, vereador ou partido; o quadro abaixo dos filtros mostra quem mais aprovou leis no recorte escolhido.</p>
+ <p class="explica">Leis de categoria {glossario.termo('simbolica', 'simbólica')} e leis {glossario.termo('autorizativa', 'autorizativas')} entram no grupo {glossario.termo('sem-efeito', 'sem efeito prático')}. Quando a lei vem de um {glossario.termo('substitutivo', 'substitutivo')}, ela conta para o projeto original.</p>
 </section>
-{filtros_lista('leis', cliente)}"""
+{filtros_lista('leis', cliente)}{glossario.definicoes()}"""
     return pagina("Leis aprovadas · Radar dos Vereadores de Niterói", corpo, "leis.html", manifesto=manifesto, dialogo=True, caminho="leis.html")
 
 
 def gerar_projetos(cliente: dict | None = None, manifesto: dict | None = None) -> str:
+    glossario = ColetorGlossario()
     corpo = f"""<section class="abertura">
  <h1>Todos os projetos de lei</h1>
- <p>Os projetos apresentados desde 2021, incluindo os arquivados, vetados e em tramitação. Os filtros ficam no endereço da página, então dá para compartilhar uma busca.</p>
+ <p>Os projetos apresentados desde 2021, incluindo os arquivados, {glossario.termo('veto', 'vetados')} e em tramitação. Os filtros ficam no endereço da página, então dá para compartilhar uma busca.</p>
+ <p class="explica">A {glossario.termo('derrubada', 'derrubada de veto')} pode levar à promulgação da lei. Um {glossario.termo('substitutivo', 'substitutivo')} é um texto novo que substitui o do projeto.</p>
 </section>
-{filtros_lista('projetos', cliente)}"""
+{filtros_lista('projetos', cliente)}{glossario.definicoes()}"""
     return pagina("Projetos de lei · Radar dos Vereadores de Niterói", corpo, "projetos.html", manifesto=manifesto, dialogo=True, caminho="projetos.html")
 
 
@@ -1062,17 +1067,18 @@ def mapa_indicacoes(modelo: dict, docs: list[dict], titulo: str, *, limite_gzip:
 
 
 def gerar_atividades(modelo: dict, manifesto: dict | None = None) -> str:
+    glossario = ColetorGlossario()
     docs = modelo.get("documentos") or []
-    abertura = """<section class="abertura">
+    abertura = f"""<section class="abertura">
  <h1>Atividades na Câmara</h1>
- <p>Indicações, moções, requerimentos, projetos de decreto legislativo e projetos de resolução apresentados desde 2021, separados dos projetos de lei. Filtre por tipo, ano, vereador, categoria ou bairro; cada item leva ao documento oficial no SISCAM. Os filtros ficam no endereço da página.</p>
+ <p>{glossario.termo('indicacao', 'Indicações')}, {glossario.termo('mocao', 'moções')}, {glossario.termo('requerimento', 'requerimentos')}, {glossario.termo('pdl', 'projetos de decreto legislativo')} e {glossario.termo('projeto-de-resolucao', 'projetos de resolução')} apresentados desde 2021, separados dos projetos de lei. Filtre por tipo, ano, vereador, categoria ou bairro; cada item leva ao documento oficial no SISCAM. Os filtros ficam no endereço da página.</p>
  <p class="atualizacao">Classificação por regras sobre a ementa · <a href="metodologia.html#atividades">como classificamos</a></p>
 </section>"""
     titulo = "Atividades · Radar dos Vereadores de Niterói"
     descricao = "Indicações, moções, requerimentos, PDLs e resoluções da Câmara de Niterói, por vereador, tipo, categoria e bairro."
     ano_padrao = ano_padrao_doc(manifesto["arquivos"]) if manifesto and manifesto.get("build_doc") else None
     if not docs or ano_padrao is None:
-        return pagina(titulo, abertura + '\n<p class="vazio">Nenhum documento coletado ainda.</p>', "atividades.html", descricao=descricao, caminho="atividades.html")
+        return pagina(titulo, abertura + '\n<p class="vazio">Nenhum documento coletado ainda.</p>' + glossario.definicoes(), "atividades.html", descricao=descricao, caminho="atividades.html")
 
     def opcoes(pares) -> str:
         return "".join(f'<option value="{esc(k)}">{esc(v)}</option>' for k, v in pares)
@@ -1132,7 +1138,7 @@ def gerar_atividades(modelo: dict, manifesto: dict | None = None) -> str:
 <ol id="resultados" class="projetos documentos"></ol>
 <button type="button" id="mais" class="mais" hidden>Mostrar mais</button>
 <noscript><p class="vazio">A lista de documentos precisa de JavaScript. Os documentos mais recentes de cada vereador também aparecem na página dele.</p></noscript>
-{resumos}"""
+{resumos}{glossario.definicoes()}"""
     return pagina(titulo, corpo, "atividades.html", descricao=descricao, manifesto=manifesto, dialogo=True, caminho="atividades.html")
 
 
@@ -1224,6 +1230,7 @@ def secao_resumos_atividades(modelo: dict) -> str:
 
 # --------------------------------------------------------------------- ruído
 def gerar_ruido(modelo: dict) -> str:
+    glossario = ColetorGlossario()
     projs = modelo["projetos"]
     legs = modelo["legislaturas"]
     atual = legs[-1]["id"]
@@ -1272,7 +1279,8 @@ def gerar_ruido(modelo: dict) -> str:
 
     corpo = f"""<section class="abertura">
  <h1>Sem efeito e polêmicas</h1>
- <p>Uma parte da produção da Câmara não muda nada na vida da cidade: homenagens, datas comemorativas, nomes de rua, leis que só "autorizam" o prefeito a fazer o que ele já pode fazer, e projetos que repetem outros. Outra parte gera conflito: restringe direitos de grupos, explora pauta de costumes ou tem apelo populista. Esta página reúne as duas.</p>
+ <p>Uma parte da produção da Câmara não muda nada na vida da cidade: homenagens, datas comemorativas, nomes de rua, leis {glossario.termo('autorizativa', 'autorizativas')} que só "autorizam" o prefeito a fazer o que ele já pode fazer, e projetos que repetem outros. Outra parte gera conflito: restringe direitos de grupos, explora pauta de costumes ou tem apelo populista. Esta página reúne as duas.</p>
+ <p class="explica">O grupo {glossario.termo('sem-efeito', 'sem efeito prático')} inclui a categoria {glossario.termo('simbolica', 'simbólica')}; não é uma avaliação de resultado comprovado.</p>
 </section>
 <div class="tiles">
  {tile(len(simb), "leis simbólicas aprovadas desde 2021", f"{round(100 * len(simb) / max(len(leis_ver), 1))}% das leis de vereadores", "tile-sem")}
@@ -1286,7 +1294,7 @@ def gerar_ruido(modelo: dict) -> str:
 <section id="ia"><h2 class="h-secao">Marcadas por IA ({len(ia)})</h2><p class="explica">Alertas sugeridos pela IA a partir da ementa, com confiança mínima de {int(CONFIANCA_MINIMA * 100)}%. Podem conter erros; cada um tem link para contestar.</p>{lista(ia, "Nenhum projeto marcado por IA ainda.", "sinal=alerta_ia")}</section>
 <section id="autorizativas"><h2 class="h-secao">Leis autorizativas aprovadas ({len(autoriz_leis)})</h2><p class="explica">{esc(DESC_SINAL['autorizativa'])}</p>{lista(autoriz_leis, "Nenhuma.", "origem=vereador&desfecho=lei&sinal=autorizativa")}</section>
 <section id="repetidos"><h2 class="h-secao">Projetos que repetem outro ({len(rep)})</h2><p class="explica">{esc(DESC_SINAL['repete_projeto'])} Reapresentar um projeto arquivado é legítimo; o sinal serve para ver o quanto da produção é reaproveitada.</p>{lista(sorted(rep, key=lambda p: p['data'] or '', reverse=True), "Nenhum.", "origem=vereador&sinal=repete_projeto")}</section>"""
-    return pagina("Sem efeito e polêmicas · Radar dos Vereadores de Niterói", corpo, "ruido.html", caminho="ruido.html")
+    return pagina("Sem efeito e polêmicas · Radar dos Vereadores de Niterói", corpo + glossario.definicoes(), "ruido.html", caminho="ruido.html")
 
 
 def secao_homenagens(modelo: dict) -> str:
@@ -1650,6 +1658,7 @@ def metricas_atividade(modelo: dict, pessoa: dict) -> str:
 def gerar_metodologia(modelo: dict) -> str:
     from coletor.site import pagina_sessoes
 
+    glossario = ColetorGlossario()
     cls = modelo["meta"].get("classificacao") or {}
     defs_cat = "".join(f"<dt>{esc(NOME_CATEGORIA[k])}</dt><dd>{esc(v)}</dd>" for k, v in CATEGORIAS.items())
     defs_al = "".join(f"<dt>{esc(NOME_ALERTA[k])}</dt><dd>{esc(v)}</dd>" for k, v in ALERTAS.items())
@@ -1657,6 +1666,7 @@ def gerar_metodologia(modelo: dict) -> str:
     defs_doc = "".join(f"<dt>{esc(v)}</dt><dd>{esc(DESC_CATEGORIA_DOC.get(k, ''))}</dd>" for k, v in NOME_CATEGORIA_DOC.items())
     corpo = f"""<section class="abertura texto">
 <h1>Metodologia</h1>
+<nav class="indice" aria-label="Nesta página"><a href="#glossario">Glossário</a><a href="#impacto">Impacto e efeito</a><a href="#atividades">Atividades</a><a href="#sessoes">Sessões</a></nav>
 <p>Este site mede a produção de cada vereador em projetos de lei, não seu trabalho inteiro. Indicações, moções, requerimentos, projetos de decreto legislativo e de resolução aparecem à parte, na página <a href="atividades.html">Atividades</a>, e não entram nos números de projetos e leis. A página <a href="sessoes.html">Sessões e votações</a> e a seção "Presença e votos" de cada vereador mostram os registros plenários, com as <a href="#sessoes">regras de contagem e limitações</a>. Comissões, fiscalização fora do SISCAM e atendimento à população não aparecem no site.</p>
 
 <h2>De onde vêm os dados</h2>
@@ -1744,7 +1754,7 @@ def gerar_metodologia(modelo: dict) -> str:
 <p>O mapa usa valores absolutos, sem ajuste por população: não mede necessidade, atendimento nem qualidade. O bairro é inferido da ementa pelas mesmas regras das tabelas; a porcentagem sem bairro identificado aparece junto ao mapa, e essas indicações ficam fora dele. Os resumos cobrem todos os anos coletados e não mudam com os filtros da lista. Os bairros com indicações são divididos em até cinco faixas por quantis: os cortes buscam grupos de tamanhos semelhantes, sem separar bairros empatados, e há menos faixas quando há poucos valores distintos. Os limites são arredondados para números simples apenas no intervalo entre valores observados, sem alterar os grupos ou criar faixas vazias. Zero tem uma faixa própria hachurada, só quando há bairros sem indicações. A legenda mostra os limites e o número de bairros em cada faixa; a tabela alternativa inclui os 52 bairros, inclusive zeros, com os valores exatos. As faixas dependem dos dados: cores de mapas com limites diferentes não são diretamente comparáveis.</p>
 <p>Limites: © contribuidores do OpenStreetMap, sob <a href="https://www.openstreetmap.org/copyright">ODbL 1.0</a>, obtidos pelo Overpass das relações administrativas dos bairros (nível 10) dentro do município de Niterói (<a href="https://www.openstreetmap.org/relation/2220789">relação 2220789</a>). A data da base OSM aparece junto a cada mapa; as tags de origem dos limites indicam IBGE. A geometria é projetada localmente, simplificada e arredondada para exibição: não é um mapa cadastral nem uma confirmação municipal dos limites. Nas páginas dos vereadores, o mapa só pode aparecer se SVG, legenda, tabela e atribuição somarem no máximo 12 KiB gzip. Com a geometria atual (base OSM de 23/10/2026), esse orçamento é excedido: o mapa por vereador não é exibido, e ficam as tabelas por legislatura. O <a href="atividades.html#bairros">mapa geral está em Atividades</a>. Sem o arquivo de geometria, a geração mantém os gráficos e tabelas existentes, sem mapa.</p>
 
-{pagina_sessoes.metodologia_sessoes(modelo)}
+{pagina_sessoes.metodologia_sessoes(modelo, glossario)}
 
 <h2>Limitações</h2>
 <ul>
@@ -1755,10 +1765,12 @@ def gerar_metodologia(modelo: dict) -> str:
  <li>Erros de registro no SISCAM passam para cá.</li>
 </ul>
 
+{secao_glossario()}
+
 <h2>Contestar ou corrigir</h2>
 <p>Projetos com alerta ou sinal têm um link "contestar", que abre uma issue no GitHub. Correções na composição das legislaturas e na curadoria podem ser enviadas como pull request.</p>
 </section>"""
-    return pagina("Metodologia · Radar dos Vereadores de Niterói", corpo, "metodologia.html", caminho="metodologia.html")
+    return pagina("Metodologia · Radar dos Vereadores de Niterói", corpo + glossario.definicoes(), "metodologia.html", caminho="metodologia.html")
 
 
 def redirecionar(destino: str) -> str:

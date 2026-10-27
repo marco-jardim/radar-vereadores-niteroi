@@ -12,6 +12,7 @@ from urllib.parse import urlencode
 from coletor.regras_sessoes import rotulo_voto
 from coletor.site import graficos as G
 from coletor.site import paginas as P
+from coletor.site.glossario import ColetorGlossario
 from coletor.site.modelo import nome_curto
 
 
@@ -579,11 +580,16 @@ def _qualidade(dados: dict) -> str:
 # ---- página da Câmara --------------------------------------------------------
 def gerar_sessoes(modelo: dict) -> str:
     """HTML completo de sessoes.html, inclusive o estado ainda sem coleta."""
+    glossario = ColetorGlossario()
     dados = modelo.get("sessoes") or {}
     meta = modelo.get("meta") or {}
     coleta = (meta.get("sessoes") or {}).get("em") or (meta.get("coleta") or {}).get("em") or ""
     abertura = ('<section class="abertura"><h1>Sessões e votações</h1>'
                 '<p>Presença nas sessões plenárias e votos nominais: primeiro a participação, depois as decisões que dividiram a Câmara.</p>'
+                f'<p class="explica">{glossario.termo("consignado")} é registro da Mesa; '
+                f'{glossario.termo("votou-ausente", "votou ausente na abertura")} identifica presença por voto na mesma sessão. '
+                f'Favor e Contra se referem ao {glossario.termo("parecer", "parecer")}; '
+                f'a opção mais votada não é o {glossario.termo("quorum", "quórum")} legal.</p>'
                 f'<p class="atualizacao">Sessões coletadas: {P.esc(_periodo(dados))} · dados do SISCAM de '
                 f'{P.esc(P.data_br(coleta[:10]))} · <a href="metodologia.html#sessoes">como contamos</a></p></section>')
     if not dados or not dados.get("sessoes"):
@@ -628,7 +634,7 @@ def gerar_sessoes(modelo: dict) -> str:
                  + "".join(blocos) + '<section id="ritmo-sessoes"><h2 class="h-secao">Ritmo das sessões</h2>'
                  + _ritmo(dados) + '</section><section id="qualidade-sessoes"><h2 class="h-secao">Qualidade dos dados</h2>'
                  + _qualidade(dados) + '</section></div>')
-    return P.pagina("Sessões e votações · Radar dos Vereadores de Niterói", corpo, "sessoes.html",
+    return P.pagina("Sessões e votações · Radar dos Vereadores de Niterói", corpo + glossario.definicoes(), "sessoes.html",
                     caminho="sessoes.html",
                     descricao="Presença nas sessões plenárias e votações nominais da Câmara de Niterói, com fontes e limitações.",
                     dialogo=True, scripts=("sessoes.js",))
@@ -775,13 +781,17 @@ def secao_sessoes_vereador(modelo: dict, pessoa: dict) -> str:
 
 
 # ---- metodologia -------------------------------------------------------------
-def metodologia_sessoes(modelo: dict) -> str:
+def metodologia_sessoes(modelo: dict, glossario: ColetorGlossario | None = None) -> str:
     """Regras publicadas, inclusive quando a coleta ainda está vazia."""
     dados = modelo.get("sessoes") or {}
-    return f'''<section id="sessoes" class="texto sessoes" aria-labelledby="t-metodo-sessoes">
+    proprio = glossario is None
+    if glossario is None:
+        glossario = ColetorGlossario()
+    corpo = f'''<section id="sessoes" class="texto sessoes" aria-labelledby="t-metodo-sessoes">
 <h2 id="t-metodo-sessoes">Sessões plenárias: presença e votos</h2>
 <p>A página <a href="sessoes.html">Sessões e votações</a> usa os registros públicos do SISCAM. Período coletado: {P.esc(_periodo(dados))}. A cobertura por ano e as pendências aparecem junto aos números; uma sessão sem lista não vira falta para ninguém.</p>
 <h3>Presença e base individual</h3>
+<p>Os registros {glossario.termo('consignado', 'consignado')} e {glossario.termo('votou-ausente', 'votou ausente na abertura')} contam como presença, identificados à parte.</p>
 <ul>
 <li>Só sessões ordinárias e extraordinárias realizadas, com lista de frequência, entram na presença. Solenes e especiais aparecem à parte.</li>
 <li>● Presença (P) e ◆ Consignado (C) contam como presente. Consignado é um registro feito pela Mesa.</li>
@@ -791,8 +801,8 @@ def metodologia_sessoes(modelo: dict) -> str:
 <li>Afastamentos registrados na configuração aparecem com cargo e fonte pública, por legislatura. Com base inferior a 10 sessões, mostramos “X de Y sessões em exercício”, sem barra de presença nem percentual; esses afastados ficam no fim da ordenação por presença e fora da mediana dos eleitos, como os demais sem base suficiente. Com pelo menos 10 sessões, a barra e o percentual permanecem, junto à etiqueta. O afastamento não reclassifica os registros brutos nem informa suas datas de início e fim.</li>
 </ul>
 <h3>O que significa cada voto</h3>
-<p>O voto nominal “Favor” ou “Contra” é sobre o parecer da comissão, não necessariamente a favor ou contra a matéria. O sentido apresentado vem do resultado oficial e do lado vencedor. O texto da tramitação só determina o sentido em vetos mantidos sem nenhum lado com 11 votos, quando há decisão e direção inequívocas na mesma data; nos demais casos serve como conferência. Notas técnicas ficam em “Notas de conferência” e em “Qualidade dos dados”, sem apagar votos só porque o texto diverge.</p>
-<p>Derrubar um veto exige 11 votos: maioria absoluta dos 21 vereadores, não dos presentes. Um veto pode ser mantido sem que a maioria tenha votado para mantê-lo: não atingir 11 votos para derrubar não transforma ausências e abstenções em votos para manter. A opção mais votada entre Favor e Contra não é o quórum legal; empates não têm maioria.</p>
+<p>O voto nominal “Favor” ou “Contra” é {glossario.termo('parecer', 'sobre o parecer da comissão')}, não necessariamente a favor ou contra a matéria. O sentido apresentado vem do resultado oficial e do lado vencedor. O texto da tramitação só determina o sentido em vetos mantidos sem nenhum lado com 11 votos, quando há decisão e direção inequívocas na mesma data; nos demais casos serve como conferência. Notas técnicas ficam em “Notas de conferência” e em “Qualidade dos dados”, sem apagar votos só porque o texto diverge.</p>
+<p>Derrubar um veto exige 11 votos: maioria absoluta dos 21 vereadores, não dos presentes. Um veto pode ser mantido sem que a maioria tenha votado para mantê-lo: não atingir 11 votos para derrubar não transforma ausências e abstenções em votos para manter. A opção mais votada entre Favor e Contra não é o {glossario.termo('quorum', 'quórum')} legal; empates não têm maioria.</p>
 <p>Sem sentido seguro, mostramos “Favor ao parecer” e “Contra o parecer”, em cinza, com “sentido não determinado”. Placar inconsistente mostra somente os totais oficiais e a nota, sem nomes. A participação nominal conta votos substantivos (inclusive abstenção, branco e nulo); presidência aparece à parte. “Como votou” usa apenas sentidos determinados e consistentes. Um voto na opção menos votada ainda pode ser identificado pelo rótulo original, mas sem lhe atribuir um sentido que não foi determinado.</p>
 <h3>Votações divididas e ritmo</h3>
 <p>Uma votação é dividida com ao menos 3 votos no lado menor entre Favor e Contra, ou ao menos 3 abstenções. Com 1 ou 2 votos diferentes ou abstenções, é dissenso isolado; sem eles, unânime. Inconsistentes ficam separados no gráfico. A comparação individual conta apenas Favor/Contra na opção minoritária em votações divididas, sem empates; não há ordenação dos vereadores por esse indicador. Ritmo conta sessões listadas por mês e tipo, não horas de trabalho.</p>
@@ -801,3 +811,4 @@ def metodologia_sessoes(modelo: dict) -> str:
 <p>Contar presença e votos não mede qualidade do mandato. Comissões, debates, atendimento e votações simbólicas não aparecem nestes indicadores. Uma lista de abertura não mede permanência durante toda a sessão. A ausência de registro não prova ausência de trabalho; a cobertura do SISCAM e as pendências de coleta limitam todas as comparações.</p>
 <p>Encontrou erro? {_contestar("Presença ou votos", "Informe sessão, data, documento e fonte pública.")} por issue, informando a sessão, o documento e uma fonte pública. As regras valem igualmente para todos.</p>
 </section>'''
+    return corpo + (glossario.definicoes() if proprio else '')

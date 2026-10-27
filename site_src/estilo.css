@@ -169,6 +169,16 @@ body::before {
 }
 a { color: var(--baia); text-decoration-thickness: 1px; text-underline-offset: 3px; }
 a:hover { text-decoration-thickness: 2px; }
+/* Glossário: o link continua útil sem JavaScript e sem a API Popover. */
+.glossario { text-decoration-style: dotted; cursor: help; padding-block: var(--esp-2); }
+.glossario-pop {
+  position: fixed; inset: auto; margin: 0; max-width: min(32ch, calc(100vw - 16px));
+  color: var(--tinta); background: var(--superficie); border: 1px solid var(--borda-campo);
+  border-radius: var(--raio-2); box-shadow: var(--sombra-2); padding: var(--esp-3);
+  font: 400 var(--fs--1)/1.45 var(--texto); overflow-wrap: anywhere;
+}
+@media (forced-colors: active) { .glossario-pop { border: 1px solid CanvasText; } }
+@media print { .glossario-pop { display: none; } }
 /* Navegação, marca, nomes e cartões-link mantêm a cor do texto; a baía marca os links do conteúdo. */
 .marca, .topo nav a, a.chip, .quem, .convite a, .cartao h3 a { color: inherit; }
 :focus-visible { outline: 3px solid var(--foco); outline-offset: 2px; border-radius: var(--raio-1); }
