@@ -75,7 +75,7 @@ class TestGerarSite(unittest.TestCase):
                     prefixo = urlsplit(N.URL_SITE).path if caminho.name == "404.html" else (
                         "../" if caminho.parent.name == "vereadores" else "")
                     rodape = html.split('<footer class="rodape">', 1)[1].split("</footer>", 1)[0]
-                    atual = ' aria-current="page"' if pagina == "memoria.html" else ""
+                    atual = ' aria-current="page"' if caminho.name == "memoria.html" else ""
                     self.assertIn(f'<a href="{prefixo}memoria.html"{atual}>Memória de Niterói</a>', rodape)
                 else:
                     self.assertNotIn("memoria.html", html)
