@@ -6,8 +6,8 @@ data/documentos/<tipo>/<ano>.json e de data/sessoes/<ano>.json (inclusive o form
 byte a byte gravado por coletor.arquivos; as duas pastas são opcionais), da geometria
 opcional (data/geo/bairros.json), do cache da IA (data/classificacao_ia.json), de
 data/meta.json e dos arquivos
-config/curadoria.json, config/vereadores.json, config/memoria.json e config/perfis.json (opcionais os dois
-últimos), e acusa temporários de gravação
+config/curadoria.json, config/vereadores.json, config/memoria.json, config/perfis.json,
+config/backend.json e config/remocoes.json (opcionais os quatro últimos), e acusa temporários de gravação
 interrompida em data/. Cada verificação é uma função que recebe os dados já
 carregados e devolve a lista de problemas encontrados (vazia quando está tudo certo).
 
@@ -25,6 +25,7 @@ import sys
 import unicodedata
 from datetime import date
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from coletor import documentos as D
 from coletor import sessoes as S
@@ -967,6 +968,20 @@ def _memoria_nfc(valor: object, rotulo: str) -> list[str]:
     return problemas
 
 
+def _validar_formato_config(dados: object, bruto: bytes, arquivo: str) -> list[str]:
+    """Formato comum dos configs editoriais, preservando a ordem das chaves."""
+    problemas = _memoria_nfc(dados, arquivo)
+    try:
+        canonico = (json.dumps(dados, ensure_ascii=False, indent=1) + "\n").encode("utf-8")
+    except UnicodeEncodeError:
+        problemas.append(f"{arquivo}: texto não representável em UTF-8")
+    else:
+        if bruto != canonico:
+            problemas.append(f"{arquivo}: fora do formato esperado (UTF-8, indentação de 1 espaço, "
+                             "ordem das chaves preservada, quebras LF e quebra final)")
+    return problemas
+
+
 def _memoria_imagem(imagem: object, rotulo: str, ano_atual: int) -> list[str]:
     if not isinstance(imagem, dict):
         return [f"{rotulo}: 'imagem' deveria ser um objeto"]
@@ -1010,17 +1025,7 @@ def validar_memoria(caminho: Path | None = None, hoje: date | None = None) -> li
     except ValueError as e:  # inclui UnicodeDecodeError
         return [f"{arquivo}: não foi possível ler o JSON ({e})"]
 
-    problemas = _memoria_nfc(dados, arquivo)
-    try:
-        canonico = (json.dumps(dados, ensure_ascii=False, indent=1) + "\n").encode("utf-8")
-    except UnicodeEncodeError:
-        problemas.append(f"{arquivo}: texto não representável em UTF-8")
-    else:
-        if bruto != canonico:
-            problemas.append(
-                f"{arquivo}: fora do formato esperado (UTF-8, indentação de 1 espaço, "
-                "ordem das chaves preservada, quebras LF e quebra final)"
-            )
+    problemas = _validar_formato_config(dados, bruto, arquivo)
     if not isinstance(dados, dict):
         return problemas + [f"{arquivo}: deveria conter um objeto"]
     problemas += _memoria_textos(dados, ("criterios",), arquivo)
@@ -1168,15 +1173,7 @@ def validar_perfis(caminho: Path | None = None, cfg: object = None) -> list[str]
         dados = json.loads(bruto.decode("utf-8"))
     except ValueError as e:  # inclui UnicodeDecodeError
         return [f"{arquivo}: não foi possível ler o JSON ({e})"]
-    problemas = _memoria_nfc(dados, arquivo)
-    try:
-        canonico = (json.dumps(dados, ensure_ascii=False, indent=1) + "\n").encode("utf-8")
-    except UnicodeEncodeError:
-        problemas.append(f"{arquivo}: texto não representável em UTF-8")
-    else:
-        if bruto != canonico:
-            problemas.append(f"{arquivo}: fora do formato esperado (UTF-8, indentação de 1 espaço, "
-                             "ordem das chaves preservada, quebras LF e quebra final)")
+    problemas = _validar_formato_config(dados, bruto, arquivo)
     if not isinstance(dados, dict):
         return problemas + [f"{arquivo}: o conteúdo deveria ser um objeto"]
     if dados.get("fonte_padrao") is not None:
@@ -1267,6 +1264,139 @@ def validar_perfis(caminho: Path | None = None, cfg: object = None) -> list[str]
     return problemas
 
 
+# ---- backend e remoções
+def _ler_config_opcional(raiz: Path, nome: str) -> tuple[object, list[str]]:
+    arquivo = f"config/{nome}.json"
+    try:
+        bruto = (raiz / arquivo).read_bytes()
+    except FileNotFoundError:
+        aviso = f"{arquivo}: arquivo ausente; configuração de {nome} indisponível"
+        print(f"::warning::{_anotacao(aviso)}" if os.environ.get("GITHUB_ACTIONS") else f"aviso: {aviso}", file=sys.stderr)
+        return None, []
+    except OSError as e:
+        return None, [f"{arquivo}: não foi possível ler o arquivo ({e})"]
+    try:
+        dados = json.loads(bruto.decode("utf-8"))
+    except ValueError as e:  # inclui UnicodeDecodeError
+        return None, [f"{arquivo}: não foi possível ler o JSON ({e})"]
+    problemas = _validar_formato_config(dados, bruto, arquivo)
+    if not isinstance(dados, dict):
+        return None, problemas + [f"{arquivo}: deveria conter um objeto"]
+    return dados, problemas
+
+
+def _https_backend(valor: object, origem: bool = False) -> bool:
+    """URL HTTPS com host e porta válidos; origens não admitem caminho nem sufixos."""
+    if not isinstance(valor, str) or re.search(r"[\s\x00-\x1f\x7f\\]", valor):
+        return False
+    try:
+        url = urlsplit(valor)
+        _ = url.port  # também rejeita portas inválidas ou fora do intervalo
+    except ValueError:
+        return False
+    if url.scheme != "https" or not url.hostname or url.username is not None or url.password is not None:
+        return False
+    host = r"[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)*\.?"
+    if not re.fullmatch(rf"(?:{host}|\[[A-Fa-f0-9:]+\])(?::[0-9]+)?", url.netloc):
+        return False
+    return not origem or valor == f"https://{url.netloc}"
+
+
+def validar_backend(raiz: Path | None = None) -> list[str]:
+    """Confere endereço da API, origens CORS e contatos institucionais, sem rede."""
+    arquivo = "config/backend.json"
+    dados, problemas = _ler_config_opcional(raiz or RAIZ, "backend")
+    if dados is None:
+        return problemas
+    if set(dados) != {"api_url", "origens_cors", "contatos_institucionais"}:
+        problemas.append(f"{arquivo}: campos esperados: api_url, origens_cors, contatos_institucionais, sem extras")
+    api = dados.get("api_url")
+    if api is not None and (not _https_backend(api) or api.endswith("/")):
+        problemas.append(f"{arquivo}: 'api_url' deveria ser URL HTTPS sem barra final ou null")
+    origens = dados.get("origens_cors")
+    if not isinstance(origens, list) or not origens:
+        problemas.append(f"{arquivo}: 'origens_cors' deveria ser lista não vazia de origens HTTPS únicas")
+    else:
+        vistas: set[str] = set()
+        for origem in origens:
+            if not _https_backend(origem, origem=True):
+                problemas.append(f"{arquivo}: origem {origem!r} deveria ser https://host[:porta], sem caminho nem barra final")
+            elif origem in vistas:
+                problemas.append(f"{arquivo}: origem {origem!r} repetida")
+            else:
+                vistas.add(origem)
+    contatos, erros = _lista(dados, "contatos_institucionais", arquivo)
+    problemas += erros
+    vistos: set[tuple[str, str]] = set()
+    for i, contato in enumerate(contatos, 1):
+        r = f"{arquivo}: contato {i}"
+        if not isinstance(contato, dict):
+            problemas.append(f"{r} deveria ser um objeto")
+            continue
+        if set(contato) != {"tipo", "valor", "descricao", "fonte"}:
+            problemas.append(f"{r}: campos esperados: tipo, valor, descricao, fonte, sem extras")
+        problemas += _memoria_textos(contato, ("valor", "descricao"), r)
+        tipo, valor = contato.get("tipo"), contato.get("valor")
+        if tipo not in ("telefone", "email"):
+            problemas.append(f"{r}: 'tipo' deveria ser telefone ou email")
+        elif isinstance(valor, str):
+            padrao = r"[^\s@]+@[^\s@.]+(?:\.[^\s@.]+)+" if tipo == "email" else r"[0-9 ()+\-]+"
+            if not re.fullmatch(padrao, valor):
+                problemas.append(f"{r}: 'valor' inválido para {tipo}")
+            chave = (tipo, valor)
+            if chave in vistos:
+                problemas.append(f"{r}: contato (tipo, valor) repetido")
+            vistos.add(chave)
+        if not _https_backend(contato.get("fonte")):
+            problemas.append(f"{r}: 'fonte' deveria ser URL HTTPS com host")
+    return problemas
+
+
+def validar_remocoes(raiz: Path | None = None) -> list[str]:
+    """Confere chaves, hashes, justificativas e ordem das remoções, sem rede."""
+    arquivo = "config/remocoes.json"
+    dados, problemas = _ler_config_opcional(raiz or RAIZ, "remocoes")
+    if dados is None:
+        return problemas
+    if set(dados) != {"remocoes"}:
+        problemas.append(f"{arquivo}: esperado somente o campo 'remocoes'")
+    itens, erros = _lista(dados, "remocoes", arquivo)
+    problemas += erros
+    vistos: set[str] = set()
+    anterior: tuple[str, str] | None = None
+    for i, item in enumerate(itens, 1):
+        r = f"{arquivo}: remoção {i}"
+        if not isinstance(item, dict):
+            problemas.append(f"{r} deveria ser um objeto")
+            continue
+        if set(item) != {"chave", "sha256", "motivo", "fonte", "data"}:
+            problemas.append(f"{r}: campos esperados: chave, sha256, motivo, fonte, data, sem extras")
+        problemas += _memoria_textos(item, ("motivo",), r)
+        chave, sha256, data = item.get("chave"), item.get("sha256"), item.get("data")
+        chave_valida = isinstance(chave, str) and re.fullmatch(r"(siscam|sessao):[A-Za-z0-9-]+", chave)
+        if not chave_valida:
+            problemas.append(f"{r}: 'chave' deveria ser siscam:<id> ou sessao:<id> (letras, números e hífen)")
+        elif chave in vistos:
+            problemas.append(f"{r}: chave {chave!r} repetida")
+        else:
+            vistos.add(chave)
+        if not isinstance(sha256, str) or not re.fullmatch(r"[0-9a-f]{64}", sha256):
+            problemas.append(f"{r}: 'sha256' deveria ter 64 caracteres hexadecimais minúsculos")
+        if not _https_backend(item.get("fonte")):
+            problemas.append(f"{r}: 'fonte' deveria ser URL HTTPS com host")
+        if not isinstance(data, str) or not RE_DATA.fullmatch(data) or not data_valida(data):
+            problemas.append(f"{r}: 'data' deveria ser data ISO válida AAAA-MM-DD")
+        else:
+            if date.fromisoformat(data) > date.today():
+                problemas.append(f"{r}: 'data' não pode ser futura")
+            if chave_valida:
+                ordem = (data, chave)
+                if anterior is not None and ordem < anterior:
+                    problemas.append(f"{r}: remoções fora de ordem por data e chave")
+                anterior = ordem
+    return problemas
+
+
 def _ler_json(arq: Path, rotulo: str) -> tuple[object, list[str]]:
     try:
         return json.loads(arq.read_text(encoding="utf-8")), []
@@ -1330,6 +1460,8 @@ def validar_tudo(raiz: Path | None = None) -> list[str]:
     problemas += erros or validar_vereadores(cfg, perfis)
     problemas += validar_memoria(raiz / "config" / "memoria.json")
     problemas += validar_perfis(raiz / "config" / "perfis.json", cfg if not erros else None)
+    problemas += validar_backend(raiz)
+    problemas += validar_remocoes(raiz)
     return problemas
 
 

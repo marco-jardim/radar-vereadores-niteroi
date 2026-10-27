@@ -41,6 +41,8 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `config/curadoria.json` | Rótulos e correções editoriais com fontes públicas. |
 | `config/memoria.json` | Conteúdo editorial da memória: critérios, homenageados e linha do tempo; validado por `coletor.validar`. |
 | `config/perfis.json` | Perfil público por nome do SISCAM: partido, votos e situação por mandato, outras eleições (TSE), links oficiais, falecimento opcional e fontes; validado por `coletor.validar`. |
+| `config/backend.json` | URL opcional da API, origens CORS e contatos institucionais com fonte; validado por `coletor.validar`. |
+| `config/remocoes.json` | Remoções por chave de origem e SHA-256, com motivo, fonte e data; validado por `coletor.validar`. |
 | `data/proposicoes/`, `data/documentos/`, `data/sessoes/` | Registros coletados por ano (documentos também por tipo). |
 | `data/classificacao_ia.json`, `data/meta.json` | Cache da IA e metadados das execuções. |
 | `data/geo/bairros.json` | Geometria opcional gerada por `coletor.geo`. |
@@ -196,6 +198,19 @@ com anos consecutivos dentro da legislatura, `cargo` entre Presidente, 1º/2º V
 1º/2º Suplente, `siscam` entre os eleitos da legislatura ou os nomes conhecidos (eleitos de outra legislatura ou
 `apelidos`), `fonte` HTTPS (ata ou votação da sessão no SISCAM) e, por biênio, nenhum cargo repetido nem pessoa com
 dois cargos. Não invente nomes: quem ainda não está na configuração (como um suplente) entra primeiro em `apelidos`.
+
+### Validação do backend e das remoções
+
+`coletor.validar` confere `config/backend.json` e `config/remocoes.json`; a ausência de cada arquivo gera aviso,
+não erro. Ambos usam JSON com `indent=1`, ordem das chaves preservada, UTF-8, LF, quebra final e NFC.
+O backend aceita só `api_url` (URL HTTPS sem barra final ou `null`), `origens_cors` (lista não vazia de origens
+HTTPS únicas, `https://host[:porta]`, sem caminho nem barra final) e `contatos_institucionais`. Cada contato tem
+somente `tipo` (`telefone` ou `email`), `valor`, `descricao` não vazia e `fonte` HTTPS; e-mail precisa ter formato
+de endereço e telefone admite só dígitos, espaços, parênteses, `+` e `-`. Não repita o par `(tipo, valor)`.
+
+Remoções têm somente a lista `remocoes`, ordenada por `data` e depois `chave`, sem chaves repetidas. Cada item
+contém exatamente `chave` (`siscam:<id>` ou `sessao:<id>`, id com letras ASCII, números e hífen), `sha256`
+(64 hexadecimais minúsculos), `motivo` não vazio, `fonte` HTTPS e `data` válida `AAAA-MM-DD`, não futura.
 
 ### Opções das CLIs
 

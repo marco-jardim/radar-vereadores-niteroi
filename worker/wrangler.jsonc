@@ -1,0 +1,54 @@
+// Worker de busca do Radar dos Vereadores de Niterói (somente leitura para o público).
+// Recursos dedicados com prefixo radar-niteroi- na conta "Marco Jardim"; ver docs/backend.md.
+// Observabilidade e Logpush desligados: a URL de busca carrega a consulta e não deve ser registrada.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "radar-niteroi-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "account_id": "7b60055a9f153a4a8441ff519e1a208f",
+  "workers_dev": true,
+  "observability": { "enabled": false },
+  "limits": { "cpu_ms": 1000 },
+  "version_metadata": { "binding": "CF_VERSION_METADATA" },
+  "env": {
+    "staging": {
+      "name": "radar-niteroi-api-staging",
+      "vars": { "AMBIENTE": "staging", "ORIGENS_CORS": "https://marco-jardim.github.io,http://localhost:8000,http://127.0.0.1:8080" },
+      "observability": { "enabled": false },
+      "limits": { "cpu_ms": 1000 },
+      "version_metadata": { "binding": "CF_VERSION_METADATA" },
+      "d1_databases": [
+        { "binding": "DB", "database_name": "radar-niteroi-staging", "database_id": "653aeeb5-072e-46b0-a429-53c030458349", "migrations_dir": "migrations" }
+      ],
+      "vectorize": [{ "binding": "VETORES", "index_name": "radar-niteroi-trechos-staging" }],
+      "r2_buckets": [
+        { "binding": "ARQUIVOS", "bucket_name": "radar-niteroi-arquivos-staging" },
+        { "binding": "EXPORTACOES", "bucket_name": "radar-niteroi-exportacoes-staging" }
+      ],
+      "ai": { "binding": "AI" },
+      "ratelimits": [{ "name": "LIMITE", "namespace_id": "7302", "simple": { "limit": 60, "period": 60 } }],
+      "analytics_engine_datasets": [{ "binding": "METRICAS", "dataset": "radar_niteroi_busca_staging" }],
+      "triggers": { "crons": ["17 7 * * *"] }
+    },
+    "production": {
+      "name": "radar-niteroi-api",
+      "vars": { "AMBIENTE": "production", "ORIGENS_CORS": "https://marco-jardim.github.io" },
+      "observability": { "enabled": false },
+      "limits": { "cpu_ms": 1000 },
+      "version_metadata": { "binding": "CF_VERSION_METADATA" },
+      "d1_databases": [
+        { "binding": "DB", "database_name": "radar-niteroi", "database_id": "8750fe41-d702-407f-9373-414529504ced", "migrations_dir": "migrations" }
+      ],
+      "vectorize": [{ "binding": "VETORES", "index_name": "radar-niteroi-trechos" }],
+      "r2_buckets": [
+        { "binding": "ARQUIVOS", "bucket_name": "radar-niteroi-arquivos" },
+        { "binding": "EXPORTACOES", "bucket_name": "radar-niteroi-exportacoes" }
+      ],
+      "ai": { "binding": "AI" },
+      "ratelimits": [{ "name": "LIMITE", "namespace_id": "7301", "simple": { "limit": 60, "period": 60 } }],
+      "analytics_engine_datasets": [{ "binding": "METRICAS", "dataset": "radar_niteroi_busca" }],
+      "triggers": { "crons": ["17 7 * * *"] }
+    }
+  }
+}
