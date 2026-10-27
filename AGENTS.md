@@ -267,7 +267,7 @@ Não há carregamento automático de `.env`. A IA usa `POST /chat/completions`, 
 - Alvos de toque dos controles principais têm ≥ 44 px; chips, tags e `.ver-siscam`, ≥ 24 px.
   No desktop, navegação e tema podem ampliar a área de toque por pseudoelementos sem ampliar o desenho.
 - A textura decorativa fica em `body::before`, com `mask-image` de `textura-bairros.svg`,
-  `background-color: var(--linha)` e opacidade ≤ .06; fica oculta na impressão e em cores forçadas.
+  `background-color: var(--tinta)` e opacidade ≤ .06; fica oculta na impressão e em cores forçadas.
 - Em `@media (forced-colors: active)`, preserve bordas visíveis e foco com `Highlight`. As cores de dados
   só são preservadas com `forced-color-adjust: none` nas amostras, barras, marcas dos gráficos e mapa,
   não no texto ou nos cartões inteiros.
