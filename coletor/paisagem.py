@@ -7,19 +7,26 @@ com cores próprias para os temas claro e escuro) e a marca do cabeçalho (sprit
 `<symbol id="marca">` sem cores fixas: o sol herda `fill` e as ondas `currentColor` da
 página, pelos tokens de estilo.css).
 
-Uso: python -m coletor.paisagem --marca
-Grava favicon.svg e marca.svg em site_src/. Mesma geometria, mesmos bytes.
+Uso: python -m coletor.paisagem --marca [--textura]
+Grava favicon.svg e marca.svg em site_src/. --textura gera textura-bairros.svg
+a partir da geometria local dos bairros. Mesma geometria, mesmos bytes.
 """
 from __future__ import annotations
 
 import argparse
+import gzip
+import json
+import re
 import sys
+from html import escape
 from pathlib import Path
 
 from coletor.arquivos import gravar_atomico
+from coletor.validar import validar_geo
 
 RAIZ = Path(__file__).resolve().parents[1]
 SAIDA = RAIZ / "site_src"
+GEOMETRIA = RAIZ / "data" / "geo" / "bairros.json"
 SVG_NS = "http://www.w3.org/2000/svg"
 TITULO = "Radar dos Vereadores de Niterói"
 
@@ -115,16 +122,73 @@ def gravar(caminho: Path, texto: str) -> None:
     gravar_atomico(caminho, texto)
 
 
+# ---- textura
+LIMITE_TEXTURA_GZIP = 12 * 1024
+
+
+def _contorno_textura(path: str, distancia: int) -> str:
+    """Reduz pontos próximos em cada anel inteiro, sem eliminar seus três vértices mínimos."""
+    aneis = []
+    for anel in re.findall(r"M([^MZ]+)Z", path):
+        pontos = [tuple(map(int, par.split(","))) for par in anel.split()]
+        manter = [pontos[0]]
+        for x, y in pontos[1:]:
+            if (x - manter[-1][0]) ** 2 + (y - manter[-1][1]) ** 2 >= distancia ** 2:
+                manter.append((x, y))
+        if len(set(manter)) < 3:
+            manter = pontos
+        aneis.append("M" + " ".join(f"{x},{y}" for x, y in manter) + "Z")
+    return "".join(aneis)
+
+
+def textura_svg(geo: dict) -> str:
+    """Máscara decorativa: contornos pretos sobre transparência, sem dados temáticos.
+
+    Mantém o viewBox e todos os anéis dos 52 bairros. Só reduz pontos próximos se
+    necessário ao orçamento; não substitui a geometria dos mapas nem serve a cadastro.
+    """
+    problemas = validar_geo(geo)
+    if problemas:
+        raise ValueError("; ".join(problemas))
+    viewbox = " ".join(str(v) for v in geo["viewbox"])
+    descricao = escape("© contribuidores do OpenStreetMap, ODbL 1.0, "
+                       "https://www.openstreetmap.org/copyright. "
+                       f"Base OSM: {geo['osm_base']}. Contornos simplificados para decoração; não é um mapa cadastral.")
+    # Ordem fixa, independente da ordem das chaves do JSON. Um único path, sem fundo.
+    for distancia in (0, 2, 4, 8):
+        caminhos = "".join(_contorno_textura(geo["bairros"][nome]["path"], distancia)
+                           for nome in sorted(geo["bairros"]))
+        texto = (f'<svg xmlns="{SVG_NS}" viewBox="{viewbox}">'
+                 '<title>Contornos dos bairros de Niterói</title>'
+                 f'<desc>{descricao}</desc>'
+                 f'<path fill="none" stroke="#000" stroke-width="1" d="{caminhos}"/>'
+                 '</svg>\n')
+        if len(gzip.compress(texto.encode("utf-8"), compresslevel=9, mtime=0)) <= LIMITE_TEXTURA_GZIP:
+            return texto
+    raise ValueError("textura excede 12 KiB gzip mesmo após simplificação")
+
+
 # ---- cli
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--marca", action="store_true", help="grava favicon.svg e marca.svg em site_src/")
+    ap.add_argument("--textura", action="store_true", help="grava textura-bairros.svg usando data/geo/bairros.json")
     args = ap.parse_args(argv)
-    if not args.marca:
+    if not (args.marca or args.textura):
         ap.print_usage(sys.stderr)
-        print("nada a fazer: informe --marca", file=sys.stderr)
+        print("nada a fazer: informe --marca ou --textura", file=sys.stderr)
         return 2
-    for nome, texto in (("favicon.svg", favicon_svg()), ("marca.svg", marca_svg())):
+    arquivos = []
+    if args.marca:
+        arquivos.extend((("favicon.svg", favicon_svg()), ("marca.svg", marca_svg())))
+    if args.textura:
+        try:
+            geo = json.loads(GEOMETRIA.read_text(encoding="utf-8"))
+            arquivos.append(("textura-bairros.svg", textura_svg(geo)))
+        except (OSError, ValueError, TypeError, KeyError) as e:
+            print(f"textura não gravada: {e}", file=sys.stderr)
+            return 1
+    for nome, texto in arquivos:
         destino = SAIDA / nome
         gravar(destino, texto)
         print(f"{exibir(destino)}: {len(texto.encode('utf-8'))} bytes")
