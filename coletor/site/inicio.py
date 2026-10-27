@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 from collections.abc import Callable
 from pathlib import Path
+from xml.etree import ElementTree
 
 import coletor.site.paginas as P
 
@@ -153,3 +154,28 @@ def linha_do_tempo(memoria: dict | None) -> str:
             f'<h2 id="t-linha" class="h-secao">Niterói no tempo</h2>'
             f'<div class="tabela-rolavel linha-rolavel" role="region" tabindex="0" aria-labelledby="t-linha">'
             f'<ol>{"".join(itens)}</ol></div></section>')
+
+
+# ---------------------------------------------------------------- memória
+def faixa_memoria(memoria: dict | None, prefixo: str = "") -> str:
+    """Pessoas da página de memória; sem homenageados, omite a faixa inteira."""
+    pessoas = (memoria or {}).get("homenageados") or []
+    if not pessoas:
+        return ""
+    itens = []
+    for pessoa in pessoas:
+        identificador = P.esc(pessoa["id"])
+        nome = P.esc(pessoa["nome"])
+        arquivo = pessoa.get("emblema")
+        emblema = ""
+        if arquivo and (P.FONTE_ESTATICA / "memoria" / arquivo).is_file():
+            caixa = ElementTree.parse(P.FONTE_ESTATICA / "memoria" / arquivo).getroot().get("viewBox")
+            viewbox = f' viewBox="{P.esc(caixa)}"' if caixa else ""
+            emblema = (f'<svg class="emblema"{viewbox} role="img" aria-labelledby="fm-{identificador}">'
+                       f'<title id="fm-{identificador}">Emblema de {nome}</title>'
+                       f'<use href="{P.esc(P.url_estatica("memoria/" + arquivo, prefixo))}#emblema"/></svg>')
+        itens.append(f'<li><a href="{P.esc(prefixo)}memoria.html#{identificador}">{emblema}<span>{nome}</span></a></li>')
+    return (f'<section class="faixa-memoria" aria-labelledby="fm-titulo">'
+            f'<h2 id="fm-titulo" class="h-secao">Niterói que nos inspira</h2>'
+            f'<ul>{"".join(itens)}</ul><p><a href="{P.esc(prefixo)}memoria.html">'
+            f'Conheça a Memória de Niterói</a></p></section>')

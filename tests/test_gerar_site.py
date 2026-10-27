@@ -13,16 +13,20 @@ import unittest
 from html.parser import HTMLParser
 from pathlib import Path
 from unittest import mock
+from urllib.parse import urlsplit
 from xml.etree import ElementTree
 
 from coletor import gerar_site
 from coletor import novidades as N
+from coletor.site import inicio
 from coletor.site import paginas as P
 from coletor.site.modelo import TIPOS_DOC
 from tests import test_tabelas_rolaveis
 
 PAGINAS = ("index.html", "novidades.html", "leis.html", "projetos.html", "atividades.html", "sessoes.html", "ruido.html", "analises.html",
            "metodologia.html")
+if (inicio.carregar_memoria(gerar_site.RAIZ) or {}).get("homenageados"):
+    PAGINAS += ("memoria.html",)
 DOCUMENTOS = gerar_site.RAIZ / "data" / "documentos"
 
 
@@ -30,8 +34,11 @@ class TestGerarSite(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         saida = io.StringIO()
-        with mock.patch.object(sys, "argv", ["coletor.gerar_site"]), contextlib.redirect_stdout(saida):
+        with (mock.patch.object(sys, "argv", ["coletor.gerar_site"]),
+              mock.patch.object(inicio, "carregar_memoria", wraps=inicio.carregar_memoria) as carregar,
+              contextlib.redirect_stdout(saida)):
             gerar_site.main()
+        cls.carregamentos_memoria = carregar.call_count
         cls.mensagem = saida.getvalue()
         cls.saida = gerar_site.SAIDA
 
@@ -53,6 +60,33 @@ class TestGerarSite(unittest.TestCase):
                     self, caminho.read_text(encoding="utf-8"))
                 total += len(doc.tabelas)
         self.assertGreater(total, 0)
+
+    def test_memoria_publicada_e_rodape_em_todas_as_paginas(self):
+        self.assertEqual(self.carregamentos_memoria, 1)
+        memoria = inicio.carregar_memoria(gerar_site.RAIZ)
+        publicada = bool(memoria and memoria.get("homenageados"))
+        self.assertEqual((self.saida / "memoria.html").is_file(), publicada)
+        for caminho in self.saida.rglob("*.html"):
+            if caminho.name == "alertas.html":  # redirect separado, sem template/rodapé
+                continue
+            with self.subTest(pagina=str(caminho.relative_to(self.saida))):
+                html = caminho.read_text(encoding="utf-8")
+                if publicada:
+                    prefixo = urlsplit(N.URL_SITE).path if caminho.name == "404.html" else (
+                        "../" if caminho.parent.name == "vereadores" else "")
+                    rodape = html.split('<footer class="rodape">', 1)[1].split("</footer>", 1)[0]
+                    self.assertIn(f'<a href="{prefixo}memoria.html">Memória de Niterói</a>', rodape)
+                else:
+                    self.assertNotIn("memoria.html", html)
+        index = (self.saida / "index.html").read_text(encoding="utf-8")
+        self.assertEqual('id="fm-titulo"' in index, publicada)
+
+    def test_rodape_sem_memoria_em_renderizacoes_isoladas(self):
+        with mock.patch.object(P, "MEMORIA_PUBLICADA", False):
+            for prefixo in ("", "../", urlsplit(N.URL_SITE).path):
+                with self.subTest(prefixo=prefixo):
+                    html = P.pagina("Página", "", "", prefixo=prefixo, caminho="pagina.html")
+                    self.assertNotIn("memoria.html", html)
 
     def test_integracao_sessoes_menu_metodologia_e_fichas(self):
         hrefs = [href for href, _ in P.NAV]
@@ -88,10 +122,12 @@ class TestGerarSite(unittest.TestCase):
             renderizar = gerar_site.pagina_sessoes.gerar_sessoes
             with (mock.patch.object(gerar_site, "RAIZ", raiz),
                   mock.patch.object(gerar_site, "SAIDA", saida),
+                  mock.patch.object(P, "MEMORIA_PUBLICADA", True),
                   mock.patch.object(gerar_site.modelo_sessoes, "montar_sessoes") as montar,
                   mock.patch.object(gerar_site.pagina_sessoes, "gerar_sessoes", wraps=renderizar) as pagina,
                   contextlib.redirect_stdout(mensagem)):
                 gerar_site.main()
+                self.assertFalse(P.MEMORIA_PUBLICADA)
             montar.assert_not_called()
             self.assertIsNone(pagina.call_args.args[0]["sessoes"])
             self.assertIn("Nenhuma sessão coletada disponível", (saida / "sessoes.html").read_text(encoding="utf-8"))
@@ -99,7 +135,11 @@ class TestGerarSite(unittest.TestCase):
             ficha = next((saida / "vereadores").glob("*.html")).read_text(encoding="utf-8")
             self.assertIn("Nenhum registro de frequência com este nome", ficha)
             for nome in PAGINAS:
-                self.assertTrue((saida / nome).is_file(), nome)
+                if nome != "memoria.html":
+                    self.assertTrue((saida / nome).is_file(), nome)
+            self.assertFalse((saida / "memoria.html").exists())
+            for caminho in saida.rglob("*.html"):
+                self.assertNotIn("memoria.html", caminho.read_text(encoding="utf-8"))
             self.assertEqual(list((saida / "dados").glob("vot-*.json")), [])
             manifesto = json.loads((saida / "dados/manifest.json").read_bytes())
             self.assertNotIn("build_ses", manifesto)
