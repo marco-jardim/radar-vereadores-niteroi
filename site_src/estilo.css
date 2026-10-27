@@ -612,6 +612,8 @@ details.bloco summary { cursor: pointer; font: 600 var(--fs-1)/1.3 var(--display
   .abas button[aria-selected="true"], .chips-impacto label:has(input:checked) { border: 2px solid Highlight; text-decoration: underline; }
   :focus-visible, .chips-impacto label:has(:focus-visible) { outline-color: Highlight; }
   .sw, .trilho i, .mini-barra i, .svg-box .marca, .svg-box .ponto, .svg-box .linha, .mapa-bairro, .mapa-hachura { forced-color-adjust: none; }
+  .trilho i { border-inline: 1px solid CanvasText; }
+  .sessoes .presenca .trilho i.corte { background: CanvasText; }
 }
 
 /* ---------------------------------------------------------------- impressão */
@@ -638,6 +640,7 @@ details.bloco summary { cursor: pointer; font: 600 var(--fs-1)/1.3 var(--display
   --consignado: #7951A1;
   --votou-ausente: #007C91;
   --justificada: #916211;
+  --outro-cargo: #536E40;
   --ausente: #687783;
   --licenca: #746B86;
   --voto-maioria: #245A81;
@@ -650,6 +653,7 @@ details.bloco summary { cursor: pointer; font: 600 var(--fs-1)/1.3 var(--display
     --consignado: #BE9EE0;
     --votou-ausente: #50AFC2;
     --justificada: #D2AC64;
+    --outro-cargo: #A6BF88;
     --ausente: #93A4B1;
     --licenca: #B3A7C5;
     --voto-maioria: #7CB4DE;
@@ -662,6 +666,7 @@ details.bloco summary { cursor: pointer; font: 600 var(--fs-1)/1.3 var(--display
   --consignado: #BE9EE0;
   --votou-ausente: #50AFC2;
   --justificada: #D2AC64;
+  --outro-cargo: #A6BF88;
   --ausente: #93A4B1;
   --licenca: #B3A7C5;
   --voto-maioria: #7CB4DE;
@@ -672,6 +677,7 @@ details.bloco summary { cursor: pointer; font: 600 var(--fs-1)/1.3 var(--display
 .s-consignado { background: var(--consignado); fill: var(--consignado); }
 .s-votou-ausente { background: var(--votou-ausente); fill: var(--votou-ausente); }
 .s-justificada { background: var(--justificada); fill: var(--justificada); }
+.s-outro-cargo { background: var(--outro-cargo); fill: var(--outro-cargo); }
 .s-ausente { background: var(--ausente); fill: var(--ausente); }
 .s-licenca { background: var(--licenca); fill: var(--licenca); }
 .s-voto-maioria { background: var(--voto-maioria); fill: var(--voto-maioria); }
@@ -681,9 +687,13 @@ details.bloco summary { cursor: pointer; font: 600 var(--fs-1)/1.3 var(--display
 .sessoes .tile-valor { font-size: var(--fs-4); line-height: 1.2; }
 .sessoes .presenca .trilho { width: 100%; }
 .sessoes .presenca .trilho i { min-width: 0; }
-.sessoes .presenca .s-consignado { background-image: repeating-linear-gradient(90deg, transparent 0 5px, var(--superficie) 5px 6px); }
-.sessoes .presenca .s-votou-ausente { background-image: repeating-linear-gradient(135deg, transparent 0 5px, var(--superficie) 5px 6px); }
-.sessoes .presenca .s-justificada { background-image: repeating-linear-gradient(45deg, transparent 0 5px, var(--superficie) 5px 6px); }
+.sessoes .presenca .trilho .corte { flex: 0 0 2px; background: var(--tinta); border-radius: 0; }
+.sessoes :is(.presenca, .leg-presenca) .s-consignado { background-image: repeating-linear-gradient(90deg, transparent 0 5px, var(--superficie) 5px 6px); }
+.sessoes :is(.presenca, .leg-presenca) .s-votou-ausente { background-image: repeating-linear-gradient(135deg, transparent 0 5px, var(--superficie) 5px 6px); }
+.sessoes :is(.presenca, .leg-presenca) .s-ausente { background-image: repeating-linear-gradient(45deg, transparent 0 5px, var(--superficie) 5px 6px), repeating-linear-gradient(135deg, transparent 0 5px, var(--superficie) 5px 6px); }
+.sessoes :is(.presenca, .leg-presenca) .s-justificada { background-image: repeating-linear-gradient(45deg, transparent 0 5px, var(--superficie) 5px 6px); }
+.sessoes :is(.presenca, .leg-presenca) .s-outro-cargo { background-image: radial-gradient(var(--superficie) 1px, transparent 1px); background-size: 5px 5px; }
+.sessoes :is(.presenca, .leg-presenca) .s-licenca { background-image: repeating-linear-gradient(0deg, transparent 0 5px, var(--superficie) 5px 6px); }
 .sessoes .leg-presenca { gap: var(--esp-2) var(--esp-4); }
 .sessoes .filtros-sessoes[hidden] { display: none; }
 /* Rádios e caixa de seleção ganham a área de toque pelo rótulo. */

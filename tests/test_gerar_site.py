@@ -94,6 +94,14 @@ class TestGerarSite(unittest.TestCase):
         self.assertIn("metodologia.html", documentos)
         for chave in TERMOS:
             self.assertIn(f"g-{chave}", documentos["metodologia.html"].ids)
+        termos_presenca = {"presenca-efetiva", "ausencia-justificada", "abono-cargo"}
+        self.assertTrue(termos_presenca <= documentos["metodologia.html"].usados)
+        if any(ident.startswith("presenca-") for ident in documentos["sessoes.html"].ids):
+            self.assertTrue(termos_presenca <= documentos["sessoes.html"].usados)
+        fichas = [doc for nome, doc in documentos.items() if nome.startswith("vereadores/")]
+        self.assertTrue(fichas)
+        for doc in fichas:
+            self.assertTrue(termos_presenca <= doc.usados)
 
     def test_html_gerado_dentro_do_orcamento(self):
         paginas = sorted(self.saida.rglob("*.html"))

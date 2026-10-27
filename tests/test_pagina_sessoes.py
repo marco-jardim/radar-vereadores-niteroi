@@ -19,13 +19,14 @@ from coletor.site import paginas as P
 
 
 RAIZ = Path(__file__).resolve().parents[1]
-TOKENS = ("presente", "consignado", "votou-ausente", "justificada", "ausente", "licenca",
+TOKENS = ("presente", "consignado", "votou-ausente", "justificada", "outro-cargo", "ausente", "licenca",
           "voto-maioria", "voto-diferente", "voto-abstencao")
 
 
 def presenca(**extra) -> dict:
-    return {"P": 90, "C": 10, "V": 5, "J": 3, "A": 4, "L": 2,
-            "denominador": 112, "presentes": 105, "pct": 94, **extra}
+    return {"P": 90, "C": 10, "V": 5, "A": 4, "J": 3, "O": 0, "L": 2,
+            "denominador": 109, "presentes": 105, "faltas": 4, "listadas": 114,
+            "pct": 96, "pct_bruta": 94, **extra}
 
 
 def modelo_sintetico(numero_sessoes: int = 12, numero_votacoes: int = 6, distribuicao_realista: bool = False) -> dict:
@@ -237,15 +238,15 @@ class TestPaginaSessoes(unittest.TestCase):
 
     def test_presenca_bases_e_contrato_do_placar(self):
         r = self.modelo["sessoes"]["por_pessoa"]["pessoa-00"]["2025-2028"]
-        r["presenca"] = presenca(P=4, C=1, V=0, J=1, A=0, L=2, denominador=6, presentes=5, pct=83)
+        r["presenca"] = presenca(P=4, C=1, V=0, J=1, A=1, L=2, denominador=6, presentes=5, pct=83, pct_bruta=None)
         html = S.gerar_sessoes(self.modelo)
-        self.assertIn("94% · 105 de 112", html)
+        self.assertIn("96% · 105 de 109", html)
         self.assertIn("5 de 6", html)
         self.assertNotIn("83%", html)
         self.assertIn("justificadas · 2 licenças (fora da base)", html)
         self.assertIn("Consignado: registro da Mesa", html)
         self.assertIn("Ausente na abertura, com voto registrado", html)
-        self.assertIn("presença mediana dos eleitos", html)
+        self.assertIn("presença efetiva mediana dos eleitos", html)
         doc = Documento(html)
         linhas = doc.com_classe("linha")
         self.assertEqual(len(linhas), 42)
@@ -260,6 +261,72 @@ class TestPaginaSessoes(unittest.TestCase):
         self.assertIn('href="vereadores/pessoa-00.html"', html)
         self.assertIn('id="ordem"', html)
         self.assertIn("suplente em exercício", html)
+
+    def test_presenca_efetiva_separa_base_abonadas_e_preserva_ordenacao(self):
+        p = presenca(P=20, C=7, V=3, A=45, J=22, O=3, L=13, presentes=30,
+                     denominador=75, faltas=45, listadas=113, pct=40, pct_bruta=30)
+        leg = self.modelo["sessoes"]["legislaturas"][1]
+        registro = self.modelo["sessoes"]["por_pessoa"][self.pessoa["slug"]][leg["id"]]
+        registro.update(presenca=p, por_ano={2026: p})
+        html = S._presencas(self.modelo, self.modelo["sessoes"], leg)
+        doc = Documento(html)
+        linha = next(n for n in doc.com_classe("linha") if n["attrs"]["data-nome"] == self.pessoa["nome"])
+        self.assertEqual(linha["attrs"]["data-presenca"], "40")
+        self.assertEqual(linha["attrs"]["data-denominador"], "75")
+        resumo = "40% · 30 de 75 · 45 faltas · 22 justificadas · 3 outro cargo · 13 licenças (fora da base)"
+        self.assertEqual(Documento.texto(Documento.descendentes(linha, "p")[0]), resumo)
+        barra = next(n for n in Documento.descendentes(linha, "div") if n["attrs"].get("role") == "img")
+        self.assertIn("Presença efetiva: 40% · 30 de 75 sessões deliberativas", barra["attrs"]["aria-label"])
+        self.assertIn("45 faltas · 22 justificadas · 3 outro cargo · 13 licenças (fora da base)", barra["attrs"]["aria-label"])
+        segmentos = Documento.descendentes(barra, "i")
+        self.assertEqual([n["attrs"]["class"] for n in segmentos], [
+            "s-presente", "s-consignado", "s-votou-ausente", "s-ausente", "corte",
+            "s-justificada", "s-outro-cargo", "s-licenca",
+        ])
+        self.assertEqual(segmentos[4]["attrs"]["aria-hidden"], "true")
+        self.assertEqual([n["attrs"].get("style") for n in segmentos], [
+            "flex:20", "flex:7", "flex:3", "flex:45", None, "flex:22", "flex:3", "flex:13",
+        ])
+        legenda = S._legenda_presenca()
+        for trecho in ("▣ Abonada por outro cargo: fora da base", "◇ Ausência justificada: fora da base",
+                       "○ Falta: ausência não abonada", "— Licença: fora da base"):
+            self.assertIn(trecho, legenda)
+        ficha = Documento(S.secao_sessoes_vereador(self.modelo, self.pessoa))
+        self.assertEqual(Documento.texto(ficha.com_classe("tile-valor")[1]), "45")
+        self.assertEqual(Documento.texto(ficha.com_classe("tile-rotulo")[1]), "Faltas não abonadas")
+        self.assertIn(resumo, Documento.texto(ficha.com_classe("numeros")[0]))
+
+    def test_tabela_presenca_dez_colunas_rotulos_e_bruta_independente(self):
+        p = presenca(P=20, C=7, V=3, A=45, J=22, O=3, L=13, presentes=30,
+                     denominador=75, pct=40, pct_bruta=30)
+        html = S._tabela_presenca("Presença de teste", [["Pessoa", *S._celulas_presenca(p)]])
+        doc = Documento(html)
+        tabela = next(n for n in doc.nos if n["tag"] == "table")
+        self.assertEqual(tabela["attrs"]["class"], "empilha col-10")
+        cabecalho = ["Vereador / ano", "Presença efetiva", "Presença", "Consignado", "Ausência com voto",
+                     "Falta", "Justificada", "Outro cargo", "Licença", "Presença bruta"]
+        cab = [n for n in Documento.descendentes(tabela, "th") if n["attrs"].get("scope") == "col"]
+        self.assertEqual([Documento.texto(n) for n in cab], cabecalho)
+        linha = Documento.descendentes(tabela, "tbody")[0]["filhos"][0]
+        self.assertEqual([n["attrs"]["data-label"] for n in linha["filhos"]], cabecalho)
+        self.assertEqual([Documento.texto(n) for n in linha["filhos"]],
+                         ["Pessoa", "40% · 30 de 75", "20", "7", "3", "45", "22", "3", "13", "30%"])
+        # A base bruta pode alcançar dez mesmo quando a efetiva ainda não alcança.
+        curta = presenca(P=4, C=0, V=0, A=1, J=5, O=0, L=0,
+                         presentes=4, denominador=5, pct=None, pct_bruta=40)
+        self.assertEqual(S._celulas_presenca(curta)[0], "4 de 5")
+        self.assertEqual(S._celulas_presenca(curta)[-1], "40%")
+        curta["pct_bruta"] = None
+        self.assertEqual(S._celulas_presenca(curta)[-1], "—")
+        self.assertIn('class="barra presenca"', S._barra_presenca(curta))
+        # Uma base efetiva vazia ainda exibe os registros abonados, sem percentual.
+        abonadas = presenca(P=0, C=0, V=0, A=0, J=2, O=1, L=3,
+                            presentes=0, denominador=0, pct=None, pct_bruta=None)
+        barra = S._barra_presenca(abonadas)
+        self.assertIn('class="barra presenca"', barra)
+        self.assertIn("0 de 0", barra)
+        self.assertNotIn("%", barra)
+        self.assertNotIn("Sem base de frequência", barra)
 
     def test_links_de_fontes_de_afastamento_so_abrem_siscam_em_nova_aba(self):
         for url, nova_aba in (
@@ -834,8 +901,8 @@ class TestPaginaSessoes(unittest.TestCase):
                 if href.startswith("#"):
                     self.assertIn(href[1:], ids)
             for barra in doc.com_classe("presenca"):
-                self.assertIn("licenças fora da base", barra["attrs"]["aria-label"])
-                self.assertIn("105 de 112", barra["attrs"]["aria-label"])
+                self.assertIn("2 licenças (fora da base)", barra["attrs"]["aria-label"])
+                self.assertIn("105 de 109", barra["attrs"]["aria-label"])
                 self.assertIn("Consignado: 10", barra["attrs"]["aria-label"])
             for chip in doc.com_classe("chip"):
                 self.assertIn("Pessoa", Documento.texto(chip))
@@ -851,7 +918,7 @@ class TestPaginaSessoes(unittest.TestCase):
         self.assertIn('id="t-sessoes">Presença e votos', html)
         self.assertIn("sessões plenárias e votações nominais", html)
         self.assertIn('href="../metodologia.html#sessoes"', html)
-        self.assertIn("94% · 105 de 112", html)
+        self.assertIn("96% · 105 de 109", html)
         self.assertIn("acima da mediana dos eleitos (92%)", html)
         self.assertIn("3 justificadas · 2 licenças (fora da base)", html)
         self.assertIn("61 de 63", html)
@@ -864,8 +931,10 @@ class TestPaginaSessoes(unittest.TestCase):
         self.assertIn("Presença por ano", html)
         doc = Documento(html)
         self.assertEqual(len(doc.com_classe("tile")), 8)
-        self.assertEqual(Documento.texto(doc.com_classe("tile-valor")[0]), "94%")
-        self.assertEqual(Documento.texto(doc.com_classe("tile-rotulo")[0]), "105 de 112 sessões deliberativas")
+        self.assertEqual(Documento.texto(doc.com_classe("tile-valor")[0]), "96%")
+        self.assertEqual(Documento.texto(doc.com_classe("tile-rotulo")[0]), "105 de 109 sessões deliberativas")
+        self.assertEqual(Documento.texto(doc.com_classe("tile-valor")[1]), "4")
+        self.assertEqual(Documento.texto(doc.com_classe("tile-rotulo")[1]), "Faltas não abonadas")
         self.assertIn("Votações divididas com sentido conhecido; divergir não mede qualidade", html)
         listas = doc.com_classe("votos-diferentes")
         self.assertTrue(listas)
@@ -886,12 +955,12 @@ class TestPaginaSessoes(unittest.TestCase):
         modelo = {"sessoes": {"anos": list(range(2021, 2027))}}
         self.assertIn("(2021–2026)", S.secao_sessoes_vereador(modelo, self.pessoa))
         r = self.modelo["sessoes"]["por_pessoa"][self.pessoa["slug"]]["2025-2028"]
-        r["presenca"] = presenca(P=1, C=1, V=0, J=1, A=0, L=0, denominador=3, presentes=2, pct=67)
+        r["presenca"] = presenca(P=1, C=1, V=0, J=1, A=0, L=0, denominador=2, presentes=2, pct=67, pct_bruta=None)
         html = S.secao_sessoes_vereador(self.modelo, self.pessoa)
-        self.assertIn("2 de 3", html)
+        self.assertIn("2 de 2", html)
         self.assertNotIn("67%", html)
         self.assertIn("base inferior a 10 sessões", html)
-        self.assertEqual(Documento.texto(Documento(html).com_classe("tile-valor")[0]), "2 de 3")
+        self.assertEqual(Documento.texto(Documento(html).com_classe("tile-valor")[0]), "2 de 2")
         r["presenca"] = dict.fromkeys(presenca(), 0)
         self.assertIn("Sem base de frequência", S.secao_sessoes_vereador(self.modelo, self.pessoa))
 
@@ -916,7 +985,7 @@ class TestPaginaSessoes(unittest.TestCase):
             registro["participacao"]["presidindo"] = 0
             registro["indeterminadas"] = 1
         html = S.secao_sessoes_vereador(self.modelo, self.pessoa)
-        for texto in ("0 licenças", "0 justificadas", "0 presidindo", "licenças fora da base: 0", ": 1 votações"):
+        for texto in ("0 licenças", "0 justificadas", "0 outro cargo", "0 presidindo", "licenças fora da base: 0", ": 1 votações"):
             self.assertNotIn(texto, html)
         self.assertIn("Sentido não determinado: 1 votação.", html)
         r = self.modelo["sessoes"]["por_pessoa"][self.pessoa["slug"]]["2025-2028"]
@@ -924,10 +993,12 @@ class TestPaginaSessoes(unittest.TestCase):
         r["participacao"].update(votou=1, possiveis=1, presidindo=1)
         html = S.secao_sessoes_vereador(self.modelo, self.pessoa)
         doc = Documento(html)
-        self.assertEqual(Documento.texto(doc.com_classe("tile-valor")[0]), "105 de 112")
-        self.assertEqual(Documento.texto(doc.com_classe("tile-rotulo")[1]), "ausência")
+        self.assertEqual(Documento.texto(doc.com_classe("tile-valor")[0]), "105 de 109")
+        self.assertEqual(Documento.texto(doc.com_classe("tile-valor")[1]), "0")
+        self.assertEqual(Documento.texto(doc.com_classe("tile-rotulo")[1]), "Faltas não abonadas")
         self.assertEqual(Documento.texto(doc.com_classe("tile-rotulo")[2]), "votação nominal em que votou")
         self.assertIn("1 justificada · 1 licença (fora da base)", html)
+        self.assertIn("0 faltas · 1 justificada", html)
         self.assertIn("1 presidindo", html)
         pagina = Documento(S.gerar_sessoes(self.modelo))
         linha = next(n for n in pagina.com_classe("linha") if n["attrs"]["data-nome"] == self.pessoa["nome"])
@@ -1014,6 +1085,31 @@ class TestPaginaSessoes(unittest.TestCase):
                        "ao menos 3 votos no lado menor", "3 abstenções", "Não membros", "Comissões, debates",
                        "votações simbólicas", "não mede qualidade do mandato", "motivo de ausência", "contestar", "por issue"):
             self.assertIn(trecho, html)
+        self.assertEqual(S.CRITERIO_PRESENCA_DESDE, "2026-10-27")
+        self.assertIn('<time datetime="2026-10-27">27/10/2026</time>', html)
+        self.assertIn("Até 27/10/2026, a ausência justificada contava na base da presença; "
+                      "a presença bruta continua na tabela para comparação.", html)
+        for trecho in ("P/C/V ÷ (P/C/V + A)", "P/C/V ÷ (P/C/V + A + J + O)",
+                       "reclassificam A/J como O", "sem alterar os registros brutos", "na sua ausência, na aprovação",
+                       "sem ambos, não há abono", "véspera do próximo P/C/V", "no fim dela",
+                       "Licenças só abonam com aprovação ou ato", "marcação “Ausência Justificada” da Câmara"):
+            self.assertIn(trecho, html)
+        self.assertNotIn("O afastamento não reclassifica", html)
+
+    def test_texturas_legenda_corte_e_cores_forcadas(self):
+        css = (RAIZ / "site_src/estilo.css").read_text(encoding="utf-8")
+        for classe, padrao in (("consignado", "repeating-linear-gradient(90deg"),
+                               ("votou-ausente", "repeating-linear-gradient(135deg"),
+                               ("justificada", "repeating-linear-gradient(45deg"),
+                               ("outro-cargo", "radial-gradient("),
+                               ("licenca", "repeating-linear-gradient(0deg")):
+            self.assertIn(f'.sessoes :is(.presenca, .leg-presenca) .s-{classe} {{ background-image: {padrao}', css)
+        self.assertIn('.trilho .corte { flex: 0 0 2px;', css)
+        blocos = [b.split('\n}', 1)[0] for b in css.split('@media (forced-colors: active) {')[1:]]
+        forcadas = next(b for b in blocos if '.trilho i' in b)
+        self.assertIn('.trilho i { border-inline: 1px solid CanvasText; }', forcadas)
+        self.assertIn('.trilho i.corte { background: CanvasText; }', forcadas)
+        self.assertIn('forced-color-adjust: none;', forcadas)
 
     def test_neutralidade_sem_rotulos_politicos_nem_cores_de_alerta(self):
         for html in (S.gerar_sessoes(self.modelo), S.secao_sessoes_vereador(self.modelo, self.pessoa), S.metodologia_sessoes(self.modelo)):

@@ -449,9 +449,14 @@ Esta é a referência única para sessões; a CLI está em "Pipeline e comandos"
 ### Interpretação e HTML
 
 - Só deliberativas (ordinárias/extraordinárias) com lista entram na presença. O denominador é individual,
-  sem licenças/textos desconhecidos e sem inventar faltas para nomes ausentes. Cada pessoa conta uma vez,
+  com presença efetiva P/C/V ÷ (P/C/V + A), sem J/O/L e textos desconhecidos nem faltas inventadas para nomes
+  ausentes. Cada pessoa conta uma vez,
   pela melhor evidência; ausência com voto substantivo na sessão pode virar presença identificada como V.
   Com base menor que 10, não há percentual; a mediana considera eleitos com base suficiente.
+- Desde `2026-10-27` (`pagina_sessoes.CRITERIO_PRESENCA_DESDE`), justificadas (J), abonadas por outro cargo (O)
+  e licenças (L) ficam fora da base efetiva. A barra separa P/C/V/A de J/O/L por um corte de 2 px e usa texturas
+  e rótulos além das cores. A tabela empilhável de dez colunas conserva a presença bruta P/C/V ÷ (P/C/V + A + J + O)
+  para comparação, também com mínimo de dez na própria base. As fichas contam só A em “Faltas não abonadas”.
 - Favor/Contra é sobre o parecer, não automaticamente a matéria. Use `regras_sessoes` para determinar o
   sentido e o quórum: derrubar veto exige 11 votos dos 21 vereadores, não maioria dos presentes.
   Sentido inseguro aparece como não determinado; placar inconsistente só mostra totais oficiais, sem nomes.
