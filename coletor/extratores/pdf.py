@@ -15,6 +15,7 @@ Somente biblioteca padrão do Python; as ferramentas rodam por subprocess, sem s
 """
 from __future__ import annotations
 
+import hashlib
 import tempfile
 from pathlib import Path
 
@@ -41,7 +42,8 @@ def paginas_pdftotext(saida: str) -> list[str]:
     return paginas
 
 
-def extrair_pdf(dados: bytes, ocr: bool, ferramentas=None) -> Resultado:
+def extrair_pdf(dados: bytes, ocr: bool, ferramentas=None, cache_ocr: Path | None = None) -> Resultado:
+    """Texto do PDF por página; `cache_ocr` guarda o OCR de cada página (veja `ocr`)."""
     resultado = Resultado(formato="pdf", extrator="pdftotext")
     with tempfile.TemporaryDirectory(prefix="radar-pdf-", ignore_cleanup_errors=True) as nome_pasta:
         pasta = Path(nome_pasta)
@@ -74,7 +76,8 @@ def extrair_pdf(dados: bytes, ocr: bool, ferramentas=None) -> Resultado:
             resultado.texto = SEPARADOR.join(paginas)
             resultado.status, resultado.detalhe = "pendente_ferramenta", f"ferramenta ausente: {exc}"
             return resultado
-        lido = _ocr.ocr_paginas_pdf(arquivo, escaneadas, pasta, ferramentas)
+        lido = _ocr.ocr_paginas_pdf(arquivo, escaneadas, pasta, ferramentas, cache_ocr,
+                                    hashlib.sha256(dados).hexdigest() if cache_ocr is not None else None)
 
     # A confiança só considera as páginas cujo texto do OCR foi usado, isto é, que
     # trouxe mais caracteres úteis que o texto embutido no PDF.

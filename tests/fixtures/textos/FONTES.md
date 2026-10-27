@@ -42,7 +42,7 @@ O gerador recusa qualquer fixture acima de 50 KB, e `tests/test_extratores.py`
 
 | Fixture | Origem e conteúdo |
 | --- | --- |
-| `real_pl_127510.doc` | Arquivo público do SISCAM: Projeto de Lei do documento `IdDocumento=127510` (`https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=127510`), arquivo `https://consultaniteroi.siscam.com.br/Download.aspx?id=231695`, Word 97–2003. Texto de lei e justificativa, com os nomes públicos dos vereadores autores; sem dados pessoais de terceiros. Bytes preservados. |
+| `real_pl_127510.doc` | Arquivo público do SISCAM: Projeto de Lei do documento `IdDocumento=127510` (`https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=127510`), arquivo `https://consultaniteroi.siscam.com.br/Download.aspx?id=231695`, Word 97–2003. Texto de lei e justificativa, com os nomes públicos dos vereadores autores; sem dados pessoais de terceiros. Bytes preservados, exceto os metadados do arquivo (resumo OLE: autor e "salvo por último por"), cujos nomes foram trocados por "x"; o texto do documento não foi alterado. |
 | `real_pl_127510.esperado.txt` | Texto extraído pelo parser e conferido por pessoa (artigos, parágrafos e justificativa). O teste compara o corpo até as assinaturas; o papel timbrado que vinha depois (histórias de cabeçalho do Word) deixou de entrar no texto na versão 2 dos extratores. |
 
 Casos de malformação (CFB com ciclo na FAT, CFB truncado, tamanho declarado maior que o

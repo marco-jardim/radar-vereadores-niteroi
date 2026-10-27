@@ -10,6 +10,9 @@ Somente biblioteca padrão do Python; as ferramentas rodam por subprocess, sem s
 """
 from __future__ import annotations
 
+import hashlib
+import json
+import os
 import tempfile
 import time
 from dataclasses import dataclass, field
@@ -106,24 +109,69 @@ def _ocr_pagina(caminho_pdf: Path, n: int, pasta: Path, ferramentas) -> tuple[st
         imagem.unlink(missing_ok=True)
 
 
+def _versao_ocr(ferramentas) -> str:
+    """Identifica as ferramentas e opções do OCR, para invalidar o cache quando mudam."""
+    descricao = "|".join([_ferr.versao("pdftoppm", ferramentas) or "", _ferr.versao("tesseract", ferramentas) or "",
+                          RESOLUCAO, IDIOMA, "psm6"])
+    return hashlib.sha1(descricao.encode("utf-8")).hexdigest()[:12]
+
+
+def _ler_cache(arquivo: Path) -> tuple[str, float | None, int] | None:
+    try:
+        dados = json.loads(arquivo.read_text(encoding="utf-8"))
+        conf = dados["confianca"]
+        return str(dados["texto"]), (float(conf) if conf is not None else None), int(dados["palavras"])
+    except (OSError, ValueError, KeyError, TypeError):
+        return None
+
+
+def _gravar_cache(arquivo: Path, lido: tuple[str, float | None, int]) -> None:
+    arquivo.parent.mkdir(parents=True, exist_ok=True)
+    temporario = arquivo.with_name(f".{arquivo.name}.tmp")
+    texto, conf, palavras = lido
+    temporario.write_text(json.dumps({"confianca": conf, "palavras": palavras, "texto": texto},
+                                     ensure_ascii=False, sort_keys=True), encoding="utf-8")
+    os.replace(temporario, arquivo)
+
+
 def ocr_paginas_pdf(caminho_pdf: Path, paginas: list[int], pasta: Path,
-                    ferramentas=None) -> OcrPaginas:
+                    ferramentas=None, cache_ocr: Path | None = None,
+                    sha256: str | None = None) -> OcrPaginas:
     """OCR das páginas indicadas (base 1), página a página.
 
     Erro de ferramenta numa página (código de saída ou tempo esgotado) não perde as
-    demais: a página fica em `falhas`. Páginas além de `MAX_PAGINAS_OCR` ou depois de
-    `OCR_SEGUNDOS_DOCUMENTO` segundos não são tentadas e ficam em `adiadas`.
+    demais: a página fica em `falhas`. Depois de `MAX_PAGINAS_OCR` páginas lidas nesta
+    execução ou de `OCR_SEGUNDOS_DOCUMENTO` segundos, as restantes ficam em `adiadas`.
+
+    Com `cache_ocr`, cada página lida fica em `<cache_ocr>/<sha256>-<página>-<versão>.json`
+    (versão = pdftoppm, tesseract e opções); páginas já no cache não chamam as
+    ferramentas nem contam no orçamento, e as adiadas são retomadas na próxima execução.
     """
     resultado = OcrPaginas()
     inicio = time.monotonic()
-    for posicao, n in enumerate(paginas):
-        if posicao >= MAX_PAGINAS_OCR or time.monotonic() - inicio >= OCR_SEGUNDOS_DOCUMENTO:
-            resultado.adiadas = list(paginas[posicao:])
-            break
+    feitas = 0
+    versao = _versao_ocr(ferramentas) if cache_ocr is not None else ""
+    if cache_ocr is not None and sha256 is None:
+        sha256 = hashlib.sha256(Path(caminho_pdf).read_bytes()).hexdigest()
+    for n in paginas:
+        arquivo = Path(cache_ocr) / f"{sha256}-{n}-{versao}.json" if cache_ocr is not None else None
+        if arquivo is not None and arquivo.exists():
+            guardado = _ler_cache(arquivo)
+            if guardado is not None:
+                resultado.lidas[n] = guardado
+                continue
+        if feitas >= MAX_PAGINAS_OCR or time.monotonic() - inicio >= OCR_SEGUNDOS_DOCUMENTO:
+            resultado.adiadas.append(n)
+            continue
         try:
-            resultado.lidas[n] = _ocr_pagina(caminho_pdf, n, pasta, ferramentas)
+            lido = _ocr_pagina(caminho_pdf, n, pasta, ferramentas)
         except ErroFerramenta as exc:
             resultado.falhas[n] = str(exc)[:200]
+            continue
+        feitas += 1
+        resultado.lidas[n] = lido
+        if arquivo is not None:
+            _gravar_cache(arquivo, lido)
     return resultado
 
 

@@ -1,8 +1,10 @@
 """Texto de documentos Word 2007+ (docx, WordprocessingML).
 
 Lê o documento principal indicado em `_rels/.rels` (ou `word/document.xml`),
-depois as notas de rodapé e as notas de fim. Cabeçalhos e rodapés só são contados,
-não entram no texto. Cada parágrafo `w:p`
+depois as notas de rodapé e as notas de fim. Cabeçalhos e rodapés são contados e não
+entram no texto, exceto as linhas que identificam o documento (ato numerado, como
+"PROJETO DE LEI Nº 45/2026") ou têm 12 ou mais palavras, postas antes do corpo
+quando ainda não estão nele. Cada parágrafo `w:p`
 vira uma linha; `w:tab` vira tabulação; `w:br`/`w:cr` viram quebra de linha.
 Tabelas saem linha a linha, com as células separadas por " | ". Texto excluído
 em revisão (`w:delText`), códigos de campo (`w:instrText`) e o conteúdo
@@ -18,7 +20,7 @@ import xml.etree.ElementTree as ET
 import zipfile
 
 from . import base
-from .base import ErroFormato, ErroLimite, ler_membro_zip
+from .base import ErroFormato, ErroLimite, ler_membro_zip, linhas_relevantes_do_cabecalho
 
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 MC = "{http://schemas.openxmlformats.org/markup-compatibility/2006}"
@@ -171,9 +173,16 @@ def extrair_docx(dados: bytes, orcamento: list[int] | None = None) -> tuple[str,
             raise ErroFormato("docx sem document.xml")
         secoes = [_texto_parte(ler_membro_zip(zf, nomes[principal], orcamento))]
         cabecalhos = 0
+        relevantes: list[str] = []
         for nome in sorted((n for n in nomes if _RE_CABECALHO.match(n)), key=_ordem_cabecalho):
-            if _texto_parte(ler_membro_zip(zf, nomes[nome], orcamento)).strip():
+            texto = _texto_parte(ler_membro_zip(zf, nomes[nome], orcamento))
+            if texto.strip():
                 cabecalhos += 1
+                for linha in linhas_relevantes_do_cabecalho(texto, secoes[0]):
+                    if linha not in relevantes:
+                        relevantes.append(linha)
+        if relevantes:  # identificação do documento que só estava no cabeçalho
+            secoes.insert(0, "\n".join(relevantes))
         for nome in ("word/footnotes.xml", "word/endnotes.xml"):
             if nome in nomes:
                 secoes.append(_texto_parte(ler_membro_zip(zf, nomes[nome], orcamento), notas=True))

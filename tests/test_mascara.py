@@ -300,7 +300,8 @@ class TestIdempotenciaVarrer(unittest.TestCase):
         self.assertEqual([a["tipo"] for a in achados],
                          ["cpf", "cpf", "rg", "telefone", "telefone", "telefone", "email", "email"])
         for a in achados:
-            self.assertEqual(set(a), {"tipo", "inicio", "fim"})
+            self.assertEqual(set(a), {"tipo", "inicio", "fim", "forte"})
+            self.assertTrue(a["forte"])
         primeiro = achados[0]
         self.assertEqual(self.TEXTO[primeiro["inicio"]:primeiro["fim"]], CPF_A)
         mascarado, _ = mascarar(self.TEXTO)
@@ -316,8 +317,42 @@ class TestIdempotenciaVarrer(unittest.TestCase):
         texto = "Protocolo nº 2026-1234, telefone 26201234 e CPF 529 982 247 25"
         saida, contagens = mascarar(texto)
         self.assertEqual(sum(contagens.values()), 0)  # protegidos ou ambíguos para mascarar
-        tipos = [a["tipo"] for a in varrer(texto)]
-        self.assertEqual(tipos, ["telefone", "telefone", "cpf"])
+        achados = varrer(texto)
+        self.assertEqual([a["tipo"] for a in achados], ["telefone", "telefone", "cpf"])
+        # "2026-1234" tem separador (forte); "26201234" é só dígitos corridos (fraco)
+        self.assertEqual([a["forte"] for a in achados], [True, False, True])
+
+    def test_forca_das_ocorrencias(self) -> None:
+        casos = {
+            "Tel. (21) 2620-1234": ("telefone", True),
+            "Tel. +5521998887777": ("telefone", True),
+            "Tel. 2620 1234": ("telefone", True),
+            "Código 26201234": ("telefone", False),
+            "Código 2126201234": ("telefone", False),
+            "CPF 52998224725": ("cpf", True),
+            "RG 12.345.678-9": ("rg", True),
+            "e-mail fulano@exemplo.org": ("email", True),
+        }
+        for texto, esperado in casos.items():
+            with self.subTest(texto=texto):
+                achados = varrer(texto)
+                self.assertEqual([(a["tipo"], a["forte"]) for a in achados], [esperado])
+
+    def test_medir(self) -> None:
+        with tempfile.TemporaryDirectory() as nome:
+            pasta = Path(nome)
+            (pasta / "a.txt").write_text("CPF 529.982.247-25 e protocolo 26201234", encoding="utf-8")
+            (pasta / "b.txt").write_text("Processo nº 2024-1234, tel (21) 2620-1234", encoding="utf-8")
+            (pasta / "c.txt").write_text("Sem dados pessoais.", encoding="utf-8")
+            resultado = mascara.medir(pasta)
+        self.assertEqual(resultado, {
+            "documentos": 3,
+            "mascarados": {"cpf": 1, "rg": 0, "telefone": 1, "email": 0},
+            "restantes": {"telefone_forte": 1, "telefone_fraco": 1},
+            "documentos_com_forte": 1,
+            "documentos_com_fraco": 1,
+        })
+        self.assertNotIn("2620", json.dumps(resultado))
 
     def test_varrer_ignora_so_as_protecoes_explicitas(self) -> None:
         texto = ("em 12/03/2024, mandato 2021-2024, CEP 24020-000, CNPJ 11.222.333/0001-81, "

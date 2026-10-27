@@ -10,8 +10,10 @@ Piece table que cobre mais caracteres ou bytes do que o `WordDocument` tem é
 recusada (ErroFormato), em vez de repetir o mesmo trecho indefinidamente.
 
 São lidos o texto principal, as notas de rodapé, as notas de fim e as caixas de
-texto. Cabeçalhos/rodapés (e suas caixas de texto) e comentários ficam de fora;
-`cabecalhos` informa quantas histórias de cabeçalho foram omitidas.
+texto. Cabeçalhos/rodapés (e suas caixas de texto) e comentários ficam de fora,
+exceto as linhas de cabeçalho que identificam o documento (ato numerado) ou têm 12 ou
+mais palavras, postas antes do corpo; `cabecalhos` informa quantas histórias de
+cabeçalho foram omitidas.
 
 Caracteres especiais: \\r, \\x0b, \\x0c e \\x0e viram quebra; campos (\\x13 código
 \\x14 resultado \\x15) mantêm só o resultado (campo sem fim mantém o texto seguinte,
@@ -30,7 +32,7 @@ import bisect
 import re
 import struct
 
-from .base import ErroFormato
+from .base import ErroFormato, linhas_relevantes_do_cabecalho
 from .cfb import CompoundFile
 
 IDENT_WORD = 0xA5EC
@@ -318,6 +320,7 @@ def extrair_doc(dados: bytes) -> tuple[str, list[str], int]:
     total = pecas.cps[-1]
     secoes: list[str] = []
     avisos: list[str] = []
+    textos_cabecalho: list[str] = []
     cabecalhos = 0
     inicio = 0
     for indice, quantidade in enumerate(contagens):
@@ -328,7 +331,14 @@ def extrair_doc(dados: bytes) -> tuple[str, list[str], int]:
                 avisos.append("campo do Word sem fim")
             if indice in (2, 7):  # cabeçalhos/rodapés e suas caixas de texto
                 cabecalhos += bool(texto.strip())
+                textos_cabecalho.append(texto)
             else:
                 secoes.append(texto)
         inicio = fim
-    return "\n\n".join(s for s in secoes if s.strip()), avisos, cabecalhos
+    corpo = "\n\n".join(s for s in secoes if s.strip())
+    relevantes: list[str] = []
+    for texto in textos_cabecalho:
+        relevantes += [l for l in linhas_relevantes_do_cabecalho(texto, corpo) if l not in relevantes]
+    if relevantes:  # identificação do documento que só estava no cabeçalho
+        corpo = "\n".join(relevantes) + ("\n\n" + corpo if corpo else "")
+    return corpo, avisos, cabecalhos

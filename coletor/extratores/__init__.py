@@ -98,7 +98,7 @@ def _interno(nome: str, texto: str, formato: str | None = None) -> Resultado:
 
 
 def _por_formato(formato: str, dados: bytes, ocr: bool, ferramentas, profundidade: int,
-                 orcamento: list[int]) -> Resultado:
+                 orcamento: list[int], cache_ocr=None) -> Resultado:
     if formato == "vazio":
         return Resultado(formato="vazio", status="vazio_legitimo", detalhe="arquivo sem conteúdo")
     if formato == "docx":
@@ -119,19 +119,21 @@ def _por_formato(formato: str, dados: bytes, ocr: bool, ferramentas, profundidad
     if formato == "texto":
         return _interno("texto", _decodificar_texto(dados))
     if formato == "pdf":
-        return _pdf.extrair_pdf(dados, ocr, ferramentas)
+        return _pdf.extrair_pdf(dados, ocr, ferramentas, cache_ocr)
     if formato in ("jpeg", "png", "tiff"):
         return _ocr.extrair_imagem(dados, formato, ocr, ferramentas)
     if formato == "zip":
-        return _zip.extrair_zip(dados, ocr, ferramentas, profundidade, orcamento, _extrair)
+        def membro(d, o, f, p, orc):
+            return _extrair(d, o, f, p, orc, cache_ocr)
+        return _zip.extrair_zip(dados, ocr, ferramentas, profundidade, orcamento, membro)
     raise ErroFormato("formato desconhecido")
 
 
 def _extrair(dados: bytes, ocr: bool, ferramentas, profundidade: int,
-             orcamento: list[int]) -> Resultado:
+             orcamento: list[int], cache_ocr=None) -> Resultado:
     formato = _detectar.detectar(dados)
     try:
-        resultado = _por_formato(formato, dados, ocr, ferramentas, profundidade, orcamento)
+        resultado = _por_formato(formato, dados, ocr, ferramentas, profundidade, orcamento, cache_ocr)
     except FerramentaAusente as exc:
         resultado = Resultado(formato=formato, status="pendente_ferramenta",
                               detalhe=f"ferramenta ausente: {exc}")
@@ -146,6 +148,10 @@ def _extrair(dados: bytes, ocr: bool, ferramentas, profundidade: int,
     return resultado
 
 
-def extrair(dados: bytes, ocr: bool = False, ferramentas=None) -> Resultado:
-    """Extrai o texto de um arquivo; nunca levanta exceção por arquivo malformado."""
-    return _extrair(bytes(dados), ocr, ferramentas, 1, [base.LIMITE_DESCOMPACTADO])
+def extrair(dados: bytes, ocr: bool = False, ferramentas=None, cache_ocr=None) -> Resultado:
+    """Extrai o texto de um arquivo; nunca levanta exceção por arquivo malformado.
+
+    `cache_ocr` (pasta ou None) guarda o OCR de cada página de PDF, para não repetir
+    páginas já lidas e retomar as adiadas pelo orçamento em outra execução.
+    """
+    return _extrair(bytes(dados), ocr, ferramentas, 1, [base.LIMITE_DESCOMPACTADO], cache_ocr)

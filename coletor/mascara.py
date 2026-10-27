@@ -30,18 +30,28 @@ RG rotulado. Ignora só o que casa com as proteções explícitas de datas (incl
 intervalos de anos), CEP, CNPJ com DV válido, processo CNJ, "Lei nº …" e valores em
 R$. Pode apontar falsos positivos (por exemplo, protocolos com forma de telefone):
 quem chama decide. Passe a `varrer` o mesmo conjunto `liberados` usado em `mascarar`.
-Devolve só tipo e posição, nunca o valor.
+Devolve só tipo, posição e força (`forte`), nunca o valor; a barreira bloqueia nas
+ocorrências fortes.
+
+Uso: python -m coletor.mascara --medir DIR [--limite N]
+  Mascara cada .txt de DIR e imprime, em JSON, quantas ocorrências `varrer` ainda acha
+  (por tipo, fortes e fracas) e quantos documentos têm cada uma; não imprime valores.
 
 Somente biblioteca padrão do Python.
 """
 from __future__ import annotations
 
+import argparse
 import bisect
 import json
 import re
+import sys
 import unicodedata
 from collections.abc import Iterable
 from pathlib import Path
+
+RAIZ = Path(__file__).resolve().parent.parent
+_RE_SEPARADOR_TELEFONE = re.compile(r"[ .\-()+]")
 
 TIPOS = ("cpf", "rg", "telefone", "email")
 SUBSTITUICOES = {
@@ -397,9 +407,12 @@ def mascarar(texto: str, liberados: Iterable[str] = frozenset()) -> tuple[str, d
 
 
 def varrer(texto: str, liberados: Iterable[str] = frozenset()) -> list[dict]:
-    """Barreira independente: ocorrências `{tipo, inicio, fim}` suspeitas, sem o valor.
+    """Barreira independente: ocorrências `{tipo, inicio, fim, forte}` suspeitas, sem o valor.
 
     Mais ampla que `mascarar` (veja o docstring do módulo); use o mesmo `liberados`.
+    `forte` é verdadeiro para CPF com DV válido, e-mail, RG com rótulo e telefone com
+    separador, parênteses ou +55; telefone só de dígitos corridos é fraco. A barreira
+    bloqueia só nas ocorrências fortes; as fracas são contadas para revisão.
     """
     conjunto, dominios = _preparar(liberados)
     ignorar = _Intervalos(
@@ -427,5 +440,55 @@ def varrer(texto: str, liberados: Iterable[str] = frozenset()) -> list[dict]:
                       telefone_canonico(digitos[-8:])}
         if candidatos & conjunto:
             continue
-        achados.append((ini, fim, "telefone"))
-    return [{"tipo": tipo, "inicio": ini, "fim": fim} for ini, fim, tipo in sorted(achados)]
+        achados.append((ini, fim, "telefone" if _RE_SEPARADOR_TELEFONE.search(m.group()) else "_fraco"))
+    return [
+        {"tipo": "telefone" if tipo == "_fraco" else tipo, "inicio": ini, "fim": fim,
+         "forte": tipo != "_fraco"}
+        for ini, fim, tipo in sorted(achados)
+    ]
+
+
+# ---------------------------------------------------------------- medição
+def medir(pasta: Path, liberados_: Iterable[str] = frozenset(), limite: int = 0) -> dict:
+    """Ocorrências que `varrer` ainda acha depois de `mascarar`, nos .txt de `pasta`.
+
+    Só contagens (por tipo e força, e documentos afetados); nenhum valor é guardado.
+    """
+    conjunto = frozenset(liberados_)
+    arquivos = sorted(p for p in Path(pasta).rglob("*.txt") if p.is_file())
+    if limite > 0:
+        arquivos = arquivos[:limite]
+    restantes: dict[str, int] = {}
+    mascarados = {tipo: 0 for tipo in TIPOS}
+    docs_forte = docs_fraco = 0
+    for arquivo in arquivos:
+        texto = arquivo.read_text(encoding="utf-8", errors="replace")
+        limpo, contagens = mascarar(texto, conjunto)
+        for tipo, n in contagens.items():
+            mascarados[tipo] += n
+        achados = varrer(limpo, conjunto)
+        for o in achados:
+            chave = f"{o['tipo']}_{'forte' if o['forte'] else 'fraco'}"
+            restantes[chave] = restantes.get(chave, 0) + 1
+        docs_forte += any(o["forte"] for o in achados)
+        docs_fraco += any(not o["forte"] for o in achados)
+    return {"documentos": len(arquivos), "mascarados": mascarados,
+            "restantes": dict(sorted(restantes.items())),
+            "documentos_com_forte": docs_forte, "documentos_com_fraco": docs_fraco}
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(
+        description="Mede o que a barreira (varrer) ainda acha depois da máscara; só contagens.")
+    parser.add_argument("--medir", type=Path, required=True, help="pasta com um .txt por documento")
+    parser.add_argument("--limite", type=int, default=0, help="número máximo de documentos")
+    args = parser.parse_args(argv)
+    if not args.medir.is_dir():
+        print(f"pasta inexistente: {args.medir}", file=sys.stderr)
+        return 2
+    print(json.dumps(medir(args.medir, liberados(RAIZ), args.limite), ensure_ascii=False, indent=1))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

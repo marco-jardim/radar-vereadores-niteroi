@@ -4,13 +4,14 @@ Somente biblioteca padrão do Python.
 """
 from __future__ import annotations
 
+import re
 import zipfile
 import zlib
 from dataclasses import dataclass, field
 
 # Versão dos extratores escritos em Python puro (docx, doc, rtf, html, zip, texto).
 # Mudar a saída de qualquer um deles exige subir esta versão, para reprocessar.
-VERSAO_EXTRATORES = "2"
+VERSAO_EXTRATORES = "3"
 
 # Limite de bytes descompactados por arquivo zip/docx (proteção contra zip bomb).
 LIMITE_DESCOMPACTADO = 100 * 1024 * 1024
@@ -79,6 +80,29 @@ class FerramentaAusente(RuntimeError):
 
 class ErroFerramenta(RuntimeError):
     """Ferramenta externa terminou com erro ou estourou o tempo limite."""
+
+
+# Linha de cabeçalho/rodapé que identifica o documento ("PROJETO DE LEI Nº 45/2026",
+# "Requerimento nº 12/2026"): fica no texto mesmo com o resto do papel timbrado omitido.
+_RE_CABECALHO_RELEVANTE = re.compile(
+    r"\b(?:projeto\s+de\s+(?:lei|resolu[cç][aã]o|decreto)|requerimento|indica[cç][aã]o|mo[cç][aã]o"
+    r"|resolu[cç][aã]o|decreto|lei|of[ií]cio|mensagem|emenda)\b[^\n]{0,40}?\d",
+    re.I,
+)
+_RE_PALAVRAS = re.compile(r"[^\W\d_]+")
+
+
+def linhas_relevantes_do_cabecalho(texto_cabecalho: str, corpo: str) -> list[str]:
+    """Linhas de cabeçalho/rodapé que não podem ser descartadas: com ato numerado ou com
+    12 ou mais palavras, sem repetir as que já estão no corpo."""
+    escolhidas: list[str] = []
+    for linha in texto_cabecalho.split("\n"):
+        linha = linha.strip()
+        if not linha or linha in corpo or linha in escolhidas:
+            continue
+        if _RE_CABECALHO_RELEVANTE.search(linha) or len(_RE_PALAVRAS.findall(linha)) >= 12:
+            escolhidas.append(linha)
+    return escolhidas
 
 
 def ler_membro_zip(zf: zipfile.ZipFile, info: zipfile.ZipInfo, orcamento: list[int]) -> bytes:

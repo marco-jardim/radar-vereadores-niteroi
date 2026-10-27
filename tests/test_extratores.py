@@ -188,6 +188,19 @@ class TestDocx(unittest.TestCase):
         # corpo antes das notas
         self.assertLess(r.texto.index("Indicação sintética"), r.texto.index("Nota de rodapé"))
 
+    def test_docx_cabecalho_com_ato_numerado_fica(self) -> None:
+        cabecalho = (f'<?xml version="1.0" encoding="UTF-8"?><w:hdr {fx.NS_DECL}>'
+                     + fx._p("CÂMARA MUNICIPAL DE NITERÓI") + fx._p("PROJETO DE LEI Nº 45/2026")
+                     + fx._p("Indicação sintética") + "</w:hdr>").encode()
+        dados = fx.zip_bytes({
+            "[Content_Types].xml": fx._CT.encode(), "_rels/.rels": fx._RELS.encode(),
+            "word/document.xml": fx._documento(fx._p("Indicação sintética") + fx._p("Dispõe sobre praças.")),
+            "word/header1.xml": cabecalho,
+        })
+        r = extratores.extrair(dados)
+        self.assertEqual(r.texto, "PROJETO DE LEI Nº 45/2026\n\nIndicação sintética\nDispõe sobre praças.")
+        self.assertEqual(r.cabecalhos_omitidos, 1)
+
     def test_docx_sem_document_xml(self) -> None:
         r = extratores.extrair(fx.docx_sem_documento())
         self.assertEqual(r.status, "erro_formato")
@@ -350,6 +363,11 @@ class TestDoc(unittest.TestCase):
         r = extratores.extrair(fx.doc_word97([("Corpo do requerimento.\r", True)],
                                              cabecalho="CÂMARA MUNICIPAL DE NITERÓI\r"))
         self.assertEqual((r.texto, r.cabecalhos_omitidos), ("Corpo do requerimento.", 1))
+
+    def test_cabecalho_do_doc_com_ato_numerado_fica(self) -> None:
+        r = extratores.extrair(fx.doc_word97([("Corpo do requerimento.\r", True)],
+                                             cabecalho="REQUERIMENTO Nº 12/2026\rCÂMARA MUNICIPAL DE NITERÓI\r"))
+        self.assertEqual((r.texto, r.cabecalhos_omitidos), ("REQUERIMENTO Nº 12/2026\n\nCorpo do requerimento.", 1))
 
     def test_word95(self) -> None:
         r = extratores.extrair(fx.doc_word95("Indicação antiga em Word 95.\rSegunda linha.\r"))
@@ -550,6 +568,29 @@ class TestPdfFalso(ComFerramentasFalsas):
         self.assertIn("páginas 2, 3", r.detalhe)
         self.assertEqual((r.paginas_ocr, r.texto.split("\n\f\n")), (1, ["Texto lido", "", ""]))
         self.assertEqual(self.registro(), ["pdftoppm 1", "tesseract pagina-1.png"])
+
+    def test_cache_de_ocr_retoma_paginas_adiadas(self) -> None:
+        from coletor.extratores import ocr
+        self.configurar(paginas=["", "", ""], ocr_texto="Texto lido", confs=[80, 90])
+        cache = self.pasta / "cache-ocr"
+        with mock.patch.object(ocr, "MAX_PAGINAS_OCR", 1):
+            primeira = extratores.extrair(fx.pdf_escaneado(), ocr=True, ferramentas=self.ferr, cache_ocr=cache)
+            self.assertEqual(self.registro(), ["pdftoppm 1", "tesseract pagina-1.png"])
+            segunda = extratores.extrair(fx.pdf_escaneado(), ocr=True, ferramentas=self.ferr, cache_ocr=cache)
+            self.assertEqual(self.registro()[2:], ["pdftoppm 2", "tesseract pagina-2.png"])
+        self.assertEqual((primeira.status, primeira.paginas_ocr), ("escaneado_sem_ocr", 1))
+        self.assertEqual((segunda.status, segunda.paginas_ocr), ("escaneado_sem_ocr", 2))
+        self.assertIn("páginas 3", segunda.detalhe)
+        terceira = extratores.extrair(fx.pdf_escaneado(), ocr=True, ferramentas=self.ferr, cache_ocr=cache)
+        self.assertEqual(self.registro()[4:], ["pdftoppm 3", "tesseract pagina-3.png"])
+        self.assertEqual((terceira.status, terceira.paginas_ocr, terceira.confianca), ("ok_ocr", 3, 85.0))
+        quarta = extratores.extrair(fx.pdf_escaneado(), ocr=True, ferramentas=self.ferr, cache_ocr=cache)
+        self.assertEqual(len(self.registro()), 6)  # tudo do cache: nenhuma chamada nova
+        self.assertEqual(quarta.texto, terceira.texto)
+        self.assertEqual(len(list(cache.glob("*.json"))), 3)
+        # sem cache, o OCR é refeito
+        extratores.extrair(fx.pdf_escaneado(), ocr=True, ferramentas=self.ferr)
+        self.assertEqual(len(self.registro()), 12)
 
     def test_orcamento_de_tempo_de_ocr(self) -> None:
         from coletor.extratores import ocr
