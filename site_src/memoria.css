@@ -26,7 +26,7 @@
 .memoria-abertura h1 { font-size: var(--fs-6); margin-top: 0; }
 .memoria-abertura p { max-width: 65ch; margin-bottom: 0; }
 .memoria-pessoas {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   gap: var(--esp-5); align-items: start;
 }
 .homenageado {
