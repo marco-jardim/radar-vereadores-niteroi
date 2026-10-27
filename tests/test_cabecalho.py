@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import gzip
 import hashlib
+import re
 import tempfile
 import unittest
 from html.parser import HTMLParser
@@ -10,10 +11,12 @@ from pathlib import Path
 from unittest import mock
 
 from coletor.site import paginas as P
+from coletor import gerar_site as GS
+from coletor import novidades as N
 
 
 RAIZ = Path(__file__).resolve().parents[1]
-CLASSE_JS = '<script>document.documentElement.classList.add("js")</script>'
+CLASSE_JS = f'<script>{P.SCRIPT_CABECA}</script>'
 
 
 class Cabecalho(HTMLParser):
@@ -23,6 +26,9 @@ class Cabecalho(HTMLParser):
         super().__init__()
         self.scripts: list[dict] = []
         self.botoes: list[dict] = []
+        self.botoes_tema: list[dict] = []
+        self.grupos_tema: list[dict] = []
+        self.nos: list[dict] = []
         self.navs: list[dict] = []
         self.links: list[dict] = []
         self.no_head = False
@@ -34,6 +40,7 @@ class Cabecalho(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
+        self.nos.append({"tag": tag, "attrs": a})
         if tag == "head":
             self.no_head = True
         elif tag == "script":
@@ -48,6 +55,11 @@ class Cabecalho(HTMLParser):
         elif tag == "button" and "menu-botao" in (a.get("class") or "").split():
             self.botao = {"attrs": a, "texto": ""}
             self.botoes.append(self.botao)
+        elif tag == "div" and a.get("class") == "tema":
+            self.grupos_tema.append({"attrs": a, "na_nav": self.nav is not None})
+        elif tag == "button" and "data-tema" in a:
+            self.botao = {"attrs": a, "texto": ""}
+            self.botoes_tema.append(self.botao)
 
     def handle_endtag(self, tag):
         if tag == "head":
@@ -82,6 +94,86 @@ class TestCabecalho(unittest.TestCase):
         inline = [s for s in Cabecalho(html).scripts if not s["attrs"]]
         self.assertEqual(len(inline), 1)
         self.assertTrue(inline[0]["head"])
+        self.assertEqual(inline[0]["texto"], P.SCRIPT_CABECA)
+        self.assertLessEqual(len(P.SCRIPT_CABECA.encode("utf-8")), 400)
+        teste_js = (RAIZ / "tests/js/tema.test.js").read_text(encoding="utf-8")
+        constante = re.search(r"^const SCRIPT_CABECA = '(.*)';$", teste_js, re.MULTILINE)
+        self.assertIsNotNone(constante)
+        self.assertEqual(P.SCRIPT_CABECA.encode("utf-8"), constante.group(1).encode("utf-8"))
+
+    def test_controle_de_tema_oculto_sem_js_dentro_da_nav(self):
+        doc = Cabecalho(P.pagina("Início", "", "index.html"))
+        self.assertEqual(doc.grupos_tema, [{"attrs": {"class": "tema", "role": "group", "aria-label": "Tema", "hidden": None}, "na_nav": True}])
+        self.assertEqual([b["texto"] for b in doc.botoes_tema], ["Automático", "Claro", "Escuro"])
+        self.assertEqual([b["attrs"] for b in doc.botoes_tema], [
+            {"type": "button", "data-tema": tema, "aria-pressed": str(tema == "auto").lower()}
+            for tema in ("auto", "claro", "escuro")])
+
+    def test_canonical_e_open_graph_por_caminho(self):
+        for caminho, ativo in (("index.html", "index.html"), ("projetos.html", "projetos.html"),
+                               ("vereadores/ana-de-souza.html", "")):
+            with self.subTest(caminho=caminho):
+                html = P.pagina("Título", "", ativo, caminho=caminho)
+                url = N.URL_SITE + ("" if caminho == "index.html" else caminho)
+                self.assertIn(f'<link rel="canonical" href="{url}">', html)
+                self.assertIn(f'<meta property="og:url" content="{url}">', html)
+        # A ficha precisa passar seu caminho real, sem derivá-lo do ativo vazio.
+        pessoa = {"slug": "ana-de-souza", "nome": "Ana de Souza", "nome_siscam": "ANA DE SOUZA", "mandatos": {}}
+        with mock.patch("coletor.site.pagina_sessoes.secao_sessoes_vereador", return_value=""):
+            ficha = P.gerar_vereador({"legislaturas": []}, pessoa)
+        self.assertIn(f'<link rel="canonical" href="{N.URL_SITE}vereadores/ana-de-souza.html">', ficha)
+        # Compatibilidade com chamadas posicionais antigas.
+        self.assertIn(f'href="{N.URL_SITE}projetos.html"', P.pagina("Título", "", "projetos.html"))
+
+    def test_metadados_comuns_e_escape(self):
+        html = P.pagina('Título "especial"', "", "index.html", descricao='Texto "citado"')
+        nos = Cabecalho(html).nos
+        metas = [n["attrs"] for n in nos if n["tag"] == "meta"]
+        for propriedade, valor in (("og:type", "website"), ("og:site_name", "Radar dos Vereadores de Niterói"),
+                                   ("og:locale", "pt_BR")):
+            self.assertIn({"property": propriedade, "content": valor}, metas)
+        self.assertIn({"name": "twitter:card", "content": "summary_large_image"}, metas)
+        for tema, cor in (("light", "#F7F2E9"), ("dark", "#0E1B26")):
+            self.assertIn({"name": "theme-color", "content": cor, "media": f"(prefers-color-scheme: {tema})"}, metas)
+        self.assertIn('content="Título &quot;especial&quot;"', html)
+        self.assertIn('content="Texto &quot;citado&quot;"', html)
+        with mock.patch.object(N, "URL_SITE", 'https://exemplo.test/"&/'):
+            html = P.pagina("Título", "", "index.html")
+        self.assertIn('href="https://exemplo.test/&quot;&amp;/"', html)
+
+    def test_404_links_absolutos_noindex_e_fichas_atuais(self):
+        modelo = {"legislaturas": [{"id": "2021-2024"}, {"id": "2025-2028"}], "pessoas": {
+            "zoe": {"slug": "zoe", "nome": "Zoé", "mandatos": {"2025-2028": {}}},
+            "ana-de-souza": {"slug": "ana-de-souza", "nome": "Ana de Souza", "mandatos": {"2025-2028": {}}},
+            "anterior": {"slug": "anterior", "nome": "Anterior", "mandatos": {"2021-2024": {}}}}}
+        html = GS.gerar_404(modelo)
+        self.assertIn('<h1>Página não encontrada</h1>', html)
+        self.assertIn('<meta name="robots" content="noindex">', html)
+        self.assertNotIn('rel="canonical"', html)
+        self.assertNotIn('property="og:url"', html)
+        self.assertIn('<h2>Procure um vereador</h2><ul><li>', html)
+        self.assertIn('href="/radar-vereadores-niteroi/vereadores/ana-de-souza.html"', html)
+        self.assertIn('href="/radar-vereadores-niteroi/vereadores/zoe.html"', html)
+        self.assertLess(html.index('>Ana de Souza</a>'), html.index('>Zoé</a>'))
+        self.assertNotIn("vereadores/anterior.html", html)
+        for no in Cabecalho(html).nos:
+            for atributo in ("href", "src"):
+                if atributo in no["attrs"]:
+                    self.assertTrue(no["attrs"][atributo].startswith(("/radar-vereadores-niteroi/", "#", "https://")), no)
+        self.assertLessEqual(len(gzip.compress(html.encode("utf-8"), mtime=0)), 15 * 1024)
+        self.assertIn('rel="alternate" type="application/rss+xml"', html)
+
+    def test_redirect_alertas_permanece_separado(self):
+        html = P.redirecionar("ruido.html")
+        self.assertEqual(html, '<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=ruido.html"><link rel="canonical" href="ruido.html"><a href="ruido.html">Esta página mudou de endereço.</a>')
+        self.assertNotIn("og:site_name", html)
+
+    def test_moldura_sem_vocabulario_politico_de_sessoes(self):
+        html = P.pagina("Título", "", "index.html")
+        moldura = " ".join(re.findall(r"<(?:header|footer)\b[^>]*>(.*?)</(?:header|footer)>", html, re.DOTALL))
+        texto = re.sub(r"<[^>]+>", " ", moldura).casefold()
+        self.assertTrue(texto.strip())
+        self.assertNotRegex(texto, r"\b(?:governo|oposição|bancada|governista|alinhamento|rebeldia|fidelidade)\b")
 
     def test_botao_e_navegacao_principal(self):
         doc = Cabecalho(P.pagina("Sessões", "", "sessoes.html"))

@@ -12,6 +12,7 @@ import shutil
 import sys
 from collections import defaultdict
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from coletor import novidades as N
 from coletor import regras_documentos as RD
@@ -598,6 +599,23 @@ def copiar_estaticos(fonte: Path, saida: Path) -> None:
         destino.write_bytes(P.bytes_estaticos(arq, raiz=fonte))
 
 
+def gerar_404(modelo: dict) -> str:
+    """Links absolutos à raiz publicada funcionam mesmo em URLs inexistentes profundas."""
+    prefixo = urlsplit(N.URL_SITE).path
+    legislaturas = modelo.get("legislaturas") or []
+    atual = legislaturas[-1]["id"] if legislaturas else None
+    pessoas = sorted((p for p in modelo.get("pessoas", {}).values() if atual is not None and atual in p["mandatos"]),
+                     key=lambda p: P._chave_nome(p["nome"]))
+    links = "".join(f'<li><a href="{P.esc(prefixo + "vereadores/" + p["slug"] + ".html")}">{P.esc(p["nome"])}</a></li>'
+                    for p in pessoas)
+    lista = f'<section><h2>Procure um vereador</h2><ul>{links}</ul></section>' if links else ""
+    corpo = (f'<section class="abertura"><h1>Página não encontrada</h1>'
+             f'<p>O endereço pode ter mudado ou não existir. <a href="{P.esc(prefixo)}">Volte ao início</a>.</p></section>'
+             f'{lista}')
+    return P.pagina("Página não encontrada · Radar dos Vereadores de Niterói", corpo, "", prefixo=prefixo,
+                    caminho="404.html", indexavel=False)
+
+
 def main() -> None:
     modelo = montar_modelo()
     modelo["sessoes"] = modelo_sessoes.montar_sessoes(modelo) if (RAIZ / "data" / "sessoes").is_dir() else None
@@ -631,6 +649,7 @@ def main() -> None:
     escrever(N.PAGINA, P.gerar_novidades(eventos))
     (SAIDA / N.FEED).write_bytes(N.gerar_rss(eventos).encode("utf-8"))  # bytes: LF em qualquer sistema
     escrever("alertas.html", P.redirecionar("ruido.html"))
+    escrever("404.html", gerar_404(modelo))
     for pessoa in modelo["pessoas"].values():
         escrever(f"vereadores/{pessoa['slug']}.html", P.gerar_vereador(modelo, pessoa))
     resumo = {

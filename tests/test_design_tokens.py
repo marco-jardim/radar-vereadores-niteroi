@@ -357,7 +357,9 @@ class TestCabecalho(unittest.TestCase):
             self.assertNotIn("fonts.googleapis", texto)
             self.assertNotIn("fonts.gstatic", texto)
         cabeca = html.split("</head>")[0]
-        for href in re.findall(r'<link\b[^>]*\bhref="([^"]+)"', cabeca):
+        # A canônica é endereço de navegação, não recurso carregado.
+        carregados = [m for m in re.findall(r"<link\b[^>]*>", cabeca) if 'rel="canonical"' not in m]
+        for href in (re.search(r'\bhref="([^"]+)"', m).group(1) for m in carregados if 'href="' in m):
             self.assertNotRegex(href, r"^(?:[a-z][a-z0-9+.-]*:|//)", href)
         for alvo in re.findall(r"""url\(\s*["']?([^"')\s]+)""", sem_comentarios(publicado)):
             self.assertNotRegex(alvo, r"^(?:[a-z][a-z0-9+.-]*:|//)", alvo)

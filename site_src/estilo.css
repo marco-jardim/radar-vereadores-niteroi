@@ -200,6 +200,15 @@ button { font: inherit; color: inherit; }
   .topo nav a::after { content: ""; position: absolute; top: -10px; bottom: -10px; left: -8px; right: -8px; }
 }
 @media print { .menu-botao { display: none; } }
+.tema { display: flex; flex-wrap: wrap; gap: var(--esp-1); align-items: center; margin-left: auto; grid-column: 1 / -1; }
+.tema[hidden] { display: none; }
+.tema button {
+  min-width: 44px; min-height: 44px; padding: var(--esp-1) var(--esp-2); font-size: var(--fs--1); cursor: pointer;
+  color: var(--tinta); background: var(--superficie); border: 1px solid var(--borda-campo); border-radius: var(--raio-1);
+}
+.tema button[aria-pressed="true"] { font-weight: 700; text-decoration: underline; text-underline-offset: 3px; border-bottom-width: 3px; }
+.tema button:focus-visible { outline: 3px solid var(--foco); outline-offset: 2px; }
+@media (forced-colors: active) { .tema button[aria-pressed="true"] { border-style: double; } }
 .rodape { margin-top: 56px; padding-top: 16px; padding-bottom: 40px; border-top: 1px solid var(--linha); font-size: .85rem; color: var(--tinta-suave); }
 
 .abertura { padding: 40px 0 12px; max-width: 72ch; }
