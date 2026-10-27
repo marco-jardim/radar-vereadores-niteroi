@@ -401,12 +401,22 @@ def chip_autor(a: dict, prefixo: str, principal: bool = False) -> str:
     return f'<a class="chip{" chip-principal" if principal else ""}" href="{prefixo}vereadores/{a["slug"]}.html">{esc(a["exibicao"])}</a>'
 
 
+def lista_coautores(resumo: str, nomes: list[str]) -> str:
+    """Resumo clicável com a lista completa de nomes; espelho de listaCoautores em app.js.
+
+    Vai dentro de um <div> (nunca de um <p>, que não pode conter <details>).
+    """
+    itens = "".join(f"<li>{esc(n)}</li>" for n in nomes)
+    return f'<details class="coautores"><summary>{esc(resumo)}</summary><ul>{itens}</ul></details>'
+
+
 def autores_html(p: dict, prefixo: str) -> str:
     principal = [a for a in p["autores"] if a["slug"] == p["principal"]] or p["autores"][:1]
     outros = [a for a in p["autores"] if a not in principal]
     base = "".join(chip_autor(a, prefixo, True) for a in principal)
     if outros:
-        base += f'<span class="coautores">e {plural(len(outros), "coautor", "coautores")}</span>'
+        base += lista_coautores(f'e {plural(len(outros), "coautor", "coautores")}',
+                                [a.get("exibicao") or a.get("nome") or "" for a in outros])
     return base
 
 
@@ -460,7 +470,7 @@ def cartao_lei(p: dict, prefixo: str) -> str:
  <p class="lei-situacao">{esc(situacao_lei(lei))}{via_substitutivo(p, link=False)}</p>
  <h3><a href="{esc(url_lei(p))}" target="_blank" rel="noopener">{esc(resumo)}{NOVA_ABA}</a></h3>
  {f'<p class="publico">Afeta: {esc(p["publico"])}{" · " + esc(tema) if tema else ""}</p>' if p['publico'] or tema else ''}
- <p class="cartao-autor">{autores_html(p, prefixo)}{f'<span class="partido">{esc(p["partido"])}</span>' if p["partido"] else ''}</p>
+ <div class="cartao-autor">{autores_html(p, prefixo)}{f'<span class="partido">{esc(p["partido"])}</span>' if p["partido"] else ''}</div>
 </article>"""
 
 
@@ -474,7 +484,7 @@ def item_projeto(p: dict, prefixo: str) -> str:
     return f"""<li class="projeto d-{esc(DESFECHO_GRUPO.get(p['desfecho'], 'andamento'))}">
  <p class="cab"><a href="{esc(p['url'])}" target="_blank" rel="noopener">PL {esc(p['numero'])}{NOVA_ABA}</a><span>{data_br(p['data'])}</span><span class="desfecho">{esc(NOME_DESFECHO.get(p['desfecho'], p['desfecho']))}{lei_txt}</span>{selo_impacto(p)}</p>
  {resumo}<p class="ementa">{esc(legivel(p['ementa']))}</p>
- <p class="autoria">{autores_html(p, prefixo)}</p>
+ <div class="autoria">{autores_html(p, prefixo)}</div>
  {tags_html(p)}
 </li>"""
 
@@ -529,8 +539,7 @@ def autores_documento_html(d: dict, prefixo: str, maximo: int = 3) -> str:
             chips.append(f'<span class="chip{"" if a["vereador"] else " chip-exec"}">{esc(a["exibicao"])}</span>')
     resto = d["autores"][maximo:]
     if resto:
-        chips.append(f'<span class="coautores" title="{esc(", ".join(a["exibicao"] for a in resto))}">'
-                     f'e mais {plural(len(resto), "autor", "autores")}</span>')
+        chips.append(lista_coautores(f'e mais {plural(len(resto), "autor", "autores")}', [a["exibicao"] for a in resto]))
     return "".join(chips)
 
 
@@ -541,7 +550,7 @@ def item_documento(d: dict, prefixo: str) -> str:
  <p class="cab"><a href="{esc(d['url'])}" target="_blank" rel="noopener">{esc(rotulo)}{NOVA_ABA}</a><span>{data_br(d['data'])}</span><span class="desfecho">{esc(situacao_legivel(d['situacao']))}</span><span class="selo cat-{esc(d['categoria'])}">{esc(NOME_CATEGORIA_DOC.get(d['categoria'], d['categoria']))}</span></p>
  {assunto}<p class="ementa">{esc(legivel(d['ementa']))}</p>
  <p class="publico">{esc(' · '.join(meta_documento(d)))}</p>
- <p class="autoria">{autores_documento_html(d, prefixo)}</p>
+ <div class="autoria">{autores_documento_html(d, prefixo)}</div>
  {botoes_siscam(d['url'], rotulo)}
 </li>"""
 
@@ -741,6 +750,25 @@ def linha_placar(pessoa: dict, leg: str, maximo: int, docs: dict | None = None) 
 </li>"""
 
 
+def aba_legislatura(leg_id: str, selecionada: bool) -> str:
+    """Aba do placar no padrão WAI-ARIA, com tabindex móvel; app.js troca a seleção e o foco pelas setas."""
+    return (f'<button type="button" role="tab" id="aba-leg-{esc(leg_id)}" aria-selected="{"true" if selecionada else "false"}" '
+            f'aria-controls="leg-{esc(leg_id)}" tabindex="{0 if selecionada else -1}">{esc(leg_id)}</button>')
+
+
+def lista_abas_legislatura(abas: list[str]) -> str:
+    """Sem JS a lista fica oculta e todos os painéis aparecem empilhados; app.js a revela."""
+    return f'<div role="tablist" aria-label="Legislatura" class="abas" hidden>{"".join(abas)}</div>'
+
+
+def painel_legislatura(leg_id: str, conteudo: str) -> str:
+    """Painel sem `hidden`: sem JS, cada legislatura aparece com o próprio título; app.js oculta as outras."""
+    return (f'<section class="legislatura" id="leg-{esc(leg_id)}" data-leg="{esc(leg_id)}" role="tabpanel" '
+            f'aria-labelledby="aba-leg-{esc(leg_id)}" tabindex="0">\n'
+            f'<h3 class="titulo-legislatura">Legislatura {esc(leg_id.replace("-", "–"))}</h3>\n'
+            f'{conteudo}\n</section>')
+
+
 def gerar_index(modelo: dict) -> str:
     legs = modelo["legislaturas"]
     atual = legs[-1]["id"]
@@ -771,11 +799,9 @@ def gerar_index(modelo: dict) -> str:
         partidos_por_leg[leg["id"]] = sorted({p["mandatos"][leg["id"]]["partido"] for p in pessoas if p["mandatos"][leg["id"]]["partido"]})
         zerados = [p["nome"] for p in pessoas if p["mandatos"][leg["id"]]["eleito"] and p["mandatos"][leg["id"]]["metricas"]["leis"] == 0]
         nota_zero = f'<p class="nota">Eleitos sem nenhuma lei de autoria própria nesta legislatura: {esc(", ".join(zerados))}.</p>' if zerados else ""
-        blocos.append(f"""<section class="legislatura" id="leg-{esc(leg['id'])}" data-leg="{esc(leg['id'])}"{'' if leg['id'] == atual else ' hidden'}>
-{nota_zero}
-<ol class="placar">{''.join(linha_placar(p, leg['id'], maximo, docs_de(p, leg['id'])) for p in pessoas)}</ol>
-</section>""")
-        abas.append(f'<button type="button" role="tab" aria-selected="{"true" if leg["id"] == atual else "false"}" data-alvo="leg-{esc(leg["id"])}">{esc(leg["id"])}</button>')
+        blocos.append(painel_legislatura(leg["id"], f"""{nota_zero}
+<ol class="placar">{''.join(linha_placar(p, leg['id'], maximo, docs_de(p, leg['id'])) for p in pessoas)}</ol>"""))
+        abas.append(aba_legislatura(leg["id"], leg["id"] == atual))
     opcoes_partido = "".join(f'<option value="{esc(pt)}">{esc(pt)}</option>' for pt in sorted({x for v in partidos_por_leg.values() for x in v}))
     pct_sem = round(100 * len(sem) / len(leis_atual)) if leis_atual else 0
     ordem_docs = explica_docs = ""
@@ -816,7 +842,7 @@ def gerar_index(modelo: dict) -> str:
  <div class="cab-secao"><h2 id="t-placar" class="h-secao">Produção de cada vereador como autor principal</h2></div>
  <p class="explica">O comprimento da barra é o total de projetos apresentados; as cores mostram o que aconteceu com eles. Projetos assinados como coautor não entram, para que assinaturas em bloco não inflem a conta.{explica_docs}</p>
  <div class="controles">
-  <div role="tablist" aria-label="Legislatura" class="abas">{''.join(abas)}</div>
+  {lista_abas_legislatura(abas)}
   <label>Ordenar por
    <select id="ordem">
     <option value="leis-efeito">Leis com efeito</option>
@@ -930,6 +956,7 @@ def filtros_lista(modo: str, cliente: dict | None = None) -> str:
  <p class="acoes-filtro"><button type="button" id="limpar">Limpar filtros</button> <button type="button" id="csv">Baixar CSV</button></p>
 </form>
 <div class="resumo-filtro" id="resumo-filtro" aria-live="polite"{atributos_resumo}>{texto_resumo}</div>
+<p id="anuncio" class="so-leitor" aria-live="polite"></p>
 <ol id="resultados" class="projetos"></ol>
 <button type="button" id="mais" class="mais" hidden>Mostrar mais</button>
 <noscript><p class="vazio">{esc(sem_js[modo])}</p></noscript>"""
@@ -967,7 +994,7 @@ def item_evento(ev: dict, prefixo: str) -> str:
  <p class="cab"><span class="desfecho">{esc(N.ROTULO_EVENTO[ev['tipo']])}</span><time datetime="{esc(ev['data'])}">{data_br(ev['data'])}</time><a href="{esc(p['url'])}" target="_blank" rel="noopener">PL {esc(p['numero'])}{NOVA_ABA}</a></p>
  <p class="titulo-evento">{esc(N.titulo_evento(ev))}{sub}</p>
  {resumo}<p class="ementa">{esc(legivel(p['ementa']))}</p>
- <p class="autoria">{autores_html(p, prefixo)}{partido}</p>
+ <div class="autoria">{autores_html(p, prefixo)}{partido}</div>
 </li>"""
 
 

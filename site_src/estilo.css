@@ -319,7 +319,13 @@ section { margin-top: var(--esp-6); }
 .chip { display: inline-block; min-height: 24px; font-size: var(--fs--1); font-weight: 600; padding: 2px var(--esp-2); border: 1px solid var(--linha); border-radius: var(--raio-pilula); background: var(--fundo); text-decoration: none; }
 .chip-principal { background: var(--superficie); border-color: var(--tinta-suave); }
 .chip-exec { color: var(--tinta-suave); font-weight: 400; }
-.coautores { font-size: var(--fs--1); color: var(--tinta-suave); margin-left: var(--esp-1); }
+/* Coautores: resumo com aparência de texto na linha dos chips; aberto, a lista ocupa a linha inteira. */
+.coautores { font-size: var(--fs--1); line-height: 1.4; color: var(--tinta-suave); margin-left: var(--esp-1); }
+.coautores > summary { display: inline-flex; align-items: center; min-height: 24px; cursor: pointer; list-style: none; text-decoration: underline dotted; text-underline-offset: 3px; }
+.coautores > summary::-webkit-details-marker { display: none; }
+.coautores > summary:hover { color: var(--tinta); text-decoration-style: solid; }
+.coautores[open] { flex-basis: 100%; }
+.coautores ul { margin: var(--esp-1) 0 0; padding-left: var(--esp-4); }
 .partido { font-size: var(--fs--1); color: var(--tinta-suave); margin-left: var(--esp-2); }
 /* Estados de interação: o hover reforça a borda (espessura, não só cor) e os links ganham sublinhado. */
 a.chip, .mais, .abas button, .ver-siscam, .acoes-filtro button, .filtros-sessoes .acoes-item button, .chips-impacto label, .convite a {
@@ -333,6 +339,7 @@ a.chip:hover, .ver-siscam:hover, .acoes-filtro button:hover:not(:disabled), .fil
 /* -------------------------------------------------------------- placar */
 .controles { display: flex; flex-wrap: wrap; align-items: center; gap: var(--esp-3) var(--esp-5); margin: var(--esp-3) 0 var(--esp-2); padding: var(--esp-3) 0; border-top: 1px solid var(--linha); border-bottom: 1px solid var(--linha); }
 .abas { display: flex; flex-wrap: wrap; border: 1.5px solid var(--tinta); }
+.abas[hidden] { display: none; }
 .abas button { font: 600 var(--fs-1)/1 var(--display); min-height: 44px; padding: var(--esp-2) var(--esp-3); border: 0; background: transparent; cursor: pointer; }
 .abas button:hover:not([aria-selected="true"]) { text-decoration: underline; text-underline-offset: 4px; }
 .abas button[aria-selected="true"] { background: var(--tinta); color: var(--fundo); }
