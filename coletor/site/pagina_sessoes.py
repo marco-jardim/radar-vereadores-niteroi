@@ -629,6 +629,7 @@ def gerar_sessoes(modelo: dict) -> str:
                  + _ritmo(dados) + '</section><section id="qualidade-sessoes"><h2 class="h-secao">Qualidade dos dados</h2>'
                  + _qualidade(dados) + '</section></div>')
     return P.pagina("Sessões e votações · Radar dos Vereadores de Niterói", corpo, "sessoes.html",
+                    caminho="sessoes.html",
                     descricao="Presença nas sessões plenárias e votações nominais da Câmara de Niterói, com fontes e limitações.",
                     dialogo=True, scripts=("sessoes.js",))
 

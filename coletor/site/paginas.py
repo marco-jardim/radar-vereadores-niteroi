@@ -37,6 +37,7 @@ NAV = [
 ]
 CLASSE_IMPACTO = {3: "imp-3", 2: "imp-2", 1: "imp-1", 0: "imp-0", None: "imp-x"}
 FONTE_ESTATICA = Path(__file__).resolve().parents[2] / "site_src"
+SCRIPT_CABECA = 'document.documentElement.classList.add("js");try{var t=localStorage.getItem("radar-tema");if(t==="claro"||t==="escuro")document.documentElement.dataset.theme=t==="escuro"?"dark":"light"}catch(e){}'
 LIMITE_ITENS_RUIDO = 30
 PASSO_LISTA = 40  # itens por "Mostrar mais"; igual a PASSO em site_src/app.js
 # Sem filtros, projetos.html carrega só a prévia (pl-recentes, as PASSO_LISTA primeiras linhas) e traz o resumo
@@ -292,12 +293,17 @@ def cabecalho_dados(manifesto: dict | None, ativo: str, prefixo: str) -> str:
 
 
 def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: str = "", manifesto: dict | None = None,
-           dialogo: bool = False, scripts: tuple[str, ...] = ()) -> str:
+           dialogo: bool = False, scripts: tuple[str, ...] = (), caminho: str | None = None,
+           indexavel: bool = True) -> str:
     desc = esc(descricao or "Quais leis de Niterói mudam a cidade, quem as escreveu, e quanto da produção da Câmara é homenagem, "
                "lei sem efeito ou pauta polêmica. Dados do SISCAM atualizados toda semana.")
     nav = "".join(
-        f'<a href="{prefixo}{href}"{" aria-current=\"page\"" if href == ativo else ""}>{esc(nome)}</a>' for href, nome in NAV
+        f'<a href="{esc(prefixo + href)}"{" aria-current=\"page\"" if href == ativo else ""}>{esc(nome)}</a>' for href, nome in NAV
     )
+    caminho = caminho or ativo or "index.html"
+    canonica = esc(N.URL_SITE + ("" if caminho == "index.html" else caminho))
+    identidade = (f'<link rel="canonical" href="{canonica}">\n<meta property="og:url" content="{canonica}">'
+                  if indexavel else '<meta name="robots" content="noindex">')
     extras = "\n".join(f'<script src="{esc(prefixo + nome)}?v={versao_estatica(nome)}" defer></script>'
                        for nome in scripts if (FONTE_ESTATICA / nome).is_file())
     icone = f'<link rel="icon" href="{esc(url_estatica("favicon.svg", prefixo))}" type="image/svg+xml">' if (FONTE_ESTATICA / "favicon.svg").is_file() else ""
@@ -313,32 +319,39 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>document.documentElement.classList.add("js")</script>
+<script>{SCRIPT_CABECA}</script>
 <title>{esc(titulo)}</title>
 <meta name="description" content="{desc}">
 <meta property="og:title" content="{esc(titulo)}">
 <meta property="og:description" content="{desc}">
-{fontes}<link rel="stylesheet" href="{prefixo}estilo.css?v={versao_estatica('estilo.css')}">
+{identidade}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Radar dos Vereadores de Niterói">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F7F2E9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0E1B26" media="(prefers-color-scheme: dark)">
+{fontes}<link rel="stylesheet" href="{esc(prefixo)}estilo.css?v={versao_estatica('estilo.css')}">
 {icone}
-<link rel="alternate" type="application/rss+xml" title="Novidades · Radar dos Vereadores de Niterói" href="{prefixo}{N.FEED}">
+<link rel="alternate" type="application/rss+xml" title="Novidades · Radar dos Vereadores de Niterói" href="{esc(prefixo + N.FEED)}">
 {cabecalho_dados(manifesto, ativo, prefixo)}
 </head>
 <body>
 <a class="pular" href="#conteudo">Ir para o conteúdo</a>
 <header class="topo">
- <a class="marca" href="{prefixo}index.html">Radar dos Vereadores <span>Niterói</span></a>
+ <a class="marca" href="{esc(prefixo)}index.html">Radar dos Vereadores <span>Niterói</span></a>
  <button class="menu-botao" type="button" aria-expanded="false" aria-controls="menu-principal" hidden>Menu</button>
- <nav id="menu-principal" aria-label="Principal">{nav}</nav>
+ <nav id="menu-principal" aria-label="Principal">{nav}<div class="tema" role="group" aria-label="Tema" hidden><button type="button" data-tema="auto" aria-pressed="true">Automático</button><button type="button" data-tema="claro" aria-pressed="false">Claro</button><button type="button" data-tema="escuro" aria-pressed="false">Escuro</button></div></nav>
 </header>
-<main id="conteudo" data-prefixo="{prefixo}">
+<main id="conteudo" data-prefixo="{esc(prefixo)}">
 {corpo}
 </main>
 <footer class="rodape">
- <p>Dados públicos do <a href="https://consultaniteroi.siscam.com.br/">SISCAM da Câmara Municipal de Niterói</a>, coletados toda semana. Classificação por regras, curadoria com fonte e IA, explicada na <a href="{prefixo}metodologia.html">metodologia</a>. Código aberto sob GPL v3 no <a href="{REPO}">GitHub</a>. Encontrou um erro? <a href="{REPO}/issues/new">Abra uma issue</a>.</p>
+ <p>Dados públicos do <a href="https://consultaniteroi.siscam.com.br/">SISCAM da Câmara Municipal de Niterói</a>, coletados toda semana. Classificação por regras, curadoria com fonte e IA, explicada na <a href="{esc(prefixo)}metodologia.html">metodologia</a>. Código aberto sob GPL v3 no <a href="{REPO}">GitHub</a>. Encontrou um erro? <a href="{REPO}/issues/new">Abra uma issue</a>.</p>
 </footer>
 {(DIALOGO_SISCAM + chr(10)) if dialogo else ''}<div id="tip" role="tooltip" hidden></div>
-{navegacao}<script src="{prefixo}dados.js?v={versao_estatica('dados.js')}" defer></script>
-<script src="{prefixo}app.js?v={versao_estatica('app.js')}" defer></script>
+{navegacao}<script src="{esc(prefixo)}dados.js?v={versao_estatica('dados.js')}" defer></script>
+<script src="{esc(prefixo)}app.js?v={versao_estatica('app.js')}" defer></script>
 {extras}
 </body>
 </html>
@@ -786,7 +799,7 @@ def gerar_index(modelo: dict) -> str:
  <a href="ruido.html"><strong>Sem efeito e polêmicas</strong><span>Homenagens, leis que só autorizam o prefeito, projetos repetidos e pautas que restringem direitos.</span></a>
  <a href="analises.html"><strong>Análises históricas</strong><span>Como a produção da Câmara mudou de 2021 a hoje, por tema, partido e tempo de tramitação.</span></a>
 </section>"""
-    return pagina("Radar dos Vereadores de Niterói", corpo, "index.html")
+    return pagina("Radar dos Vereadores de Niterói", corpo, "index.html", caminho="index.html")
 
 
 # ------------------------------------------------------------- leis e projetos
@@ -886,7 +899,7 @@ def gerar_leis(cliente: dict | None = None, manifesto: dict | None = None) -> st
  <p>Todas as leis que saíram de projetos apresentados desde 2021, com o impacto estimado e um resumo em linguagem simples. Filtre por impacto, tema, vereador ou partido; o quadro abaixo dos filtros mostra quem mais aprovou leis no recorte escolhido.</p>
 </section>
 {filtros_lista('leis', cliente)}"""
-    return pagina("Leis aprovadas · Radar dos Vereadores de Niterói", corpo, "leis.html", manifesto=manifesto, dialogo=True)
+    return pagina("Leis aprovadas · Radar dos Vereadores de Niterói", corpo, "leis.html", manifesto=manifesto, dialogo=True, caminho="leis.html")
 
 
 def gerar_projetos(cliente: dict | None = None, manifesto: dict | None = None) -> str:
@@ -895,7 +908,7 @@ def gerar_projetos(cliente: dict | None = None, manifesto: dict | None = None) -
  <p>Os projetos apresentados desde 2021, incluindo os arquivados, vetados e em tramitação. Os filtros ficam no endereço da página, então dá para compartilhar uma busca.</p>
 </section>
 {filtros_lista('projetos', cliente)}"""
-    return pagina("Projetos de lei · Radar dos Vereadores de Niterói", corpo, "projetos.html", manifesto=manifesto, dialogo=True)
+    return pagina("Projetos de lei · Radar dos Vereadores de Niterói", corpo, "projetos.html", manifesto=manifesto, dialogo=True, caminho="projetos.html")
 
 
 # ------------------------------------------------------------------- novidades
@@ -949,6 +962,7 @@ def gerar_novidades(eventos: list[dict]) -> str:
 {f'<nav class="indice" aria-label="Semanas, pela segunda-feira, com o número de eventos">{indice}</nav>' if indice else ''}
 {''.join(secao_semana(s, '', i == 0) for i, s in enumerate(semanas)) or '<p class="vazio">Nenhum evento encontrado.</p>'}"""
     return pagina("Novidades · Radar dos Vereadores de Niterói", corpo, "novidades.html",
+                  caminho="novidades.html",
                   descricao="O que aconteceu nas últimas semanas com os projetos de lei da Câmara de Niterói: projetos apresentados, "
                             "leis, vetos e vetos derrubados, com feed RSS.")
 
@@ -985,7 +999,7 @@ def gerar_atividades(modelo: dict, manifesto: dict | None = None) -> str:
     descricao = "Indicações, moções, requerimentos, PDLs e resoluções da Câmara de Niterói, por vereador, tipo, categoria e bairro."
     ano_padrao = ano_padrao_doc(manifesto["arquivos"]) if manifesto and manifesto.get("build_doc") else None
     if not docs or ano_padrao is None:
-        return pagina(titulo, abertura + '\n<p class="vazio">Nenhum documento coletado ainda.</p>', "atividades.html", descricao=descricao)
+        return pagina(titulo, abertura + '\n<p class="vazio">Nenhum documento coletado ainda.</p>', "atividades.html", descricao=descricao, caminho="atividades.html")
 
     def opcoes(pares) -> str:
         return "".join(f'<option value="{esc(k)}">{esc(v)}</option>' for k, v in pares)
@@ -1046,7 +1060,7 @@ def gerar_atividades(modelo: dict, manifesto: dict | None = None) -> str:
 <button type="button" id="mais" class="mais" hidden>Mostrar mais</button>
 <noscript><p class="vazio">A lista de documentos precisa de JavaScript. Os documentos mais recentes de cada vereador também aparecem na página dele.</p></noscript>
 {resumos}"""
-    return pagina(titulo, corpo, "atividades.html", descricao=descricao, manifesto=manifesto, dialogo=True)
+    return pagina(titulo, corpo, "atividades.html", descricao=descricao, manifesto=manifesto, dialogo=True, caminho="atividades.html")
 
 
 def secao_resumos_atividades(modelo: dict) -> str:
@@ -1199,7 +1213,7 @@ def gerar_ruido(modelo: dict) -> str:
 <section id="ia"><h2 class="h-secao">Marcadas por IA ({len(ia)})</h2><p class="explica">Alertas sugeridos pela IA a partir da ementa, com confiança mínima de {int(CONFIANCA_MINIMA * 100)}%. Podem conter erros; cada um tem link para contestar.</p>{lista(ia, "Nenhum projeto marcado por IA ainda.", "sinal=alerta_ia")}</section>
 <section id="autorizativas"><h2 class="h-secao">Leis autorizativas aprovadas ({len(autoriz_leis)})</h2><p class="explica">{esc(DESC_SINAL['autorizativa'])}</p>{lista(autoriz_leis, "Nenhuma.", "origem=vereador&desfecho=lei&sinal=autorizativa")}</section>
 <section id="repetidos"><h2 class="h-secao">Projetos que repetem outro ({len(rep)})</h2><p class="explica">{esc(DESC_SINAL['repete_projeto'])} Reapresentar um projeto arquivado é legítimo; o sinal serve para ver o quanto da produção é reaproveitada.</p>{lista(sorted(rep, key=lambda p: p['data'] or '', reverse=True), "Nenhum.", "origem=vereador&sinal=repete_projeto")}</section>"""
-    return pagina("Sem efeito e polêmicas · Radar dos Vereadores de Niterói", corpo, "ruido.html")
+    return pagina("Sem efeito e polêmicas · Radar dos Vereadores de Niterói", corpo, "ruido.html", caminho="ruido.html")
 
 
 def secao_homenagens(modelo: dict) -> str:
@@ -1348,7 +1362,7 @@ def gerar_analises(modelo: dict) -> str:
 </section>
 <div class="graficos">{g1}{g2}{g3}{g4}{g5}</div>
 {''.join(blocos_leg)}"""
-    return pagina("Análises · Radar dos Vereadores de Niterói", corpo, "analises.html")
+    return pagina("Análises · Radar dos Vereadores de Niterói", corpo, "analises.html", caminho="analises.html")
 
 
 def grafico_producao_por_tipo(modelo: dict) -> str:
@@ -1444,7 +1458,7 @@ def gerar_vereador(modelo: dict, pessoa: dict) -> str:
 {''.join(secoes)}{pagina_sessoes.secao_sessoes_vereador(modelo, pessoa)}{secao_atividade(modelo, pessoa) if tem_docs else ''}"""
     return pagina(f"{pessoa['nome']} · Radar dos Vereadores de Niterói", corpo, "", "../",
                   f"Leis e projetos de {pessoa['nome']} na Câmara de Niterói: quantas leis com efeito, quantas sem efeito prático e quais pautas polêmicas.",
-                  dialogo=tem_docs)
+                  dialogo=tem_docs, caminho=f"vereadores/{pessoa['slug']}.html")
 
 
 def secao_atividade(modelo: dict, pessoa: dict) -> str:
@@ -1671,7 +1685,7 @@ def gerar_metodologia(modelo: dict) -> str:
 <h2>Contestar ou corrigir</h2>
 <p>Projetos com alerta ou sinal têm um link "contestar", que abre uma issue no GitHub. Correções na composição das legislaturas e na curadoria podem ser enviadas como pull request.</p>
 </section>"""
-    return pagina("Metodologia · Radar dos Vereadores de Niterói", corpo, "metodologia.html")
+    return pagina("Metodologia · Radar dos Vereadores de Niterói", corpo, "metodologia.html", caminho="metodologia.html")
 
 
 def redirecionar(destino: str) -> str:

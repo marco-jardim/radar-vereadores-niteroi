@@ -16,6 +16,58 @@
     return !!(alvo && elemento && typeof elemento.contains === "function" && !elemento.contains(alvo));
   }
 
+  function iniciarTema(doc, win) {
+    if (!doc || typeof doc.querySelector !== "function") return;
+    var grupo = doc.querySelector(".tema"), raiz = doc.documentElement;
+    if (!grupo || !raiz || !raiz.dataset || typeof grupo.querySelectorAll !== "function" ||
+        typeof grupo.addEventListener !== "function" || typeof grupo.removeAttribute !== "function") return;
+    var botoes = grupo.querySelectorAll("button[data-tema]"), tema = "auto";
+    var metas = typeof doc.querySelectorAll === "function" ? doc.querySelectorAll('meta[name="theme-color"]') : [];
+    var consultas = Array.from(metas, function (meta) { return meta.getAttribute("media"); });
+    try { tema = win.localStorage.getItem("radar-tema"); } catch (e) {}
+    if (tema !== "claro" && tema !== "escuro") tema = "auto";
+
+    function marcar() {
+      for (var i = 0; i < botoes.length; i++) {
+        botoes[i].setAttribute("aria-pressed", botoes[i].getAttribute("data-tema") === tema ? "true" : "false");
+      }
+    }
+    function aplicar() {
+      if (tema === "auto") delete raiz.dataset.theme;
+      else raiz.dataset.theme = tema === "escuro" ? "dark" : "light";
+      for (var i = 0; i < metas.length; i++) {
+        if (tema === "auto") {
+          if (consultas[i] === null) metas[i].removeAttribute("media");
+          else metas[i].setAttribute("media", consultas[i]);
+        } else {
+          var escuro = (consultas[i] || "").indexOf("dark") !== -1;
+          metas[i].setAttribute("media", escuro === (tema === "escuro") ? "all" : "not all");
+        }
+      }
+      marcar();
+    }
+    grupo.addEventListener("click", function (evento) {
+      var alvo = evento && evento.target;
+      for (var i = 0; i < botoes.length; i++) {
+        if (alvo !== botoes[i]) continue;
+        var valor = alvo.getAttribute("data-tema");
+        if (valor !== "auto" && valor !== "claro" && valor !== "escuro") return;
+        tema = valor;
+        try { win.localStorage.setItem("radar-tema", tema); } catch (e) {}
+        aplicar();
+        return;
+      }
+    });
+    var midia = win && typeof win.matchMedia === "function" ? win.matchMedia("(prefers-color-scheme: dark)") : null;
+    function sistema() { if (tema === "auto") marcar(); }
+    if (midia) {
+      if (typeof midia.addEventListener === "function") midia.addEventListener("change", sistema);
+      else if (typeof midia.addListener === "function") midia.addListener(sistema);
+    }
+    aplicar();
+    grupo.removeAttribute("hidden");
+  }
+
   function iniciar(doc, win) {
     if (!doc || typeof doc.querySelector !== "function") return null;
     var topo = doc.querySelector("header.topo");
@@ -88,6 +140,7 @@
   if (typeof module !== "undefined" && module.exports) {
     module.exports = { CONSULTA: CONSULTA, ehEscape: ehEscape, fora: fora, iniciar: iniciar };
   } else if (typeof document !== "undefined") {
+    iniciarTema(document, typeof window !== "undefined" ? window : null);
     iniciar(document, typeof window !== "undefined" ? window : null);
   }
 })();

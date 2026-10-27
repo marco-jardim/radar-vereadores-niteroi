@@ -176,7 +176,7 @@ class TestPaginaSessoes(unittest.TestCase):
         inline = [n for n in scripts if "src" not in n["attrs"]]
         self.assertEqual(len(inline), 1)
         self.assertNotIn("type", inline[0]["attrs"])
-        self.assertEqual(Documento.texto(inline[0]), 'document.documentElement.classList.add("js")')
+        self.assertEqual(Documento.texto(inline[0]), P.SCRIPT_CABECA)
         self.assertIn('id="siscam-dialogo"', html)
         self.assertNotIn('<iframe', html)
         blocos = [n for n in doc.nos if n["attrs"].get("id", "").startswith("sessoes-leg-")]
