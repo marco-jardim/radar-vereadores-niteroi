@@ -155,6 +155,8 @@ O conversor é offline. Revise seu relatório, o mapa e os limites antes de vers
   [abra uma issue](https://github.com/marco-jardim/radar-vereadores-niteroi/issues/new), com documento e fonte.
 - **Composição das legislaturas e afastamentos:** `config/vereadores.json`; preserve o partido da eleição.
 - **Curadoria:** `config/curadoria.json`. Toda entrada precisa de fonte pública; a curadoria prevalece sobre a IA.
+- **Memória:** `config/memoria.json` reúne critérios, homenageados e linha do tempo, com fontes públicas HTTPS;
+  é conferido por `coletor.validar`.
 - **Código:** consulte [AGENTS.md](AGENTS.md), faça mudanças focadas e execute os testes offline.
 
 A metodologia completa é publicada no próprio site. Correções editoriais vão na configuração,
@@ -165,6 +167,8 @@ não nos arquivos coletados.
 - Documentos e sessões: [SISCAM da Câmara Municipal de Niterói](https://consultaniteroi.siscam.com.br/).
 - Composição e curadoria: fontes públicas registradas nos arquivos de `config/`.
 - Código: [GNU General Public License v3.0 (GPL-3.0)](LICENSE).
+- Fontes tipográficas: Barlow Condensed, Public Sans e Fraunces, sob SIL Open Font License 1.1;
+  arquivos WOFF2 e licenças `OFL-*.txt` em `site_src/fontes/`. O site não carrega fontes de terceiros.
 - Geometria derivada: © contribuidores do [OpenStreetMap](https://www.openstreetmap.org/copyright),
   sob [ODbL 1.0](https://www.openstreetmap.org/copyright), bairros administrativos de nível 10 dentro de
   [Niterói, relação 2220789](https://www.openstreetmap.org/relation/2220789).

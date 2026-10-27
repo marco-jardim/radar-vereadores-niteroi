@@ -35,13 +35,15 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `coletor/site/paginas.py` | HTML, navegação, componentes, diálogo SISCAM e metodologia. |
 | `config/vereadores.json` | Legislaturas, eleitos, partidos da eleição, apelidos e afastamentos. |
 | `config/curadoria.json` | Rótulos e correções editoriais com fontes públicas. |
+| `config/memoria.json` | Conteúdo editorial da memória: critérios, homenageados e linha do tempo; validado por `coletor.validar`. |
 | `data/proposicoes/`, `data/documentos/`, `data/sessoes/` | Registros coletados por ano (documentos também por tipo). |
 | `data/classificacao_ia.json`, `data/meta.json` | Cache da IA e metadados das execuções. |
 | `data/geo/bairros.json` | Geometria opcional gerada por `coletor.geo`. |
 | `site_src/app.js` | Listas de PLs/documentos, carregador compartilhado e diálogo SISCAM. |
 | `site_src/dados.js` | Hidratação das colunas e planejamento das partes de PLs/documentos. |
 | `site_src/sessoes.js` | Filtros, mapa de votos, paginação e CSV de sessões. |
-| `site_src/estilo.css`, `site_src/favicon.svg` | Estilos e ícone. |
+| `site_src/estilo.css`, `site_src/favicon.svg` | Estilos, tokens, paleta, `@font-face` e ícone. |
+| `site_src/fontes/` | WOFF2 auto-hospedadas Barlow Condensed, Public Sans e Fraunces; licenças `OFL-*.txt`; `FONTES.md` não publicado. |
 | `tests/` | Testes Python, JS em `tests/js/` e HTML real em `tests/fixtures/siscam/`. |
 | `.github/workflows/` | Testes, coleta semanal e publicação. |
 | `site/` | Saída gerada e ignorada pelo Git. |
@@ -54,11 +56,20 @@ versionada; o código também trata sua ausência conforme os contratos abaixo.
 - **Nunca edite à mão `data/` nem `site/`**, inclusive geometria, cache e metadados. Corrija coleta, regras ou
   configuração e regenere; correções editoriais cabem em `config/curadoria.json`.
 - Edite fontes em `coletor/`, `config/` e `site_src/` conforme a responsabilidade. O gerador apaga e recria `site/`.
+- `coletor/gerar_site.py:copiar_estaticos` copia `site_src/` recursivamente pela regra única
+  `paginas.publicavel`: ignora componentes do caminho iniciados por `.` e arquivos `*.md`.
+  No CSS publicado, cada alvo local de `url()`, `@import "…"` e `image-set("…")` recebe
+  `?v=<10 primeiros hex do SHA-1 dos bytes publicados do alvo>`, com o fragmento depois de `?v=`.
+  URLs `data:` e absolutas ficam intactas; alvo inexistente, fora de `site_src/` ou não publicável é erro.
+  `paginas.url_estatica(nome, prefixo)` e `versao_estatica` calculam `?v=` sobre os bytes **publicados**
+  (CSS após a reescrita); preloads usam exatamente a mesma URL. O favicon também leva `?v=`.
 - Preserve `/site/` com barra inicial no `.gitignore`: `site/` também ignoraria o código em `coletor/site/`.
 - Grave `data/` só por `coletor/arquivos.py`: `salvar_lista` (um registro por linha), `salvar_mapa` (uma chave
   por linha) e `salvar_json` (JSON pequeno, como metadados, com `indent=1`). Não são todos o mesmo formato.
   Todos ordenam chaves, usam UTF-8, `ensure_ascii=False`, LF, quebra final e gravação atômica.
   `.gitattributes` fixa LF em `data/**`; temporários `.*.tmp` não devem ser versionados.
+- `.gitattributes` também fixa LF em `site_src/**`, `coletor/**`, `config/*.json`, `tests/js/**` e `*.py`;
+  marca `*.woff2` e `*.png` como binários e mantém `tests/fixtures/** -text` por último.
 - O hash da IA é SHA-1 de `VERSAO_PROMPT|MODELO|ementa`, truncado para 16 caracteres. Mudar versão ou modelo
   invalida o cache **para novas chamadas**, com custo de reclassificação. Ao mudar o prompt, revise a versão
   e esse custo; não apague o cache para experimentar. O gerador lê o cache existente sem conferir esse hash.
@@ -97,6 +108,15 @@ python -m http.server -d site 8000
 ```
 
 Para usar só os dados versionados, comece por `validar` e `gerar_site`, sem rede nem chave.
+
+### Validação da memória
+
+`coletor.validar` também confere `config/memoria.json`; a ausência do arquivo gera aviso. Valida campos,
+datas `AAAA` ou `AAAA-MM-DD`, homenageados falecidos, categorias fechadas (`fundacao`, `ciencia`, `artes`,
+`musica`, `arquitetura`), fontes HTTPS por pessoa e evento, ids únicos e linha do tempo ordenada.
+Exige `data_fim` ≥ `data` e emblema no padrão `^[a-z0-9-]+\.svg$`. Domínio público só é aceito para
+fotografia pelo art. 44 da Lei 9.610/98, com `ano_divulgacao + 70 < ano atual`. O formato é JSON com
+`indent=1`, UTF-8, LF e normalização NFC.
 
 ### Opções das CLIs
 
@@ -176,13 +196,22 @@ Não há carregamento automático de `.env`. A IA usa `POST /chat/completions`, 
   `build_doc` fica no manifesto. O alvo de fatiamento é 120 KiB gzip, com margem de 512 bytes; as primeiras
   partes de tipo/ano usam 24 KiB até cobrir `PASSO_LISTA` e terminar numa troca de data. Uma data só se divide
   se não couber sozinha no orçamento. Partes por autor usam o alvo de 120 KiB.
-- URLs dos arquivos do manifesto e dos estáticos usam `?v=` com os 10 primeiros caracteres do SHA-1 dos bytes.
+- URLs dos arquivos do manifesto usam `?v=` com os 10 primeiros caracteres do SHA-1 dos bytes;
+  para estáticos, veja a regra de bytes publicados em "O que editar e como gravar".
 - `atividades.html` e a seção "Atividade" das fichas usam filtros na URL. Métricas agregadas de documentos
   são HTML/SVG, sem novas colunas nos JSONs e sem reagir aos filtros da lista.
 - "Ver no SISCAM" abre `<dialog>` com iframe em sandbox. Só aceite a URL HTTPS exata do host SISCAM e
   `DetalhesDocumentos.aspx?IdDocumento=<n>`; preserve o link "abrir no SISCAM" como alternativa visível.
 - Preserve colunas, escape de HTML e os espelhos `PASSO_LISTA`/`PASSO`, `plano_docs`/`fatiasDocs` e as fixtures
   de paridade. Sessões têm contrato próprio, consolidado na próxima seção.
+
+### Tokens e fontes
+
+- Os tokens de cor do contrato são literais hexadecimais de seis dígitos em `:root`, no bloco `@media`
+  escuro e em `:root[data-theme="dark"]`, nunca `var()`. Não use hexadecimais em `[data-theme="light"]`.
+  `tests/test_design_tokens.py` verifica os pares WCAG declarados; preserve esses contrastes.
+- Fontes são auto-hospedadas em `site_src/fontes/`, com `font-display: swap`. Não carregue fontes de
+  terceiros; o carregamento via Google Fonts foi removido. Preserve as licenças OFL junto aos arquivos.
 
 ### Orçamentos (gzip, salvo indicação contrária)
 
@@ -382,6 +411,9 @@ Esta é a referência única para sessões; a CLI está em "Pipeline e comandos"
   Use o número do PL em `projeto` (ex.: `1/2022`) e nota factual apoiada nas fontes.
 - Aplique os mesmos critérios a qualquer autor, partido ou espectro político, inclusive nas regras dos
   documentos. Não crie exceções partidárias.
+- Na memória, o critério é: "Não homenageamos quem exerceu mandato eletivo ou função executiva na direção
+  de partido político. Cargos coloniais, títulos honorários e militância pessoal não excluem e são
+  mencionados com neutralidade." Cada fato precisa de fonte pública HTTPS; as mesmas regras valem para todos.
 - Curadoria prevalece sobre IA; `substitui_ia: true` suprime seus alertas naquele projeto. Use `corrige`
   para correções documentadas em vez de alterar os dados coletados.
 - Nomes `siscam` em `config/vereadores.json` devem corresponder exatamente ao SISCAM, em maiúsculas.
