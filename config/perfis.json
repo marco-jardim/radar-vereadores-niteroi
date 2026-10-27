@@ -43,6 +43,54 @@
       "titulo": "TSE — Dados abertos: candidatos 2020",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
      }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSB",
+     "votos": 1264,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PRP",
+     "votos": 1375,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 1507,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    },
+    {
+     "ano": 2004,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSC",
+     "votos": 81563,
+     "resultado": "Não eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2004",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
+     }
     }
    ],
    "camara": null,
@@ -149,6 +197,18 @@
      "fonte": {
       "titulo": "TSE — Dados abertos: candidatos 2020",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 2053,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
      }
     }
    ],
@@ -271,6 +331,54 @@
       "titulo": "TSE — Dados abertos: candidatos 2020",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
      }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSDB",
+     "votos": 1675,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2004,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PFL",
+     "votos": 14656,
+     "resultado": "Não eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2004",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
+     }
+    },
+    {
+     "ano": 2000,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSB",
+     "votos": 0,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2000",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2000"
+     }
+    },
+    {
+     "ano": 1996,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PFL",
+     "votos": 977,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 1996",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-1996"
+     }
     }
    ],
    "camara": null,
@@ -379,6 +487,42 @@
      "fonte": {
       "titulo": "TSE — Dados abertos: candidatos 2020",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PV",
+     "votos": 3359,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PV",
+     "votos": 1169,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PV",
+     "votos": 605,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
      }
     }
    ],
@@ -495,6 +639,78 @@
       "titulo": "TSE — Dados abertos: candidatos 2020",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
      }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "SD",
+     "votos": 4518,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 2950,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 4115,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    },
+    {
+     "ano": 2004,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PMDB",
+     "votos": 13892,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2004",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
+     }
+    },
+    {
+     "ano": 2000,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": 0,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2000",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2000"
+     }
+    },
+    {
+     "ano": 1996,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSD",
+     "votos": 1166,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 1996",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-1996"
+     }
     }
    ],
    "camara": null,
@@ -565,6 +781,30 @@
      "fonte": {
       "titulo": "TSE — Dados abertos: candidatos 2020",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PRB",
+     "votos": 3008,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vice-Prefeito",
+     "uf": "RJ",
+     "partido": "PSD",
+     "votos": null,
+     "resultado": "Não eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
      }
     }
    ],
@@ -709,6 +949,18 @@
       "titulo": "TSE — Dados abertos: candidatos 2020",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
      }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSB",
+     "votos": 863,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
     }
    ],
    "camara": null,
@@ -768,6 +1020,42 @@
       "titulo": "TSE — Dados abertos: candidatos 2020",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
      }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "SD",
+     "votos": 4339,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT do B",
+     "votos": 2178,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 1371,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
     }
    ],
    "camara": null,
@@ -824,6 +1112,30 @@
       "titulo": "TSE — Dados abertos: candidatos 2020",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
      }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSB",
+     "votos": 1301,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PPS",
+     "votos": 1850,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
     }
    ],
    "camara": null,
@@ -871,6 +1183,54 @@
      "fonte": {
       "titulo": "TSE — Dados abertos: candidatos 2020",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 2580,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 2723,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 2714,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    },
+    {
+     "ano": 2004,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 34539,
+     "resultado": "Média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2004",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
      }
     }
    ],
@@ -930,6 +1290,30 @@
      "fonte": {
       "titulo": "TSE — Dados abertos: candidatos 2020",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSDB",
+     "votos": 1811,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSDB",
+     "votos": 718,
+     "resultado": "Não eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
      }
     }
    ],
@@ -996,6 +1380,54 @@
       "titulo": "TSE — Dados abertos: candidatos 2020",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
      }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PCdoB",
+     "votos": 3393,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 2867,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 2671,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    },
+    {
+     "ano": 2004,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 5013,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2004",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
+     }
     }
    ],
    "camara": null,
@@ -1027,6 +1459,30 @@
      "fonte": {
       "titulo": "TSE — Dados abertos: candidatos 2020",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PR",
+     "votos": 1802,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT do B",
+     "votos": 1884,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
      }
     }
    ],
@@ -1086,6 +1542,54 @@
      "fonte": {
       "titulo": "TSE — Dados abertos: candidatos 2020",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSL",
+     "votos": 3946,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 3662,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 3954,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    },
+    {
+     "ano": 2000,
+     "cargo": "Vice-Prefeito",
+     "uf": "RJ",
+     "partido": "PFL",
+     "votos": 0,
+     "resultado": "Resultado não divulgado",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2000",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2000"
      }
     }
    ],
@@ -1193,6 +1697,66 @@
       "titulo": "TSE — Dados abertos: candidatos 2020",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
      }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PP",
+     "votos": 3582,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PP",
+     "votos": 3151,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PP",
+     "votos": 2947,
+     "resultado": "Média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    },
+    {
+     "ano": 2004,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PCdoB",
+     "votos": 11739,
+     "resultado": "Média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2004",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
+     }
+    },
+    {
+     "ano": 2000,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": 0,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2000",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2000"
+     }
     }
    ],
    "camara": null,
@@ -1236,6 +1800,78 @@
      "fonte": {
       "titulo": "TSE — Dados abertos: candidatos 2020",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSOL",
+     "votos": 5083,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSOL",
+     "votos": 8011,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Prefeito",
+     "uf": "RJ",
+     "partido": "PSOL",
+     "votos": 22111,
+     "resultado": "Não eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    },
+    {
+     "ano": 2004,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 11232,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2004",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
+     }
+    },
+    {
+     "ano": 2000,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 0,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2000",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2000"
+     }
+    },
+    {
+     "ano": 1996,
+     "cargo": "Prefeito",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 28941,
+     "resultado": "Não eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 1996",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-1996"
      }
     }
    ],
@@ -1284,6 +1920,78 @@
      "fonte": {
       "titulo": "TSE — Dados abertos: candidatos 2020",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT do B",
+     "votos": 1505,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSDB",
+     "votos": 1414,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 1830,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    },
+    {
+     "ano": 2004,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PMDB",
+     "votos": 4244,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2004",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
+     }
+    },
+    {
+     "ano": 2000,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSD",
+     "votos": 0,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2000",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2000"
+     }
+    },
+    {
+     "ano": 1996,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSD",
+     "votos": 1383,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 1996",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-1996"
      }
     }
    ],
@@ -1344,6 +2052,42 @@
       "titulo": "TSE — Dados abertos: candidatos 2020",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
      }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 4575,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 5308,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 3332,
+     "resultado": "Média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
     }
    ],
    "camara": null,
@@ -1402,6 +2146,78 @@
      "fonte": {
       "titulo": "TSE — Dados abertos: candidatos 2020",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PMDB",
+     "votos": 3124,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PMDB",
+     "votos": 4067,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PMDB",
+     "votos": 4232,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    },
+    {
+     "ano": 2004,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PTB",
+     "votos": 15184,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2004",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
+     }
+    },
+    {
+     "ano": 2000,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 0,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2000",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2000"
+     }
+    },
+    {
+     "ano": 1996,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSC",
+     "votos": 1006,
+     "resultado": "Não eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 1996",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-1996"
      }
     }
    ],
@@ -1473,6 +2289,18 @@
       "titulo": "TSE — Dados abertos: candidatos 2020",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
      }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 1672,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
     }
    ],
    "camara": null,
@@ -1531,6 +2359,54 @@
      "fonte": {
       "titulo": "TSE — Dados abertos: candidatos 2020",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PMDB",
+     "votos": 3555,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PMDB",
+     "votos": 3819,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PRP",
+     "votos": 3997,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    },
+    {
+     "ano": 2004,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": 17432,
+     "resultado": "Média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2004",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
      }
     }
    ],
@@ -1644,6 +2520,30 @@
       "titulo": "TSE — Dados abertos: candidatos 2020",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
      }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSOL",
+     "votos": 2216,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 1643,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
     }
    ],
    "camara": null,
@@ -1708,6 +2608,54 @@
      "fonte": {
       "titulo": "TSE — Dados abertos: candidatos 2020",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 4501,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 3030,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 1686,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    },
+    {
+     "ano": 2004,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 2803,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2004",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
      }
     }
    ],
