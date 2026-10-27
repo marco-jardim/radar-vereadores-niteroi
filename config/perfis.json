@@ -19,7 +19,32 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 1639,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 1764,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
    "redes": []
@@ -42,7 +67,32 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": 4413,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Prefeito",
+     "uf": "RJ",
+     "partido": "PTC",
+     "votos": 22834,
+     "resultado": "Não eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
    "redes": []
@@ -76,10 +126,41 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 5488,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 3066,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
-   "redes": []
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/pipico_niteroi",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    }
+   ]
   },
   "BENNY BRIOLLY": {
    "mandatos": {
@@ -110,7 +191,44 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2026,
+     "cargo": "Deputado Federal",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": null,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2026",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+     }
+    },
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSOL",
+     "votos": 4801,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSOL",
+     "votos": 4367,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
    "redes": []
@@ -129,10 +247,41 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "MDB",
+     "votos": 3042,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSDB",
+     "votos": 1512,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
-   "redes": []
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/casotaoficial",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    }
+   ]
   },
   "DADO FOLY": {
    "mandatos": {
@@ -148,7 +297,20 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "Cidadania",
+     "votos": 1593,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
    "redes": []
@@ -182,7 +344,44 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2026,
+     "cargo": "Deputado Estadual",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": null,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2026",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+     }
+    },
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": 6750,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "DEM",
+     "votos": 2411,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
    "redes": []
@@ -216,7 +415,44 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2026,
+     "cargo": "Deputado Federal",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": null,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2026",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+     }
+    },
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": 16369,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PTC",
+     "votos": 2416,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
    "redes": []
@@ -235,7 +471,32 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "União Brasil",
+     "votos": 3844,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "Solidariedade",
+     "votos": 2956,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
    "redes": []
@@ -269,7 +530,44 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2026,
+     "cargo": "Deputado Federal",
+     "uf": "RJ",
+     "partido": "Republicanos",
+     "votos": null,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2026",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+     }
+    },
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "Republicanos",
+     "votos": 3478,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "Cidadania",
+     "votos": 3464,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
    "redes": []
@@ -292,7 +590,32 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2026,
+     "cargo": "Vice-Governador",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": null,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2026",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+     }
+    },
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": 3503,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
    "redes": []
@@ -315,25 +638,79 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSD",
+     "votos": 4258,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
-   "redes": []
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/gabrielvelascorj",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    },
+    {
+     "rede": "facebook",
+     "url": "https://www.facebook.com/profile.php?id=61557245683979",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    }
+   ]
   },
   "JHONATAN COSTA DOS ANJOS": {
    "mandatos": {
     "2021-2024": {
      "partido": "PDT",
+     "votos": 1224,
      "situacao": "suplente",
      "fontes": [
       {
        "titulo": "Lista de vereadores de Niterói — Wikipédia",
        "url": "https://pt.wikipedia.org/wiki/Lista_de_vereadores_de_Niter%C3%B3i"
+      },
+      {
+       "titulo": "TSE — Dados abertos: resultados 2020",
+       "url": "https://dadosabertos.tse.jus.br/dataset/resultados-2020"
       }
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 1535,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 1224,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
    "redes": []
@@ -367,7 +744,32 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 5546,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 4783,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
    "redes": []
@@ -386,7 +788,44 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2026,
+     "cargo": "Deputado Estadual",
+     "uf": "RJ",
+     "partido": "PP",
+     "votos": null,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2026",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+     }
+    },
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PP",
+     "votos": 2997,
+     "resultado": "Não eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSD",
+     "votos": 1362,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
    "redes": []
@@ -409,9 +848,34 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "União Brasil",
+     "votos": 3910,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "Solidariedade",
+     "votos": 1670,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
-   "site": null,
+   "site": "https://zafniteroi.com.br",
    "redes": []
   },
   "LEANDRO PORTUGAL FRANZEN DE LIMA": {
@@ -443,10 +907,41 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "MDB",
+     "votos": 4516,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PV",
+     "votos": 3838,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
-   "site": null,
-   "redes": []
+   "site": "https://leandroportugal.com.br/sobre-o-leandro",
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/leandroportugalrj",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    }
+   ]
   },
   "LEONARDO SOARES GIORDANO": {
    "mandatos": {
@@ -477,9 +972,34 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PCdoB",
+     "votos": 4395,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PCdoB",
+     "votos": 2676,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
-   "site": null,
+   "site": "https://www.leonardogiordano.com.br",
    "redes": []
   },
   "LUIS ROBERTO NOGUEIRA SAAD": {
@@ -496,7 +1016,20 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PV",
+     "votos": 1660,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
    "redes": []
@@ -530,7 +1063,32 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "Cidadania",
+     "votos": 4612,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "Cidadania",
+     "votos": 3597,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
    "redes": []
@@ -553,10 +1111,34 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "Podemos",
+     "votos": 2772,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
-   "redes": []
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/michel_saad",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    },
+    {
+     "rede": "facebook",
+     "url": "https://www.facebook.com/michelsaadneto",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    }
+   ]
   },
   "MILTON CARLOS DA SILVA LOPES": {
    "mandatos": {
@@ -587,7 +1169,32 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "União Brasil",
+     "votos": 5861,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PP",
+     "votos": 4320,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
    "redes": []
@@ -606,10 +1213,51 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSOL",
+     "votos": 3965,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSOL",
+     "votos": 3978,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
-   "redes": []
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/pauloeduardogomes_peg",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    },
+    {
+     "rede": "facebook",
+     "url": "https://www.facebook.com/pauloeduardogomes.psol",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    },
+    {
+     "rede": "x",
+     "url": "https://x.com/peg_psol",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    }
+   ]
   },
   "PAULO FERNANDO GONÇALVES VELASCO": {
    "mandatos": {
@@ -625,7 +1273,20 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "Avante",
+     "votos": 4378,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
    "redes": []
@@ -659,7 +1320,32 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 5444,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 4458,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
    "redes": []
@@ -693,10 +1379,46 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "MDB",
+     "votos": 3828,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": 3532,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
-   "redes": []
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/ver.betodapipa",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    },
+    {
+     "rede": "facebook",
+     "url": "https://www.facebook.com/betodapipa",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    }
+   ]
   },
   "ROBSON GUIMARÃES JOSÉ FILHO": {
    "mandatos": {
@@ -727,7 +1449,32 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 5884,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 2999,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
    "redes": []
@@ -761,10 +1508,46 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "Cidadania",
+     "votos": 4682,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "MDB",
+     "votos": 2632,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
-   "site": null,
-   "redes": []
+   "site": "https://rodrigofarahvereador.com.br",
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/rodrigofarahvereador",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    },
+    {
+     "rede": "facebook",
+     "url": "https://www.facebook.com/share/Pch5unHAwzNFer6X",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    }
+   ]
   },
   "SYLVIO MAURÍCIO DE FREITAS": {
    "mandatos": {
@@ -784,10 +1567,29 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 4045,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
-   "redes": []
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/sylviomauriciof",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    }
+   ]
   },
   "TULIO RABELO DE ALBUQUERQUE MOTA": {
    "mandatos": {
@@ -818,10 +1620,56 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSOL",
+     "votos": 6789,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSOL",
+     "votos": 4534,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
-   "site": null,
-   "redes": []
+   "site": "https://manifesto-voz-da-mudanca.pages.net.br",
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/professortulio",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    },
+    {
+     "rede": "facebook",
+     "url": "https://www.facebook.com/professortulio",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    },
+    {
+     "rede": "x",
+     "url": "https://x.com/proftulionit",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    },
+    {
+     "rede": "tiktok",
+     "url": "https://www.tiktok.com/@professortulio",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    }
+   ]
   },
   "VERÔNICA DOS SANTOS LIMA": {
    "mandatos": {
@@ -837,7 +1685,32 @@
      ]
     }
    },
-   "eleicoes": [],
+   "eleicoes": [
+    {
+     "ano": 2026,
+     "cargo": "Deputado Estadual",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": null,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2026",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 4220,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
    "camara": null,
    "site": null,
    "redes": []
