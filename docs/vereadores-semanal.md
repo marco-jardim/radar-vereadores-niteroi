@@ -38,7 +38,11 @@ python -m coletor.vereadores_semanal [--saida relatorio.md] [--com-rede]
   federal exige uma única candidatura no RJ.
 - Sem casamento pelo nome do SISCAM, os nomes civis de `coletor.tse.APELIDOS_TSE` (nome do SISCAM → outras grafias
   no TSE, cada uma com a fonte da conferência em comentário) são tentados como nome exato, com as mesmas regras de
-  ambiguidade; o resumo mostra "casado por apelido (confira na revisão)".
+  ambiguidade; o resumo mostra "casado por apelido (confirmado)".
+- Identidades confirmadas também podem ser fixadas por ano e `SQ_CANDIDATO` em
+  `coletor.tse.CANDIDATURAS_FIXADAS`, antes de qualquer casamento por nome. Só vale o SQ exato;
+  se ele não constar no arquivo, não há alternativa automática naquele ano. O resumo mostra
+  "fixado por SQ (confirmado)", com a chave SISCAM e o SQ, sem expor o nome civil do registro.
 - Sem casamento exato nem por apelido, duas alternativas, só entre candidaturas de Niterói (vereador, prefeito, vice) e do RJ:
   nome de urna (`NM_URNA_CANDIDATO`, com e sem títulos como DR, PROFESSOR, PASTOR, DELEGADO, CORONEL) igual ao nome
   do SISCAM ou ao apelido depois de ` - `; depois, o nome do SISCAM (≥ 3 palavras) como subsequência ordenada do nome

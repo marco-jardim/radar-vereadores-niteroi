@@ -153,6 +153,34 @@
   }
   [ordem, soEleitos, partidoPlacar].forEach(function (el) { if (el) el.addEventListener("change", aplicarPlacar); });
 
+  // ----------------------------------------------- mandatos e atividade
+  // Mesmo padrão do placar: atributos numéricos nas linhas, sem buscar dados adicionais.
+  document.querySelectorAll("[data-mandatos]").forEach(function (sec) {
+    var controles = sec.querySelector("[data-controles-mandatos]");
+    var ordenar = sec.querySelector("[data-ordem-mandatos]");
+    var ocultar = sec.querySelector("[data-ocultar-cargos]");
+    var corpo = sec.querySelector("tbody");
+    if (!controles || !ordenar || !ocultar || !corpo) return;
+    function aplicarMandatos() {
+      var linhas = Array.prototype.slice.call(corpo.children), chave = ordenar.value;
+      linhas.sort(function (a, b) {
+        var nome = a.dataset.nome.localeCompare(b.dataset.nome, "pt-BR");
+        if (chave === "nome") return nome;
+        var x = a.dataset[camel(chave)], y = b.dataset[camel(chave)];
+        var faltaX = x === "" || x == null, faltaY = y === "" || y == null;
+        if (faltaX || faltaY) return faltaX === faltaY ? nome : faltaX ? 1 : -1;
+        return Number(y) - Number(x) || nome;
+      });
+      linhas.forEach(function (linha) {
+        linha.hidden = ocultar.checked && linha.dataset.cargo === "1";
+        corpo.appendChild(linha);
+      });
+    }
+    ordenar.addEventListener("change", aplicarMandatos);
+    ocultar.addEventListener("change", aplicarMandatos);
+    controles.hidden = false;
+  });
+
   // ---------------------------------------------- detalhe do SISCAM em diálogo
   // Cada item tem o botão "Ver no SISCAM" (só com JS e <dialog> nativo) e o link comum "abrir no SISCAM",
   // sempre presente, que continua funcionando se o SISCAM passar a bloquear a exibição incorporada.

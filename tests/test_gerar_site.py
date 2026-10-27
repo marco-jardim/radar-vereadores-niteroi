@@ -19,12 +19,13 @@ from xml.etree import ElementTree
 
 from coletor import gerar_site
 from coletor import novidades as N
-from coletor.site import inicio
+from coletor.site import inicio, resumo
 from coletor.site import paginas as P
 from coletor.site.modelo import TIPOS_DOC
 from tests import test_tabelas_empilhaveis, test_tabelas_rolaveis
 from tests.test_acessibilidade_html import analisar
 from tests.test_glossario import PaginaGlossario, TERMOS
+from tests.test_resumo import conferir_resumo
 
 PAGINAS = ("index.html", "novidades.html", "leis.html", "projetos.html", "atividades.html", "sessoes.html", "ruido.html", "analises.html",
            "metodologia.html")
@@ -37,7 +38,14 @@ class TestGerarSite(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         saida = io.StringIO()
+        montar = gerar_site.montar_modelo
+
+        def guardar_modelo():
+            cls.modelo = montar()
+            return cls.modelo
+
         with (mock.patch.object(sys, "argv", ["coletor.gerar_site"]),
+              mock.patch.object(gerar_site, "montar_modelo", side_effect=guardar_modelo),
               mock.patch.object(inicio, "carregar_memoria", wraps=inicio.carregar_memoria) as carregar,
               contextlib.redirect_stdout(saida)):
             gerar_site.main()
@@ -52,6 +60,33 @@ class TestGerarSite(unittest.TestCase):
                 self.assertTrue(arq.is_file(), f"{arq} não foi gerado")
                 conteudo = arq.read_text(encoding="utf-8")
                 self.assertIn("<html", conteudo.lower())
+
+    def test_analises_publica_mandatos_e_atividade(self):
+        texto = (self.saida / "analises.html").read_text(encoding="utf-8")
+        self.assertIn('id="mandatos-atividade"', texto)
+        self.assertIn('Mandatos e atividade na Câmara', texto)
+        self.assertIn('data-ordem-mandatos', texto)
+        self.assertIn('data-ocultar-cargos', texto)
+        self.assertIn('estimativa pelas listas de frequência', texto)
+        # O teto de 100 KiB gzip para esta página também é verificado no teste geral de orçamento.
+
+    def test_resumo_neutro_e_numeros_de_todas_as_pessoas_reais(self):
+        self.assertTrue(self.modelo["pessoas"])
+        for s, pessoa in self.modelo["pessoas"].items():
+            with self.subTest(vereador=s):
+                conteudo = resumo.secao_resumo(self.modelo, pessoa)
+                conferir_resumo(self, self.modelo, pessoa, conteudo)
+                ficha = (self.saida / "vereadores" / f"{s}.html").read_text(encoding="utf-8")
+                self.assertIn(conteudo, ficha)
+                self.assertEqual(ficha.count('class="resumo-numeros"'), 1)
+                self.assertLess(ficha.index('class="resumo-numeros"'), ficha.index('id="t-sessoes"'))
+                if 'class="perfil"' in ficha:
+                    self.assertLess(ficha.index('class="perfil"'), ficha.index('class="resumo-numeros"'))
+                self.assertLessEqual(gerar_site.tamanho_gzip(ficha.encode("utf-8")), gerar_site.LIMITE_HTML_GZIP)
+        metodologia = (self.saida / "metodologia.html").read_text(encoding="utf-8")
+        self.assertIn('id="resumo"', metodologia)
+        self.assertIn('href="#resumo"', metodologia)
+        self.assertIn("Este resumo não usa IA", metodologia)
 
     def test_todas_as_tabelas_em_todas_as_paginas(self):
         paginas = sorted(self.saida.rglob("*.html"))

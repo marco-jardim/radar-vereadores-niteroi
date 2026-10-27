@@ -186,6 +186,7 @@ def montar_sessoes(modelo: dict, registros: list[dict] | None = None,
     saida = {"anos": anos,
              "cobertura": {a: dict.fromkeys(("listadas", "com_frequencia", "com_votacao", "pendentes"), 0) for a in anos},
              "legislaturas": [], "sessoes": [], "votacoes": [], "por_pessoa": {}, "mediana_presenca": {},
+             "exercicio": {l["id"]: {"total": 0, "primeira": None, "ultima": None} for l in legs},
              "placares_por_ano": {a: dict.fromkeys(CAMPOS_PLACAR, 0) for a in anos}, "ritmo": {},
              "qualidade": {c: [] for c in ("sem_lista", "inconsistentes", "indeterminadas", "duplicados", "nao_membros", "notas")}}
     qualidade = saida["qualidade"]
@@ -224,6 +225,13 @@ def montar_sessoes(modelo: dict, registros: list[dict] | None = None,
         leg_id = legislatura_de(sessao.get("data"), ano, legs)
         membros = R.indice_membros(sessao, pessoas, cfg)
         presencas = R.presencas_da_sessao(sessao, membros, abonos)
+        if leg_id:
+            cobertura_exercicio = saida["exercicio"][leg_id]
+            cobertura_exercicio["total"] += int(presencas["incluida"])
+            if sessao.get("tipo") in R.TIPOS_DELIBERATIVOS and sessao.get("data"):
+                data = sessao["data"]
+                cobertura_exercicio["primeira"] = min(cobertura_exercicio["primeira"] or data, data)
+                cobertura_exercicio["ultima"] = max(cobertura_exercicio["ultima"] or data, data)
         exercicio = R.pessoas_em_exercicio(sessao, membros, presencas=presencas)
         indicadores = R.indicadores_sessao(sessao)
         cobertura = saida["cobertura"][ano]
