@@ -1965,7 +1965,14 @@
      "url": "https://x.com/peg_psol",
      "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
     }
-   ]
+   ],
+   "falecimento": {
+    "data": "2026-09-05",
+    "fonte": {
+     "titulo": "G1 — Morre Paulo Eduardo Gomes",
+     "url": "https://g1.globo.com/rj/rio-de-janeiro/noticia/2026/09/06/morre-paulo-eduardo-gomes.ghtml"
+    }
+   }
   },
   "PAULO FERNANDO GONÇALVES VELASCO": {
    "mandatos": {
