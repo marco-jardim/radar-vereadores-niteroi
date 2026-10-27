@@ -568,6 +568,11 @@ details.bloco summary { cursor: pointer; font: 600 var(--fs-1)/1.3 var(--display
   .tile-valor { font-size: var(--fs-5); }
 }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
+/* Transição entre páginas (View Transitions entre documentos): só sem pedido de movimento reduzido.
+   Nomes únicos por página: a marca do cabeçalho e o h1 de abertura. */
+@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }
+.topo .marca { view-transition-name: marca; }
+.abertura h1, .hero h1 { view-transition-name: titulo; }
 
 /* ------------------------------------------------------- alto contraste */
 /* Bordas onde só havia fundo ou sombra, foco no realce do sistema, sem textura; as amostras e barras de dados

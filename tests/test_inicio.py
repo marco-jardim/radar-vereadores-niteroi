@@ -1,6 +1,7 @@
 """Blocos da página inicial (coletor.site.inicio), com modelos sintéticos e sem rede."""
 from __future__ import annotations
 
+import gzip
 import hashlib
 import json
 import re
@@ -10,12 +11,25 @@ from collections import Counter
 from pathlib import Path
 from unittest import mock
 
+from coletor import gerar_site
+from coletor import novidades as N
 from coletor.site import inicio as I
 from coletor.site import paginas as P
+from tests import test_tabelas_rolaveis
+from tests.test_design_tokens import compor, declaracoes, luminancia, regras, rgba, sem_comentarios
 from tests.test_geo import geo_completo
 
 RAIZ = Path(__file__).resolve().parents[1]
 ATUAL = "2025-2028"
+CSS_INICIO = P.FONTE_ESTATICA / "inicio.css"
+FASES_CEU = ("madrugada", "manha", "tarde", "por-do-sol", "noite")
+CHAVES_FASE = ("--ceu-1", "--ceu-2", "--sol", "--sol-x", "--sol-y", "--camada-1", "--camada-2", "--camada-3", "--camada-4",
+               "--veu", "--h1")
+# Marcadores das seções da home, na ordem do plano.
+ORDEM_HOME = ('id="t-hero"', 'id="t-quem"', 'class="tiles"', 'id="t-destaques"', 'id="t-mapa-home"', 'id="t-placar"',
+              'id="t-linha"', 'class="convite"')
+ALT_OG = "Paisagem de Niterói ao pôr do sol vista da baía, com a marca do Radar dos Vereadores"
+KIB = 1024
 
 
 def pessoa(slug: str, nome: str, legs: dict[str, dict]) -> dict:
@@ -200,6 +214,227 @@ class TestBlocosJuntos(unittest.TestCase):
         for esperado in ("t-hero", "t-quem", "t-mapa-home", "t-linha", "lista-vereadores"):
             self.assertIn(esperado, lista)
         self.assertEqual(tudo(), html)
+
+
+# ---- integração na página inicial
+def metricas_placar() -> dict:
+    return {"apresentados": 2, "leis": 1, "leis_efeito": 1, "leis_outras": 0, "leis_sem_efeito": 0, "andamento": 1,
+            "sem_exito": 0, "polemicos": 0, "pct_sem_efeito": 0, "taxa_aprovacao": 50}
+
+
+def modelo_home(**extra) -> dict:
+    """Modelo com o mínimo que o placar de gerar_index usa, além dos blocos de inicio.py."""
+    modelo = modelo_base(**extra)
+    for p in modelo["pessoas"].values():
+        for mandato in p["mandatos"].values():
+            mandato.update(afastamentos=[], metricas=metricas_placar())
+    return modelo
+
+
+def corpo_principal(html: str) -> str:
+    return html.split('<main id="conteudo"', 1)[1].split(">", 1)[1].split("</main>", 1)[0]
+
+
+def fases_do_ceu(css: str) -> dict[str, dict[str, str]]:
+    """Propriedades de cada fase, lidas dos blocos .ceu[data-ceu="…"] fora de at-rules."""
+    fases: dict[str, dict[str, str]] = {}
+    for contexto, seletor, corpo in regras(css):
+        m = re.match(r'\.ceu\[data-ceu="([a-z-]+)"\]', seletor)
+        if m and not contexto:
+            fases.setdefault(m.group(1), {}).update({n: v for n, v in declaracoes(corpo).items() if n.startswith("--")})
+    return fases
+
+
+def razao_contraste(a: tuple[float, float, float], b: tuple[float, float, float]) -> float:
+    claro, escuro = sorted((luminancia(a), luminancia(b)), reverse=True)
+    return (claro + .05) / (escuro + .05)
+
+
+class TestFasesDoCeu(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.css = CSS_INICIO.read_text(encoding="utf-8")
+        cls.fases = fases_do_ceu(cls.css)
+
+    def test_mesmas_fases_de_inicio_js_e_todas_as_chaves(self):
+        js = (P.FONTE_ESTATICA / "inicio.js").read_text(encoding="utf-8")
+        nomes_js = re.findall(r'\[\d+, "([a-z-]+)"\]', js.split("var FASES = ", 1)[1].split(";", 1)[0])
+        self.assertEqual(tuple(nomes_js), FASES_CEU)
+        self.assertEqual(sorted(self.fases), sorted(FASES_CEU))
+        for fase, props in self.fases.items():
+            with self.subTest(fase=fase):
+                self.assertEqual([c for c in CHAVES_FASE if c not in props], [])
+
+    def test_texto_com_contraste_sobre_a_cor_mais_clara_com_veu(self):
+        for fase, props in self.fases.items():
+            with self.subTest(fase=fase):
+                mais_clara = max((rgba(props[c], {})[:3] for c in ("--ceu-1", "--ceu-2", "--sol")), key=luminancia)
+                veu = rgba(props["--veu"], {})
+                fundo = compor(veu, mais_clara)
+                texto = rgba(props["--h1"], {})
+                self.assertEqual(texto[3], 1.0)
+                self.assertGreaterEqual(razao_contraste(texto[:3], fundo), 4.5)
+
+    def test_veu_e_texto_tambem_valem_para_o_irmao_hero_texto(self):
+        # As propriedades são declaradas no .ceu; o texto é irmão, então cada bloco precisa do seletor ~ .hero-texto.
+        for fase in FASES_CEU:
+            with self.subTest(fase=fase):
+                self.assertIn(f'.ceu[data-ceu="{fase}"] ~ .hero-texto', self.css)
+
+    def test_hexadecimais_so_nas_fases(self):
+        for contexto, seletor, corpo in regras(self.css):
+            if re.search(r"#[0-9A-Fa-f]{3,8}\b", corpo):
+                with self.subTest(seletor=seletor):
+                    self.assertFalse(contexto)
+                    self.assertRegex(seletor, r'^\.ceu\[data-ceu="[a-z-]+"\]')
+
+    def test_guardas_de_movimento(self):
+        css = sem_comentarios(self.css)
+        self.assertIn("@supports (animation-timeline: scroll())", css)
+        self.assertIn("prefers-reduced-motion", css)
+        animadas = [(contexto, seletor) for contexto, seletor, corpo in regras(css) if "animation" in declaracoes(corpo)
+                    or "animation-timeline" in declaracoes(corpo)]
+        self.assertTrue(animadas)
+        for contexto, seletor in animadas:
+            with self.subTest(seletor=seletor):
+                self.assertIn("@supports (animation-timeline: scroll())", contexto)
+                self.assertIn("@media (prefers-reduced-motion: no-preference)", contexto)
+        # Deslocamento sutil: no máximo 40px por camada.
+        deslocamentos = [float(v[:-2]) for _, _, corpo in regras(css)
+                         for n, v in declaracoes(corpo).items() if n == "--desloca"]
+        self.assertTrue(deslocamentos)
+        self.assertLessEqual(max(abs(d) for d in deslocamentos), 40)
+
+    def test_proporcao_fixa_impressao_e_cores_forcadas(self):
+        ceu = [(contexto, declaracoes(corpo)) for contexto, seletor, corpo in regras(self.css) if seletor == ".ceu"]
+        self.assertIn(("16 / 6"), [d.get("aspect-ratio") for c, d in ceu if not c])
+        self.assertTrue(any(d.get("aspect-ratio") == "4 / 3" and any("max-width" in x for x in c) for c, d in ceu))
+        ocultos = {c[-1] for c, s, corpo in regras(self.css) if c and ".ceu" in s.split(", ")
+                   and declaracoes(corpo).get("display", "").startswith("none")}
+        self.assertIn("@media print", ocultos)
+        self.assertIn("@media (forced-colors: active)", ocultos)
+
+    def test_view_transition_no_css_global_so_sem_movimento_reduzido(self):
+        css = sem_comentarios((P.FONTE_ESTATICA / "estilo.css").read_text(encoding="utf-8"))
+        self.assertEqual(css.count("@view-transition"), 1)
+        vt = [(contexto, declaracoes(corpo)) for contexto, seletor, corpo in regras(css) if seletor == "@view-transition"]
+        self.assertEqual(vt, [(("@media (prefers-reduced-motion: no-preference)",), {"navigation": "auto"})])
+        nomes = Counter(d["view-transition-name"] for _, _, corpo in regras(css)
+                        for d in [declaracoes(corpo)] if "view-transition-name" in d)
+        self.assertEqual(nomes, Counter({"marca": 1, "titulo": 1}))
+        titulo = next(s for _, s, corpo in regras(css) if declaracoes(corpo).get("view-transition-name") == "titulo")
+        self.assertIn(".hero h1", titulo)
+
+
+class TestHomeIntegrada(unittest.TestCase):
+    def test_ordem_das_secoes(self):
+        modelo = modelo_home(documentos=docs_mapa(), geo_bairros=geo_completo(), memoria=memoria_sintetica())
+        corpo = corpo_principal(P.gerar_index(modelo))
+        posicoes = [corpo.find(marca) for marca in ORDEM_HOME]
+        self.assertNotIn(-1, posicoes, dict(zip(ORDEM_HOME, posicoes)))
+        self.assertEqual(posicoes, sorted(posicoes))
+        self.assertTrue(corpo.lstrip().startswith('<section class="hero"'))
+        self.assertNotIn('class="abertura"', corpo)
+        self.assertIn('class="camada fundo"', corpo)  # máscaras versionadas de site_src/paisagem/
+
+    def test_mapa_e_linha_do_tempo_omitidos_sem_dados(self):
+        modelo = modelo_home(memoria=None)
+        corpo = corpo_principal(P.gerar_index(modelo))
+        self.assertNotIn('id="t-mapa-home"', corpo)
+        self.assertNotIn('id="t-linha"', corpo)
+        restantes = [m for m in ORDEM_HOME if m not in ('id="t-mapa-home"', 'id="t-linha"')]
+        posicoes = [corpo.find(m) for m in restantes]
+        self.assertNotIn(-1, posicoes)
+        self.assertEqual(posicoes, sorted(posicoes))
+
+    def test_memoria_real_sem_chave_no_modelo(self):
+        corpo = corpo_principal(P.gerar_index(modelo_home()))
+        self.assertIn('id="t-linha"', corpo)
+        self.assertEqual(corpo.count("<time datetime="), len(I.carregar_memoria(RAIZ)["linha_do_tempo"]))
+
+    def test_ids_unicos_e_tabelas_acessiveis(self):
+        html = P.gerar_index(modelo_home(documentos=docs_mapa(), geo_bairros=geo_completo(), memoria=memoria_sintetica()))
+        repetidos = [i for i, n in Counter(ids(html)).items() if n > 1]
+        self.assertEqual(repetidos, [])
+        self.assertEqual(html.count("<h1"), 1)
+        test_tabelas_rolaveis.ContratoTabelas.conferir_tabelas(self, html)
+
+    def test_inicio_css_e_js_so_na_home(self):
+        home = P.gerar_index(modelo_home())
+        css, js = P.url_estatica("inicio.css"), P.url_estatica("inicio.js")
+        self.assertIn(f'<link rel="stylesheet" href="{css}">', home)
+        self.assertIn(f'<script src="{js}" defer></script>', home)
+        self.assertLess(home.index("estilo.css?v="), home.index(css))
+        self.assertLess(home.index("app.js?v="), home.index(js))
+        for html in (P.pagina("Leis", "", "leis.html"),
+                     P.pagina("Ficha", "", "", prefixo="../", caminho="vereadores/ana.html")):
+            self.assertNotIn("inicio.css", html)
+            self.assertNotIn("inicio.js", html)
+
+    def test_estilos_extras_com_prefixo_e_so_se_existirem(self):
+        html = P.pagina("Ficha", "", "", prefixo="../", caminho="vereadores/ana.html", estilos=("inicio.css", "nao-existe.css"))
+        self.assertIn(f'<link rel="stylesheet" href="{P.url_estatica("inicio.css", "../")}">', html)
+        self.assertNotIn("nao-existe.css", html)
+
+
+class TestImagemDeCompartilhamento(unittest.TestCase):
+    def test_og_image_absoluta_versionada_em_toda_pagina(self):
+        versao = hashlib.sha1((P.FONTE_ESTATICA / "og-radar.png").read_bytes()).hexdigest()[:10]
+        url = f"{N.URL_SITE}og-radar.png?v={versao}"
+        self.assertTrue(url.startswith("https://"))
+        modelo_404 = {"legislaturas": [{"id": ATUAL}], "pessoas": {"ana": {"slug": "ana", "nome": "Ana", "mandatos": {ATUAL: {}}}}}
+        paginas = {"index": P.gerar_index(modelo_home()), "leis": P.pagina("Leis", "", "leis.html"),
+                   "ficha": P.pagina("Ficha", "", "", prefixo="../", caminho="vereadores/ana.html"),
+                   "404": gerar_site.gerar_404(modelo_404)}
+        for nome, html in paginas.items():
+            with self.subTest(pagina=nome):
+                self.assertEqual(html.count('property="og:image"'), 1)
+                self.assertIn(f'<meta property="og:image" content="{url}">', html)
+                self.assertIn('<meta property="og:image:width" content="1200">', html)
+                self.assertIn('<meta property="og:image:height" content="630">', html)
+                self.assertIn(f'<meta property="og:image:alt" content="{ALT_OG}">', html)
+                self.assertIn(f'<meta name="twitter:image" content="{url}">', html)
+                self.assertIn('<meta name="twitter:card" content="summary_large_image">', html)
+
+    def test_sem_png_sem_og_image(self):
+        with tempfile.TemporaryDirectory() as pasta:
+            fonte = Path(pasta)
+            for nome in ("estilo.css", "dados.js", "app.js"):
+                (fonte / nome).write_bytes(b"/* recurso de teste */")
+            with mock.patch.object(P, "FONTE_ESTATICA", fonte):
+                html = P.pagina("Leis", "", "leis.html")
+        self.assertNotIn("og:image", html)
+        self.assertNotIn("twitter:image", html)
+
+
+def gz(conteudo: bytes) -> int:
+    return len(gzip.compress(conteudo, mtime=0))
+
+
+class TestOrcamentoDaHome(unittest.TestCase):
+    def html_home(self) -> bytes:
+        """A home gerada em site/, se existir; senão, a de um modelo sintético com a memória real."""
+        gerada = gerar_site.SAIDA / "index.html"
+        if gerada.is_file():
+            return gerada.read_bytes()
+        return P.gerar_index(modelo_home(documentos=docs_mapa(), geo_bairros=geo_completo())).encode("utf-8")
+
+    def test_html_ate_100_kib(self):
+        self.assertLessEqual(gz(self.html_home()), 100 * KIB)
+        sintetica = P.gerar_index(modelo_home(documentos=docs_mapa(), geo_bairros=geo_completo())).encode("utf-8")
+        self.assertLessEqual(gz(sintetica), 100 * KIB)
+
+    def test_carga_da_home_ate_300_kib(self):
+        textos = ["estilo.css", "inicio.css", "navegacao.js", "inicio.js", "dados.js", "app.js",
+                  *(f"paisagem/{c}.svg" for c in I.CAMADAS if (P.FONTE_ESTATICA / f"paisagem/{c}.svg").is_file())]
+        fontes = ["fontes/public-sans-latin-wght-normal.woff2", "fontes/barlow-condensed-latin-700-normal.woff2"]
+        self.assertEqual(len(textos), 10)  # quatro máscaras, além dos seis CSS/JS
+        tamanhos = {nome: gz(P.bytes_estaticos(P.FONTE_ESTATICA / nome)) for nome in textos}
+        # WOFF2 já é comprimido e não é servido com gzip: conta os bytes brutos.
+        tamanhos.update({nome: len(P.bytes_estaticos(P.FONTE_ESTATICA / nome)) for nome in fontes})
+        tamanhos["index.html"] = gz(self.html_home())
+        total = sum(tamanhos.values())
+        self.assertLessEqual(total, 300 * KIB, tamanhos)
 
 
 if __name__ == "__main__":

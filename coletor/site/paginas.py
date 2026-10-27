@@ -38,7 +38,11 @@ NAV = [
     ("metodologia.html", "Metodologia"),
 ]
 CLASSE_IMPACTO = {3: "imp-3", 2: "imp-2", 1: "imp-1", 0: "imp-0", None: "imp-x"}
-FONTE_ESTATICA = Path(__file__).resolve().parents[2] / "site_src"
+RAIZ = Path(__file__).resolve().parents[2]
+FONTE_ESTATICA = RAIZ / "site_src"
+# Imagem de compartilhamento (coletor.paisagem --og), com URL absoluta e versionada em toda página do template.
+IMAGEM_OG = "og-radar.png"
+ALT_IMAGEM_OG = "Paisagem de Niterói ao pôr do sol vista da baía, com a marca do Radar dos Vereadores"
 # Antes do CSS: marca "js" (menu móvel já recolhido na primeira pintura) só se navegacao.js puder montar o menu,
 # e aplica o tema salvo. navegacao.js tira a classe se não montar o menu; o onerror da sua tag também.
 SCRIPT_CABECA = '(function(d,r){if(window.matchMedia&&d.addEventListener)r.classList.add("js");try{var t=localStorage.getItem("radar-tema");if(t==="claro"||t==="escuro")r.dataset.theme=t==="escuro"?"dark":"light"}catch(e){}})(document,document.documentElement)'
@@ -313,7 +317,7 @@ def atribuicao_textura() -> str:
 
 def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: str = "", manifesto: dict | None = None,
            dialogo: bool = False, scripts: tuple[str, ...] = (), caminho: str | None = None,
-           indexavel: bool = True) -> str:
+           indexavel: bool = True, estilos: tuple[str, ...] = ()) -> str:
     desc = esc(descricao or "Quais leis de Niterói mudam a cidade, quem as escreveu, e quanto da produção da Câmara é homenagem, "
                "lei sem efeito ou pauta polêmica. Dados do SISCAM atualizados toda semana.")
     nav = "".join(
@@ -327,6 +331,17 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
                   if indexavel else '<meta name="robots" content="noindex">')
     extras = "\n".join(f'<script src="{esc(prefixo + nome)}?v={versao_estatica(nome)}" defer></script>'
                        for nome in scripts if (FONTE_ESTATICA / nome).is_file())
+    # CSS próprio de uma página (ex.: inicio.css), depois do global, só se existir na árvore estática.
+    folhas = "".join(f'<link rel="stylesheet" href="{esc(url_estatica(nome, prefixo))}">\n'
+                     for nome in estilos if (FONTE_ESTATICA / nome).is_file())
+    imagem_og = ""
+    if (FONTE_ESTATICA / IMAGEM_OG).is_file():
+        url_og = esc(f"{N.URL_SITE}{IMAGEM_OG}?v={versao_estatica(IMAGEM_OG)}")
+        imagem_og = (f'<meta property="og:image" content="{url_og}">\n'
+                     '<meta property="og:image:width" content="1200">\n'
+                     '<meta property="og:image:height" content="630">\n'
+                     f'<meta property="og:image:alt" content="{esc(ALT_IMAGEM_OG)}">\n'
+                     f'<meta name="twitter:image" content="{url_og}">\n')
     icone = f'<link rel="icon" href="{esc(url_estatica("favicon.svg", prefixo))}" type="image/svg+xml">' if (FONTE_ESTATICA / "favicon.svg").is_file() else ""
     # Fontes críticas auto-hospedadas: a URL do preload é a mesma da url() publicada em estilo.css (com ?v=).
     fontes = "".join(f'<link rel="preload" as="font" type="font/woff2" crossorigin href="{esc(url_estatica(nome, prefixo))}">\n'
@@ -350,10 +365,10 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
 <meta property="og:site_name" content="Radar dos Vereadores de Niterói">
 <meta property="og:locale" content="pt_BR">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#F7F2E9" media="(prefers-color-scheme: light)">
+{imagem_og}<meta name="theme-color" content="#F7F2E9" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0E1B26" media="(prefers-color-scheme: dark)">
 {fontes}<link rel="stylesheet" href="{esc(prefixo)}estilo.css?v={versao_estatica('estilo.css')}">
-{icone}
+{folhas}{icone}
 <link rel="alternate" type="application/rss+xml" title="Novidades · Radar dos Vereadores de Niterói" href="{esc(prefixo + N.FEED)}">
 {cabecalho_dados(manifesto, ativo, prefixo)}
 </head>
@@ -762,7 +777,6 @@ def gerar_index(modelo: dict) -> str:
 </section>""")
         abas.append(f'<button type="button" role="tab" aria-selected="{"true" if leg["id"] == atual else "false"}" data-alvo="leg-{esc(leg["id"])}">{esc(leg["id"])}</button>')
     opcoes_partido = "".join(f'<option value="{esc(pt)}">{esc(pt)}</option>' for pt in sorted({x for v in partidos_por_leg.values() for x in v}))
-    atualizado = (modelo["meta"].get("coleta") or {}).get("em", "")[:10]
     pct_sem = round(100 * len(sem) / len(leis_atual)) if leis_atual else 0
     ordem_docs = explica_docs = ""
     if tem_docs:
@@ -771,13 +785,19 @@ def gerar_index(modelo: dict) -> str:
                         'aparece como autor, inclusive os assinados em conjunto, porque a listagem do SISCAM não separa autor de coautor. '
                         'Veja todos em <a href="atividades.html">Atividades</a>.')
 
-    corpo = f"""<section class="abertura">
- <h1>Leis que mudam a cidade, e quem as escreveu.</h1>
- <p>Desde 2021, a Câmara de Niterói analisou mais de {milhar(len(projs) // 100 * 100)} projetos de lei. Este site separa as leis com efeito real das homenagens, das leis que só autorizam o prefeito e das pautas polêmicas, e mostra quem fez cada uma.</p>
- <p class="atualizacao">Dados do SISCAM de {data_br(atualizado) if atualizado else '—'} · <a href="metodologia.html">como classificamos</a></p>
-</section>
+    # Blocos novos da home (coletor/site/inicio.py); importado aqui porque inicio importa este módulo.
+    from coletor.site import inicio
+    memoria = modelo["memoria"] if "memoria" in modelo else inicio.carregar_memoria(RAIZ)
+    blocos_extras = {
+        "quem": inicio.quem_e_meu_vereador(modelo),
+        "mapa": inicio.mapa_home(modelo),
+        "linha": inicio.linha_do_tempo(memoria),
+    }
+    extras = {k: (v + "\n\n" if v else "") for k, v in blocos_extras.items()}
 
-<section aria-labelledby="t-numeros">
+    corpo = f"""{inicio.hero(modelo, url_estatica)}
+
+{extras["quem"]}<section aria-labelledby="t-numeros">
  <h2 id="t-numeros" class="h-secao">Legislatura {esc(atual)}, até agora</h2>
  <div class="tiles">
   {tile(len(efeito), "leis de vereadores com efeito real", f"de {len(leis_atual)} leis aprovadas", "tile-efeito")}
@@ -792,7 +812,7 @@ def gerar_index(modelo: dict) -> str:
  <div class="cartoes">{''.join(cartao_lei(p, '') for p in destaques)}</div>
 </section>
 
-<section aria-labelledby="t-placar">
+{extras["mapa"]}<section aria-labelledby="t-placar">
  <div class="cab-secao"><h2 id="t-placar" class="h-secao">Produção de cada vereador como autor principal</h2></div>
  <p class="explica">O comprimento da barra é o total de projetos apresentados; as cores mostram o que aconteceu com eles. Projetos assinados como coautor não entram, para que assinaturas em bloco não inflem a conta.{explica_docs}</p>
  <div class="controles">
@@ -816,11 +836,12 @@ def gerar_index(modelo: dict) -> str:
  {''.join(blocos)}
 </section>
 
-<section class="convite">
+{extras["linha"]}<section class="convite">
  <a href="ruido.html"><strong>Sem efeito e polêmicas</strong><span>Homenagens, leis que só autorizam o prefeito, projetos repetidos e pautas que restringem direitos.</span></a>
  <a href="analises.html"><strong>Análises históricas</strong><span>Como a produção da Câmara mudou de 2021 a hoje, por tema, partido e tempo de tramitação.</span></a>
 </section>"""
-    return pagina("Radar dos Vereadores de Niterói", corpo, "index.html", caminho="index.html")
+    return pagina("Radar dos Vereadores de Niterói", corpo, "index.html", caminho="index.html",
+                  estilos=("inicio.css",), scripts=("inicio.js",))
 
 
 # ------------------------------------------------------------- leis e projetos
