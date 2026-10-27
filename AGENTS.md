@@ -164,7 +164,9 @@ Quem está entre os eleitos da legislatura precisa do mesmo partido do config e 
 está, só suplente. `eleicoes`, da mais recente para a mais antiga: `ano` 2000–2100, `cargo`, `partido` e
 `resultado` não vazios, `uf` com duas letras maiúsculas, `votos` inteiro ≥ 0 ou `null` e `fonte` HTTPS.
 `camara`/`site` são HTTPS ou `null`; `redes` usa `instagram`, `facebook`, `x`, `youtube`, `tiktok`, `threads`
-ou `linkedin`, com `url` e `fonte` HTTPS. Formato: JSON com `indent=1`, ordem das chaves preservada, UTF-8, LF e NFC.
+ou `linkedin`, com `url` e `fonte` HTTPS: página oficial da Câmara ou do vereador, ou o registro de candidatura
+no TSE (`fonte` = `https://dadosabertos.tse.jus.br/dataset/candidatos-<ano>`, como grava `coletor.tse`).
+Formato: JSON com `indent=1`, ordem das chaves preservada, UTF-8, LF e NFC.
 
 ### Opções das CLIs
 
@@ -584,8 +586,9 @@ Esta é a referência única para sessões; a CLI está em "Pipeline e comandos"
   Preserve partido da eleição, fontes das legislaturas e registros de afastamento.
 - `config/perfis.json` usa os mesmos campos para todos os vereadores, com fonte pública HTTPS para cada fato
   (votação e partido da eleição, eleições do TSE). Links de redes sociais só entram quando declarados numa página
-  oficial (da Câmara ou do próprio vereador), registrada em `fonte`; não inclua perfis não oficiais nem omita
-  links oficiais de alguém por critério político.
+  oficial (da Câmara ou do próprio vereador) ou no registro de candidatura ao TSE (declaração a órgão oficial;
+  `fonte` = URL do conjunto de dados do TSE daquele ano), registrada em `fonte`; não inclua perfis não oficiais
+  nem omita links oficiais de alguém por critério político.
 - Não confunda impacto estimado e resultado comprovado. Preserve limitações e contestação por issue;
   contar documentos, presença ou votos não mede qualidade nem resultado.
 
