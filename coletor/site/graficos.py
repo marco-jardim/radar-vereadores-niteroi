@@ -57,10 +57,12 @@ def legenda(series: list[tuple[str, str]]) -> str:
     return f'<ul class="leg-graf">{itens}</ul>'
 
 
-def tabela(cabecalho: list[str], linhas: list[list]) -> str:
+def tabela(cabecalho: list[str], linhas: list[list], titulo: str = "Dados do gráfico") -> str:
     th = "".join(f"<th scope=\"col\">{esc(c)}</th>" for c in cabecalho)
     trs = "".join("<tr>" + "".join(f"<td>{esc(_fmt(c) if isinstance(c, (int, float)) else c)}</td>" for c in l) + "</tr>" for l in linhas)
-    return f'<details class="tabela-graf"><summary>Ver os números em tabela</summary><table><thead><tr>{th}</tr></thead><tbody>{trs}</tbody></table></details>'
+    return (f'<details class="tabela-graf"><summary>Ver os números em tabela</summary>'
+            f'<div class="tabela-rolavel" role="region" tabindex="0" aria-label="{esc(titulo)}">'
+            f'<table><thead><tr>{th}</tr></thead><tbody>{trs}</tbody></table></div></details>')
 
 
 def _corte_limpo(inferior: int, superior: int) -> int:
@@ -160,7 +162,7 @@ def mapa_coropletico(valores: dict[str, int], geo: dict, titulo: str, subtitulo:
                   '<a href="https://www.openstreetmap.org/copyright">ODbL 1.0</a> · '
                   f'base OSM: {esc(geo["osm_base"])}. Não é um mapa cadastral.</p>')
     return figura(titulo, subtitulo, "".join(partes), leg,
-                  tabela(["Bairro", "Região", "Indicações"], linhas) + atribuicao, titulo)
+                  tabela(["Bairro", "Região", "Indicações"], linhas, titulo) + atribuicao, titulo)
 
 
 def figura(titulo: str, subtitulo: str, corpo_svg: str, leg: str, tab: str, rotulo: str) -> str:
@@ -213,7 +215,7 @@ def colunas_empilhadas(titulo: str, subtitulo: str, rotulos_x: list[str], series
         partes.append(f'<text class="valor" x="{cx:.1f}" y="{y(totais[i]) - 5:.1f}" text-anchor="middle">{_fmt(totais[i])}</text>')
     partes.append(f'<line class="base" x1="{m_esq}" x2="{LARGURA - m_dir}" y1="{y(0):.1f}" y2="{y(0):.1f}"/></svg>')
     leg = legenda([(n, c) for n, c, _ in series])
-    tab = tabela(["", *[n for n, _, _ in series], "Total"], [[r, *[s[2][i] for s in series], totais[i]] for i, r in enumerate(rotulos_x)])
+    tab = tabela(["", *[n for n, _, _ in series], "Total"], [[r, *[s[2][i] for s in series], totais[i]] for i, r in enumerate(rotulos_x)], titulo)
     return figura(titulo, subtitulo, "".join(partes), leg, tab, titulo)
 
 
@@ -252,7 +254,7 @@ def linhas(titulo: str, subtitulo: str, rotulos_x: list[str], series: list[tuple
     for ly, lx, nome, v in fim_y:
         partes.append(f'<text class="rotulo-fim" x="{lx + 8:.1f}" y="{ly + 4:.1f}">{esc(nome)} · {_fmt(v)}{esc(unidade)}</text>')
     partes.append(f'<line class="base" x1="{m_esq}" x2="{LARGURA - m_dir}" y1="{y(0):.1f}" y2="{y(0):.1f}"/></svg>')
-    tab = tabela(["", *[n for n, _, _ in series]], [[r, *[s[2][i] for s in series]] for i, r in enumerate(rotulos_x)])
+    tab = tabela(["", *[n for n, _, _ in series]], [[r, *[s[2][i] for s in series]] for i, r in enumerate(rotulos_x)], titulo)
     return figura(titulo, subtitulo, "".join(partes), legenda([(n, c) for n, c, _ in series]), tab, titulo)
 
 
@@ -288,7 +290,7 @@ def barras_horizontais(titulo: str, subtitulo: str, itens: list[dict], series: l
         partes.append(f'<text class="valor" x="{x0 + 6:.1f}" y="{yy + barra_h - 2}">{_fmt(totais[i])}{esc(unidade)}{esc(it.get("nota", ""))}</text>')
     partes.append("</svg>")
     tab = tabela(["", *[n for n, _, _ in series]] + (["Total"] if len(series) > 1 else []),
-                 [[it["rotulo"], *[it.get(k) or 0 for _, _, k in series]] + ([totais[i]] if len(series) > 1 else []) for i, it in enumerate(itens)])
+                 [[it["rotulo"], *[it.get(k) or 0 for _, _, k in series]] + ([totais[i]] if len(series) > 1 else []) for i, it in enumerate(itens)], titulo)
     return figura(titulo, subtitulo, "".join(partes), legenda([(n, c) for n, c, _ in series]), tab, titulo)
 
 
@@ -337,5 +339,5 @@ def dispersao(titulo: str, subtitulo: str, pontos: list[dict], rot_x: str, rot_y
         anchor = "end" if lx > LARGURA - 120 else "start"
         partes.append(f'<text class="rotulo-ponto" x="{lx + (-8 if anchor == "end" else 8):.1f}" y="{ly + 4:.1f}" text-anchor="{anchor}">{esc(r)}</text>')
     partes.append(f'<line class="base" x1="{m_esq}" x2="{LARGURA - m_dir}" y1="{Y(0):.1f}" y2="{Y(0):.1f}"/></svg>')
-    tab = tabela(["Vereador", rot_x, rot_y], [[p["rotulo"], p["x"], p["y"]] for p in sorted(pontos, key=lambda p: -p["y"])])
+    tab = tabela(["Vereador", rot_x, rot_y], [[p["rotulo"], p["x"], p["y"]] for p in sorted(pontos, key=lambda p: -p["y"])], titulo)
     return figura(titulo, subtitulo, "".join(partes), "", tab, titulo)
