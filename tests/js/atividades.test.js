@@ -173,7 +173,7 @@ test("a primeira tela carrega só a parte mais recente; Mostrar mais acrescenta 
   assert.equal(itens(app), 80);
   assert.ok(app.resultados.innerHTML.startsWith(antes), "Mostrar mais só acrescenta ao fim");
   assert.match(app.resultados.innerHTML, /Moção 10\/2026/);
-  assert.equal(app.anuncio.textContent, "Mostrando 80 de 130 documentos.");
+  assert.equal(app.anuncio.textContent, "40 itens adicionados. Mostrando 80 de 130 documentos.");
   assert.equal(app.resumo.innerHTML, RESUMO_2026);
   assert.equal(app.mais.disabled, false);
   assert.equal(app.mais.textContent, "Mostrar mais 40");
