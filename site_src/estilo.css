@@ -430,7 +430,7 @@ li.projeto { content-visibility: auto; contain-intrinsic-size: auto 220px; }
 .tag { display: inline-block; min-height: 24px; font-size: var(--fs--1); padding: 2px var(--esp-2); border: 1px solid var(--sem-exito-borda); border-radius: var(--raio-1); text-decoration: none; }
 .tag small { margin-left: var(--esp-2); opacity: .8; }
 .tag.alerta { border-color: var(--alerta); background: var(--alerta-fundo); color: var(--tinta); font-weight: 600; }
-.contestar { font-size: var(--fs--1); color: var(--tinta-suave); }
+.contestar { display: inline-block; min-height: 24px; padding-block: 2px; font-size: var(--fs--1); color: var(--tinta-suave); }
 .vazio { color: var(--tinta-suave); font-style: italic; padding: var(--esp-3) 0; }
 .link { background: none; border: 0; padding: 0; text-decoration: underline; cursor: pointer; font-style: normal; }
 .mais { margin: var(--esp-5) 0; font: 600 var(--fs-1) var(--display); min-height: 44px; min-width: 44px; padding: var(--esp-2) var(--esp-4); background: var(--tinta); color: var(--fundo); border: 0; border-radius: var(--raio-1); cursor: pointer; }

@@ -322,7 +322,7 @@ def dispersao(titulo: str, subtitulo: str, pontos: list[dict], rot_x: str, rot_y
     for p in pontos:
         cx, cy = X(p["x"]), Y(p["y"])
         circ = f'<circle class="ponto {p.get("cor", "c-efeito")}" cx="{cx:.1f}" cy="{cy:.1f}" r="5" data-tip="{esc(p["rotulo"])}: {_fmt(p["x"])} projetos, {_fmt(p["y"])} leis com efeito"/>'
-        partes.append(f'<a href="{esc(p["link"])}">{circ}</a>' if p.get("link") else circ)
+        partes.append(f'<a href="{esc(p["link"])}" aria-label="{esc(p["rotulo"])}: {_fmt(p["x"])} projetos, {_fmt(p["y"])} leis com efeito">{circ}</a>' if p.get("link") else circ)
         if id(p) in destaque:
             rotulos.append([cy - 8, cx, p["rotulo"]])
     colocados = []  # evita colisão em 2D: largura estimada pelo número de caracteres
