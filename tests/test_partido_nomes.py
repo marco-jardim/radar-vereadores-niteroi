@@ -267,8 +267,11 @@ class TestValidarPerfis(unittest.TestCase):
         boa = {"ano": 2026, "cargo": "Deputado Estadual", "uf": "RJ", "partido": "PL", "votos": None,
                "resultado": "Eleito por média", "fonte": {"titulo": "TSE", "url": "https://dadosabertos.tse.jus.br/x"}}
         antiga = {**boa, "ano": 2022, "votos": 0}
-        self.assertEqual(self.validar({"ANA MARIA TESTE": self.perfil(eleicoes=[boa, antiga])}), [])
-        casos = {"ordem": ([antiga, boa], "mais recente"), "ano": ([{**boa, "ano": 1999}], "'ano'"),
+        pre_tse = {**boa, "ano": 1988, "fonte": {"titulo": "Wikipédia", "url": "https://pt.wikipedia.org/wiki/x"}}
+        self.assertEqual(self.validar({"ANA MARIA TESTE": self.perfil(eleicoes=[boa, antiga, pre_tse])}), [])
+        self.assertEqual(self.validar({"ANA MARIA TESTE": self.perfil(eleicoes=[{**boa, "ano": 1945}])}), [])
+        casos = {"ordem": ([antiga, boa], "mais recente"), "ano": ([{**boa, "ano": 1944}], "entre 1945 e 2100"),
+                 "ano futuro": ([{**boa, "ano": 2101}], "'ano'"), "ano texto": ([{**boa, "ano": "1988"}], "'ano'"),
                  "uf": ([{**boa, "uf": "rj"}], "'uf'"), "votos": ([{**boa, "votos": -1}], "'votos'"),
                  "cargo": ([{**boa, "cargo": ""}], "cargo"), "fonte": ([{**boa, "fonte": {"titulo": "TSE", "url": "http://tse.jus.br"}}], "HTTPS")}
         for nome, (eleicoes, trecho) in casos.items():
