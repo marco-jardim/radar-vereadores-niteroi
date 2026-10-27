@@ -81,9 +81,35 @@ class TestHero(unittest.TestCase):
             html = I.hero(modelo_base(), P.url_estatica)
         self.assertTrue(html.startswith('<section class="hero" aria-labelledby="t-hero">'
                                         '<div class="ceu" data-ceu="tarde" aria-hidden="true"></div>'
+                                        f'<script>{I.SCRIPT_CEU}</script>'
                                         '<div class="hero-texto"><h1 id="t-hero">'))
         self.assertNotIn("camada", html)
         self.assertIn("Dados do SISCAM de 19/10/2026", html)
+
+    def test_script_do_ceu_pequeno_e_com_a_tabela_de_inicio_js(self):
+        script = I.SCRIPT_CEU
+        self.assertLessEqual(len(script.encode("utf-8")), 300)
+        self.assertNotIn("</", script)
+        # Nada global: bloco com let, Intl com fuso de São Paulo e fallback UTC−3, tudo sob try/catch.
+        self.assertTrue(script.startswith("{let ") and script.endswith("}"))
+        self.assertIn('timeZone:"America/Sao_Paulo"', script)
+        self.assertIn("(d.getUTCHours()+21)%24", script)
+        self.assertEqual(script.count("try{"), script.count("catch(e){}"))
+        self.assertTrue(script.endswith("}catch(e){}}"))
+        # Mesmos limites [início, fim) de FASES em inicio.js.
+        js = (P.FONTE_ESTATICA / "inicio.js").read_text(encoding="utf-8")
+        fases_js = [(int(h), nome) for h, nome in
+                    re.findall(r'\[(\d+), "([a-z-]+)"\]', js.split("var FASES = ", 1)[1].split(";", 1)[0])]
+        tabela = [(int(h), nome) for h, nome in re.findall(r'h<(\d+)\?"([a-z-]+)":', script)]
+        ultima = re.search(r':"([a-z-]+)"\}catch', script).group(1)
+        self.assertEqual(tabela + [(24, ultima)], fases_js)
+        self.assertEqual([nome for _, nome in fases_js], list(FASES_CEU))
+
+    def test_script_do_ceu_logo_apos_o_ceu(self):
+        html = I.hero(modelo_base(), P.url_estatica)
+        self.assertEqual(html.count("<script>"), 1)
+        self.assertIn(f'</div><script>{I.SCRIPT_CEU}</script><div class="hero-texto">', html)
+        self.assertLess(html.index('<div class="ceu"'), html.index("<script>"))
 
     def test_camadas_presentes_com_url_versionada(self):
         with tempfile.TemporaryDirectory() as pasta:
@@ -97,8 +123,10 @@ class TestHero(unittest.TestCase):
         for nome, dados in conteudo.items():
             versao = hashlib.sha1(dados).hexdigest()[:10]
             self.assertIn(f'<div class="camada {nome}" style="--mascara:url(\'paisagem/{nome}.svg?v={versao}\')"></div>', html)
-        for nome in ("sol", "baia", "promontorio"):
+        for nome in ("baia", "promontorio"):
             self.assertNotIn(f"camada {nome}", html)
+        # O sol é o .ceu::before do CSS, não uma camada com máscara.
+        self.assertEqual(I.CAMADAS, ("fundo", "baia", "promontorio", "orla"))
         # Ordem fixa das camadas, do fundo para a frente.
         self.assertLess(html.index("camada fundo"), html.index("camada orla"))
 
@@ -119,10 +147,32 @@ class TestQuemEMeuVereador(unittest.TestCase):
         self.assertNotIn("vereadores/anterior.html", html)
         self.assertIn('<section class="quem-vereador" data-combobox aria-labelledby="t-quem">', html)
         self.assertIn('<h2 id="t-quem" class="h-secao">Quem é meu vereador?</h2>', html)
-        self.assertIn('<details class="lista-vereadores"><summary>Ver os 5 vereadores da legislatura atual</summary>'
-                      '<ul id="lista-vereadores">', html)
+        self.assertIn('<details class="lista-vereadores"><summary>Ver os 5 que exerceram mandato nesta legislatura '
+                      '(4 eleitos e 1 suplente)</summary><ul id="lista-vereadores">', html)
         self.assertIn('<a href="vereadores/bruno.html">Bruno</a> <span class="partido">PA</span></li>', html)
         self.assertIn('Carlos Silva</a> <span class="partido">PC</span> <span class="status">suplente em exercício</span>', html)
+
+    def test_campo_do_combobox_no_servidor_antes_da_lista(self):
+        html = I.quem_e_meu_vereador(modelo_base())
+        self.assertEqual(html.count(I.CAMPO_BUSCA), 1)
+        self.assertLess(html.index('<div class="cb-campo">'), html.index('<details class="lista-vereadores">'))
+        self.assertIn('<label for="cb-vereadores" id="cb-vereadores-rotulo">Digite o nome do vereador</label>', html)
+        self.assertIn('<input id="cb-vereadores" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" '
+                      'aria-controls="cb-vereadores-lista" autocomplete="off">', html)
+        self.assertIn('<ul role="listbox" id="cb-vereadores-lista" aria-labelledby="cb-vereadores-rotulo" hidden></ul>', html)
+        self.assertIn('<p class="so-leitor" aria-live="polite" id="cb-vereadores-status"></p></div>', html)
+        # Sem JS, o campo some (a classe js vem de SCRIPT_CABECA); na impressão também.
+        css = sem_comentarios(CSS_INICIO.read_text(encoding="utf-8"))
+        ocultos = [(c, s) for c, s, corpo in regras(css) if ".cb-campo" in s and declaracoes(corpo).get("display", "").startswith("none")]
+        self.assertIn(((), "html:not(.js) .cb-campo"), ocultos)
+        self.assertTrue(any(c == ("@media print",) for c, _ in ocultos))
+
+    def test_resumo_com_eleitos_e_suplentes(self):
+        self.assertEqual(I.resumo_lista(21, 9), "Ver os 30 que exerceram mandato nesta legislatura (21 eleitos e 9 suplentes)")
+        self.assertEqual(I.resumo_lista(21, 1), "Ver os 22 que exerceram mandato nesta legislatura (21 eleitos e 1 suplente)")
+        self.assertEqual(I.resumo_lista(1, 2), "Ver os 3 que exerceram mandato nesta legislatura (1 eleito e 2 suplentes)")
+        self.assertEqual(I.resumo_lista(21, 0), "Ver os 21 vereadores eleitos nesta legislatura")
+        self.assertEqual(I.resumo_lista(1, 0), "Ver o vereador eleito nesta legislatura")
 
     def test_prefixo_e_escape(self):
         modelo = modelo_base()
@@ -130,7 +180,8 @@ class TestQuemEMeuVereador(unittest.TestCase):
         html = I.quem_e_meu_vereador(modelo, "../")
         self.assertIn('<a href="../vereadores/x.html">Ana &lt;b&gt; &amp; Cia</a> <span class="partido">P&amp;&lt;T&gt;</span>', html)
         self.assertNotIn("<b>", html)
-        self.assertIn("Ver o vereador da legislatura atual", html)
+        # Sem "eleito": False, conta como eleito.
+        self.assertIn("<summary>Ver o vereador eleito nesta legislatura</summary>", html)
 
 
 def docs_mapa() -> list[dict]:
@@ -178,10 +229,12 @@ class TestLinhaDoTempo(unittest.TestCase):
         html = I.linha_do_tempo(memoria_sintetica())
         self.assertTrue(html.startswith('<section class="linha-tempo" aria-labelledby="t-linha">'
                                         '<h2 id="t-linha" class="h-secao">Niterói no tempo</h2>'
-                                        '<div class="tabela-rolavel linha-rolavel" role="region" tabindex="0" aria-labelledby="t-linha"><ol>'))
-        self.assertEqual(re.findall(r'<time datetime="([^"]+)">', html), ["1573-11-22", "1894", "1975-03-15"])
-        self.assertIn('<time datetime="1573-11-22">22/11/1573</time>', html)
-        self.assertIn('<time datetime="1894">1894–1903</time>', html)
+                                        '<div class="tabela-rolavel linha-rolavel" role="region" tabindex="0" '
+                                        'aria-label="Linha do tempo, role na horizontal"><ol>'))
+        self.assertEqual(re.findall(r'<span class="quando"><time datetime="([^"]+)">', html), ["1573-11-22", "1894", "1975-03-15"])
+        self.assertEqual(re.findall(r'<time datetime="([^"]+)">', html), ["1573-11-22", "1894", "1903", "1975-03-15"])
+        self.assertIn('<li><span class="quando"><time datetime="1573-11-22">22/11/1573</time></span> <strong>', html)
+        self.assertIn('<span class="quando"><time datetime="1894">1894</time>–<time datetime="1903">1903</time></span>', html)
         self.assertIn("<strong>Capital &lt;fora&gt; &amp; volta</strong>", html)
         self.assertIn("<p>Texto &lt;i&gt;A&lt;/i&gt; &amp; mais.</p>", html)
         self.assertIn('<a href="https://exemplo.test/a?x=1&amp;y=2">Arquivo &amp; cia</a>', html)
@@ -192,10 +245,10 @@ class TestLinhaDoTempo(unittest.TestCase):
         memoria = I.carregar_memoria(RAIZ)
         self.assertIsNotNone(memoria)
         html = I.linha_do_tempo(memoria)
-        datas = re.findall(r'<time datetime="([^"]+)">', html)
+        datas = re.findall(r'<span class="quando"><time datetime="([^"]+)">', html)
         self.assertEqual(len(datas), len(memoria["linha_do_tempo"]))
         self.assertEqual(datas, sorted(datas))
-        self.assertIn('<time datetime="1894">1894–1903</time>', html)
+        self.assertIn('<time datetime="1894">1894</time>–<time datetime="1903">1903</time>', html)
         self.assertEqual(html.count("<li>"), len(memoria["linha_do_tempo"]))
 
 
@@ -210,8 +263,9 @@ class TestFaixaMemoria(unittest.TestCase):
         html = I.faixa_memoria(memoria)
         pagina = gerar_memoria(memoria)
         self.assertIn('id="fm-titulo" class="h-secao">Niterói que nos inspira</h2>', html)
-        self.assertEqual(html.count('<svg class="emblema"'), 5)
-        self.assertEqual(html.count('aria-hidden="true" focusable="false"'), 5)
+        n = len(memoria["homenageados"])
+        self.assertEqual(html.count('<svg class="emblema"'), n)
+        self.assertEqual(html.count('aria-hidden="true" focusable="false"'), n)
         self.assertNotIn('role="img"', html)
         self.assertNotIn("<title", html)
         self.assertEqual(len(ids(html)), len(set(ids(html))))
@@ -313,6 +367,32 @@ class TestFasesDoCeu(unittest.TestCase):
                 self.assertEqual(texto[3], 1.0)
                 self.assertGreaterEqual(razao_contraste(texto[:3], fundo), 4.5)
 
+    def test_texto_empilhado_sobre_a_orla_com_contraste(self):
+        # Abaixo de 900px o texto sai do céu e fica sobre --camada-4.
+        for fase, props in self.fases.items():
+            with self.subTest(fase=fase):
+                texto, orla = rgba(props["--h1"], {}), rgba(props["--camada-4"], {})
+                self.assertEqual(orla[3], 1.0)
+                self.assertGreaterEqual(razao_contraste(texto[:3], orla[:3]), 4.5)
+
+    def test_horizonte_e_fundo_distinguiveis(self):
+        # O fundo da paisagem (--camada-1) recorta o horizonte (--ceu-2), também à noite e de madrugada.
+        for fase, props in self.fases.items():
+            with self.subTest(fase=fase):
+                horizonte, fundo = rgba(props["--ceu-2"], {}), rgba(props["--camada-1"], {})
+                self.assertGreaterEqual(razao_contraste(horizonte[:3], fundo[:3]), 1.5)
+
+    def test_texto_empilhado_abaixo_de_900px(self):
+        estreito = "@media (max-width: 899.98px)"
+        hero_texto = {s: declaracoes(corpo) for c, s, corpo in regras(self.css) if c == (estreito,)}
+        self.assertEqual(hero_texto[".hero"].get("grid-template-rows"), "auto auto")
+        self.assertEqual(hero_texto[".ceu"].get("grid-area"), "1 / 1")
+        self.assertEqual(hero_texto[".hero-texto"].get("grid-area"), "2 / 1")
+        self.assertEqual(hero_texto[".hero-texto"].get("background"), "var(--camada-4)")
+        self.assertEqual(hero_texto[".hero-texto"].get("max-width"), "none")
+        largo = [declaracoes(corpo) for c, s, corpo in regras(self.css) if not c and s == ".hero-texto"]
+        self.assertIn("min(46rem, 55%)", [d.get("max-width") for d in largo])
+
     def test_veu_e_texto_tambem_valem_para_o_irmao_hero_texto(self):
         # As propriedades são declaradas no .ceu; o texto é irmão, então cada bloco precisa do seletor ~ .hero-texto.
         for fase in FASES_CEU:
@@ -346,7 +426,7 @@ class TestFasesDoCeu(unittest.TestCase):
     def test_proporcao_fixa_impressao_e_cores_forcadas(self):
         ceu = [(contexto, declaracoes(corpo)) for contexto, seletor, corpo in regras(self.css) if seletor == ".ceu"]
         self.assertIn(("16 / 6"), [d.get("aspect-ratio") for c, d in ceu if not c])
-        self.assertTrue(any(d.get("aspect-ratio") == "4 / 3" and any("max-width" in x for x in c) for c, d in ceu))
+        self.assertTrue(any(d.get("aspect-ratio") == "2 / 1" and c == ("@media (max-width: 899.98px)",) for c, d in ceu))
         ocultos = {c[-1] for c, s, corpo in regras(self.css) if c and ".ceu" in s.split(", ")
                    and declaracoes(corpo).get("display", "").startswith("none")}
         self.assertIn("@media print", ocultos)
@@ -390,7 +470,7 @@ class TestHomeIntegrada(unittest.TestCase):
     def test_memoria_real_sem_chave_no_modelo(self):
         corpo = corpo_principal(P.gerar_index(modelo_home()))
         self.assertIn('id="t-linha"', corpo)
-        self.assertEqual(corpo.count("<time datetime="), len(I.carregar_memoria(RAIZ)["linha_do_tempo"]))
+        self.assertEqual(corpo.count('<span class="quando"><time datetime='), len(I.carregar_memoria(RAIZ)["linha_do_tempo"]))
 
     def test_faixa_so_quando_pagina_publicada(self):
         modelo = modelo_home(memoria=I.carregar_memoria(RAIZ))
@@ -462,24 +542,39 @@ def gz(conteudo: bytes) -> int:
     return len(gzip.compress(conteudo, mtime=0))
 
 
+def fontes_do_css_global() -> list[str]:
+    """WOFF2 de todos os @font-face de estilo.css (Barlow Condensed e Public Sans, normal, itálico e latin-ext)."""
+    css = sem_comentarios((P.FONTE_ESTATICA / "estilo.css").read_text(encoding="utf-8"))
+    return sorted({url for _, seletor, corpo in regras(css) if seletor == "@font-face"
+                   for url in re.findall(r'url\(\s*["\']?([^"\')?#]+\.woff2)', corpo)})
+
+
 class TestOrcamentoDaHome(unittest.TestCase):
-    def html_home(self) -> bytes:
-        """A home gerada em site/, se existir; senão, a de um modelo sintético com a memória real."""
-        gerada = gerar_site.SAIDA / "index.html"
-        if gerada.is_file():
-            return gerada.read_bytes()
+    def html_sintetico(self) -> bytes:
         return P.gerar_index(modelo_home(documentos=docs_mapa(), geo_bairros=geo_completo())).encode("utf-8")
+
+    def html_home(self) -> bytes:
+        """A home gerada em site/, se for mais nova que o código da geração; senão, a de um modelo sintético."""
+        gerada = gerar_site.SAIDA / "index.html"
+        fontes = [*(RAIZ / "coletor" / "site").glob("*.py"), RAIZ / "coletor" / "gerar_site.py"]
+        if gerada.is_file() and gerada.stat().st_mtime >= max(f.stat().st_mtime for f in fontes):
+            return gerada.read_bytes()
+        return self.html_sintetico()
 
     def test_html_ate_100_kib(self):
         self.assertLessEqual(gz(self.html_home()), 100 * KIB)
-        sintetica = P.gerar_index(modelo_home(documentos=docs_mapa(), geo_bairros=geo_completo())).encode("utf-8")
-        self.assertLessEqual(gz(sintetica), 100 * KIB)
+        self.assertLessEqual(gz(self.html_sintetico()), 100 * KIB)
 
     def test_carga_da_home_ate_300_kib(self):
         textos = ["estilo.css", "inicio.css", "navegacao.js", "inicio.js", "dados.js", "app.js",
-                  *(f"paisagem/{c}.svg" for c in I.CAMADAS if (P.FONTE_ESTATICA / f"paisagem/{c}.svg").is_file())]
-        fontes = ["fontes/public-sans-latin-wght-normal.woff2", "fontes/barlow-condensed-latin-700-normal.woff2"]
-        self.assertEqual(len(textos), 10)  # quatro máscaras, além dos seis CSS/JS
+                  *(f"paisagem/{c}.svg" for c in I.CAMADAS if (P.FONTE_ESTATICA / f"paisagem/{c}.svg").is_file()),
+                  "textura-bairros.svg"]
+        self.assertEqual(len(textos), 11)  # seis CSS/JS, quatro máscaras e a textura de body::before
+        fontes = fontes_do_css_global()
+        # Todas as faces que a home pode pedir: Barlow 500/600/700 e Public Sans normal/itálico, latin e latin-ext.
+        self.assertEqual(len(fontes), 10, fontes)
+        self.assertIn("fontes/public-sans-latin-wght-normal.woff2", fontes)
+        self.assertTrue(all("fraunces" not in f for f in fontes))
         tamanhos = {nome: gz(P.bytes_estaticos(P.FONTE_ESTATICA / nome)) for nome in textos}
         # WOFF2 já é comprimido e não é servido com gzip: conta os bytes brutos.
         tamanhos.update({nome: len(P.bytes_estaticos(P.FONTE_ESTATICA / nome)) for nome in fontes})

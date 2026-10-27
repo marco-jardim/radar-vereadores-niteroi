@@ -163,53 +163,6 @@
      "url": "https://dicionariompb.com.br/artista/ismael-silva/"
     }
    ]
-  },
-  {
-   "id": "oscar-niemeyer",
-   "nome": "Oscar Niemeyer",
-   "nome_completo": "Oscar Ribeiro de Almeida Niemeyer Soares Filho",
-   "nascimento": "1907-12-15",
-   "morte": "2012-12-05",
-   "categoria": "arquitetura",
-   "vinculo": "Projetou o Museu de Arte Contemporânea de Niterói, inaugurado em 2 de setembro de 1996.",
-   "biografia": [
-    "Foi arquiteto e formou-se na Escola Nacional de Belas Artes em 1934.",
-    "Projetou edifícios públicos de Brasília, incluindo o Congresso Nacional e o Palácio da Alvorada.",
-    "Foi autor do projeto do Museu de Arte Contemporânea de Niterói.",
-    "Filiou-se ao PCB em 1945. Segundo nota publicada pelo partido em 2012, foi eleito seu presidente de honra em 1992. O obituário do The Guardian o identifica como presidente entre 1992 e 1996, sem qualificar o cargo como honorário."
-   ],
-   "lugar_de_memoria": "Museu de Arte Contemporânea de Niterói, no Mirante da Boa Viagem.",
-   "emblema": "oscar-niemeyer.svg",
-   "imagem": {
-    "tipo": "propria",
-    "credito": "Ilustração própria do projeto"
-   },
-   "fontes": [
-    {
-     "titulo": "Biografia 1930–1940 — Fundação Oscar Niemeyer",
-     "url": "https://www.niemeyer.org.br/biografia/1930-1940"
-    },
-    {
-     "titulo": "Biografia 1955–1960 — Fundação Oscar Niemeyer",
-     "url": "https://www.niemeyer.org.br/biografia/1955-1960"
-    },
-    {
-     "titulo": "Museu de Arte Contemporânea de Niterói — Fundação Oscar Niemeyer",
-     "url": "https://www.niemeyer.org.br/obra/pro193"
-    },
-    {
-     "titulo": "Museus — Prefeitura de Niterói",
-     "url": "https://niteroi.rj.gov.br/museus/"
-    },
-    {
-     "titulo": "Oscar Niemeyer: uma legenda comunista para a história — PCB",
-     "url": "https://pcb.org.br/portal2/3982"
-    },
-    {
-     "titulo": "Oscar Niemeyer obituary — The Guardian",
-     "url": "https://www.theguardian.com/artanddesign/2012/dec/06/oscar-niemeyer-obituary"
-    }
-   ]
   }
  ],
  "linha_do_tempo": [
