@@ -1,8 +1,10 @@
-"""Marca e favicon gerados por coletor.paisagem: XML, paleta, contraste e bytes versionados."""
+"""Marca, favicon e textura: XML, paleta, contraste, orçamento e bytes versionados."""
 from __future__ import annotations
 
 import contextlib
+import gzip
 import io
+import json
 import re
 import tempfile
 import unittest
@@ -11,6 +13,7 @@ from pathlib import Path
 from unittest import mock
 
 from coletor import paisagem
+from coletor.regras_documentos import BAIRROS_NITEROI
 
 RAIZ = Path(__file__).resolve().parents[1]
 NS = "{http://www.w3.org/2000/svg}"
@@ -167,6 +170,56 @@ class MarcaTest(unittest.TestCase):
         self.assertAlmostEqual(contraste("#777777", "#777777"), 1)
 
 
+def geometria_textura() -> dict:
+    """Geometria sintética mínima dos 52 bairros, sem depender da base opcional."""
+    return {"viewbox": [0, 0, 1000, 800], "osm_base": "2026-10-23T03:26:20Z",
+            "atribuicao": "© contribuidores do OpenStreetMap", "licenca": "ODbL 1.0",
+            "fonte": "https://www.openstreetmap.org/relation/2220789",
+            "bairros": {nome: {"path": "M8,8 9,8 10,8 20,8 20,20Z", "centro": [15, 12], "osm_id": i}
+                        for i, nome in enumerate(BAIRROS_NITEROI, 1)}}
+
+
+class TexturaTest(unittest.TestCase):
+    def test_xml_contornos_atribuicao_e_data(self) -> None:
+        geo = geometria_textura()
+        texto = paisagem.textura_svg(geo)
+        raiz = ET.fromstring(texto)
+        self.assertEqual(raiz.tag, f"{NS}svg")
+        self.assertEqual(raiz.get("viewBox"), "0 0 1000 800")
+        self.assertEqual(raiz.findtext(f"{NS}title"), "Contornos dos bairros de Niterói")
+        descricao = raiz.findtext(f"{NS}desc")
+        self.assertIn("© contribuidores do OpenStreetMap, ODbL 1.0, https://www.openstreetmap.org/copyright", descricao)
+        self.assertIn(geo["osm_base"], descricao)
+        caminhos = list(raiz.iter(f"{NS}path"))
+        self.assertEqual(len(caminhos), 1)
+        self.assertEqual(caminhos[0].get("fill"), "none")
+        self.assertEqual(caminhos[0].get("stroke"), "#000")
+        self.assertEqual(caminhos[0].get("stroke-width"), "1")
+        self.assertEqual(caminhos[0].get("d").count("M"), 52)
+        self.assertIsNone(raiz.find(f"{NS}rect"))
+        self.assertEqual(set(HEX.findall(texto)), {"#000"})
+        self.assertTrue(texto.endswith("</svg>\n"))
+        self.assertNotIn("\r", texto)
+        self.assertLessEqual(len(gzip.compress(texto.encode("utf-8"), compresslevel=9, mtime=0)), 12 * 1024)
+
+    def test_deterministico_independente_da_ordem_dos_bairros(self) -> None:
+        geo = geometria_textura()
+        texto = paisagem.textura_svg(geo)
+        self.assertEqual(texto, paisagem.textura_svg(geo))
+        geo["bairros"] = dict(reversed(list(geo["bairros"].items())))
+        self.assertEqual(texto, paisagem.textura_svg(geo))
+
+    def test_simplificacao_preserva_aneis(self) -> None:
+        self.assertEqual(paisagem._contorno_textura("M8,8 9,8 10,8 20,8 20,20Z", 4), "M8,8 20,8 20,20Z")
+        self.assertEqual(paisagem._contorno_textura("M8,8 9,8 9,9Z", 8), "M8,8 9,8 9,9Z")
+
+    def test_geometria_invalida_falha(self) -> None:
+        for geo in (None, {}, {**geometria_textura(), "bairros": {}},
+                    {**geometria_textura(), "viewbox": [0, 0, 0, 800]}):
+            with self.subTest(geo=geo), self.assertRaises(ValueError):
+                paisagem.textura_svg(geo)
+
+
 class ArquivosVersionadosTest(unittest.TestCase):
     def test_site_src_igual_a_geracao(self) -> None:
         """Mudou a geometria? Rode `python -m coletor.paisagem --marca`."""
@@ -174,8 +227,54 @@ class ArquivosVersionadosTest(unittest.TestCase):
             with self.subTest(nome=nome):
                 self.assertEqual((RAIZ / "site_src" / nome).read_bytes(), texto.encode("utf-8"))
 
+    def test_textura_igual_a_geracao_e_dentro_do_orcamento(self) -> None:
+        """Mudou a geometria? Rode `python -m coletor.paisagem --textura`."""
+        caminho = RAIZ / "data" / "geo" / "bairros.json"
+        if not caminho.exists():
+            self.skipTest("data/geo/bairros.json ausente: geometria opcional da textura")
+        geo = json.loads(caminho.read_text(encoding="utf-8"))
+        texto = paisagem.textura_svg(geo)
+        self.assertEqual((RAIZ / "site_src" / "textura-bairros.svg").read_bytes(), texto.encode("utf-8"))
+        self.assertEqual(ET.fromstring(texto).get("viewBox"), " ".join(map(str, geo["viewbox"])))
+        self.assertIn(geo["osm_base"], ET.fromstring(texto).findtext(f"{NS}desc"))
+        self.assertEqual(set(HEX.findall(texto)), {"#000"})
+        self.assertEqual(texto, paisagem.textura_svg(geo))
+        self.assertLessEqual(len(gzip.compress(texto.encode("utf-8"), compresslevel=9, mtime=0)), 12 * 1024)
+
 
 class CliTest(unittest.TestCase):
+    def test_textura_e_marca_podem_ser_combinadas(self) -> None:
+        geo = geometria_textura()
+        for argumentos in (["--textura"], ["--marca", "--textura"]):
+            with self.subTest(argumentos=argumentos), tempfile.TemporaryDirectory() as tmp:
+                saida = Path(tmp) / "site_src"
+                caminho = Path(tmp) / "bairros.json"
+                caminho.write_text(json.dumps(geo), encoding="utf-8")
+                with (mock.patch.object(paisagem, "SAIDA", saida),
+                      mock.patch.object(paisagem, "GEOMETRIA", caminho), contextlib.redirect_stdout(io.StringIO())):
+                    self.assertEqual(paisagem.main(argumentos), 0)
+                self.assertEqual((saida / "textura-bairros.svg").read_bytes(), paisagem.textura_svg(geo).encode("utf-8"))
+                self.assertEqual((saida / "marca.svg").exists(), "--marca" in argumentos)
+                self.assertEqual((saida / "favicon.svg").exists(), "--marca" in argumentos)
+
+    def test_geometria_ausente_ou_invalida_nao_sobrescreve_textura(self) -> None:
+        for conteudo in (None, "{", "{}", "null"):
+            with self.subTest(conteudo=conteudo), tempfile.TemporaryDirectory() as tmp:
+                saida = Path(tmp) / "site_src"
+                saida.mkdir()
+                destino = saida / "textura-bairros.svg"
+                destino.write_bytes(b"textura anterior\n")
+                caminho = Path(tmp) / "bairros.json"
+                if conteudo is not None:
+                    caminho.write_text(conteudo, encoding="utf-8")
+                with (mock.patch.object(paisagem, "SAIDA", saida),
+                      mock.patch.object(paisagem, "GEOMETRIA", caminho),
+                      contextlib.redirect_stderr(io.StringIO()) as erro):
+                    self.assertNotEqual(paisagem.main(["--textura"]), 0)
+                self.assertIn("textura não gravada", erro.getvalue())
+                self.assertEqual(destino.read_bytes(), b"textura anterior\n")
+                self.assertEqual(list(saida.iterdir()), [destino])
+
     def test_marca_grava_os_dois_arquivos(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             saida = Path(tmp) / "site_src"
