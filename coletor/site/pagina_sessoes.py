@@ -171,9 +171,21 @@ def _nome(modelo: dict, slug: str, prefixo: str = "", chip: bool = False, leg_id
 
 
 def _etiqueta_afastamento(afastamentos: list[dict]) -> str:
-    """Reutiliza cargo e fonte do mandato enriquecido a partir do config."""
-    return "".join(f'<span class="status">afastado: {P.esc(a["cargo"])} '
-                   f'({P.link_fonte(a["fonte"])})</span>' for a in afastamentos)
+    """Agrupa natureza e cargo na ordem de aparição, preservando as fontes do mandato."""
+    grupos = {}
+    for a in afastamentos:
+        grupos.setdefault((a.get("natureza", "cargo"), a["cargo"]), []).append(a["fonte"])
+    etiquetas = []
+    for (natureza, cargo), fontes in grupos.items():
+        rotulo = "licença registrada" if natureza == "licenca" else "em outro cargo"
+        if len(fontes) == 1:
+            links = P.link_fonte(fontes[0])
+        else:
+            links = "fontes: " + ", ".join(
+                P.link_fonte(fonte, str(i), rotulo=f"fonte {i} de {len(fontes)}: {cargo}")
+                for i, fonte in enumerate(fontes, 1))
+        etiquetas.append(f'<span class="status">{rotulo}: {P.esc(cargo)} ({links})</span>')
+    return "".join(etiquetas)
 
 
 def _barra_presenca(presenca: dict, afastado: bool = False) -> str:

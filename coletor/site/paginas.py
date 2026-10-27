@@ -78,11 +78,13 @@ def esc(x) -> str:
     return html.escape(str(x if x is not None else ""))
 
 
-def link_fonte(url: str, texto: str = "fonte") -> str:
+def link_fonte(url: str, texto: str = "fonte", *, rotulo: str | None = None) -> str:
     """Link de fonte escapado; só o host HTTPS do SISCAM abre em nova aba."""
     destino = urlsplit(url)
     nova_aba = destino.scheme == "https" and destino.netloc == urlsplit(SISCAM).netloc
     atributos = ' target="_blank" rel="noopener"' if nova_aba else ""
+    if rotulo:
+        atributos += f' aria-label="{esc(rotulo + (" (abre em nova aba)" if nova_aba else ""))}"'
     return f'<a href="{esc(url)}"{atributos}>{esc(texto)}{NOVA_ABA if nova_aba else ""}</a>'
 
 
@@ -1520,7 +1522,8 @@ def gerar_vereador(modelo: dict, pessoa: dict) -> str:
         for a in m["afastamentos"]:
             datas = "".join(f", {rotulo} {data_br(a[chave])}" for chave, rotulo in (
                 ("inicio", "a partir de"), ("aprovacao", "aprovado em"), ("fim", "até")) if a.get(chave))
-            avisos.append(f'<p class="aviso">Afastamento registrado: {esc(a["cargo"])}{datas} ({link_fonte(a["fonte"])}).</p>')
+            rotulo = "Licença registrada" if a.get("natureza") == "licenca" else "Em outro cargo"
+            avisos.append(f'<p class="aviso">{rotulo}: {esc(a["cargo"])}{datas} ({link_fonte(a["fonte"])}).</p>')
         afast = "".join(avisos)
         cond = "Eleito" if m["eleito"] else "Suplente em exercício"
         med = lambda k: mediana_legislatura(modelo, leg["id"], k)

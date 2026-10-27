@@ -292,17 +292,18 @@ class TestGerarSite(unittest.TestCase):
         pessoa = next(iter(modelo["pessoas"].values()))
         mandato = next(iter(pessoa["mandatos"].values()))
         fonte = P.SISCAM + "DetalhesDocumentos.aspx?IdDocumento=277284"
-        for datas, texto in (
-            ({}, ""),
-            ({"inicio": "2023-12-08", "fim": "2024-03-31"},
+        for natureza, rotulo, datas, texto in (
+            ("cargo", "Em outro cargo", {}, ""),
+            ("licenca", "Licença registrada", {"inicio": "2023-12-08", "fim": "2024-03-31"},
              ", a partir de 08/12/2023, até 31/03/2024"),
-            ({"aprovacao": "2021-02-03", "inicio": None, "fim": None}, ", aprovado em 03/02/2021"),
+            ("licenca", "Licença registrada", {"aprovacao": "2021-02-03", "inicio": None, "fim": None}, ", aprovado em 03/02/2021"),
         ):
-            with self.subTest(datas=datas):
-                mandato["afastamentos"] = [{"cargo": "Licença <médica>", "fonte": fonte, **datas}]
+            with self.subTest(natureza=natureza, datas=datas):
+                mandato["afastamentos"] = [{"natureza": natureza, "cargo": "Licença <médica>", "fonte": fonte, **datas}]
                 html = P.gerar_vereador(modelo, pessoa)
-                self.assertIn(f'<p class="aviso">Afastamento registrado: Licença &lt;médica&gt;{texto} '
+                self.assertIn(f'<p class="aviso">{rotulo}: Licença &lt;médica&gt;{texto} '
                               f'({P.link_fonte(fonte)}).</p>', html)
+                self.assertNotIn("Afastamento registrado:", html)
                 self.assertNotIn("Nesse período a cadeira foi ocupada por suplente", html)
                 self.assertNotIn("Afastou-se da Câmara para o cargo", html)
 

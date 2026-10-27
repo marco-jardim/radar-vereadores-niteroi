@@ -336,10 +336,12 @@ class TestPaginaSessoes(unittest.TestCase):
             ("https://consultaniteroi.siscam.com.br.example.org/ato", False),
         ):
             with self.subTest(url=url):
-                html = S._etiqueta_afastamento([{"cargo": "Licença <médica>", "fonte": url}])
+                html = S._etiqueta_afastamento([{"natureza": "licenca", "cargo": "Licença <médica>", "fonte": url}])
                 link = next(n for n in Documento(html).nos if n["tag"] == "a")
                 self.assertEqual(link["attrs"]["href"], url)
                 self.assertIn("Licença &lt;médica&gt;", html)
+                self.assertIn("licença registrada:", html)
+                self.assertNotIn("fontes:", html)
                 if nova_aba:
                     self.assertEqual(link["attrs"]["target"], "_blank")
                     self.assertEqual(link["attrs"]["rel"], "noopener")
@@ -349,9 +351,39 @@ class TestPaginaSessoes(unittest.TestCase):
                     self.assertNotIn(P.NOVA_ABA, html)
         self.assertIn("&lt;fonte&gt;", P.link_fonte("https://example.org/", "<fonte>"))
 
+    def test_etiquetas_agrupam_natureza_e_cargo_com_fontes_numeradas_acessiveis(self):
+        cargo = 'Deputado <Estadual> & "suplente"'
+        fontes = [P.SISCAM + "DetalhesDocumentos.aspx?IdDocumento=1",
+                  "https://example.org/ato", P.SISCAM + "Arquivos/Sessoes/ata.pdf"]
+        afastamentos = [{"natureza": "cargo", "cargo": cargo, "fonte": fontes[0]},
+                        {"natureza": "licenca", "cargo": cargo, "fonte": fontes[1]},
+                        {"natureza": "cargo", "cargo": cargo, "fonte": fontes[1]},
+                        {"natureza": "cargo", "cargo": "Secretário", "fonte": fontes[1]},
+                        {"natureza": "cargo", "cargo": cargo, "fonte": fontes[2]}]
+        html = S._etiqueta_afastamento(afastamentos)
+        etiquetas = Documento(html).com_classe("status")
+        self.assertEqual(len(etiquetas), 3)
+        self.assertTrue(Documento.texto(etiquetas[0]).startswith(f"em outro cargo: {cargo} (fontes: 1"))
+        self.assertEqual(Documento.texto(etiquetas[1]), f"licença registrada: {cargo} (fonte)")
+        self.assertEqual(Documento.texto(etiquetas[2]), "em outro cargo: Secretário (fonte)")
+        links = Documento.descendentes(etiquetas[0], "a")
+        self.assertEqual([a["attrs"]["href"] for a in links], fontes)
+        for i, link in enumerate(links, 1):
+            nova_aba = i != 2
+            self.assertEqual(link["attrs"]["aria-label"], f"fonte {i} de 3: {cargo}"
+                             + (" (abre em nova aba)" if nova_aba else ""))
+            self.assertEqual(link["attrs"].get("target"), "_blank" if nova_aba else None)
+        self.assertNotIn("<Estadual>", html)
+        # O mesmo agrupamento chega à lista, à tabela e à seção de sessões da ficha.
+        leg = self.modelo["sessoes"]["legislaturas"][1]
+        self.pessoa["mandatos"][leg["id"]]["afastamentos"] = afastamentos
+        presencas = S._presencas(self.modelo, self.modelo["sessoes"], leg)
+        self.assertEqual(presencas.count(html), 2)
+        self.assertIn(html, S.secao_sessoes_vereador(self.modelo, self.pessoa))
+
     def test_afastamento_por_mandato_com_fonte_base_curta_sem_barra_e_base_dez_com_barra(self):
         leg = self.modelo["sessoes"]["legislaturas"][1]
-        afastamento = {"cargo": 'Administração <Regional> & Serviços',
+        afastamento = {"natureza": "cargo", "cargo": 'Administração <Regional> & Serviços',
                        "fonte": 'https://example.org/ato?cargo=1&edicao="2"'}
         self.pessoa["mandatos"][leg["id"]]["afastamentos"] = [afastamento]
         registro = self.modelo["sessoes"]["por_pessoa"][self.pessoa["slug"]][leg["id"]]
@@ -371,13 +403,13 @@ class TestPaginaSessoes(unittest.TestCase):
                 self.assertEqual([a["attrs"]["href"] for a in links],
                                  [f'vereadores/{self.pessoa["slug"]}.html', afastamento["fonte"]])
                 self.assertTrue(all(not Documento.descendentes(a, "a") for a in links))
-                self.assertIn('afastado: ' + afastamento["cargo"], Documento.texto(linha))
+                self.assertIn('em outro cargo: ' + afastamento["cargo"], Documento.texto(linha))
                 self.assertIn(P.esc(afastamento["fonte"]), html)
                 self.assertNotIn('<Regional>', html)
                 barras = [n for n in Documento.descendentes(linha, "div") if n["attrs"].get("class") == "barra presenca"]
                 ficha = S.secao_sessoes_vereador(self.modelo, self.pessoa)
                 doc_ficha = Documento(ficha)
-                self.assertIn('afastado: ' + P.esc(afastamento["cargo"]), ficha)
+                self.assertIn('em outro cargo: ' + P.esc(afastamento["cargo"]), ficha)
                 self.assertTrue(any(n["tag"] == "a" and n["attrs"].get("href") == afastamento["fonte"]
                                     and Documento.texto(n) == "fonte" for n in doc_ficha.nos))
                 if base < 10:
@@ -402,7 +434,8 @@ class TestPaginaSessoes(unittest.TestCase):
             {"cargo": "Secretaria de teste", "fonte": "https://example.org/fonte"}]
         dados = self.modelo["sessoes"]
         antigo = S._presencas(self.modelo, dados, dados["legislaturas"][0])
-        self.assertNotIn("afastado:", antigo)
+        self.assertNotIn("em outro cargo:", antigo)
+        self.assertNotIn("licença registrada:", antigo)
         self.assertNotIn("https://example.org/fonte", antigo)
         # Base curta sem afastamento continua com a apresentação anterior.
         pessoa = self.modelo["pessoas"]["pessoa-01"]
