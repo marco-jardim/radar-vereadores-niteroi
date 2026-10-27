@@ -135,6 +135,43 @@ test("cartões espelham classes, rótulos, notas, ações e escape, sem nomes em
   assert.match(perigoso, /&lt;script&gt;/);
 });
 
+test("cartão tem paridade byte a byte com cartao_votacao conferido pelo Python", () => {
+  // test_pagina_sessoes.py confere o mesmo arquivo; o botão da ementa é comportamento, não marcação.
+  const esperado = fs.readFileSync(path.join(__dirname, "fixtures/cartao_sessoes.html"), "utf8").trim();
+  assert.equal(S.cartao(fixture.dic, dados()[2], ""), esperado);
+  assert.doesNotMatch(esperado, /ver-ementa/);
+});
+
+test("ementa longa ganha um botão sem duplicar texto; curta não; alternar troca classe, estado e rótulo", () => {
+  const longa = "Dispõe sobre <obras> & serviços " + "na cidade de Niterói ".repeat(10);
+  const html = S.cartao(fixture.dic, { ...dados()[2], ementa: longa }, "");
+  assert.match(html, /<p class="ementa">Dispõe sobre &lt;obras&gt; &amp; serviços na cidade/);
+  assert.equal(html.split("Dispõe sobre").length, 2, "o texto da ementa aparece uma única vez");
+  assert.doesNotMatch(html, /ver-ementa/);
+  const fazer = (id, texto) => {
+    const e = { id: "", textContent: texto, depois: "", classes: new Set(),
+      insertAdjacentHTML(pos, h) { assert.equal(pos, "afterend"); this.depois += h; },
+      classList: { toggle(c, ativo) { if (ativo) e.classes.add(c); else e.classes.delete(c); } } };
+    return { id, e, querySelector: (q) => q === ".ementa" ? e : null };
+  };
+  const curta = fazer("v-1", "x".repeat(S.LIMIAR_EMENTA)), comprida = fazer("v-2", longa.replace(/\s+$/, ""));
+  assert.equal(S.LIMIAR_EMENTA, 180);
+  S.ementas([curta, comprida, { id: "v-3" }]);
+  assert.equal(curta.e.depois, "");
+  assert.equal(curta.e.id, "");
+  assert.equal(comprida.e.id, "v-2-ementa");
+  assert.equal(comprida.e.depois, '<button type="button" class="link ver-ementa" aria-expanded="false" aria-controls="v-2-ementa">Ver ementa completa</button>');
+  S.ementas([comprida]);
+  assert.equal(comprida.e.depois.match(/ver-ementa/g).length, 1, "nova passada não repete o botão");
+  const bt = { atributos: { "aria-controls": "v-2-ementa", "aria-expanded": "false" }, textContent: "Ver ementa completa",
+    getAttribute(k) { return this.atributos[k]; }, setAttribute(k, v) { this.atributos[k] = v; } };
+  const doc = { getElementById: (id) => id === "v-2-ementa" ? comprida.e : null };
+  S.alternarEmenta(bt, doc);
+  assert.deepEqual([bt.atributos["aria-expanded"], bt.textContent, comprida.e.classes.has("ementa-aberta")], ["true", "Ver menos", true]);
+  S.alternarEmenta(bt, doc);
+  assert.deepEqual([bt.atributos["aria-expanded"], bt.textContent, comprida.e.classes.has("ementa-aberta")], ["false", "Ver ementa completa", false]);
+});
+
 test("CSV tem BOM, pessoa × votação, escape e fórmulas neutralizadas; não atribui inconsistentes", () => {
   assert.equal(S.celulaCsv('Texto, "aspas"\nlinha'), '"Texto, ""aspas""\nlinha"');
   for (const formula of ["=1+1", "+cmd", "-2", "@SOMA(A1)", "\tTabulação", "\rRetorno"]) assert.equal(S.celulaCsv(formula), '"\'' + formula + '"');
@@ -201,10 +238,12 @@ function iniciar({ query = "", numero = 3, falhar = false, semVotos = false, cab
   const elementos = { conteudo: el(), "manifesto-dados": el({ textContent: textoEmbutido || JSON.stringify(manifesto) }),
     "sessoes-leg-2025-2028": bloco, "divididas-2025-2028": secao, "lista-votacoes-2025-2028": lista,
     "contagem-votacoes-2025-2028": contador, "faixa-2025-2028": mapa };
-  const requisicoes = [], urls = [];
+  const requisicoes = [], urls = [], focos = [], cartoes = {};
   let blob, nomeCsv;
+  // Cartões existem só depois de inseridos na lista; focus() registra a ordem dos focos.
+  const cartao = (id) => lista.innerHTML.includes('id="' + id + '"') ? (cartoes[id] ||= el({ focus() { focos.push(id); } })) : null;
   const document = {
-    getElementById: (id) => elementos[id] || null,
+    getElementById: (id) => elementos[id] || (id.startsWith("v-") ? cartao(id) : null),
     querySelector: (q) => q === "form.filtros" || q === "form.filtros-sessoes" ? formulario : null,
     querySelectorAll: (q) => q === "form.filtros-sessoes" ? [formulario] : [],
     createElement: () => ({ click() { nomeCsv = this.download; } })
@@ -222,7 +261,7 @@ function iniciar({ query = "", numero = 3, falhar = false, semVotos = false, cab
   } };
   vm.runInNewContext(app, contexto, { filename: "app.js" });
   vm.runInNewContext(fonte, contexto, { filename: "sessoes.js" });
-  return { formulario, lista, contador, mapa, mais, linhas, continuacao, botaoCsv, requisicoes, urls,
+  return { formulario, lista, contador, mapa, mais, linhas, continuacao, botaoCsv, requisicoes, urls, focos, cartoes,
     manifesto: () => window.RadarArquivos.manifesto(),
     alterar(k, value) { formulario.elements[k].value = value; formulario.eventos.change(); },
     clicar(acao) { secao.eventos.click({ target: { closest: () => acao === "mais" ? mais : acao === "csv" ? botaoCsv : { dataset: { acao } } } }); },
@@ -298,6 +337,34 @@ test("VM: Mostrar mais acrescenta 40, CSV inicial baixa no primeiro clique e vaz
   assert.equal(csv.nome, "radar-vereadores-votacoes.csv");
   assert.match(csv.texto, /"data","sessao"/);
   assert.ok(inicial.requisicoes.includes("dados/vot-2025.json?v=fixture"));
+});
+
+test("VM: carga anuncia texto; Mostrar mais anuncia acréscimo e foca o primeiro cartão novo, inclusive na última página", async () => {
+  const tela = iniciar({ numero: 95, query: "?ano=2025" });
+  assert.equal(tela.contador.textContent, "Carregando votações…");
+  await assentar();
+  assert.deepEqual(tela.focos, [], "a carga por filtro não move o foco");
+  assert.doesNotMatch(tela.contador.textContent, /adicionadas/);
+  const ordem = () => [...tela.lista.innerHTML.matchAll(/<li class="projeto votacao" id="([^"]+)"/g)].map((m) => m[1]);
+  tela.clicar("mais");
+  assert.deepEqual(tela.focos, [ordem()[40]]);
+  assert.equal(tela.cartoes[ordem()[40]].tabindex, "-1");
+  assert.match(tela.contador.textContent, /^40 votações adicionadas · .*mostrando 80 de 95$/);
+  tela.clicar("mais");
+  assert.equal(tela.mais.hidden, true, "lista esgotada: o botão some");
+  assert.deepEqual(tela.focos, [ordem()[40], ordem()[80]], "o foco vai ao primeiro cartão novo, não ao body");
+  assert.equal(tela.cartoes[ordem()[80]].tabindex, "-1");
+  assert.match(tela.contador.textContent, /^15 votações adicionadas · .*mostrando 95 de 95$/);
+  // Primeiro clique sobre os cartões do servidor: carrega e foca o 41º.
+  const servidor = iniciar({ numero: 95 });
+  await assentar();
+  servidor.clicar("mais");
+  assert.equal(servidor.contador.textContent, "Carregando votações…");
+  await assentar();
+  assert.equal((servidor.lista.innerHTML.match(/<li class="projeto votacao"/g) || []).length, 80);
+  assert.equal(servidor.focos.length, 1);
+  assert.equal(servidor.focos[0], [...servidor.lista.innerHTML.matchAll(/<li class="projeto votacao" id="([^"]+)"/g)][40][1]);
+  assert.match(servidor.contador.textContent, /^40 votações adicionadas · /);
 });
 
 test("VM: falha de dados preserva servidor e avisa em aria-live; sem forms não inicializa", async () => {
