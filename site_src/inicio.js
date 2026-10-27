@@ -4,7 +4,8 @@
 (function () {
   "use strict";
 
-  // Fases do céu pela hora (h23) em America/Sao_Paulo, intervalos [início, fim):
+  // Fases do céu pela hora (h23) em America/Sao_Paulo, intervalos [início, fim). O script inline do hero
+  // (SCRIPT_CEU em coletor/site/inicio.py) repete esta tabela; tests/test_inicio.py confere as duas.
   //   madrugada  [0, 6)    00:00 e 05:59 → madrugada
   //   manha      [6, 12)   06:00 → manha
   //   tarde      [12, 17)
@@ -155,35 +156,48 @@
   function iniciarBusca(doc, win) {
     var secao = doc.querySelector("section.quem-vereador[data-combobox]");
     if (!secao || typeof secao.querySelectorAll !== "function" || typeof doc.createElement !== "function") return null;
-    var detalhes = secao.querySelector("details.lista-vereadores"), pai = detalhes && detalhes.parentNode;
-    if (!pai || typeof pai.insertBefore !== "function") return null;
-    if (typeof doc.getElementById === "function" && doc.getElementById("cb-vereadores")) return null;
+    var detalhes = secao.querySelector("details.lista-vereadores");
+    if (!detalhes) return null;
     var itens = [];
+    function texto(el) { return el ? (el.textContent || "").trim() : ""; }
     Array.prototype.forEach.call(secao.querySelectorAll("#lista-vereadores li"), function (li) {
-      var a = li.querySelector("a"), partido = li.querySelector(".partido"), href = a && a.getAttribute("href");
-      if (href) itens.push({ nome: (a.textContent || "").trim(), partido: partido ? (partido.textContent || "").trim() : "", href: href });
+      var a = li.querySelector("a"), href = a && a.getAttribute("href");
+      if (href) itens.push({ nome: texto(a), partido: texto(li.querySelector(".partido")), status: texto(li.querySelector(".status")), href: href });
     });
     if (!itens.length) return null;
 
-    function criar(tag, atributos, texto) {
+    function criar(tag, atributos, conteudo) {
       var el = doc.createElement(tag);
       for (var k in atributos) el.setAttribute(k, atributos[k]);
-      if (texto) el.textContent = texto;
+      if (conteudo) el.textContent = conteudo;
       return el;
     }
-    var rotulo = criar("label", { "for": "cb-vereadores", id: "cb-vereadores-rotulo" }, "Digite o nome do vereador");
-    var entrada = criar("input", { type: "text", role: "combobox", "aria-autocomplete": "list", "aria-expanded": "false",
-      "aria-controls": "cb-vereadores-lista", id: "cb-vereadores", autocomplete: "off" });
-    var lista = criar("ul", { role: "listbox", id: "cb-vereadores-lista", "aria-labelledby": "cb-vereadores-rotulo", hidden: "" });
-    var aviso = criar("p", { "class": "so-leitor", "aria-live": "polite" });
+    // O servidor já emite o campo (sem deslocar o layout); só sem ele o campo é criado aqui.
+    var entrada = secao.querySelector("#cb-vereadores"), lista = secao.querySelector("#cb-vereadores-lista"),
+      aviso = secao.querySelector("#cb-vereadores-status");
+    if (!entrada && !lista && !aviso) {
+      var pai = detalhes.parentNode;
+      if (!pai || typeof pai.insertBefore !== "function") return null;
+      var campo = criar("div", { "class": "cb-campo" });
+      campo.appendChild(criar("label", { "for": "cb-vereadores", id: "cb-vereadores-rotulo" }, "Digite o nome do vereador"));
+      entrada = campo.appendChild(criar("input", { type: "text", role: "combobox", "aria-autocomplete": "list", "aria-expanded": "false",
+        "aria-controls": "cb-vereadores-lista", id: "cb-vereadores", autocomplete: "off" }));
+      lista = campo.appendChild(criar("ul", { role: "listbox", id: "cb-vereadores-lista", "aria-labelledby": "cb-vereadores-rotulo", hidden: "" }));
+      aviso = campo.appendChild(criar("p", { "class": "so-leitor", "aria-live": "polite", id: "cb-vereadores-status" }));
+      pai.insertBefore(campo, detalhes);
+    }
+    // Campo incompleto ou já ativado: não mexe.
+    if (!entrada || !lista || !aviso || lista.childElementCount || typeof entrada.addEventListener !== "function") return null;
     var nomes = itens.map(function (item) { return item.nome; });
     var opcoes = itens.map(function (item, i) {
-      var li = criar("li", { role: "option", id: "cb-op-" + i, "aria-selected": "false" }, item.nome + (item.partido ? " " : ""));
-      if (item.partido) li.appendChild(criar("span", { "class": "partido" }, item.partido));
+      var extras = [];
+      if (item.partido) extras.push(["partido", item.partido]);
+      if (item.status) extras.push(["status", item.status]);
+      var li = criar("li", { role: "option", id: "cb-op-" + i, "aria-selected": "false" }, item.nome + (extras.length ? " " : ""));
+      extras.forEach(function (x, j) { li.appendChild(criar("span", { "class": x[0] }, x[1] + (j < extras.length - 1 ? " " : ""))); });
       lista.appendChild(li);
       return li;
     });
-    [rotulo, entrada, lista, aviso].forEach(function (el) { pai.insertBefore(el, detalhes); });
     if (typeof detalhes.removeAttribute === "function") detalhes.removeAttribute("open");
 
     var visiveis = [], ativo = -1, aberta = false;
@@ -227,11 +241,14 @@
         n = visiveis.length;
         if (n) marcar(tecla === "ArrowDown" ? (ativo + 1) % n : (ativo < 1 ? n - 1 : ativo - 1));
         evitar(evento);
-      } else if ((tecla === "Home" || tecla === "End") && aberta) {
+      } else if ((tecla === "Home" || tecla === "End") && aberta && ativo >= 0) {
+        // Só com uma opção ativa; sem ela, Home/End (e sempre as setas laterais) ficam com o campo de texto.
         marcar(tecla === "Home" ? 0 : visiveis.length - 1);
         evitar(evento);
       } else if (tecla === "Enter") {
-        if (aberta && ativo >= 0) { evitar(evento); ir(itens[visiveis[ativo]].href); }
+        // Opção ativa ou um único resultado: vai à página do vereador.
+        n = ativo >= 0 ? visiveis[ativo] : visiveis.length === 1 ? visiveis[0] : -1;
+        if (aberta && n >= 0) { evitar(evento); ir(itens[n].href); }
       } else if (ehEscape(evento)) {
         // Primeiro Esc fecha a lista; o segundo limpa o texto.
         if (aberta) fechar();

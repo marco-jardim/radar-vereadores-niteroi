@@ -115,11 +115,21 @@ const CASOS = [[0, 0, "madrugada"], [5, 59, "madrugada"], [6, 0, "manha"], [17, 
   [18, 0, "por-do-sol"], [23, 59, "noite"]];
 
 const VEREADORES = [["JOÃO DA SILVA", "PSOL", "vereadores/joao-da-silva.html"], ["Maria José", "PT", "vereadores/maria-jose.html"],
-  ["João Pedro", "PL", "vereadores/joao-pedro.html"], ["Ana Lúcia", "PDT", "vereadores/ana-lucia.html"]];
+  ["João Pedro", "PL", "vereadores/joao-pedro.html"], ["Ana Lúcia", "PDT", "vereadores/ana-lucia.html", "suplente em exercício"]];
 const VALORES = ["12", "58%", "86,5%", "35 de 132", "—", "0", "1.234"];
 
+// Campo do combobox como CAMPO_BUSCA de coletor/site/inicio.py: o servidor já o emite.
+function campoServidor() {
+  return new No("div", { class: "cb-campo" }, [
+    new No("label", { for: "cb-vereadores", id: "cb-vereadores-rotulo" }, ["Digite o nome do vereador"]),
+    new No("input", { id: "cb-vereadores", type: "text", role: "combobox", "aria-autocomplete": "list", "aria-expanded": "false",
+      "aria-controls": "cb-vereadores-lista", autocomplete: "off" }),
+    new No("ul", { role: "listbox", id: "cb-vereadores-lista", "aria-labelledby": "cb-vereadores-rotulo", hidden: "" }),
+    new No("p", { class: "so-leitor", "aria-live": "polite", id: "cb-vereadores-status" })]);
+}
+
 // Página inicial com céu, números e "Quem é meu vereador?", como gerar_index e P.tile.
-function montar({ ceu = true, valores = VALORES, busca = true, janela = {}, contexto = {}, visibilidade = "visible" } = {}) {
+function montar({ ceu = true, valores = VALORES, busca = true, campo = true, janela = {}, contexto = {}, visibilidade = "visible" } = {}) {
   const doc = documento();
   doc.visibilityState = visibilidade;
   const main = new No("main");
@@ -127,17 +137,19 @@ function montar({ ceu = true, valores = VALORES, busca = true, janela = {}, cont
   if (ceu) main.appendChild(new No("section", { class: "hero" }, [ceuEl]));
   const tiles = valores.map((v) => new No("p", { class: "tile-valor" }, [v]));
   main.appendChild(new No("div", { class: "tiles" }, tiles.map((p) => new No("div", { class: "tile" }, [p]))));
-  let detalhes = null;
+  let detalhes = null, campoEl = null;
   if (busca) {
-    const ul = new No("ul", { id: "lista-vereadores" }, VEREADORES.map(([nome, partido, href]) =>
-      new No("li", {}, [new No("a", { href }, [nome]), " ", new No("span", { class: "partido" }, [partido])])));
+    const ul = new No("ul", { id: "lista-vereadores" }, VEREADORES.map(([nome, partido, href, status]) =>
+      new No("li", {}, [new No("a", { href }, [nome]), " ", new No("span", { class: "partido" }, [partido]),
+        ...(status ? [" ", new No("span", { class: "status" }, [status])] : [])])));
     detalhes = new No("details", { class: "lista-vereadores", open: "" }, [new No("summary", {}, ["Ver todos"]), ul]);
+    campoEl = campo ? campoServidor() : null;
     main.appendChild(new No("section", { class: "quem-vereador", "data-combobox": "", "aria-labelledby": "t-quem" },
-      [new No("h2", { id: "t-quem" }, ["Quem é meu vereador?"]), detalhes]));
+      [new No("h2", { id: "t-quem" }, ["Quem é meu vereador?"]), ...(campoEl ? [campoEl] : []), detalhes]));
   }
   doc.appendChild(main);
   vm.runInNewContext(fonte, Object.assign({ document: doc, window: janela }, contexto), { filename: "inicio.js" });
-  return { doc, ceu: ceuEl, tiles, detalhes, janela };
+  return { doc, ceu: ceuEl, tiles, detalhes, campo: campoEl, janela };
 }
 
 // ---- céu
@@ -286,9 +298,9 @@ test("sem animação com movimento reduzido, sem IntersectionObserver ou sem req
 
 // ---- busca de vereador
 
-function montarBusca() {
+function montarBusca({ campo = true } = {}) {
   const destinos = [];
-  const p = montar({ janela: { location: { assign(href) { destinos.push(href); } } }, valores: [] });
+  const p = montar({ janela: { location: { assign(href) { destinos.push(href); } } }, valores: [], campo });
   const entrada = p.doc.getElementById("cb-vereadores");
   const lista = p.doc.getElementById("cb-vereadores-lista");
   const aviso = p.doc.querySelector("p.so-leitor");
@@ -300,23 +312,54 @@ function montarBusca() {
   return { ...p, destinos, entrada, lista, aviso, digitar, tecla, visiveis, ativo, aberta };
 }
 
-test("monta o combobox antes da lista original, que fica no DOM e fechada", () => {
+test("reusa o campo do servidor sem inserir nada; a lista original fica no DOM e fechada", () => {
   const b = montarBusca();
   const pai = b.detalhes.parentNode;
-  const ordem = pai.filhos.map((f) => f.tag);
-  assert.deepEqual(ordem, ["h2", "label", "input", "ul", "p", "details"]);
+  assert.deepEqual(pai.filhos.map((f) => f.tag), ["h2", "div", "details"]);
+  assert.equal(pai.filhos[1], b.campo);
+  assert.deepEqual(b.campo.filhos.map((f) => f.tag), ["label", "input", "ul", "p"]);
+  assert.equal(b.entrada, b.campo.filhos[1]);
+  assert.equal(b.lista, b.campo.filhos[2]);
+  assert.equal(b.aviso, b.campo.filhos[3]);
+  assert.equal(b.doc.querySelectorAll("#cb-vereadores").length, 1);
   assert.equal(b.detalhes.hasAttribute("open"), false);
   assert.equal(b.doc.querySelectorAll("#lista-vereadores li").length, 4);
-  assert.deepEqual(b.entrada.atributos, { type: "text", role: "combobox", "aria-autocomplete": "list",
-    "aria-expanded": "false", "aria-controls": "cb-vereadores-lista", id: "cb-vereadores", autocomplete: "off" });
-  assert.equal(pai.filhos[1].getAttribute("for"), "cb-vereadores");
-  assert.equal(b.lista.getAttribute("role"), "listbox");
   assert.equal(b.lista.hasAttribute("hidden"), true);
-  assert.equal(b.aviso.getAttribute("aria-live"), "polite");
   assert.deepEqual(b.lista.filhos.map((li) => [li.getAttribute("role"), li.getAttribute("id"), li.getAttribute("aria-selected")]),
     VEREADORES.map((_, i) => ["option", `cb-op-${i}`, "false"]));
   assert.equal(b.lista.filhos[0].textContent, "JOÃO DA SILVA PSOL");
   assert.equal(b.lista.filhos[0].querySelector(".partido").textContent, "PSOL");
+  // Suplente em exercício também aparece na opção.
+  assert.equal(b.lista.filhos[3].textContent, "Ana Lúcia PDT suplente em exercício");
+  assert.equal(b.lista.filhos[3].querySelector(".status").textContent, "suplente em exercício");
+  assert.equal(b.lista.filhos[0].querySelector(".status"), null);
+});
+
+test("sem o campo do servidor, cria o mesmo campo antes da lista original", () => {
+  const b = montarBusca({ campo: false });
+  const pai = b.detalhes.parentNode;
+  assert.deepEqual(pai.filhos.map((f) => f.tag), ["h2", "div", "details"]);
+  const campo = pai.filhos[1];
+  assert.equal(campo.getAttribute("class"), "cb-campo");
+  assert.deepEqual(campo.filhos.map((f) => f.tag), ["label", "input", "ul", "p"]);
+  assert.equal(b.detalhes.hasAttribute("open"), false);
+  assert.deepEqual(b.entrada.atributos, { type: "text", role: "combobox", "aria-autocomplete": "list",
+    "aria-expanded": "false", "aria-controls": "cb-vereadores-lista", id: "cb-vereadores", autocomplete: "off" });
+  assert.equal(campo.filhos[0].getAttribute("for"), "cb-vereadores");
+  assert.equal(b.lista.getAttribute("role"), "listbox");
+  assert.equal(b.lista.hasAttribute("hidden"), true);
+  assert.equal(b.aviso.getAttribute("aria-live"), "polite");
+  assert.equal(b.aviso.getAttribute("id"), "cb-vereadores-status");
+  assert.equal(b.lista.filhos.length, 4);
+  b.digitar("maria");
+  assert.deepEqual(b.visiveis(), ["cb-op-1"]);
+});
+
+test("não ativa duas vezes o mesmo campo", () => {
+  const b = montarBusca();
+  vm.runInNewContext(fonte, { document: b.doc, window: {} });
+  assert.equal(b.lista.filhos.length, 4);
+  assert.equal(b.entrada.ouvintes.input.length, 1);
 });
 
 test("consulta vazia ou só com espaços fica fechada; seta para baixo mostra todos", () => {
@@ -351,11 +394,16 @@ test("filtro ignora acentos e caixa e anuncia o resultado, inclusive vazio", () 
   assert.equal(I.norm("Ação"), "acao");
 });
 
-test("setas dão a volta nos limites; Home e End vão às pontas com a lista aberta", () => {
+test("setas dão a volta nos limites; Home e End vão às pontas só com uma opção ativa", () => {
   const b = montarBusca();
   b.digitar("jo");
   assert.deepEqual(b.visiveis(), ["cb-op-0", "cb-op-1", "cb-op-2"]);
   assert.equal(b.ativo(), null);
+  // Lista aberta sem opção ativa: Home/End movem o cursor do campo.
+  assert.equal(b.tecla("Home").defaultPrevented, false);
+  assert.equal(b.tecla("End").defaultPrevented, false);
+  assert.equal(b.ativo(), null);
+  assert.equal(b.aberta(), true);
   b.tecla("ArrowUp");
   assert.equal(b.ativo(), "cb-op-2");
   b.tecla("ArrowDown");
@@ -371,6 +419,11 @@ test("setas dão a volta nos limites; Home e End vão às pontas com a lista abe
   assert.equal(fim.defaultPrevented, true);
   b.tecla("Home");
   assert.equal(b.ativo(), "cb-op-0");
+  // Setas laterais nunca são interceptadas.
+  for (const lateral of ["ArrowLeft", "ArrowRight"]) {
+    assert.equal(b.tecla(lateral).defaultPrevented, false);
+    assert.equal(b.ativo(), "cb-op-0");
+  }
   // Fechada, Home/End ficam com o campo de texto.
   b.tecla("Escape");
   assert.equal(b.tecla("Home").defaultPrevented, false);
@@ -408,6 +461,19 @@ test("Enter e clique levam ao link da opção; Enter sem opção ativa não nave
   assert.deepEqual(b.destinos, ["vereadores/joao-pedro.html", "vereadores/ana-lucia.html"]);
   disparar(b.entrada, "blur");
   assert.equal(b.aberta(), false);
+});
+
+test("Enter com um único resultado vai direto a ele", () => {
+  const b = montarBusca();
+  b.digitar("lucia");
+  assert.equal(b.ativo(), null);
+  const enter = b.tecla("Enter");
+  assert.equal(enter.defaultPrevented, true);
+  assert.deepEqual(b.destinos, ["vereadores/ana-lucia.html"]);
+  // Fechada com Esc, Enter não navega.
+  b.tecla("Escape");
+  assert.equal(b.tecla("Enter").defaultPrevented, false);
+  assert.deepEqual(b.destinos, ["vereadores/ana-lucia.html"]);
 });
 
 // ---- robustez e tamanho
