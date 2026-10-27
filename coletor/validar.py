@@ -1299,7 +1299,8 @@ def _https_backend(valor: object, origem: bool = False) -> bool:
     host = r"[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)*\.?"
     if not re.fullmatch(rf"(?:{host}|\[[A-Fa-f0-9:]+\])(?::[0-9]+)?", url.netloc):
         return False
-    return not origem or valor == f"https://{url.netloc}"
+    return not origem or (valor == f"https://{url.netloc}" and valor == valor.lower()
+                          and not url.hostname.endswith(".") and url.port != 443)
 
 
 def validar_backend(raiz: Path | None = None) -> list[str]:
@@ -1311,8 +1312,8 @@ def validar_backend(raiz: Path | None = None) -> list[str]:
     if set(dados) != {"api_url", "origens_cors", "contatos_institucionais"}:
         problemas.append(f"{arquivo}: campos esperados: api_url, origens_cors, contatos_institucionais, sem extras")
     api = dados.get("api_url")
-    if api is not None and (not _https_backend(api) or api.endswith("/")):
-        problemas.append(f"{arquivo}: 'api_url' deveria ser URL HTTPS sem barra final ou null")
+    if api is not None and (not _https_backend(api) or api.endswith("/") or "?" in api or "#" in api):
+        problemas.append(f"{arquivo}: 'api_url' deveria ser URL HTTPS sem barra final, consulta nem fragmento ou null")
     origens = dados.get("origens_cors")
     if not isinstance(origens, list) or not origens:
         problemas.append(f"{arquivo}: 'origens_cors' deveria ser lista não vazia de origens HTTPS únicas")
@@ -1320,7 +1321,8 @@ def validar_backend(raiz: Path | None = None) -> list[str]:
         vistas: set[str] = set()
         for origem in origens:
             if not _https_backend(origem, origem=True):
-                problemas.append(f"{arquivo}: origem {origem!r} deveria ser https://host[:porta], sem caminho nem barra final")
+                problemas.append(f"{arquivo}: origem {origem!r} deveria ser https://host[:porta] em minúsculas, "
+                                 "sem ponto final no host, porta padrão, caminho, consulta nem fragmento")
             elif origem in vistas:
                 problemas.append(f"{arquivo}: origem {origem!r} repetida")
             else:
@@ -1341,7 +1343,7 @@ def validar_backend(raiz: Path | None = None) -> list[str]:
             problemas.append(f"{r}: 'tipo' deveria ser telefone ou email")
         elif isinstance(valor, str):
             padrao = r"[^\s@]+@[^\s@.]+(?:\.[^\s@.]+)+" if tipo == "email" else r"[0-9 ()+\-]+"
-            if not re.fullmatch(padrao, valor):
+            if not re.fullmatch(padrao, valor) or (tipo == "telefone" and len(re.findall(r"[0-9]", valor)) < 8):
                 problemas.append(f"{r}: 'valor' inválido para {tipo}")
             chave = (tipo, valor)
             if chave in vistos:
@@ -1362,8 +1364,8 @@ def validar_remocoes(raiz: Path | None = None) -> list[str]:
         problemas.append(f"{arquivo}: esperado somente o campo 'remocoes'")
     itens, erros = _lista(dados, "remocoes", arquivo)
     problemas += erros
-    vistos: set[str] = set()
-    anterior: tuple[str, str] | None = None
+    vistos: set[tuple[str, str]] = set()
+    anterior: tuple[str, str, str] | None = None
     for i, item in enumerate(itens, 1):
         r = f"{arquivo}: remoção {i}"
         if not isinstance(item, dict):
@@ -1376,12 +1378,14 @@ def validar_remocoes(raiz: Path | None = None) -> list[str]:
         chave_valida = isinstance(chave, str) and re.fullmatch(r"(siscam|sessao):[A-Za-z0-9-]+", chave)
         if not chave_valida:
             problemas.append(f"{r}: 'chave' deveria ser siscam:<id> ou sessao:<id> (letras, números e hífen)")
-        elif chave in vistos:
-            problemas.append(f"{r}: chave {chave!r} repetida")
-        else:
-            vistos.add(chave)
-        if not isinstance(sha256, str) or not re.fullmatch(r"[0-9a-f]{64}", sha256):
+        sha256_valido = isinstance(sha256, str) and re.fullmatch(r"[0-9a-f]{64}", sha256)
+        if not sha256_valido:
             problemas.append(f"{r}: 'sha256' deveria ter 64 caracteres hexadecimais minúsculos")
+        if chave_valida and sha256_valido:
+            par = (chave, sha256)
+            if par in vistos:
+                problemas.append(f"{r}: combinação (chave, sha256) repetida: {par!r}")
+            vistos.add(par)
         if not _https_backend(item.get("fonte")):
             problemas.append(f"{r}: 'fonte' deveria ser URL HTTPS com host")
         if not isinstance(data, str) or not RE_DATA.fullmatch(data) or not data_valida(data):
@@ -1389,10 +1393,10 @@ def validar_remocoes(raiz: Path | None = None) -> list[str]:
         else:
             if date.fromisoformat(data) > date.today():
                 problemas.append(f"{r}: 'data' não pode ser futura")
-            if chave_valida:
-                ordem = (data, chave)
+            if chave_valida and sha256_valido:
+                ordem = (data, chave, sha256)
                 if anterior is not None and ordem < anterior:
-                    problemas.append(f"{r}: remoções fora de ordem por data e chave")
+                    problemas.append(f"{r}: remoções fora de ordem por data, chave e sha256")
                 anterior = ordem
     return problemas
 

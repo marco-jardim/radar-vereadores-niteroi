@@ -729,6 +729,8 @@ class TestValidarBackend(ConfigOpcional, Afirmacoes):
 
     def test_api_url(self):
         for valor in ("", "http://exemplo.org", "https://", "https://exemplo.org/", "https://exemplo.org/api/",
+                      "https://exemplo.org/api?a", "https://exemplo.org/api#f",
+                      "https://exemplo.org/api?", "https://exemplo.org/api#",
                       "https://exemplo.org/a b", "https://exemplo.org:abc", "https://exemplo.org:70000", 1, [], {}):
             with self.subTest(valor=valor):
                 self.assertProblema(self.validar({**BACKEND, "api_url": valor}), "'api_url'")
@@ -743,6 +745,12 @@ class TestValidarBackend(ConfigOpcional, Afirmacoes):
                       ["https://-host.org"], ["https://exemplo.org/\x00"], ["https://exemplo.org"] * 2):
             with self.subTest(valor=valor):
                 self.assertTrue(self.validar({**BACKEND, "origens_cors": valor}))
+
+    def test_origens_cors_exigem_forma_canonica(self):
+        for origem in ("https://EXEMPLO.org", "HTTPS://exemplo.org", "https://exemplo.org.",
+                       "https://exemplo.org:443", "https://exemplo.org:0443"):
+            with self.subTest(origem=origem):
+                self.assertProblema(self.validar({**BACKEND, "origens_cors": [origem]}), "origem")
 
     def test_contatos_estrutura(self):
         for valor in (None, {}, "telefone"):
@@ -759,7 +767,8 @@ class TestValidarBackend(ConfigOpcional, Afirmacoes):
     def test_contatos_campos(self):
         casos = [("tipo", valor) for valor in ("fax", None, [], {})]
         casos += [(campo, valor) for campo in ("valor", "descricao") for valor in ("", " ", None, 123, [])]
-        casos += [("valor", valor) for valor in ("(21) ABCD-1234", "21.1234.5678", "21\t1234", "21\n1234")]
+        casos += [("valor", valor) for valor in ("(21) ABCD-1234", "21.1234.5678", "21\t1234", "21\n1234",
+                                                "()", "-", "1234567")]
         casos += [("fonte", valor) for valor in ("http://exemplo.org", "https://", None, "https://exemplo.org/a b")]
         for campo, valor in casos:
             with self.subTest(campo=campo, valor=valor):
@@ -773,6 +782,10 @@ class TestValidarBackend(ConfigOpcional, Afirmacoes):
     def test_contatos_repetidos(self):
         contatos = [self.contato, {**self.contato, "descricao": "Outra descrição"}]
         self.assertProblema(self.validar({**BACKEND, "contatos_institucionais": contatos}), "(tipo, valor) repetido")
+
+    def test_telefone_com_oito_digitos(self):
+        contato = {**self.contato, "valor": "1234-5678"}
+        self.assertEqual(self.validar({**BACKEND, "contatos_institucionais": [contato]}), [])
 
 
 class TestValidarRemocoes(ConfigOpcional, Afirmacoes):
@@ -812,15 +825,23 @@ class TestValidarRemocoes(ConfigOpcional, Afirmacoes):
                     problemas = self.validar({"remocoes": [{**REMOCAO, campo: valor}]})
                     self.assertProblema(problemas, f"'{campo}'")
 
-    def test_chave_repetida(self):
-        self.assertProblema(self.validar({"remocoes": [REMOCAO, {**REMOCAO, "sha256": "c" * 64}]}), "repetida")
+    def test_chave_repetida_com_hash_diferente_e_valida(self):
+        self.assertEqual(self.validar({"remocoes": [REMOCAO, {**REMOCAO, "sha256": "c" * 64}]}), [])
 
-    def test_ordem_por_data_depois_chave(self):
-        itens = [REMOCAO, {**REMOCAO, "chave": "siscam:124"},
+    def test_par_chave_hash_repetido(self):
+        for outra in (REMOCAO, {**REMOCAO, "data": "2024-03-01", "motivo": "Outro motivo"}):
+            with self.subTest(outra=outra):
+                self.assertProblema(self.validar({"remocoes": [REMOCAO, outra]}), "(chave, sha256) repetida")
+
+    def test_ordem_por_data_depois_chave_e_hash(self):
+        itens = [REMOCAO, {**REMOCAO, "sha256": "c" * 64}, {**REMOCAO, "chave": "siscam:124"},
                  {**REMOCAO, "chave": "sessao:1", "data": "2024-03-01"}]
         self.assertEqual(self.validar({"remocoes": itens}), [])
-        for fora_de_ordem in ([itens[1], itens[0], itens[2]], [itens[2], itens[0], itens[1]]):
-            self.assertProblema(self.validar({"remocoes": fora_de_ordem}), "fora de ordem por data e chave")
+        for i in range(len(itens) - 1):
+            fora_de_ordem = itens.copy()
+            fora_de_ordem[i], fora_de_ordem[i + 1] = fora_de_ordem[i + 1], fora_de_ordem[i]
+            with self.subTest(troca=i):
+                self.assertProblema(self.validar({"remocoes": fora_de_ordem}), "fora de ordem por data, chave e sha256")
 
 
 # ------------------------------------------------------------------------ execução

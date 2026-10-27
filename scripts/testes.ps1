@@ -14,7 +14,20 @@ try {
   $Modulos = @($Modulos | ForEach-Object { $_ -split "," } | Where-Object { $_ })
   if (-not $Modulos.Count) {
     $dirTestes = Get-Item -LiteralPath (Join-Path $Raiz "tests") -ErrorAction Stop
-    $Modulos = @(Get-ChildItem -LiteralPath $dirTestes.FullName -Recurse -Filter "test_*.py" -ErrorAction Stop | Sort-Object FullName | ForEach-Object {
+    $Modulos = @(Get-ChildItem -LiteralPath $dirTestes.FullName -Recurse -File -Filter "test_*.py" -ErrorAction Stop | Where-Object {
+      # O discover só entra em subdiretórios que sejam pacotes, inclusive todos os ancestrais.
+      $dir = $_.Directory
+      $pacote = $true
+      while ($null -ne $dir) {
+        if (-not (Test-Path -LiteralPath (Join-Path $dir.FullName "__init__.py") -PathType Leaf)) {
+          $pacote = $false
+          break
+        }
+        if ($dir.FullName -eq $dirTestes.FullName) { break }
+        $dir = $dir.Parent
+      }
+      $pacote
+    } | Sort-Object FullName | ForEach-Object {
       $rel = [IO.Path]::GetRelativePath($dirTestes.FullName, $_.FullName) -replace "\.py$", ""
       "tests." + ($rel -replace "[\\/]", ".")
     })

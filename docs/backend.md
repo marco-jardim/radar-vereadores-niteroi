@@ -32,11 +32,17 @@ Este documento acompanha o plano `D:\git\radar-vereadores-niteroi\docs\plans\202
 | D1 | `radar-niteroi` (`8750fe41-d702-407f-9373-414529504ced`) | `radar-niteroi-staging` (`653aeeb5-072e-46b0-a429-53c030458349`) |
 | Vectorize (1.024 dimensões, cosseno) | `radar-niteroi-trechos` | `radar-niteroi-trechos-staging` |
 | Índices de metadados do Vectorize | `tipo` (string), `ano` (number), `legislatura` (string) | os mesmos |
-| Worker | `radar-niteroi-api` | `radar-niteroi-api-staging` |
+| Worker | `radar-niteroi-api`, criado no primeiro deploy (Phase 3.2) | `radar-niteroi-api-staging`, criado no primeiro deploy (Phase 3.2) |
 
-**Acesso aos buckets de originais.** Os buckets de originais, de produção e de staging, recusam acesso anônimo. Uma requisição S3 sem assinatura recebe HTTP 400, e o `r2.dev` está desativado neles. A escrita, a leitura e a remoção de um objeto de teste no staging funcionaram em 27/10/2026.
+**Acesso aos buckets privados.** Os três buckets privados (`radar-niteroi-arquivos`, `radar-niteroi-arquivos-staging` e `radar-niteroi-exportacoes-staging`) foram conferidos em 27/10/2026 de duas formas:
+- `npx wrangler r2 bucket dev-url get <bucket>` informa o acesso pelo `r2.dev` desativado;
+- `npx wrangler r2 bucket domain list <bucket>` mostra que não há domínio personalizado ligado.
 
-**Configuração do Worker:** `D:\git\radar-vereadores-niteroi\worker\wrangler.jsonc`, com os ambientes `staging` e `production`.
+Uma requisição S3 sem assinatura recebe HTTP 400, mas isso acontece em qualquer bucket e não prova, sozinho, que ele é privado. No staging, gravar, ler e apagar um objeto de teste funcionou.
+
+**Endereço da API.** `api_url` em `D:\git\radar-vereadores-niteroi\config\backend.json` continua `null` até o primeiro deploy (Phase 3.2), quando o Cloudflare informa o endereço `workers.dev`. Ele é preenchido depois da QA da Wave 3.
+
+**Configuração do Worker:** `D:\git\radar-vereadores-niteroi\worker\wrangler.jsonc`. A **produção fica no nível superior**, então `npx wrangler deploy` sem `--env` publica a produção completa. O staging fica em `env.staging` e é publicado com `--env staging`. O wrangler fixado no `D:\git\radar-vereadores-niteroi\worker\package.json` (Phase 3.2) precisa suportar `ratelimits`, versão 4.36 ou posterior, e a `compatibility_date` 2026-10-01.
 - Observabilidade e Logpush ficam desligados.
 - O limite de CPU por requisição é configurado.
 - Ficam definidos o metadado de versão, o Rate Limiting de 60 requisições por minuto, o Analytics Engine só com contagens e o cron diário de verificação.
@@ -51,23 +57,35 @@ Este documento acompanha o plano `D:\git\radar-vereadores-niteroi\docs\plans\202
 
 ## Credenciais para o GitHub Actions (o humano cria no painel)
 
-1. **Token da API Cloudflare** em `CLOUDFLARE_API_TOKEN`. Tipo "Custom token", com escopo **Account: Marco Jardim** e as permissões:
+O princípio é o menor privilégio: tokens separados por função, chaves R2 separadas por ambiente e secrets de produção restritos à branch `main`.
+
+1. **GitHub Environments.** Em "Settings → Environments", criar `staging` e `production`. Em `production`, a regra de branch é **só `main`**. Os secrets abaixo são gravados no Environment correspondente, não como secrets do repositório.
+2. **Token de dados** em `CLOUDFLARE_API_TOKEN_DADOS`, nos dois Environments. Tipo "Custom token", com escopo **Account: Marco Jardim** e as permissões:
    - Account → D1: Edit;
    - Account → Vectorize: Edit;
-   - Account → Workers AI: Read;
+   - Account → Workers AI: Read.
+
+   No checkpoint T0.2.2, testar uma chamada real a `/ai/run/@cf/baai/bge-m3` com esse token. Se `Read` não bastar, trocar por `Workers AI: Edit`.
+3. **Token de deploy** em `CLOUDFLARE_API_TOKEN_DEPLOY`, só no Environment `production`, com uma cópia no `staging` para o deploy de staging. Permissões:
    - Account → Workers Scripts: Edit;
-   - Account → Account Analytics: Read.
-2. **Token do R2** em "R2 → Manage API tokens". Permissão "Object Read & Write", com escopo **só** nos quatro buckets `radar-niteroi-*`. O *Access Key ID* vai para `R2_ACCESS_KEY_ID` e o *Secret Access Key* para `R2_SECRET_ACCESS_KEY`. O endpoint S3 é `https://7b60055a9f153a4a8441ff519e1a208f.r2.cloudflarestorage.com`, na região `auto`.
-3. **Secret `CLOUDFLARE_ACCOUNT_ID`** com o valor `7b60055a9f153a4a8441ff519e1a208f`.
-4. **Alerta de cobrança.** Em "Notifications → Billing → Usage Based Billing", criar um aviso por e-mail quando o uso passar de US$ 10 acima da assinatura.
+   - Account → D1: Edit, porque o deploy aplica as migrações.
+4. **Chaves do R2**, criadas em "R2 → Manage API tokens", com a permissão "Object Read & Write", **uma por ambiente**:
+   - `staging`: escopo em `radar-niteroi-arquivos-staging` e `radar-niteroi-exportacoes-staging`;
+   - `production`: escopo em `radar-niteroi-arquivos` e `radar-niteroi-exportacoes`.
 
-Para a carga a partir da máquina local, as mesmas credenciais entram só como variáveis de ambiente da sessão, nunca gravadas em arquivo.
+   Em cada Environment, o *Access Key ID* vai para `R2_ACCESS_KEY_ID` e o *Secret Access Key* para `R2_SECRET_ACCESS_KEY`. O endpoint S3 é `https://7b60055a9f153a4a8441ff519e1a208f.r2.cloudflarestorage.com`, região `auto`.
+5. **`CLOUDFLARE_ACCOUNT_ID`** = `7b60055a9f153a4a8441ff519e1a208f`. Não é segredo; pode ser uma variável do repositório.
+6. **Alerta de cobrança.** Em "Notifications → Billing → Usage Based Billing", criar um aviso por e-mail para quando o uso passar de US$ 10 acima da assinatura.
+7. **Métricas.** `Account Analytics: Read` não entra nos tokens do CI. Só quem consulta as métricas no painel precisa dela.
 
-**Limitação de isolamento.** As permissões de D1, Vectorize, Workers AI e Workers Scripts valem para a conta inteira, não para um recurso específico. O isolamento total exigiria uma conta Cloudflare separada, que só o titular pode criar.
+Para a carga a partir da máquina local, as mesmas credenciais entram como variáveis de ambiente da sessão. Nunca são gravadas em arquivo; o `.gitignore` cobre `.env*` e `/worker/.dev.vars*` por precaução.
+
+**Limitação de isolamento.** As permissões de D1, Vectorize, Workers AI e Workers Scripts valem para a conta inteira, não para um recurso específico. O token de deploy consegue alterar Workers de outros projetos da conta. Por isso ele fica restrito ao Environment `production` e à branch `main`. Isolamento total exigiria uma conta Cloudflare separada, que só o titular pode criar.
 
 ## Rollback, recriação e reconstrução
 
-- **Voltar a versão anterior do Worker:** `npx wrangler rollback --env production`, no diretório `D:\git\radar-vereadores-niteroi\worker`.
+- **Voltar a versão anterior do Worker:** `npx wrangler rollback`, no diretório `D:\git\radar-vereadores-niteroi\worker` (para o staging, `npx wrangler rollback --env staging`). Isso não desfaz migrações nem dados do D1.
+- **Voltar o D1 a um ponto no tempo:** `npx wrangler d1 time-travel restore radar-niteroi --timestamp=<ISO>`. Também dá para reconstruir a partir do Git, como no item seguinte.
 - **Reconstruir D1 e Vectorize a partir do Git:** `python -m coletor.nuvem --ambiente production --reconstruir`. Disponível a partir da Phase 2.2.
 - **Recriar os recursos do zero:** repetir os comandos da Phase 0.2 com `CLOUDFLARE_ACCOUNT_ID` definido:
   - `npx wrangler r2 bucket create <nome>`;
@@ -75,4 +93,6 @@ Para a carga a partir da máquina local, as mesmas credenciais entram só como v
   - `npx wrangler vectorize create <nome> --dimensions=1024 --metric=cosine`;
   - `npx wrangler vectorize create-metadata-index <nome> --propertyName=<p> --type=<t>`.
 
-  Depois, atualizar os ids em `wrangler.jsonc`.
+  - `npx wrangler r2 bucket dev-url enable radar-niteroi-exportacoes`, para reabrir a leitura pública.
+
+  Depois, atualizar os ids em `wrangler.jsonc`. A URL `pub-…` das exportações muda ao recriar o bucket: atualizar este documento e os links da metodologia.

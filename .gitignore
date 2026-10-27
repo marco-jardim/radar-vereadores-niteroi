@@ -7,3 +7,5 @@ __pycache__/
 /worker/node_modules/
 /worker/.wrangler/
 /worker/coverage/
+/worker/.dev.vars*
+.env*

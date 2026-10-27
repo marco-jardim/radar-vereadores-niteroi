@@ -57,10 +57,38 @@ class TestBackendConfig(unittest.TestCase):
         cls.backend = json.loads((RAIZ / "config" / "backend.json").read_text(encoding="utf-8"))
 
     def ambientes(self):
-        return [(nome, self.cfg["env"][nome]) for nome in ("staging", "production")]
+        return [("production", self.cfg), ("staging", self.cfg["env"]["staging"])]
+
+    def test_producao_no_nivel_superior_e_so_staging_nomeado(self):
+        self.assertEqual(set(self.cfg["env"]), {"staging"})
+        self.assertEqual(self.cfg["name"], "radar-niteroi-api")
+        for nome, cfg in self.ambientes():
+            with self.subTest(ambiente=nome):
+                self.assertEqual(cfg["vars"]["AMBIENTE"], nome)
+                self.assertTrue(cfg["vars"]["ORIGENS_CORS"])
+
+    def test_todos_os_bindings_explicitos_em_cada_ambiente(self):
+        grupos = {"d1_databases": {"DB"}, "vectorize": {"VETORES"},
+                  "r2_buckets": {"ARQUIVOS", "EXPORTACOES"},
+                  "analytics_engine_datasets": {"METRICAS"}}
+        for nome, cfg in self.ambientes():
+            with self.subTest(ambiente=nome):
+                for grupo, bindings in grupos.items():
+                    self.assertEqual(len(cfg[grupo]), len(bindings))
+                    self.assertEqual({item["binding"] for item in cfg[grupo]}, bindings)
+                self.assertEqual(cfg["ai"]["binding"], "AI")
+                self.assertEqual(cfg["version_metadata"]["binding"], "CF_VERSION_METADATA")
+                self.assertEqual(cfg["triggers"]["crons"], ["17 7 * * *"])
+                self.assertEqual(len(cfg["ratelimits"]), 1)
+                limite = cfg["ratelimits"][0]
+                self.assertEqual(limite["name"], "LIMITE")
+                self.assertIsInstance(limite["namespace_id"], str)
+                self.assertRegex(limite["namespace_id"], r"^[1-9][0-9]*$")
+                self.assertIn(limite["simple"]["period"], {10, 60})
+                self.assertEqual(limite["simple"]["limit"], 60)
 
     def test_observabilidade_desligada(self):
-        for nome, cfg in [("global", self.cfg), *self.ambientes()]:
+        for nome, cfg in self.ambientes():
             with self.subTest(ambiente=nome):
                 self.assertIs(cfg["observability"]["enabled"], False)
 
@@ -82,7 +110,7 @@ class TestBackendConfig(unittest.TestCase):
                 self.assertEqual(cfg["version_metadata"]["binding"], "CF_VERSION_METADATA")
                 cpu = cfg["limits"]["cpu_ms"]
                 self.assertIs(type(cpu), int)
-                self.assertGreater(cpu, 0)
+                self.assertEqual(cpu, 1000)
                 self.assertTrue(cfg["d1_databases"])
                 for banco in cfg["d1_databases"]:
                     self.assertEqual(banco["migrations_dir"], "migrations")
@@ -97,21 +125,24 @@ class TestBackendConfig(unittest.TestCase):
                 for chave, item in valor.items():
                     if chave in ("database_name", "index_name", "bucket_name"):
                         self.assertTrue(item.startswith("radar-niteroi"), item)
+                    elif chave == "dataset":
+                        self.assertTrue(item.startswith("radar_niteroi"), item)
                     conferir(item)
             elif isinstance(valor, list):
                 for item in valor:
                     conferir(item)
 
         conferir(self.cfg)
-        for nome, cfg in [("global", self.cfg), *self.ambientes()]:
+        for nome, cfg in self.ambientes():
             with self.subTest(ambiente=nome):
                 self.assertTrue(cfg["name"].startswith("radar-niteroi"))
 
     def test_recursos_separados_entre_ambientes(self):
-        staging, producao = (cfg for _, cfg in self.ambientes())
+        producao, staging = (cfg for _, cfg in self.ambientes())
         self.assertNotEqual(staging["name"], producao["name"])
         recursos = (("d1_databases", "database_id"), ("d1_databases", "database_name"),
-                    ("vectorize", "index_name"), ("r2_buckets", "bucket_name"))
+                    ("vectorize", "index_name"), ("r2_buckets", "bucket_name"),
+                    ("ratelimits", "namespace_id"), ("analytics_engine_datasets", "dataset"))
         for grupo, campo in recursos:
             with self.subTest(grupo=grupo, campo=campo):
                 a = {item[campo] for item in staging[grupo]}
@@ -121,8 +152,13 @@ class TestBackendConfig(unittest.TestCase):
                 self.assertTrue(a.isdisjoint(b), f"{grupo}: recursos compartilhados: {a & b}")
 
     def test_cors_producao_igual_ao_config_versionado(self):
-        self.assertEqual(self.cfg["env"]["production"]["vars"]["ORIGENS_CORS"],
+        self.assertEqual(self.cfg["vars"]["ORIGENS_CORS"],
                          ",".join(self.backend["origens_cors"]))
+
+    def test_cors_local_staging(self):
+        origens = self.cfg["env"]["staging"]["vars"]["ORIGENS_CORS"].split(",")
+        self.assertEqual({origem for origem in origens if origem.startswith("http:")},
+                         {"http://localhost:8000", "http://127.0.0.1:8000"})
 
 
 if __name__ == "__main__":

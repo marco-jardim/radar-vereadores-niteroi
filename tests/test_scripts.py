@@ -49,7 +49,10 @@ class TestScriptTestes(unittest.TestCase):
             raiz = Path(tmp)
             montar(raiz, {"tests/__init__.py": "", "tests/test_ok.py": TESTE_OK, "tests/test_falha.py": TESTE_FALHA,
                           "tests/test_vazio.py": "import unittest\n", "tests/sub/__init__.py": "",
-                          "tests/sub/test_x.py": TESTE_OK})
+                          "tests/sub/test_x.py": TESTE_OK,
+                          "tests/sem_pacote/test_y.py": TESTE_FALHA,
+                          "tests/sem_pacote/sub/__init__.py": "",
+                          "tests/sem_pacote/sub/test_z.py": TESTE_FALHA})
             discover = subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "tests", "-t", "."],
                                       cwd=raiz, capture_output=True, text=True, encoding="utf-8", timeout=300)
             esperado = int(re.search(r"Ran (\d+) test", discover.stderr)[1])

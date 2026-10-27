@@ -63,6 +63,9 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `site_src/fontes/` | WOFF2 auto-hospedadas Barlow Condensed, Public Sans e Fraunces; licenças `OFL-*.txt`; `FONTES.md` não publicado. |
 | `tests/` | Testes Python, JS em `tests/js/` e HTML real em `tests/fixtures/siscam/`. |
 | `tests/js/fixtures/cartao_sessoes.html` | Paridade Python/JavaScript do cartão de votação. |
+| `worker/` | Worker de busca TypeScript; `wrangler.jsonc` com produção no nível superior e staging em `env.staging`. |
+| `scripts/testes.ps1` | Executor paralelo local equivalente ao discover; o CI segue sequencial. |
+| `docs/backend.md` | Recursos Cloudflare, ferramentas, credenciais e rollback. |
 | `.github/workflows/` | Testes, coleta semanal e publicação. |
 | `site/` | Saída gerada e ignorada pelo Git. |
 
@@ -203,14 +206,17 @@ dois cargos. Não invente nomes: quem ainda não está na configuração (como u
 
 `coletor.validar` confere `config/backend.json` e `config/remocoes.json`; a ausência de cada arquivo gera aviso,
 não erro. Ambos usam JSON com `indent=1`, ordem das chaves preservada, UTF-8, LF, quebra final e NFC.
-O backend aceita só `api_url` (URL HTTPS sem barra final ou `null`), `origens_cors` (lista não vazia de origens
-HTTPS únicas, `https://host[:porta]`, sem caminho nem barra final) e `contatos_institucionais`. Cada contato tem
+O backend aceita só `api_url` (URL HTTPS sem barra final, consulta nem fragmento ou `null`; caminho permitido),
+`origens_cors` (lista não vazia de origens HTTPS únicas em minúsculas, `https://host[:porta]`, sem ponto final
+no host, porta padrão `:443`, caminho, consulta, fragmento nem barra final) e `contatos_institucionais`. Cada contato tem
 somente `tipo` (`telefone` ou `email`), `valor`, `descricao` não vazia e `fonte` HTTPS; e-mail precisa ter formato
-de endereço e telefone admite só dígitos, espaços, parênteses, `+` e `-`. Não repita o par `(tipo, valor)`.
+de endereço e telefone admite só dígitos, espaços, parênteses, `+` e `-`, com pelo menos oito dígitos.
+Não repita o par `(tipo, valor)`.
 
-Remoções têm somente a lista `remocoes`, ordenada por `data` e depois `chave`, sem chaves repetidas. Cada item
+Remoções têm somente a lista `remocoes`, ordenada por `(data, chave, sha256)`, sem pares `(chave, sha256)` repetidos. Cada item
 contém exatamente `chave` (`siscam:<id>` ou `sessao:<id>`, id com letras ASCII, números e hífen), `sha256`
 (64 hexadecimais minúsculos), `motivo` não vazio, `fonte` HTTPS e `data` válida `AAAA-MM-DD`, não futura.
+O `motivo` é público no Git e não deve conter dados pessoais.
 
 ### Opções das CLIs
 
