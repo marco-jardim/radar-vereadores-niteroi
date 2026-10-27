@@ -78,7 +78,7 @@ VEREADORES = {
         {"id": "2025-2028", "eleitos": [{"nome": "A", "siscam": "ANA MARIA"}]},
     ],
     "afastamentos": [{"siscam": "ANA MARIA", "legislatura": "2025-2028", "cargo": "Secretária Municipal",
-                      "fonte": "https://exemplo.org/ato"}],
+                      "natureza": "cargo", "fonte": "https://exemplo.org/ato"}],
 }
 
 
@@ -331,6 +331,13 @@ class TestValidarAfastamentos(Afirmacoes):
         del cfg["afastamentos"]
         self.assertEqual(V.validar_vereadores(cfg), [])
 
+    def test_natureza(self):
+        for natureza in ("cargo", "licenca"):
+            self.assertEqual(V.validar_vereadores(self.cfg(natureza=natureza)), [])
+        for natureza in ("Licença", "outro", [], {}):
+            with self.subTest(natureza=natureza):
+                self.assertProblema(V.validar_vereadores(self.cfg(natureza=natureza)), "natureza")
+
     def test_datas_e_evidencias_validas(self):
         for evidencia in ("ata", "requerimento", "diario_oficial", "prefeitura", "alerj", "imprensa"):
             with self.subTest(evidencia=evidencia):
@@ -347,7 +354,7 @@ class TestValidarAfastamentos(Afirmacoes):
                 self.assertEqual(V.validar_vereadores(cfg, perfis), [])
 
     def test_campos_obrigatorios(self):
-        for campo in ("siscam", "legislatura", "cargo", "fonte"):
+        for campo in ("siscam", "legislatura", "cargo", "natureza", "fonte"):
             for valor in (None, "", " "):
                 with self.subTest(campo=campo, valor=valor):
                     self.assertProblema(V.validar_vereadores(self.cfg(**{campo: valor})), campo)
@@ -403,6 +410,10 @@ class TestValidarAfastamentos(Afirmacoes):
         self.assertEqual(arq.read_bytes(), (json.dumps(cfg, ensure_ascii=False, indent=1) + "\n").encode("utf-8"))
         self.assertEqual(V._memoria_nfc(cfg, "config/vereadores.json"), [])
         itens = cfg["afastamentos"]
+        for item in itens:
+            chaves = list(item)
+            self.assertEqual(chaves[chaves.index("cargo") + 1], "natureza")
+            self.assertEqual(item["natureza"], "licenca" if item["cargo"].startswith("Licença") else "cargo")
         self.assertEqual(itens, sorted(itens, key=lambda a: (a["legislatura"], a.get("inicio") or a.get("aprovacao") or "", a["siscam"])))
 
 

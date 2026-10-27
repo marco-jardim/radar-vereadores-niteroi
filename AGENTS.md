@@ -173,7 +173,8 @@ quando presente, a ficha informa a data com link para a fonte, sem alterar as m�
 
 ### Validação dos afastamentos
 
-Cada item de `afastamentos` mantém `siscam`, `legislatura`, `cargo` (cargo ou motivo) e `fonte` HTTPS
+Cada item de `afastamentos` mantém `siscam`, `legislatura`, `cargo` (cargo ou motivo),
+`natureza` (`cargo` para exercício de outro cargo ou `licenca` para licença) e `fonte` HTTPS
 obrigatórios. Aceita somente os opcionais `inicio`, `fim`, `aprovacao` (datas ISO válidas dentro da legislatura
 ou `null`, com `fim` ≥ `inicio`), `ato` (URL HTTPS do requerimento/ata ou `null`), `evidencia` (`ata`,
 `requerimento`, `diario_oficial`, `prefeitura`, `alerj` ou `imprensa`), `suplentes` (lista de nomes SISCAM)
@@ -182,6 +183,10 @@ primeiro registro observado. `siscam` e `suplentes` precisam estar entre eleitos
 `apelidos` ou chaves de `perfis.json`; só registre suplentes nomeados no documento citado. Novos apelidos
 exigem nome encontrado na frequência das sessões. Ordene por legislatura, `inicio` ou `aprovacao` (sem data
 primeiro), depois `siscam`. Preserve fontes de divergências nas notas e não duplique o mesmo afastamento.
+O abono usa `inicio` ou, na sua ausência, `aprovacao`; sem ambos, não cria intervalo.
+Sem `fim`, vai até a véspera do próximo P/C/V em deliberativa da legislatura ou até o fim dela.
+Licenças só abonam com `aprovacao` ou `ato`. Presença efetiva é P/C/V ÷ (P/C/V + A):
+J/O/L são abonadas e ficam fora da base; J continua contando como exercício nas votações possíveis.
 
 ### Validação da Mesa Diretora
 

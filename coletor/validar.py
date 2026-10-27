@@ -783,7 +783,7 @@ def _validar_afastamentos(cfg: dict, perfis: object, arquivo: str) -> list[str]:
     conhecidos |= {n for n in (cfg.get("apelidos") or {}) if isinstance(n, str) and not n.startswith("_")}
     if isinstance(perfis, dict) and isinstance(perfis.get("vereadores"), dict):
         conhecidos |= set(perfis["vereadores"])
-    obrigatorios = {"siscam", "legislatura", "cargo", "fonte"}
+    obrigatorios = {"siscam", "legislatura", "cargo", "natureza", "fonte"}
     opcionais = {"inicio", "fim", "aprovacao", "ato", "evidencia", "suplentes", "nota"}
     evidencias = ("ata", "requerimento", "diario_oficial", "prefeitura", "alerj", "imprensa")
     problemas = []
@@ -793,6 +793,8 @@ def _validar_afastamentos(cfg: dict, perfis: object, arquivo: str) -> list[str]:
             problemas.append(f"{r} deveria ser um objeto")
             continue
         problemas += _memoria_textos(item, tuple(sorted(obrigatorios)), r)
+        if item.get("natureza") not in ("cargo", "licenca"):
+            problemas.append(f"{r}: 'natureza' deveria ser cargo ou licenca")
         extras = set(item) - obrigatorios - opcionais
         if extras:
             problemas.append(f"{r}: campos desconhecidos: {', '.join(sorted(extras))}")

@@ -50,6 +50,70 @@ def votacao(pares: list[tuple[str, str]], **campos) -> dict:
 
 # ---- presença e pessoas --------------------------------------------------------
 class TestPresenca(unittest.TestCase):
+    def test_pct_bruta(self):
+        modelo = modelo_minimo(suplentes=())
+        modelo["cfg"]["afastamentos"] = [
+            {"siscam": "Ana", "legislatura": LEG, "natureza": "cargo",
+             "inicio": "2026-03-14", "fim": "2026-03-15"},
+            {"siscam": "Ana", "legislatura": LEG, "natureza": "licenca",
+             "inicio": "2026-03-16", "fim": "2026-03-17", "aprovacao": "2026-03-15"}]
+        textos = ["Presença"] * 8 + ["Ausência"] * 2 + ["Ausência Justificada"] * 3 + ["Ausência"] * 4 + ["Outro texto"]
+        registros = [sessao(n, frequencia=[frequencia("Ana", texto), frequencia("Bruno", "Ausência Justificada")])
+                     for n, texto in enumerate(textos, 1)]
+        antes = copy.deepcopy((modelo, registros))
+        resultado = montar_sessoes(modelo, registros, {})
+        ana = resultado["por_pessoa"]["ana"][LEG]
+        self.assertEqual(ana["presenca"], {"P": 8, "C": 0, "V": 0, "J": 3, "A": 2, "L": 2, "O": 2,
+                                            "presentes": 8, "faltas": 2, "denominador": 10, "listadas": 18,
+                                            "pct": 80, "pct_bruta": 53})
+        self.assertEqual(ana["por_ano"][2026], ana["presenca"])
+        bruno = resultado["por_pessoa"]["bruno"][LEG]["presenca"]
+        self.assertEqual((bruno["J"], bruno["faltas"], bruno["denominador"], bruno["listadas"]), (18, 0, 0, 18))
+        self.assertIsNone(bruno["pct"])
+        self.assertEqual(bruno["pct_bruta"], 0)
+        self.assertEqual(resultado["mediana_presenca"][LEG], 80)
+        self.assertEqual((modelo, registros), antes)
+        self.assertEqual(resultado, montar_sessoes(modelo, registros[::-1], {}))
+
+    def test_justificada_fora_da_base_e_limiares_independentes(self):
+        registros = [sessao(n, frequencia=[frequencia("Ana")]) for n in range(1, 10)]
+        registros.append(sessao(10, frequencia=[frequencia("Ana", "Ausência Justificada")]))
+        resultado = montar_sessoes(modelo_minimo(), registros, {})
+        p = resultado["por_pessoa"]["ana"][LEG]["presenca"]
+        self.assertEqual((p["denominador"], p["listadas"], p["faltas"]), (9, 10, 0))
+        self.assertIsNone(p["pct"])
+        self.assertEqual(p["pct_bruta"], 90)
+        self.assertIsNone(resultado["mediana_presenca"][LEG])
+        curto = montar_sessoes(modelo_minimo(), registros[:9], {})
+        self.assertIsNone(curto["por_pessoa"]["ana"][LEG]["presenca"]["pct_bruta"])
+
+    def test_fim_nulo_usa_retorno_em_outro_ano(self):
+        modelo = modelo_minimo()
+        modelo["cfg"]["afastamentos"] = [{"siscam": "Ana", "legislatura": LEG, "natureza": "cargo",
+                                            "aprovacao": "2025-12-01", "fim": None}]
+        registros = [sessao(1, ano=2025, data="2025-12-10", frequencia=[frequencia("Ana", "Ausência")]),
+                     sessao(2, data="2026-02-01", frequencia=[frequencia("Ana")]),
+                     sessao(3, data="2026-02-02", frequencia=[frequencia("Ana", "Ausência")])]
+        resultado = montar_sessoes(modelo, registros, {})
+        ana = resultado["por_pessoa"]["ana"][LEG]
+        self.assertEqual((ana["presenca"]["O"], ana["presenca"]["A"], ana["presenca"]["denominador"]), (1, 1, 2))
+        self.assertEqual((ana["por_ano"][2025]["O"], ana["por_ano"][2025]["denominador"]), (1, 0))
+        self.assertEqual((ana["por_ano"][2026]["O"], ana["por_ano"][2026]["denominador"]), (0, 2))
+
+    def test_abono_de_suplente_reconhecido_mantem_chave_literal(self):
+        modelo = modelo_minimo(suplentes=())
+        modelo["cfg"]["afastamentos"] = [{"siscam": "Nome Suplente Completo", "legislatura": LEG,
+                                            "natureza": "cargo", "inicio": "2026-03-01", "fim": None}]
+        registros = [sessao(1, frequencia=[frequencia("Nome Suplente Completo", "Ausência")]),
+                     sessao(2, frequencia=[frequencia("Nome Suplente Completo")],
+                            votacoes=[votacao([("Nome Suplente Completo", "Favor")])]),
+                     sessao(3, frequencia=[frequencia("Nome Suplente Completo", "Ausência")])]
+        resultado = montar_sessoes(modelo, registros, {})
+        suplente = resultado["por_pessoa"]["nome-suplente-completo"][LEG]
+        self.assertTrue(suplente["sem_pagina"])
+        self.assertEqual([suplente["presenca"][c] for c in ("P", "O", "A")], [1, 1, 1])
+        self.assertEqual(suplente["presenca"]["denominador"], 2)
+
     def test_denominador_individual_licenca_solene_v_e_lista_duplicada(self):
         lista = [frequencia("Ana"), frequencia("Bruno", "Ausência"), frequencia("Suplente")]
         registros = [sessao(1, frequencia=lista + lista),
@@ -184,6 +248,21 @@ class TestPresenca(unittest.TestCase):
 
 # ---- votações ------------------------------------------------------------------
 class TestVotacoes(unittest.TestCase):
+    def test_exercicio_inclui_justificada_mas_nao_abonos(self):
+        modelo = modelo_minimo()
+        modelo["cfg"]["afastamentos"] = [
+            {"siscam": "Bruno", "legislatura": LEG, "natureza": "cargo",
+             "inicio": "2026-03-02", "fim": "2026-03-02"},
+            {"siscam": "Bruno", "legislatura": LEG, "natureza": "licenca",
+             "inicio": "2026-03-03", "fim": "2026-03-03", "ato": "https://exemplo.org/ata"}]
+        registros = [sessao(n, frequencia=[frequencia("Ana"), frequencia("Bruno", "Ausência Justificada")],
+                             votacoes=[votacao([("Ana", "Favor")])]) for n in range(1, 4)]
+        resultado = montar_sessoes(modelo, registros, {})
+        bruno = resultado["por_pessoa"]["bruno"][LEG]
+        self.assertEqual(bruno["participacao"], {"votou": 0, "possiveis": 1, "presidindo": 0})
+        self.assertEqual([bruno["presenca"][c] for c in ("J", "O", "L")], [1, 1, 1])
+        self.assertEqual((bruno["presenca"]["denominador"], bruno["presenca"]["faltas"]), (0, 0))
+
     def test_presidente_duplicado_totais_classe_e_divergencia(self):
         nomes = ("Ana", "Bruno", "Caio", "Dora", "Eva", "Fabio", "Gabi", "Presidente")
         modelo = modelo_minimo(nomes, ())

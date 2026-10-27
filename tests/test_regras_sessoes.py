@@ -65,7 +65,7 @@ class TestPresenca(unittest.TestCase):
         pessoas = resultado["pessoas"]
         self.assertEqual([pessoas[R.slug(n)]["categoria"] for n in ("P", "C", "V", "J", "A", "L", "?")],
                          ["P", "C", "V", "J", "A", "L", "?"])
-        self.assertEqual(sum(p["denominador"] for p in pessoas.values()), 5)
+        self.assertEqual(sum(p["denominador"] for p in pessoas.values()), 4)
         self.assertEqual(sum(p["presente"] for p in pessoas.values()), 3)
         self.assertTrue(pessoas["l"]["licenca"])
         self.assertNotIn("so-voto", pessoas)
@@ -120,6 +120,128 @@ class TestPresenca(unittest.TestCase):
         r = R.resumo_presencas(sessoes)
         self.assertEqual((r["a"]["presentes"], r["a"]["denominador"], r["a"]["licencas"]), (1, 1, 1))
         self.assertEqual((r["b"]["presentes"], r["b"]["denominador"]), (0, 1))
+        self.assertEqual((r["a"]["listadas"], r["a"]["faltas"], r["b"]["faltas"]), (3, 0, 1))
+
+    def test_justificada_fora_da_base(self):
+        s = sessao(frequencia=[frequencia("Pessoa", "Ausência Justificada")])
+        p = R.presencas_da_sessao(s)["pessoas"]["pessoa"]
+        self.assertEqual(p["categoria"], "J")
+        self.assertFalse(p["denominador"])
+        self.assertFalse(p["presente"])
+        self.assertTrue(p["abonada"])
+        self.assertTrue(p["exercicio"])
+        resumo = R.resumo_presencas([s])["pessoa"]
+        self.assertEqual((resumo["denominador"], resumo["faltas"], resumo["listadas"]), (0, 0, 1))
+        self.assertEqual(resumo["categorias"]["J"], 1)
+
+
+class TestAbonos(unittest.TestCase):
+    def cfg(self, **campos) -> dict:
+        return {"legislaturas": [{"id": "2025-2028", "inicio": "2025-01-01", "fim": "2028-12-31"}],
+                "afastamentos": [{"siscam": "Pessoa", "legislatura": "2025-2028", "natureza": "cargo",
+                                  "inicio": "2026-03-20", "fim": "2026-03-26", **campos}]}
+
+    def test_abono_cargo_intervalo(self):
+        cfg = self.cfg()
+        registros = [sessao(id=n, data=dia, frequencia=[frequencia("Pessoa", texto)])
+                     for n, (dia, texto) in enumerate((("2026-03-19", "Ausência"),
+                                                       ("2026-03-20", "Ausência"),
+                                                       ("2026-03-25", "Ausência Justificada"),
+                                                       ("2026-03-26", "Ausência"),
+                                                       ("2026-03-27", "Ausência")), 1)]
+        indice = {"pessoa": "chave-do-modelo"}
+        antes = copy.deepcopy((cfg, registros, indice))
+        abonos = R.intervalos_abono(cfg, registros, indice)
+        self.assertEqual(abonos, {"chave-do-modelo": [("2026-03-20", "2026-03-26", "cargo")]})
+        presencas = [R.presencas_da_sessao(s, indice, abonos)["pessoas"]["chave-do-modelo"] for s in registros]
+        self.assertEqual([p["categoria"] for p in presencas], ["A", "O", "O", "O", "A"])
+        for p in presencas[1:4]:
+            self.assertTrue(p["abonada"])
+            self.assertFalse(p["licenca"])
+            self.assertFalse(p["exercicio"])
+            self.assertFalse(p["denominador"])
+        resumo = R.resumo_presencas(registros, indice, abonos=abonos)["chave-do-modelo"]
+        self.assertEqual((resumo["faltas"], resumo["denominador"], resumo["listadas"]), (2, 2, 5))
+        self.assertEqual(resumo["categorias"]["O"], 3)
+        self.assertEqual((cfg, registros, indice), antes)
+
+    def test_licenca_aprovada_abona(self):
+        for campos in ({"inicio": None, "aprovacao": "2026-03-20"},
+                       {"aprovacao": "2026-03-21"}, {"ato": "https://exemplo.org/ata"}):
+            with self.subTest(campos=campos):
+                cfg = self.cfg(natureza="licenca", **campos)
+                s = sessao(frequencia=[frequencia("Pessoa", "Ausência")])
+                abonos = R.intervalos_abono(cfg, [s])
+                self.assertEqual(abonos["pessoa"][0][0], "2026-03-20")
+                p = R.presencas_da_sessao(s, abonos=abonos)["pessoas"]["pessoa"]
+                self.assertEqual(p["categoria"], "L")
+                self.assertTrue(p["licenca"])
+                self.assertTrue(p["abonada"])
+                self.assertFalse(p["denominador"])
+                self.assertFalse(p["exercicio"])
+
+    def test_licenca_sem_aprovacao_nem_ato_nao_abona(self):
+        cfg = self.cfg(natureza="licenca", aprovacao=None, ato=None)
+        s = sessao(frequencia=[frequencia("Pessoa", "Ausência")])
+        abonos = R.intervalos_abono(cfg, [s])
+        self.assertEqual(abonos, {})
+        self.assertEqual(R.presencas_da_sessao(s, abonos=abonos)["pessoas"]["pessoa"]["categoria"], "A")
+
+    def test_fim_nulo_ate_retorno(self):
+        cfg = self.cfg(fim=None)
+        for texto, votos in (("Presença", []), ("Consignado", []),
+                             ("Ausência", [votacao(votos=[{"nome": "Pessoa", "voto": "Favor"}])])):
+            with self.subTest(texto=texto):
+                registros = [sessao(id=1, data="2026-03-21", tipo="solene", frequencia=[frequencia("Pessoa", "Presença")]),
+                             sessao(id=2, data="2026-03-22", frequencia=[frequencia("Pessoa", "Ausência Justificada")]),
+                             sessao(id=3, data="2026-03-23", frequencia=[frequencia("Pessoa", "Licença")]),
+                             sessao(id=4, data="2026-03-25", frequencia=[frequencia("Pessoa", texto)], votacoes=votos)]
+                esperado = {"pessoa": [("2026-03-20", "2026-03-24", "cargo")]}
+                self.assertEqual(R.intervalos_abono(cfg, registros), esperado)
+                self.assertEqual(R.intervalos_abono(cfg, registros[::-1]), esperado)
+                self.assertEqual(R.presencas_da_sessao(registros[1], abonos=esperado)["pessoas"]["pessoa"]["categoria"], "O")
+                self.assertTrue(R.presencas_da_sessao(registros[-1], abonos=esperado)["pessoas"]["pessoa"]["presente"])
+        # Uma presença de outra legislatura ou sem data não encerra o intervalo.
+        cfg["legislaturas"].append({"id": "2029-2032", "inicio": "2029-01-01", "fim": "2032-12-31"})
+        registros = [sessao(ano=2029, data="2029-03-25", frequencia=[frequencia("Pessoa", "Presença")]),
+                     sessao(id=2, data=None, frequencia=[frequencia("Pessoa", "Presença")])]
+        self.assertEqual(R.intervalos_abono(cfg, registros), {"pessoa": [("2026-03-20", "2028-12-31", "cargo")]})
+
+    def test_sem_datas_sem_abono(self):
+        for campos in ({}, {"aprovacao": None}, {"ato": "https://exemplo.org/ata"}):
+            cfg = self.cfg(inicio=None, **campos)
+            self.assertEqual(R.intervalos_abono(cfg, []), {})
+        s = sessao(data=None, frequencia=[frequencia("Pessoa", "Ausência")])
+        abonos = R.intervalos_abono(self.cfg(), [])
+        self.assertEqual(R.presencas_da_sessao(s, abonos=abonos)["pessoas"]["pessoa"]["categoria"], "A")
+
+    def test_presente_no_intervalo_nao_reclassifica(self):
+        abonos = R.intervalos_abono(self.cfg(), [])
+        for texto, votos, categoria in (("Presença", [], "P"), ("Consignado", [], "C"),
+                                       ("Ausência", [votacao(votos=[{"nome": "Pessoa", "voto": "Favor"}])], "V")):
+            with self.subTest(categoria=categoria):
+                s = sessao(frequencia=[frequencia("Pessoa", texto)], votacoes=votos)
+                resultado = R.presencas_da_sessao(s, abonos=abonos)
+                p = resultado["pessoas"]["pessoa"]
+                self.assertEqual(p["categoria"], categoria)
+                self.assertTrue(p["presente"])
+                self.assertTrue(p["exercicio"])
+                self.assertTrue(p["denominador"])
+                self.assertFalse(p["abonada"])
+                self.assertIn("intervalo de abono", resultado["qualidade"][0])
+        # Um retorno não encurta um fim explicitamente documentado.
+        self.assertEqual(R.intervalos_abono(self.cfg(), [s]), abonos)
+
+    def test_varios_intervalos_sem_mutacao(self):
+        cfg = self.cfg()
+        cfg["afastamentos"].append({**cfg["afastamentos"][0], "inicio": "2026-04-01", "fim": "2026-04-02"})
+        antes = copy.deepcopy(cfg)
+        esperado = {"pessoa": [("2026-03-20", "2026-03-26", "cargo"), ("2026-04-01", "2026-04-02", "cargo")]}
+        self.assertEqual(R.intervalos_abono(cfg, []), esperado)
+        cfg["afastamentos"].reverse()
+        self.assertEqual(R.intervalos_abono(cfg, []), esperado)
+        cfg["afastamentos"].reverse()
+        self.assertEqual(cfg, antes)
 
 
 class TestVotos(unittest.TestCase):
@@ -164,6 +286,14 @@ class TestVotos(unittest.TestCase):
 
 # ---- sentido e consistência -----------------------------------------------------
 class TestRegrasDoModelo(unittest.TestCase):
+    def test_exercicio_inclui_justificada(self):
+        s = sessao(frequencia=[frequencia("Pessoa", "Ausência Justificada")])
+        self.assertEqual(R.pessoas_em_exercicio(s), {"pessoa"})
+        for natureza in ("cargo", "licenca"):
+            abonos = {"pessoa": [("2026-03-01", "2026-03-31", natureza)]}
+            presencas = R.presencas_da_sessao(s, abonos=abonos)
+            self.assertEqual(R.pessoas_em_exercicio(s, presencas=presencas), set())
+
     def test_realizacao_observada_nao_se_confunde_com_pauta_ou_detalhe(self):
         s = sessao(pauta=[{"id_documento": 123}], detalhe_em="2026-10-23")
         self.assertFalse(R.indicadores_sessao(s)["realizada"])
