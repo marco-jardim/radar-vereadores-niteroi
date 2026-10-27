@@ -226,6 +226,8 @@ Não há carregamento automático de `.env`. A IA usa `POST /chat/completions`, 
 - Toda tabela fica em `div.tabela-rolavel[role=region][tabindex=0][aria-label]`, com rótulo acessível único
   na página e foco por teclado. Exceções: os wrappers já roláveis `tabela-resumo` e `faixa-rolagem`,
   que preservam seus próprios `role="region"`, `tabindex="0"` e rótulo (`aria-label` ou `aria-labelledby`).
+  Esses wrappers mantêm `overflow-x: auto` e `position: relative`: contêm os spans `.so-leitor` absolutos
+  das células; sem o bloco de contenção, eles escapam do recorte e alargam a página.
 
 ### Cabeçalho, tema e metadados
 
@@ -249,8 +251,27 @@ Não há carregamento automático de `.env`. A IA usa `POST /chat/completions`, 
 - Os tokens de cor do contrato são literais hexadecimais de seis dígitos em `:root`, no bloco `@media`
   escuro e em `:root[data-theme="dark"]`, nunca `var()`. Não use hexadecimais em `[data-theme="light"]`.
   `tests/test_design_tokens.py` verifica os pares WCAG declarados; preserve esses contrastes.
+- Use em todos os componentes os tokens de `site_src/estilo.css`: `--fs--1` a `--fs-6` (escala de razão
+  1,2 com `clamp()`), `--esp-1` a `--esp-8`, `--raio-*`, `--sombra-*`, `--dur-*` e `--ease-mar`.
+  Texto auxiliar tem mínimo de `.8125rem` (`--fs--1`) e entrelinha ≥ 1,4. A exceção são os rótulos de
+  12 px em unidades do viewBox na `.svg-box`, identificados pelo comentário `/* exceção de tamanho: … */`;
+  a faixa de votos de sessões não tem essa exceção.
 - Fontes são auto-hospedadas em `site_src/fontes/`, com `font-display: swap`. Não carregue fontes de
   terceiros; o carregamento via Google Fonts foi removido. Preserve as licenças OFL junto aos arquivos.
+
+### Responsividade e meios de saída
+
+- Nas grades autoajustáveis, use `minmax(min(100%, Npx), 1fr)`, sem mínimos fixos > 288 px.
+  A meta é nenhuma rolagem horizontal da página a 320 px; confira com Playwright na QA, preservando
+  a rolagem local das tabelas conforme o contrato acima.
+- Alvos de toque dos controles principais têm ≥ 44 px; chips, tags e `.ver-siscam`, ≥ 24 px.
+  No desktop, navegação e tema podem ampliar a área de toque por pseudoelementos sem ampliar o desenho.
+- A textura decorativa fica em `body::before`, com `mask-image` de `textura-bairros.svg`,
+  `background-color: var(--linha)` e opacidade ≤ .06; fica oculta na impressão e em cores forçadas.
+- Em `@media (forced-colors: active)`, preserve bordas visíveis e foco com `Highlight`. As cores de dados
+  só são preservadas com `forced-color-adjust: none` nas amostras, barras, marcas dos gráficos e mapa,
+  não no texto ou nos cartões inteiros.
+- Na impressão, mantenha texto preto sobre branco, sem textura nem sombras e com os controles ocultos.
 
 ### Orçamentos (gzip, salvo indicação contrária)
 
@@ -264,6 +285,7 @@ Não há carregamento automático de `.env`. A IA usa `POST /chat/completions`, 
 | Seção individual de sessões | Até +10 KiB, verificada em teste sintético. |
 | `sessoes.js` | Até 12 KiB, testado offline. |
 | `navegacao.js` | Até 4 KiB. |
+| CSS global (`estilo.css` publicado) | Até 16 KiB, testado em `tests/test_responsivo_css.py`. |
 | Script inline `paginas.SCRIPT_CABECA` | Até 400 bytes **brutos**. |
 | `favicon.svg` e `marca.svg` | Até 2 KiB **brutos** cada. |
 | `textura-bairros.svg` | Até 12 KiB; distância de simplificação fixa, sem ajuste pelo compressor. |
@@ -273,6 +295,8 @@ Não há carregamento automático de `.env`. A IA usa `POST /chat/completions`, 
 O gerador imprime tamanhos brutos/gzip, soma e máximo das famílias e avisos `::warning::` para os tetos
 oficiais de HTML/JSON/carga inicial. Não confunda esses tetos com alvos de apresentação; os testes do mapa
 de votos também têm um cenário sintético de até 65 KiB para a página com mapa.
+`tests/test_responsivo_css.py` também confere o teto de 100 KiB por HTML usando o `site/` existente,
+sem regenerá-lo; essa checagem é pulada se a saída estiver ausente ou desatualizada em relação ao CSS.
 
 ## Sessões: coleta, regras e apresentação
 

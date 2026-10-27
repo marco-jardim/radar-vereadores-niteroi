@@ -28,6 +28,7 @@ O endereço antigo `alertas.html` redireciona para `ruido.html`; `dados/` conté
 
 Com JavaScript, o cabeçalho oferece os temas Automático, Claro e Escuro e um menu recolhível no celular.
 Sem JavaScript, os links de navegação permanecem visíveis.
+O layout é responsivo, com adaptação ao alto contraste do sistema e impressão sem controles nem textura.
 
 **Limites importantes:** impacto é estimado pela ementa, não resultado comprovado. Contar documentos,
 presenças ou votos não mede a qualidade do mandato. Os critérios valem igualmente para qualquer autor,
