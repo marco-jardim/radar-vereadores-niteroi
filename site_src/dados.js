@@ -51,7 +51,7 @@
 
   // As partes de documentos não levam build: a URL de cada arquivo já traz o hash do conteúdo. tp, c e sc
   // apontam para as enumerações estáveis de dic-doc; au, st e b, para os dicionários locais da própria parte
-  // (pessoas: [slug, nome, 1 se há página], situacoes e bairros), como em fatia_documentos (gerar_site.py).
+  // (pessoas: [slug, nome, 1 se há página, partido?], situacoes e bairros), como em fatia_documentos (gerar_site.py).
   function hidratarDocs(dic, fatia) {
     if (!dic || !fatia || dic.esquema !== 2 || fatia.esquema !== 2) throw new Error("Esquema incompatível");
     var c = fatia.colunas || {};
@@ -67,11 +67,11 @@
       return {
         id: id, tipo: tipo[0], numero: c.n[j], ano: c.a[j], data: c.d[j], ementa: c.e[j],
         situacao: situacao, assunto: c.as[j],
-        // [nome de exibição, slug ("" para quem não é vereador), 1 se há página do vereador]
+        // [nome de exibição, slug ("" para quem não é vereador), 1 se há página do vereador, partido ("" se desconhecido)]
         autores: c.au[j].map(function (i) {
           var p = pessoas[i];
           if (!p) throw new Error("Índice inválido no documento " + id);
-          return [p[1], p[0], p[2] ? 1 : 0];
+          return [p[1], p[0], p[2] ? 1 : 0, p[3] || ""];
         }),
         categoria: categoria[0], subcategoria: sub[1], homenagem: c.h[j] === 1,
         respondido: c.rs[j] === 1, respondido_em: c.re[j], dias_ate_resposta: c.dr[j],

@@ -80,6 +80,22 @@ TERMOS: dict[str, tuple[str, str]] = {
         "Ausência na abertura com voto nominal substantivo registrado na mesma sessão. "
         "Conta como presença identificada à parte; presidir não é voto substantivo.",
     ),
+    "ausencia-justificada": (
+        "Ausência justificada",
+        "Ausência marcada como justificada pela Câmara. Não conta como presença nem como falta "
+        "na base da presença efetiva; permanece na base da presença bruta.",
+    ),
+    "abono-cargo": (
+        "Abonada por outro cargo",
+        "Ausência no intervalo documentado de afastamento para exercer outro cargo. "
+        "Fica fora da base da presença efetiva, mas permanece na presença bruta.",
+    ),
+    "presenca-efetiva": (
+        "Presença efetiva",
+        "Presenças (incluindo consignado e ausência com voto) divididas por presenças mais faltas "
+        "não abonadas. Justificadas, abonadas por outro cargo e licenças ficam fora da base. "
+        "O percentual só aparece com ao menos 10 sessões na base individual.",
+    ),
 }
 
 

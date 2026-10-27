@@ -7,6 +7,7 @@ from __future__ import annotations
 import contextlib
 import io
 import json
+import re
 import sys
 import tempfile
 import unittest
@@ -93,6 +94,14 @@ class TestGerarSite(unittest.TestCase):
         self.assertIn("metodologia.html", documentos)
         for chave in TERMOS:
             self.assertIn(f"g-{chave}", documentos["metodologia.html"].ids)
+        termos_presenca = {"presenca-efetiva", "ausencia-justificada", "abono-cargo"}
+        self.assertTrue(termos_presenca <= documentos["metodologia.html"].usados)
+        if any(ident.startswith("presenca-") for ident in documentos["sessoes.html"].ids):
+            self.assertTrue(termos_presenca <= documentos["sessoes.html"].usados)
+        fichas = [doc for nome, doc in documentos.items() if nome.startswith("vereadores/")]
+        self.assertTrue(fichas)
+        for doc in fichas:
+            self.assertTrue(termos_presenca <= doc.usados)
 
     def test_html_gerado_dentro_do_orcamento(self):
         paginas = sorted(self.saida.rglob("*.html"))
@@ -277,6 +286,61 @@ class TestGerarSite(unittest.TestCase):
                         self.assertEqual(link.get("rel"), "noopener")
                     elif not href.startswith(("https://", "http://")):
                         self.assertNotIn("target", link)
+
+    def test_ficha_afastamento_neutro_com_datas_quando_conhecidas(self):
+        modelo = gerar_site.montar_modelo()
+        pessoa = next(iter(modelo["pessoas"].values()))
+        mandato = next(iter(pessoa["mandatos"].values()))
+        fonte = P.SISCAM + "DetalhesDocumentos.aspx?IdDocumento=277284"
+        for natureza, rotulo, datas, texto in (
+            ("cargo", "Em outro cargo", {}, ""),
+            ("licenca", "Licença registrada", {"inicio": "2023-12-08", "fim": "2024-03-31"},
+             ", a partir de 08/12/2023, até 31/03/2024"),
+            ("licenca", "Licença registrada", {"aprovacao": "2021-02-03", "inicio": None, "fim": None}, ", aprovado em 03/02/2021"),
+        ):
+            with self.subTest(natureza=natureza, datas=datas):
+                mandato["afastamentos"] = [{"natureza": natureza, "cargo": "Licença <médica>", "fonte": fonte, **datas}]
+                html = P.gerar_vereador(modelo, pessoa)
+                self.assertIn(f'<p class="aviso">{rotulo}: Licença &lt;médica&gt;{texto} '
+                              f'({P.link_fonte(fonte)}).</p>', html)
+                self.assertNotIn("Afastamento registrado:", html)
+                self.assertNotIn("Nesse período a cadeira foi ocupada por suplente", html)
+                self.assertNotIn("Afastou-se da Câmara para o cargo", html)
+
+    def test_partido_ao_lado_dos_nomes_em_todas_as_paginas(self):
+        """Todo link com nome de vereador traz o partido dentro do link (ou logo depois, na lista da home).
+
+        Ficam de fora os links dos gráficos SVG (o partido vai no tooltip, no aria-label e na tabela). Só falha
+        para quem tem partido conhecido em todas as legislaturas: nesses casos, nenhum contexto justifica a falta.
+        """
+        from coletor.site.modelo import partido_em
+
+        modelo = gerar_site.montar_modelo()
+        legs = [l["id"] for l in modelo["legislaturas"]]
+        sempre = {s for s in modelo["pessoas"] if all(partido_em(modelo, s, l) for l in legs)}
+        padrao = re.compile(r'<a\s(?P<antes>[^>]*?)href="[^"]*?vereadores/(?P<slug>[a-z0-9-]+)\.html"(?P<depois>[^>]*)>'
+                            r'(?P<conteudo>.*?)</a>(?P<seguinte> <span class="partido">)?', re.S)
+        com_partido = 0
+        for caminho in self.saida.rglob("*.html"):
+            html = caminho.read_text(encoding="utf-8")
+            for m in padrao.finditer(html):
+                conteudo = m["conteudo"]
+                if "aria-label=" in m["antes"] + m["depois"] or conteudo.lstrip().startswith(("<text", "<circle")):
+                    continue  # gráficos SVG
+                if 'class="partido"' in conteudo or m["seguinte"]:
+                    com_partido += 1
+                    continue
+                with self.subTest(pagina=str(caminho.relative_to(self.saida)), vereador=m["slug"]):
+                    self.assertNotIn(m["slug"], sempre, conteudo[:120])
+        self.assertGreater(com_partido, 0)
+
+    def test_ficha_com_perfil_e_partido_no_titulo(self):
+        ficha = (self.saida / "vereadores" / "daniel-marques-frederico.html").read_text(encoding="utf-8")
+        self.assertIn('<h1>Daniel Marques<span class="partido">PL</span></h1>', ficha)
+        self.assertIn('<section class="perfil" aria-labelledby="t-perfil">', ficha)
+        self.assertIn("<dt>Mandato 2025-2028</dt><dd>eleito pelo PL com 6.750 votos</dd>", ficha)
+        self.assertIn("<dt>Mandato 2021-2024</dt><dd>eleito pelo DEM com 2.411 votos</dd>", ficha)
+        self.assertLess(ficha.index("Mandato 2025-2028"), ficha.index("Mandato 2021-2024"))
 
     def test_manifesto_e_documentos(self):
         manifesto = json.loads((self.saida / "dados" / "manifest.json").read_text(encoding="utf-8"))

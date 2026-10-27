@@ -391,7 +391,8 @@ class TestMontarModelo(unittest.TestCase):
 
     def test_estrutura(self):
         self.assertEqual(set(self.modelo), {"legislaturas", "pessoas", "projetos", "meta", "curadoria", "cfg", "documentos", "atividade",
-                                            "anos_coleta"})
+                                            "anos_coleta", "perfis"})
+        self.assertEqual(self.modelo["perfis"], {})  # sem config/perfis.json, nenhum perfil
         self.assertEqual(len(self.modelo["projetos"]), 5)
         self.assertEqual(self.modelo["documentos"], [])  # sem data/documentos, nenhum documento
         self.assertEqual(self.modelo["atividade"], {})

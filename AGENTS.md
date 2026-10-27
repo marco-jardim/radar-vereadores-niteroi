@@ -37,9 +37,10 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `coletor/site/glossario.py` | Glossário: links `a.glossario` para `metodologia.html#g-*` na prosa, definições num `<template>` por página e popover progressivo em `navegacao.js`. |
 | `coletor/site/graficos.py` | Gráficos SVG e tabelas acessíveis. |
 | `coletor/site/paginas.py` | HTML, navegação, componentes, diálogo SISCAM e metodologia. |
-| `config/vereadores.json` | Legislaturas, eleitos, partidos da eleição, apelidos e afastamentos. |
+| `config/vereadores.json` | Legislaturas, eleitos, partidos da eleição, apelidos, afastamentos com datas e fontes e Mesa Diretora por biênio (`mesa`, ainda não exibida no site). |
 | `config/curadoria.json` | Rótulos e correções editoriais com fontes públicas. |
 | `config/memoria.json` | Conteúdo editorial da memória: critérios, homenageados e linha do tempo; validado por `coletor.validar`. |
+| `config/perfis.json` | Perfil público por nome do SISCAM: partido, votos e situação por mandato, outras eleições (TSE), links oficiais, falecimento opcional e fontes; validado por `coletor.validar`. |
 | `data/proposicoes/`, `data/documentos/`, `data/sessoes/` | Registros coletados por ano (documentos também por tipo). |
 | `data/classificacao_ia.json`, `data/meta.json` | Cache da IA e metadados das execuções. |
 | `data/geo/bairros.json` | Geometria opcional gerada por `coletor.geo`. |
@@ -153,6 +154,49 @@ Exige `data_fim` ≥ `data` e emblema no padrão `^[a-z0-9-]+\.svg$`. Domínio p
 fotografia pelo art. 44 da Lei 9.610/98, com `ano_divulgacao + 70 < ano atual`. O formato é JSON com
 `indent=1`, UTF-8, LF e normalização NFC.
 
+### Validação dos perfis
+
+`coletor.validar` confere `config/perfis.json`; a ausência gera aviso (suplentes ficam sem partido e as fichas,
+sem perfil). Chaves de `vereadores` são o nome exato do SISCAM em maiúsculas; cada perfil tem só `mandatos`,
+`eleicoes`, `camara`, `site`, `redes` e, opcionalmente, `falecimento`. Por mandato: legislatura existente em
+`config/vereadores.json`, `partido` não vazio, `votos` inteiro positivo (opcional), `situacao` em
+`eleito`/`eleita`/`suplente` e `fontes` HTTPS.
+Quem está entre os eleitos da legislatura precisa do mesmo partido do config e não pode ser suplente; quem não
+está, só suplente. `eleicoes`, da mais recente para a mais antiga: `ano` 1945–2100, `cargo`, `partido` e
+`resultado` não vazios, `uf` com duas letras maiúsculas, `votos` inteiro ≥ 0 ou `null` e `fonte` HTTPS.
+`camara`/`site` são HTTPS ou `null`; `redes` usa `instagram`, `facebook`, `x`, `youtube`, `tiktok`, `threads`
+ou `linkedin`, com `url` e `fonte` HTTPS: página oficial da Câmara ou do vereador, ou o registro de candidatura
+no TSE (`fonte` = `https://dadosabertos.tse.jus.br/dataset/candidatos-<ano>`, como grava `coletor.tse`).
+Formato: JSON com `indent=1`, ordem das chaves preservada, UTF-8, LF e NFC.
+`falecimento` contém somente `data` (`AAAA-MM-DD` válida, não futura) e `fonte` (`{titulo, url}` HTTPS);
+quando presente, a ficha informa a data com link para a fonte, sem alterar as métricas históricas.
+
+### Validação dos afastamentos
+
+Cada item de `afastamentos` mantém `siscam`, `legislatura`, `cargo` (cargo ou motivo),
+`natureza` (`cargo` para exercício de outro cargo ou `licenca` para licença) e `fonte` HTTPS
+obrigatórios. Aceita somente os opcionais `inicio`, `fim`, `aprovacao` (datas ISO válidas dentro da legislatura
+ou `null`, com `fim` ≥ `inicio`), `ato` (URL HTTPS do requerimento/ata ou `null`), `evidencia` (`ata`,
+`requerimento`, `diario_oficial`, `prefeitura`, `alerj` ou `imprensa`), `suplentes` (lista de nomes SISCAM)
+e `nota` (texto factual curto). Fonte sem data é admitida; não invente início a partir da aprovação ou do
+primeiro registro observado. `siscam` e `suplentes` precisam estar entre eleitos de qualquer legislatura,
+`apelidos` ou chaves de `perfis.json`; só registre suplentes nomeados no documento citado. Novos apelidos
+exigem nome encontrado na frequência das sessões. Ordene por legislatura, `inicio` ou `aprovacao` (sem data
+primeiro), depois `siscam`. Preserve fontes de divergências nas notas e não duplique o mesmo afastamento.
+O abono usa `inicio` ou, na sua ausência, `aprovacao`; sem ambos, não cria intervalo.
+Sem `fim`, vai até a véspera do próximo P/C/V em deliberativa da legislatura ou até o fim dela.
+Licenças só abonam com `aprovacao` ou `ato`. Presença efetiva é P/C/V ÷ (P/C/V + A):
+J/O/L são abonadas e ficam fora da base; J continua contando como exercício nas votações possíveis.
+
+### Validação da Mesa Diretora
+
+A chave opcional `mesa` de `config/vereadores.json` lista `{siscam, legislatura, bienio, cargo, fonte}`, como
+`afastamentos`. `coletor.validar` exige campos não vazios e sem extras, legislatura existente, `bienio` `AAAA-AAAA`
+com anos consecutivos dentro da legislatura, `cargo` entre Presidente, 1º/2º Vice-Presidente, 1º/2º Secretário e
+1º/2º Suplente, `siscam` entre os eleitos da legislatura ou os nomes conhecidos (eleitos de outra legislatura ou
+`apelidos`), `fonte` HTTPS (ata ou votação da sessão no SISCAM) e, por biênio, nenhum cargo repetido nem pessoa com
+dois cargos. Não invente nomes: quem ainda não está na configuração (como um suplente) entra primeiro em `apelidos`.
+
 ### Opções das CLIs
 
 - Nos três coletores, `--anos` aceita ano ou intervalo inclusivo (`2025-2026`). Padrão de PLs: 2021 até o
@@ -254,6 +298,22 @@ Não há carregamento automático de `.env`. A IA usa `POST /chat/completions`, 
   `.so-leitor` absolutos das células; sem o bloco de contenção, eles escapam do recorte e alargam a página.
   Meta: nenhuma tabela com rolagem horizontal a 320, 375 e 414 px. `tests/test_tabelas_empilhaveis.py` confere
   os construtores e `TestGerarSite` confere todas as tabelas do site gerado.
+
+### Partido ao lado do nome
+
+- Todo nome de vereador no site leva `<span class="partido">SIGLA</span>` logo depois do texto do nome, dentro do
+  mesmo link ou chip (`paginas.partido_html`, `ptHtml` em `app.js`, `nome()` em `sessoes.js`). A sigla é a do partido
+  na legislatura do item (`modelo.partido_em`: projeto, documento, votação ou mandato); em listas sem item, a da
+  legislatura atual (404, home) ou a mais recente conhecida (`partido_atual`, título da ficha). Partido desconhecido:
+  sem span. Exceções: na lista da home o span fica logo depois do link (`inicio.js` lê o nome do link); nos gráficos
+  SVG o partido vai só no tooltip, no `aria-label` e na tabela alternativa (`graficos.com_partido`), não no rótulo.
+- O partido é o da eleição (`config/vereadores.json`) para eleitos e o de `config/perfis.json` para suplentes.
+  No navegador: `dic-pl.pessoas` já tem `{legislatura: partido}`; nas partes de documentos a pessoa local ganha
+  o partido como quarto campo, e nas de votações (`vot-<ano>`) como quinto, só quando conhecido (sem mapas de
+  partido por pessoa). Sem partido, a marcação é idêntica à anterior, e as fixtures de paridade não mudam.
+- A ficha tem `section.perfil` depois do título: partido e votos por mandato (mais recente primeiro), outras
+  eleições, página na Câmara, site e redes oficiais, e as fontes; linhas sem dado são omitidas. Links externos
+  seguem a regra geral (sem nova aba; só os detalhes do SISCAM abrem em nova aba).
 
 ### Home e interações acessíveis
 
@@ -389,9 +449,14 @@ Esta é a referência única para sessões; a CLI está em "Pipeline e comandos"
 ### Interpretação e HTML
 
 - Só deliberativas (ordinárias/extraordinárias) com lista entram na presença. O denominador é individual,
-  sem licenças/textos desconhecidos e sem inventar faltas para nomes ausentes. Cada pessoa conta uma vez,
+  com presença efetiva P/C/V ÷ (P/C/V + A), sem J/O/L e textos desconhecidos nem faltas inventadas para nomes
+  ausentes. Cada pessoa conta uma vez,
   pela melhor evidência; ausência com voto substantivo na sessão pode virar presença identificada como V.
   Com base menor que 10, não há percentual; a mediana considera eleitos com base suficiente.
+- Desde `2026-10-27` (`pagina_sessoes.CRITERIO_PRESENCA_DESDE`), justificadas (J), abonadas por outro cargo (O)
+  e licenças (L) ficam fora da base efetiva. A barra separa P/C/V/A de J/O/L por um corte de 2 px e usa texturas
+  e rótulos além das cores. A tabela empilhável de dez colunas conserva a presença bruta P/C/V ÷ (P/C/V + A + J + O)
+  para comparação, também com mínimo de dez na própria base. As fichas contam só A em “Faltas não abonadas”.
 - Favor/Contra é sobre o parecer, não automaticamente a matéria. Use `regras_sessoes` para determinar o
   sentido e o quórum: derrubar veto exige 11 votos dos 21 vereadores, não maioria dos presentes.
   Sentido inseguro aparece como não determinado; placar inconsistente só mostra totais oficiais, sem nomes.
@@ -553,6 +618,11 @@ Esta é a referência única para sessões; a CLI está em "Pipeline e comandos"
   para correções documentadas em vez de alterar os dados coletados.
 - Nomes `siscam` em `config/vereadores.json` devem corresponder exatamente ao SISCAM, em maiúsculas.
   Preserve partido da eleição, fontes das legislaturas e registros de afastamento.
+- `config/perfis.json` usa os mesmos campos para todos os vereadores, com fonte pública HTTPS para cada fato
+  (votação e partido da eleição, eleições do TSE). Links de redes sociais só entram quando declarados numa página
+  oficial (da Câmara ou do próprio vereador) ou no registro de candidatura ao TSE (declaração a órgão oficial;
+  `fonte` = URL do conjunto de dados do TSE daquele ano), registrada em `fonte`; não inclua perfis não oficiais
+  nem omita links oficiais de alguém por critério político.
 - Não confunda impacto estimado e resultado comprovado. Preserve limitações e contestação por issue;
   contar documentos, presença ou votos não mede qualidade nem resultado.
 

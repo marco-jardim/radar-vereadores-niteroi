@@ -25,7 +25,8 @@ const dic = {
 };
 const indicacoes = {
   esquema: 2, nome: "doc-indicacao-2026", n: 2, tipo: "indicacao", ano: 2026, parte: 0,
-  pessoas: [["", "Mesa Diretora 2025/2026", 0], ["ana-maria-teste", "Ana Teste", 1], ["dina-so-indicacao", "Diná", 0]],
+  // O quarto campo (partido na legislatura do documento) só existe quando é conhecido.
+  pessoas: [["", "Mesa Diretora 2025/2026", 0], ["ana-maria-teste", "Ana Teste", 1, "PX"], ["dina-so-indicacao", "Diná", 0]],
   situacoes: ["RECEBIDO"], bairros: ["Icaraí"],
   colunas: {
     id: [900002, 900001], tp: [1, 1], n: ["11/2026", "10/2026"], a: [2026, 2026], d: ["2026-03-11", "2026-03-10"],
@@ -51,13 +52,13 @@ test("hidratação de documentos recupera todos os campos e autores que não sã
   assert.deepEqual(docs, [
     {
       id: 900002, tipo: "indicacao", numero: "11/2026", ano: 2026, data: "2026-03-11", ementa: "Indica a troca de lâmpadas",
-      situacao: "RECEBIDO", assunto: null, autores: [["Diná", "dina-so-indicacao", 0]], categoria: "zeladoria", subcategoria: "poda",
+      situacao: "RECEBIDO", assunto: null, autores: [["Diná", "dina-so-indicacao", 0, ""]], categoria: "zeladoria", subcategoria: "poda",
       homenagem: false, respondido: false, respondido_em: null, dias_ate_resposta: null, publicado: false, publicacao: null,
       bairro: null, detalhe_pendente: false, url: "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=900002"
     },
     {
       id: 900001, tipo: "indicacao", numero: "10/2026", ano: 2026, data: "2026-03-10", ementa: "Indica a poda de árvores na Rua Tal, Icaraí.",
-      situacao: "RECEBIDO", assunto: "Poda", autores: [["Ana Teste", "ana-maria-teste", 1], ["Mesa Diretora 2025/2026", "", 0]],
+      situacao: "RECEBIDO", assunto: "Poda", autores: [["Ana Teste", "ana-maria-teste", 1, "PX"], ["Mesa Diretora 2025/2026", "", 0, ""]],
       categoria: "zeladoria", subcategoria: "poda", homenagem: false, respondido: false, respondido_em: null, dias_ate_resposta: null,
       publicado: false, publicacao: null, bairro: "Icaraí", detalhe_pendente: true,
       url: "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=900001"

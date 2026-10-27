@@ -1,0 +1,2746 @@
+{
+ "_leia_me": "Perfil público de cada vereador: votação e partido por eleição, links oficiais. Toda informação tem fonte pública HTTPS; links de redes só quando declarados em página oficial. Mesmos campos para todos.",
+ "fonte_padrao": {
+  "titulo": "Lista de vereadores de Niterói — Wikipédia",
+  "url": "https://pt.wikipedia.org/wiki/Lista_de_vereadores_de_Niter%C3%B3i"
+ },
+ "vereadores": {
+  "ADRIANO DOS SANTOS OLIVEIRA": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PDT",
+     "votos": 1764,
+     "situacao": "suplente",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 1639,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 1764,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSB",
+     "votos": 1264,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PRP",
+     "votos": 1375,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 1507,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    },
+    {
+     "ano": 2004,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSC",
+     "votos": 81563,
+     "resultado": "Não eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2004",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "ALLAN PINHO LYRA": {
+   "mandatos": {
+    "2025-2028": {
+     "partido": "PL",
+     "votos": 4413,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": 4413,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Prefeito",
+     "uf": "RJ",
+     "partido": "PTC",
+     "votos": 22834,
+     "resultado": "Não eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "ANDERSON JOSÉ RODRIGUES - PIPICO": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PT",
+     "votos": 3066,
+     "situacao": "suplente",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "PT",
+     "votos": 5488,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 5488,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 3066,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 2053,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/pipico_niteroi",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    }
+   ]
+  },
+  "BENNY BRIOLLY": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PSOL",
+     "votos": 4367,
+     "situacao": "eleita",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "PSOL",
+     "votos": 4801,
+     "situacao": "eleita",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2026,
+     "cargo": "Deputado Federal",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": null,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2026",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+     }
+    },
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSOL",
+     "votos": 4801,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSOL",
+     "votos": 4367,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "CARLOS OTÁVIO DIAS VAZ - CASOTA": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PSDB",
+     "votos": 1512,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "MDB",
+     "votos": 3042,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSDB",
+     "votos": 1512,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSDB",
+     "votos": 1675,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2004,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PFL",
+     "votos": 14656,
+     "resultado": "Não eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2004",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
+     }
+    },
+    {
+     "ano": 2000,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSB",
+     "votos": 0,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2000",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2000"
+     }
+    },
+    {
+     "ano": 1996,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PFL",
+     "votos": 977,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 1996",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-1996"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/casotaoficial",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    }
+   ]
+  },
+  "DADO FOLY": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "Cidadania",
+     "votos": 1055,
+     "situacao": "suplente",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "Cidadania",
+     "votos": 1593,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "DANIEL MARQUES FREDERICO": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "DEM",
+     "votos": 2411,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "PL",
+     "votos": 6750,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2026,
+     "cargo": "Deputado Estadual",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": null,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2026",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+     }
+    },
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": 6750,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "DEM",
+     "votos": 2411,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PV",
+     "votos": 3359,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PV",
+     "votos": 1169,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PV",
+     "votos": 605,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "DOUGLAS DE SOUZA GOMES": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PTC",
+     "votos": 2416,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "PL",
+     "votos": 16369,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2026,
+     "cargo": "Deputado Federal",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": null,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2026",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+     }
+    },
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": 16369,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PTC",
+     "votos": 2416,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "EMANUEL JORGE ROCHA": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "Solidariedade",
+     "votos": 2959,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "União Brasil",
+     "votos": 3844,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "Solidariedade",
+     "votos": 2956,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "SD",
+     "votos": 4518,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 2950,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 4115,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    },
+    {
+     "ano": 2004,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PMDB",
+     "votos": 13892,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2004",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
+     }
+    },
+    {
+     "ano": 2000,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": 0,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2000",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2000"
+     }
+    },
+    {
+     "ano": 1996,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSD",
+     "votos": 1166,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 1996",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-1996"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "FABIANO GONÇALVES": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "Cidadania",
+     "votos": 3464,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "Republicanos",
+     "votos": 3478,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2026,
+     "cargo": "Deputado Federal",
+     "uf": "RJ",
+     "partido": "Republicanos",
+     "votos": null,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2026",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+     }
+    },
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "Republicanos",
+     "votos": 3478,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "Cidadania",
+     "votos": 3464,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PRB",
+     "votos": 3008,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vice-Prefeito",
+     "uf": "RJ",
+     "partido": "PSD",
+     "votos": null,
+     "resultado": "Não eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "FERNANDA ANCHIETA LOUBACK": {
+   "mandatos": {
+    "2025-2028": {
+     "partido": "PL",
+     "votos": 3503,
+     "situacao": "eleita",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2026,
+     "cargo": "Vice-Governador",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": null,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2026",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+     }
+    },
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": 3503,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "GABRIEL AMOÊDO GUIMARÃES VELASCO": {
+   "mandatos": {
+    "2025-2028": {
+     "partido": "PSD",
+     "votos": 4258,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSD",
+     "votos": 4258,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/gabrielvelascorj",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    },
+    {
+     "rede": "facebook",
+     "url": "https://www.facebook.com/profile.php?id=61557245683979",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    }
+   ]
+  },
+  "JHONATAN COSTA DOS ANJOS": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PDT",
+     "votos": 1224,
+     "situacao": "suplente",
+     "fontes": [
+      {
+       "titulo": "Lista de vereadores de Niterói — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Lista_de_vereadores_de_Niter%C3%B3i"
+      },
+      {
+       "titulo": "TSE — Dados abertos: resultados 2020",
+       "url": "https://dadosabertos.tse.jus.br/dataset/resultados-2020"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 1535,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 1224,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSB",
+     "votos": 863,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "JORGE ANDRIGO DIAS DE CARVALHO": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PDT",
+     "votos": 4783,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "PDT",
+     "votos": 5546,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 5546,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 4783,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "SD",
+     "votos": 4339,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT do B",
+     "votos": 2178,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 1371,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "JOSÉ ADRIANO VALLE DA COSTA - FOLHA": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PSD",
+     "votos": 1362,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2026,
+     "cargo": "Deputado Estadual",
+     "uf": "RJ",
+     "partido": "PP",
+     "votos": null,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2026",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+     }
+    },
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PP",
+     "votos": 2997,
+     "resultado": "Não eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSD",
+     "votos": 1362,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSB",
+     "votos": 1301,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PPS",
+     "votos": 1850,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "JOSÉ ANTONIO TORO FERNANDEZ": {
+   "mandatos": {
+    "2025-2028": {
+     "partido": "União Brasil",
+     "votos": 3910,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "União Brasil",
+     "votos": 3910,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "Solidariedade",
+     "votos": 1670,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 2580,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 2723,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 2714,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    },
+    {
+     "ano": 2004,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 34539,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2004",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
+     }
+    },
+    {
+     "ano": 2000,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSD",
+     "votos": 0,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2000",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2000"
+     }
+    }
+   ],
+   "camara": null,
+   "site": "https://zafniteroi.com.br",
+   "redes": []
+  },
+  "LEANDRO PORTUGAL FRANZEN DE LIMA": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PV",
+     "votos": 3838,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "MDB",
+     "votos": 4516,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "MDB",
+     "votos": 4516,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PV",
+     "votos": 3838,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PV",
+     "votos": 4088,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSDB",
+     "votos": 1811,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSDB",
+     "votos": 718,
+     "resultado": "Não eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    }
+   ],
+   "camara": null,
+   "site": "https://leandroportugal.com.br/sobre-o-leandro",
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/leandroportugalrj",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    }
+   ]
+  },
+  "LEONARDO SOARES GIORDANO": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PCdoB",
+     "votos": 2676,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "PCdoB",
+     "votos": 4395,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PCdoB",
+     "votos": 4395,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PCdoB",
+     "votos": 2676,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PCdoB",
+     "votos": 3393,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 2867,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 2671,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    },
+    {
+     "ano": 2004,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 5013,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2004",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
+     }
+    }
+   ],
+   "camara": null,
+   "site": "https://www.leonardogiordano.com.br",
+   "redes": []
+  },
+  "LUIS ROBERTO NOGUEIRA SAAD": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PV",
+     "votos": 1660,
+     "situacao": "suplente",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PV",
+     "votos": 1660,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PR",
+     "votos": 1802,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT do B",
+     "votos": 1884,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "LUIZ CARLOS GALLO DE FREITAS": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "Cidadania",
+     "votos": 3597,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "Cidadania",
+     "votos": 4612,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "Cidadania",
+     "votos": 4612,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "Cidadania",
+     "votos": 3597,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSL",
+     "votos": 3946,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 3662,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 3954,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    },
+    {
+     "ano": 2004,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": 13251,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2004",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
+     }
+    },
+    {
+     "ano": 2000,
+     "cargo": "Vice-Prefeito",
+     "uf": "RJ",
+     "partido": "PFL",
+     "votos": 0,
+     "resultado": "Resultado não divulgado",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2000",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2000"
+     }
+    },
+    {
+     "ano": 1996,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PFL",
+     "votos": 4319,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 1996",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-1996"
+     }
+    },
+    {
+     "ano": 1992,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PTB",
+     "votos": 2420,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "Wikipédia — Lista de vereadores de Niterói (revisão 70206495)",
+      "url": "https://pt.wikipedia.org/w/index.php?title=Lista_de_vereadores_de_Niter%C3%B3i&oldid=70206495"
+     }
+    },
+    {
+     "ano": 1988,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": 1418,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "Wikipédia — Lista de vereadores de Niterói (revisão 70206495)",
+      "url": "https://pt.wikipedia.org/w/index.php?title=Lista_de_vereadores_de_Niter%C3%B3i&oldid=70206495"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "MICHEL SALIM SAAD NETO": {
+   "mandatos": {
+    "2025-2028": {
+     "partido": "Podemos",
+     "votos": 2772,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "Podemos",
+     "votos": 2772,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/michel_saad",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    },
+    {
+     "rede": "facebook",
+     "url": "https://www.facebook.com/michelsaadneto",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    }
+   ]
+  },
+  "MILTON CARLOS DA SILVA LOPES": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PP",
+     "votos": 4320,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "União Brasil",
+     "votos": 5861,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "União Brasil",
+     "votos": 5861,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PP",
+     "votos": 4320,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PP",
+     "votos": 3582,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PP",
+     "votos": 3151,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PP",
+     "votos": 2947,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    },
+    {
+     "ano": 2004,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PCdoB",
+     "votos": 11739,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2004",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
+     }
+    },
+    {
+     "ano": 2000,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": 0,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2000",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2000"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "PAULO EDUARDO GOMES": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PSOL",
+     "votos": 3978,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSOL",
+     "votos": 3965,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSOL",
+     "votos": 3978,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSOL",
+     "votos": 5083,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSOL",
+     "votos": 8011,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Prefeito",
+     "uf": "RJ",
+     "partido": "PSOL",
+     "votos": 22111,
+     "resultado": "Não eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    },
+    {
+     "ano": 2004,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 11232,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2004",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
+     }
+    },
+    {
+     "ano": 2000,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 0,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2000",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2000"
+     }
+    },
+    {
+     "ano": 1996,
+     "cargo": "Prefeito",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 28941,
+     "resultado": "Não eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 1996",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-1996"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/pauloeduardogomes_peg",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    },
+    {
+     "rede": "facebook",
+     "url": "https://www.facebook.com/pauloeduardogomes.psol",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    },
+    {
+     "rede": "x",
+     "url": "https://x.com/peg_psol",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    }
+   ],
+   "falecimento": {
+    "data": "2026-09-05",
+    "fonte": {
+     "titulo": "G1 — Morre Paulo Eduardo Gomes",
+     "url": "https://g1.globo.com/rj/rio-de-janeiro/noticia/2026/09/06/morre-paulo-eduardo-gomes.ghtml"
+    }
+   }
+  },
+  "PAULO FERNANDO GONÇALVES VELASCO": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "Avante",
+     "votos": 4378,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "Avante",
+     "votos": 4378,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT do B",
+     "votos": 1505,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSDB",
+     "votos": 1414,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 1830,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    },
+    {
+     "ano": 2004,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PMDB",
+     "votos": 4244,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2004",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
+     }
+    },
+    {
+     "ano": 2000,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSD",
+     "votos": 0,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2000",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2000"
+     }
+    },
+    {
+     "ano": 1996,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSD",
+     "votos": 1383,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 1996",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-1996"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "RENATO FERREIRA DE OLIVEIRA CARIELLO": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PDT",
+     "votos": 4458,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "PDT",
+     "votos": 5444,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 5444,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 4458,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 4575,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 5308,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 3332,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "ROBERTO FERNANDES JALES": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PL",
+     "votos": 3532,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "MDB",
+     "votos": 3828,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "MDB",
+     "votos": 3828,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": 3532,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PMDB",
+     "votos": 3124,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PMDB",
+     "votos": 4067,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PMDB",
+     "votos": 4232,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    },
+    {
+     "ano": 2004,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PTB",
+     "votos": 15184,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2004",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
+     }
+    },
+    {
+     "ano": 2000,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 0,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2000",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2000"
+     }
+    },
+    {
+     "ano": 1996,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSC",
+     "votos": 1006,
+     "resultado": "Não eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 1996",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-1996"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/ver.betodapipa",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    },
+    {
+     "rede": "facebook",
+     "url": "https://www.facebook.com/betodapipa",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    }
+   ]
+  },
+  "ROBSON GUIMARÃES JOSÉ FILHO": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PDT",
+     "votos": 2999,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "PDT",
+     "votos": 5884,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 5884,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 2999,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 1672,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "RODRIGO FLACH FARAH": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "MDB",
+     "votos": 2632,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "Cidadania",
+     "votos": 4682,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "Cidadania",
+     "votos": 4682,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "MDB",
+     "votos": 2632,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PMDB",
+     "votos": 3555,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PMDB",
+     "votos": 3819,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PRP",
+     "votos": 3997,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    },
+    {
+     "ano": 2004,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": 17432,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2004",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
+     }
+    }
+   ],
+   "camara": null,
+   "site": "https://rodrigofarahvereador.com.br",
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/rodrigofarahvereador",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    },
+    {
+     "rede": "facebook",
+     "url": "https://www.facebook.com/share/Pch5unHAwzNFer6X",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    }
+   ]
+  },
+  "SYLVIO MAURÍCIO DE FREITAS": {
+   "mandatos": {
+    "2025-2028": {
+     "partido": "PT",
+     "votos": 4045,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 4045,
+     "resultado": "Eleito por média",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/sylviomauriciof",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    }
+   ]
+  },
+  "TULIO RABELO DE ALBUQUERQUE MOTA": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PSOL",
+     "votos": 4534,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "PSOL",
+     "votos": 6789,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2024,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSOL",
+     "votos": 6789,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2024",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSOL",
+     "votos": 4534,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSOL",
+     "votos": 2216,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PDT",
+     "votos": 1643,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    }
+   ],
+   "camara": null,
+   "site": "https://manifesto-voz-da-mudanca.pages.net.br",
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/professortulio",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    },
+    {
+     "rede": "facebook",
+     "url": "https://www.facebook.com/professortulio",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    },
+    {
+     "rede": "x",
+     "url": "https://x.com/proftulionit",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    },
+    {
+     "rede": "tiktok",
+     "url": "https://www.tiktok.com/@professortulio",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    }
+   ]
+  },
+  "VERÔNICA DOS SANTOS LIMA": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PT",
+     "votos": 4220,
+     "situacao": "eleita",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    }
+   },
+   "eleicoes": [
+    {
+     "ano": 2026,
+     "cargo": "Deputado Estadual",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": null,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2026",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+     }
+    },
+    {
+     "ano": 2020,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 4220,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2020",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 4501,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
+     }
+    },
+    {
+     "ano": 2012,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 3030,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2012",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2012"
+     }
+    },
+    {
+     "ano": 2008,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 1686,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2008",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
+     }
+    },
+    {
+     "ano": 2004,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PT",
+     "votos": 2803,
+     "resultado": "Suplente",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2004",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
+     }
+    }
+   ],
+   "camara": null,
+   "site": null,
+   "redes": []
+  }
+ }
+}

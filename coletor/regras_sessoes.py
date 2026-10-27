@@ -11,7 +11,7 @@ import json
 import re
 import sys
 from collections import Counter, defaultdict
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 from coletor.novidades import RE_PLENARIO, data_valida
@@ -44,12 +44,13 @@ VOTOS_SUBSTANTIVOS = frozenset({"Favor", "Contra", "Abstenção", "Branco", "Nul
 
 CATEGORIAS_PRESENCA = {
     "P": "Presença", "C": "Consignado", "V": "Ausência com voto registrado",
-    "J": "Ausência Justificada", "A": "Ausência", "L": "Licença", "?": "Texto desconhecido",
+    "J": "Ausência Justificada", "A": "Ausência", "L": "Licença",
+    "O": "Abonada por outro cargo", "?": "Texto desconhecido",
 }
-"""P/C/V contam como presentes; L/? ficam fora do denominador."""
+"""P/C/V contam como presentes; só A conta como falta no denominador."""
 
-ORDEM_PRESENCA = {c: i for i, c in enumerate("?AJLVCP")}
-"""Melhor evidência, em ordem crescente: ? < A < J < L < V < C < P."""
+ORDEM_PRESENCA = {c: i for i, c in enumerate("?AJOLVCP")}
+"""Melhor evidência, em ordem crescente: ? < A < J < O < L < V < C < P."""
 
 CHAVES_TOTAIS = {
     "Favor": "favor", "Contra": "contra", "Abstenção": "abstencao", "Branco": "branco",
@@ -122,12 +123,49 @@ def deduplicar_votos(votacao: dict, indice: dict[str, str] | None = None) -> dic
             "nao_membros": sorted(set(nao_membros))}
 
 
-def presencas_da_sessao(sessao: dict, indice: dict[str, str] | None = None) -> dict:
-    """Categorias por pessoa, com flags presente/denominador/licenca e qualidade.
+def intervalos_abono(cfg: dict, sessoes: list[dict], indice: dict[str, str] | None = None) -> dict[str, list[tuple[str, str, str]]]:
+    """Intervalos inclusivos de abono, com retorno observado só em deliberativas.
 
-    O denominador é individual: só quem consta na frequência deliberativa, menos
-    licenças e textos desconhecidos. Não se inventam faltas para nomes ausentes da
-    lista. V exige ausência registrada e voto substantivo deduplicado na mesma sessão.
+    Sem fim explícito, termina na véspera do próximo P/C/V da legislatura ou no
+    fim dela. Aprovação pode iniciar o intervalo, mas não altera a configuração.
+    Licenças exigem aprovação ou ato; fonte sem data não cria intervalo.
+    """
+    legs = {leg["id"]: leg for leg in cfg.get("legislaturas") or []}
+    retornos: dict[tuple[str, str], list[str]] = defaultdict(list)
+    for sessao in sorted(sessoes, key=_chave_sessao):
+        if not data_valida(sessao.get("data")):
+            continue
+        leg_id = legislatura_de(sessao["data"], sessao["ano"], list(legs.values()))
+        presencas = presencas_da_sessao(sessao, indice)
+        if presencas["incluida"]:
+            for pessoa, registro in presencas["pessoas"].items():
+                if registro["presente"]:
+                    retornos[(pessoa, leg_id)].append(sessao["data"])
+    abonos: dict[str, list[tuple[str, str, str]]] = defaultdict(list)
+    for item in cfg.get("afastamentos") or []:
+        natureza = item.get("natureza")
+        inicio = item.get("inicio") or item.get("aprovacao")
+        leg = legs.get(item.get("legislatura"))
+        if natureza not in {"cargo", "licenca"} or not data_valida(inicio) or leg is None:
+            continue
+        if natureza == "licenca" and not (item.get("aprovacao") or item.get("ato")):
+            continue
+        pessoa = _pessoa(item["siscam"], indice)
+        fim = item.get("fim")
+        if fim is None:
+            retorno = next((dia for dia in retornos[(pessoa, leg["id"])] if dia > inicio), None)
+            fim = (date.fromisoformat(retorno) - timedelta(days=1)).isoformat() if retorno else leg["fim"]
+        if data_valida(fim) and inicio <= fim:
+            abonos[pessoa].append((inicio, fim, natureza))
+    return {p: sorted(set(intervalos)) for p, intervalos in sorted(abonos.items())}
+
+
+def presencas_da_sessao(sessao: dict, indice: dict[str, str] | None = None,
+                       abonos: dict[str, list[tuple[str, str, str]]] | None = None) -> dict:
+    """Categorias e flags individuais de presença efetiva, exercício e abono.
+
+    Só P/C/V/A entram no denominador; não se inventam faltas para nomes ausentes
+    da lista. V exige ausência registrada e voto substantivo na mesma sessão.
     """
     qualidade = []
     frequencia = []
@@ -161,8 +199,18 @@ def presencas_da_sessao(sessao: dict, indice: dict[str, str] | None = None) -> d
                 categoria = "V"
             categorias.append(categoria)
         categoria = max(categorias, key=ORDEM_PRESENCA.__getitem__)
+        dia = sessao.get("data")
+        naturezas = {natureza for inicio, fim, natureza in (abonos or {}).get(pessoa, [])
+                     if data_valida(dia) and inicio <= dia <= fim}
+        if naturezas:
+            if categoria in {"A", "J"}:
+                categoria = "L" if "licenca" in naturezas else "O"
+            elif categoria in {"P", "C", "V"}:
+                qualidade.append(f"{nome}: presença {categoria} em intervalo de abono ({', '.join(sorted(naturezas))})")
         pessoas[pessoa] = {"nome": nome, "categoria": categoria, "presente": categoria in {"P", "C", "V"},
-                           "denominador": categoria not in {"L", "?"}, "licenca": categoria == "L"}
+                           "denominador": categoria in {"P", "C", "V", "A"}, "licenca": categoria == "L",
+                           "exercicio": categoria in {"P", "C", "V", "J", "A"},
+                           "abonada": categoria in {"J", "O", "L"}}
         if len(linhas) > 1:
             duplicatas.append({"nome": nome, "linhas": len(linhas), "categoria": categoria})
     return {"incluida": True, "pessoas": pessoas, "duplicatas": duplicatas, "qualidade": sorted(set(qualidade))}
@@ -216,18 +264,18 @@ def pessoas_em_exercicio(sessao: dict, indice: dict[str, str] | None = None,
                         *, presencas: dict | None = None) -> set[str]:
     """Base observada na sessão, não o mandato inteiro de eleitos ou suplentes.
 
-    Frequência com denominador ou voto substantivo/presidência comprova exercício.
-    Licença explícita fica fora; ausência só na votação não inventa exercício para
+    Frequência em exercício ou voto substantivo/presidência comprova exercício.
+    Licença e outro cargo ficam fora; ausência só na votação não inventa exercício para
     um suplente. A evidência em uma votação vale para as demais da mesma sessão.
     """
     presencas = presencas if presencas is not None else presencas_da_sessao(sessao, indice)
     registros = presencas["pessoas"]
-    pessoas = {p for p, r in registros.items() if r["denominador"]}
-    licencas = {p for p, r in registros.items() if r["licenca"]}
+    pessoas = {p for p, r in registros.items() if r["exercicio"]}
+    afastadas = {p for p, r in registros.items() if r["categoria"] in {"L", "O"}}
     for votacao in sessao.get("votacoes") or []:
         pessoas.update(p for p, voto in deduplicar_votos(votacao, indice)["votos"].items()
                        if voto in VOTOS_SUBSTANTIVOS or voto == "Presidente")
-    return pessoas - licencas
+    return pessoas - afastadas
 
 
 # ---- matéria, parecer e consistência -------------------------------------------
@@ -704,15 +752,19 @@ def indice_membros(sessao: dict, pessoas: dict, cfg: dict) -> dict[str, str]:
 def resumo_presencas(
     sessoes: list[dict], indice: dict[str, str] | None = None,
     *, pessoas: dict | None = None, cfg: dict | None = None,
+    abonos: dict[str, list[tuple[str, str, str]]] | None = None,
 ) -> dict[str, dict]:
-    """Soma por pessoa: presentes P/C/V, denominador individual, licenças e categorias."""
+    """Soma por pessoa: presentes P/C/V, faltas A, listadas, base e categorias."""
     resumo = {}
     for sessao in sorted(sessoes, key=_chave_sessao):
         membros = indice_membros(sessao, pessoas, cfg or {}) if pessoas is not None else indice
-        for chave, registro in presencas_da_sessao(sessao, membros)["pessoas"].items():
+        for chave, registro in presencas_da_sessao(sessao, membros, abonos)["pessoas"].items():
             pessoa = resumo.setdefault(chave, {"nome": registro["nome"], "presentes": 0, "denominador": 0,
-                                               "licencas": 0, "categorias": dict.fromkeys(CATEGORIAS_PRESENCA, 0)})
+                                               "faltas": 0, "listadas": 0, "licencas": 0,
+                                               "categorias": dict.fromkeys(CATEGORIAS_PRESENCA, 0)})
             pessoa["presentes"] += int(registro["presente"])
+            pessoa["faltas"] += int(registro["categoria"] == "A")
+            pessoa["listadas"] += 1
             pessoa["denominador"] += int(registro["denominador"])
             pessoa["licencas"] += int(registro["licenca"])
             pessoa["categorias"][registro["categoria"]] += 1
@@ -731,10 +783,11 @@ def auditar(sessoes: list[dict], documentos: dict[int, dict], cfg: dict) -> str:
     Leitura→votação é diagnóstico de cobertura, não mediana publicável.
     """
     pessoas, indice = indice_nomes(cfg, [documentos[k] for k in sorted(documentos)])
+    abonos = intervalos_abono(cfg, sessoes, indice)
     tempos = tempos_leitura_votacao(sessoes, documentos)
     saida = [f"Auditoria de sessões — {len(sessoes)} sessões", f"MINIMO_DIVIDIDA decidido: {MINIMO_DIVIDIDA}",
              f"Derrubada de veto: {QUORUM_DERRUBADA_VETO} votos — {ROTULO_QUORUM_VETO}",
-             "Presença: P/C/V presentes; L/? fora do denominador individual.",
+             "Presença efetiva: P/C/V presentes / (P/C/V + A); J/O/L/? fora do denominador individual.",
              "Nomes não casados: ocorrências brutas em frequência e votos (sem fuzzy).",
              f"Leitura→votação: NÃO CONFIÁVEL; fora da fase 1. {MOTIVO_LEITURA_VOTACAO}"]
     por_ano: dict[int, list[dict]] = defaultdict(list)
@@ -754,7 +807,7 @@ def auditar(sessoes: list[dict], documentos: dict[int, dict], cfg: dict) -> str:
         for sessao in lista:
             referencia = f"{sessao.get('titulo') or sessao['id']} [sessão {sessao['id']}, {sessao.get('data')}]"
             membros = indice_membros(sessao, pessoas, cfg)
-            presencas = presencas_da_sessao(sessao, membros)
+            presencas = presencas_da_sessao(sessao, membros, abonos)
             categorias.update(p["categoria"] for p in presencas["pessoas"].values())
             qualidade.extend(f"{referencia}: {m}" for m in presencas["qualidade"])
             if not legislatura_de(sessao.get("data"), ano, cfg.get("legislaturas") or []):
@@ -801,7 +854,7 @@ def auditar(sessoes: list[dict], documentos: dict[int, dict], cfg: dict) -> str:
             for linha in linhas_nomes:
                 if slug(linha["nome"]) not in indice:
                     nao_casados[linha["nome"]] += 1
-        resumo = resumo_presencas(lista, pessoas=pessoas, cfg=cfg)
+        resumo = resumo_presencas(lista, pessoas=pessoas, cfg=cfg, abonos=abonos)
         coorte = [t for t in tempos.values() if t["ano"] == ano]
         duracoes = [t["dias"] for t in coorte if t["dias"] is not None]
         saida.extend(["", f"=== {ano} ===", f"Sessões por tipo: {_distribuicao(tipos)}",

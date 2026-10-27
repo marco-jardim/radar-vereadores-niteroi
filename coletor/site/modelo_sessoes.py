@@ -16,7 +16,7 @@ from coletor.sessoes import DETALHE_SESSAO
 
 
 RAIZ = Path(__file__).resolve().parents[2]
-CAMPOS_PRESENCA = ("P", "C", "V", "J", "A", "L")
+CAMPOS_PRESENCA = ("P", "C", "V", "J", "A", "L", "O")
 CAMPOS_TOTAIS = ("favor", "contra", "abstencao", "ausentes", "branco", "nulo")
 CAMPOS_PLACAR = ("unanime", "dissenso", "dividida", "inconsistente", "indeterminado")
 
@@ -105,9 +105,12 @@ def _presenca(resumo: dict | None = None) -> dict:
     categorias = resumo.get("categorias") or {}
     denominador = resumo.get("denominador", 0)
     presentes = resumo.get("presentes", 0)
+    base_bruta = presentes + sum(categorias.get(c, 0) for c in ("A", "J", "O"))
     return {**{c: categorias.get(c, 0) for c in CAMPOS_PRESENCA},
             "denominador": denominador, "presentes": presentes,
-            "pct": round(100 * presentes / denominador) if denominador >= R.MINIMO_BASE_PRESENCA else None}
+            "faltas": resumo.get("faltas", 0), "listadas": resumo.get("listadas", 0),
+            "pct": round(100 * presentes / denominador) if denominador >= R.MINIMO_BASE_PRESENCA else None,
+            "pct_bruta": round(100 * presentes / base_bruta) if base_bruta >= R.MINIMO_BASE_PRESENCA else None}
 
 
 def _registro_pessoa() -> dict:
@@ -174,6 +177,8 @@ def montar_sessoes(modelo: dict, registros: list[dict] | None = None,
         pessoa = pessoas.setdefault(s, {"nome_siscam": candidato["nome_siscam"], "nome": candidato["nome"], "legislaturas": set()})
         pessoa["legislaturas"].add(leg_id)
         pessoa.setdefault("suplencias_sessoes", set()).add(leg_id)
+        indice.setdefault(s, s)
+    abonos = R.intervalos_abono(cfg, registros, indice)
     ids = {v["id_documento"] for s in ordenadas for v in s.get("votacoes") or []
            if R.votacao_nominal(v) and v.get("id_documento") is not None}
     documentos = _documentos(modelo, proposicoes, raiz, ids)
@@ -197,8 +202,8 @@ def montar_sessoes(modelo: dict, registros: list[dict] | None = None,
             continue
         anos_leg = sorted({s["ano"] for s in por_leg[leg_id]})
         saida["legislaturas"].append({"id": leg_id, "rotulo": leg.get("rotulo") or leg_id, "anos": anos_leg})
-        resumo = R.resumo_presencas(por_leg[leg_id], pessoas=pessoas, cfg=cfg)
-        anuais = {ano: R.resumo_presencas(por_leg_ano[(leg_id, ano)], pessoas=pessoas, cfg=cfg) for ano in anos_leg}
+        resumo = R.resumo_presencas(por_leg[leg_id], pessoas=pessoas, cfg=cfg, abonos=abonos)
+        anuais = {ano: R.resumo_presencas(por_leg_ano[(leg_id, ano)], pessoas=pessoas, cfg=cfg, abonos=abonos) for ano in anos_leg}
         for s, pessoa in pessoas.items():
             if leg_id not in pessoa["legislaturas"]:
                 continue
@@ -218,7 +223,7 @@ def montar_sessoes(modelo: dict, registros: list[dict] | None = None,
         ano = sessao["ano"]
         leg_id = legislatura_de(sessao.get("data"), ano, legs)
         membros = R.indice_membros(sessao, pessoas, cfg)
-        presencas = R.presencas_da_sessao(sessao, membros)
+        presencas = R.presencas_da_sessao(sessao, membros, abonos)
         exercicio = R.pessoas_em_exercicio(sessao, membros, presencas=presencas)
         indicadores = R.indicadores_sessao(sessao)
         cobertura = saida["cobertura"][ano]

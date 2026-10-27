@@ -12,6 +12,7 @@ from collections import Counter, defaultdict
 from datetime import datetime
 from functools import cmp_to_key
 from pathlib import Path
+from urllib.parse import urlsplit
 from xml.etree import ElementTree
 
 from coletor import novidades as N
@@ -21,7 +22,7 @@ from coletor.site.glossario import ColetorGlossario, secao_glossario
 from coletor.site.modelo import (
     DESC_CATEGORIA_DOC, DESC_SINAL, DESFECHO_GRUPO, NOME_ALERTA, NOME_CATEGORIA, NOME_CATEGORIA_DOC, NOME_DESFECHO, NOME_EIXO,
     NOME_IMPACTO, NOME_SINAL, NOME_SUBCATEGORIA_DOC, NOME_TEMA, NOME_TIPO_DOC, TIPOS_DOC, com_efeito, mediana_legislatura,
-    sem_efeito, situacao_lei, url_lei,
+    partido_atual, partido_em, sem_efeito, situacao_lei, url_lei,
     anos_documentos, coleta_do_modelo, documentos_por_legislatura, homenagens_do_autor, homenagens_por_ano,
     indicacoes_por_bairro, menos_citados, ranking_orgaos, resumo_bairros, resumo_informacao,
 )
@@ -75,6 +76,24 @@ DIALOGO_SISCAM = f"""<dialog id="siscam-dialogo" class="dialogo-siscam" aria-lab
 
 def esc(x) -> str:
     return html.escape(str(x if x is not None else ""))
+
+
+def link_fonte(url: str, texto: str = "fonte", *, rotulo: str | None = None) -> str:
+    """Link de fonte escapado; só o host HTTPS do SISCAM abre em nova aba."""
+    destino = urlsplit(url)
+    nova_aba = destino.scheme == "https" and destino.netloc == urlsplit(SISCAM).netloc
+    atributos = ' target="_blank" rel="noopener"' if nova_aba else ""
+    if rotulo:
+        atributos += f' aria-label="{esc(rotulo + (" (abre em nova aba)" if nova_aba else ""))}"'
+    return f'<a href="{esc(url)}"{atributos}>{esc(texto)}{NOVA_ABA if nova_aba else ""}</a>'
+
+
+def partido_html(partido: str | None) -> str:
+    """Sigla do partido logo depois do nome (dentro do link ou chip do nome), em fonte menor.
+
+    Vazia quando o partido não é conhecido naquele contexto; espelho de ptHtml em app.js e sessoes.js.
+    """
+    return f'<span class="partido">{esc(partido)}</span>' if partido else ""
 
 
 def data_br(iso: str | None) -> str:
@@ -408,25 +427,31 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
 def chip_autor(a: dict, prefixo: str, principal: bool = False) -> str:
     if not a.get("vereador"):
         return f'<span class="chip chip-exec">{esc(a["exibicao"])}</span>'
-    return f'<a class="chip{" chip-principal" if principal else ""}" href="{prefixo}vereadores/{a["slug"]}.html">{esc(a["exibicao"])}</a>'
+    return (f'<a class="chip{" chip-principal" if principal else ""}" href="{prefixo}vereadores/{a["slug"]}.html">'
+            f'{esc(a["exibicao"])}{partido_html(a.get("partido"))}</a>')
 
 
-def lista_coautores(resumo: str, nomes: list[str]) -> str:
+def lista_coautores(resumo: str, nomes: list[str], partidos: list[str] | None = None) -> str:
     """Resumo clicável com a lista completa de nomes; espelho de listaCoautores em app.js.
 
+    partidos: o partido de cada nome na legislatura do item ("" quando desconhecido ou não vereador).
     Vai dentro de um <div> (nunca de um <p>, que não pode conter <details>).
     """
-    itens = "".join(f"<li>{esc(n)}</li>" for n in nomes)
+    partidos = partidos or [""] * len(nomes)
+    itens = "".join(f"<li>{esc(n)}{partido_html(pt)}</li>" for n, pt in zip(nomes, partidos))
     return f'<details class="coautores"><summary>{esc(resumo)}</summary><ul>{itens}</ul></details>'
 
 
 def autores_html(p: dict, prefixo: str) -> str:
     principal = [a for a in p["autores"] if a["slug"] == p["principal"]] or p["autores"][:1]
     outros = [a for a in p["autores"] if a not in principal]
-    base = "".join(chip_autor(a, prefixo, True) for a in principal)
+    # O partido do autor principal é o do projeto (p["partido"]), o mesmo de a["partido"] no modelo.
+    base = "".join(chip_autor({**a, "partido": a.get("partido", p.get("partido") if a.get("slug") == p.get("principal") else "")},
+                              prefixo, True) for a in principal)
     if outros:
         base += lista_coautores(f'e {plural(len(outros), "coautor", "coautores")}',
-                                [a.get("exibicao") or a.get("nome") or "" for a in outros])
+                                [a.get("exibicao") or a.get("nome") or "" for a in outros],
+                                [a.get("partido") or "" if a.get("vereador") else "" for a in outros])
     return base
 
 
@@ -480,7 +505,7 @@ def cartao_lei(p: dict, prefixo: str) -> str:
  <p class="lei-situacao">{esc(situacao_lei(lei))}{via_substitutivo(p, link=False)}</p>
  <h3><a href="{esc(url_lei(p))}" target="_blank" rel="noopener">{esc(resumo)}{NOVA_ABA}</a></h3>
  {f'<p class="publico">Afeta: {esc(p["publico"])}{" · " + esc(tema) if tema else ""}</p>' if p['publico'] or tema else ''}
- <div class="cartao-autor">{autores_html(p, prefixo)}{f'<span class="partido">{esc(p["partido"])}</span>' if p["partido"] else ''}</div>
+ <div class="cartao-autor">{autores_html(p, prefixo)}</div>
 </article>"""
 
 
@@ -543,13 +568,15 @@ def autores_documento_html(d: dict, prefixo: str, maximo: int = 3) -> str:
     """Autores na ordem do SISCAM, sem destacar principal: a listagem não separa autor de coautor."""
     chips = []
     for a in d["autores"][:maximo]:
+        partido = partido_html(a.get("partido")) if a["vereador"] else ""
         if a["vereador"] and a["pagina"]:
-            chips.append(f'<a class="chip" href="{prefixo}vereadores/{esc(a["slug"])}.html">{esc(a["exibicao"])}</a>')
+            chips.append(f'<a class="chip" href="{prefixo}vereadores/{esc(a["slug"])}.html">{esc(a["exibicao"])}{partido}</a>')
         else:
-            chips.append(f'<span class="chip{"" if a["vereador"] else " chip-exec"}">{esc(a["exibicao"])}</span>')
+            chips.append(f'<span class="chip{"" if a["vereador"] else " chip-exec"}">{esc(a["exibicao"])}{partido}</span>')
     resto = d["autores"][maximo:]
     if resto:
-        chips.append(lista_coautores(f'e mais {plural(len(resto), "autor", "autores")}', [a["exibicao"] for a in resto]))
+        chips.append(lista_coautores(f'e mais {plural(len(resto), "autor", "autores")}', [a["exibicao"] for a in resto],
+                                     [(a.get("partido") or "") if a["vereador"] else "" for a in resto]))
     return "".join(chips)
 
 
@@ -667,8 +694,9 @@ def nome_autor(modelo: dict, s: str) -> str:
     return next((a["exibicao"] for d in docs for a in d["autores"] if a["slug"] == s), s)
 
 
-def link_autor(modelo: dict, s: str, prefixo: str) -> str:
-    nome = esc(nome_autor(modelo, s))
+def link_autor(modelo: dict, s: str, prefixo: str, leg_id: str | None = None) -> str:
+    """Nome (com link, se há página) e o partido na legislatura `leg_id`, dentro do link."""
+    nome = esc(nome_autor(modelo, s)) + partido_html(partido_em(modelo, s, leg_id))
     return f'<a href="{prefixo}vereadores/{esc(s)}.html">{nome}</a>' if s in modelo["pessoas"] else nome
 
 
@@ -755,7 +783,7 @@ def linha_placar(pessoa: dict, leg: str, maximo: int, docs: dict | None = None) 
         colunas_docs = '<span class="n-docs">' + "".join(
             f'<span><b>{milhar(docs.get(t, 0))}</b> {um if docs.get(t, 0) == 1 else varios}</span>' for t, _, um, varios in PLACAR_DOCS) + "</span>"
     return f"""<li class="linha" {dados}{dados_docs} data-nome="{esc(pessoa['nome'])}" data-eleito="{int(m['eleito'])}" data-partido="{esc(m['partido'])}">
- <a class="quem" href="vereadores/{pessoa['slug']}.html"><strong>{esc(pessoa['nome'])}</strong> <span class="partido">{esc(m['partido'])}</span>{''.join(f'<span class="status">{esc(s)}</span>' for s in status)}</a>
+ <a class="quem" href="vereadores/{pessoa['slug']}.html"><strong>{esc(pessoa['nome'])}</strong>{' ' + partido_html(m['partido']) if m['partido'] else ''}{''.join(f'<span class="status">{esc(s)}</span>' for s in status)}</a>
  {barra_producao(me, maximo)}
  <p class="numeros"><span class="n-efeito"><b>{me['leis_efeito']}</b> {'lei com efeito' if me['leis_efeito'] == 1 else 'leis com efeito'}</span><span>{me['leis']} de {plural(me['apresentados'], 'projeto', 'projetos')}{' · ' if sem else ''}{sem}</span>{alerta}{colunas_docs}</p>
 </li>"""
@@ -807,8 +835,9 @@ def gerar_index(modelo: dict) -> str:
         pessoas.sort(key=lambda p: (-p["mandatos"][leg["id"]]["metricas"]["leis_efeito"], -p["mandatos"][leg["id"]]["metricas"]["leis"], p["nome"]))
         maximo = max([p["mandatos"][leg["id"]]["metricas"]["apresentados"] for p in pessoas] + [1])
         partidos_por_leg[leg["id"]] = sorted({p["mandatos"][leg["id"]]["partido"] for p in pessoas if p["mandatos"][leg["id"]]["partido"]})
-        zerados = [p["nome"] for p in pessoas if p["mandatos"][leg["id"]]["eleito"] and p["mandatos"][leg["id"]]["metricas"]["leis"] == 0]
-        nota_zero = f'<p class="nota">Eleitos sem nenhuma lei de autoria própria nesta legislatura: {esc(", ".join(zerados))}.</p>' if zerados else ""
+        zerados = [esc(p["nome"]) + partido_html(p["mandatos"][leg["id"]]["partido"]) for p in pessoas
+                   if p["mandatos"][leg["id"]]["eleito"] and p["mandatos"][leg["id"]]["metricas"]["leis"] == 0]
+        nota_zero = f'<p class="nota">Eleitos sem nenhuma lei de autoria própria nesta legislatura: {", ".join(zerados)}.</p>' if zerados else ""
         blocos.append(painel_legislatura(leg["id"], f"""{nota_zero}
 <ol class="placar">{''.join(linha_placar(p, leg['id'], maximo, docs_de(p, leg['id'])) for p in pessoas)}</ol>"""))
         abas.append(aba_legislatura(leg["id"], leg["id"] == atual))
@@ -1004,12 +1033,11 @@ def item_evento(ev: dict, prefixo: str) -> str:
         sub = (f' · <a class="via-substitutivo" href="{esc(N.url_detalhe(ev["substitutivo"]))}" target="_blank" rel="noopener">'
                f'substitutivo no SISCAM<span class="so-leitor"> (substitutivo ao PL {esc(p["numero"])})</span>{NOVA_ABA}</a>')
     resumo = f'<p class="resumo-ia">{esc(p["resumo"])}</p>' if p.get("resumo") else ""
-    partido = f'<span class="partido">{esc(p["partido"])}</span>' if p.get("partido") else ""
     return f"""<li class="projeto ev-{esc(ev['tipo'])}">
  <p class="cab"><span class="desfecho">{esc(N.ROTULO_EVENTO[ev['tipo']])}</span><time datetime="{esc(ev['data'])}">{data_br(ev['data'])}</time><a href="{esc(p['url'])}" target="_blank" rel="noopener">PL {esc(p['numero'])}{NOVA_ABA}</a></p>
  <p class="titulo-evento">{esc(N.titulo_evento(ev))}{sub}</p>
  {resumo}<p class="ementa">{esc(legivel(p['ementa']))}</p>
- <div class="autoria">{autores_html(p, prefixo)}{partido}</div>
+ <div class="autoria">{autores_html(p, prefixo)}</div>
 </li>"""
 
 
@@ -1170,14 +1198,14 @@ def secao_resumos_atividades(modelo: dict) -> str:
         info = sorted(((s, r) for s, r in info if r["pedidos"]), key=lambda sr: (-sr[1]["pedidos"], ordem_nome(sr[0])))
         if info:
             tab = tabela_resumo(f"Requerimentos de informação por vereador, legislatura {leg}", ["Vereador", *CAB_INFORMACAO],
-                                [[link_autor(modelo, s, ""), *celulas_informacao(r)] for s, r in info])
+                                [[link_autor(modelo, s, "", leg), *celulas_informacao(r)] for s, r in info])
             blocos_info.append(f'<details class="bloco"{" open" if not blocos_info else ""}><summary>Legislatura {esc(leg)} '
                                f'({plural(len(info), "vereador", "vereadores")})</summary>{tab}</details>')
         bairros = [(s, resumo_bairros(ds)) for s, ds in por_leg[leg].items()]
         bairros = sorted(((s, r) for s, r in bairros if r["indicacoes"]), key=lambda sr: (-sr[1]["indicacoes"], ordem_nome(sr[0])))
         if bairros:
             tab = tabela_resumo(f"Bairros das indicações por vereador, legislatura {leg}", ["Vereador", *CAB_BAIRROS],
-                                [[link_autor(modelo, s, ""), *celulas_bairros(r)] for s, r in bairros], texto=TEXTO_BAIRROS)
+                                [[link_autor(modelo, s, "", leg), *celulas_bairros(r)] for s, r in bairros], texto=TEXTO_BAIRROS)
             blocos_bairro.append(f'<details class="bloco"{" open" if not blocos_bairro else ""}><summary>Legislatura {esc(leg)} '
                                  f'({plural(len(bairros), "vereador", "vereadores")})</summary>{tab}</details>')
 
@@ -1251,7 +1279,8 @@ def gerar_ruido(modelo: dict) -> str:
     ia.sort(key=lambda p: p["data"] or "", reverse=True)
 
     pessoas = [p for p in modelo["pessoas"].values() if atual in p["mandatos"] and p["mandatos"][atual]["metricas"]["leis"]]
-    itens = [{"rotulo": p["nome"], "link": f"vereadores/{p['slug']}.html", "efeito": p["mandatos"][atual]["metricas"]["leis_efeito"],
+    itens = [{"rotulo": p["nome"], "link": f"vereadores/{p['slug']}.html", "partido": p["mandatos"][atual]["partido"],
+              "efeito": p["mandatos"][atual]["metricas"]["leis_efeito"],
               "baixo": p["mandatos"][atual]["metricas"]["leis_outras"], "sem": p["mandatos"][atual]["metricas"]["leis_sem_efeito"]} for p in pessoas]
     itens.sort(key=lambda i: (-i["sem"], i["efeito"]))
     graf = G.barras_horizontais(
@@ -1343,7 +1372,7 @@ def secao_homenagens(modelo: dict) -> str:
         linhas.sort(key=lambda sr: (-sr[1]["homenagens"], -(sr[1]["pct"] or 0), _chave_nome(nome_autor(modelo, sr[0]))))
         tab = tabela_resumo(f"Homenagens por vereador, legislatura {leg['id']}",
                             ["Vereador", "Homenagens", "Documentos", "Projetos de lei (autor principal)", "% da produção"],
-                            [[link_autor(modelo, s, ""), r["homenagens"], r["documentos"], r["projetos"], pct_txt(r["pct"])]
+                            [[link_autor(modelo, s, "", leg["id"]), r["homenagens"], r["documentos"], r["projetos"], pct_txt(r["pct"])]
                              for s, r in linhas])
         blocos.append(f'<details class="bloco"{" open" if not blocos else ""}><summary>Legislatura {esc(leg["id"])} '
                       f'({plural(len(linhas), "vereador", "vereadores")})</summary>{tab}</details>')
@@ -1422,7 +1451,7 @@ def gerar_analises(modelo: dict) -> str:
     for leg in reversed(modelo["legislaturas"]):
         pessoas = [p for p in modelo["pessoas"].values() if leg["id"] in p["mandatos"] and p["mandatos"][leg["id"]]["metricas"]["apresentados"]]
         pts = [{"x": p["mandatos"][leg["id"]]["metricas"]["apresentados"], "y": p["mandatos"][leg["id"]]["metricas"]["leis_efeito"],
-                "rotulo": p["nome"], "link": f"vereadores/{p['slug']}.html",
+                "rotulo": p["nome"], "link": f"vereadores/{p['slug']}.html", "partido": p["mandatos"][leg["id"]]["partido"],
                 "cor": "c-efeito" if p["mandatos"][leg["id"]]["eleito"] else "c-andamento"} for p in pessoas]
         gd = G.dispersao(f"Volume x resultado, legislatura {leg['id']}",
                          "Cada ponto é um vereador. Mais à direita, mais projetos apresentados; mais acima, mais leis com efeito. Suplentes em cinza.",
@@ -1489,7 +1518,13 @@ def gerar_vereador(modelo: dict, pessoa: dict) -> str:
         if not m:
             continue
         me = m["metricas"]
-        afast = "".join(f'<p class="aviso">Afastou-se da Câmara para o cargo de {esc(a["cargo"])} (<a href="{esc(a["fonte"])}">fonte</a>). Nesse período a cadeira foi ocupada por suplente.</p>' for a in m["afastamentos"])
+        avisos = []
+        for a in m["afastamentos"]:
+            datas = "".join(f", {rotulo} {data_br(a[chave])}" for chave, rotulo in (
+                ("inicio", "a partir de"), ("aprovacao", "aprovado em"), ("fim", "até")) if a.get(chave))
+            rotulo = "Licença registrada" if a.get("natureza") == "licenca" else "Em outro cargo"
+            avisos.append(f'<p class="aviso">{rotulo}: {esc(a["cargo"])}{datas} ({link_fonte(a["fonte"])}).</p>')
+        afast = "".join(avisos)
         cond = "Eleito" if m["eleito"] else "Suplente em exercício"
         med = lambda k: mediana_legislatura(modelo, leg["id"], k)
         proj = sorted(m["projetos_autor"], key=lambda p: p["data"] or "", reverse=True)
@@ -1536,16 +1571,95 @@ def gerar_vereador(modelo: dict, pessoa: dict) -> str:
  <p><a href="../leis.html?autor={pessoa['slug']}&amp;coautor=1">Ver também as leis em que é coautor</a></p>
 </section>""")
     tem_docs = bool(modelo.get("documentos"))
+    perfil = secao_perfil(modelo, pessoa)
     corpo = f"""<section class="abertura ficha">
  <p><a href="../index.html">Todos os vereadores</a></p>
- <h1>{esc(pessoa['nome'])}</h1>
+ <h1>{esc(pessoa['nome'])}{partido_html(partido_atual(modelo, pessoa['slug']))}</h1>
  <p class="siscam">Nome no SISCAM: {esc(pessoa['nome_siscam'])}</p>
 </section>
-{LEGENDA_BARRA}
+{perfil + chr(10) if perfil else ''}{LEGENDA_BARRA}
 {''.join(secoes)}{pagina_sessoes.secao_sessoes_vereador(modelo, pessoa)}{secao_atividade(modelo, pessoa) if tem_docs else ''}"""
     return pagina(f"{pessoa['nome']} · Radar dos Vereadores de Niterói", corpo, "", "../",
                   f"Leis e projetos de {pessoa['nome']} na Câmara de Niterói: quantas leis com efeito, quantas sem efeito prático e quais pautas polêmicas.",
                   dialogo=tem_docs, caminho=f"vereadores/{pessoa['slug']}.html")
+
+
+NOME_REDE = {"instagram": "Instagram", "facebook": "Facebook", "x": "X", "youtube": "YouTube", "tiktok": "TikTok",
+             "threads": "Threads", "linkedin": "LinkedIn"}
+
+
+def _texto_link(url: str) -> str:
+    """Domínio do link externo, sem "www.", como texto visível."""
+    host = urlsplit(url).netloc
+    return host[4:] if host.startswith("www.") else host
+
+
+def texto_mandato(situacao: str, partido: str, votos: int | None) -> str:
+    """ "eleito pelo PL com 16.369 votos"; sem votos conhecidos, sem a votação; sem partido, sem o partido."""
+    texto = situacao + (f" pelo {partido}" if partido else "")
+    if isinstance(votos, int) and not isinstance(votos, bool) and votos > 0:
+        texto += f" com {milhar(votos)} {'voto' if votos == 1 else 'votos'}"
+    return texto
+
+
+def texto_eleicao(e: dict) -> str:
+    """ "2026 · Deputado Estadual (RJ) · PL · 12.345 votos · Eleito por média"; partes vazias e votos nulos são omitidos."""
+    cargo = (e.get("cargo") or "") + (f" ({e['uf']})" if e.get("uf") else "")
+    votos = e.get("votos")
+    texto_votos = (f"{milhar(votos)} {'voto' if votos == 1 else 'votos'}"
+                   if isinstance(votos, int) and not isinstance(votos, bool) else "")
+    partes = [str(e.get("ano") or ""), cargo, e.get("partido") or "", texto_votos, e.get("resultado") or ""]
+    return " · ".join(p for p in partes if p)
+
+
+def secao_perfil(modelo: dict, pessoa: dict) -> str:
+    """Perfil da ficha: partido e votos por mandato, eleições (TSE) e links oficiais, com fontes.
+
+    Mesmos campos para todos (config/perfis.json, com fonte pública); linhas sem dado são omitidas e, sem nenhuma,
+    a seção inteira. Links externos seguem a regra dos demais (sem nova aba; só o SISCAM abre em nova aba).
+    """
+    perfil = pessoa.get("perfil") or {}
+    mandatos = pessoa.get("mandatos") or {}
+    linhas = []
+    for leg in reversed(modelo.get("legislaturas") or []):
+        leg_id = leg["id"]
+        dados = (perfil.get("mandatos") or {}).get(leg_id)
+        m = mandatos.get(leg_id)
+        if not dados and not m:
+            continue
+        partido = (m or {}).get("partido") or (dados or {}).get("partido") or ""
+        situacao = (dados or {}).get("situacao") or ("eleito" if (m or {}).get("eleito") else "suplente")
+        votos = (dados or {}).get("votos")
+        if not partido and not votos:
+            continue
+        linhas.append(f'<dt>Mandato {esc(leg_id)}</dt><dd>{esc(texto_mandato(situacao, partido, votos))}</dd>')
+    eleicoes = [texto_eleicao(e) for e in perfil.get("eleicoes") or []]
+    if eleicoes:
+        itens = "".join(f"<li>{esc(t)}</li>" for t in eleicoes)
+        linhas.append(f'<dt>Eleições</dt><dd><ul class="perfil-eleicoes">{itens}</ul></dd>')
+    for chave, rotulo in (("camara", "Página na Câmara"), ("site", "Site oficial")):
+        url = perfil.get(chave)
+        if url:
+            linhas.append(f'<dt>{rotulo}</dt><dd><a href="{esc(url)}">{esc(_texto_link(url))}</a></dd>')
+    redes = perfil.get("redes") or []
+    if redes:
+        itens = "".join(f'<li><a href="{esc(r["url"])}">{esc(NOME_REDE.get(r["rede"], r["rede"]))}</a></li>' for r in redes)
+        linhas.append(f'<dt>Redes oficiais</dt><dd><ul class="perfil-redes">{itens}</ul></dd>')
+    # O perfil público resumido omite campos biográficos; consulte também o config por slug.
+    falecimento = perfil.get("falecimento") or ((modelo.get("perfis") or {}).get(pessoa.get("slug")) or {}).get("falecimento")
+    if falecimento:
+        fonte = falecimento["fonte"]
+        linhas.append(f'<dt>Falecimento</dt><dd>Faleceu em {esc(data_br(falecimento["data"]))} '
+                      f'(<a href="{esc(fonte["url"])}">{esc(fonte["titulo"])}</a>).</dd>')
+    if not linhas:
+        return ""
+    fontes = perfil.get("fontes") or []
+    rodape = ""
+    if fontes:
+        rodape = ('<p class="perfil-fontes">Fontes: '
+                  + ", ".join(f'<a href="{esc(f["url"])}">{esc(f["titulo"])}</a>' for f in fontes) + ".</p>")
+    return (f'<section class="perfil" aria-labelledby="t-perfil"><h2 id="t-perfil" class="h-pequeno">Perfil</h2>'
+            f'<dl class="perfil-dados">{"".join(linhas)}</dl>{rodape}</section>')
 
 
 def secao_atividade(modelo: dict, pessoa: dict) -> str:

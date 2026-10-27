@@ -13,7 +13,7 @@ CSS = FONTE / "estilo.css"
 
 # Tokens de contrato: hex literal de 6 dígitos em todo bloco que os declara (claro, escuro automático e explícito).
 TOKENS_CONTRATO = ("tinta", "tinta-suave", "tinta-fraca", "fundo", "superficie", "linha", "efeito", "alerta",
-                   "presente", "consignado", "votou-ausente", "justificada", "ausente", "licenca",
+                   "presente", "consignado", "votou-ausente", "justificada", "outro-cargo", "ausente", "licenca",
                    "voto-maioria", "voto-diferente", "voto-abstencao")
 TOKENS_MAPA = tuple(f"mapa-{i}" for i in range(1, 6))
 CONTRATO = frozenset(TOKENS_CONTRATO + TOKENS_MAPA)
@@ -33,6 +33,7 @@ PARES = (
     # .n-alerta usa --alerta como cor de texto, sobre o fundo (placar) e sobre a superfície.
     ("alerta", "fundo", 4.5), ("alerta", "superficie", 4.5),
     ("efeito", "fundo", 3), ("efeito", "superficie", 3),
+    ("outro-cargo", "fundo", 3), ("outro-cargo", "superficie", 3),
     # Selo de impacto alto (.selo.imp-3) e demais selos/etiquetas com texto em --tinta.
     ("selo-alto-texto", "selo-alto-fundo", 4.5),
     ("tinta", "efeito-fundo", 4.5), ("tinta", "sem-efeito-fundo", 4.5), ("tinta", "alerta-fundo", 4.5),

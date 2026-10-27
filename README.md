@@ -165,6 +165,9 @@ O conversor é offline. Revise seu relatório, o mapa e os limites antes de vers
   [abra uma issue](https://github.com/marco-jardim/radar-vereadores-niteroi/issues/new), com documento e fonte.
 - **Composição das legislaturas e afastamentos:** `config/vereadores.json`; preserve o partido da eleição.
 - **Curadoria:** `config/curadoria.json`. Toda entrada precisa de fonte pública; a curadoria prevalece sobre a IA.
+- **Perfis:** `config/perfis.json`, com votação e partido por eleição, outras eleições (TSE) e links oficiais, sempre
+  com fonte pública e os mesmos campos para todos; redes sociais só quando declaradas em página oficial. O partido do
+  mandato aparece em fonte menor ao lado de cada nome de vereador, e o perfil abre a página de cada um.
 - **Memória:** `config/memoria.json` reúne critérios, homenageados e linha do tempo, com fontes públicas HTTPS;
   é conferido por `coletor.validar`.
 - **Código:** consulte [AGENTS.md](AGENTS.md), faça mudanças focadas e execute os testes offline.

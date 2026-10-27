@@ -1,0 +1,124 @@
+name: Vereadores semanal
+
+on:
+  schedule:
+    # terças-feiras, 07:23 no horário de Brasília (10:23 UTC)
+    - cron: "23 10 * * 2"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: vereadores
+  cancel-in-progress: false
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      RAMO: atualiza-vereadores
+      TITULO_PR: "Atualiza dados dos vereadores (TSE e detecções semanais)"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Os zips do TSE passam de 1 GB somados: ficam no cache do Actions, fora do
+      # repositório. A chave exata nunca casa; restore-keys traz o cache mais recente,
+      # e o importador só baixa de novo o que mudou (ETag/Last-Modified em versoes.json).
+      - name: Restaurar cache dos arquivos do TSE
+        id: cache-tse
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/radar-tse
+          key: tse-${{ github.run_id }}
+          restore-keys: |
+            tse-
+
+      - name: Importar candidaturas, votos e redes do TSE
+        timeout-minutes: 60
+        run: python -m coletor.tse --anos 2020,2024,2026 --cache "$RUNNER_TEMP/radar-tse"
+
+      - name: Calcular a versão do cache do TSE
+        id: versao-tse
+        if: always()
+        run: |
+          arquivo="$RUNNER_TEMP/radar-tse/versoes.json"
+          if [ -f "$arquivo" ]; then
+            echo "chave=tse-$(sha256sum "$arquivo" | cut -c1-16)" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Guardar cache dos arquivos do TSE
+        if: always() && steps.versao-tse.outputs.chave != '' && steps.versao-tse.outputs.chave != steps.cache-tse.outputs.cache-matched-key
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ runner.temp }}/radar-tse
+          key: ${{ steps.versao-tse.outputs.chave }}
+
+      - name: Detectar mudanças na composição
+        # só lê data/ e config/; o site da Câmara fora do ar aparece no relatório, sem falhar
+        run: python -m coletor.vereadores_semanal --com-rede --saida "$RUNNER_TEMP/relatorio.md"
+
+      - name: Validar configuração e executar testes
+        # sem continue-on-error: configuração inválida não abre PR
+        run: |
+          python -m coletor.validar
+          testes="tests.test_tse tests.test_vereadores_semanal"
+          if [ -f tests/test_perfis_config.py ]; then testes="tests.test_perfis_config $testes"; fi
+          python -m unittest $testes
+
+      - name: Abrir ou atualizar o PR de revisão
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELATORIO: ${{ runner.temp }}/relatorio.md
+          CORPO: ${{ runner.temp }}/corpo.md
+        run: |
+          if [ -n "$(git status --porcelain -- data/)" ]; then
+            echo "::error::data/ foi alterado; este workflow só pode mudar config/"
+            exit 1
+          fi
+          mudancas="$(git status --porcelain -- config/)"
+          if [ -z "$mudancas" ] && grep -qx '<!-- achados: 0 -->' "$RELATORIO"; then
+            echo "Nenhuma mudança nos perfis e nenhuma detecção nova."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -C "$RAMO"
+          if [ -n "$mudancas" ]; then
+            git add -- config/
+            alterados="$(git diff --cached --name-only -- config/)"
+            git commit -m "Atualiza perfis dos vereadores com dados do TSE"
+          else
+            # sem mudança nos arquivos, um commit vazio permite abrir o PR com as detecções
+            alterados=""
+            git commit --allow-empty -m "Registra detecções semanais dos vereadores para revisão"
+          fi
+          # o ramo é recriado a partir de main a cada execução; nunca é main
+          git push --force origin "HEAD:refs/heads/$RAMO"
+          {
+            head -c 60000 "$RELATORIO"
+            echo
+            echo "## Arquivos alterados"
+            echo
+            if [ -n "$alterados" ]; then
+              printf '%s\n' "$alterados" | sed 's/^/- `/; s/$/`/'
+            else
+              echo "Nenhum: só detecções para revisão. Feche o PR depois de corrigir a configuração."
+            fi
+            echo
+            echo "Gerado pelo workflow [Vereadores semanal]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID). Confira as fontes antes de aprovar."
+          } > "$CORPO"
+          numero="$(gh pr list --head "$RAMO" --base main --state open --json number --jq '.[0].number // empty')"
+          if [ -n "$numero" ]; then
+            gh pr edit "$numero" --title "$TITULO_PR" --body-file "$CORPO"
+          else
+            gh pr create --base main --head "$RAMO" --title "$TITULO_PR" --body-file "$CORPO"
+          fi

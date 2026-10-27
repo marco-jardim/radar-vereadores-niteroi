@@ -59,6 +59,7 @@ class TestGlossario(unittest.TestCase):
             "autorizativa", "sem-efeito", "simbolica", "substitutivo", "indicacao",
             "requerimento", "mocao", "pdl", "projeto-de-resolucao", "veto",
             "derrubada", "quorum", "parecer", "consignado", "votou-ausente",
+            "ausencia-justificada", "abono-cargo", "presenca-efetiva",
         })
         secao = secao_glossario()
         self.assertTrue(secao.startswith(
@@ -78,8 +79,8 @@ class TestGlossario(unittest.TestCase):
 
     def test_secao_em_ordem_alfabetica_estavel(self):
         self.assertEqual(re.findall(r'<dfn id="g-([^"]+)">', secao_glossario()), [
-            "autorizativa", "consignado", "derrubada", "indicacao", "mocao", "parecer",
-            "pdl", "projeto-de-resolucao", "quorum", "requerimento", "sem-efeito",
+            "abono-cargo", "ausencia-justificada", "autorizativa", "consignado", "derrubada", "indicacao", "mocao", "parecer",
+            "presenca-efetiva", "pdl", "projeto-de-resolucao", "quorum", "requerimento", "sem-efeito",
             "simbolica", "substitutivo", "veto", "votou-ausente",
         ])
         with patch.dict(TERMOS, {"z": ("Árvore", "Uma definição."),

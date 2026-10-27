@@ -21,7 +21,8 @@ from coletor.site import inicio, modelo_sessoes, pagina_memoria, pagina_sessoes
 from coletor.site import paginas as P
 from coletor.site.modelo import (
     DESFECHO_GRUPO, NOME_ALERTA, NOME_CATEGORIA, NOME_CATEGORIA_DOC, NOME_DESFECHO, NOME_SINAL, NOME_SUBCATEGORIA_DOC,
-    NOME_TEMA, NOME_TIPO_DOC, TIPOS_COM_DETALHE, TIPOS_DOC, URL_DETALHE, com_efeito, montar_modelo, nome_curto, sem_efeito, slug,
+    NOME_TEMA, NOME_TIPO_DOC, TIPOS_COM_DETALHE, TIPOS_DOC, URL_DETALHE, com_efeito, montar_modelo, nome_curto, partido_em,
+    sem_efeito, slug,
 )
 
 RAIZ = Path(__file__).resolve().parent.parent
@@ -190,8 +191,9 @@ def dicionario_documentos(modelo: dict) -> dict:
 def linhas_documentos(modelo: dict, dic: dict) -> list[dict]:
     """Uma linha por documento, na mesma ordem de modelo["documentos"].
 
-    tp, c e sc já são índices nas enumerações de dic-doc; au (slug, nome, tem página), st e b guardam os
-    próprios valores, trocados por índices nos dicionários locais em fatia_documentos.
+    tp, c e sc já são índices nas enumerações de dic-doc; au (slug, nome, tem página[, partido]), st e b guardam
+    os próprios valores, trocados por índices nos dicionários locais em fatia_documentos. O partido (na legislatura
+    do documento) só entra quando é conhecido: sem ele, a pessoa local continua com três campos.
     """
     idx = {
         "tipos": {t[0]: i for i, t in enumerate(dic["tipos"])},
@@ -206,7 +208,8 @@ def linhas_documentos(modelo: dict, dic: dict) -> list[dict]:
         linhas.append({
             "id": d["id"], "tp": idx["tipos"][d["tipo"]], "n": d["numero"], "a": d["ano"], "d": d["data"], "e": d["ementa"],
             "st": d["situacao"], "as": d["assunto"],
-            "au": [(a["slug"], a["exibicao"], int(bool(a["pagina"]))) for a in d["autores"]],
+            "au": [(a["slug"], a["exibicao"], int(bool(a["pagina"])), *((a["partido"],) if a.get("partido") else ()))
+                   for a in d["autores"]],
             "c": idx["categorias"][d["categoria"]], "sc": idx["subcategorias"][(d["tipo"], d["subcategoria"])],
             "h": int(d["homenagem"]), "rs": int(d["respondido"]), "re": d["respondido_em"], "dr": d["dias_ate_resposta"],
             "pu": int(d["publicado"]), "pb": [pub["numero"], pub["data"]] if pub else None,
@@ -222,7 +225,9 @@ def nome_parte(base: str, k: int) -> str:
 def fatia_documentos(nome: str, linhas: list[dict], extra: dict) -> dict:
     """Parte em colunas, sem build: o conteúdo depende só das próprias linhas e das enumerações de dic-doc.
 
-    pessoas ([slug, nome, tem página]), situacoes e bairros são dicionários locais, ordenados.
+    pessoas ([slug, nome, tem página] e, se conhecido, o partido na legislatura do documento), situacoes e
+    bairros são dicionários locais, ordenados. Uma pessoa com partidos diferentes em legislaturas diferentes
+    aparece uma vez por partido.
     """
     pessoas = sorted({a for l in linhas for a in l["au"]})
     situacoes = sorted({l["st"] for l in linhas})
@@ -405,7 +410,10 @@ def dicionario_sessoes() -> dict:
 
 
 def pessoa_votacao(modelo: dict, s: str, ano: int) -> list:
-    """Metadados locais do ano, inclusive suplentes sem página e nomes não casados."""
+    """Metadados locais do ano, inclusive suplentes sem página e nomes não casados.
+
+    [slug, nome curto, tem página, condição] e, quando conhecido, o partido na legislatura do ano (quinto campo).
+    """
     dados = modelo["sessoes"]
     pessoa = (modelo.get("pessoas") or {}).get(s) or {}
     entrada = (dados.get("por_pessoa") or {}).get(s) or {}
@@ -415,7 +423,9 @@ def pessoa_votacao(modelo: dict, s: str, ano: int) -> list:
     nome = pessoa.get("nome") or entrada.get("nome") or registro.get("nome") or s
     condicao = entrada.get("condicao") or registro.get("condicao") or pessoa.get("condicao") or (
         "suplente em exercício" if registro.get("sem_pagina") else "")
-    return [s, nome_curto(nome), int(s in (modelo.get("pessoas") or {})), condicao]
+    # A mesma legislatura dos chips do cartão no servidor (pagina_sessoes._votos_nomes).
+    partido = partido_em(modelo, s, pagina_sessoes.leg_do_ano(modelo, ano))
+    return [s, nome_curto(nome), int(s in (modelo.get("pessoas") or {})), condicao, *([partido] if partido else [])]
 
 
 def numero_votacao(votacao: dict) -> str:
@@ -606,7 +616,8 @@ def gerar_404(modelo: dict) -> str:
     atual = legislaturas[-1]["id"] if legislaturas else None
     pessoas = sorted((p for p in modelo.get("pessoas", {}).values() if atual is not None and atual in p["mandatos"]),
                      key=lambda p: P._chave_nome(p["nome"]))
-    links = "".join(f'<li><a href="{P.esc(prefixo + "vereadores/" + p["slug"] + ".html")}">{P.esc(p["nome"])}</a></li>'
+    links = "".join(f'<li><a href="{P.esc(prefixo + "vereadores/" + p["slug"] + ".html")}">{P.esc(p["nome"])}'
+                    f'{P.partido_html(p["mandatos"][atual].get("partido"))}</a></li>'
                     for p in pessoas)
     lista = f'<section><h2>Procure um vereador</h2><ul>{links}</ul></section>' if links else ""
     corpo = (f'<section class="abertura"><h1>Página não encontrada</h1>'

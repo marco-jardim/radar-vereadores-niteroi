@@ -385,6 +385,9 @@ for (const modo of ["leis", "projetos"]) {
       assert.match(app.elementos.resultados.innerHTML, /chip-principal[^>]+daniel-marques-frederico/);
       assert.match(app.elementos.resultados.innerHTML, /<div class="autoria">[^]*?<details class="coautores"><summary>e 1 coautor<\/summary><ul><li>Cal<\/li><\/ul><\/details>[^]*?<\/div>/);
       assert.doesNotMatch(app.elementos.resultados.innerHTML, /<p class="autoria">|title="Cal"/);
+      // Partido na legislatura do item (2025-2028): o principal tem PL, dentro do chip; Cal só tem partido em 2021-2024.
+      assert.match(app.elementos.resultados.innerHTML, /daniel-marques-frederico\.html">Daniel Marques<span class="partido">PL<\/span><\/a>/);
+      assert.doesNotMatch(app.elementos.resultados.innerHTML, /<\/details><span class="partido">|partido">PY</);
       assert.match(app.elementos.resultados.innerHTML, /via substitutivo/);
       const arquivo = await app.csv();
       assert.equal(arquivo.texto.split("\n").length, 2);

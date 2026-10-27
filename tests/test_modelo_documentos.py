@@ -299,7 +299,8 @@ class TestPaginasMetricas(unittest.TestCase):
         self.assertIn("Peso das homenagens na produção total da Câmara, por ano", html)
         self.assertIn("<caption>Homenagens por vereador, legislatura 2025-2028</caption>", html)
         # Ana em 2026 (2025 é parcial): título de cidadão entre 4 documentos, sem projeto de lei no ano
-        self.assertIn('<tr><th scope="row"><a href="vereadores/ana-maria-teste.html">Ana Teste</a></th>'
+        # O partido (o da eleição de 2024, na legislatura da tabela) vai dentro do link, logo depois do nome.
+        self.assertIn('<tr><th scope="row"><a href="vereadores/ana-maria-teste.html">Ana Teste<span class="partido">PX</span></a></th>'
                       "<td>1</td><td>4</td><td>0</td><td>25%</td></tr>", html)
         self.assertIn('<th scope="row">Diná</th>', html)  # sem página: sem link
         self.assertIn(self.NOTA_PARCIAIS, html)
@@ -319,7 +320,7 @@ class TestPaginasMetricas(unittest.TestCase):
         self.assertIn("<caption>Requerimentos de informação por vereador, legislatura 2025-2028</caption>", html)
         self.assertIn('<th scope="col">Base da mediana (respondidos com data)</th>', html)
         # Michel: um respondido em 30 dias (com data) e um aguardando, ainda sem detalhe
-        self.assertIn('<tr><th scope="row"><a href="vereadores/michel-salim-saad-neto.html">Michel Saad</a></th>'
+        self.assertIn('<tr><th scope="row"><a href="vereadores/michel-salim-saad-neto.html">Michel Saad<span class="partido">PZ</span></a></th>'
                       "<td>2</td><td>1</td><td>50%</td><td>30</td><td>1</td><td>1</td><td>0</td><td>0</td></tr>", html)
         self.assertIn("Requerimentos de informação por órgão citado", html)
         self.assertIn('<tr><th scope="row">NitTrans</th><td>1</td><td>0</td><td>0%</td><td>—</td><td>0</td><td>1</td>'
