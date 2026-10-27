@@ -12,7 +12,7 @@ A coleta é programada semanalmente pelo GitHub Actions; o site é estático, pu
 
 | Página | Conteúdo |
 | --- | --- |
-| Início (`index.html`) | Paisagem de Niterói, “Quem é meu vereador?”, números, destaques, mapa de indicações, placar e linha do tempo da cidade. |
+| Início (`index.html`) | Paisagem de Niterói, “Quem é meu vereador?”, números, destaques, mapa de indicações, placar, linha do tempo da cidade e a faixa “Niterói que nos inspira”. |
 | Novidades (`novidades.html`) | Apresentações de PLs, leis, vetos e vetos derrubados; também em RSS (`feed.xml`). |
 | Leis aprovadas (`leis.html`) | Leis com filtros por impacto, tema, vereador e partido. |
 | Projetos (`projetos.html`) | Projetos de lei, inclusive em tramitação e sem êxito. |
@@ -20,7 +20,8 @@ A coleta é programada semanalmente pelo GitHub Actions; o site é estático, pu
 | Sessões (`sessoes.html`) | Presença por legislatura, votações nominais, mapa de votos, ritmo e cobertura. |
 | Sem efeito e polêmicas (`ruido.html`) | Produção simbólica, projetos sem efeito, alertas e homenagens. |
 | Análises (`analises.html`) | Gráficos históricos e comparações da produção legislativa. |
-| Metodologia (`metodologia.html`) | Critérios, fontes e limitações. |
+| Metodologia (`metodologia.html`) | Critérios, fontes, limitações e glossário. |
+| Memória de Niterói (`memoria.html`) | “Cidade Sorriso”: pessoas ligadas à cidade, critério de homenagem, linha do tempo e fontes; link no rodapé. |
 
 As páginas em `vereadores/` reúnem projetos, **Presença e votos** e, quando há documentos coletados,
 **Atividade**. Os demais documentos não entram nos números de projetos de lei e leis.
