@@ -7,6 +7,7 @@ o detalhe de cada um é baixado junto com o do PL, e a lei que sair de um
 substitutivo é atribuída ao PL original. Grava um JSON por ano em data/proposicoes/.
 
 Uso: python -m coletor.siscam [--anos 2021-2026] [--forcar] [--workers 4] [--max-detalhes 400]
+     python -m coletor.siscam --arquivos-do-cache DIR [--anos 2021-2026]   (offline: só "arquivos")
 Somente biblioteca padrão do Python.
 """
 from __future__ import annotations
@@ -37,7 +38,8 @@ USER_AGENT = os.environ.get(
 RAIZ = Path(__file__).resolve().parent.parent
 DIR_DADOS = RAIZ / "data" / "proposicoes"
 ANO_INICIAL = 2021
-# Detalhes extras por substitutivos ou arquivos ausentes; mudanças da listagem ficam fora do limite.
+# Detalhes extras por execução, pedidos pelos substitutivos ou pela chave "arquivos" ausente no PL;
+# as mudanças da listagem não entram no limite.
 MAX_DETALHES = 400
 
 
@@ -387,11 +389,14 @@ def precisa_substitutivos(anterior: dict | None) -> bool:
 
 
 def precisa_arquivos(anterior: dict | None) -> bool:
-    """PL ou substitutivo ainda sem arquivos; lista vazia já é conhecida."""
-    return anterior is not None and (
-        "arquivos" not in anterior
-        or any("arquivos" not in s for s in anterior.get("substitutivos") or [])
-    )
+    """Detalhe pedido para obter a lista de arquivos, dentro do limite de --max-detalhes.
+
+    Só a chave "arquivos" do próprio PL decide (lista vazia já é conhecida). Substitutivos sem a
+    chave não recolocam o PL na fila: um substitutivo mantido da coleta anterior, por falha no seu
+    detalhe, ficaria sem ela e prenderia o PL na fila a cada execução. Ele ganha a chave quando
+    o PL voltar a ser baixado por outro motivo (ou por --arquivos-do-cache).
+    """
+    return anterior is not None and "arquivos" not in anterior
 
 
 def arquivos_do_cache(pasta: Path, anos: list[int] | None = None) -> None:
@@ -444,7 +449,8 @@ def montar_registro(resumo: dict, detalhe: dict, substitutivos: list[dict] | Non
 
 
 def coletar(anos: list[int], forcar: bool, workers: int, max_detalhes: int = MAX_DETALHES) -> dict:
-    estat = {"anos": {}, "detalhes_baixados": 0, "falhas": 0, "por_substitutivos": 0, "substitutivos_adiados": 0}
+    estat = {"anos": {}, "detalhes_baixados": 0, "falhas": 0, "por_substitutivos": 0, "substitutivos_adiados": 0,
+             "por_arquivos": 0, "arquivos_adiados": 0}
     restante = max(0, max_detalhes)
     # do ano mais recente ao mais antigo: o limite de --max-detalhes vale para a execução inteira
     for ano in sorted(anos, reverse=True):
@@ -456,12 +462,20 @@ def coletar(anos: list[int], forcar: bool, workers: int, max_detalhes: int = MAX
         extras = sorted((r for r in resumos if r["id"] not in ids_pendentes
                          and (precisa_substitutivos(anteriores.get(r["id"])) or precisa_arquivos(anteriores.get(r["id"])))),
                         key=ordem_recente, reverse=True)
-        adiados = max(0, len(extras) - restante)
+        adiados_lista = extras[restante:]
+        adiados = len(adiados_lista)
         extras = extras[:restante]
         restante -= len(extras)
-        estat["por_substitutivos"] += len(extras)
-        estat["substitutivos_adiados"] += adiados
-        print(f"{ano}: {len(resumos)} projetos, {len(pendentes)} para atualizar, {len(extras)} pelos substitutivos/arquivos"
+
+        def motivo(r: dict) -> str:  # cada extra conta uma vez; substitutivos têm precedência
+            return "substitutivos" if precisa_substitutivos(anteriores.get(r["id"])) else "arquivos"
+
+        por_motivo = {m: sum(1 for r in extras if motivo(r) == m) for m in ("substitutivos", "arquivos")}
+        for m in ("substitutivos", "arquivos"):
+            estat[f"por_{m}"] += por_motivo[m]
+            estat[f"{m}_adiados"] += sum(1 for r in adiados_lista if motivo(r) == m)
+        print(f"{ano}: {len(resumos)} projetos, {len(pendentes)} para atualizar, {por_motivo['substitutivos']} pelos "
+              f"substitutivos, {por_motivo['arquivos']} pelos arquivos"
               + (f" ({adiados} para a próxima execução)" if adiados else ""), flush=True)
         registros = dict(anteriores)
         # atualiza situação/contagem dos que não precisam de detalhe
@@ -493,7 +507,8 @@ def coletar(anos: list[int], forcar: bool, workers: int, max_detalhes: int = MAX
         for reg in registros.values():  # regras de derivação podem mudar; recalcula sem rebaixar
             aplicar_substitutivos(reg)
         salvar_ano(ano, registros)
-        estat["anos"][ano] = {"total": len(resumos), "atualizados": len(pendentes), "por_substitutivos": len(extras),
+        estat["anos"][ano] = {"total": len(resumos), "atualizados": len(pendentes),
+                              "por_substitutivos": por_motivo["substitutivos"], "por_arquivos": por_motivo["arquivos"],
                               "segundos": round(time.time() - t0)}
     return estat
 

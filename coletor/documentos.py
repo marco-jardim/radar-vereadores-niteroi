@@ -41,6 +41,7 @@ detalhes já aplicados são gravados e data/meta.json é atualizado antes de sai
 Uso: python -m coletor.documentos [--anos 2025-2026]
          [--tipos requerimento,indicacao,mocao,pdl,resolucao] [--workers 4]
          [--max-detalhes 1500] [--sem-detalhe | --so-detalhes] [--forcar] [--max-minutos 100]
+     python -m coletor.documentos --arquivos-do-cache DIR [--anos 2025-2026] [--tipos pdl]  (offline: só "arquivos")
 Somente biblioteca padrão do Python.
 """
 from __future__ import annotations
@@ -409,6 +410,16 @@ def tem_detalhe(registro: dict | None) -> bool:
     return bool(registro and registro.get("detalhe_em"))
 
 
+def falta_arquivos(registro: dict | None) -> bool:
+    """Requerimento, PDL ou resolução com detalhe baixado antes do suporte à chave "arquivos".
+
+    Entra de novo na fila de detalhes (dentro de --max-detalhes, por recência). Indicações e
+    moções de vários autores ficam de fora: o inteiro teor delas está fora do escopo.
+    """
+    return bool(registro) and registro.get("tipo") in TIPOS_COM_DETALHE and tem_detalhe(registro) \
+        and "arquivos" not in registro
+
+
 def precisa_detalhe(registro: dict, anterior: dict | None, forcar: bool = False) -> bool:
     """Se o detalhe de um documento elegível deve ser baixado.
 
@@ -416,11 +427,14 @@ def precisa_detalhe(registro: dict, anterior: dict | None, forcar: bool = False)
     (adiado pelo limite ou com falha), quando a contagem de tramitações, a situação ou
     o último passo da listagem diferem dos gravados no registro anterior (um passo
     pode ser editado, ou a situação mudar, sem que a contagem mude), quando os autores
-    listados mudaram (a autoria do detalhe ficaria desatualizada) ou com forcar.
+    listados mudaram (a autoria do detalhe ficaria desatualizada), quando o detalhe antigo
+    de requerimento, PDL ou resolução não tem "arquivos" (falta_arquivos) ou com forcar.
     """
     if not elegivel_detalhe(registro):
         return False
     if forcar or anterior is None or not tem_detalhe(anterior) or anterior.get("detalhe_pendente"):
+        return True
+    if falta_arquivos(anterior):
         return True
     return (
         anterior.get("n_tramitacoes") != registro.get("n_tramitacoes")
@@ -566,7 +580,8 @@ def coletar_detalhes(
     A fila reúne os tipos e anos da execução e todos os arquivos já existentes em
     data/documentos, para que os pendentes de anos que não são mais relistados também
     sejam baixados. Documento elegível sem detalhe e sem a marca (arquivo de versão
-    anterior) recebe "detalhe_pendente" e entra na fila. Baixa no máximo max_detalhes
+    anterior) recebe "detalhe_pendente" e entra na fila, assim como o detalhe antigo sem
+    "arquivos" (veja falta_arquivos). Baixa no máximo max_detalhes
     páginas; os demais continuam pendentes para a próxima execução. Uma falha deixa o
     registro como estava (com o detalhe anterior, se houver) e ainda pendente.
 
@@ -592,7 +607,7 @@ def coletar_detalhes(
         arquivos[chave] = (caminho, carregar_ano(caminho))
         contagem[chave] = {"detalhes_baixados": 0, "detalhes_falhas": 0, "detalhes_pendentes": 0}
         for reg in arquivos[chave][1].values():
-            if not reg.get("detalhe_pendente") and elegivel_detalhe(reg) and not tem_detalhe(reg):
+            if not reg.get("detalhe_pendente") and elegivel_detalhe(reg) and (not tem_detalhe(reg) or falta_arquivos(reg)):
                 reg["detalhe_pendente"] = True
                 alterados.add(chave)
             if reg.get("detalhe_pendente"):
@@ -862,24 +877,25 @@ def atualizar_meta(estat: dict, caminho: Path | None = None) -> dict:
 
 
 # ---------------------------------------------------------------------- execução
-def arquivos_do_cache(pasta: Path, anos: list[int] | None = None) -> None:
-    """Preenche só arquivos dos documentos elegíveis; cache ausente deixa pendência, sem rede."""
+def arquivos_do_cache(pasta: Path, anos: list[int] | None = None, tipos: list[str] | None = None) -> None:
+    """Preenche só "arquivos" a partir de <pasta>/<id>.html, sem rede.
+
+    Vale para requerimentos, PDLs e resoluções e para indicações/moções de vários autores já
+    com detalhe. Sem HTML no cache, o registro fica intocado (nenhuma chave nova); quem tem
+    detalhe e continua sem "arquivos" volta à fila normal de detalhes (falta_arquivos).
+    """
     for tipo, ano in arquivos_existentes():
-        if anos is not None and ano not in anos:
+        if (anos is not None and ano not in anos) or (tipos is not None and tipo not in tipos):
             continue
         caminho = caminho_ano(tipo, ano)
         registros = carregar_ano(caminho)
         for reg in registros.values():
-            if not elegivel_detalhe(reg):
+            if not elegivel_detalhe(reg) or not (tipo in TIPOS_COM_DETALHE or tem_detalhe(reg)):
                 continue
-            disponivel = False
-            if tipo in TIPOS_COM_DETALHE or tem_detalhe(reg):
-                try:
-                    disponivel = preencher_arquivos_cache(reg, pasta)
-                except ValueError as e:
-                    print(f"::warning::documento {reg['id']}: cache não aplicado ({e})", file=sys.stderr)
-            if not disponivel and "arquivos" not in reg:
-                reg["detalhe_pendente"] = True
+            try:
+                preencher_arquivos_cache(reg, pasta)
+            except ValueError as e:
+                print(f"::warning::documento {reg['id']}: cache não aplicado ({e})", file=sys.stderr)
         salvar_ano(caminho, registros)
 
 
@@ -938,7 +954,12 @@ def main() -> None:
     except ValueError as e:
         ap.error(f"--anos inválido: {e}")
     if args.arquivos_do_cache:
-        arquivos_do_cache(args.arquivos_do_cache, anos if args.anos is not None else None)
+        ignoradas = [nome for nome, ativa in (("--so-detalhes", args.so_detalhes), ("--sem-detalhe", args.sem_detalhe),
+                                              ("--forcar", args.forcar), ("--max-minutos", args.max_minutos))
+                     if ativa]
+        if ignoradas:
+            print(f"::warning::--arquivos-do-cache ignora {', '.join(ignoradas)}", file=sys.stderr)
+        arquivos_do_cache(args.arquivos_do_cache, anos if args.anos is not None else None, tipos)
         return
     prazo = _agora() + 60 * args.max_minutos if args.max_minutos else None
     signal.signal(signal.SIGTERM, _interromper)

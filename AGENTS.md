@@ -19,6 +19,7 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | --- | --- |
 | `coletor/siscam.py` | HTTP compartilhado, parsing, autoria, tramitação, substitutivos e desfechos dos PLs. |
 | `coletor/documentos.py` | Listagem e detalhe seletivo dos cinco demais tipos de documento. |
+| `coletor/arquivos_siscam.py` | Tabela "[ Arquivos ]" do detalhe (`extrair_arquivos`), preservação da lista anterior e preenchimento offline por `--arquivos-do-cache`. |
 | `coletor/sessoes.py` | Coleta de sessões, documentos da sessão, pauta, frequência e votações. |
 | `coletor/regras_documentos.py` | Classificação, bairros, respostas, publicação e regras das métricas de documentos. |
 | `coletor/regras_sessoes.py` | Presença, votos, parecer, quórum, qualidade e auditoria offline das sessões. |
@@ -224,14 +225,22 @@ O `motivo` é público no Git e não deve conter dados pessoais.
   ano atual; documentos/sessões: ano anterior e atual. `--workers` usa `COLETOR_WORKERS` ou 4; em sessões,
   controla só os detalhes, pois a paginação da listagem é sequencial.
 - **PLs:** `--forcar` rebaixa os detalhes de todos os PLs listados. `--max-detalhes` (padrão 400) limita
-  apenas detalhes pedidos **só pelos substitutivos**, do mais recente ao mais antigo, na execução inteira:
-  PL sem a chave `substitutivos` ou PL sem lei com substitutivo ainda sem lei. Mudanças normais da listagem
-  e `--forcar` não entram nesse limite. Extras adiados ficam para outra execução.
+  apenas detalhes pedidos **só pelos substitutivos ou pelos arquivos**, do mais recente ao mais antigo, na
+  execução inteira: PL sem a chave `substitutivos`, PL sem lei com substitutivo ainda sem lei ou PL sem a chave
+  `arquivos` (só a do próprio PL decide; substitutivo sem ela não recoloca o PL na fila). Mudanças normais da
+  listagem e `--forcar` não entram nesse limite. Extras adiados ficam para outra execução; `meta.json` separa
+  `por_substitutivos`/`substitutivos_adiados` de `por_arquivos`/`arquivos_adiados`.
+- **Arquivos do cache (PLs e documentos):** `--arquivos-do-cache DIR` só preenche `arquivos` a partir de
+  `DIR/<id>.html` (PL, cada substitutivo e documento), sem rede nem outros campos, e encerra; respeita `--anos`
+  (padrão: todos os anos existentes) e, em documentos, `--tipos`. Sem HTML, o registro fica intocado. Em
+  documentos, avisa que ignora `--so-detalhes`, `--sem-detalhe`, `--forcar` e `--max-minutos`. Idempotente.
 - **Documentos:** `--tipos requerimento,indicacao,mocao,pdl,resolucao` seleciona os tipos a **relistar**;
   `--max-detalhes` (1500) limita detalhes; `--sem-detalhe` só lista; `--so-detalhes` não relista e atende
   pendentes, sem combinar com `--sem-detalhe` ou `--forcar`. `--forcar` marca os elegíveis relistados para
   rebaixar, ainda dentro do limite. A fila de detalhes inclui **todos os arquivos existentes**, mesmo fora
   dos tipos/anos escolhidos. Portanto `--so-detalhes` não garante esvaziar toda a fila numa execução.
+  Requerimentos, PDLs e resoluções com `detalhe_em` e sem `arquivos` também entram nessa fila, por recência e
+  dentro do limite; indicações e moções com detalhe não (inteiro teor fora do escopo).
 - **Sessões:** `--forcar` marca as sessões listadas para rebaixar; `--max-detalhes` (400) limita a execução,
   mais recentes primeiro. A fila também inclui pendentes de todos os anos existentes.
 - **Documentos e sessões:** `--max-minutos N` é um prazo interno positivo, sem prazo por padrão. Para de
@@ -549,6 +558,12 @@ Esta é a referência única para sessões; a CLI está em "Pipeline e comandos"
   tramitação e lei. Se a lei sai do substitutivo e não do PL, aplique-a ao PL com `desfecho: virou_lei`
   e `lei_substitutivo` apontando para ele. Preserve autoria principal do PL; autores adicionais do substitutivo
   que virou lei entram como coautores no modelo, sem duplicar nomes.
+- Chave `arquivos` (PL, cada substitutivo e documentos com detalhe): lista, na ordem da página, de
+  `{id, descricao, versao, data, icone}` da tabela "[ Arquivos ]" (`coletor/arquivos_siscam.py`); `id` é o
+  de `Download.aspx?id=`, `data` é `AAAA-MM-DD` ou `null` e `icone` vem da imagem (`doc`, `pdf`; vazio sem
+  imagem). Ausência da chave = ainda não coletado; `[]` = página sem arquivos ("Nenhum Registro" ou sem seção).
+  Lista nova vazia não apaga uma anterior não vazia (aviso); seção sem grade é layout alterado e mantém o
+  detalhe anterior como falha. Relistar documentos preserva a chave como os demais campos do detalhe.
 - Categoria combina curadoria → regra → IA. Curadoria pode corrigir campos; categoria simbólica zera impacto,
   autorizativa limita impacto avaliado a 1. IA avalia só ementa; não trate estimativa como efeito comprovado.
 - Novidades são derivadas na geração, sem estado entre coletas nem `data/novidades.json` ou JSON próprio no

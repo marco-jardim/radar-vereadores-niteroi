@@ -611,16 +611,32 @@ class TestArquivos(unittest.TestCase):
         self.assertFalse(siscam.precisa_arquivos({"arquivos": []}))
         self.assertFalse(siscam.precisa_arquivos({"arquivos": ESPERADOS["pl_275545"]}))
         self.assertFalse(siscam.precisa_arquivos(None))
-        self.assertTrue(siscam.precisa_arquivos({"arquivos": [], "substitutivos": [{"id": 1}]}))
-        self.assertFalse(siscam.precisa_arquivos({"arquivos": [], "substitutivos": [{"id": 1, "arquivos": []}]}))
+        # só a chave do próprio PL decide: substitutivo mantido de coleta anterior não prende o PL na fila
+        self.assertFalse(siscam.precisa_arquivos({"arquivos": [], "substitutivos": [{"id": 1}]}))
+        self.assertTrue(siscam.precisa_arquivos({"substitutivos": [{"id": 1, "arquivos": []}]}))
+
+    def test_substitutivo_sem_arquivos_nao_recoloca_o_pl_na_fila(self):
+        ajuda = TestColetarComSubstitutivos()
+        legado = substitutivo(lei=dict(LEI_3958))  # sem "arquivos": preservado de uma coleta anterior
+        pares = {2025: [ajuda.par(501, 1, 2025, arquivos=[], substitutivos=[legado], lei=dict(LEI_3958))]}
+        estat, _, baixados = ajuda.rodar(pares, 10, lambda url: "<html></html>")
+        self.assertEqual(baixados, [])
+        self.assertEqual((estat["por_arquivos"], estat["arquivos_adiados"]), (0, 0))
 
     def test_fila_compartilha_limite_sem_duplicar(self):
         ajuda = TestColetarComSubstitutivos()
+        # 501 já conferiu os substitutivos e só falta "arquivos"; 502 falta tudo (conta como substitutivos)
         pares = {2025: [ajuda.par(501, 1, 2025, substitutivos=[]), ajuda.par(502, 2, 2025)]}
-        for limite, esperado in [(0, []), (1, [502]), (2, [502, 501])]:
+        casos = [(0, [], (0, 1, 0, 1)), (1, [502], (1, 0, 0, 1)), (2, [502, 501], (1, 0, 1, 0)),
+                 (5, [502, 501], (1, 0, 1, 0))]
+        for limite, esperado, contagem in casos:
             with self.subTest(limite=limite):
-                _, _, baixados = ajuda.rodar(pares, limite, lambda url: "<html></html>")
+                estat, _, baixados = ajuda.rodar(pares, limite, lambda url: "<html></html>")
                 self.assertEqual(baixados, esperado)
+                self.assertEqual((estat["por_substitutivos"], estat["substitutivos_adiados"],
+                                  estat["por_arquivos"], estat["arquivos_adiados"]), contagem)
+                self.assertEqual((estat["anos"][2025]["por_substitutivos"], estat["anos"][2025]["por_arquivos"]),
+                                 contagem[::2])
 
     def test_lista_vazia_preserva_arquivos_do_pl_com_aviso(self):
         ajuda = TestColetarComSubstitutivos()

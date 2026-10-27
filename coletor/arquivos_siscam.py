@@ -8,6 +8,8 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlsplit
 
+RE_LEGENDA = re.compile(r"<legend[^>]*>\s*\[\s*Arquivos\s*\]\s*</legend>", re.I)
+
 
 class _Arquivos(HTMLParser):
     """Restringe a leitura à grade dentro de trArquivos, inclusive seus trs aninhados."""
@@ -89,11 +91,18 @@ class _Arquivos(HTMLParser):
             self.tabelas -= 1
 
 
-def extrair_arquivos(html: str) -> list[dict] | None:
-    """Extrai arquivos na ordem da página; seção sem grade reconhecida é erro de layout."""
+def extrair_arquivos(html: str) -> list[dict]:
+    """Extrai os arquivos na ordem da página.
+
+    Página sem a seção (nem `tr#trArquivos` nem a legenda "[ Arquivos ]") não tem arquivos: [].
+    Legenda sem `tr#trArquivos`, ou seção sem a grade e sem "Nenhum Registro", é layout alterado
+    (ValueError): o chamador mantém o detalhe anterior.
+    """
     parser = _Arquivos()
     parser.feed(html)
     parser.close()
+    if not parser.secao and RE_LEGENDA.search(html):
+        raise ValueError("layout alterado: legenda de arquivos sem a linha trArquivos")
     if parser.secao and not parser.grade and not re.search(r"Nenhum\s+Registro", " ".join(parser.textos), re.I):
         raise ValueError("layout alterado: tabela de arquivos ausente")
     vistos = set()

@@ -978,9 +978,16 @@ class TestExecucao(Afirmacoes):
     def test_anotacao_escapa_caracteres_especiais(self):
         self.assertEqual(V._anotacao("100% certo\nlinha"), "100%25 certo%0Alinha")
 
+    def test_validar_tudo_aceita_arquivos_sem_manifesto_de_textos(self):
+        item = {"id": 385956, "descricao": "", "versao": "Anexos", "data": "2025-02-10", "icone": "doc"}
+        raiz = self.montar_raiz(registros=[registro(arquivos=[item])])
+        self.assertFalse((raiz / "data" / "textos").exists())
+        self.assertEqual(V.validar_tudo(raiz), [])
+        pasta = raiz / "data" / "documentos" / "resolucao"
+        pasta.mkdir(parents=True)
+        (pasta / "2026.json").write_bytes(canonico([documento(arquivos=[{**item, "id": 403683, "icone": "pdf"}])]))
+        self.assertEqual(V.validar_tudo(raiz), [])
 
-if __name__ == "__main__":
-    unittest.main()
 
 class TestValidarArquivos(unittest.TestCase):
     def setUp(self):
@@ -1010,3 +1017,7 @@ class TestValidarArquivos(unittest.TestCase):
             with self.subTest(nome):
                 problemas = self.problemas(arquivos)
                 self.assertTrue(any(trecho in p for p in problemas), problemas)
+
+
+if __name__ == "__main__":
+    unittest.main()

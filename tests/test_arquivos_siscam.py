@@ -1,9 +1,14 @@
-"""Arquivos de páginas reais do SISCAM e proteções contra perda de metadados."""
+"""Seção "[ Arquivos ]" das páginas de detalhe do SISCAM (coletor/arquivos_siscam.py).
+
+As páginas com e sem arquivos são reais, salvas em tests/fixtures/siscam/; só a de layout
+alterado (detalhe_arquivos_layout_alterado.html) é sintética.
+"""
 from __future__ import annotations
 
 import unittest
 from pathlib import Path
 
+from coletor import siscam
 from coletor.arquivos_siscam import extrair_arquivos
 from tests.apoio import ler_fixture
 
@@ -25,16 +30,14 @@ ESPERADOS = {
     "requerimento_290504": [arquivo(404266, "pdf", "2025-12-11")],
     "requerimento_290505": [arquivo(404267, "pdf", "2025-12-11")],
 }
+LAYOUT_ALTERADO = "detalhe_arquivos_layout_alterado.html"
 
 
 class TestExtrairArquivos(unittest.TestCase):
-    def test_fixtures_sinteticas_preservam_crlf(self):
-        pasta = Path(__file__).parent / "fixtures" / "siscam"
-        for nome in ("nenhum_registro", "layout_alterado"):
-            with self.subTest(nome=nome):
-                conteudo = (pasta / f"detalhe_arquivos_{nome}.html").read_bytes()
-                self.assertIn(b"\r\n", conteudo)
-                self.assertNotIn(b"\n", conteudo.replace(b"\r\n", b""))
+    def test_fixture_de_layout_alterado_usa_crlf(self):
+        conteudo = (Path(__file__).parent / "fixtures" / "siscam" / LAYOUT_ALTERADO).read_bytes()
+        self.assertIn(b"\r\n", conteudo)
+        self.assertNotIn(b"\n", conteudo.replace(b"\r\n", b""))
 
     def test_paginas_reais(self):
         for nome, esperado in ESPERADOS.items():
@@ -56,19 +59,48 @@ class TestExtrairArquivos(unittest.TestCase):
         self.assertEqual(extrair_arquivos(pagina.replace("id=404140", "id=404139")), ESPERADOS["pdl_290379"][:1])
 
     def test_sem_secao_nao_le_grade_de_outro_local(self):
-        pagina = ler_fixture("siscam", "detalhe_pl_275545.html").replace('id="trArquivos"', 'id="outra"')
-        self.assertEqual(extrair_arquivos(pagina), [])
+        pagina = ler_fixture("siscam", "detalhe_pl_275545.html")
+        sem_secao = pagina.replace('id="trArquivos"', 'id="outra"').replace("[ Arquivos ]", "[ Outros ]")
+        self.assertEqual(extrair_arquivos(sem_secao), [])
         self.assertEqual(extrair_arquivos(""), [])
 
-    def test_nenhum_registro(self):
-        self.assertEqual(extrair_arquivos(ler_fixture("siscam", "detalhe_arquivos_nenhum_registro.html")), [])
+    def test_pl_real_sem_secao_de_arquivos(self):
+        # PL 175/2026: o SISCAM omite a seção inteira (sem trArquivos nem legenda)
+        pagina = ler_fixture("siscam", "detalhe_pl_293738_sem_arquivos.html")
+        self.assertNotIn('id="trArquivos"', pagina)
+        self.assertEqual(extrair_arquivos(pagina), [])
+        d = siscam.parse_detalhe(pagina)
+        self.assertEqual(d["arquivos"], [])
+        self.assertEqual((d["data"], d["situacao"], d["protocolo"], d["data_protocolo"]),
+                         ("2026-04-29", "ENCAMINHADO ÀS COMISSÕES", "3105/2026", "2026-04-29"))
+        self.assertEqual(d["autoria"], [{"nome": "Mesa Diretora 2025/2026", "origem": "Mesa", "papel": "Autor"}])
+        self.assertEqual([t["seq"] for t in d["tramitacoes"]][:2], [1, 2])
+
+    def test_resolucao_real_com_nenhum_registro_encontrado(self):
+        # Resolução 20/2025: grade arquivos_gvListagem com a linha grid-empty-data
+        pagina = ler_fixture("siscam", "detalhe_resolucao_288836_sem_arquivos.html")
+        self.assertIn("Nenhum Registro Encontrado!", pagina)
+        self.assertEqual(extrair_arquivos(pagina), [])
+        d = siscam.parse_detalhe(pagina)
+        self.assertEqual(d["arquivos"], [])
+        self.assertEqual((d["data"], d["assunto"], d["situacao"], d["processo"], d["protocolo"]),
+                         ("2025-11-25", "LOA", "PUBLICADO", "773/2025", "12991/2025"))
+        self.assertTrue(d["autoria"])
+        self.assertEqual([t["seq"] for t in d["tramitacoes"]][:8], list(range(1, 9)))
 
     def test_layout_alterado(self):
         with self.assertRaisesRegex(ValueError, "^layout alterado: tabela de arquivos ausente$"):
-            extrair_arquivos(ler_fixture("siscam", "detalhe_arquivos_layout_alterado.html"))
+            extrair_arquivos(ler_fixture("siscam", LAYOUT_ALTERADO))
+
+    def test_legenda_sem_linha_tr_arquivos_e_layout_alterado(self):
+        pagina = ler_fixture("siscam", "detalhe_pl_275545.html").replace('id="trArquivos"', 'id="trOutros"')
+        with self.assertRaisesRegex(ValueError, "^layout alterado: legenda de arquivos sem a linha trArquivos$"):
+            extrair_arquivos(pagina)
+        with self.assertRaises(ValueError):
+            siscam.parse_detalhe(pagina)
 
     def test_nenhum_registro_de_outra_secao_nao_oculta_layout_alterado(self):
-        pagina = ler_fixture("siscam", "detalhe_arquivos_layout_alterado.html")
+        pagina = ler_fixture("siscam", LAYOUT_ALTERADO)
         with self.assertRaises(ValueError):
             extrair_arquivos(pagina + "<tr><td>Nenhum Registro</td></tr>")
 
