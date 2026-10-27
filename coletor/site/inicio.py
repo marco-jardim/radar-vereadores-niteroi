@@ -14,7 +14,16 @@ import coletor.site.paginas as P
 
 H1_INICIO = "Leis que mudam a cidade, e quem as escreveu."
 # Camadas da paisagem, do fundo para a frente; cada uma usa site_src/paisagem/<camada>.svg como máscara.
-CAMADAS = ("sol", "fundo", "baia", "promontorio", "orla")
+# O sol (ou a lua) não é camada: é o .ceu::before de inicio.css.
+CAMADAS = ("fundo", "baia", "promontorio", "orla")
+# Fase do céu antes da primeira pintura, logo depois do .ceu, para não piscar a fase "tarde" do servidor.
+# Mesma tabela de FASES em site_src/inicio.js (início inclusivo, fim exclusivo; conferida em
+# tests/test_inicio.py) e mesmo fallback UTC−3; hour12:!1 pode dar "24" à meia-noite, daí o %24.
+# Bloco com let: nada vaza para o escopo global. Até 300 bytes.
+SCRIPT_CEU = ('{let d=new Date,h;try{try{h=new Intl.DateTimeFormat("en",{timeZone:"America/Sao_Paulo",'
+              'hour:"numeric",hour12:!1}).format(d)%24}catch(e){}h>=0||(h=(d.getUTCHours()+21)%24);'
+              'document.querySelector(".ceu").dataset.ceu=h<6?"madrugada":h<12?"manha":h<17?"tarde":'
+              'h<19?"por-do-sol":"noite"}catch(e){}}')
 
 
 # ---------------------------------------------------------------- abertura
@@ -44,7 +53,7 @@ def hero(modelo: dict, url_estatica: Callable[[str], str]) -> str:
     """Abertura com a paisagem em camadas decorativas; proporção e cores ficam no CSS."""
     camadas = "".join(camada(nome, url_estatica) for nome in CAMADAS)
     return (f'<section class="hero" aria-labelledby="t-hero">'
-            f'<div class="ceu" data-ceu="tarde" aria-hidden="true">{camadas}</div>'
+            f'<div class="ceu" data-ceu="tarde" aria-hidden="true">{camadas}</div><script>{SCRIPT_CEU}</script>'
             f'<div class="hero-texto"><h1 id="t-hero">{P.esc(H1_INICIO)}</h1>'
             f'<p>{P.esc(texto_abertura(modelo))}</p>'
             f'<p class="atualizacao">Dados do SISCAM de {P.esc(atualizacao_txt(modelo))} · '
@@ -62,6 +71,26 @@ def membros_atuais(modelo: dict) -> list[dict]:
                   key=lambda p: (P._chave_nome(p["nome"]), p["nome"], p["slug"]))
 
 
+def resumo_lista(eleitos: int, suplentes: int) -> str:
+    """Rótulo do <details>: eleitos e suplentes em exercício, com singular e plural."""
+    def contagem(n: int, singular: str, plural: str) -> str:
+        return f"{n} {singular if n == 1 else plural}"
+
+    if not suplentes:
+        return "Ver o vereador eleito nesta legislatura" if eleitos == 1 else f"Ver os {eleitos} vereadores eleitos nesta legislatura"
+    total = eleitos + suplentes
+    return (f"Ver os {total} que exerceram mandato nesta legislatura "
+            f"({contagem(eleitos, 'eleito', 'eleitos')} e {contagem(suplentes, 'suplente', 'suplentes')})")
+
+
+# Campo do combobox já no HTML, para não deslocar o layout quando inicio.js o ativa; oculto sem JS (inicio.css).
+CAMPO_BUSCA = ('<div class="cb-campo"><label for="cb-vereadores" id="cb-vereadores-rotulo">Digite o nome do vereador</label>'
+               '<input id="cb-vereadores" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" '
+               'aria-controls="cb-vereadores-lista" autocomplete="off">'
+               '<ul role="listbox" id="cb-vereadores-lista" aria-labelledby="cb-vereadores-rotulo" hidden></ul>'
+               '<p class="so-leitor" aria-live="polite" id="cb-vereadores-status"></p></div>')
+
+
 def quem_e_meu_vereador(modelo: dict, prefixo: str = "") -> str:
     """Lista de todos os vereadores da legislatura atual; base do combobox de site_src (melhoria progressiva)."""
     pessoas = membros_atuais(modelo)
@@ -69,20 +98,22 @@ def quem_e_meu_vereador(modelo: dict, prefixo: str = "") -> str:
         return ""
     atual = modelo["legislaturas"][-1]["id"]
     itens = []
+    suplentes = 0
     for p in pessoas:
         mandato = p["mandatos"][atual] or {}
         partido = mandato.get("partido") or ""
         extra = f' <span class="partido">{P.esc(partido)}</span>' if partido else ""
         if mandato.get("eleito") is False:
+            suplentes += 1
             extra += ' <span class="status">suplente em exercício</span>'
         itens.append(f'<li><a href="{P.esc(prefixo)}vereadores/{P.esc(p["slug"])}.html">{P.esc(p["nome"])}</a>{extra}</li>')
-    n = len(pessoas)
-    resumo = "Ver o vereador da legislatura atual" if n == 1 else f"Ver os {n} vereadores da legislatura atual"
+    resumo = resumo_lista(len(pessoas) - suplentes, suplentes)
     return (f'<section class="quem-vereador" data-combobox aria-labelledby="t-quem">'
             f'<h2 id="t-quem" class="h-secao">Quem é meu vereador?</h2>'
             f'<p>Em Niterói, os vereadores são eleitos pelo voto de toda a cidade, sem divisão por bairro. '
             f'A página de cada um reúne projetos de lei, atividades, presença e votos na legislatura '
             f'{P.esc(atual)} e nas anteriores.</p>'
+            f'{CAMPO_BUSCA}'
             f'<details class="lista-vereadores"><summary>{P.esc(resumo)}</summary>'
             f'<ul id="lista-vereadores">{"".join(itens)}</ul></details></section>')
 
@@ -143,16 +174,19 @@ def linha_do_tempo(memoria: dict | None) -> str:
         return ""
     eventos = sorted(eventos, key=lambda e: (str(e["data"]), str(e.get("data_fim") or "")))
     itens = []
+    def tempo(valor: str) -> str:
+        return f'<time datetime="{P.esc(valor)}">{P.esc(data_memoria(valor))}</time>'
+
     for e in eventos:
-        quando = data_memoria(e["data"])
-        if e.get("data_fim"):
-            quando += "–" + data_memoria(e["data_fim"])
-        itens.append(f'<li><time datetime="{P.esc(e["data"])}">{P.esc(quando)}</time> '
+        # Intervalo com um <time> por ponta; o <span> mantém as datas juntas no cartão em coluna.
+        quando = tempo(e["data"]) + ("–" + tempo(e["data_fim"]) if e.get("data_fim") else "")
+        itens.append(f'<li><span class="quando">{quando}</span> '
                      f'<strong>{P.esc(e.get("titulo") or "")}</strong> '
                      f'<p>{P.esc(e.get("texto") or "")}</p>{fontes_evento(e.get("fontes"))}</li>')
     return (f'<section class="linha-tempo" aria-labelledby="t-linha">'
             f'<h2 id="t-linha" class="h-secao">Niterói no tempo</h2>'
-            f'<div class="tabela-rolavel linha-rolavel" role="region" tabindex="0" aria-labelledby="t-linha">'
+            f'<div class="tabela-rolavel linha-rolavel" role="region" tabindex="0" '
+            f'aria-label="Linha do tempo, role na horizontal">'
             f'<ol>{"".join(itens)}</ol></div></section>')
 
 
