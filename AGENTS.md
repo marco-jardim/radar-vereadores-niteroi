@@ -161,7 +161,7 @@ sem perfil). Chaves de `vereadores` são o nome exato do SISCAM em maiúsculas; 
 `eleicoes`, `camara`, `site` e `redes`. Por mandato: legislatura existente em `config/vereadores.json`, `partido`
 não vazio, `votos` inteiro positivo (opcional), `situacao` em `eleito`/`eleita`/`suplente` e `fontes` HTTPS.
 Quem está entre os eleitos da legislatura precisa do mesmo partido do config e não pode ser suplente; quem não
-está, só suplente. `eleicoes`, da mais recente para a mais antiga: `ano` 2000–2100, `cargo`, `partido` e
+está, só suplente. `eleicoes`, da mais recente para a mais antiga: `ano` 1945–2100, `cargo`, `partido` e
 `resultado` não vazios, `uf` com duas letras maiúsculas, `votos` inteiro ≥ 0 ou `null` e `fonte` HTTPS.
 `camara`/`site` são HTTPS ou `null`; `redes` usa `instagram`, `facebook`, `x`, `youtube`, `tiktok`, `threads`
 ou `linkedin`, com `url` e `fonte` HTTPS: página oficial da Câmara ou do vereador, ou o registro de candidatura

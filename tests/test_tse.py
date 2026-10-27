@@ -476,6 +476,25 @@ class TestExecucao(Base):
         self.assertIsNone(ana["eleicoes"][0]["votos"])
         self.assertNotIn("votos", ana["mandatos"]["2025-2028"])
 
+    def test_anos_fora_da_execucao_ficam_intactos(self):
+        tse_2008 = {"ano": 2008, "cargo": "Vereador", "uf": "RJ", "partido": "PT", "votos": 1234, "resultado": "Suplente",
+                    "fonte": {"titulo": "TSE — Dados abertos: candidatos 2008",
+                              "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"}}
+        # 2020 é pedido, mas o arquivo não está no cache: o ano não é processado
+        tse_2020 = {**tse_2008, "ano": 2020, "votos": 999, "fonte": {"titulo": "TSE — Dados abertos: candidatos 2020",
+                                                                      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"}}
+        wiki_1992 = {"ano": 1992, "cargo": "Vereador", "uf": "RJ", "partido": "PDT", "votos": None, "resultado": "Eleito",
+                     "fonte": {"titulo": "Wikipédia", "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%B5es_em_Niter%C3%B3i"}}
+        perfis = copy.deepcopy(PERFIS)
+        perfis["vereadores"]["ANA MARIA TESTE"]["eleicoes"] = [tse_2020, tse_2008, wiki_1992]
+        self.perfis.write_text(tse.texto_perfis(perfis), encoding="utf-8", newline="\n")
+        codigo, _, erros = self.rodar("--anos", "2020,2024")
+        self.assertEqual(codigo, 0, erros)
+        eleicoes = self.resultado()["vereadores"]["ANA MARIA TESTE"]["eleicoes"]
+        self.assertEqual([e["ano"] for e in eleicoes], [2024, 2020, 2008, 1992])
+        self.assertEqual(eleicoes[1:], [tse_2020, tse_2008, wiki_1992])
+        self.assertEqual(eleicoes[0]["fonte"]["url"], "https://dadosabertos.tse.jus.br/dataset/candidatos-2024")
+
     def test_passa_no_validador(self):
         from coletor import validar
         self.rodar()

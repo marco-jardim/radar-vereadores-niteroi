@@ -994,8 +994,8 @@ def _perfil_eleicoes(eleicoes: object, r: str) -> list[str]:
             problemas.append(f"{re_} deveria ser um objeto")
             continue
         ano = e.get("ano")
-        if not _e_inteiro(ano) or not 2000 <= ano <= 2100:
-            problemas.append(f"{re_}: 'ano' deveria ser inteiro entre 2000 e 2100")
+        if not _e_inteiro(ano) or not 1945 <= ano <= 2100:
+            problemas.append(f"{re_}: 'ano' deveria ser inteiro entre 1945 e 2100")
         else:
             anos.append(ano)
         problemas += _memoria_textos(e, ("cargo", "partido", "resultado"), re_)
