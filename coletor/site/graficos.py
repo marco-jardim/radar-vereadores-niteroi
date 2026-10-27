@@ -299,7 +299,10 @@ def linhas(titulo: str, subtitulo: str, rotulos_x: list[str], series: list[tuple
 
 def barras_horizontais(titulo: str, subtitulo: str, itens: list[dict], series: list[tuple[str, str, str]],
                        unidade: str = "", max_itens: int = 30) -> str:
-    """itens: [{'rotulo', 'link'?, 'nota'?, <chave>: valor, ...}]; series: [(nome, classe_cor, chave)] empilhadas."""
+    """itens: [{'rotulo', 'link'?, 'nota'?, 'partido'?, <chave>: valor, ...}]; series: [(nome, classe_cor, chave)] empilhadas.
+
+    O partido não entra no rótulo do SVG (curto, sem espaço); vai no tooltip e na tabela alternativa.
+    """
     itens = itens[:max_itens]
     m_esq, m_dir, linha_h, barra_h = 170, 56, 26, 14
     altura = linha_h * len(itens) + 8
@@ -320,7 +323,7 @@ def barras_horizontais(titulo: str, subtitulo: str, itens: list[dict], series: l
             if val <= 0:
                 continue
             w = w_plot * val / topo - (2 if ativos[-1][2] != k else 0)
-            tip = f"{it['rotulo']} · {nome}: {_fmt(val)}{unidade}"
+            tip = f"{com_partido(it)} · {nome}: {_fmt(val)}{unidade}"
             if ativos[-1][2] == k:
                 partes.append(f'<path class="marca {cor}" d="{_ponta_direita(x0, yy, max(w, 1), barra_h)}" data-tip="{esc(tip)}"/>')
             else:
@@ -329,12 +332,20 @@ def barras_horizontais(titulo: str, subtitulo: str, itens: list[dict], series: l
         partes.append(f'<text class="valor" x="{x0 + 6:.1f}" y="{yy + barra_h - 2}">{_fmt(totais[i])}{esc(unidade)}{esc(it.get("nota", ""))}</text>')
     partes.append("</svg>")
     tab = tabela(["", *[n for n, _, _ in series]] + (["Total"] if len(series) > 1 else []),
-                 [[it["rotulo"], *[it.get(k) or 0 for _, _, k in series]] + ([totais[i]] if len(series) > 1 else []) for i, it in enumerate(itens)], titulo)
+                 [[com_partido(it), *[it.get(k) or 0 for _, _, k in series]] + ([totais[i]] if len(series) > 1 else []) for i, it in enumerate(itens)], titulo)
     return figura(titulo, subtitulo, "".join(partes), legenda([(n, c) for n, c, _ in series]), tab, titulo)
 
 
+def com_partido(item: dict) -> str:
+    """Rótulo com o partido entre parênteses, para tooltips, aria-label e tabelas dos gráficos (texto puro)."""
+    return f"{item['rotulo']} ({item['partido']})" if item.get("partido") else item["rotulo"]
+
+
 def dispersao(titulo: str, subtitulo: str, pontos: list[dict], rot_x: str, rot_y: str, rotular: int = 8, altura: int = 340) -> str:
-    """pontos: [{'x', 'y', 'rotulo', 'cor', 'link'?}]. Rotula só os `rotular` pontos mais distantes da origem."""
+    """pontos: [{'x', 'y', 'rotulo', 'cor', 'link'?, 'partido'?}]. Rotula só os `rotular` pontos mais distantes da origem.
+
+    O partido vai no tooltip, no aria-label do link e na tabela, não no rótulo curto do SVG.
+    """
     m_esq, m_dir, m_top, m_base = 44, 20, 14, 40
     w_plot, h_plot = LARGURA - m_esq - m_dir, altura - m_top - m_base
     px_, py_ = _passo(max([p["x"] for p in pontos] + [1])), _passo(max([p["y"] for p in pontos] + [1]))
@@ -357,8 +368,8 @@ def dispersao(titulo: str, subtitulo: str, pontos: list[dict], rot_x: str, rot_y
     rotulos = []
     for p in pontos:
         cx, cy = X(p["x"]), Y(p["y"])
-        circ = f'<circle class="ponto {p.get("cor", "c-efeito")}" cx="{cx:.1f}" cy="{cy:.1f}" r="5" data-tip="{esc(p["rotulo"])}: {_fmt(p["x"])} projetos, {_fmt(p["y"])} leis com efeito"/>'
-        partes.append(f'<a href="{esc(p["link"])}" aria-label="{esc(p["rotulo"])}: {_fmt(p["x"])} projetos, {_fmt(p["y"])} leis com efeito">{circ}</a>' if p.get("link") else circ)
+        circ = f'<circle class="ponto {p.get("cor", "c-efeito")}" cx="{cx:.1f}" cy="{cy:.1f}" r="5" data-tip="{esc(com_partido(p))}: {_fmt(p["x"])} projetos, {_fmt(p["y"])} leis com efeito"/>'
+        partes.append(f'<a href="{esc(p["link"])}" aria-label="{esc(com_partido(p))}: {_fmt(p["x"])} projetos, {_fmt(p["y"])} leis com efeito">{circ}</a>' if p.get("link") else circ)
         if id(p) in destaque:
             rotulos.append([cy - 8, cx, p["rotulo"]])
     colocados = []  # evita colisão em 2D: largura estimada pelo número de caracteres
@@ -378,5 +389,5 @@ def dispersao(titulo: str, subtitulo: str, pontos: list[dict], rot_x: str, rot_y
         anchor = "end" if lx > LARGURA - 120 else "start"
         partes.append(f'<text class="rotulo-ponto" x="{lx + (-8 if anchor == "end" else 8):.1f}" y="{ly + 4:.1f}" text-anchor="{anchor}">{esc(r)}</text>')
     partes.append(f'<line class="base" x1="{m_esq}" x2="{LARGURA - m_dir}" y1="{Y(0):.1f}" y2="{Y(0):.1f}"/></svg>')
-    tab = tabela(["Vereador", rot_x, rot_y], [[p["rotulo"], p["x"], p["y"]] for p in sorted(pontos, key=lambda p: -p["y"])], titulo)
+    tab = tabela(["Vereador", rot_x, rot_y], [[com_partido(p), p["x"], p["y"]] for p in sorted(pontos, key=lambda p: -p["y"])], titulo)
     return figura(titulo, subtitulo, "".join(partes), "", tab, titulo)

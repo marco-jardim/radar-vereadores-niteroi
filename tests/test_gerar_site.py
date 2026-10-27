@@ -7,6 +7,7 @@ from __future__ import annotations
 import contextlib
 import io
 import json
+import re
 import sys
 import tempfile
 import unittest
@@ -277,6 +278,41 @@ class TestGerarSite(unittest.TestCase):
                         self.assertEqual(link.get("rel"), "noopener")
                     elif not href.startswith(("https://", "http://")):
                         self.assertNotIn("target", link)
+
+    def test_partido_ao_lado_dos_nomes_em_todas_as_paginas(self):
+        """Todo link com nome de vereador traz o partido dentro do link (ou logo depois, na lista da home).
+
+        Ficam de fora os links dos gráficos SVG (o partido vai no tooltip, no aria-label e na tabela). Só falha
+        para quem tem partido conhecido em todas as legislaturas: nesses casos, nenhum contexto justifica a falta.
+        """
+        from coletor.site.modelo import partido_em
+
+        modelo = gerar_site.montar_modelo()
+        legs = [l["id"] for l in modelo["legislaturas"]]
+        sempre = {s for s in modelo["pessoas"] if all(partido_em(modelo, s, l) for l in legs)}
+        padrao = re.compile(r'<a\s(?P<antes>[^>]*?)href="[^"]*?vereadores/(?P<slug>[a-z0-9-]+)\.html"(?P<depois>[^>]*)>'
+                            r'(?P<conteudo>.*?)</a>(?P<seguinte> <span class="partido">)?', re.S)
+        com_partido = 0
+        for caminho in self.saida.rglob("*.html"):
+            html = caminho.read_text(encoding="utf-8")
+            for m in padrao.finditer(html):
+                conteudo = m["conteudo"]
+                if "aria-label=" in m["antes"] + m["depois"] or conteudo.lstrip().startswith(("<text", "<circle")):
+                    continue  # gráficos SVG
+                if 'class="partido"' in conteudo or m["seguinte"]:
+                    com_partido += 1
+                    continue
+                with self.subTest(pagina=str(caminho.relative_to(self.saida)), vereador=m["slug"]):
+                    self.assertNotIn(m["slug"], sempre, conteudo[:120])
+        self.assertGreater(com_partido, 0)
+
+    def test_ficha_com_perfil_e_partido_no_titulo(self):
+        ficha = (self.saida / "vereadores" / "daniel-marques-frederico.html").read_text(encoding="utf-8")
+        self.assertIn('<h1>Daniel Marques<span class="partido">PL</span></h1>', ficha)
+        self.assertIn('<section class="perfil" aria-labelledby="t-perfil">', ficha)
+        self.assertIn("<dt>Mandato 2025-2028</dt><dd>eleito pelo PL com 6.750 votos</dd>", ficha)
+        self.assertIn("<dt>Mandato 2021-2024</dt><dd>eleito pelo DEM com 2.411 votos</dd>", ficha)
+        self.assertLess(ficha.index("Mandato 2025-2028"), ficha.index("Mandato 2021-2024"))
 
     def test_manifesto_e_documentos(self):
         manifesto = json.loads((self.saida / "dados" / "manifest.json").read_text(encoding="utf-8"))

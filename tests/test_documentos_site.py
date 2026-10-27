@@ -115,7 +115,8 @@ def hidratar(dic: dict, fatia: dict) -> list[dict]:
         saida.append({
             "id": id_, "tipo": dic["tipos"][c["tp"][j]][0], "numero": c["n"][j], "ano": c["a"][j], "data": c["d"][j],
             "ementa": c["e"][j], "situacao": situacoes[c["st"][j]], "assunto": c["as"][j],
-            "autores": [[pessoas[i][1], pessoas[i][0], 1 if pessoas[i][2] else 0] for i in c["au"][j]],
+            "autores": [[pessoas[i][1], pessoas[i][0], 1 if pessoas[i][2] else 0, pessoas[i][3] if len(pessoas[i]) > 3 else ""]
+                        for i in c["au"][j]],
             "categoria": dic["categorias"][c["c"][j]][0], "subcategoria": dic["subcategorias"][c["sc"][j]][1],
             "homenagem": c["h"][j] == 1, "respondido": c["rs"][j] == 1, "respondido_em": c["re"][j],
             "dias_ate_resposta": c["dr"][j], "publicado": c["pu"][j] == 1,
@@ -130,7 +131,7 @@ def esperado(d: dict) -> dict:
     return {
         "id": d["id"], "tipo": d["tipo"], "numero": d["numero"], "ano": d["ano"], "data": d["data"], "ementa": d["ementa"],
         "situacao": d["situacao"], "assunto": d["assunto"],
-        "autores": [[a["exibicao"], a["slug"], int(a["pagina"])] for a in d["autores"]],
+        "autores": [[a["exibicao"], a["slug"], int(a["pagina"]), a.get("partido") or ""] for a in d["autores"]],
         "categoria": d["categoria"], "subcategoria": d["subcategoria"], "homenagem": d["homenagem"],
         "respondido": d["respondido"], "respondido_em": d["respondido_em"], "dias_ate_resposta": d["dias_ate_resposta"],
         "publicado": d["publicado"], "publicacao": d["publicacao"], "bairro": d["bairro"],
@@ -280,7 +281,8 @@ class TestExportacaoDocumentos(unittest.TestCase):
             with self.subTest(nome=nome):
                 self.assertEqual(fatia["pessoas"], sorted(fatia["pessoas"]))
                 self.assertEqual(fatia["situacoes"], sorted(fatia["situacoes"]))
-                self.assertTrue(all(len(p) == 3 for p in fatia["pessoas"]), "sem mapas de partido por pessoa")
+                # Sem mapas de partido por pessoa: no máximo a sigla na legislatura do documento, como quarto campo.
+                self.assertTrue(all(len(p) == 3 or (len(p) == 4 and isinstance(p[3], str) and p[3]) for p in fatia["pessoas"]))
                 usados = {i for au in fatia["colunas"]["au"] for i in au}
                 self.assertEqual(usados, set(range(len(fatia["pessoas"]))), "dicionário local só com quem aparece na parte")
 
@@ -376,7 +378,8 @@ class TestExportacaoDocumentos(unittest.TestCase):
         self.assertTrue(any(e["tipo"] == "indicacao" for n, e in self.partes("ver") if e["slug"] == "ana-maria-teste"),
                         "acima do orçamento, ver/<slug> se divide por tipo")
         nome = next(n for n, e in self.partes("ver") if e["slug"] == "ana-maria-teste")
-        self.assertIn(["ana-maria-teste", "Ana Teste", 1], self.ler(nome)["pessoas"])
+        # Quarto campo: o partido na legislatura dos documentos (PX, eleição de 2024).
+        self.assertIn(["ana-maria-teste", "Ana Teste", 1, "PX"], self.ler(nome)["pessoas"])
 
     def test_saida_deterministica(self):
         self.assertEqual(self.manifestos[0], self.manifestos[1])

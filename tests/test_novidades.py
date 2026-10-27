@@ -386,7 +386,9 @@ class TestRssEPagina(unittest.TestCase):
         self.assertNotIn("<script>alert(1)", html)
         self.assertIn("&lt;script&gt;alert(1)&lt;/script&gt; &amp;", html)
         self.assertIn(f'<a href="{URL.format(10)}" target="_blank" rel="noopener">PL 10/2026', html)
-        self.assertIn('<a class="chip chip-principal" href="vereadores/ana-teste.html">Ana Teste</a>', html)
+        # O partido do autor principal fica dentro do chip, logo depois do nome (não mais solto após os autores).
+        self.assertIn('<a class="chip chip-principal" href="vereadores/ana-teste.html">Ana Teste<span class="partido">PX</span></a>', html)
+        self.assertNotIn('</a><span class="partido">', html)
         self.assertIn(f'href="{URL.format(266596)}" target="_blank" rel="noopener">substitutivo no SISCAM', html)
         self.assertIn('<time datetime="2026-10-19">19/10/2026</time>', html)
         # Semanas da mais recente para a mais antiga, com a contagem por tipo.

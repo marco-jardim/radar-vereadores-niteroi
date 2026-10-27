@@ -6,7 +6,8 @@ data/documentos/<tipo>/<ano>.json e de data/sessoes/<ano>.json (inclusive o form
 byte a byte gravado por coletor.arquivos; as duas pastas são opcionais), da geometria
 opcional (data/geo/bairros.json), do cache da IA (data/classificacao_ia.json), de
 data/meta.json e dos arquivos
-config/curadoria.json, config/vereadores.json e config/memoria.json (opcional), e acusa temporários de gravação
+config/curadoria.json, config/vereadores.json, config/memoria.json e config/perfis.json (opcionais os dois
+últimos), e acusa temporários de gravação
 interrompida em data/. Cada verificação é uma função que recebe os dados já
 carregados e devolve a lista de problemas encontrados (vazia quando está tudo certo).
 
@@ -970,6 +971,154 @@ def validar_memoria(caminho: Path | None = None, hoje: date | None = None) -> li
 
 
 # ------------------------------------------------------------------------ execução
+# ---- perfis
+REDES_PERFIL = ("instagram", "facebook", "x", "youtube", "tiktok", "threads", "linkedin")
+SITUACOES_PERFIL = ("eleito", "eleita", "suplente")
+CAMPOS_PERFIL = {"mandatos", "eleicoes", "camara", "site", "redes"}
+URL_HTTPS = r"https://[^\s/]+\.[^\s/]+(/\S*)?"
+
+
+def _https(valor: object) -> bool:
+    return isinstance(valor, str) and re.fullmatch(URL_HTTPS, valor) is not None
+
+
+def _perfil_eleicoes(eleicoes: object, r: str) -> list[str]:
+    """Outras eleições (dados do TSE), da mais recente para a mais antiga."""
+    if not isinstance(eleicoes, list):
+        return [f"{r}: 'eleicoes' deveria ser uma lista"]
+    problemas = []
+    anos = []
+    for i, e in enumerate(eleicoes, 1):
+        re_ = f"{r}: eleição {i}"
+        if not isinstance(e, dict):
+            problemas.append(f"{re_} deveria ser um objeto")
+            continue
+        ano = e.get("ano")
+        if not _e_inteiro(ano) or not 2000 <= ano <= 2100:
+            problemas.append(f"{re_}: 'ano' deveria ser inteiro entre 2000 e 2100")
+        else:
+            anos.append(ano)
+        problemas += _memoria_textos(e, ("cargo", "partido", "resultado"), re_)
+        if not isinstance(e.get("uf"), str) or not re.fullmatch(r"[A-Z]{2}", e["uf"]):
+            problemas.append(f"{re_}: 'uf' deveria ter duas letras maiúsculas")
+        votos = e.get("votos")
+        if votos is not None and (not _e_inteiro(votos) or votos < 0):
+            problemas.append(f"{re_}: 'votos' deveria ser inteiro ≥ 0 ou null")
+        fonte = e.get("fonte")
+        if not isinstance(fonte, dict):
+            problemas.append(f"{re_}: 'fonte' deveria ser um objeto com título e URL HTTPS")
+        else:
+            problemas += _memoria_fontes([fonte], re_)
+    if anos != sorted(anos, reverse=True):
+        problemas.append(f"{r}: 'eleicoes' deveria estar da mais recente para a mais antiga")
+    return problemas
+
+
+def validar_perfis(caminho: Path | None = None, cfg: object = None) -> list[str]:
+    """Confere config/perfis.json: nomes, legislaturas, partidos, votos, situação, fontes, links e formato, sem rede.
+
+    Com cfg (config/vereadores.json), o partido de quem foi eleito na legislatura deve ser o mesmo do config,
+    e a situação, eleito/eleita; quem não está entre os eleitos só pode ser suplente.
+    """
+    caminho = caminho or RAIZ / "config" / "perfis.json"
+    arquivo = "config/perfis.json"
+    try:
+        bruto = caminho.read_bytes()
+    except FileNotFoundError:
+        aviso = f"{arquivo}: arquivo ausente; fichas sem perfil e suplentes sem partido"
+        print(f"::warning::{_anotacao(aviso)}" if os.environ.get("GITHUB_ACTIONS") else f"aviso: {aviso}", file=sys.stderr)
+        return []
+    except OSError as e:
+        return [f"{arquivo}: não foi possível ler o arquivo ({e})"]
+    try:
+        dados = json.loads(bruto.decode("utf-8"))
+    except ValueError as e:  # inclui UnicodeDecodeError
+        return [f"{arquivo}: não foi possível ler o JSON ({e})"]
+    problemas = _memoria_nfc(dados, arquivo)
+    try:
+        canonico = (json.dumps(dados, ensure_ascii=False, indent=1) + "\n").encode("utf-8")
+    except UnicodeEncodeError:
+        problemas.append(f"{arquivo}: texto não representável em UTF-8")
+    else:
+        if bruto != canonico:
+            problemas.append(f"{arquivo}: fora do formato esperado (UTF-8, indentação de 1 espaço, "
+                             "ordem das chaves preservada, quebras LF e quebra final)")
+    if not isinstance(dados, dict):
+        return problemas + [f"{arquivo}: o conteúdo deveria ser um objeto"]
+    if dados.get("fonte_padrao") is not None:
+        problemas += _memoria_fontes([dados["fonte_padrao"]], f"{arquivo}: fonte_padrao")
+    vereadores = dados.get("vereadores")
+    if not isinstance(vereadores, dict):
+        return problemas + [f"{arquivo}: 'vereadores' deveria ser um objeto"]
+
+    legs: dict[str, dict[str, str]] | None = None
+    if isinstance(cfg, dict) and isinstance(cfg.get("legislaturas"), list):
+        legs = {}
+        for leg in cfg["legislaturas"]:
+            if isinstance(leg, dict) and isinstance(leg.get("id"), str):
+                legs[leg["id"]] = {str(e.get("siscam", "")).upper(): str(e.get("partido", ""))
+                                   for e in leg.get("eleitos") or [] if isinstance(e, dict)}
+    for nome, perfil in vereadores.items():
+        r = f"{arquivo}: {nome}"
+        if not nome or nome != nome.upper() or nome != " ".join(nome.split()):
+            problemas.append(f"{r}: a chave deveria ser o nome exato do SISCAM, em maiúsculas e sem espaços extras")
+        if not isinstance(perfil, dict):
+            problemas.append(f"{r}: o perfil deveria ser um objeto")
+            continue
+        extras = set(perfil) - CAMPOS_PERFIL
+        if extras:
+            problemas.append(f"{r}: campos desconhecidos: {', '.join(sorted(extras))}")
+        mandatos = perfil.get("mandatos")
+        if not isinstance(mandatos, dict):
+            problemas.append(f"{r}: 'mandatos' deveria ser um objeto por legislatura")
+            mandatos = {}
+        for leg_id, m in mandatos.items():
+            rm = f"{r}: mandato {leg_id}"
+            if legs is not None and leg_id not in legs:
+                problemas.append(f"{rm}: legislatura inexistente em config/vereadores.json")
+            if not isinstance(m, dict):
+                problemas.append(f"{rm} deveria ser um objeto")
+                continue
+            partido = m.get("partido")
+            if not _memoria_texto(partido):
+                problemas.append(f"{rm}: 'partido' deveria ser texto não vazio")
+            if "votos" in m and (not _e_inteiro(m["votos"]) or m["votos"] <= 0):
+                problemas.append(f"{rm}: 'votos' deveria ser inteiro positivo (ou ficar de fora)")
+            situacao = m.get("situacao")
+            if situacao not in SITUACOES_PERFIL:
+                problemas.append(f"{rm}: 'situacao' deveria ser {', '.join(SITUACOES_PERFIL)}")
+            problemas += _memoria_fontes(m.get("fontes"), rm)
+            if legs is not None and leg_id in legs:
+                eleito = legs[leg_id].get(nome.upper())
+                if eleito is not None:
+                    if partido != eleito:
+                        problemas.append(f"{rm}: partido {partido!r} difere do partido da eleição em config/vereadores.json ({eleito!r})")
+                    if situacao == "suplente":
+                        problemas.append(f"{rm}: está entre os eleitos em config/vereadores.json; situação deveria ser eleito ou eleita")
+                elif situacao in ("eleito", "eleita"):
+                    problemas.append(f"{rm}: não está entre os eleitos em config/vereadores.json; situação deveria ser suplente")
+        problemas += _perfil_eleicoes(perfil.get("eleicoes", []), r)
+        for chave in ("camara", "site"):
+            if perfil.get(chave) is not None and not _https(perfil[chave]):
+                problemas.append(f"{r}: '{chave}' deveria ser URL HTTPS com host ou null")
+        redes = perfil.get("redes", [])
+        if not isinstance(redes, list):
+            problemas.append(f"{r}: 'redes' deveria ser uma lista")
+            redes = []
+        for i, rede in enumerate(redes, 1):
+            rr = f"{r}: rede {i}"
+            if not isinstance(rede, dict):
+                problemas.append(f"{rr} deveria ser um objeto")
+                continue
+            if rede.get("rede") not in REDES_PERFIL:
+                problemas.append(f"{rr}: 'rede' deveria ser {', '.join(REDES_PERFIL)}")
+            if not _https(rede.get("url")):
+                problemas.append(f"{rr}: 'url' deveria ser HTTPS com host")
+            if not _https(rede.get("fonte")):
+                problemas.append(f"{rr}: 'fonte' (página oficial que declara a rede) deveria ser HTTPS com host")
+    return problemas
+
+
 def _ler_json(arq: Path, rotulo: str) -> tuple[object, list[str]]:
     try:
         return json.loads(arq.read_text(encoding="utf-8")), []
@@ -1030,6 +1179,7 @@ def validar_tudo(raiz: Path | None = None) -> list[str]:
     cfg, erros = _ler_json(raiz / "config" / "vereadores.json", "config/vereadores.json")
     problemas += erros or validar_vereadores(cfg)
     problemas += validar_memoria(raiz / "config" / "memoria.json")
+    problemas += validar_perfis(raiz / "config" / "perfis.json", cfg if not erros else None)
     return problemas
 
 

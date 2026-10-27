@@ -511,6 +511,10 @@ class TestExecucao(Afirmacoes):
             (json.dumps({"criterios": "Critérios de memória", "homenageados": [], "linha_do_tempo": []},
                         ensure_ascii=False, indent=1) + "\n").encode("utf-8")
         )
+        # Perfis mínimos no formato canônico: sem o arquivo, o validador só avisaria (stderr não ficaria vazio).
+        (raiz / "config" / "perfis.json").write_bytes(
+            (json.dumps({"vereadores": {}}, ensure_ascii=False, indent=1) + "\n").encode("utf-8")
+        )
         return raiz
 
     def rodar_main(self, raiz: Path, ambiente: dict) -> tuple[int, str, str]:

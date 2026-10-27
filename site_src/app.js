@@ -243,20 +243,25 @@
     return '<span class="selo imp-' + k + '">' + (NOME_IMP[k] || "Não avaliado") + "</span>";
   }
   // Espelho de lista_coautores (paginas.py): resumo clicável com todos os nomes, dentro de um <div>, nunca de um <p>.
-  function listaCoautores(resumo, nomes) {
+  // Espelho de partido_html (paginas.py): a sigla logo depois do nome, vazia quando o partido não é conhecido.
+  function ptHtml(pt) { return pt ? '<span class="partido">' + esc(pt) + "</span>" : ""; }
+  // Partido de um vereador na legislatura, pelo mapa {legislatura: partido} de dic-pl.pessoas.
+  function ptPl(slug, leg) { var m = slug && DADOS && DADOS.partidos && DADOS.partidos[slug]; return (m && leg && m[leg]) || ""; }
+  // Espelho de lista_coautores (paginas.py): resumo clicável com todos os nomes, dentro de um <div>, nunca de um <p>.
+  function listaCoautores(resumo, nomes, partidos) {
     return '<details class="coautores"><summary>' + esc(resumo) + "</summary><ul>" +
-      nomes.map(function (nome) { return "<li>" + esc(nome) + "</li>"; }).join("") + "</ul></details>";
+      nomes.map(function (nome, i) { return "<li>" + esc(nome) + ptHtml(partidos && partidos[i]) + "</li>"; }).join("") + "</ul></details>";
   }
   function autores(p) {
     var princ = p.au.filter(function (a) { return a[1] && a[1] === p.pr; });
     if (!princ.length) princ = p.au.slice(0, 1);
     var html = princ.map(function (a) {
-      return a[1] ? '<a class="chip chip-principal" href="' + prefixo + "vereadores/" + esc(a[1]) + '.html">' + esc(a[0]) + "</a>"
+      return a[1] ? '<a class="chip chip-principal" href="' + prefixo + "vereadores/" + esc(a[1]) + '.html">' + esc(a[0]) + ptHtml(a[1] === p.pr ? p.pt : ptPl(a[1], p.lg)) + "</a>"
         : '<span class="chip chip-exec">' + esc(a[0]) + "</span>";
     }).join("");
     var outros = p.au.filter(function (a) { return princ.indexOf(a) < 0; }), n = outros.length;
-    if (n > 0) html += listaCoautores("e " + n + (n === 1 ? " coautor" : " coautores"), outros.map(function (a) { return a[0]; }));
-    if (p.pt) html += '<span class="partido">' + esc(p.pt) + "</span>";
+    if (n > 0) html += listaCoautores("e " + n + (n === 1 ? " coautor" : " coautores"), outros.map(function (a) { return a[0]; }),
+      outros.map(function (a) { return ptPl(a[1], p.lg); }));
     return html;
   }
   function tags(p) {
@@ -383,14 +388,16 @@
     var cont = {};
     lista.forEach(function (p) {
       if (!p.pr) return;
-      var k = p.pr; cont[k] = cont[k] || { n: 0, ef: 0 }; cont[k].n += 1; cont[k].ef += p.ef;
+      var k = p.pr; cont[k] = cont[k] || { n: 0, ef: 0, lg: "", pt: "" }; cont[k].n += 1; cont[k].ef += p.ef;
+      // O recorte pode cruzar legislaturas: vale o partido da mais recente entre os projetos contados.
+      if (p.pt && (p.lg || "") >= cont[k].lg) { cont[k].lg = p.lg || ""; cont[k].pt = p.pt; }
     });
     var top = Object.keys(cont).sort(function (a, b) { return cont[b].ef - cont[a].ef || cont[b].n - cont[a].n; }).slice(0, 8);
     if (!top.length) return "";
     var max = cont[top[0]].n || 1;
     return '<div class="quem-mais"><h2 class="h-pequeno">Quem mais aparece neste recorte</h2><ol>' + top.map(function (k) {
       var c = cont[k];
-      return '<li><a href="' + prefixo + "vereadores/" + esc(k) + '.html">' + esc(DADOS.pessoas[k] || k) + '</a><span class="mini-barra"><i class="c-efeito" style="width:' + (100 * c.ef / max) + '%"></i><i class="c-sem-efeito" style="width:' + (100 * (c.n - c.ef) / max) + '%"></i></span><span class="mini-n">' +
+      return '<li><a href="' + prefixo + "vereadores/" + esc(k) + '.html">' + esc(DADOS.pessoas[k] || k) + ptHtml(c.pt) + '</a><span class="mini-barra"><i class="c-efeito" style="width:' + (100 * c.ef / max) + '%"></i><i class="c-sem-efeito" style="width:' + (100 * (c.n - c.ef) / max) + '%"></i></span><span class="mini-n">' +
         c.ef + " com efeito · " + c.n + " no total</span></li>";
     }).join("") + '</ol><p class="mini-leg"><i class="sw c-efeito"></i>com efeito <i class="sw c-sem-efeito"></i>demais</p></div>';
   }
@@ -573,8 +580,8 @@
   if (document.querySelector("form.filtros-sessoes")) return;
 
   function prepararDados(pacote, nomes) {
-    var dic = pacote.arquivos[0], linhas = [], dados = { pessoas: {}, temas: {}, sinais: {} };
-    dic.pessoas.forEach(function (p) { if (p[0]) dados.pessoas[p[0]] = p[1]; });
+    var dic = pacote.arquivos[0], linhas = [], dados = { pessoas: {}, partidos: {}, temas: {}, sinais: {} };
+    dic.pessoas.forEach(function (p) { if (p[0]) { dados.pessoas[p[0]] = p[1]; dados.partidos[p[0]] = p[2] || {}; } });
     dic.temas.forEach(function (p) { dados.temas[p[0]] = p[1]; });
     dic.sinais.forEach(function (p) { dados.sinais[p[0]] = p[1]; });
     dados.legislaturas = dic.legislaturas;
@@ -831,13 +838,15 @@
       return meta;
     }
     function autoresD(d) {
+      // a[3]: partido na legislatura do documento (só vereadores com partido conhecido); espelho de autores_documento_html.
       var html = d.autores.slice(0, 3).map(function (a) {
-        if (a[1] && a[2]) return '<a class="chip" href="' + prefixo + "vereadores/" + esc(a[1]) + '.html">' + esc(a[0]) + "</a>";
-        return '<span class="chip' + (a[1] ? "" : " chip-exec") + '">' + esc(a[0]) + "</span>";
+        if (a[1] && a[2]) return '<a class="chip" href="' + prefixo + "vereadores/" + esc(a[1]) + '.html">' + esc(a[0]) + ptHtml(a[3]) + "</a>";
+        return '<span class="chip' + (a[1] ? "" : " chip-exec") + '">' + esc(a[0]) + (a[1] ? ptHtml(a[3]) : "") + "</span>";
       }).join("");
       var resto = d.autores.slice(3);
       if (resto.length) {
-        html += listaCoautores("e mais " + resto.length + (resto.length === 1 ? " autor" : " autores"), resto.map(function (a) { return a[0]; }));
+        html += listaCoautores("e mais " + resto.length + (resto.length === 1 ? " autor" : " autores"), resto.map(function (a) { return a[0]; }),
+          resto.map(function (a) { return a[1] ? a[3] : ""; }));
       }
       return html;
     }

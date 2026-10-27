@@ -1,0 +1,846 @@
+{
+ "_leia_me": "Perfil público de cada vereador: votação e partido por eleição, links oficiais. Toda informação tem fonte pública HTTPS; links de redes só quando declarados em página oficial. Mesmos campos para todos.",
+ "fonte_padrao": {
+  "titulo": "Lista de vereadores de Niterói — Wikipédia",
+  "url": "https://pt.wikipedia.org/wiki/Lista_de_vereadores_de_Niter%C3%B3i"
+ },
+ "vereadores": {
+  "ADRIANO DOS SANTOS OLIVEIRA": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PDT",
+     "votos": 1764,
+     "situacao": "suplente",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "ALLAN PINHO LYRA": {
+   "mandatos": {
+    "2025-2028": {
+     "partido": "PL",
+     "votos": 4413,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "ANDERSON JOSÉ RODRIGUES - PIPICO": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PT",
+     "votos": 3066,
+     "situacao": "suplente",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "PT",
+     "votos": 5488,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "BENNY BRIOLLY": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PSOL",
+     "votos": 4367,
+     "situacao": "eleita",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "PSOL",
+     "votos": 4801,
+     "situacao": "eleita",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "CARLOS OTÁVIO DIAS VAZ - CASOTA": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PSDB",
+     "votos": 1512,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "DADO FOLY": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "Cidadania",
+     "votos": 1055,
+     "situacao": "suplente",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "DANIEL MARQUES FREDERICO": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "DEM",
+     "votos": 2411,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "PL",
+     "votos": 6750,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "DOUGLAS DE SOUZA GOMES": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PTC",
+     "votos": 2416,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "PL",
+     "votos": 16369,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "EMANUEL JORGE ROCHA": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "Solidariedade",
+     "votos": 2959,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "FABIANO GONÇALVES": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "Cidadania",
+     "votos": 3464,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "Republicanos",
+     "votos": 3478,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "FERNANDA ANCHIETA LOUBACK": {
+   "mandatos": {
+    "2025-2028": {
+     "partido": "PL",
+     "votos": 3503,
+     "situacao": "eleita",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "GABRIEL AMOÊDO GUIMARÃES VELASCO": {
+   "mandatos": {
+    "2025-2028": {
+     "partido": "PSD",
+     "votos": 4258,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "JHONATAN COSTA DOS ANJOS": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PDT",
+     "situacao": "suplente",
+     "fontes": [
+      {
+       "titulo": "Lista de vereadores de Niterói — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Lista_de_vereadores_de_Niter%C3%B3i"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "JORGE ANDRIGO DIAS DE CARVALHO": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PDT",
+     "votos": 4783,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "PDT",
+     "votos": 5546,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "JOSÉ ADRIANO VALLE DA COSTA - FOLHA": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PSD",
+     "votos": 1362,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "JOSÉ ANTONIO TORO FERNANDEZ": {
+   "mandatos": {
+    "2025-2028": {
+     "partido": "União Brasil",
+     "votos": 3910,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "LEANDRO PORTUGAL FRANZEN DE LIMA": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PV",
+     "votos": 3838,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "MDB",
+     "votos": 4516,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "LEONARDO SOARES GIORDANO": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PCdoB",
+     "votos": 2676,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "PCdoB",
+     "votos": 4395,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "LUIS ROBERTO NOGUEIRA SAAD": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PV",
+     "votos": 1660,
+     "situacao": "suplente",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "LUIZ CARLOS GALLO DE FREITAS": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "Cidadania",
+     "votos": 3597,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "Cidadania",
+     "votos": 4612,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "MICHEL SALIM SAAD NETO": {
+   "mandatos": {
+    "2025-2028": {
+     "partido": "Podemos",
+     "votos": 2772,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "MILTON CARLOS DA SILVA LOPES": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PP",
+     "votos": 4320,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "União Brasil",
+     "votos": 5861,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "PAULO EDUARDO GOMES": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PSOL",
+     "votos": 3978,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "PAULO FERNANDO GONÇALVES VELASCO": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "Avante",
+     "votos": 4378,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "RENATO FERREIRA DE OLIVEIRA CARIELLO": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PDT",
+     "votos": 4458,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "PDT",
+     "votos": 5444,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "ROBERTO FERNANDES JALES": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PL",
+     "votos": 3532,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "MDB",
+     "votos": 3828,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "ROBSON GUIMARÃES JOSÉ FILHO": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PDT",
+     "votos": 2999,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "PDT",
+     "votos": 5884,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "RODRIGO FLACH FARAH": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "MDB",
+     "votos": 2632,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "Cidadania",
+     "votos": 4682,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "SYLVIO MAURÍCIO DE FREITAS": {
+   "mandatos": {
+    "2025-2028": {
+     "partido": "PT",
+     "votos": 4045,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "TULIO RABELO DE ALBUQUERQUE MOTA": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PSOL",
+     "votos": 4534,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    },
+    "2025-2028": {
+     "partido": "PSOL",
+     "votos": 6789,
+     "situacao": "eleito",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2024 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2024"
+      },
+      {
+       "titulo": "Vereadores eleitos em Niterói (RJ) — Redutto",
+       "url": "https://redutto.com.br/eleicoes/niteroi-rj/vereadores-eleitos/"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  },
+  "VERÔNICA DOS SANTOS LIMA": {
+   "mandatos": {
+    "2021-2024": {
+     "partido": "PT",
+     "votos": 4220,
+     "situacao": "eleita",
+     "fontes": [
+      {
+       "titulo": "Eleição municipal de Niterói em 2020 — Wikipédia",
+       "url": "https://pt.wikipedia.org/wiki/Elei%C3%A7%C3%A3o_municipal_de_Niter%C3%B3i_em_2020"
+      }
+     ]
+    }
+   },
+   "eleicoes": [],
+   "camara": null,
+   "site": null,
+   "redes": []
+  }
+ }
+}

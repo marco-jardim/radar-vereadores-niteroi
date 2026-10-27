@@ -342,7 +342,8 @@ test("coautores: 1 e 30 nomes num <details> dentro de div.autoria, sem title", a
   await assentar();
   // Mesmo literal de lista_coautores em tests/test_acessibilidade_html.py.
   assert.ok(um.resultados.innerHTML.includes('<details class="coautores"><summary>e 1 coautor</summary><ul><li>Cal</li></ul></details>'));
-  assert.match(um.resultados.innerHTML, /<div class="autoria"><a class="chip chip-principal"[^>]*>[^<]*<\/a><details class="coautores">/);
+  // O partido do principal (quando conhecido) fica dentro do chip, antes de fechar o link; nada solto antes do <details>.
+  assert.match(um.resultados.innerHTML, /<div class="autoria"><a class="chip chip-principal"[^>]*>[^<]*(?:<span class="partido">[^<]+<\/span>)?<\/a><details class="coautores">/);
   assert.doesNotMatch(um.resultados.innerHTML, /<p class="autoria">|title="Cal"/);
   const nomes = Array.from({ length: 30 }, (_, i) => "Pessoa " + i);
   const trinta = iniciarLista({ conjunto: conjuntoCoautores(nomes) });

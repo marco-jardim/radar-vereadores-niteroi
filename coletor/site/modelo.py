@@ -297,12 +297,15 @@ def indice_pessoas(pessoas: dict) -> dict[str, str]:
     return indice
 
 
-def montar_documentos(registros: list[dict], cfg: dict, pessoas: dict, legs: list[dict]) -> list[dict]:
+def montar_documentos(registros: list[dict], cfg: dict, pessoas: dict, legs: list[dict],
+                      perfis: dict | None = None) -> list[dict]:
     """Documentos enriquecidos, do mais recente ao mais antigo, separados dos projetos de lei.
 
     A autoria vem do detalhe ("autoria", com papel) quando existe; senão, da listagem
-    ("autores"), em que todos contam como autores, sem principal nem coautor.
+    ("autores"), em que todos contam como autores, sem principal nem coautor. Cada autor
+    vereador leva o partido na legislatura do documento (partido_em), vazio se desconhecido.
     """
+    contexto = {"pessoas": pessoas, "perfis": perfis or {}}
     nao_vereador = cfg.get("nao_vereador", [])
     apelidos = {slug(k): v for k, v in cfg.get("apelidos", {}).items() if not k.startswith("_")}
     indice = indice_pessoas(pessoas)
@@ -313,6 +316,7 @@ def montar_documentos(registros: list[dict], cfg: dict, pessoas: dict, legs: lis
             continue
         vistos.add((r["tipo"], r["id"]))
         cls = RD.classificar_documento(r)
+        leg_doc = legislatura_de(r.get("data"), r["ano"], legs)
         autoria = r.get("autoria") or []
         autores, marcas = [], set()
         for a in autoria or r.get("autores") or []:
@@ -333,7 +337,8 @@ def montar_documentos(registros: list[dict], cfg: dict, pessoas: dict, legs: lis
             else:
                 exibicao = nome.title() if nome.isupper() else nome
             autores.append({"nome": nome, "papel": (a.get("papel") or "") if autoria else "", "slug": s,
-                            "vereador": vereador, "pagina": s in pessoas, "exibicao": exibicao})
+                            "vereador": vereador, "pagina": s in pessoas, "exibicao": exibicao,
+                            "partido": partido_em(contexto, s, leg_doc) if vereador else ""})
         respondido_em = r.get("respondido_em")
         dias = r.get("dias_ate_resposta")
         if "dias_ate_resposta" not in r and respondido_em:
@@ -344,7 +349,7 @@ def montar_documentos(registros: list[dict], cfg: dict, pessoas: dict, legs: lis
             "id": r["id"], "tipo": r["tipo"], "numero": r["numero"], "ano": r["ano"], "data": r.get("data"),
             "ementa": r.get("ementa") or "", "situacao": r.get("situacao") or "", "assunto": r.get("assunto") or None,
             "url": r.get("url") or URL_DETALHE.format(id=r["id"]),
-            "legislatura": legislatura_de(r.get("data"), r["ano"], legs),
+            "legislatura": leg_doc,
             "autores": autores,
             "categoria": cls["categoria"], "subcategoria": cls["subcategoria"], "homenagem": bool(cls["homenagem"]),
             "respondido": bool(cls["respondido"]), "publicado": bool(cls["publicado"]), "bairro": cls["bairro"],
@@ -636,6 +641,81 @@ def carregar_config() -> dict:
     return json.loads((RAIZ / "config" / "vereadores.json").read_text(encoding="utf-8"))
 
 
+# ------------------------------------------------------------------ perfis
+def carregar_perfis(raiz: Path | None = None) -> dict:
+    """config/perfis.json (votação, partido por eleição e links oficiais); vazio se o arquivo não existe."""
+    caminho = (raiz or RAIZ) / "config" / "perfis.json"
+    if not caminho.exists():
+        return {}
+    dados = json.loads(caminho.read_text(encoding="utf-8"))
+    return dados if isinstance(dados, dict) else {}
+
+
+def perfis_por_slug(perfis: dict) -> dict[str, dict]:
+    """Perfis indexados pelo slug do nome no SISCAM: o mesmo slug das pessoas e dos autores dos documentos."""
+    vereadores = perfis.get("vereadores") if isinstance(perfis, dict) else None
+    return {slug(k): v for k, v in sorted((vereadores or {}).items()) if isinstance(v, dict)}
+
+
+def partido_perfil(perfis: dict | None, s: str, leg_id: str | None) -> str:
+    """Partido da pessoa (slug) na legislatura segundo os perfis; vazio se desconhecido."""
+    if not perfis or not s or not leg_id:
+        return ""
+    mandato = ((perfis.get(s) or {}).get("mandatos") or {}).get(leg_id) or {}
+    return str(mandato.get("partido") or "")
+
+
+def partido_em(modelo: dict, s: str, leg_id: str | None) -> str:
+    """Partido de quem tem slug `s` na legislatura: o do mandato (eleição ou perfis) ou, sem mandato, o dos perfis.
+
+    É a regra única do partido exibido ao lado do nome; vazio quando não se conhece o partido naquela legislatura.
+    """
+    if not s or not leg_id:
+        return ""
+    pessoa = (modelo.get("pessoas") or {}).get(s) or {}
+    partido = ((pessoa.get("mandatos") or {}).get(leg_id) or {}).get("partido")
+    return partido or partido_perfil(modelo.get("perfis"), s, leg_id)
+
+
+def partido_atual(modelo: dict, s: str) -> str:
+    """Partido na legislatura mais recente em que se conhece o partido da pessoa (ficha, listas sem legislatura)."""
+    for leg in reversed(modelo.get("legislaturas") or []):
+        partido = partido_em(modelo, s, leg["id"])
+        if partido:
+            return partido
+    return ""
+
+
+def perfil_da_pessoa(perfil: dict | None, fonte_padrao: dict | None) -> dict | None:
+    """Campos exibidos na ficha: mandatos (partido, votos, situação), outras eleições, links oficiais e fontes."""
+    if not perfil:
+        return None
+    fontes, vistas = [], set()
+
+    def juntar(lista) -> None:
+        for f in lista or []:
+            if isinstance(f, dict) and f.get("url") and f["url"] not in vistas:
+                vistas.add(f["url"])
+                fontes.append({"titulo": f.get("titulo") or f["url"], "url": f["url"]})
+
+    mandatos = {}
+    for leg_id, m in sorted((perfil.get("mandatos") or {}).items()):
+        mandatos[leg_id] = {"partido": m.get("partido") or "", "votos": m.get("votos"), "situacao": m.get("situacao") or ""}
+        juntar(m.get("fontes"))
+    # Eleições do TSE (inclusive para outros cargos), da mais recente para a mais antiga; a fonte de cada uma vai às fontes.
+    eleicoes = []
+    for e in sorted((e for e in perfil.get("eleicoes") or [] if isinstance(e, dict) and isinstance(e.get("ano"), int)),
+                    key=lambda e: (-e["ano"], str(e.get("cargo") or ""))):
+        eleicoes.append({"ano": e["ano"], "cargo": e.get("cargo") or "", "uf": e.get("uf") or "",
+                         "partido": e.get("partido") or "", "votos": e.get("votos"), "resultado": e.get("resultado") or ""})
+        juntar([e.get("fonte")])
+    redes = [{"rede": r["rede"], "url": r["url"]} for r in perfil.get("redes") or [] if r.get("rede") and r.get("url")]
+    juntar([{"titulo": f"Declaração da rede ({r['rede']})", "url": r["fonte"]} for r in perfil.get("redes") or [] if r.get("fonte")])
+    juntar([fonte_padrao] if fonte_padrao else [])
+    return {"mandatos": mandatos, "eleicoes": eleicoes, "camara": perfil.get("camara") or None,
+            "site": perfil.get("site") or None, "redes": redes, "fontes": fontes}
+
+
 def metricas(autor: list[dict], coautor: list[dict]) -> dict:
     leis = [p for p in autor if p["desfecho"] == "virou_lei"]
     dias = [p["dias_ate_lei"] for p in leis if p["dias_ate_lei"] is not None]
@@ -728,18 +808,22 @@ def montar_modelo() -> dict:
             pessoa = pessoas.setdefault(slug(e["siscam"]), {"slug": slug(e["siscam"]), "nome_siscam": e["siscam"], "mandatos": {}})
             pessoa["mandatos"].setdefault(leg["id"], {"projetos_autor": [], "projetos_coautor": []})
 
-    for pessoa in pessoas.values():
+    perfis_cfg = carregar_perfis()
+    perfis = perfis_por_slug(perfis_cfg)
+    for s, pessoa in pessoas.items():
         nome_up = pessoa["nome_siscam"].upper()
         pessoa["nome"] = None
         for leg_id, m in pessoa["mandatos"].items():
             info = eleitos.get(leg_id, {}).get(nome_up)
             m["eleito"] = bool(info)
-            m["partido"] = info["partido"] if info else ""
+            # Eleitos: o partido da eleição em vereadores.json; suplentes: o dos perfis, quando há fonte.
+            m["partido"] = info["partido"] if info else partido_perfil(perfis, s, leg_id)
             m["afastamentos"] = afast.get((nome_up, leg_id), [])
             m["metricas"] = metricas(m["projetos_autor"], m["projetos_coautor"])
             if info:
                 pessoa["nome"] = info["nome"]
         pessoa["nome"] = pessoa["nome"] or apelidos.get(nome_up) or nome_curto(pessoa["nome_siscam"])
+        pessoa["perfil"] = perfil_da_pessoa(perfis.get(s), perfis_cfg.get("fonte_padrao"))
 
     nomes = {s: p["nome"] for s, p in pessoas.items()}
     partido_de = {}
@@ -749,16 +833,18 @@ def montar_modelo() -> dict:
     for reg in projetos:
         for a in reg["autores"]:
             a["exibicao"] = nomes.get(a["slug"]) or nome_curto(a["nome"])
+            # Partido na legislatura do projeto, exibido ao lado do nome (autor principal e coautores).
+            a["partido"] = partido_de.get((a["slug"], reg["legislatura"]), "") if a["vereador"] else ""
         reg["partido"] = partido_de.get((reg["principal"], reg["legislatura"]), "")
 
     # Documentos ficam fora de `projetos`: não entram em marcar_repetidos nem nas métricas de PL.
-    documentos = montar_documentos(carregar_documentos(), cfg, pessoas, legs)
+    documentos = montar_documentos(carregar_documentos(), cfg, pessoas, legs, perfis)
     atividade = atividade_por_autor(documentos)
     for s, pessoa in pessoas.items():
         pessoa["atividade"] = atividade.get(s) or {"documentos": [], "por_leg": {}}
 
     return {"legislaturas": legs, "pessoas": pessoas, "projetos": projetos, "meta": meta, "curadoria": curadoria, "cfg": cfg,
-            "documentos": documentos, "atividade": atividade, "anos_coleta": anos_coleta(documentos)}
+            "documentos": documentos, "atividade": atividade, "anos_coleta": anos_coleta(documentos), "perfis": perfis}
 
 
 def mediana_legislatura(modelo: dict, leg_id: str, chave: str) -> float | None:

@@ -13,7 +13,7 @@ from coletor.regras_sessoes import rotulo_voto
 from coletor.site import graficos as G
 from coletor.site import paginas as P
 from coletor.site.glossario import ColetorGlossario
-from coletor.site.modelo import nome_curto
+from coletor.site.modelo import nome_curto, partido_em
 
 
 # Contrato de melhoria progressiva (o servidor não depende de JS):
@@ -133,10 +133,26 @@ def _pessoa(modelo: dict, slug: str, leg_id: str | None = None) -> dict:
     return {**registro, **entrada, "nome": entrada.get("nome") or registro.get("nome") or slug}
 
 
-def _nome(modelo: dict, slug: str, prefixo: str = "", chip: bool = False) -> str:
+def leg_do_ano(modelo: dict, ano) -> str | None:
+    """Legislatura de um ano de votações: a das sessões que contêm o ano ou, sem elas, a do calendário do config.
+
+    Mesma regra do partido exportado em gerar_site.pessoa_votacao (quinto campo das pessoas de vot-<ano>).
+    """
+    if ano is None:
+        return None
+    legs = {str(l["id"]) for l in ((modelo.get("sessoes") or {}).get("legislaturas") or [])
+            if int(ano) in {int(a) for a in l.get("anos") or []}}
+    if legs:
+        return min(legs)
+    return next((str(l["id"]) for l in modelo.get("legislaturas") or []
+                 if str(l.get("inicio", ""))[:4] <= str(ano) <= str(l.get("fim", ""))[:4]), None)
+
+
+def _nome(modelo: dict, slug: str, prefixo: str = "", chip: bool = False, leg_id: str | None = None) -> str:
+    """Nome com o partido na legislatura `leg_id` logo depois (dentro do link ou chip); espelho de nome() em sessoes.js."""
     pessoa = _pessoa(modelo, slug)
     exibicao = pessoa.get("nome") or slug
-    nome = P.esc(nome_curto(exibicao) if chip else exibicao)
+    nome = P.esc(nome_curto(exibicao) if chip else exibicao) + P.partido_html(partido_em(modelo, slug, leg_id))
     if slug not in (modelo.get("pessoas") or {}):
         condicao = pessoa.get("condicao") or ("suplente em exercício" if pessoa.get("sem_pagina") else "")
         if condicao:
@@ -198,10 +214,10 @@ def _presencas(modelo: dict, dados: dict, leg: dict, ordenar: bool = False) -> s
         mandato = (pessoa.get("mandatos") or {}).get(leg["id"]) or {}
         afastamentos = mandato.get("afastamentos") or []
         afastado = bool(afastamentos)
-        partido = mandato.get("partido") or ""
+        partido = mandato.get("partido") or partido_em(modelo, slug, leg["id"])
         eleito = bool(mandato.get("eleito"))
         status = '' if eleito else f'<span class="status">{P.esc(pessoa.get("condicao") or "suplente em exercício")}</span>'
-        conteudo_nome = f'<strong>{P.esc(pessoa["nome"])}</strong><span class="partido">{P.esc(partido)}</span>{status}'
+        conteudo_nome = f'<strong>{P.esc(pessoa["nome"])}</strong>{P.partido_html(partido)}{status}'
         quem = (f'<a class="quem" href="vereadores/{P.esc(slug)}.html">{conteudo_nome}</a>' if slug in pessoas
                 else f'<span class="quem">{conteudo_nome}</span>')
         if afastado:
@@ -218,7 +234,7 @@ def _presencas(modelo: dict, dados: dict, leg: dict, ordenar: bool = False) -> s
                       f'{quem}{_barra_presenca(presenca, afastado)}'
                       f'<p class="numeros"><strong>{P.esc(_compareceu(presenca, afastado))}</strong>'
                       f'{nota_html}</p></li>')
-        tabela.append([_nome(modelo, slug) + _etiqueta_afastamento(afastamentos), *_celulas_presenca(presenca, afastado)])
+        tabela.append([_nome(modelo, slug, leg_id=leg["id"]) + _etiqueta_afastamento(afastamentos), *_celulas_presenca(presenca, afastado)])
     if not linhas:
         return '<p class="vazio">Nenhum registro de frequência nesta legislatura.</p>'
     controles = ('<div class="controles"><label for="ordem">Ordenar presença da legislatura mais recente</label>'
@@ -286,8 +302,9 @@ def _documento(v: dict) -> str:
 
 def _votos_nomes(modelo: dict, v: dict) -> str:
     grupos = defaultdict(list)
+    leg_id = leg_do_ano(modelo, _ano(v))
     for slug in sorted(v.get("votos") or {}, key=lambda s: (_pessoa(modelo, s).get("nome") or s, s)):
-        grupos[_rotulo(v, slug)].append(_nome(modelo, slug, chip=True))
+        grupos[_rotulo(v, slug)].append(_nome(modelo, slug, chip=True, leg_id=leg_id))
     itens = "".join(f'<div class="grupo-votos"><h4>{P.esc(rotulo)} ({len(nomes)})</h4><p>{" ".join(nomes)}</p></div>'
                     for rotulo, nomes in sorted(grupos.items()))
     return '<details class="votos-nomes"><summary>Como votou cada vereador</summary>' + itens + '</details>'
@@ -373,8 +390,11 @@ def _filtros_votacoes(modelo: dict, dados: dict, leg: dict) -> str:
     ident = P.esc(leg["id"])
     anos = ''.join(f'<option value="{a}">{a}</option>' for a in sorted({int(a) for a in leg.get("anos") or []}, reverse=True))
     materias = ''.join(f'<option value="{chave}">{P.esc(nome)}</option>' for chave, nome in MATERIAS.items())
-    pessoas = ''.join(f'<option value="{P.esc(s)}">{P.esc(_pessoa(modelo, s, leg["id"]).get("nome") or s)}</option>'
-                      for s in _pessoas_leg(modelo, dados, leg))
+    def opcao(s: str) -> str:
+        partido = partido_em(modelo, s, leg["id"])
+        return P.esc((_pessoa(modelo, s, leg["id"]).get("nome") or s) + (f" · {partido}" if partido else ""))
+
+    pessoas = ''.join(f'<option value="{P.esc(s)}">{opcao(s)}</option>' for s in _pessoas_leg(modelo, dados, leg))
     classes = ''.join(f'<label><input type="radio" name="classe" value="{chave}"'
                       f'{" checked" if chave == "dividida" else ""}>{nome}</label>'
                       for chave, nome in (("dividida", "Divididas"), ("dissenso", "Dissenso isolado"), ("todas", "Todas")))
@@ -490,7 +510,7 @@ def _mapa_votos(modelo: dict, dados: dict, leg: dict) -> str:
         if not eleito and not any((v.get("votos") or {}).get(slug) in
                                   {"Favor", "Contra", "Abstenção", "Branco", "Nulo", "Presidente"} for v in nominais):
             continue
-        nome = _nome(modelo, slug)
+        nome = _nome(modelo, slug, leg_id=leg["id"])
         if not eleito and slug in (modelo.get("pessoas") or {}):
             nome += '<span class="status">suplente em exercício</span>'
         celulas, contagens = [], defaultdict(int)

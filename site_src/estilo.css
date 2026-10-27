@@ -338,7 +338,15 @@ section { margin-top: var(--esp-6); }
 .coautores > summary:hover { color: var(--tinta); text-decoration-style: solid; }
 .coautores[open] { flex-basis: 100%; }
 .coautores ul { margin: var(--esp-1) 0 0; padding-left: var(--esp-4); }
-.partido { font-size: var(--fs--1); color: var(--tinta-suave); margin-left: var(--esp-2); }
+/* Partido logo depois do nome (também em chips: tinta-suave tem ≥ 4,5:1 sobre fundo e superficie) */
+.partido { font-size: var(--fs--1); font-weight: 400; color: var(--tinta-suave); margin-left: .35em; white-space: nowrap; }
+.perfil { margin: var(--esp-4) 0; padding: var(--esp-3) var(--esp-4); border: 1px solid var(--linha); border-radius: var(--raio-2); background: var(--superficie); }
+.perfil-dados { margin: 0; overflow-wrap: anywhere; }
+.perfil-dados dt { font-weight: 600; margin-top: var(--esp-2); }
+.perfil-dados dt:first-child { margin-top: 0; }
+.perfil-dados dd, .perfil-dados ul { margin: 0; padding: 0; list-style: none; }
+.perfil-redes li { display: inline-block; margin-right: var(--esp-3); }
+.perfil-fontes { font-size: var(--fs--1); line-height: 1.4; color: var(--tinta-suave); margin: var(--esp-3) 0 0; }
 /* Estados de interação: o hover reforça a borda (espessura, não só cor) e os links ganham sublinhado. */
 a.chip, .mais, .abas button, .ver-siscam, .acoes-filtro button, .filtros-sessoes .acoes-item button, .chips-impacto label, .convite a {
   transition: border-color var(--dur-curta) var(--ease-mar), box-shadow var(--dur-curta) var(--ease-mar), background-color var(--dur-curta) var(--ease-mar);

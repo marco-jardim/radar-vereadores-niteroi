@@ -369,7 +369,10 @@ class TestPaginaSessoes(unittest.TestCase):
         html = S.gerar_sessoes(self.modelo)
         chips = [n for n in Documento(html).com_classe("chip") if n["attrs"].get("href") == "vereadores/pessoa-00.html"]
         self.assertTrue(chips)
-        self.assertTrue(all(Documento.texto(n) == "Ana de Souza" for n in chips))
+        # O nome curto é o texto do próprio chip; o partido da legislatura vem logo depois, num span .partido.
+        partidos = lambda n: [f for f in n["filhos"] if isinstance(f, dict) and f["attrs"].get("class") == "partido"]
+        self.assertTrue(all("".join(f for f in n["filhos"] if isinstance(f, str)) == "Ana de Souza" for n in chips))
+        self.assertTrue(all([Documento.texto(f) for f in partidos(n)] == ["P0"] for n in chips))
         self.assertTrue(all("votou" not in Documento.texto(n) for n in chips))
         self.assertIn("Ana Maria de Souza", html)  # nome completo nas linhas e na tabela
 

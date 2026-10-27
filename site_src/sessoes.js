@@ -57,7 +57,7 @@
       fatia.pessoas.forEach(function (p, j) {
         var codigo = c.v[i][j];
         if (codigos.indexOf(codigo) < 0) throw new Error("Voto desconhecido");
-        pessoas[p[0]] = { slug: p[0], nome: p[1], pagina: !!p[2], condicao: p[3] };
+        pessoas[p[0]] = { slug: p[0], nome: p[1], pagina: !!p[2], condicao: p[3], partido: p[4] || "" };
         if (codigo !== ".") votos[p[0]] = dic.votos[codigos.indexOf(codigo)][1];
       });
       return { id: id, sessao: c.s[i], data: c.d[i], ano: fatia.ano, titulo_sessao: c.ts[i], materia: c.m[i],
@@ -102,8 +102,9 @@
     return plural(lista.length, "votação", "votações") + " · " + plural(lista.filter(function (v) { return v.materia === "veto"; }).length, "veto", "vetos") +
       " · " + plural(lista.filter(function (v) { return v.materia === "pl"; }).length, "projeto de lei", "projetos de lei");
   }
+  // Espelho de pagina_sessoes._nome: o partido (na legislatura) logo depois do nome, dentro do link ou chip.
   function nome(p, chip) {
-    var texto = esc(p.nome), status = p.condicao ? '<span class="status">' + esc(p.condicao) + '</span>' : "";
+    var texto = esc(p.nome) + (p.partido ? '<span class="partido">' + esc(p.partido) + '</span>' : ""), status = p.condicao ? '<span class="status">' + esc(p.condicao) + '</span>' : "";
     if (p.pagina) return '<a' + (chip ? ' class="chip"' : "") + ' href="vereadores/' + esc(p.slug) + '.html">' + texto + '</a>' + (chip ? "" : status);
     return chip ? '<span class="chip">' + texto + status + '</span>' : texto + status;
   }
@@ -304,9 +305,11 @@
       var mais = secao.querySelector('[data-acao="mais"]'), botaoCsv = form.querySelector('[data-acao="csv"]');
       var mapa = doc.getElementById("faixa-" + leg.id), mapaInicial = mapa.innerHTML, anoMapa = mapa.dataset.ano;
       var membros = Array.from(mapa.querySelectorAll(".faixa tbody tr")).map(function (tr) {
-        var th = tr.querySelector("th"), a = th.querySelector("a"), status = th.querySelector(".status");
-        return { slug: tr.dataset.vereador, nome: a ? a.textContent : th.textContent.replace(status ? status.textContent : "", ""),
-          pagina: !!a, condicao: status ? status.textContent : "" };
+        var th = tr.querySelector("th"), a = th.querySelector("a"), status = th.querySelector(".status"), pt = th.querySelector(".partido");
+        var texto = a ? a.textContent : th.textContent.replace(status ? status.textContent : "", ""), sigla = pt ? pt.textContent : "";
+        // O partido vem logo depois do nome, no mesmo link: sai do nome e volta como campo próprio.
+        if (sigla && texto.slice(-sigla.length) === sigla) texto = texto.slice(0, -sigla.length);
+        return { slug: tr.dataset.vereador, nome: texto, pagina: !!a, condicao: status ? status.textContent : "", partido: sigla };
       });
       var st = inicial.leg === leg.id ? inicial : padrao(leg.id), dic, filtradas = null, mostrando = 0, pedido = 0;
       var continuacao = secao.querySelector(".mais-votacoes"), vazioServidor = secao.querySelector("p.vazio");
