@@ -1,17 +1,10 @@
 """Regiões de rolagem das tabelas, inclusive nas páginas completas geradas offline."""
 from __future__ import annotations
 
-import contextlib
-import io
-import sys
-import tempfile
 import unittest
 from html.parser import HTMLParser
-from pathlib import Path
-from unittest import mock
 from xml.etree import ElementTree
 
-from coletor import gerar_site
 from coletor.site import graficos as G
 from coletor.site import paginas as P
 from tests.test_geo import geo_completo
@@ -28,11 +21,14 @@ class TabelasHTML(HTMLParser):
         self.pilha = []
         self.ids = {}
         self.tabelas = []
+        self.regioes = []
         self.feed(texto)
         self.close()
 
     def handle_starttag(self, tag, attrs):
         no = {"tag": tag, "attrs": dict(attrs), "texto": []}
+        if no["attrs"].get("role") == "region":
+            self.regioes.append(no)
         if tag == "table":
             self.tabelas.append(tuple(self.pilha))
         if "id" in no["attrs"]:
@@ -72,6 +68,8 @@ class ContratoTabelas(unittest.TestCase):
                 self.assertEqual(regiao["attrs"].get("role"), "region")
                 self.assertEqual(regiao["attrs"].get("tabindex"), "0")
                 self.assertTrue(doc.rotulo(regiao["attrs"]), "Região sem rótulo acessível")
+        rotulos = [" ".join(doc.rotulo(no["attrs"]).split()).casefold() for no in doc.regioes]
+        self.assertEqual(len(rotulos), len(set(rotulos)), "Rótulos de região repetidos na mesma página")
         return doc
 
 
@@ -84,7 +82,8 @@ class TestAlternativasGraficos(ContratoTabelas):
         self.assertEqual(doc.tabelas[0][-1]["attrs"]["class"], "tabela-rolavel")
         self.assertEqual(doc.tabelas[0][-1]["attrs"]["aria-label"], "Produção anual")
         self.assertIn("<table>", texto)  # pagina_sessoes._grafico insere o caption neste literal.
-        self.conferir_tabelas(G.tabela(["Total"], [[3]]))
+        with self.assertRaises(TypeError):
+            G.tabela(["Total"], [[3]])
 
     def test_helpers_usam_titulo_escapado_sem_criar_ids(self):
         titulo = 'Produção <anual> & "total"'
@@ -129,28 +128,10 @@ class TestAlternativasGraficos(ContratoTabelas):
         self.assertEqual(doc.rotulo(doc.tabelas[0][-1]["attrs"]), "Dados anuais")
         self.assertEqual(TabelasHTML(texto).rotulo({"aria-labelledby": "inexistente"}), "")
 
-
-class TestTabelasSiteCompleto(ContratoTabelas):
-    @classmethod
-    def setUpClass(cls):
-        # Mesmo gerador do teste de fumaça, isolando a saída sem alterar data/ nem site/.
-        pasta = tempfile.TemporaryDirectory(prefix="tabelas-rolaveis-", dir=gerar_site.RAIZ)
-        cls.addClassCleanup(pasta.cleanup)
-        cls.saida = Path(pasta.name) / "saida"
-        with (mock.patch.object(gerar_site, "SAIDA", cls.saida),
-              mock.patch.object(sys, "argv", ["coletor.gerar_site"]),
-              contextlib.redirect_stdout(io.StringIO())):
-            gerar_site.main()
-
-    def test_todas_as_tabelas_em_todas_as_paginas(self):
-        paginas = sorted(self.saida.rglob("*.html"))
-        self.assertTrue(paginas)
-        total = 0
-        for caminho in paginas:
-            with self.subTest(pagina=str(caminho.relative_to(self.saida))):
-                doc = self.conferir_tabelas(caminho.read_text(encoding="utf-8"))
-                total += len(doc.tabelas)
-        self.assertGreater(total, 0)
+    def test_rejeita_rotulos_repetidos_na_mesma_pagina(self):
+        texto = G.tabela(["Total"], [[3]], "Produção anual")
+        with self.assertRaisesRegex(AssertionError, "Rótulos de região repetidos"):
+            self.conferir_tabelas(texto + texto)
 
 
 if __name__ == "__main__":

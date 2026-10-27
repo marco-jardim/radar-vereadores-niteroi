@@ -635,7 +635,7 @@ def gerar_sessoes(modelo: dict) -> str:
 
 
 # ---- página individual -------------------------------------------------------
-def _como_votou(registro: dict) -> str:
+def _como_votou(registro: dict, sufixo: str = "") -> str:
     linhas, resumos = [], []
     tem_outros = False
     for materia, contagens in sorted((registro.get("como_votou") or {}).items()):
@@ -669,7 +669,7 @@ def _como_votou(registro: dict) -> str:
     if linhas:
         tabela = ('<ul class="como-votou" role="list">' + "".join(resumos) + '</ul>'
                   + '<details class="bloco tabela-como-votou"><summary>Como votou em tabela</summary>'
-                  + P.tabela_resumo("Como votou por matéria (sentidos determinados)",
+                  + P.tabela_resumo("Como votou por matéria (sentidos determinados)" + sufixo,
                                     ["Matéria", "A favor do projeto ou manter o veto", "Contra ou derrubar", "Abstenção", "Total"], linhas)
                   + ('<p class="nota">O total inclui os outros registros discriminados no resumo, quando houver.</p>' if tem_outros else '')
                   + '</details>')
@@ -763,11 +763,11 @@ def secao_sessoes_vereador(modelo: dict, pessoa: dict) -> str:
                  + P.tile(f'{len(registro.get("divergencias") or [])} de {registro.get("divididas", 0)}',
                           "votou diferente da maioria", "Votações divididas com sentido conhecido; divergir não mede qualidade"))
         por_ano = registro.get("por_ano") or {}
-        tabela = _tabela_presenca("Presença por ano", [[P.esc(a), *_celulas_presenca(r, afastado)] for a, r in sorted(por_ano.items(), key=lambda i: str(i[0]))])
+        tabela = _tabela_presenca(f"Presença por ano · {leg['rotulo']}", [[P.esc(a), *_celulas_presenca(r, afastado)] for a, r in sorted(por_ano.items(), key=lambda i: str(i[0]))])
         blocos.append(f'<details class="bloco"{" open" if not blocos else ""}><summary>Legislatura {P.esc(leg["rotulo"])}</summary>'
                       + _etiqueta_afastamento(afastamentos)
                       + f'<div class="tiles">{tiles}</div>' + _barra_presenca(p, afastado) + _legenda_presenca()
-                      + '<h3>Como votou</h3>' + _como_votou(registro)
+                      + '<h3>Como votou</h3>' + _como_votou(registro, f" · {leg['rotulo']}")
                       + '<h3>Onde votou diferente da maioria</h3>' + _diferentes(dados, registro, pessoa["slug"], leg)
                       + f'<p><a href="../sessoes.html#sessoes-leg-{P.esc(leg["id"])}">Ver todas em Sessões</a></p>'
                       + '<details class="bloco"><summary>Presença por ano</summary>' + tabela + '</details></details>')

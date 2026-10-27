@@ -19,6 +19,7 @@ from coletor import gerar_site
 from coletor import novidades as N
 from coletor.site import paginas as P
 from coletor.site.modelo import TIPOS_DOC
+from tests import test_tabelas_rolaveis
 
 PAGINAS = ("index.html", "novidades.html", "leis.html", "projetos.html", "atividades.html", "sessoes.html", "ruido.html", "analises.html",
            "metodologia.html")
@@ -41,6 +42,17 @@ class TestGerarSite(unittest.TestCase):
                 self.assertTrue(arq.is_file(), f"{arq} não foi gerado")
                 conteudo = arq.read_text(encoding="utf-8")
                 self.assertIn("<html", conteudo.lower())
+
+    def test_todas_as_tabelas_em_todas_as_paginas(self):
+        paginas = sorted(self.saida.rglob("*.html"))
+        self.assertTrue(paginas)
+        total = 0
+        for caminho in paginas:
+            with self.subTest(pagina=str(caminho.relative_to(self.saida))):
+                doc = test_tabelas_rolaveis.ContratoTabelas.conferir_tabelas(
+                    self, caminho.read_text(encoding="utf-8"))
+                total += len(doc.tabelas)
+        self.assertGreater(total, 0)
 
     def test_integracao_sessoes_menu_metodologia_e_fichas(self):
         hrefs = [href for href, _ in P.NAV]
@@ -69,7 +81,7 @@ class TestGerarSite(unittest.TestCase):
 
     def test_gera_sem_pasta_de_sessoes(self):
         # Isola só a raiz opcional e a saída, sem renomear nem alterar data/.
-        with tempfile.TemporaryDirectory(prefix="site-sem-sessoes-", dir=self.saida.parent) as pasta:
+        with tempfile.TemporaryDirectory(prefix="site-sem-sessoes-") as pasta:
             raiz = Path(pasta)
             saida = raiz / "site"
             mensagem = io.StringIO()

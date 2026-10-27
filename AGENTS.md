@@ -26,7 +26,7 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `coletor/arquivos.py` | Serialização e gravação atômica dos JSONs versionados. |
 | `coletor/validar.py` | Validação de dados, configuração e temporários, sem alterar arquivos. |
 | `coletor/geo.py` | Conversão offline do Overpass em limites simplificados dos bairros, com fonte OSM/ODbL. |
-| `coletor/paisagem.py` | Geometria única da marca e do favicon; `python -m coletor.paisagem --marca` regrava os dois SVGs em `site_src/`; testes exigem bytes iguais aos gerados. |
+| `coletor/paisagem.py` | Geometria única da marca e do favicon (`--marca`) e textura dos bairros (`--textura`); regrava os SVGs em `site_src/`; testes exigem bytes iguais aos gerados. |
 | `coletor/novidades.py` | Eventos dos PLs pelas datas dos dados, semanas e feed RSS. |
 | `coletor/gerar_site.py` | Geração de `site/`, JSONs do navegador, manifesto e relatório de tamanhos. |
 | `coletor/site/modelo.py` | Enriquecimento, pessoas, mandatos, métricas, repetidos e documentos por autor. |
@@ -47,6 +47,7 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `site_src/estilo.css` | Estilos, tokens, paleta e `@font-face`. |
 | `site_src/favicon.svg` | Ícone gerado por `coletor.paisagem`; não editar à mão. |
 | `site_src/marca.svg` | Símbolo `#marca`: ondas com `currentColor`, sol com `fill` herdado do `<use>` via token `--marca-sol`; gerado, não editar à mão. |
+| `site_src/textura-bairros.svg` | Gerada por `python -m coletor.paisagem --textura` a partir de `data/geo/bairros.json`; não editar à mão; ≤ 12 KiB gzip; atribuição OSM visível no rodapé. |
 | `site_src/fontes/` | WOFF2 auto-hospedadas Barlow Condensed, Public Sans e Fraunces; licenças `OFL-*.txt`; `FONTES.md` não publicado. |
 | `tests/` | Testes Python, JS em `tests/js/` e HTML real em `tests/fixtures/siscam/`. |
 | `.github/workflows/` | Testes, coleta semanal e publicação. |
@@ -119,6 +120,12 @@ Para regenerar a marca e o favicon após mudar sua geometria, execute separadame
 
 ```text
 python -m coletor.paisagem --marca
+```
+
+Para regenerar a textura após atualizar os limites dos bairros, também offline:
+
+```text
+python -m coletor.paisagem --textura
 ```
 
 ### Validação da memória
@@ -216,6 +223,9 @@ Não há carregamento automático de `.env`. A IA usa `POST /chat/completions`, 
   `DetalhesDocumentos.aspx?IdDocumento=<n>`; preserve o link "abrir no SISCAM" como alternativa visível.
 - Preserve colunas, escape de HTML e os espelhos `PASSO_LISTA`/`PASSO`, `plano_docs`/`fatiasDocs` e as fixtures
   de paridade. Sessões têm contrato próprio, consolidado na próxima seção.
+- Toda tabela fica em `div.tabela-rolavel[role=region][tabindex=0][aria-label]`, com rótulo acessível único
+  na página e foco por teclado. Exceções: os wrappers já roláveis `tabela-resumo` e `faixa-rolagem`,
+  que preservam seus próprios `role="region"`, `tabindex="0"` e rótulo (`aria-label` ou `aria-labelledby`).
 
 ### Cabeçalho, tema e metadados
 
@@ -256,6 +266,7 @@ Não há carregamento automático de `.env`. A IA usa `POST /chat/completions`, 
 | `navegacao.js` | Até 4 KiB. |
 | Script inline `paginas.SCRIPT_CABECA` | Até 400 bytes **brutos**. |
 | `favicon.svg` e `marca.svg` | Até 2 KiB **brutos** cada. |
+| `textura-bairros.svg` | Até 12 KiB; distância de simplificação fixa, sem ajuste pelo compressor. |
 | Mapa individual de indicações completo | Até 12 KiB, medidos deterministicamente na geração. |
 | Geometria `data/geo/bairros.json` | Até 60 KiB **brutos**, conferidos pelo conversor. |
 
@@ -391,6 +402,9 @@ Esta é a referência única para sessões; a CLI está em "Pipeline e comandos"
   `boundary=administrative`, `admin_level=10` de Niterói (relação 2220789; consulta no README).
   Exija os 52 nomes de `BAIRROS_NITEROI`, com normalização e variantes cadastradas; faltas, sobras e
   duplicatas abortam. Preserve timestamp da base, atribuição e ODbL; não edite a saída à mão.
+  Após regenerar a geometria com `coletor.geo`, execute `python -m coletor.paisagem --textura`.
+  A textura decorativa deduplica bordas compartilhadas; toda página que a usa mantém atribuição OSM
+  visível no rodapé, com a data da base extraída do `<desc>` do SVG.
 - Encadeie ways por pontas exatas, invertendo se preciso, respeitando outer/inner, sem fechar lacunas à força.
   Projeção equiretangular local em metros usa o cosseno da latitude média dos extremos; não é mapa cadastral.
   Simplificação Douglas–Peucker por way compartilhado preserva pontas e mínimo lexicográfico; anéis fechados

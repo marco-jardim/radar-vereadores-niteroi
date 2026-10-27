@@ -57,7 +57,7 @@ def legenda(series: list[tuple[str, str]]) -> str:
     return f'<ul class="leg-graf">{itens}</ul>'
 
 
-def tabela(cabecalho: list[str], linhas: list[list], titulo: str = "Dados do gráfico") -> str:
+def tabela(cabecalho: list[str], linhas: list[list], titulo: str) -> str:
     th = "".join(f"<th scope=\"col\">{esc(c)}</th>" for c in cabecalho)
     trs = "".join("<tr>" + "".join(f"<td>{esc(_fmt(c) if isinstance(c, (int, float)) else c)}</td>" for c in l) + "</tr>" for l in linhas)
     return (f'<details class="tabela-graf"><summary>Ver os números em tabela</summary>'

@@ -185,6 +185,29 @@ class TestCabecalho(unittest.TestCase):
         self.assertTrue(texto.strip())
         self.assertNotRegex(texto, r"\b(?:governo|oposição|bancada|governista|alinhamento|rebeldia|fidelidade)\b")
 
+    def test_rodape_credita_textura_opcional_com_data_do_desc(self):
+        with tempfile.TemporaryDirectory() as pasta:
+            fonte = Path(pasta)
+            for nome in ("estilo.css", "dados.js", "app.js"):
+                (fonte / nome).write_bytes(b"/* recurso de teste */")
+            with mock.patch.object(P, "FONTE_ESTATICA", fonte):
+                html = P.pagina("Sessões", "", "sessoes.html")
+                self.assertNotIn("Textura dos bairros", html)
+                self.assertNotIn("openstreetmap.org", html)
+                (fonte / "textura-bairros.svg").write_text(
+                    '<svg xmlns="http://www.w3.org/2000/svg"><desc>Base OSM: '
+                    '2026-10-23T03:26:20Z. Texto &lt;decorativo&gt;.</desc></svg>', encoding="utf-8")
+                html = P.pagina("Sessões", "", "sessoes.html")
+                rodape = html.split('<footer class="rodape">', 1)[1].split("</footer>", 1)[0]
+                self.assertIn('Textura dos bairros: © <a href="https://www.openstreetmap.org/copyright">'
+                              'contribuidores do OpenStreetMap</a>, ODbL 1.0 · base de 23/10/2026', rodape)
+                link = next(n["attrs"] for n in Cabecalho(html).nos
+                            if n["tag"] == "a" and n["attrs"].get("href") == "https://www.openstreetmap.org/copyright")
+                self.assertNotIn("target", link)  # Mesmo padrão da atribuição dos mapas.
+                self.assertNotIn("decorativo", rodape)
+                texto = re.sub(r"<[^>]+>", " ", rodape).casefold()
+                self.assertNotRegex(texto, r"\b(?:governo|oposição|bancada|governista|alinhamento|rebeldia|fidelidade)\b")
+
     def test_botao_e_navegacao_principal(self):
         doc = Cabecalho(P.pagina("Sessões", "", "sessoes.html"))
         self.assertEqual(len(doc.botoes), 1)

@@ -179,6 +179,17 @@ def geometria_textura() -> dict:
                         for i, nome in enumerate(BAIRROS_NITEROI, 1)}}
 
 
+def segmentos_caminho(caminho: str) -> list[tuple]:
+    """Lê os segmentos não orientados dos paths lineares de entrada e da textura."""
+    segmentos = []
+    for anel, fechado in re.findall(r"M([^MZ]+)(Z?)", caminho):
+        pontos = [tuple(map(int, par.split(","))) for par in anel.split()]
+        if fechado:
+            pontos.append(pontos[0])
+        segmentos.extend(tuple(sorted((a, b))) for a, b in zip(pontos, pontos[1:]) if a != b)
+    return segmentos
+
+
 class TexturaTest(unittest.TestCase):
     def test_xml_contornos_atribuicao_e_data(self) -> None:
         geo = geometria_textura()
@@ -195,7 +206,8 @@ class TexturaTest(unittest.TestCase):
         self.assertEqual(caminhos[0].get("fill"), "none")
         self.assertEqual(caminhos[0].get("stroke"), "#000")
         self.assertEqual(caminhos[0].get("stroke-width"), "1")
-        self.assertEqual(caminhos[0].get("d").count("M"), 52)
+        self.assertEqual(caminhos[0].get("vector-effect"), "non-scaling-stroke")
+        self.assertEqual(caminhos[0].get("d").count("M"), 1)  # 52 contornos idênticos viram um só.
         self.assertIsNone(raiz.find(f"{NS}rect"))
         self.assertEqual(set(HEX.findall(texto)), {"#000"})
         self.assertTrue(texto.endswith("</svg>\n"))
@@ -208,10 +220,28 @@ class TexturaTest(unittest.TestCase):
         self.assertEqual(texto, paisagem.textura_svg(geo))
         geo["bairros"] = dict(reversed(list(geo["bairros"].items())))
         self.assertEqual(texto, paisagem.textura_svg(geo))
+        for bairro in geo["bairros"].values():
+            bairro["path"] = "M20,20 20,8 10,8 9,8 8,8Z"
+        self.assertEqual(texto, paisagem.textura_svg(geo))
 
-    def test_simplificacao_preserva_aneis(self) -> None:
-        self.assertEqual(paisagem._contorno_textura("M8,8 9,8 10,8 20,8 20,20Z", 4), "M8,8 20,8 20,20Z")
-        self.assertEqual(paisagem._contorno_textura("M8,8 9,8 9,9Z", 8), "M8,8 9,8 9,9Z")
+    def test_bordas_compartilhadas_sem_duplicatas_em_precisao_integral(self) -> None:
+        geo = geometria_textura()
+        bairros = list(geo["bairros"].values())
+        bairros[0]["path"] = "M20,8 30,8 30,20 20,20Z"  # Borda compartilhada em sentido inverso.
+        bairros[1]["path"] += "M40,40 50,40 50,50Z"  # Outro anel, sem conexão.
+        with mock.patch.object(paisagem, "DISTANCIA_TEXTURA", 0):
+            texto = paisagem.textura_svg(geo)
+        segmentos = segmentos_caminho(ET.fromstring(texto).find(f"{NS}path").get("d"))
+        esperados = {s for bairro in bairros for s in segmentos_caminho(bairro["path"])}
+        self.assertEqual(len(segmentos), len(set(segmentos)))
+        self.assertEqual(set(segmentos), esperados)
+        self.assertIn(((8, 8), (9, 8)), segmentos)  # Não elimina o segmento de um pixel.
+
+    def test_bytes_independem_do_compressor(self) -> None:
+        geo = geometria_textura()
+        texto = paisagem.textura_svg(geo)
+        with mock.patch.object(paisagem.gzip, "compress", return_value=b"x" * (13 * 1024)):
+            self.assertEqual(texto, paisagem.textura_svg(geo))
 
     def test_geometria_invalida_falha(self) -> None:
         for geo in (None, {}, {**geometria_textura(), "bairros": {}},
@@ -240,9 +270,33 @@ class ArquivosVersionadosTest(unittest.TestCase):
         self.assertEqual(set(HEX.findall(texto)), {"#000"})
         self.assertEqual(texto, paisagem.textura_svg(geo))
         self.assertLessEqual(len(gzip.compress(texto.encode("utf-8"), compresslevel=9, mtime=0)), 12 * 1024)
+        # Em precisão integral, cada borda compartilhada sai uma única vez.
+        with mock.patch.object(paisagem, "DISTANCIA_TEXTURA", 0):
+            integral = paisagem.textura_svg(geo)
+        segmentos = segmentos_caminho(ET.fromstring(integral).find(f"{NS}path").get("d"))
+        self.assertEqual(len(segmentos), len(set(segmentos)))
+        self.assertEqual(set(segmentos), {s for bairro in geo["bairros"].values()
+                                         for s in segmentos_caminho(bairro["path"])})
 
 
 class CliTest(unittest.TestCase):
+    def test_orcamento_excedido_nao_grava_nem_simplifica(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            saida = Path(tmp) / "site_src"
+            saida.mkdir()
+            destino = saida / "textura-bairros.svg"
+            destino.write_bytes(b"textura anterior\n")
+            caminho = Path(tmp) / "bairros.json"
+            caminho.write_text(json.dumps(geometria_textura()), encoding="utf-8")
+            with (mock.patch.object(paisagem, "SAIDA", saida),
+                  mock.patch.object(paisagem, "GEOMETRIA", caminho),
+                  mock.patch.object(paisagem, "LIMITE_TEXTURA_GZIP", 1),
+                  contextlib.redirect_stderr(io.StringIO()) as erro):
+                self.assertEqual(paisagem.main(["--marca", "--textura"]), 1)
+            self.assertIn("textura excede 12 KiB gzip", erro.getvalue())
+            self.assertEqual(destino.read_bytes(), b"textura anterior\n")
+            self.assertEqual(list(saida.iterdir()), [destino])
+
     def test_textura_e_marca_podem_ser_combinadas(self) -> None:
         geo = geometria_textura()
         for argumentos in (["--textura"], ["--marca", "--textura"]):

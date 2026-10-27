@@ -9,8 +9,10 @@ import re
 import statistics
 import unicodedata
 from collections import Counter, defaultdict
+from datetime import datetime
 from functools import cmp_to_key
 from pathlib import Path
+from xml.etree import ElementTree
 
 from coletor import novidades as N
 from coletor.classificar import ALERTAS, CATEGORIAS, CONFIANCA_MINIMA
@@ -295,6 +297,20 @@ def cabecalho_dados(manifesto: dict | None, ativo: str, prefixo: str) -> str:
     return "\n".join(partes)
 
 
+def atribuicao_textura() -> str:
+    """Crédito visível em toda página que pode exibir a textura opcional dos bairros."""
+    caminho = FONTE_ESTATICA / "textura-bairros.svg"
+    if not caminho.is_file():
+        return ""
+    descricao = ElementTree.fromstring(caminho.read_bytes()).findtext("{http://www.w3.org/2000/svg}desc") or ""
+    base = re.search(r"\b\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z\b", descricao)
+    if not base:
+        raise ValueError("Textura dos bairros sem data da base OSM no desc")
+    data = datetime.fromisoformat(base.group()).strftime("%d/%m/%Y")
+    return ('<p>Textura dos bairros: © <a href="https://www.openstreetmap.org/copyright">'
+            f'contribuidores do OpenStreetMap</a>, ODbL 1.0 · base de {esc(data)}</p>')
+
+
 def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: str = "", manifesto: dict | None = None,
            dialogo: bool = False, scripts: tuple[str, ...] = (), caminho: str | None = None,
            indexavel: bool = True) -> str:
@@ -353,7 +369,7 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
 </main>
 <footer class="rodape">
  <p>Dados públicos do <a href="https://consultaniteroi.siscam.com.br/">SISCAM da Câmara Municipal de Niterói</a>, coletados toda semana. Classificação por regras, curadoria com fonte e IA, explicada na <a href="{esc(prefixo)}metodologia.html">metodologia</a>. Código aberto sob GPL v3 no <a href="{REPO}">GitHub</a>. Encontrou um erro? <a href="{REPO}/issues/new">Abra uma issue</a>.</p>
-</footer>
+{atribuicao_textura()}</footer>
 {(DIALOGO_SISCAM + chr(10)) if dialogo else ''}<div id="tip" role="tooltip" hidden></div>
 {navegacao}<script src="{esc(prefixo)}dados.js?v={versao_estatica('dados.js')}" defer></script>
 <script src="{esc(prefixo)}app.js?v={versao_estatica('app.js')}" defer></script>
@@ -1420,7 +1436,7 @@ def gerar_vereador(modelo: dict, pessoa: dict) -> str:
         graf_ano = ""
         if len(anos) > 1:
             c = lambda f: [sum(1 for p in proj if p["ano"] == a and f(p)) for a in anos]
-            graf_ano = G.colunas_empilhadas("Projetos por ano de apresentação", "", [str(a) for a in anos], [
+            graf_ano = G.colunas_empilhadas(f"Projetos por ano de apresentação · {leg['id']}", "", [str(a) for a in anos], [
                 ("Lei com efeito", "c-efeito", c(com_efeito)),
                 ("Lei de impacto baixo", "c-baixo", c(lambda p: p["desfecho"] == "virou_lei" and not com_efeito(p) and not sem_efeito(p))),
                 ("Lei sem efeito prático", "c-sem-efeito", c(lambda p: p["desfecho"] == "virou_lei" and sem_efeito(p))),
@@ -1428,7 +1444,7 @@ def gerar_vereador(modelo: dict, pessoa: dict) -> str:
                 ("Sem êxito", "c-sem-exito", c(lambda p: DESFECHO_GRUPO.get(p["desfecho"]) == "sem_exito")),
             ], altura=200)
         temas = Counter(p["tema"] for p in proj if p["tema"] not in ("outro",))
-        graf_tema = "" if len(temas) < 2 else G.barras_horizontais("Temas dos projetos apresentados", "", [{"rotulo": NOME_TEMA.get(t, t), "v": n} for t, n in temas.most_common(8)],
+        graf_tema = "" if len(temas) < 2 else G.barras_horizontais(f"Temas dos projetos apresentados · {leg['id']}", "", [{"rotulo": NOME_TEMA.get(t, t), "v": n} for t, n in temas.most_common(8)],
                                          [("Projetos", "c-exec", "v")])
 
         tiles = "".join([

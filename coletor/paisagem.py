@@ -7,7 +7,7 @@ com cores próprias para os temas claro e escuro) e a marca do cabeçalho (sprit
 `<symbol id="marca">` sem cores fixas: o sol herda `fill` e as ondas `currentColor` da
 página, pelos tokens de estilo.css).
 
-Uso: python -m coletor.paisagem --marca [--textura]
+Uso: python -m coletor.paisagem [--marca] [--textura] (ao menos uma opção)
 Grava favicon.svg e marca.svg em site_src/. --textura gera textura-bairros.svg
 a partir da geometria local dos bairros. Mesma geometria, mesmos bytes.
 """
@@ -18,11 +18,11 @@ import gzip
 import json
 import re
 import sys
+from collections import defaultdict
 from html import escape
 from pathlib import Path
 
 from coletor.arquivos import gravar_atomico
-from coletor.validar import validar_geo
 
 RAIZ = Path(__file__).resolve().parents[1]
 SAIDA = RAIZ / "site_src"
@@ -124,29 +124,64 @@ def gravar(caminho: Path, texto: str) -> None:
 
 # ---- textura
 LIMITE_TEXTURA_GZIP = 12 * 1024
+DISTANCIA_TEXTURA = 2  # Fixa: com bordas deduplicadas, ~10,5 KiB gzip, margem estável abaixo dos 12 KiB.
 
 
-def _contorno_textura(path: str, distancia: int) -> str:
-    """Reduz pontos próximos em cada anel inteiro, sem eliminar seus três vértices mínimos."""
-    aneis = []
-    for anel in re.findall(r"M([^MZ]+)Z", path):
-        pontos = [tuple(map(int, par.split(","))) for par in anel.split()]
+def _caminhos_textura(geo: dict) -> str:
+    """Deduplica segmentos não orientados antes de encadear vértices de grau dois."""
+    segmentos = set()
+    for bairro in geo["bairros"].values():
+        for anel in re.findall(r"M([^MZ]+)Z", bairro["path"]):
+            pontos = [tuple(map(int, par.split(","))) for par in anel.split()]
+            for a, b in zip(pontos, pontos[1:] + pontos[:1]):
+                if a != b:
+                    segmentos.add(tuple(sorted((a, b))))
+    vizinhos = defaultdict(set)
+    for a, b in segmentos:
+        vizinhos[a].add(b)
+        vizinhos[b].add(a)
+    restantes = set(segmentos)
+    linhas = []
+
+    def encadear(a, b):
+        pontos = [a]
+        while True:
+            restantes.remove(tuple(sorted((a, b))))
+            pontos.append(b)
+            proximos = sorted(c for c in vizinhos[b] if tuple(sorted((b, c))) in restantes)
+            if len(vizinhos[b]) != 2 or not proximos:
+                break
+            a, b = b, proximos[0]
+        # Distância fixa, nunca escolhida pelo tamanho comprimido ou pela versão do zlib.
         manter = [pontos[0]]
-        for x, y in pontos[1:]:
-            if (x - manter[-1][0]) ** 2 + (y - manter[-1][1]) ** 2 >= distancia ** 2:
+        for x, y in pontos[1:-1]:
+            if (x - manter[-1][0]) ** 2 + (y - manter[-1][1]) ** 2 >= DISTANCIA_TEXTURA ** 2:
                 manter.append((x, y))
-        if len(set(manter)) < 3:
+        manter.append(pontos[-1])
+        if pontos[0] == pontos[-1] and len(set(manter)) < 3:
             manter = pontos
-        aneis.append("M" + " ".join(f"{x},{y}" for x, y in manter) + "Z")
-    return "".join(aneis)
+        linhas.append("M" + " ".join(f"{x},{y}" for x, y in manter))
+
+    # Primeiro as linhas entre entroncamentos; depois os ciclos isolados, sempre ordenados.
+    for a in sorted(vizinhos):
+        if len(vizinhos[a]) != 2:
+            for b in sorted(vizinhos[a]):
+                if tuple(sorted((a, b))) in restantes:
+                    encadear(a, b)
+    for a, b in sorted(restantes):
+        if (a, b) in restantes:
+            encadear(a, b)
+    return "".join(linhas)
 
 
 def textura_svg(geo: dict) -> str:
     """Máscara decorativa: contornos pretos sobre transparência, sem dados temáticos.
 
-    Mantém o viewBox e todos os anéis dos 52 bairros. Só reduz pontos próximos se
-    necessário ao orçamento; não substitui a geometria dos mapas nem serve a cadastro.
+    Mantém o viewBox e deduplica as bordas dos 52 bairros antes de qualquer redução
+    por distância fixa; não substitui a geometria dos mapas nem serve a cadastro.
     """
+    from coletor.validar import validar_geo
+
     problemas = validar_geo(geo)
     if problemas:
         raise ValueError("; ".join(problemas))
@@ -154,18 +189,11 @@ def textura_svg(geo: dict) -> str:
     descricao = escape("© contribuidores do OpenStreetMap, ODbL 1.0, "
                        "https://www.openstreetmap.org/copyright. "
                        f"Base OSM: {geo['osm_base']}. Contornos simplificados para decoração; não é um mapa cadastral.")
-    # Ordem fixa, independente da ordem das chaves do JSON. Um único path, sem fundo.
-    for distancia in (0, 2, 4, 8):
-        caminhos = "".join(_contorno_textura(geo["bairros"][nome]["path"], distancia)
-                           for nome in sorted(geo["bairros"]))
-        texto = (f'<svg xmlns="{SVG_NS}" viewBox="{viewbox}">'
-                 '<title>Contornos dos bairros de Niterói</title>'
-                 f'<desc>{descricao}</desc>'
-                 f'<path fill="none" stroke="#000" stroke-width="1" d="{caminhos}"/>'
-                 '</svg>\n')
-        if len(gzip.compress(texto.encode("utf-8"), compresslevel=9, mtime=0)) <= LIMITE_TEXTURA_GZIP:
-            return texto
-    raise ValueError("textura excede 12 KiB gzip mesmo após simplificação")
+    return (f'<svg xmlns="{SVG_NS}" viewBox="{viewbox}">'
+            '<title>Contornos dos bairros de Niterói</title>'
+            f'<desc>{descricao}</desc>'
+            '<path fill="none" stroke="#000" stroke-width="1" vector-effect="non-scaling-stroke" '
+            f'd="{_caminhos_textura(geo)}"/></svg>\n')
 
 
 # ---- cli
@@ -184,7 +212,10 @@ def main(argv: list[str] | None = None) -> int:
     if args.textura:
         try:
             geo = json.loads(GEOMETRIA.read_text(encoding="utf-8"))
-            arquivos.append(("textura-bairros.svg", textura_svg(geo)))
+            textura = textura_svg(geo)
+            if len(gzip.compress(textura.encode("utf-8"), compresslevel=9, mtime=0)) > LIMITE_TEXTURA_GZIP:
+                raise ValueError("textura excede 12 KiB gzip; revise DISTANCIA_TEXTURA")
+            arquivos.append(("textura-bairros.svg", textura))
         except (OSError, ValueError, TypeError, KeyError) as e:
             print(f"textura não gravada: {e}", file=sys.stderr)
             return 1
