@@ -12,7 +12,7 @@ A coleta é programada semanalmente pelo GitHub Actions; o site é estático, pu
 
 | Página | Conteúdo |
 | --- | --- |
-| Início (`index.html`) | Placar por vereador e leis com efeito mais recentes. |
+| Início (`index.html`) | Paisagem de Niterói, “Quem é meu vereador?”, números, destaques, mapa de indicações, placar, linha do tempo da cidade e a faixa “Niterói que nos inspira”. |
 | Novidades (`novidades.html`) | Apresentações de PLs, leis, vetos e vetos derrubados; também em RSS (`feed.xml`). |
 | Leis aprovadas (`leis.html`) | Leis com filtros por impacto, tema, vereador e partido. |
 | Projetos (`projetos.html`) | Projetos de lei, inclusive em tramitação e sem êxito. |
@@ -20,11 +20,21 @@ A coleta é programada semanalmente pelo GitHub Actions; o site é estático, pu
 | Sessões (`sessoes.html`) | Presença por legislatura, votações nominais, mapa de votos, ritmo e cobertura. |
 | Sem efeito e polêmicas (`ruido.html`) | Produção simbólica, projetos sem efeito, alertas e homenagens. |
 | Análises (`analises.html`) | Gráficos históricos e comparações da produção legislativa. |
-| Metodologia (`metodologia.html`) | Critérios, fontes e limitações. |
+| Metodologia (`metodologia.html`) | Critérios, fontes, limitações e glossário. |
+| Memória de Niterói (`memoria.html`) | “Cidade Sorriso”: pessoas ligadas à cidade, critério de homenagem, linha do tempo e fontes; link no rodapé. |
 
 As páginas em `vereadores/` reúnem projetos, **Presença e votos** e, quando há documentos coletados,
 **Atividade**. Os demais documentos não entram nos números de projetos de lei e leis.
 O endereço antigo `alertas.html` redireciona para `ruido.html`; `dados/` contém os JSONs de consulta e exportação.
+
+Com JavaScript, o cabeçalho oferece os temas Automático, Claro e Escuro e um menu recolhível no celular.
+Sem JavaScript, os links de navegação permanecem visíveis.
+Na página inicial, o céu acompanha a hora de Niterói e a busca de vereadores funciona por teclado;
+sem JavaScript, permanece a lista de nomes. A linha do tempo reúne eventos com fontes públicas.
+O layout é responsivo, com adaptação ao alto contraste do sistema e impressão sem controles nem textura.
+As abas do placar têm navegação por teclado; coautores podem ser expandidos e os tooltips dos gráficos
+com links também abrem pelo foco. “Mostrar mais” leva o foco ao primeiro item novo e anuncia a inclusão.
+Nas sessões, é possível expandir ementas longas; sem JavaScript, elas aparecem inteiras.
 
 **Limites importantes:** impacto é estimado pela ementa, não resultado comprovado. Contar documentos,
 presenças ou votos não mede a qualidade do mandato. Os critérios valem igualmente para qualquer autor,
@@ -155,6 +165,8 @@ O conversor é offline. Revise seu relatório, o mapa e os limites antes de vers
   [abra uma issue](https://github.com/marco-jardim/radar-vereadores-niteroi/issues/new), com documento e fonte.
 - **Composição das legislaturas e afastamentos:** `config/vereadores.json`; preserve o partido da eleição.
 - **Curadoria:** `config/curadoria.json`. Toda entrada precisa de fonte pública; a curadoria prevalece sobre a IA.
+- **Memória:** `config/memoria.json` reúne critérios, homenageados e linha do tempo, com fontes públicas HTTPS;
+  é conferido por `coletor.validar`.
 - **Código:** consulte [AGENTS.md](AGENTS.md), faça mudanças focadas e execute os testes offline.
 
 A metodologia completa é publicada no próprio site. Correções editoriais vão na configuração,
@@ -165,6 +177,8 @@ não nos arquivos coletados.
 - Documentos e sessões: [SISCAM da Câmara Municipal de Niterói](https://consultaniteroi.siscam.com.br/).
 - Composição e curadoria: fontes públicas registradas nos arquivos de `config/`.
 - Código: [GNU General Public License v3.0 (GPL-3.0)](LICENSE).
+- Fontes tipográficas: Barlow Condensed, Public Sans e Fraunces, sob SIL Open Font License 1.1;
+  arquivos WOFF2 e licenças `OFL-*.txt` em `site_src/fontes/`. O site não carrega fontes de terceiros.
 - Geometria derivada: © contribuidores do [OpenStreetMap](https://www.openstreetmap.org/copyright),
   sob [ODbL 1.0](https://www.openstreetmap.org/copyright), bairros administrativos de nível 10 dentro de
   [Niterói, relação 2220789](https://www.openstreetmap.org/relation/2220789).

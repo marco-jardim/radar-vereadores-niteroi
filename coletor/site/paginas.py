@@ -9,12 +9,15 @@ import re
 import statistics
 import unicodedata
 from collections import Counter, defaultdict
+from datetime import datetime
 from functools import cmp_to_key
 from pathlib import Path
+from xml.etree import ElementTree
 
 from coletor import novidades as N
 from coletor.classificar import ALERTAS, CATEGORIAS, CONFIANCA_MINIMA
 from coletor.site import graficos as G
+from coletor.site.glossario import ColetorGlossario, secao_glossario
 from coletor.site.modelo import (
     DESC_CATEGORIA_DOC, DESC_SINAL, DESFECHO_GRUPO, NOME_ALERTA, NOME_CATEGORIA, NOME_CATEGORIA_DOC, NOME_DESFECHO, NOME_EIXO,
     NOME_IMPACTO, NOME_SINAL, NOME_SUBCATEGORIA_DOC, NOME_TEMA, NOME_TIPO_DOC, TIPOS_DOC, com_efeito, mediana_legislatura,
@@ -36,7 +39,17 @@ NAV = [
     ("metodologia.html", "Metodologia"),
 ]
 CLASSE_IMPACTO = {3: "imp-3", 2: "imp-2", 1: "imp-1", 0: "imp-0", None: "imp-x"}
-FONTE_ESTATICA = Path(__file__).resolve().parents[2] / "site_src"
+RAIZ = Path(__file__).resolve().parents[2]
+FONTE_ESTATICA = RAIZ / "site_src"
+# Definida a cada geração; testes e renderizações isoladas podem alternar a publicação.
+MEMORIA_PUBLICADA: bool = False
+# Imagem de compartilhamento (coletor.paisagem --og), com URL absoluta e versionada em toda página do template.
+IMAGEM_OG = "og-radar.png"
+ALT_IMAGEM_OG = "Paisagem de Niterói ao pôr do sol vista da baía, com a marca do Radar dos Vereadores"
+# Antes do CSS: marca "js" (menu móvel já recolhido na primeira pintura) só se navegacao.js puder montar o menu,
+# e aplica o tema salvo. navegacao.js tira a classe se não montar o menu; o onerror da sua tag também.
+SCRIPT_CABECA = '(function(d,r){if(window.matchMedia&&d.addEventListener)r.classList.add("js");try{var t=localStorage.getItem("radar-tema");if(t==="claro"||t==="escuro")r.dataset.theme=t==="escuro"?"dark":"light"}catch(e){}})(document,document.documentElement)'
+ERRO_NAVEGACAO = "document.documentElement.classList.remove('js')"
 LIMITE_ITENS_RUIDO = 30
 PASSO_LISTA = 40  # itens por "Mostrar mais"; igual a PASSO em site_src/app.js
 # Sem filtros, projetos.html carrega só a prévia (pl-recentes, as PASSO_LISTA primeiras linhas) e traz o resumo
@@ -106,8 +119,85 @@ def versao_bytes(conteudo: bytes) -> str:
     return hashlib.sha1(conteudo).hexdigest()[:10]
 
 
+def publicavel(relativo: Path) -> bool:
+    """Regra única de publicação de arquivos da árvore estática."""
+    return not any(parte.startswith(".") for parte in relativo.parts) and relativo.suffix.lower() != ".md"
+
+
+def css_publicado(texto: str, base_dir: Path, *, origem: Path | None = None,
+                  raiz: Path | None = None, _pilha: tuple[Path, ...] = ()) -> str:
+    """Versiona referências locais em url(), @import e image-set, sem publicar alvos excluídos."""
+    raiz = (raiz or FONTE_ESTATICA).resolve()
+    string = r'"(?:\\.|[^"\\])*"' + r"|'(?:\\.|[^'\\])*'"
+    padrao = r'''(?<![\w-])url\(\s*(?:"(?P<duplas>[^"]*)"|'(?P<simples>[^']*)'|(?P<sem_aspas>(?:\\.|[^\s)'\"])+))\s*\)'''
+
+    def versionar(url: str, sem_aspas: bool = False) -> str:
+        if not url or url.startswith(("/", "#")) or "?" in url or re.match(r"[a-z][a-z0-9+.-]*:", url, re.I):
+            return url
+        if sem_aspas and ("\\" in url or "%" in url):
+            raise ValueError(f"CSS {origem or base_dir}: alvo {url!r}: URL com escape não suportada")
+        nome, separador, fragmento = url.partition("#")
+        alvo = (base_dir / nome).resolve()
+        try:
+            relativo = alvo.relative_to(raiz)
+            if not publicavel(relativo):
+                raise ValueError("alvo excluído da publicação")
+            versao = versao_bytes(bytes_estaticos(alvo, _pilha, raiz=raiz))
+        except (OSError, ValueError) as erro:
+            raise ValueError(f"CSS {origem or base_dir}: não foi possível publicar o alvo {url!r} ({alvo}): {erro}") from erro
+        return f"{nome}?v={versao}{separador}{fragmento}"
+
+    # A pilha distingue entradas de image-set de strings em funções internas, como type().
+    pilha: list[tuple[str, int]] = []
+
+    def reescrever(m: re.Match[str]) -> str:
+        token = m.group()
+        for grupo in ("duplas", "simples", "sem_aspas", "importacao", "string"):
+            if m.group(grupo) is None:
+                continue
+            inicio, fim = m.span(grupo)
+            if grupo == "string":
+                if not pilha or pilha[-1][0] not in ("image-set", "-webkit-image-set"):
+                    return token
+                antes = re.sub(r"/\*.*?\*/", "", texto[pilha[-1][1]:m.start()], flags=re.S)
+                if antes.strip():
+                    return token
+            if grupo in ("importacao", "string"):
+                inicio += 1
+                fim -= 1
+            url = texto[inicio:fim]
+            return token[:inicio - m.start()] + versionar(url, grupo == "sem_aspas") + token[fim - m.start():]
+        if m.group("funcao") is not None or token == "(":
+            pilha.append(((m.group("funcao") or "").lower(), m.end()))
+        elif token == ")" and pilha:
+            pilha.pop()
+        elif token == "," and pilha:
+            pilha[-1] = (pilha[-1][0], m.end())
+        return token
+
+    tokens = (rf"/\*.*?\*/|{padrao}|(?<![\w-])@import\s+(?P<importacao>{string})|"
+              rf"(?P<string>{string})|(?P<funcao>[\w-]+)\(|[(),]")
+    return re.sub(tokens, reescrever, texto, flags=re.I | re.S)
+
+
+def bytes_estaticos(caminho: Path, _pilha: tuple[Path, ...] = (), *, raiz: Path | None = None) -> bytes:
+    """Lê os bytes a publicar, reescrevendo dependências CSS sem ciclos."""
+    caminho = caminho.resolve()
+    if caminho in _pilha:
+        raise ValueError(f"Ciclo de recursos CSS: {' -> '.join(map(str, (*_pilha, caminho)))}")
+    conteudo = caminho.read_bytes()
+    if caminho.suffix.lower() == ".css":
+        return css_publicado(conteudo.decode("utf-8"), caminho.parent, origem=caminho,
+                             raiz=raiz, _pilha=(*_pilha, caminho)).encode("utf-8")
+    return conteudo
+
+
 def versao_estatica(nome: str) -> str:
-    return versao_bytes((FONTE_ESTATICA / nome).read_bytes())
+    return versao_bytes(bytes_estaticos(FONTE_ESTATICA / nome))
+
+
+def url_estatica(nome_relativo: str, prefixo: str = "") -> str:
+    return f"{prefixo}{nome_relativo}?v={versao_estatica(nome_relativo)}"
 
 
 def _cmp(x, y) -> int:
@@ -214,47 +304,100 @@ def cabecalho_dados(manifesto: dict | None, ativo: str, prefixo: str) -> str:
     return "\n".join(partes)
 
 
+def atribuicao_textura() -> str:
+    """Crédito visível em toda página que pode exibir a textura opcional dos bairros."""
+    caminho = FONTE_ESTATICA / "textura-bairros.svg"
+    if not caminho.is_file():
+        return ""
+    descricao = ElementTree.fromstring(caminho.read_bytes()).findtext("{http://www.w3.org/2000/svg}desc") or ""
+    base = re.search(r"\b\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z\b", descricao)
+    if not base:
+        raise ValueError("Textura dos bairros sem data da base OSM no desc")
+    data = datetime.fromisoformat(base.group()).strftime("%d/%m/%Y")
+    return ('<p>Textura dos bairros: © <a href="https://www.openstreetmap.org/copyright">'
+            f'contribuidores do OpenStreetMap</a>, ODbL 1.0 · base de {esc(data)}</p>')
+
+
 def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: str = "", manifesto: dict | None = None,
-           dialogo: bool = False, scripts: tuple[str, ...] = ()) -> str:
+           dialogo: bool = False, scripts: tuple[str, ...] = (), caminho: str | None = None,
+           indexavel: bool = True, estilos: tuple[str, ...] = ()) -> str:
     desc = esc(descricao or "Quais leis de Niterói mudam a cidade, quem as escreveu, e quanto da produção da Câmara é homenagem, "
                "lei sem efeito ou pauta polêmica. Dados do SISCAM atualizados toda semana.")
     nav = "".join(
-        f'<a href="{prefixo}{href}"{" aria-current=\"page\"" if href == ativo else ""}>{esc(nome)}</a>' for href, nome in NAV
+        f'<a href="{esc(prefixo + href)}"{" aria-current=\"page\"" if href == ativo else ""}>{esc(nome)}</a>' for href, nome in NAV
     )
+    caminho = caminho or ativo
+    if indexavel and not caminho:
+        raise ValueError("pagina(): informe caminho para a canônica")
+    canonica = esc(N.URL_SITE + ("" if caminho == "index.html" else caminho))
+    identidade = (f'<link rel="canonical" href="{canonica}">\n<meta property="og:url" content="{canonica}">'
+                  if indexavel else '<meta name="robots" content="noindex">')
     extras = "\n".join(f'<script src="{esc(prefixo + nome)}?v={versao_estatica(nome)}" defer></script>'
                        for nome in scripts if (FONTE_ESTATICA / nome).is_file())
+    # CSS próprio de uma página (ex.: inicio.css), depois do global, só se existir na árvore estática.
+    folhas = "".join(f'<link rel="stylesheet" href="{esc(url_estatica(nome, prefixo))}">\n'
+                     for nome in estilos if (FONTE_ESTATICA / nome).is_file())
+    imagem_og = ""
+    if (FONTE_ESTATICA / IMAGEM_OG).is_file():
+        url_og = esc(f"{N.URL_SITE}{IMAGEM_OG}?v={versao_estatica(IMAGEM_OG)}")
+        imagem_og = (f'<meta property="og:image" content="{url_og}">\n'
+                     '<meta property="og:image:width" content="1200">\n'
+                     '<meta property="og:image:height" content="630">\n'
+                     f'<meta property="og:image:alt" content="{esc(ALT_IMAGEM_OG)}">\n'
+                     f'<meta name="twitter:image" content="{url_og}">\n')
+    icone = f'<link rel="icon" href="{esc(url_estatica("favicon.svg", prefixo))}" type="image/svg+xml">' if (FONTE_ESTATICA / "favicon.svg").is_file() else ""
+    marca = ('<svg class="marca-simbolo" aria-hidden="true" focusable="false" viewBox="0 0 64 64" width="28" height="28">'
+             f'<use href="{esc(url_estatica("marca.svg", prefixo))}#marca"/></svg>'
+             if (FONTE_ESTATICA / "marca.svg").is_file() else "")
+    # Fontes críticas auto-hospedadas: a URL do preload é a mesma da url() publicada em estilo.css (com ?v=).
+    fontes = "".join(f'<link rel="preload" as="font" type="font/woff2" crossorigin href="{esc(url_estatica(nome, prefixo))}">\n'
+                     for nome in ("fontes/public-sans-latin-wght-normal.woff2", "fontes/barlow-condensed-latin-700-normal.woff2")
+                     if (FONTE_ESTATICA / nome).is_file())
+    # Menu móvel (melhoria progressiva): opcional, como os demais estáticos fora de dados.js/app.js.
+    navegacao = (f'<script src="{esc(url_estatica("navegacao.js", prefixo))}" defer onerror="{ERRO_NAVEGACAO}"></script>\n'
+                 if (FONTE_ESTATICA / "navegacao.js").is_file() else "")
+    memoria_atual = ' aria-current="page"' if caminho == "memoria.html" else ""
+    link_memoria = (f'<p><a href="{esc(prefixo + "memoria.html")}"{memoria_atual}>Memória de Niterói</a></p>'
+                    if MEMORIA_PUBLICADA else "")
     return f"""<!doctype html>
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>{SCRIPT_CABECA}</script>
 <title>{esc(titulo)}</title>
 <meta name="description" content="{desc}">
 <meta property="og:title" content="{esc(titulo)}">
 <meta property="og:description" content="{desc}">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{prefixo}estilo.css?v={versao_estatica('estilo.css')}">
-<link rel="icon" href="{prefixo}favicon.svg" type="image/svg+xml">
-<link rel="alternate" type="application/rss+xml" title="Novidades · Radar dos Vereadores de Niterói" href="{prefixo}{N.FEED}">
+{identidade}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Radar dos Vereadores de Niterói">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary_large_image">
+{imagem_og}<meta name="theme-color" content="#F7F2E9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0E1B26" media="(prefers-color-scheme: dark)">
+{fontes}<link rel="stylesheet" href="{esc(prefixo)}estilo.css?v={versao_estatica('estilo.css')}">
+{folhas}{icone}
+<link rel="alternate" type="application/rss+xml" title="Novidades · Radar dos Vereadores de Niterói" href="{esc(prefixo + N.FEED)}">
 {cabecalho_dados(manifesto, ativo, prefixo)}
 </head>
 <body>
 <a class="pular" href="#conteudo">Ir para o conteúdo</a>
 <header class="topo">
- <a class="marca" href="{prefixo}index.html">Radar dos Vereadores <span>Niterói</span></a>
- <nav aria-label="Principal">{nav}</nav>
+ <a class="marca" href="{esc(prefixo)}index.html">{marca}Radar dos Vereadores <span>Niterói</span></a>
+ <button class="menu-botao" type="button" aria-expanded="false" aria-controls="menu-principal" hidden>Menu</button>
+ <nav id="menu-principal" aria-label="Principal">{nav}<div class="tema" role="group" aria-label="Tema" hidden><button type="button" data-tema="auto" aria-pressed="true">Automático</button><button type="button" data-tema="claro" aria-pressed="false">Claro</button><button type="button" data-tema="escuro" aria-pressed="false">Escuro</button></div></nav>
 </header>
-<main id="conteudo" data-prefixo="{prefixo}">
+<main id="conteudo" data-prefixo="{esc(prefixo)}">
 {corpo}
 </main>
 <footer class="rodape">
- <p>Dados públicos do <a href="https://consultaniteroi.siscam.com.br/">SISCAM da Câmara Municipal de Niterói</a>, coletados toda semana. Classificação por regras, curadoria com fonte e IA, explicada na <a href="{prefixo}metodologia.html">metodologia</a>. Código aberto sob GPL v3 no <a href="{REPO}">GitHub</a>. Encontrou um erro? <a href="{REPO}/issues/new">Abra uma issue</a>.</p>
-</footer>
+ <p>Dados públicos do <a href="https://consultaniteroi.siscam.com.br/">SISCAM da Câmara Municipal de Niterói</a>, coletados toda semana. Classificação por regras, curadoria com fonte e IA, explicada na <a href="{esc(prefixo)}metodologia.html">metodologia</a>. Código aberto sob GPL v3 no <a href="{REPO}">GitHub</a>. Encontrou um erro? <a href="{REPO}/issues/new">Abra uma issue</a>.</p>
+{link_memoria}
+{atribuicao_textura()}</footer>
 {(DIALOGO_SISCAM + chr(10)) if dialogo else ''}<div id="tip" role="tooltip" hidden></div>
-<script src="{prefixo}dados.js?v={versao_estatica('dados.js')}" defer></script>
-<script src="{prefixo}app.js?v={versao_estatica('app.js')}" defer></script>
+{navegacao}<script src="{esc(prefixo)}dados.js?v={versao_estatica('dados.js')}" defer></script>
+<script src="{esc(prefixo)}app.js?v={versao_estatica('app.js')}" defer></script>
 {extras}
 </body>
 </html>
@@ -268,12 +411,22 @@ def chip_autor(a: dict, prefixo: str, principal: bool = False) -> str:
     return f'<a class="chip{" chip-principal" if principal else ""}" href="{prefixo}vereadores/{a["slug"]}.html">{esc(a["exibicao"])}</a>'
 
 
+def lista_coautores(resumo: str, nomes: list[str]) -> str:
+    """Resumo clicável com a lista completa de nomes; espelho de listaCoautores em app.js.
+
+    Vai dentro de um <div> (nunca de um <p>, que não pode conter <details>).
+    """
+    itens = "".join(f"<li>{esc(n)}</li>" for n in nomes)
+    return f'<details class="coautores"><summary>{esc(resumo)}</summary><ul>{itens}</ul></details>'
+
+
 def autores_html(p: dict, prefixo: str) -> str:
     principal = [a for a in p["autores"] if a["slug"] == p["principal"]] or p["autores"][:1]
     outros = [a for a in p["autores"] if a not in principal]
     base = "".join(chip_autor(a, prefixo, True) for a in principal)
     if outros:
-        base += f'<span class="coautores">e {plural(len(outros), "coautor", "coautores")}</span>'
+        base += lista_coautores(f'e {plural(len(outros), "coautor", "coautores")}',
+                                [a.get("exibicao") or a.get("nome") or "" for a in outros])
     return base
 
 
@@ -327,7 +480,7 @@ def cartao_lei(p: dict, prefixo: str) -> str:
  <p class="lei-situacao">{esc(situacao_lei(lei))}{via_substitutivo(p, link=False)}</p>
  <h3><a href="{esc(url_lei(p))}" target="_blank" rel="noopener">{esc(resumo)}{NOVA_ABA}</a></h3>
  {f'<p class="publico">Afeta: {esc(p["publico"])}{" · " + esc(tema) if tema else ""}</p>' if p['publico'] or tema else ''}
- <p class="cartao-autor">{autores_html(p, prefixo)}{f'<span class="partido">{esc(p["partido"])}</span>' if p["partido"] else ''}</p>
+ <div class="cartao-autor">{autores_html(p, prefixo)}{f'<span class="partido">{esc(p["partido"])}</span>' if p["partido"] else ''}</div>
 </article>"""
 
 
@@ -341,7 +494,7 @@ def item_projeto(p: dict, prefixo: str) -> str:
     return f"""<li class="projeto d-{esc(DESFECHO_GRUPO.get(p['desfecho'], 'andamento'))}">
  <p class="cab"><a href="{esc(p['url'])}" target="_blank" rel="noopener">PL {esc(p['numero'])}{NOVA_ABA}</a><span>{data_br(p['data'])}</span><span class="desfecho">{esc(NOME_DESFECHO.get(p['desfecho'], p['desfecho']))}{lei_txt}</span>{selo_impacto(p)}</p>
  {resumo}<p class="ementa">{esc(legivel(p['ementa']))}</p>
- <p class="autoria">{autores_html(p, prefixo)}</p>
+ <div class="autoria">{autores_html(p, prefixo)}</div>
  {tags_html(p)}
 </li>"""
 
@@ -396,8 +549,7 @@ def autores_documento_html(d: dict, prefixo: str, maximo: int = 3) -> str:
             chips.append(f'<span class="chip{"" if a["vereador"] else " chip-exec"}">{esc(a["exibicao"])}</span>')
     resto = d["autores"][maximo:]
     if resto:
-        chips.append(f'<span class="coautores" title="{esc(", ".join(a["exibicao"] for a in resto))}">'
-                     f'e mais {plural(len(resto), "autor", "autores")}</span>')
+        chips.append(lista_coautores(f'e mais {plural(len(resto), "autor", "autores")}', [a["exibicao"] for a in resto]))
     return "".join(chips)
 
 
@@ -408,7 +560,7 @@ def item_documento(d: dict, prefixo: str) -> str:
  <p class="cab"><a href="{esc(d['url'])}" target="_blank" rel="noopener">{esc(rotulo)}{NOVA_ABA}</a><span>{data_br(d['data'])}</span><span class="desfecho">{esc(situacao_legivel(d['situacao']))}</span><span class="selo cat-{esc(d['categoria'])}">{esc(NOME_CATEGORIA_DOC.get(d['categoria'], d['categoria']))}</span></p>
  {assunto}<p class="ementa">{esc(legivel(d['ementa']))}</p>
  <p class="publico">{esc(' · '.join(meta_documento(d)))}</p>
- <p class="autoria">{autores_documento_html(d, prefixo)}</p>
+ <div class="autoria">{autores_documento_html(d, prefixo)}</div>
  {botoes_siscam(d['url'], rotulo)}
 </li>"""
 
@@ -493,16 +645,17 @@ def _celula(v) -> str:
 def tabela_resumo(legenda: str, cabecalho: list[str], linhas: list[list], texto: tuple[int, ...] = ()) -> str:
     """Tabela com legenda, cabeçalhos de coluna e, na primeira célula de cada linha, cabeçalho de linha.
 
-    texto: índices das colunas de texto (classe "txt", alinhadas à esquerda). O contêiner rola na horizontal e
-    recebe foco pelo teclado (região rotulada pela legenda).
+    texto: índices das colunas de texto (classe "txt", alinhadas à esquerda). Em contêiner estreito, as linhas viram
+    cartões (graficos.abre_tabela); sem container queries, o contêiner rola na horizontal. Ele recebe foco pelo
+    teclado (região rotulada pela legenda).
     """
     cls = lambda i: ' class="txt"' if i in texto else ""
-    th = "".join(f'<th scope="col"{cls(i)}>{esc(c)}</th>' for i, c in enumerate(cabecalho))
-    corpo = "".join(f'<tr><th scope="row">{_celula(l[0])}</th>'
-                    + "".join(f"<td{cls(i)}>{_celula(c)}</td>" for i, c in enumerate(l[1:], start=1)) + "</tr>"
+    th = "".join(G.cab_coluna(esc(c), cls(i)) for i, c in enumerate(cabecalho))
+    corpo = "".join(G.TR + G.cab_linha(_celula(l[0]), cabecalho[0])
+                    + "".join(G.celula(_celula(c), cabecalho[i], cls(i)) for i, c in enumerate(l[1:], start=1)) + "</tr>"
                     for l in linhas)
     return (f'<div class="tabela-graf tabela-resumo" role="region" tabindex="0" aria-label="{esc(legenda)}">'
-            f'<table><caption>{esc(legenda)}</caption><thead><tr>{th}</tr></thead><tbody>{corpo}</tbody></table></div>')
+            f'{G.abre_tabela(len(cabecalho))}<caption>{esc(legenda)}</caption>{G.fecha_tabela(th, corpo)}</div>')
 
 
 def nome_autor(modelo: dict, s: str) -> str:
@@ -608,6 +761,24 @@ def linha_placar(pessoa: dict, leg: str, maximo: int, docs: dict | None = None) 
 </li>"""
 
 
+def aba_legislatura(leg_id: str, selecionada: bool) -> str:
+    """Aba do placar no padrão WAI-ARIA, com tabindex móvel; app.js troca a seleção e o foco pelas setas."""
+    return (f'<button type="button" role="tab" id="aba-leg-{esc(leg_id)}" aria-selected="{"true" if selecionada else "false"}" '
+            f'aria-controls="leg-{esc(leg_id)}" tabindex="{0 if selecionada else -1}">{esc(leg_id)}</button>')
+
+
+def lista_abas_legislatura(abas: list[str]) -> str:
+    """Sem JS a lista fica oculta e todos os painéis aparecem empilhados; app.js a revela."""
+    return f'<div role="tablist" aria-label="Legislatura" class="abas" hidden>{"".join(abas)}</div>'
+
+
+def painel_legislatura(leg_id: str, conteudo: str) -> str:
+    """Painel sem `hidden`: sem JS, cada legislatura aparece com o próprio título; app.js oculta as outras."""
+    return (f'<section class="legislatura" id="leg-{esc(leg_id)}" data-leg="{esc(leg_id)}">\n'
+            f'<h3 class="titulo-legislatura">Legislatura {esc(leg_id.replace("-", "–"))}</h3>\n'
+            f'{conteudo}\n</section>')
+
+
 def gerar_index(modelo: dict) -> str:
     legs = modelo["legislaturas"]
     atual = legs[-1]["id"]
@@ -638,13 +809,10 @@ def gerar_index(modelo: dict) -> str:
         partidos_por_leg[leg["id"]] = sorted({p["mandatos"][leg["id"]]["partido"] for p in pessoas if p["mandatos"][leg["id"]]["partido"]})
         zerados = [p["nome"] for p in pessoas if p["mandatos"][leg["id"]]["eleito"] and p["mandatos"][leg["id"]]["metricas"]["leis"] == 0]
         nota_zero = f'<p class="nota">Eleitos sem nenhuma lei de autoria própria nesta legislatura: {esc(", ".join(zerados))}.</p>' if zerados else ""
-        blocos.append(f"""<section class="legislatura" id="leg-{esc(leg['id'])}" data-leg="{esc(leg['id'])}"{'' if leg['id'] == atual else ' hidden'}>
-{nota_zero}
-<ol class="placar">{''.join(linha_placar(p, leg['id'], maximo, docs_de(p, leg['id'])) for p in pessoas)}</ol>
-</section>""")
-        abas.append(f'<button type="button" role="tab" aria-selected="{"true" if leg["id"] == atual else "false"}" data-alvo="leg-{esc(leg["id"])}">{esc(leg["id"])}</button>')
+        blocos.append(painel_legislatura(leg["id"], f"""{nota_zero}
+<ol class="placar">{''.join(linha_placar(p, leg['id'], maximo, docs_de(p, leg['id'])) for p in pessoas)}</ol>"""))
+        abas.append(aba_legislatura(leg["id"], leg["id"] == atual))
     opcoes_partido = "".join(f'<option value="{esc(pt)}">{esc(pt)}</option>' for pt in sorted({x for v in partidos_por_leg.values() for x in v}))
-    atualizado = (modelo["meta"].get("coleta") or {}).get("em", "")[:10]
     pct_sem = round(100 * len(sem) / len(leis_atual)) if leis_atual else 0
     ordem_docs = explica_docs = ""
     if tem_docs:
@@ -653,13 +821,20 @@ def gerar_index(modelo: dict) -> str:
                         'aparece como autor, inclusive os assinados em conjunto, porque a listagem do SISCAM não separa autor de coautor. '
                         'Veja todos em <a href="atividades.html">Atividades</a>.')
 
-    corpo = f"""<section class="abertura">
- <h1>Leis que mudam a cidade, e quem as escreveu.</h1>
- <p>Desde 2021, a Câmara de Niterói analisou mais de {milhar(len(projs) // 100 * 100)} projetos de lei. Este site separa as leis com efeito real das homenagens, das leis que só autorizam o prefeito e das pautas polêmicas, e mostra quem fez cada uma.</p>
- <p class="atualizacao">Dados do SISCAM de {data_br(atualizado) if atualizado else '—'} · <a href="metodologia.html">como classificamos</a></p>
-</section>
+    # Blocos novos da home (coletor/site/inicio.py); importado aqui porque inicio importa este módulo.
+    from coletor.site import inicio
+    memoria = modelo["memoria"] if "memoria" in modelo else inicio.carregar_memoria(RAIZ)
+    blocos_extras = {
+        "quem": inicio.quem_e_meu_vereador(modelo),
+        "mapa": inicio.mapa_home(modelo),
+        "linha": inicio.linha_do_tempo(memoria),
+        "memoria": inicio.faixa_memoria(memoria) if MEMORIA_PUBLICADA else "",
+    }
+    extras = {k: (v + "\n\n" if v else "") for k, v in blocos_extras.items()}
 
-<section aria-labelledby="t-numeros">
+    corpo = f"""{inicio.hero(modelo, url_estatica)}
+
+{extras["quem"]}<section aria-labelledby="t-numeros">
  <h2 id="t-numeros" class="h-secao">Legislatura {esc(atual)}, até agora</h2>
  <div class="tiles">
   {tile(len(efeito), "leis de vereadores com efeito real", f"de {len(leis_atual)} leis aprovadas", "tile-efeito")}
@@ -674,11 +849,11 @@ def gerar_index(modelo: dict) -> str:
  <div class="cartoes">{''.join(cartao_lei(p, '') for p in destaques)}</div>
 </section>
 
-<section aria-labelledby="t-placar">
+{extras["mapa"]}<section aria-labelledby="t-placar">
  <div class="cab-secao"><h2 id="t-placar" class="h-secao">Produção de cada vereador como autor principal</h2></div>
  <p class="explica">O comprimento da barra é o total de projetos apresentados; as cores mostram o que aconteceu com eles. Projetos assinados como coautor não entram, para que assinaturas em bloco não inflem a conta.{explica_docs}</p>
  <div class="controles">
-  <div role="tablist" aria-label="Legislatura" class="abas">{''.join(abas)}</div>
+  {lista_abas_legislatura(abas)}
   <label>Ordenar por
    <select id="ordem">
     <option value="leis-efeito">Leis com efeito</option>
@@ -698,11 +873,12 @@ def gerar_index(modelo: dict) -> str:
  {''.join(blocos)}
 </section>
 
-<section class="convite">
+{extras["linha"]}{extras["memoria"]}<section class="convite">
  <a href="ruido.html"><strong>Sem efeito e polêmicas</strong><span>Homenagens, leis que só autorizam o prefeito, projetos repetidos e pautas que restringem direitos.</span></a>
  <a href="analises.html"><strong>Análises históricas</strong><span>Como a produção da Câmara mudou de 2021 a hoje, por tema, partido e tempo de tramitação.</span></a>
 </section>"""
-    return pagina("Radar dos Vereadores de Niterói", corpo, "index.html")
+    return pagina("Radar dos Vereadores de Niterói", corpo, "index.html", caminho="index.html",
+                  estilos=("inicio.css",), scripts=("inicio.js",))
 
 
 # ------------------------------------------------------------- leis e projetos
@@ -791,27 +967,32 @@ def filtros_lista(modo: str, cliente: dict | None = None) -> str:
  <p class="acoes-filtro"><button type="button" id="limpar">Limpar filtros</button> <button type="button" id="csv">Baixar CSV</button></p>
 </form>
 <div class="resumo-filtro" id="resumo-filtro" aria-live="polite"{atributos_resumo}>{texto_resumo}</div>
+<p id="anuncio" class="so-leitor" aria-live="polite"></p>
 <ol id="resultados" class="projetos"></ol>
 <button type="button" id="mais" class="mais" hidden>Mostrar mais</button>
 <noscript><p class="vazio">{esc(sem_js[modo])}</p></noscript>"""
 
 
 def gerar_leis(cliente: dict | None = None, manifesto: dict | None = None) -> str:
+    glossario = ColetorGlossario()
     corpo = f"""<section class="abertura">
  <h1>Leis aprovadas</h1>
  <p>Todas as leis que saíram de projetos apresentados desde 2021, com o impacto estimado e um resumo em linguagem simples. Filtre por impacto, tema, vereador ou partido; o quadro abaixo dos filtros mostra quem mais aprovou leis no recorte escolhido.</p>
+ <p class="explica">Leis de categoria {glossario.termo('simbolica', 'simbólica')} e leis {glossario.termo('autorizativa', 'autorizativas')} entram no grupo {glossario.termo('sem-efeito', 'sem efeito prático')}. Quando a lei vem de um {glossario.termo('substitutivo', 'substitutivo')}, ela conta para o projeto original.</p>
 </section>
-{filtros_lista('leis', cliente)}"""
-    return pagina("Leis aprovadas · Radar dos Vereadores de Niterói", corpo, "leis.html", manifesto=manifesto, dialogo=True)
+{filtros_lista('leis', cliente)}{glossario.definicoes()}"""
+    return pagina("Leis aprovadas · Radar dos Vereadores de Niterói", corpo, "leis.html", manifesto=manifesto, dialogo=True, caminho="leis.html")
 
 
 def gerar_projetos(cliente: dict | None = None, manifesto: dict | None = None) -> str:
+    glossario = ColetorGlossario()
     corpo = f"""<section class="abertura">
  <h1>Todos os projetos de lei</h1>
- <p>Os projetos apresentados desde 2021, incluindo os arquivados, vetados e em tramitação. Os filtros ficam no endereço da página, então dá para compartilhar uma busca.</p>
+ <p>Os projetos apresentados desde 2021, incluindo os arquivados, {glossario.termo('veto', 'vetados')} e em tramitação. Os filtros ficam no endereço da página, então dá para compartilhar uma busca.</p>
+ <p class="explica">A {glossario.termo('derrubada', 'derrubada de veto')} pode levar à promulgação da lei. Um {glossario.termo('substitutivo', 'substitutivo')} é um texto novo que substitui o do projeto.</p>
 </section>
-{filtros_lista('projetos', cliente)}"""
-    return pagina("Projetos de lei · Radar dos Vereadores de Niterói", corpo, "projetos.html", manifesto=manifesto, dialogo=True)
+{filtros_lista('projetos', cliente)}{glossario.definicoes()}"""
+    return pagina("Projetos de lei · Radar dos Vereadores de Niterói", corpo, "projetos.html", manifesto=manifesto, dialogo=True, caminho="projetos.html")
 
 
 # ------------------------------------------------------------------- novidades
@@ -828,7 +1009,7 @@ def item_evento(ev: dict, prefixo: str) -> str:
  <p class="cab"><span class="desfecho">{esc(N.ROTULO_EVENTO[ev['tipo']])}</span><time datetime="{esc(ev['data'])}">{data_br(ev['data'])}</time><a href="{esc(p['url'])}" target="_blank" rel="noopener">PL {esc(p['numero'])}{NOVA_ABA}</a></p>
  <p class="titulo-evento">{esc(N.titulo_evento(ev))}{sub}</p>
  {resumo}<p class="ementa">{esc(legivel(p['ementa']))}</p>
- <p class="autoria">{autores_html(p, prefixo)}{partido}</p>
+ <div class="autoria">{autores_html(p, prefixo)}{partido}</div>
 </li>"""
 
 
@@ -865,6 +1046,7 @@ def gerar_novidades(eventos: list[dict]) -> str:
 {f'<nav class="indice" aria-label="Semanas, pela segunda-feira, com o número de eventos">{indice}</nav>' if indice else ''}
 {''.join(secao_semana(s, '', i == 0) for i, s in enumerate(semanas)) or '<p class="vazio">Nenhum evento encontrado.</p>'}"""
     return pagina("Novidades · Radar dos Vereadores de Niterói", corpo, "novidades.html",
+                  caminho="novidades.html",
                   descricao="O que aconteceu nas últimas semanas com os projetos de lei da Câmara de Niterói: projetos apresentados, "
                             "leis, vetos e vetos derrubados, com feed RSS.")
 
@@ -891,17 +1073,18 @@ def mapa_indicacoes(modelo: dict, docs: list[dict], titulo: str, *, limite_gzip:
 
 
 def gerar_atividades(modelo: dict, manifesto: dict | None = None) -> str:
+    glossario = ColetorGlossario()
     docs = modelo.get("documentos") or []
-    abertura = """<section class="abertura">
+    abertura = f"""<section class="abertura">
  <h1>Atividades na Câmara</h1>
- <p>Indicações, moções, requerimentos, projetos de decreto legislativo e projetos de resolução apresentados desde 2021, separados dos projetos de lei. Filtre por tipo, ano, vereador, categoria ou bairro; cada item leva ao documento oficial no SISCAM. Os filtros ficam no endereço da página.</p>
+ <p>{glossario.termo('indicacao', 'Indicações')}, {glossario.termo('mocao', 'moções')}, {glossario.termo('requerimento', 'requerimentos')}, {glossario.termo('pdl', 'projetos de decreto legislativo')} e {glossario.termo('projeto-de-resolucao', 'projetos de resolução')} apresentados desde 2021, separados dos projetos de lei. Filtre por tipo, ano, vereador, categoria ou bairro; cada item leva ao documento oficial no SISCAM. Os filtros ficam no endereço da página.</p>
  <p class="atualizacao">Classificação por regras sobre a ementa · <a href="metodologia.html#atividades">como classificamos</a></p>
 </section>"""
     titulo = "Atividades · Radar dos Vereadores de Niterói"
     descricao = "Indicações, moções, requerimentos, PDLs e resoluções da Câmara de Niterói, por vereador, tipo, categoria e bairro."
     ano_padrao = ano_padrao_doc(manifesto["arquivos"]) if manifesto and manifesto.get("build_doc") else None
     if not docs or ano_padrao is None:
-        return pagina(titulo, abertura + '\n<p class="vazio">Nenhum documento coletado ainda.</p>', "atividades.html", descricao=descricao)
+        return pagina(titulo, abertura + '\n<p class="vazio">Nenhum documento coletado ainda.</p>' + glossario.definicoes(), "atividades.html", descricao=descricao, caminho="atividades.html")
 
     def opcoes(pares) -> str:
         return "".join(f'<option value="{esc(k)}">{esc(v)}</option>' for k, v in pares)
@@ -961,8 +1144,8 @@ def gerar_atividades(modelo: dict, manifesto: dict | None = None) -> str:
 <ol id="resultados" class="projetos documentos"></ol>
 <button type="button" id="mais" class="mais" hidden>Mostrar mais</button>
 <noscript><p class="vazio">A lista de documentos precisa de JavaScript. Os documentos mais recentes de cada vereador também aparecem na página dele.</p></noscript>
-{resumos}"""
-    return pagina(titulo, corpo, "atividades.html", descricao=descricao, manifesto=manifesto, dialogo=True)
+{resumos}{glossario.definicoes()}"""
+    return pagina(titulo, corpo, "atividades.html", descricao=descricao, manifesto=manifesto, dialogo=True, caminho="atividades.html")
 
 
 def secao_resumos_atividades(modelo: dict) -> str:
@@ -1053,6 +1236,7 @@ def secao_resumos_atividades(modelo: dict) -> str:
 
 # --------------------------------------------------------------------- ruído
 def gerar_ruido(modelo: dict) -> str:
+    glossario = ColetorGlossario()
     projs = modelo["projetos"]
     legs = modelo["legislaturas"]
     atual = legs[-1]["id"]
@@ -1101,7 +1285,8 @@ def gerar_ruido(modelo: dict) -> str:
 
     corpo = f"""<section class="abertura">
  <h1>Sem efeito e polêmicas</h1>
- <p>Uma parte da produção da Câmara não muda nada na vida da cidade: homenagens, datas comemorativas, nomes de rua, leis que só "autorizam" o prefeito a fazer o que ele já pode fazer, e projetos que repetem outros. Outra parte gera conflito: restringe direitos de grupos, explora pauta de costumes ou tem apelo populista. Esta página reúne as duas.</p>
+ <p>Uma parte da produção da Câmara não muda nada na vida da cidade: homenagens, datas comemorativas, nomes de rua, leis {glossario.termo('autorizativa', 'autorizativas')} que só "autorizam" o prefeito a fazer o que ele já pode fazer, e projetos que repetem outros. Outra parte gera conflito: restringe direitos de grupos, explora pauta de costumes ou tem apelo populista. Esta página reúne as duas.</p>
+ <p class="explica">O grupo {glossario.termo('sem-efeito', 'sem efeito prático')} inclui a categoria {glossario.termo('simbolica', 'simbólica')}; não é uma avaliação de resultado comprovado.</p>
 </section>
 <div class="tiles">
  {tile(len(simb), "leis simbólicas aprovadas desde 2021", f"{round(100 * len(simb) / max(len(leis_ver), 1))}% das leis de vereadores", "tile-sem")}
@@ -1115,7 +1300,7 @@ def gerar_ruido(modelo: dict) -> str:
 <section id="ia"><h2 class="h-secao">Marcadas por IA ({len(ia)})</h2><p class="explica">Alertas sugeridos pela IA a partir da ementa, com confiança mínima de {int(CONFIANCA_MINIMA * 100)}%. Podem conter erros; cada um tem link para contestar.</p>{lista(ia, "Nenhum projeto marcado por IA ainda.", "sinal=alerta_ia")}</section>
 <section id="autorizativas"><h2 class="h-secao">Leis autorizativas aprovadas ({len(autoriz_leis)})</h2><p class="explica">{esc(DESC_SINAL['autorizativa'])}</p>{lista(autoriz_leis, "Nenhuma.", "origem=vereador&desfecho=lei&sinal=autorizativa")}</section>
 <section id="repetidos"><h2 class="h-secao">Projetos que repetem outro ({len(rep)})</h2><p class="explica">{esc(DESC_SINAL['repete_projeto'])} Reapresentar um projeto arquivado é legítimo; o sinal serve para ver o quanto da produção é reaproveitada.</p>{lista(sorted(rep, key=lambda p: p['data'] or '', reverse=True), "Nenhum.", "origem=vereador&sinal=repete_projeto")}</section>"""
-    return pagina("Sem efeito e polêmicas · Radar dos Vereadores de Niterói", corpo, "ruido.html")
+    return pagina("Sem efeito e polêmicas · Radar dos Vereadores de Niterói", corpo + glossario.definicoes(), "ruido.html", caminho="ruido.html")
 
 
 def secao_homenagens(modelo: dict) -> str:
@@ -1264,7 +1449,7 @@ def gerar_analises(modelo: dict) -> str:
 </section>
 <div class="graficos">{g1}{g2}{g3}{g4}{g5}</div>
 {''.join(blocos_leg)}"""
-    return pagina("Análises · Radar dos Vereadores de Niterói", corpo, "analises.html")
+    return pagina("Análises · Radar dos Vereadores de Niterói", corpo, "analises.html", caminho="analises.html")
 
 
 def grafico_producao_por_tipo(modelo: dict) -> str:
@@ -1317,7 +1502,7 @@ def gerar_vereador(modelo: dict, pessoa: dict) -> str:
         graf_ano = ""
         if len(anos) > 1:
             c = lambda f: [sum(1 for p in proj if p["ano"] == a and f(p)) for a in anos]
-            graf_ano = G.colunas_empilhadas("Projetos por ano de apresentação", "", [str(a) for a in anos], [
+            graf_ano = G.colunas_empilhadas(f"Projetos por ano de apresentação · {leg['id']}", "", [str(a) for a in anos], [
                 ("Lei com efeito", "c-efeito", c(com_efeito)),
                 ("Lei de impacto baixo", "c-baixo", c(lambda p: p["desfecho"] == "virou_lei" and not com_efeito(p) and not sem_efeito(p))),
                 ("Lei sem efeito prático", "c-sem-efeito", c(lambda p: p["desfecho"] == "virou_lei" and sem_efeito(p))),
@@ -1325,7 +1510,7 @@ def gerar_vereador(modelo: dict, pessoa: dict) -> str:
                 ("Sem êxito", "c-sem-exito", c(lambda p: DESFECHO_GRUPO.get(p["desfecho"]) == "sem_exito")),
             ], altura=200)
         temas = Counter(p["tema"] for p in proj if p["tema"] not in ("outro",))
-        graf_tema = "" if len(temas) < 2 else G.barras_horizontais("Temas dos projetos apresentados", "", [{"rotulo": NOME_TEMA.get(t, t), "v": n} for t, n in temas.most_common(8)],
+        graf_tema = "" if len(temas) < 2 else G.barras_horizontais(f"Temas dos projetos apresentados · {leg['id']}", "", [{"rotulo": NOME_TEMA.get(t, t), "v": n} for t, n in temas.most_common(8)],
                                          [("Projetos", "c-exec", "v")])
 
         tiles = "".join([
@@ -1360,7 +1545,7 @@ def gerar_vereador(modelo: dict, pessoa: dict) -> str:
 {''.join(secoes)}{pagina_sessoes.secao_sessoes_vereador(modelo, pessoa)}{secao_atividade(modelo, pessoa) if tem_docs else ''}"""
     return pagina(f"{pessoa['nome']} · Radar dos Vereadores de Niterói", corpo, "", "../",
                   f"Leis e projetos de {pessoa['nome']} na Câmara de Niterói: quantas leis com efeito, quantas sem efeito prático e quais pautas polêmicas.",
-                  dialogo=tem_docs)
+                  dialogo=tem_docs, caminho=f"vereadores/{pessoa['slug']}.html")
 
 
 def secao_atividade(modelo: dict, pessoa: dict) -> str:
@@ -1479,6 +1664,7 @@ def metricas_atividade(modelo: dict, pessoa: dict) -> str:
 def gerar_metodologia(modelo: dict) -> str:
     from coletor.site import pagina_sessoes
 
+    glossario = ColetorGlossario()
     cls = modelo["meta"].get("classificacao") or {}
     defs_cat = "".join(f"<dt>{esc(NOME_CATEGORIA[k])}</dt><dd>{esc(v)}</dd>" for k, v in CATEGORIAS.items())
     defs_al = "".join(f"<dt>{esc(NOME_ALERTA[k])}</dt><dd>{esc(v)}</dd>" for k, v in ALERTAS.items())
@@ -1486,6 +1672,7 @@ def gerar_metodologia(modelo: dict) -> str:
     defs_doc = "".join(f"<dt>{esc(v)}</dt><dd>{esc(DESC_CATEGORIA_DOC.get(k, ''))}</dd>" for k, v in NOME_CATEGORIA_DOC.items())
     corpo = f"""<section class="abertura texto">
 <h1>Metodologia</h1>
+<nav class="indice" aria-label="Nesta página"><a href="#glossario">Glossário</a><a href="#impacto">Impacto e efeito</a><a href="#atividades">Atividades</a><a href="#sessoes">Sessões</a></nav>
 <p>Este site mede a produção de cada vereador em projetos de lei, não seu trabalho inteiro. Indicações, moções, requerimentos, projetos de decreto legislativo e de resolução aparecem à parte, na página <a href="atividades.html">Atividades</a>, e não entram nos números de projetos e leis. A página <a href="sessoes.html">Sessões e votações</a> e a seção "Presença e votos" de cada vereador mostram os registros plenários, com as <a href="#sessoes">regras de contagem e limitações</a>. Comissões, fiscalização fora do SISCAM e atendimento à população não aparecem no site.</p>
 
 <h2>De onde vêm os dados</h2>
@@ -1573,7 +1760,7 @@ def gerar_metodologia(modelo: dict) -> str:
 <p>O mapa usa valores absolutos, sem ajuste por população: não mede necessidade, atendimento nem qualidade. O bairro é inferido da ementa pelas mesmas regras das tabelas; a porcentagem sem bairro identificado aparece junto ao mapa, e essas indicações ficam fora dele. Os resumos cobrem todos os anos coletados e não mudam com os filtros da lista. Os bairros com indicações são divididos em até cinco faixas por quantis: os cortes buscam grupos de tamanhos semelhantes, sem separar bairros empatados, e há menos faixas quando há poucos valores distintos. Os limites são arredondados para números simples apenas no intervalo entre valores observados, sem alterar os grupos ou criar faixas vazias. Zero tem uma faixa própria hachurada, só quando há bairros sem indicações. A legenda mostra os limites e o número de bairros em cada faixa; a tabela alternativa inclui os 52 bairros, inclusive zeros, com os valores exatos. As faixas dependem dos dados: cores de mapas com limites diferentes não são diretamente comparáveis.</p>
 <p>Limites: © contribuidores do OpenStreetMap, sob <a href="https://www.openstreetmap.org/copyright">ODbL 1.0</a>, obtidos pelo Overpass das relações administrativas dos bairros (nível 10) dentro do município de Niterói (<a href="https://www.openstreetmap.org/relation/2220789">relação 2220789</a>). A data da base OSM aparece junto a cada mapa; as tags de origem dos limites indicam IBGE. A geometria é projetada localmente, simplificada e arredondada para exibição: não é um mapa cadastral nem uma confirmação municipal dos limites. Nas páginas dos vereadores, o mapa só pode aparecer se SVG, legenda, tabela e atribuição somarem no máximo 12 KiB gzip. Com a geometria atual (base OSM de 23/10/2026), esse orçamento é excedido: o mapa por vereador não é exibido, e ficam as tabelas por legislatura. O <a href="atividades.html#bairros">mapa geral está em Atividades</a>. Sem o arquivo de geometria, a geração mantém os gráficos e tabelas existentes, sem mapa.</p>
 
-{pagina_sessoes.metodologia_sessoes(modelo)}
+{pagina_sessoes.metodologia_sessoes(modelo, glossario)}
 
 <h2>Limitações</h2>
 <ul>
@@ -1584,10 +1771,12 @@ def gerar_metodologia(modelo: dict) -> str:
  <li>Erros de registro no SISCAM passam para cá.</li>
 </ul>
 
+{secao_glossario()}
+
 <h2>Contestar ou corrigir</h2>
 <p>Projetos com alerta ou sinal têm um link "contestar", que abre uma issue no GitHub. Correções na composição das legislaturas e na curadoria podem ser enviadas como pull request.</p>
 </section>"""
-    return pagina("Metodologia · Radar dos Vereadores de Niterói", corpo, "metodologia.html")
+    return pagina("Metodologia · Radar dos Vereadores de Niterói", corpo + glossario.definicoes(), "metodologia.html", caminho="metodologia.html")
 
 
 def redirecionar(destino: str) -> str:

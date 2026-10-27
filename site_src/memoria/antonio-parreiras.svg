@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <symbol id="emblema" viewBox="0 0 96 96">
+    <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M48 14H84V46H70M48 34V14M55 37H77M55 30L62 24L70 30H77"/>
+      <path d="M48 40C27 34 11 47 12 63C13 80 32 87 49 82C59 79 72 72 70 64C68 57 56 63 53 57C50 52 59 45 48 40Z"/>
+      <ellipse cx="52" cy="71" rx="5" ry="4"/>
+    </g>
+    <g fill="var(--acento)">
+      <circle cx="25" cy="56" r="4"/>
+      <circle cx="38" cy="49" r="4"/>
+      <circle cx="23" cy="70" r="4"/>
+      <circle cx="36" cy="76" r="4"/>
+    </g>
+  </symbol>
+</svg>

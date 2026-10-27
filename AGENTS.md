@@ -26,23 +26,40 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `coletor/arquivos.py` | Serialização e gravação atômica dos JSONs versionados. |
 | `coletor/validar.py` | Validação de dados, configuração e temporários, sem alterar arquivos. |
 | `coletor/geo.py` | Conversão offline do Overpass em limites simplificados dos bairros, com fonte OSM/ODbL. |
+| `coletor/paisagem.py` | Marca e favicon (`--marca`), textura dos bairros (`--textura`), camadas da paisagem (`--camadas`) e imagem de compartilhamento (`--og`); geração offline em `site_src/`, comparada por bytes nos SVGs e por pixels no PNG. |
 | `coletor/novidades.py` | Eventos dos PLs pelas datas dos dados, semanas e feed RSS. |
 | `coletor/gerar_site.py` | Geração de `site/`, JSONs do navegador, manifesto e relatório de tamanhos. |
 | `coletor/site/modelo.py` | Enriquecimento, pessoas, mandatos, métricas, repetidos e documentos por autor. |
 | `coletor/site/modelo_sessoes.py` | Agregação de sessões, cobertura e métricas da Câmara e das pessoas. |
 | `coletor/site/pagina_sessoes.py` | Página de sessões, seção individual e metodologia `#sessoes`. |
+| `coletor/site/inicio.py` | Blocos da home: hero com camadas, “Quem é meu vereador?”, mapa de indicações da legislatura atual e linha do tempo de `config/memoria.json`. |
+| `coletor/site/pagina_memoria.py` | Página de memória `memoria.html`, gerada por `coletor.gerar_site` quando há `config/memoria.json`; link no rodapé e faixa na home só quando publicada. |
+| `coletor/site/glossario.py` | Glossário: links `a.glossario` para `metodologia.html#g-*` na prosa, definições num `<template>` por página e popover progressivo em `navegacao.js`. |
 | `coletor/site/graficos.py` | Gráficos SVG e tabelas acessíveis. |
 | `coletor/site/paginas.py` | HTML, navegação, componentes, diálogo SISCAM e metodologia. |
 | `config/vereadores.json` | Legislaturas, eleitos, partidos da eleição, apelidos e afastamentos. |
 | `config/curadoria.json` | Rótulos e correções editoriais com fontes públicas. |
+| `config/memoria.json` | Conteúdo editorial da memória: critérios, homenageados e linha do tempo; validado por `coletor.validar`. |
 | `data/proposicoes/`, `data/documentos/`, `data/sessoes/` | Registros coletados por ano (documentos também por tipo). |
 | `data/classificacao_ia.json`, `data/meta.json` | Cache da IA e metadados das execuções. |
 | `data/geo/bairros.json` | Geometria opcional gerada por `coletor.geo`. |
 | `site_src/app.js` | Listas de PLs/documentos, carregador compartilhado e diálogo SISCAM. |
+| `site_src/navegacao.js` | Menu móvel e tema, até 4 KiB gzip; um listener por tipo no documento em cada script, sem alterar `app.js` para essas funções. |
 | `site_src/dados.js` | Hidratação das colunas e planejamento das partes de PLs/documentos. |
 | `site_src/sessoes.js` | Filtros, mapa de votos, paginação e CSV de sessões. |
-| `site_src/estilo.css`, `site_src/favicon.svg` | Estilos e ícone. |
+| `site_src/inicio.js` | Só na home: céu vivo pelo fuso `America/Sao_Paulo` com fallback UTC−3, contagem dos números e combobox APG; até 6 KiB gzip. |
+| `site_src/inicio.css` | Só na home: fases do céu por `[data-ceu]`, com hexadecimais apenas nesses blocos; paralaxe sob `@supports (animation-timeline: scroll())` e sem movimento reduzido. |
+| `site_src/memoria.css` | Estilos da página de memória (só nela, com a Fraunces). |
+| `site_src/estilo.css` | Estilos, tokens, paleta e `@font-face`. |
+| `site_src/favicon.svg` | Ícone gerado por `coletor.paisagem`; não editar à mão. |
+| `site_src/marca.svg` | Símbolo `#marca`: ondas com `currentColor`, sol com `fill` herdado do `<use>` via token `--marca-sol`; gerado, não editar à mão. |
+| `site_src/textura-bairros.svg` | Gerada por `python -m coletor.paisagem --textura` a partir de `data/geo/bairros.json`; não editar à mão; ≤ 12 KiB gzip; atribuição OSM visível no rodapé. |
+| `site_src/paisagem/*.svg` | Máscaras geradas por `python -m coletor.paisagem --camadas`; não editar à mão. |
+| `site_src/og-radar.png` | Imagem de compartilhamento 1200×630 gerada por `python -m coletor.paisagem --og`; testes comparam pixels, não os bytes comprimidos. |
+| `site_src/memoria/*.svg` | Emblemas próprios com `<symbol id="emblema">` e máscara de azulejo (`azulejo.svg`). |
+| `site_src/fontes/` | WOFF2 auto-hospedadas Barlow Condensed, Public Sans e Fraunces; licenças `OFL-*.txt`; `FONTES.md` não publicado. |
 | `tests/` | Testes Python, JS em `tests/js/` e HTML real em `tests/fixtures/siscam/`. |
+| `tests/js/fixtures/cartao_sessoes.html` | Paridade Python/JavaScript do cartão de votação. |
 | `.github/workflows/` | Testes, coleta semanal e publicação. |
 | `site/` | Saída gerada e ignorada pelo Git. |
 
@@ -54,11 +71,20 @@ versionada; o código também trata sua ausência conforme os contratos abaixo.
 - **Nunca edite à mão `data/` nem `site/`**, inclusive geometria, cache e metadados. Corrija coleta, regras ou
   configuração e regenere; correções editoriais cabem em `config/curadoria.json`.
 - Edite fontes em `coletor/`, `config/` e `site_src/` conforme a responsabilidade. O gerador apaga e recria `site/`.
+- `coletor/gerar_site.py:copiar_estaticos` copia `site_src/` recursivamente pela regra única
+  `paginas.publicavel`: ignora componentes do caminho iniciados por `.` e arquivos `*.md`.
+  No CSS publicado, cada alvo local de `url()`, `@import "…"` e `image-set("…")` recebe
+  `?v=<10 primeiros hex do SHA-1 dos bytes publicados do alvo>`, com o fragmento depois de `?v=`.
+  URLs `data:` e absolutas ficam intactas; alvo inexistente, fora de `site_src/` ou não publicável é erro.
+  `paginas.url_estatica(nome, prefixo)` e `versao_estatica` calculam `?v=` sobre os bytes **publicados**
+  (CSS após a reescrita); preloads usam exatamente a mesma URL. O favicon também leva `?v=`.
 - Preserve `/site/` com barra inicial no `.gitignore`: `site/` também ignoraria o código em `coletor/site/`.
 - Grave `data/` só por `coletor/arquivos.py`: `salvar_lista` (um registro por linha), `salvar_mapa` (uma chave
   por linha) e `salvar_json` (JSON pequeno, como metadados, com `indent=1`). Não são todos o mesmo formato.
   Todos ordenam chaves, usam UTF-8, `ensure_ascii=False`, LF, quebra final e gravação atômica.
   `.gitattributes` fixa LF em `data/**`; temporários `.*.tmp` não devem ser versionados.
+- `.gitattributes` também fixa LF em `site_src/**`, `coletor/**`, `config/*.json`, `tests/js/**` e `*.py`;
+  marca `*.woff2` e `*.png` como binários e mantém `tests/fixtures/** -text` por último.
 - O hash da IA é SHA-1 de `VERSAO_PROMPT|MODELO|ementa`, truncado para 16 caracteres. Mudar versão ou modelo
   invalida o cache **para novas chamadas**, com custo de reclassificação. Ao mudar o prompt, revise a versão
   e esse custo; não apague o cache para experimentar. O gerador lê o cache existente sem conferir esse hash.
@@ -82,7 +108,9 @@ Os três primeiros e a classificação rodam na coleta; a geração fica no work
 6. `gerar_site` combina curadoria, regras e cache, calcula métricas e recria `site/`. As páginas principais
    seguem `paginas.NAV`: início, novidades, leis, projetos, atividades, sessões, sem efeito e polêmicas
    (`ruido.html`), análises e metodologia. Também gera `vereadores/*.html`, `feed.xml`, o redirect
-   `alertas.html` → `ruido.html`, `dados/*`, estáticos e `.nojekyll`.
+   `alertas.html` → `ruido.html`, `404.html`, `dados/*`, estáticos e `.nojekyll`. A 404 usa o template comum,
+   prefixo de caminho absoluto extraído de `URL_SITE`, `noindex`, sem canônica, e lista de vereadores da
+   legislatura atual.
 
 Execute na raiz, trocando o ano conforme necessário:
 
@@ -97,6 +125,33 @@ python -m http.server -d site 8000
 ```
 
 Para usar só os dados versionados, comece por `validar` e `gerar_site`, sem rede nem chave.
+
+Para regenerar a marca e o favicon após mudar sua geometria, execute separadamente, offline:
+
+```text
+python -m coletor.paisagem --marca
+```
+
+Para regenerar a textura após atualizar os limites dos bairros, também offline:
+
+```text
+python -m coletor.paisagem --textura
+```
+
+Para regenerar as máscaras da paisagem e a imagem de compartilhamento após mudar as silhuetas, offline:
+
+```text
+python -m coletor.paisagem --camadas --og
+```
+
+### Validação da memória
+
+`coletor.validar` também confere `config/memoria.json`; a ausência do arquivo gera aviso. Valida campos,
+datas `AAAA` ou `AAAA-MM-DD`, homenageados falecidos, categorias fechadas (`fundacao`, `ciencia`, `artes`,
+`musica`, `arquitetura`), fontes HTTPS por pessoa e evento, ids únicos e linha do tempo ordenada.
+Exige `data_fim` ≥ `data` e emblema no padrão `^[a-z0-9-]+\.svg$`. Domínio público só é aceito para
+fotografia pelo art. 44 da Lei 9.610/98, com `ano_divulgacao + 70 < ano atual`. O formato é JSON com
+`indent=1`, UTF-8, LF e normalização NFC.
 
 ### Opções das CLIs
 
@@ -176,13 +231,94 @@ Não há carregamento automático de `.env`. A IA usa `POST /chat/completions`, 
   `build_doc` fica no manifesto. O alvo de fatiamento é 120 KiB gzip, com margem de 512 bytes; as primeiras
   partes de tipo/ano usam 24 KiB até cobrir `PASSO_LISTA` e terminar numa troca de data. Uma data só se divide
   se não couber sozinha no orçamento. Partes por autor usam o alvo de 120 KiB.
-- URLs dos arquivos do manifesto e dos estáticos usam `?v=` com os 10 primeiros caracteres do SHA-1 dos bytes.
+- URLs dos arquivos do manifesto usam `?v=` com os 10 primeiros caracteres do SHA-1 dos bytes;
+  para estáticos, veja a regra de bytes publicados em "O que editar e como gravar".
 - `atividades.html` e a seção "Atividade" das fichas usam filtros na URL. Métricas agregadas de documentos
   são HTML/SVG, sem novas colunas nos JSONs e sem reagir aos filtros da lista.
 - "Ver no SISCAM" abre `<dialog>` com iframe em sandbox. Só aceite a URL HTTPS exata do host SISCAM e
   `DetalhesDocumentos.aspx?IdDocumento=<n>`; preserve o link "abrir no SISCAM" como alternativa visível.
 - Preserve colunas, escape de HTML e os espelhos `PASSO_LISTA`/`PASSO`, `plano_docs`/`fatiasDocs` e as fixtures
   de paridade. Sessões têm contrato próprio, consolidado na próxima seção.
+- Toda tabela fica em `div.tabela-rolavel[role=region][tabindex=0][aria-label]`, com rótulo acessível único
+  na página e foco por teclado. Exceções: os wrappers `tabela-resumo` e `faixa-rolagem`, que preservam seus
+  próprios `role="region"`, `tabindex="0"` e rótulo (`aria-label` ou `aria-labelledby`).
+- Tabelas empilham em vez de rolar: toda `<table>` sai pelos auxiliares de `graficos.py` (`abre_tabela`,
+  `fecha_tabela`, `cab_coluna`, `cab_linha`, `celula`, usados por `tabela`, `paginas.tabela_resumo` e a faixa
+  de sessões) com classes `empilha col-N` (N colunas), papéis ARIA explícitos (`table`, `rowgroup`, `row`,
+  `columnheader`, `rowheader`, `cell`) e `data-label` em toda célula do corpo, igual ao texto do cabeçalho
+  da coluna (no cabeçalho de linha, o da primeira coluna). Os wrappers são contêineres (`container-type:
+  inline-size`); no fim de `estilo.css`, `@container (max-width: …)` por faixa de `col-N` transforma cada linha
+  em cartão: `thead` fora da tela como `.so-leitor` (nunca `display: none`), cabeçalho de linha como título e
+  `td::before` com `attr(data-label)`. Regras genéricas, sem CSS por tabela. Os wrappers mantêm
+  `overflow-x: auto` só como alternativa sem container queries, e `position: relative`: contêm os spans
+  `.so-leitor` absolutos das células; sem o bloco de contenção, eles escapam do recorte e alargam a página.
+  Meta: nenhuma tabela com rolagem horizontal a 320, 375 e 414 px. `tests/test_tabelas_empilhaveis.py` confere
+  os construtores e `TestGerarSite` confere todas as tabelas do site gerado.
+
+### Home e interações acessíveis
+
+- A home segue a ordem hero → “Quem é meu vereador?” → números → destaques → mapa → placar → linha do tempo
+  → faixa “Niterói que nos inspira” → convites. Blocos sem dados podem ser omitidos. `inicio.css` e `inicio.js`
+  são carregados só na home; sem JavaScript, permanecem a lista de vereadores em `<details>` e os números reais do servidor.
+- Tooltips abrem por hover ou foco; alternar por toque exige `pointerType === "touch"`. Fecham com Esc,
+  interação fora, saída do foco ou rolagem. `aria-describedby` fica nos links focalizáveis, nunca se adiciona
+  `tabindex` às marcas dos gráficos. Gráficos com links usam `role="group"`, não `role="img"`.
+- Autoria usa `<div class="cartao-autor">` ou `<div class="autoria">`, com `<details class="coautores">`
+  para os demais nomes; não envolva esses blocos em `<p>`. Preserve a paridade da marcação Python/JavaScript.
+- As abas do placar seguem APG: `tablist` sai com `hidden` e o JavaScript o revela; setas, Home/End e
+  `tabindex` móvel controlam seleção e foco. Os painéis saem como `<section>` sem `hidden`, `role` ou `tabindex`,
+  com `h3.titulo-legislatura` visível sem JavaScript. Ao revelar as abas, o JS acrescenta `role="tabpanel"`,
+  `tabindex="0"` e `aria-labelledby`, para manter todas as legislaturas legíveis sem JS.
+- “Mostrar mais” nas listas de PLs, documentos e votações leva o foco ao primeiro item novo e anuncia
+  a inclusão numa região `aria-live="polite"`, inclusive quando o botão desaparece no último lote.
+
+### Cabeçalho, tema e metadados
+
+- `paginas.SCRIPT_CABECA` roda inline antes do CSS: adiciona `js` só com `matchMedia` e `addEventListener`,
+  e aplica `localStorage['radar-tema']` se for `claro` ou `escuro`. Cabe em 400 bytes; os testes comparam
+  seu conteúdo byte a byte com a constante de `tests/js/tema.test.js`.
+- Abaixo de 760 px, sem JS, a navegação é uma grade de duas colunas com links de altura mínima de 44 px.
+  Com `js`, começa recolhida no próprio CSS, sem salto de layout. O `onerror` de `navegacao.js` e os retornos
+  sem menu funcional removem `js`, restaurando os links. Clique fora fecha; `focusout` fecha ao sair do
+  cabeçalho só sem pressão de ponteiro em curso; Esc fecha e devolve o foco ao botão Menu.
+- `.tema` tem três botões com `aria-pressed`: Automático, Claro e Escuro; fica oculto sem JS.
+  `navegacao.js` cuida do menu e do tema, separado de `app.js`. Preserve um listener por tipo no documento
+  em cada script. A ordem dos scripts com `defer` é `navegacao.js` → `dados.js` → `app.js` → extras.
+- `pagina()` recebe `caminho` e `indexavel`: canônica e `og:url` usam `URL_SITE` + caminho (`index.html`
+  vira a raiz); com `indexavel=False`, saem ambas e entra `noindex`. O template também emite `og:type`,
+  `og:site_name`, `og:locale`, `twitter:card` e `theme-color` claro/escuro. Com `og-radar.png` disponível,
+  toda página do template recebe `og:image` (URL absoluta com `?v=`), largura, altura, texto alternativo
+  e `twitter:image`. `estilos=` recebe uma tupla de CSS extras por página, versionados e inseridos após
+  o CSS global quando existem. O redirect `alertas.html` é separado e não recebe esses metadados.
+- View Transitions usam `@view-transition` sob `prefers-reduced-motion: no-preference`, com os nomes
+  `marca` no cabeçalho e `titulo` no título de abertura ou hero.
+
+### Tokens e fontes
+
+- Os tokens de cor do contrato são literais hexadecimais de seis dígitos em `:root`, no bloco `@media`
+  escuro e em `:root[data-theme="dark"]`, nunca `var()`. Não use hexadecimais em `[data-theme="light"]`.
+  `tests/test_design_tokens.py` verifica os pares WCAG declarados; preserve esses contrastes.
+- Use em todos os componentes os tokens de `site_src/estilo.css`: `--fs--1` a `--fs-6` (escala de razão
+  1,2 com `clamp()`), `--esp-1` a `--esp-8`, `--raio-*`, `--sombra-*`, `--dur-*` e `--ease-mar`.
+  Texto auxiliar tem mínimo de `.8125rem` (`--fs--1`) e entrelinha ≥ 1,4. A exceção são os rótulos de
+  12 px em unidades do viewBox na `.svg-box`, identificados pelo comentário `/* exceção de tamanho: … */`;
+  a faixa de votos de sessões não tem essa exceção.
+- Fontes são auto-hospedadas em `site_src/fontes/`, com `font-display: swap`. Não carregue fontes de
+  terceiros; o carregamento via Google Fonts foi removido. Preserve as licenças OFL junto aos arquivos.
+
+### Responsividade e meios de saída
+
+- Nas grades autoajustáveis, use `minmax(min(100%, Npx), 1fr)`, sem mínimos fixos > 288 px.
+  A meta é nenhuma rolagem horizontal da página a 320 px; confira com Playwright na QA. As tabelas
+  empilham em cartões conforme o contrato acima, sem rolagem horizontal própria a 320, 375 e 414 px.
+- Alvos de toque dos controles principais têm ≥ 44 px; chips, tags e `.ver-siscam`, ≥ 24 px.
+  No desktop, navegação e tema podem ampliar a área de toque por pseudoelementos sem ampliar o desenho.
+- A textura decorativa fica em `body::before`, com `mask-image` de `textura-bairros.svg`,
+  `background-color: var(--tinta)` e opacidade ≤ .06; fica oculta na impressão e em cores forçadas.
+- Em `@media (forced-colors: active)`, preserve bordas visíveis e foco com `Highlight`. As cores de dados
+  só são preservadas com `forced-color-adjust: none` nas amostras, barras, marcas dos gráficos e mapa,
+  não no texto ou nos cartões inteiros.
+- Na impressão, mantenha texto preto sobre branco, sem textura nem sombras e com os controles ocultos.
 
 ### Orçamentos (gzip, salvo indicação contrária)
 
@@ -191,16 +327,28 @@ Não há carregamento automático de `.env`. A IA usa `POST /chat/completions`, 
 | JSON inicial de cada página | 200 KiB, soma dos arquivos previstos sem filtros. |
 | Manifesto, dicionários e arquivos de PL | 200 KiB por arquivo buscado. |
 | Parte de documentos (`doc-*`, `ver/*`) ou votações (`vot-*`) | 150 KiB por arquivo. |
-| HTML, inclusive fichas e `sessoes.html` | 100 KiB por página. |
+| HTML, inclusive home, fichas e `sessoes.html` | 100 KiB por página. |
+| Carga da home (`index.html`, CSS/JS e máscaras em gzip, WOFF2 em bytes brutos) | Até 300 KiB. |
 | Apresentação de `sessoes.html` | Alvo de 60 KiB nos dados reais, não teto imposto pelo gerador. |
 | Seção individual de sessões | Até +10 KiB, verificada em teste sintético. |
 | `sessoes.js` | Até 12 KiB, testado offline. |
+| `navegacao.js` | Até 4 KiB. |
+| `inicio.js` | Até 6 KiB. |
+| CSS global (`estilo.css` publicado) | Até 16 KiB, testado em `tests/test_responsivo_css.py`. |
+| Script inline `paginas.SCRIPT_CABECA` | Até 400 bytes **brutos**. |
+| `favicon.svg` e `marca.svg` | Até 2 KiB **brutos** cada. |
+| `textura-bairros.svg` | Até 12 KiB; distância de simplificação fixa, sem ajuste pelo compressor. |
+| Camadas da paisagem (`paisagem/*.svg`) | Até 18 KiB somadas. |
+| Emblemas (`memoria/*.svg`, exceto azulejo) | Até 6 KiB cada. |
+| `memoria/azulejo.svg` | Até 12 KiB. |
 | Mapa individual de indicações completo | Até 12 KiB, medidos deterministicamente na geração. |
 | Geometria `data/geo/bairros.json` | Até 60 KiB **brutos**, conferidos pelo conversor. |
 
 O gerador imprime tamanhos brutos/gzip, soma e máximo das famílias e avisos `::warning::` para os tetos
 oficiais de HTML/JSON/carga inicial. Não confunda esses tetos com alvos de apresentação; os testes do mapa
 de votos também têm um cenário sintético de até 65 KiB para a página com mapa.
+`tests/test_gerar_site.py` (`TestGerarSite`) confere no site recém-gerado o teto de 100 KiB por HTML,
+a varredura de acessibilidade (sem bloco em `<p>`, sem focável em `role="img"`, abas) e a do glossário.
 
 ## Sessões: coleta, regras e apresentação
 
@@ -254,6 +402,9 @@ Esta é a referência única para sessões; a CLI está em "Pipeline e comandos"
 - Sem `data/sessoes`, gere estados vazios. Com dados, `sessoes.html` e "Presença e votos" nas fichas mantêm
   HTML estático: presença por legislatura, divididas (40 cartões iniciais, resto em `<details>`), mapa de
   votos do último ano com divididas, placares anuais, ritmo e qualidade. Não há indicador leitura→votação no site.
+- A ementa do cartão de votação só é limitada a duas linhas sob `.js`. `sessoes.js` acrescenta “Ver ementa
+  completa” quando há mais de 180 caracteres ou corte visual; o botão alterna `aria-expanded` e expande
+  o mesmo texto, sem duplicá-lo. Sem JavaScript, a ementa aparece inteira.
 
 ### JSON e melhoria progressiva
 
@@ -273,8 +424,18 @@ Esta é a referência única para sessões; a CLI está em "Pipeline e comandos"
   completo necessário pelas URLs do manifesto. Escolher ano refaz a faixa; "todos" restaura a faixa inicial.
   `tr[data-vereador]` preserva a composição do servidor e permite destaque sem promover nomes brutos.
 - Preserve `cartao_votacao`/`_mapa_votos`, rótulos e a paridade de `tests/js/fixtures/sessoes.json` com
-  `faixa_sessoes.html`, conferida por Python e JS. Referências abreviadas e nomes curtos vêm do JSON;
-  notas técnicas ficam só no HTML inicial e em Qualidade dos dados.
+  `faixa_sessoes.html` e `cartao_sessoes.html`, conferida por Python e JS. Referências abreviadas e nomes
+  curtos vêm do JSON; notas técnicas ficam só no HTML inicial e em Qualidade dos dados.
+- A faixa (`<table class="faixa empilha col-N" role="table">`, com `faixa-larga` antes de `empilha` acima de
+  12 colunas, `pagina_sessoes.FAIXA_LARGA`) e o resumo por vereador saem iguais de `pagina_sessoes._mapa_votos`
+  e de `sessoes.js` (`faixa`): papéis ARIA e `data-label` com a referência curta do cabeçalho (`"25/03 PL 280"`,
+  nunca o título longo do `<abbr>`). O rótulo da região é neutro (“Mapa de votos de <ano>, legislatura …:
+  vereador × votação dividida”), sem mencionar rolagem. Abaixo de 56rem de contêiner (100rem com `faixa-larga`,
+  que não cabe nem no desktop), cada vereador vira um cartão com ladrilhos rotulados
+  (`repeat(auto-fill, minmax(5.5rem, 1fr))`); ladrilhos `.voto-vazio` somem só no cartão, e quem só tem células
+  vazias fica com o nome. A faixa fica fora do limiar genérico de 9 colunas ou mais. A regra da primeira coluna
+  fixa (`.sessoes .faixa tr > :first-child` com `position: sticky; left: 0`) vale para a matriz larga e para
+  navegadores sem container queries.
 - CSV é UTF-8 com BOM e fórmulas neutralizadas; inclui "não consta" no produto pessoa × votação filtrada.
   Em inconsistentes, não atribui votos a pessoas, assim como os cartões. Não confunda filtrar por vereador
   (selecionar votações) com exportar somente as linhas dessa pessoa.
@@ -330,6 +491,9 @@ Esta é a referência única para sessões; a CLI está em "Pipeline e comandos"
   `boundary=administrative`, `admin_level=10` de Niterói (relação 2220789; consulta no README).
   Exija os 52 nomes de `BAIRROS_NITEROI`, com normalização e variantes cadastradas; faltas, sobras e
   duplicatas abortam. Preserve timestamp da base, atribuição e ODbL; não edite a saída à mão.
+  Após regenerar a geometria com `coletor.geo`, execute `python -m coletor.paisagem --textura`.
+  A textura decorativa deduplica bordas compartilhadas; toda página que a usa mantém atribuição OSM
+  visível no rodapé, com a data da base extraída do `<desc>` do SVG.
 - Encadeie ways por pontas exatas, invertendo se preciso, respeitando outer/inner, sem fechar lacunas à força.
   Projeção equiretangular local em metros usa o cosseno da latitude média dos extremos; não é mapa cadastral.
   Simplificação Douglas–Peucker por way compartilhado preserva pontas e mínimo lexicográfico; anéis fechados
@@ -382,6 +546,9 @@ Esta é a referência única para sessões; a CLI está em "Pipeline e comandos"
   Use o número do PL em `projeto` (ex.: `1/2022`) e nota factual apoiada nas fontes.
 - Aplique os mesmos critérios a qualquer autor, partido ou espectro político, inclusive nas regras dos
   documentos. Não crie exceções partidárias.
+- Na memória, o critério é: "Não homenageamos quem exerceu mandato eletivo ou função executiva na direção
+  de partido político. Cargos coloniais, títulos honorários e militância pessoal não excluem e são
+  mencionados com neutralidade." Cada fato precisa de fonte pública HTTPS; as mesmas regras valem para todos.
 - Curadoria prevalece sobre IA; `substitui_ia: true` suprime seus alertas naquele projeto. Use `corrige`
   para correções documentadas em vez de alterar os dados coletados.
 - Nomes `siscam` em `config/vereadores.json` devem corresponder exatamente ao SISCAM, em maiúsculas.

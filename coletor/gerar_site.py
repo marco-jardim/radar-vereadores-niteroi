@@ -12,11 +12,12 @@ import shutil
 import sys
 from collections import defaultdict
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from coletor import novidades as N
 from coletor import regras_documentos as RD
 from coletor import regras_sessoes as RS
-from coletor.site import modelo_sessoes, pagina_sessoes
+from coletor.site import inicio, modelo_sessoes, pagina_memoria, pagina_sessoes
 from coletor.site import paginas as P
 from coletor.site.modelo import (
     DESFECHO_GRUPO, NOME_ALERTA, NOME_CATEGORIA, NOME_CATEGORIA_DOC, NOME_DESFECHO, NOME_SINAL, NOME_SUBCATEGORIA_DOC,
@@ -587,17 +588,51 @@ def carregar_geo(raiz: Path | None = None) -> dict | None:
     return geo
 
 
+def copiar_estaticos(fonte: Path, saida: Path) -> None:
+    """Publica a árvore estática sem arquivos ocultos nem documentação Markdown."""
+    for arq in sorted(fonte.rglob("*")):
+        relativo = arq.relative_to(fonte)
+        if not arq.is_file() or not P.publicavel(relativo):
+            continue
+        destino = saida / relativo
+        destino.parent.mkdir(parents=True, exist_ok=True)
+        destino.write_bytes(P.bytes_estaticos(arq, raiz=fonte))
+
+
+def gerar_404(modelo: dict) -> str:
+    """Links absolutos à raiz publicada funcionam mesmo em URLs inexistentes profundas."""
+    prefixo = urlsplit(N.URL_SITE).path
+    legislaturas = modelo.get("legislaturas") or []
+    atual = legislaturas[-1]["id"] if legislaturas else None
+    pessoas = sorted((p for p in modelo.get("pessoas", {}).values() if atual is not None and atual in p["mandatos"]),
+                     key=lambda p: P._chave_nome(p["nome"]))
+    links = "".join(f'<li><a href="{P.esc(prefixo + "vereadores/" + p["slug"] + ".html")}">{P.esc(p["nome"])}</a></li>'
+                    for p in pessoas)
+    lista = f'<section><h2>Procure um vereador</h2><ul>{links}</ul></section>' if links else ""
+    corpo = (f'<section class="abertura"><h1>Página não encontrada</h1>'
+             f'<p>O endereço pode ter mudado ou não existir. <a href="{P.esc(prefixo)}">Volte ao início</a>.</p></section>'
+             f'{lista}')
+    return P.pagina("Página não encontrada · Radar dos Vereadores de Niterói", corpo, "", prefixo=prefixo,
+                    caminho="404.html", indexavel=False)
+
+
 def main() -> None:
     modelo = montar_modelo()
     modelo["sessoes"] = modelo_sessoes.montar_sessoes(modelo) if (RAIZ / "data" / "sessoes").is_dir() else None
     modelo["geo_bairros"] = carregar_geo()
+    modelo["memoria"] = inicio.carregar_memoria(RAIZ)
+    # O próprio HTML da memória também recebe o link no rodapé. Reinicia a flag em toda execução.
+    P.MEMORIA_PUBLICADA = bool(modelo["memoria"] and modelo["memoria"].get("homenageados"))
+    memoria_html = pagina_memoria.gerar_memoria(modelo["memoria"])
+    P.MEMORIA_PUBLICADA = memoria_html is not None
     if SAIDA.exists():
         shutil.rmtree(SAIDA)
     (SAIDA / "vereadores").mkdir(parents=True)
     (SAIDA / "dados").mkdir()
-    for arq in FONTE_ESTATICA.iterdir():
-        shutil.copy(arq, SAIDA / arq.name)
+    copiar_estaticos(FONTE_ESTATICA, SAIDA)
     escrever = lambda nome, conteudo: (SAIDA / nome).write_text(conteudo, encoding="utf-8")
+    if memoria_html is not None:
+        escrever("memoria.html", memoria_html)
     cliente = dados_cliente(modelo)
     projetos = json_compacto(cliente)
     (SAIDA / "dados/projetos.json").write_bytes(projetos)
@@ -621,6 +656,7 @@ def main() -> None:
     escrever(N.PAGINA, P.gerar_novidades(eventos))
     (SAIDA / N.FEED).write_bytes(N.gerar_rss(eventos).encode("utf-8"))  # bytes: LF em qualquer sistema
     escrever("alertas.html", P.redirecionar("ruido.html"))
+    escrever("404.html", gerar_404(modelo))
     for pessoa in modelo["pessoas"].values():
         escrever(f"vereadores/{pessoa['slug']}.html", P.gerar_vereador(modelo, pessoa))
     resumo = {

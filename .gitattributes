@@ -4,3 +4,12 @@ tests/fixtures/** -text
 # Dados versionados: sempre LF, como coletor.arquivos grava. coletor.validar compara os
 # arquivos de data/documentos e data/sessoes byte a byte com o formato canônico.
 data/** text eol=lf
+site_src/** text eol=lf
+config/*.json text eol=lf
+coletor/** text eol=lf
+tests/js/** text eol=lf
+*.woff2 binary
+*.png binary
+*.py text eol=lf
+# Reafirma a precedência das fixtures: preserva os bytes mesmo para extensões acima.
+tests/fixtures/** -text

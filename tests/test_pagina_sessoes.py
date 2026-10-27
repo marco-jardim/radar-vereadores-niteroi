@@ -165,11 +165,18 @@ class TestPaginaSessoes(unittest.TestCase):
         self.assertEqual(pagina.call_args.args[2], "sessoes.html")
         self.assertTrue(pagina.call_args.kwargs["dialogo"])
         doc = Documento(html)
-        scripts = [n for n in doc.nos if n["tag"] == "script"]
+        # O manifesto embutido (type="application/json"), se houver, fica fora desta conferência.
+        scripts = [n for n in doc.nos if n["tag"] == "script" and n["attrs"].get("type") != "application/json"]
         self.assertEqual(pagina.call_args.kwargs["scripts"], ("sessoes.js",))
-        self.assertEqual(len(scripts), 3)
-        self.assertTrue(all(n["attrs"].get("src", "").startswith(("app.js?", "dados.js?", "sessoes.js?")) for n in scripts))
-        self.assertTrue(all(not Documento.texto(n).strip() for n in scripts))
+        externos = [n for n in scripts if n["attrs"].get("src")]
+        self.assertEqual([n["attrs"]["src"].split("?", 1)[0] for n in externos],
+                         ["navegacao.js", "dados.js", "app.js", "sessoes.js"])
+        self.assertTrue(all("?v=" in n["attrs"]["src"] for n in externos))
+        self.assertTrue(all(not Documento.texto(n).strip() for n in externos))
+        inline = [n for n in scripts if "src" not in n["attrs"]]
+        self.assertEqual(len(inline), 1)
+        self.assertNotIn("type", inline[0]["attrs"])
+        self.assertEqual(Documento.texto(inline[0]), P.SCRIPT_CABECA)
         self.assertIn('id="siscam-dialogo"', html)
         self.assertNotIn('<iframe', html)
         blocos = [n for n in doc.nos if n["attrs"].get("id", "").startswith("sessoes-leg-")]
@@ -199,11 +206,34 @@ class TestPaginaSessoes(unittest.TestCase):
         dic["rotulos"] = {m: r for m, r in dic["rotulos"].items() if m in materias}
         self.assertEqual(dic, fixture["dic"])
         html = S._mapa_votos(modelo, modelo["sessoes"], leg)
-        tabela = re.search(r'<table class="faixa">.*?</table>', html).group()
+        # A tabela inteira, inclusive classes empilháveis (faixa empilha col-N), papéis ARIA e data-label.
+        tabela = re.search(r'<table class="faixa empilha col-\d+" role="table">.*?</table>', html).group()
         self.assertEqual(tabela, (pasta / "faixa_sessoes.html").read_text(encoding="utf-8").strip())
         # O mesmo HTML cobre caption, cabeçalhos abbr, glifos, so-leitor e nomes sem link.
         self.assertIn('role="region" tabindex="0"', html)
         self.assertLessEqual(len(gzip.compress((RAIZ / "site_src/sessoes.js").read_bytes(), mtime=0)), 12 * 1024)
+
+    def test_fixture_compartilhada_do_cartao(self):
+        """Mesmo cartão em cartao_votacao e em sessoes.js; a fixture é conferida, nunca regravada."""
+        from coletor.regras_sessoes import resumo_placar
+
+        pasta = RAIZ / "tests/js/fixtures"
+        fixture = json.loads((pasta / "sessoes.json").read_text(encoding="utf-8"))
+        leg, membros = fixture["leg"], fixture["membros"]
+        modelo = {"pessoas": {p["slug"]: {"nome": p["nome"], "mandatos": {leg["id"]: {"eleito": True}}}
+                               for p in membros if p["pagina"]},
+                  "sessoes": {"por_pessoa": {p["slug"]: {"nome": p["nome"], "condicao": p["condicao"],
+                                                        "sem_pagina": not p["pagina"], leg["id"]: {}}
+                                             for p in membros}}}
+        base = fixture["votacoes"][0]
+        # O modelo real deriva URL e resumo; o cliente os reconstrói de dic-ses e da fatia.
+        v = {**base, "url_documento": fixture["dic"]["url_detalhe"] + str(base["id_documento"]),
+             "resumo": resumo_placar({"totais": base["totais"], "sentido": base["sentido"], "materia": base["materia"]})}
+        self.assertEqual(S.cartao_votacao(modelo, v), (pasta / "cartao_sessoes.html").read_text(encoding="utf-8").strip())
+        # Sem JS a ementa aparece inteira: o recorte em duas linhas só vale com html.js.
+        css = (RAIZ / "site_src/estilo.css").read_text(encoding="utf-8")
+        self.assertIn(".js .sessoes .votacao .ementa:not(.ementa-aberta) {", css)
+        self.assertNotRegex(css, r"(?m)^\.sessoes \.votacao \.ementa \{")
 
     def test_presenca_bases_e_contrato_do_placar(self):
         r = self.modelo["sessoes"]["por_pessoa"]["pessoa-00"]["2025-2028"]
@@ -456,12 +486,15 @@ class TestPaginaSessoes(unittest.TestCase):
             ano = faixa["attrs"]["data-ano"]
             self.assertEqual(faixa["attrs"]["id"], "faixa-2025-2028" if ano == "2026" else "faixa-2021-2024")
             tabela = Documento.descendentes(faixa, "table")[0]
-            self.assertEqual(tabela["attrs"]["class"], "faixa")
+            self.assertEqual(tabela["attrs"]["class"], "faixa empilha col-4")  # Vereador + 3 votações
+            self.assertEqual(tabela["attrs"]["role"], "table")
             regiao = tabela["pai"]
             self.assertEqual(regiao["attrs"]["role"], "region")
             self.assertEqual(regiao["attrs"]["tabindex"], "0")
             self.assertIn(ano, regiao["attrs"]["aria-label"])
-            self.assertIn("rolagem horizontal", regiao["attrs"]["aria-label"])
+            # Rótulo neutro: no contêiner estreito a matriz vira cartões, sem rolagem horizontal.
+            self.assertIn("vereador × votação dividida", regiao["attrs"]["aria-label"])
+            self.assertNotIn("rolagem", regiao["attrs"]["aria-label"])
             caption = Documento.descendentes(tabela, "caption")[0]
             self.assertIn("ordem cronológica", Documento.texto(caption))
             cab = Documento.descendentes(tabela, "thead")[0]

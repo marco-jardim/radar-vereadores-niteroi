@@ -96,11 +96,21 @@ test("ordenações são estáveis e não alteram a lista; apertada usa margem Fa
 test("faixa de outro ano tem paridade byte a byte com a tabela conferida pelo Python", () => {
   const html = S.faixa(dados(), fixture.membros.slice().reverse(), fixture.leg, 2025, "");
   const esperada = fs.readFileSync(path.join(__dirname, "fixtures/faixa_sessoes.html"), "utf8").trim();
-  assert.equal(html.match(/<table class="faixa">.*?<\/table>/s)[0], esperada);
+  // A tabela inteira, inclusive classes empilháveis (faixa empilha col-N), papéis ARIA e data-label.
+  assert.equal(html.match(/<table class="faixa empilha col-\d+" role="table">.*?<\/table>/s)[0], esperada);
   assert.match(html, /role="region" tabindex="0" aria-label="Mapa de votos de 2025/);
   assert.match(html, /Resumo por vereador · votações divididas de 2025/);
   assert.match(S.faixa(dados(), fixture.membros, fixture.leg, 2025, "bia"), /data-vereador="bia" class="vereador-destaque"/);
   assert.match(S.faixa(dados(), fixture.membros, fixture.leg, 2026, ""), /Nenhuma votação dividida/);
+});
+
+test("faixa: rótulo neutro e faixa-larga só acima de 12 colunas, como pagina_sessoes.FAIXA_LARGA", () => {
+  const votacoes = (n) => Array.from({ length: n }, (_, i) => ({ ...dados()[2], id: "x-" + i }));
+  const doze = S.faixa(votacoes(11), fixture.membros, fixture.leg, 2025, "");
+  assert.match(doze, /<table class="faixa empilha col-12" role="table">/);
+  assert.match(doze, /aria-label="Mapa de votos de 2025, legislatura [^"]*: vereador × votação dividida"/);
+  assert.doesNotMatch(doze, /aria-label="[^"]*rolagem/);
+  assert.match(S.faixa(votacoes(12), fixture.membros, fixture.leg, 2025, ""), /<table class="faixa faixa-larga empilha col-13" role="table">/);
 });
 
 test("glifos da faixa preservam texto, presidência, branco, nulo e limitação de comparação", () => {
@@ -133,6 +143,85 @@ test("cartões espelham classes, rótulos, notas, ações e escape, sem nomes em
   const perigoso = S.cartao(fixture.dic, { ...v, documento: '<img onerror="x">', ementa: "<script>texto</script>", notas: ["<b>nota</b>"] }, "");
   assert.doesNotMatch(perigoso, /<img|<script>|<b>nota/);
   assert.match(perigoso, /&lt;script&gt;/);
+});
+
+test("cartão tem paridade byte a byte com cartao_votacao conferido pelo Python", () => {
+  // test_pagina_sessoes.py confere o mesmo arquivo; o botão da ementa é comportamento, não marcação.
+  const esperado = fs.readFileSync(path.join(__dirname, "fixtures/cartao_sessoes.html"), "utf8").trim();
+  assert.equal(S.cartao(fixture.dic, dados()[2], ""), esperado);
+  assert.doesNotMatch(esperado, /ver-ementa/);
+});
+
+test("ementa longa ganha um botão sem duplicar texto; curta não; alternar troca classe, estado e rótulo", () => {
+  const longa = "Dispõe sobre <obras> & serviços " + "na cidade de Niterói ".repeat(10);
+  const html = S.cartao(fixture.dic, { ...dados()[2], ementa: longa }, "");
+  assert.match(html, /<p class="ementa">Dispõe sobre &lt;obras&gt; &amp; serviços na cidade/);
+  assert.equal(html.split("Dispõe sobre").length, 2, "o texto da ementa aparece uma única vez");
+  assert.doesNotMatch(html, /ver-ementa/);
+  const fazer = (id, texto) => {
+    const e = { id: "", textContent: texto, depois: "", classes: new Set(),
+      insertAdjacentHTML(pos, h) { assert.equal(pos, "afterend"); this.depois += h; },
+      classList: { toggle(c, ativo) { if (ativo) e.classes.add(c); else e.classes.delete(c); } } };
+    return { id, e, querySelector: (q) => q === ".ementa" ? e : null };
+  };
+  const curta = fazer("v-1", "x".repeat(S.LIMIAR_EMENTA)), comprida = fazer("v-2", longa.replace(/\s+$/, ""));
+  assert.equal(S.LIMIAR_EMENTA, 180);
+  S.ementas([curta, comprida, { id: "v-3" }]);
+  assert.equal(curta.e.depois, "");
+  assert.equal(curta.e.id, "");
+  assert.equal(comprida.e.id, "v-2-ementa");
+  assert.equal(comprida.e.depois, '<button type="button" class="link ver-ementa" aria-expanded="false" aria-controls="v-2-ementa">Ver ementa completa</button>');
+  S.ementas([comprida]);
+  assert.equal(comprida.e.depois.match(/ver-ementa/g).length, 1, "nova passada não repete o botão");
+  const bt = { atributos: { "aria-controls": "v-2-ementa", "aria-expanded": "false" }, textContent: "Ver ementa completa",
+    getAttribute(k) { return this.atributos[k]; }, setAttribute(k, v) { this.atributos[k] = v; } };
+  const doc = { getElementById: (id) => id === "v-2-ementa" ? comprida.e : null };
+  S.alternarEmenta(bt, doc);
+  assert.deepEqual([bt.atributos["aria-expanded"], bt.textContent, comprida.e.classes.has("ementa-aberta")], ["true", "Ver menos", true]);
+  S.alternarEmenta(bt, doc);
+  assert.deepEqual([bt.atributos["aria-expanded"], bt.textContent, comprida.e.classes.has("ementa-aberta")], ["false", "Ver ementa completa", false]);
+});
+
+test("ementas: toggle em captura e resize reavaliam corte visual sem duplicar botões", () => {
+  const eventos = {}, eventosJanela = {}, temporizadores = new Map();
+  let numero = 0, leituras = 0;
+  const ementa = () => ({ id: "", textContent: "Texto curto", clientHeight: 0, scrollHeight: 0, depois: "",
+    insertAdjacentHTML(_, html) { this.depois += html; } });
+  const oculta = ementa(), responsiva = ementa();
+  const cartoes = [oculta, responsiva].map((e, i) => ({ id: "v-" + i, querySelector: () => e }));
+  const details = { tagName: "DETAILS", open: false,
+    querySelectorAll: () => [cartoes[0]] };
+  const document = {
+    documentElement: { classList: { contains: () => true } },
+    querySelectorAll(q) { if (q === "li.votacao") { leituras++; return cartoes; } return []; },
+    addEventListener(tipo, fn, captura) {
+      assert.equal(eventos[tipo], undefined, "um ouvinte por tipo no documento");
+      eventos[tipo] = { fn, captura };
+    }
+  };
+  const window = { document,
+    addEventListener(tipo, fn) { eventosJanela[tipo] = fn; },
+    setTimeout(fn) { temporizadores.set(++numero, fn); return numero; },
+    clearTimeout(id) { temporizadores.delete(id); } };
+  vm.runInNewContext(fonte, { window });
+  assert.equal(oculta.depois, "", "fechado: não há dimensões para detectar corte");
+  assert.equal(eventos.toggle.captura, true, "toggle não propaga");
+  oculta.clientHeight = 40; oculta.scrollHeight = 80;
+  eventos.toggle.fn({ target: details });
+  assert.equal(oculta.depois, "", "fechamento não marca");
+  details.open = true;
+  eventos.toggle.fn({ target: details });
+  assert.match(oculta.depois, /ver-ementa/);
+  responsiva.clientHeight = 40; responsiva.scrollHeight = 70;
+  const antes = leituras;
+  eventosJanela.resize(); eventosJanela.resize();
+  assert.equal(leituras, antes, "resize aguarda o debounce");
+  assert.equal(temporizadores.size, 1);
+  for (const fn of temporizadores.values()) fn();
+  assert.equal(leituras, antes + 1);
+  assert.match(responsiva.depois, /ver-ementa/);
+  eventos.toggle.fn({ target: details });
+  assert.equal(oculta.depois.match(/ver-ementa/g).length, 1);
 });
 
 test("CSV tem BOM, pessoa × votação, escape e fórmulas neutralizadas; não atribui inconsistentes", () => {
@@ -201,10 +290,12 @@ function iniciar({ query = "", numero = 3, falhar = false, semVotos = false, cab
   const elementos = { conteudo: el(), "manifesto-dados": el({ textContent: textoEmbutido || JSON.stringify(manifesto) }),
     "sessoes-leg-2025-2028": bloco, "divididas-2025-2028": secao, "lista-votacoes-2025-2028": lista,
     "contagem-votacoes-2025-2028": contador, "faixa-2025-2028": mapa };
-  const requisicoes = [], urls = [];
+  const requisicoes = [], urls = [], focos = [], cartoes = {};
   let blob, nomeCsv;
+  // Cartões existem só depois de inseridos na lista; focus() registra a ordem dos focos.
+  const cartao = (id) => lista.innerHTML.includes('id="' + id + '"') ? (cartoes[id] ||= el({ focus() { focos.push(id); } })) : null;
   const document = {
-    getElementById: (id) => elementos[id] || null,
+    getElementById: (id) => elementos[id] || (id.startsWith("v-") ? cartao(id) : null),
     querySelector: (q) => q === "form.filtros" || q === "form.filtros-sessoes" ? formulario : null,
     querySelectorAll: (q) => q === "form.filtros-sessoes" ? [formulario] : [],
     createElement: () => ({ click() { nomeCsv = this.download; } })
@@ -222,7 +313,7 @@ function iniciar({ query = "", numero = 3, falhar = false, semVotos = false, cab
   } };
   vm.runInNewContext(app, contexto, { filename: "app.js" });
   vm.runInNewContext(fonte, contexto, { filename: "sessoes.js" });
-  return { formulario, lista, contador, mapa, mais, linhas, continuacao, botaoCsv, requisicoes, urls,
+  return { formulario, lista, contador, mapa, mais, linhas, continuacao, botaoCsv, requisicoes, urls, focos, cartoes,
     manifesto: () => window.RadarArquivos.manifesto(),
     alterar(k, value) { formulario.elements[k].value = value; formulario.eventos.change(); },
     clicar(acao) { secao.eventos.click({ target: { closest: () => acao === "mais" ? mais : acao === "csv" ? botaoCsv : { dataset: { acao } } } }); },
@@ -257,7 +348,7 @@ test("VM: ano redesenha faixa; vereador destaca linha, rotula cartão e div depe
   const tela = iniciar({ query: "?ano=2025&vereador=bia" });
   await assentar();
   assert.equal(tela.mapa.dataset.ano, "2025");
-  assert.match(tela.mapa.innerHTML, /<table class="faixa">/);
+  assert.match(tela.mapa.innerHTML, /<table class="faixa(?: faixa-larga)? empilha col-\d+" role="table">/);
   assert.match(tela.lista.innerHTML, /voto-pessoal/);
   assert.match(tela.lista.innerHTML, /votou contra o projeto/);
   assert.equal(tela.linhas[1].classList.destacado, true);
@@ -298,6 +389,34 @@ test("VM: Mostrar mais acrescenta 40, CSV inicial baixa no primeiro clique e vaz
   assert.equal(csv.nome, "radar-vereadores-votacoes.csv");
   assert.match(csv.texto, /"data","sessao"/);
   assert.ok(inicial.requisicoes.includes("dados/vot-2025.json?v=fixture"));
+});
+
+test("VM: carga anuncia texto; Mostrar mais anuncia acréscimo e foca o primeiro cartão novo, inclusive na última página", async () => {
+  const tela = iniciar({ numero: 95, query: "?ano=2025" });
+  assert.equal(tela.contador.textContent, "Carregando votações…");
+  await assentar();
+  assert.deepEqual(tela.focos, [], "a carga por filtro não move o foco");
+  assert.doesNotMatch(tela.contador.textContent, /adicionadas/);
+  const ordem = () => [...tela.lista.innerHTML.matchAll(/<li class="projeto votacao" id="([^"]+)"/g)].map((m) => m[1]);
+  tela.clicar("mais");
+  assert.deepEqual(tela.focos, [ordem()[40]]);
+  assert.equal(tela.cartoes[ordem()[40]].tabindex, "-1");
+  assert.match(tela.contador.textContent, /^40 votações adicionadas · .*mostrando 80 de 95$/);
+  tela.clicar("mais");
+  assert.equal(tela.mais.hidden, true, "lista esgotada: o botão some");
+  assert.deepEqual(tela.focos, [ordem()[40], ordem()[80]], "o foco vai ao primeiro cartão novo, não ao body");
+  assert.equal(tela.cartoes[ordem()[80]].tabindex, "-1");
+  assert.match(tela.contador.textContent, /^15 votações adicionadas · .*mostrando 95 de 95$/);
+  // Primeiro clique sobre os cartões do servidor: carrega e foca o 41º.
+  const servidor = iniciar({ numero: 95 });
+  await assentar();
+  servidor.clicar("mais");
+  assert.equal(servidor.contador.textContent, "Carregando votações…");
+  await assentar();
+  assert.equal((servidor.lista.innerHTML.match(/<li class="projeto votacao"/g) || []).length, 80);
+  assert.equal(servidor.focos.length, 1);
+  assert.equal(servidor.focos[0], [...servidor.lista.innerHTML.matchAll(/<li class="projeto votacao" id="([^"]+)"/g)][40][1]);
+  assert.match(servidor.contador.textContent, /^40 votações adicionadas · /);
 });
 
 test("VM: falha de dados preserva servidor e avisa em aria-live; sem forms não inicializa", async () => {

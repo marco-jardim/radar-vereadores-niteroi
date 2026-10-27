@@ -57,10 +57,47 @@ def legenda(series: list[tuple[str, str]]) -> str:
     return f'<ul class="leg-graf">{itens}</ul>'
 
 
-def tabela(cabecalho: list[str], linhas: list[list]) -> str:
-    th = "".join(f"<th scope=\"col\">{esc(c)}</th>" for c in cabecalho)
-    trs = "".join("<tr>" + "".join(f"<td>{esc(_fmt(c) if isinstance(c, (int, float)) else c)}</td>" for c in l) + "</tr>" for l in linhas)
-    return f'<details class="tabela-graf"><summary>Ver os números em tabela</summary><table><thead><tr>{th}</tr></thead><tbody>{trs}</tbody></table></details>'
+# ---- tabelas empilháveis
+# Em contêiner estreito para o número de colunas (classe col-N), o CSS (fim de site_src/estilo.css) transforma cada
+# linha num cartão: o cabeçalho de linha vira o título e cada célula mostra o rótulo de data-label, que é o texto do
+# cabeçalho da coluna. Como trocar o display das partes apaga a semântica de tabela em alguns navegadores, toda
+# tabela leva papéis ARIA explícitos. Todos os construtores de tabela passam por estas funções.
+TR = '<tr role="row">'
+
+
+def abre_tabela(colunas: int, classe: str = "") -> str:
+    """<table> empilhável; classe extra vem antes de "empilha col-N"."""
+    return f'<table class="{classe + " " if classe else ""}empilha col-{colunas}" role="table">'
+
+
+def cab_coluna(conteudo: str, atributos: str = "") -> str:
+    """Cabeçalho de coluna; conteúdo já escapado."""
+    return f'<th scope="col" role="columnheader"{atributos}>{conteudo}</th>'
+
+
+def cab_linha(conteudo: str, rotulo: str, atributos: str = "") -> str:
+    """Cabeçalho de linha (título do cartão); rotulo é o texto puro do cabeçalho da primeira coluna."""
+    return f'<th scope="row" role="rowheader" data-label="{esc(rotulo)}"{atributos}>{conteudo}</th>'
+
+
+def celula(conteudo: str, rotulo: str, atributos: str = "") -> str:
+    """Célula de dados; rotulo é o texto puro do cabeçalho da coluna, mostrado no cartão."""
+    return f'<td role="cell" data-label="{esc(rotulo)}"{atributos}>{conteudo}</td>'
+
+
+def fecha_tabela(cabecalhos: str, linhas: str) -> str:
+    """thead (cabeçalhos já montados), tbody e fechamento da tabela aberta por abre_tabela."""
+    return f'<thead role="rowgroup">{TR}{cabecalhos}</tr></thead><tbody role="rowgroup">{linhas}</tbody></table>'
+
+
+def tabela(cabecalho: list[str], linhas: list[list], titulo: str) -> str:
+    th = "".join(cab_coluna(esc(c)) for c in cabecalho)
+    trs = "".join(TR + "".join((cab_linha if i == 0 else celula)(esc(_fmt(c) if isinstance(c, (int, float)) else c), cabecalho[i])
+                               for i, c in enumerate(l)) + "</tr>" for l in linhas)
+    # pagina_sessoes._grafico insere o caption logo depois de 'role="table">' e nomeia a coluna vazia.
+    return (f'<details class="tabela-graf"><summary>Ver os números em tabela</summary>'
+            f'<div class="tabela-rolavel" role="region" tabindex="0" aria-label="{esc(titulo)}">'
+            f'{abre_tabela(len(cabecalho))}{fecha_tabela(th, trs)}</div></details>')
 
 
 def _corte_limpo(inferior: int, superior: int) -> int:
@@ -160,14 +197,18 @@ def mapa_coropletico(valores: dict[str, int], geo: dict, titulo: str, subtitulo:
                   '<a href="https://www.openstreetmap.org/copyright">ODbL 1.0</a> · '
                   f'base OSM: {esc(geo["osm_base"])}. Não é um mapa cadastral.</p>')
     return figura(titulo, subtitulo, "".join(partes), leg,
-                  tabela(["Bairro", "Região", "Indicações"], linhas) + atribuicao, titulo)
+                  tabela(["Bairro", "Região", "Indicações"], linhas, titulo) + atribuicao, titulo)
 
 
 def figura(titulo: str, subtitulo: str, corpo_svg: str, leg: str, tab: str, rotulo: str) -> str:
+    # role="img" torna os filhos apresentacionais: com links (pontos e rótulos com página própria), o SVG vira um
+    # grupo rotulado, para que eles continuem expostos a leitores de tela. As marcas nunca recebem tabindex.
+    papel = "group" if "<a " in corpo_svg else "img"
+    nome = "" if "aria-labelledby=" in corpo_svg.split(">", 1)[0] else f' aria-label="{esc(rotulo)}"'
     return f"""<figure class="grafico">
  <figcaption><h3>{esc(titulo)}</h3>{f'<p>{esc(subtitulo)}</p>' if subtitulo else ''}</figcaption>
  {leg}
- <div class="svg-box">{corpo_svg.replace('<svg ', f'<svg role="img" aria-label="{esc(rotulo)}" ', 1)}</div>
+ <div class="svg-box">{corpo_svg.replace('<svg ', f'<svg role="{papel}"{nome} ', 1)}</div>
  {tab}
 </figure>"""
 
@@ -213,7 +254,7 @@ def colunas_empilhadas(titulo: str, subtitulo: str, rotulos_x: list[str], series
         partes.append(f'<text class="valor" x="{cx:.1f}" y="{y(totais[i]) - 5:.1f}" text-anchor="middle">{_fmt(totais[i])}</text>')
     partes.append(f'<line class="base" x1="{m_esq}" x2="{LARGURA - m_dir}" y1="{y(0):.1f}" y2="{y(0):.1f}"/></svg>')
     leg = legenda([(n, c) for n, c, _ in series])
-    tab = tabela(["", *[n for n, _, _ in series], "Total"], [[r, *[s[2][i] for s in series], totais[i]] for i, r in enumerate(rotulos_x)])
+    tab = tabela(["", *[n for n, _, _ in series], "Total"], [[r, *[s[2][i] for s in series], totais[i]] for i, r in enumerate(rotulos_x)], titulo)
     return figura(titulo, subtitulo, "".join(partes), leg, tab, titulo)
 
 
@@ -252,7 +293,7 @@ def linhas(titulo: str, subtitulo: str, rotulos_x: list[str], series: list[tuple
     for ly, lx, nome, v in fim_y:
         partes.append(f'<text class="rotulo-fim" x="{lx + 8:.1f}" y="{ly + 4:.1f}">{esc(nome)} · {_fmt(v)}{esc(unidade)}</text>')
     partes.append(f'<line class="base" x1="{m_esq}" x2="{LARGURA - m_dir}" y1="{y(0):.1f}" y2="{y(0):.1f}"/></svg>')
-    tab = tabela(["", *[n for n, _, _ in series]], [[r, *[s[2][i] for s in series]] for i, r in enumerate(rotulos_x)])
+    tab = tabela(["", *[n for n, _, _ in series]], [[r, *[s[2][i] for s in series]] for i, r in enumerate(rotulos_x)], titulo)
     return figura(titulo, subtitulo, "".join(partes), legenda([(n, c) for n, c, _ in series]), tab, titulo)
 
 
@@ -288,7 +329,7 @@ def barras_horizontais(titulo: str, subtitulo: str, itens: list[dict], series: l
         partes.append(f'<text class="valor" x="{x0 + 6:.1f}" y="{yy + barra_h - 2}">{_fmt(totais[i])}{esc(unidade)}{esc(it.get("nota", ""))}</text>')
     partes.append("</svg>")
     tab = tabela(["", *[n for n, _, _ in series]] + (["Total"] if len(series) > 1 else []),
-                 [[it["rotulo"], *[it.get(k) or 0 for _, _, k in series]] + ([totais[i]] if len(series) > 1 else []) for i, it in enumerate(itens)])
+                 [[it["rotulo"], *[it.get(k) or 0 for _, _, k in series]] + ([totais[i]] if len(series) > 1 else []) for i, it in enumerate(itens)], titulo)
     return figura(titulo, subtitulo, "".join(partes), legenda([(n, c) for n, c, _ in series]), tab, titulo)
 
 
@@ -317,7 +358,7 @@ def dispersao(titulo: str, subtitulo: str, pontos: list[dict], rot_x: str, rot_y
     for p in pontos:
         cx, cy = X(p["x"]), Y(p["y"])
         circ = f'<circle class="ponto {p.get("cor", "c-efeito")}" cx="{cx:.1f}" cy="{cy:.1f}" r="5" data-tip="{esc(p["rotulo"])}: {_fmt(p["x"])} projetos, {_fmt(p["y"])} leis com efeito"/>'
-        partes.append(f'<a href="{esc(p["link"])}">{circ}</a>' if p.get("link") else circ)
+        partes.append(f'<a href="{esc(p["link"])}" aria-label="{esc(p["rotulo"])}: {_fmt(p["x"])} projetos, {_fmt(p["y"])} leis com efeito">{circ}</a>' if p.get("link") else circ)
         if id(p) in destaque:
             rotulos.append([cy - 8, cx, p["rotulo"]])
     colocados = []  # evita colisão em 2D: largura estimada pelo número de caracteres
@@ -337,5 +378,5 @@ def dispersao(titulo: str, subtitulo: str, pontos: list[dict], rot_x: str, rot_y
         anchor = "end" if lx > LARGURA - 120 else "start"
         partes.append(f'<text class="rotulo-ponto" x="{lx + (-8 if anchor == "end" else 8):.1f}" y="{ly + 4:.1f}" text-anchor="{anchor}">{esc(r)}</text>')
     partes.append(f'<line class="base" x1="{m_esq}" x2="{LARGURA - m_dir}" y1="{Y(0):.1f}" y2="{Y(0):.1f}"/></svg>')
-    tab = tabela(["Vereador", rot_x, rot_y], [[p["rotulo"], p["x"], p["y"]] for p in sorted(pontos, key=lambda p: -p["y"])])
+    tab = tabela(["Vereador", rot_x, rot_y], [[p["rotulo"], p["x"], p["y"]] for p in sorted(pontos, key=lambda p: -p["y"])], titulo)
     return figura(titulo, subtitulo, "".join(partes), "", tab, titulo)

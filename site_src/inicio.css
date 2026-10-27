@@ -1,0 +1,191 @@
+/* Página inicial: paisagem de abertura com fases do céu, busca de vereador, mapa e linha do tempo.
+   Só a home carrega este arquivo (pagina(..., estilos=("inicio.css",))). Usa os tokens de estilo.css; os
+   hexadecimais ficam restritos às cores da ilustração, declaradas como propriedades por fase do céu.
+   Um script inline logo após o .ceu ajusta data-ceu pela hora de Niterói antes da primeira pintura e inicio.js
+   o reavalia; sem JS, vale a fase "tarde" emitida pelo servidor. */
+
+/* ---- fases do céu
+   --ceu-1/--ceu-2: degradê do céu (alto → horizonte); --sol: sol ou lua, posição em --sol-x/--sol-y;
+   --camada-1..4: fundo, baía, promontório e orla (de trás para a frente); --veu: painel translúcido atrás do
+   texto; --h1: cor do texto. O texto tem ≥ 4,5:1 contra a cor mais clara da fase já coberta pelo véu e
+   contra --camada-4 (fundo do texto empilhado no celular); o horizonte (--ceu-2) e o fundo (--camada-1)
+   diferem ≥ 1,5:1 (tests/test_inicio.py). As fases são as mesmas nos dois temas: a ilustração não muda com
+   o tema. A tabela de horas das fases está em inicio.js e no script inline do hero (coletor/site/inicio.py). */
+.ceu[data-ceu="madrugada"], .ceu[data-ceu="madrugada"] ~ .hero-texto {
+  --ceu-1: #0A1730; --ceu-2: #2C4470; --sol: #D8E1EE; --sol-x: 78%; --sol-y: 24%;
+  --camada-1: #16233C; --camada-2: #1C2D49; --camada-3: #13213A; --camada-4: #0A1426;
+  --veu: rgba(6, 14, 28, .66); --h1: #F7F2E9;
+}
+.ceu[data-ceu="manha"], .ceu[data-ceu="manha"] ~ .hero-texto {
+  --ceu-1: #6FB4DE; --ceu-2: #DCEFF5; --sol: #FFF3C4; --sol-x: 22%; --sol-y: 30%;
+  --camada-1: #8FB3C9; --camada-2: #3F86A8; --camada-3: #2E5E4E; --camada-4: #1D3B33;
+  --veu: rgba(8, 30, 48, .68); --h1: #FFFFFF;
+}
+.ceu[data-ceu="tarde"], .ceu[data-ceu="tarde"] ~ .hero-texto {
+  --ceu-1: #3E8FC7; --ceu-2: #BFE0F0; --sol: #FFF8E1; --sol-x: 50%; --sol-y: 18%;
+  --camada-1: #7FA6BF; --camada-2: #2D7499; --camada-3: #2C5546; --camada-4: #18342C;
+  --veu: rgba(8, 30, 48, .68); --h1: #FFFFFF;
+}
+.ceu[data-ceu="por-do-sol"], .ceu[data-ceu="por-do-sol"] ~ .hero-texto {
+  --ceu-1: #3B2E5A; --ceu-2: #F2A65A; --sol: #FFD27A; --sol-x: 35%; --sol-y: 62%;
+  --camada-1: #8A5A6E; --camada-2: #4E3F66; --camada-3: #33284A; --camada-4: #1E1830;
+  --veu: rgba(24, 14, 30, .66); --h1: #FFFFFF;
+}
+.ceu[data-ceu="noite"], .ceu[data-ceu="noite"] ~ .hero-texto {
+  --ceu-1: #050C1C; --ceu-2: #2A4478; --sol: #E9EEF6; --sol-x: 24%; --sol-y: 22%;
+  --camada-1: #182640; --camada-2: #142039; --camada-3: #0D172B; --camada-4: #060D1A;
+  --veu: rgba(4, 10, 22, .66); --h1: #F7F2E9;
+}
+
+/* ---- abertura
+   A partir de 900px, céu e texto dividem a mesma célula da grade: o véu fica embaixo à esquerda, sem cobrir o
+   MAC (à direita). A altura vem da proporção do céu (fixa antes de qualquer máscara carregar: sem deslocamento
+   de layout) ou do texto, se ele for mais alto; o céu estica junto. Abaixo de 900px, a paisagem fica inteira em
+   cima e o texto embaixo, sobre a cor da orla. */
+.hero { position: relative; display: grid; margin-top: var(--esp-5); border-radius: var(--raio-2); overflow: hidden; isolation: isolate; }
+.ceu, .hero-texto { grid-area: 1 / 1; }
+.ceu {
+  --sol-r: clamp(22px, 3.5vw, 48px);
+  position: relative; width: 100%; min-height: 100%; justify-self: stretch; align-self: start; aspect-ratio: 16 / 6;
+  overflow: hidden; background: linear-gradient(to bottom, var(--ceu-1), var(--ceu-2));
+}
+/* O sol (ou a lua) é um círculo em CSS, sem máscara própria. */
+.ceu::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(circle at var(--sol-x) var(--sol-y), var(--sol) 0 var(--sol-r), transparent calc(var(--sol-r) + 1px));
+}
+.ceu .camada {
+  position: absolute; inset: 0; pointer-events: none;
+  -webkit-mask: var(--mascara) center bottom / cover no-repeat;
+  mask: var(--mascara) center bottom / cover no-repeat;
+}
+.ceu .camada.fundo { background-color: var(--camada-1); }
+.ceu .camada.baia { background-color: var(--camada-2); }
+.ceu .camada.promontorio { background-color: var(--camada-3); }
+.ceu .camada.orla { background-color: var(--camada-4); }
+.hero-texto {
+  position: relative; z-index: 1; align-self: end; justify-self: start; max-width: min(46rem, 55%);
+  margin: var(--esp-7) var(--esp-4) var(--esp-4); padding: var(--esp-4) var(--esp-5);
+  color: var(--h1); background: var(--veu); border-radius: var(--raio-2);
+}
+.hero-texto h1 { font: 700 var(--fs-5)/1.05 var(--display); margin: 0 0 var(--esp-3); color: inherit; }
+.hero-texto p { margin: 0 0 var(--esp-3); color: inherit; font-size: var(--fs-1); line-height: 1.45; }
+.hero-texto .atualizacao { margin: 0; font-size: var(--fs--1); }
+.hero-texto a { color: inherit; text-decoration: underline; }
+.hero-texto a:focus-visible { outline-color: currentColor; }
+@media (max-width: 899.98px) {
+  .hero { grid-template-rows: auto auto; }
+  .ceu { grid-area: 1 / 1; aspect-ratio: 2 / 1; min-height: 0; }
+  .hero-texto {
+    grid-area: 2 / 1; justify-self: stretch; margin: 0; max-width: none; border-radius: 0;
+    background: var(--camada-4); padding: var(--esp-4);
+  }
+}
+
+/* ---- paralaxe: camadas do fundo andam mais devagar que a página (≤ 40px), só com rolagem por linha do tempo
+   e sem pedido de movimento reduzido. A duração é nominal: quem conduz é a rolagem. */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .ceu::before, .ceu .camada {
+      animation: paralaxe 1ms linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0px 80vh;
+    }
+    .ceu::before { --desloca: 40px; }
+    .ceu .camada.fundo { --desloca: 28px; }
+    .ceu .camada.baia { --desloca: 16px; }
+    .ceu .camada.promontorio { --desloca: 8px; }
+    .ceu .camada.orla { --desloca: 0px; }
+  }
+}
+@keyframes paralaxe {
+  from { transform: translateY(0); }
+  to { transform: translateY(var(--desloca, 0px)); }
+}
+
+/* ---- quem é meu vereador (combobox de inicio.js sobre a lista <details> do servidor)
+   O campo vem no HTML, mas só aparece depois de inicio.js ativá-lo; sem o script, só a lista. */
+.quem-vereador:not(.cb-ativo) .cb-campo { display: none; }
+.cb-campo { position: relative; }
+.quem-vereador > p { max-width: 75ch; color: var(--tinta-suave); margin: 0 0 var(--esp-3); }
+#cb-vereadores-rotulo { display: block; font-weight: 600; margin-bottom: var(--esp-1); }
+#cb-vereadores {
+  display: block; width: min(100%, 32rem); min-height: 44px; padding: 0 var(--esp-3); font: inherit;
+  color: var(--tinta); background: var(--superficie); border: 1px solid var(--borda-campo); border-radius: var(--raio-1);
+}
+#cb-vereadores-lista {
+  position: absolute; z-index: 5; left: 0; width: min(100%, 32rem); max-height: 20rem; overflow-y: auto;
+  margin: var(--esp-1) 0 0; padding: var(--esp-1) 0; list-style: none;
+  background: var(--superficie); border: 1px solid var(--borda-campo); border-radius: var(--raio-2); box-shadow: var(--sombra-2);
+}
+#cb-vereadores-lista [role="option"] {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0 var(--esp-2); min-height: 44px; padding: var(--esp-1) var(--esp-3);
+  cursor: pointer; line-height: 1.4;
+}
+#cb-vereadores-lista [role="option"][hidden] { display: none; }
+#cb-vereadores-lista [role="option"]:hover { background: var(--grade); }
+/* Opção ativa: fundo, contorno e sublinhado, para não depender só da cor. */
+#cb-vereadores-lista [role="option"][aria-selected="true"] {
+  background: var(--grade); outline: 2px solid var(--foco); outline-offset: -2px;
+  text-decoration: underline; text-underline-offset: 3px;
+}
+#cb-vereadores-lista .partido, #cb-vereadores-lista .status, #lista-vereadores .partido, #lista-vereadores .status { font-size: var(--fs--1); color: var(--tinta-suave); }
+.lista-vereadores { margin-top: var(--esp-3); }
+.lista-vereadores summary { min-height: 44px; padding: var(--esp-2) 0; cursor: pointer; font-weight: 600; line-height: 1.6; }
+#lista-vereadores { columns: 16rem; column-gap: var(--esp-5); margin: var(--esp-2) 0 0; padding-left: var(--esp-5); }
+#lista-vereadores li { break-inside: avoid; padding: var(--esp-1) 0; line-height: 1.6; }
+#lista-vereadores .status { display: block; }
+
+/* ---- mapa das indicações */
+.mapa-home .explica { margin-bottom: var(--esp-3); }
+.mapa-home > p:last-child { margin: var(--esp-3) 0 0; font-weight: 600; }
+
+/* ---- linha do tempo: cartões em faixa horizontal com encaixe na rolagem */
+.linha-rolavel { scroll-snap-type: x proximity; overscroll-behavior-x: contain; padding: var(--esp-2) 0; }
+.linha-tempo ol { display: flex; gap: var(--esp-3); list-style: none; margin: 0; padding: var(--esp-1) var(--esp-2); }
+.linha-tempo li {
+  flex: 0 0 min(80%, 18rem); scroll-snap-align: start; display: flex; flex-direction: column; gap: var(--esp-1);
+  padding: var(--esp-3) var(--esp-4); background: var(--superficie); border: 1px solid var(--linha);
+  border-top: 4px solid var(--mar); border-radius: var(--raio-2); box-shadow: var(--sombra-1); overflow-wrap: anywhere;
+}
+.linha-tempo .quando { font: 700 var(--fs-2)/1.1 var(--display); color: var(--por-do-sol); }
+.linha-tempo strong { font-size: var(--fs-0); line-height: 1.4; }
+.linha-tempo li p { margin: 0; color: var(--tinta-suave); line-height: 1.5; }
+.linha-tempo .fontes { margin-top: auto; padding-top: var(--esp-2); }
+@media (max-width: 599.98px) {
+  .linha-tempo li { flex-basis: 85%; }
+}
+
+/* ---- memória: emblemas e nomes com links para os perfis editoriais */
+.faixa-memoria { --acento: var(--por-do-sol); }
+.faixa-memoria ul { display: flex; flex-wrap: wrap; gap: var(--esp-3); list-style: none; margin: 0; padding: 0; }
+.faixa-memoria li { flex: 1 1 10rem; min-width: 0; }
+.faixa-memoria li a {
+  display: flex; align-items: center; gap: var(--esp-2); min-height: 56px; padding: var(--esp-2);
+  color: var(--tinta); border: 1px solid var(--linha); border-radius: var(--raio-2); overflow-wrap: anywhere;
+}
+.faixa-memoria .emblema { width: 56px; height: 56px; flex: 0 0 56px; color: var(--baia); }
+.faixa-memoria li a:hover, .faixa-memoria li a:focus-visible { border-color: var(--baia); text-decoration: underline; }
+.faixa-memoria a:focus-visible { outline: 2px solid var(--foco); outline-offset: 3px; }
+.faixa-memoria > p { margin: var(--esp-3) 0 0; font-weight: 600; }
+
+/* ---- alto contraste: sem a ilustração, com bordas visíveis e foco do sistema */
+@media (forced-colors: active) {
+  .ceu { display: none; }
+  /* Sem o céu, a margem de cima do texto seria um vão vazio. */
+  .hero-texto { margin: 0; max-width: none; border: 1px solid CanvasText; }
+  .linha-tempo li, #cb-vereadores-lista { border-color: CanvasText; }
+  #cb-vereadores-lista [role="option"][aria-selected="true"] { outline-color: Highlight; }
+  .faixa-memoria li a, .faixa-memoria li a:hover, .faixa-memoria li a:focus-visible { border-color: CanvasText; }
+  .faixa-memoria a:focus-visible { outline-color: Highlight; }
+}
+
+/* ---- impressão: sem camadas nem campo de busca; só texto e números */
+@media print {
+  .ceu, .cb-campo { display: none !important; }
+  .hero { display: block; border-radius: 0; overflow: visible; }
+  .hero-texto { margin: 0; padding: 0; max-width: none; background: none !important; color: black !important; }
+  .linha-rolavel { overflow: visible !important; }
+  .linha-tempo ol { display: block; }
+  .linha-tempo li { margin-bottom: var(--esp-3); box-shadow: none; break-inside: avoid; }
+}

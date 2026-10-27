@@ -383,7 +383,8 @@ for (const modo of ["leis", "projetos"]) {
       assert.equal(itens(app), 1);
       assert.match(app.elementos.resultados.innerHTML, /PL 140\/2021/);
       assert.match(app.elementos.resultados.innerHTML, /chip-principal[^>]+daniel-marques-frederico/);
-      assert.match(app.elementos.resultados.innerHTML, /coautores" title="Cal">e 1 coautor/);
+      assert.match(app.elementos.resultados.innerHTML, /<div class="autoria">[^]*?<details class="coautores"><summary>e 1 coautor<\/summary><ul><li>Cal<\/li><\/ul><\/details>[^]*?<\/div>/);
+      assert.doesNotMatch(app.elementos.resultados.innerHTML, /<p class="autoria">|title="Cal"/);
       assert.match(app.elementos.resultados.innerHTML, /via substitutivo/);
       const arquivo = await app.csv();
       assert.equal(arquivo.texto.split("\n").length, 2);

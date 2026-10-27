@@ -12,6 +12,7 @@ from urllib.parse import urlencode
 from coletor.regras_sessoes import rotulo_voto
 from coletor.site import graficos as G
 from coletor.site import paginas as P
+from coletor.site.glossario import ColetorGlossario
 from coletor.site.modelo import nome_curto
 
 
@@ -439,18 +440,35 @@ def _voto_faixa(v: dict, slug: str) -> tuple[str, str, str]:
     return classe, *VOTOS_FAIXA[classe]
 
 
-def _cabecalho_faixa(v: dict) -> str:
-    documento = _documento(v)
+def _curto_faixa(v: dict) -> str:
     numero = str(v.get("numero") or "").split("/")[0]
     sigla = {"pl": "PL", "pdl": "PDL", "resolucao": "PR", "veto": "Veto"}.get(v.get("materia"))
-    curto = f"{sigla} {numero}" if sigla and numero else re.sub(r"/\d{4}\b", "", documento)
+    return f"{sigla} {numero}" if sigla and numero else re.sub(r"/\d{4}\b", "", _documento(v))
+
+
+FAIXA_LARGA = 12  # acima deste número de colunas, a matriz empilha até contêineres de 100rem (estilo.css)
+
+
+def _classe_faixa(colunas: int) -> str:
+    """faixa-larga mantém o cartão por vereador também no desktop, onde a matriz já não caberia."""
+    return "faixa faixa-larga" if colunas > FAIXA_LARGA else "faixa"
+
+
+def _rotulo_faixa(v: dict) -> str:
+    """Referência curta do cabeçalho ("25/03 PL 280"), rótulo das células no cartão empilhado."""
+    return f'{P.data_br(v.get("data"))[:5]} {_curto_faixa(v)}'
+
+
+def _cabecalho_faixa(v: dict) -> str:
+    documento = _documento(v)
+    curto = _curto_faixa(v)
     data = P.data_br(v.get("data"))
     limite = _limite_faixa(v)
     marca = (f'<span aria-hidden="true"> *</span><span class="so-leitor"> · {P.esc(limite)}</span>' if limite else '')
     classe = ' class="faixa-sem-comparacao"' if limite else ''
-    return (f'<th scope="col"{classe}><a href="#v-{P.esc(v["id"])}">'
-            f'<abbr title="{P.esc(documento + ", " + data)}">{P.esc(data[:5])}</abbr><br>'
-            f'{P.esc(curto)}{marca}</a></th>')
+    return G.cab_coluna(f'<a href="#v-{P.esc(v["id"])}">'
+                        f'<abbr title="{P.esc(documento + ", " + data)}">{P.esc(data[:5])}</abbr><br>'
+                        f'{P.esc(curto)}{marca}</a>', classe)
 
 
 def _mapa_votos(modelo: dict, dados: dict, leg: dict) -> str:
@@ -463,6 +481,7 @@ def _mapa_votos(modelo: dict, dados: dict, leg: dict) -> str:
     ano = max(_ano(v) for v in divididas)
     votacoes = list(reversed(_recentes([v for v in divididas if _ano(v) == ano])))
     membros = _pessoas_leg(modelo, dados, leg)
+    rotulos = [_rotulo_faixa(v) for v in votacoes]
     linhas, resumo = [], []
     for slug in membros:
         pessoa = _pessoa(modelo, slug, leg["id"])
@@ -475,13 +494,13 @@ def _mapa_votos(modelo: dict, dados: dict, leg: dict) -> str:
         if not eleito and slug in (modelo.get("pessoas") or {}):
             nome += '<span class="status">suplente em exercício</span>'
         celulas, contagens = [], defaultdict(int)
-        for v in votacoes:
+        for v, referencia in zip(votacoes, rotulos):
             classe, glifo, rotulo = _voto_faixa(v, slug)
             contagens[classe] += 1
             marca = ' faixa-sem-comparacao' if _limite_faixa(v) else ''
-            celulas.append(f'<td class="voto-{classe}{marca}"><span aria-hidden="true">{P.esc(glifo)}</span>'
-                           f'<span class="so-leitor">{P.esc(rotulo)}</span></td>')
-        linhas.append(f'<tr data-vereador="{P.esc(slug)}"><th scope="row">{nome}</th>{"".join(celulas)}</tr>')
+            celulas.append(G.celula(f'<span aria-hidden="true">{P.esc(glifo)}</span>'
+                                    f'<span class="so-leitor">{P.esc(rotulo)}</span>', referencia, f' class="voto-{classe}{marca}"'))
+        linhas.append(f'<tr role="row" data-vereador="{P.esc(slug)}">{G.cab_linha(nome, "Vereador")}{"".join(celulas)}</tr>')
         resumo.append([nome, *[contagens[c] for c in ("maioria", "diferente", "abstencao", "ausente")]])
     legenda = ''.join(f'<li><span class="glifo-voto voto-{c}" aria-hidden="true">{g}</span>'
                       f'{P.esc(r if g else "Célula vazia: " + r)}</li>' for c, (g, r) in VOTOS_FAIXA.items())
@@ -489,12 +508,12 @@ def _mapa_votos(modelo: dict, dados: dict, leg: dict) -> str:
             f'<ul class="leg-graf leg-votos" aria-label="Legenda do mapa de votos">{legenda}</ul>'
             '<p class="nota">Linhas parecidas indicam votos parecidos nas votações divididas deste ano; '
             'não indicam grupo político. Nomes em ordem alfabética, sem agrupamento por voto.</p>'
-            f'<div class="faixa-rolagem" role="region" tabindex="0" aria-label="Mapa de votos de {ano}, legislatura {P.esc(leg["rotulo"])}: tabela com rolagem horizontal">'
-            f'<table class="faixa"><caption>Vereador × votação dividida de {ano}, em ordem cronológica. '
+            f'<div class="faixa-rolagem" role="region" tabindex="0" aria-label="Mapa de votos de {ano}, legislatura {P.esc(leg["rotulo"])}: vereador × votação dividida">'
+            f'{G.abre_tabela(len(votacoes) + 1, _classe_faixa(len(votacoes) + 1))}<caption>Vereador × votação dividida de {ano}, em ordem cronológica. '
             'A cor compara o voto à opção mais votada entre Favor e Contra, independentemente do sentido do parecer. '
             '* Coluna sem comparação: empate, sentido não determinado ou placar inconsistente.</caption>'
-            '<thead><tr><th scope="col">Vereador</th>' + ''.join(_cabecalho_faixa(v) for v in votacoes)
-            + '</tr></thead><tbody>' + ''.join(linhas) + '</tbody></table></div>'
+            + G.fecha_tabela(G.cab_coluna("Vereador") + ''.join(_cabecalho_faixa(v) for v in votacoes), ''.join(linhas))
+            + '</div>'
             + P.tabela_resumo(f'Resumo por vereador · votações divididas de {ano}',
                               ["Vereador", "Com a maioria", "Diferente da maioria", "Abstenção", "Ausente"], resumo)
             + '<p class="nota">O resumo conta apenas as colunas com comparação determinada. Presidência, células vazias, '
@@ -503,11 +522,11 @@ def _mapa_votos(modelo: dict, dados: dict, leg: dict) -> str:
 
 
 def _grafico(titulo: str, subtitulo: str, rotulos: list[str], series: list[tuple], eixo: str) -> str:
-    """Acrescenta caption e cabeçalhos de linha à alternativa do componente SVG."""
+    """Acrescenta caption e nomeia a coluna dos cabeçalhos de linha na alternativa do componente SVG."""
     grafico = G.colunas_empilhadas(titulo, subtitulo, rotulos, series)
-    grafico = grafico.replace('<table>', f'<table><caption>{P.esc(titulo)}</caption>')
-    grafico = grafico.replace('<th scope="col"></th>', f'<th scope="col">{P.esc(eixo)}</th>')
-    return re.sub(r'<tr><td>(.*?)</td>', r'<tr><th scope="row">\1</th>', grafico)
+    grafico = grafico.replace('role="table">', f'role="table"><caption>{P.esc(titulo)}</caption>', 1)
+    grafico = grafico.replace(G.cab_coluna(""), G.cab_coluna(P.esc(eixo)))
+    return grafico.replace('<th scope="row" role="rowheader" data-label="">', f'<th scope="row" role="rowheader" data-label="{P.esc(eixo)}">')
 
 
 def _grafico_placares(dados: dict, leg: dict) -> str:
@@ -579,11 +598,16 @@ def _qualidade(dados: dict) -> str:
 # ---- página da Câmara --------------------------------------------------------
 def gerar_sessoes(modelo: dict) -> str:
     """HTML completo de sessoes.html, inclusive o estado ainda sem coleta."""
+    glossario = ColetorGlossario()
     dados = modelo.get("sessoes") or {}
     meta = modelo.get("meta") or {}
     coleta = (meta.get("sessoes") or {}).get("em") or (meta.get("coleta") or {}).get("em") or ""
     abertura = ('<section class="abertura"><h1>Sessões e votações</h1>'
                 '<p>Presença nas sessões plenárias e votos nominais: primeiro a participação, depois as decisões que dividiram a Câmara.</p>'
+                f'<p class="explica">{glossario.termo("consignado")} é registro da Mesa; '
+                f'{glossario.termo("votou-ausente", "votou ausente na abertura")} identifica presença por voto na mesma sessão. '
+                f'Favor e Contra se referem ao {glossario.termo("parecer", "parecer")}; '
+                f'a opção mais votada não é o {glossario.termo("quorum", "quórum")} legal.</p>'
                 f'<p class="atualizacao">Sessões coletadas: {P.esc(_periodo(dados))} · dados do SISCAM de '
                 f'{P.esc(P.data_br(coleta[:10]))} · <a href="metodologia.html#sessoes">como contamos</a></p></section>')
     if not dados or not dados.get("sessoes"):
@@ -628,13 +652,14 @@ def gerar_sessoes(modelo: dict) -> str:
                  + "".join(blocos) + '<section id="ritmo-sessoes"><h2 class="h-secao">Ritmo das sessões</h2>'
                  + _ritmo(dados) + '</section><section id="qualidade-sessoes"><h2 class="h-secao">Qualidade dos dados</h2>'
                  + _qualidade(dados) + '</section></div>')
-    return P.pagina("Sessões e votações · Radar dos Vereadores de Niterói", corpo, "sessoes.html",
+    return P.pagina("Sessões e votações · Radar dos Vereadores de Niterói", corpo + glossario.definicoes(), "sessoes.html",
+                    caminho="sessoes.html",
                     descricao="Presença nas sessões plenárias e votações nominais da Câmara de Niterói, com fontes e limitações.",
                     dialogo=True, scripts=("sessoes.js",))
 
 
 # ---- página individual -------------------------------------------------------
-def _como_votou(registro: dict) -> str:
+def _como_votou(registro: dict, sufixo: str = "") -> str:
     linhas, resumos = [], []
     tem_outros = False
     for materia, contagens in sorted((registro.get("como_votou") or {}).items()):
@@ -668,7 +693,7 @@ def _como_votou(registro: dict) -> str:
     if linhas:
         tabela = ('<ul class="como-votou" role="list">' + "".join(resumos) + '</ul>'
                   + '<details class="bloco tabela-como-votou"><summary>Como votou em tabela</summary>'
-                  + P.tabela_resumo("Como votou por matéria (sentidos determinados)",
+                  + P.tabela_resumo("Como votou por matéria (sentidos determinados)" + sufixo,
                                     ["Matéria", "A favor do projeto ou manter o veto", "Contra ou derrubar", "Abstenção", "Total"], linhas)
                   + ('<p class="nota">O total inclui os outros registros discriminados no resumo, quando houver.</p>' if tem_outros else '')
                   + '</details>')
@@ -762,11 +787,11 @@ def secao_sessoes_vereador(modelo: dict, pessoa: dict) -> str:
                  + P.tile(f'{len(registro.get("divergencias") or [])} de {registro.get("divididas", 0)}',
                           "votou diferente da maioria", "Votações divididas com sentido conhecido; divergir não mede qualidade"))
         por_ano = registro.get("por_ano") or {}
-        tabela = _tabela_presenca("Presença por ano", [[P.esc(a), *_celulas_presenca(r, afastado)] for a, r in sorted(por_ano.items(), key=lambda i: str(i[0]))])
+        tabela = _tabela_presenca(f"Presença por ano · {leg['rotulo']}", [[P.esc(a), *_celulas_presenca(r, afastado)] for a, r in sorted(por_ano.items(), key=lambda i: str(i[0]))])
         blocos.append(f'<details class="bloco"{" open" if not blocos else ""}><summary>Legislatura {P.esc(leg["rotulo"])}</summary>'
                       + _etiqueta_afastamento(afastamentos)
                       + f'<div class="tiles">{tiles}</div>' + _barra_presenca(p, afastado) + _legenda_presenca()
-                      + '<h3>Como votou</h3>' + _como_votou(registro)
+                      + '<h3>Como votou</h3>' + _como_votou(registro, f" · {leg['rotulo']}")
                       + '<h3>Onde votou diferente da maioria</h3>' + _diferentes(dados, registro, pessoa["slug"], leg)
                       + f'<p><a href="../sessoes.html#sessoes-leg-{P.esc(leg["id"])}">Ver todas em Sessões</a></p>'
                       + '<details class="bloco"><summary>Presença por ano</summary>' + tabela + '</details></details>')
@@ -774,13 +799,17 @@ def secao_sessoes_vereador(modelo: dict, pessoa: dict) -> str:
 
 
 # ---- metodologia -------------------------------------------------------------
-def metodologia_sessoes(modelo: dict) -> str:
+def metodologia_sessoes(modelo: dict, glossario: ColetorGlossario | None = None) -> str:
     """Regras publicadas, inclusive quando a coleta ainda está vazia."""
     dados = modelo.get("sessoes") or {}
-    return f'''<section id="sessoes" class="texto sessoes" aria-labelledby="t-metodo-sessoes">
+    proprio = glossario is None
+    if glossario is None:
+        glossario = ColetorGlossario()
+    corpo = f'''<section id="sessoes" class="texto sessoes" aria-labelledby="t-metodo-sessoes">
 <h2 id="t-metodo-sessoes">Sessões plenárias: presença e votos</h2>
 <p>A página <a href="sessoes.html">Sessões e votações</a> usa os registros públicos do SISCAM. Período coletado: {P.esc(_periodo(dados))}. A cobertura por ano e as pendências aparecem junto aos números; uma sessão sem lista não vira falta para ninguém.</p>
 <h3>Presença e base individual</h3>
+<p>Os registros {glossario.termo('consignado', 'consignado')} e {glossario.termo('votou-ausente', 'votou ausente na abertura')} contam como presença, identificados à parte.</p>
 <ul>
 <li>Só sessões ordinárias e extraordinárias realizadas, com lista de frequência, entram na presença. Solenes e especiais aparecem à parte.</li>
 <li>● Presença (P) e ◆ Consignado (C) contam como presente. Consignado é um registro feito pela Mesa.</li>
@@ -790,8 +819,8 @@ def metodologia_sessoes(modelo: dict) -> str:
 <li>Afastamentos registrados na configuração aparecem com cargo e fonte pública, por legislatura. Com base inferior a 10 sessões, mostramos “X de Y sessões em exercício”, sem barra de presença nem percentual; esses afastados ficam no fim da ordenação por presença e fora da mediana dos eleitos, como os demais sem base suficiente. Com pelo menos 10 sessões, a barra e o percentual permanecem, junto à etiqueta. O afastamento não reclassifica os registros brutos nem informa suas datas de início e fim.</li>
 </ul>
 <h3>O que significa cada voto</h3>
-<p>O voto nominal “Favor” ou “Contra” é sobre o parecer da comissão, não necessariamente a favor ou contra a matéria. O sentido apresentado vem do resultado oficial e do lado vencedor. O texto da tramitação só determina o sentido em vetos mantidos sem nenhum lado com 11 votos, quando há decisão e direção inequívocas na mesma data; nos demais casos serve como conferência. Notas técnicas ficam em “Notas de conferência” e em “Qualidade dos dados”, sem apagar votos só porque o texto diverge.</p>
-<p>Derrubar um veto exige 11 votos: maioria absoluta dos 21 vereadores, não dos presentes. Um veto pode ser mantido sem que a maioria tenha votado para mantê-lo: não atingir 11 votos para derrubar não transforma ausências e abstenções em votos para manter. A opção mais votada entre Favor e Contra não é o quórum legal; empates não têm maioria.</p>
+<p>O voto nominal “Favor” ou “Contra” é {glossario.termo('parecer', 'sobre o parecer da comissão')}, não necessariamente a favor ou contra a matéria. O sentido apresentado vem do resultado oficial e do lado vencedor. O texto da tramitação só determina o sentido em vetos mantidos sem nenhum lado com 11 votos, quando há decisão e direção inequívocas na mesma data; nos demais casos serve como conferência. Notas técnicas ficam em “Notas de conferência” e em “Qualidade dos dados”, sem apagar votos só porque o texto diverge.</p>
+<p>Derrubar um veto exige 11 votos: maioria absoluta dos 21 vereadores, não dos presentes. Um veto pode ser mantido sem que a maioria tenha votado para mantê-lo: não atingir 11 votos para derrubar não transforma ausências e abstenções em votos para manter. A opção mais votada entre Favor e Contra não é o {glossario.termo('quorum', 'quórum')} legal; empates não têm maioria.</p>
 <p>Sem sentido seguro, mostramos “Favor ao parecer” e “Contra o parecer”, em cinza, com “sentido não determinado”. Placar inconsistente mostra somente os totais oficiais e a nota, sem nomes. A participação nominal conta votos substantivos (inclusive abstenção, branco e nulo); presidência aparece à parte. “Como votou” usa apenas sentidos determinados e consistentes. Um voto na opção menos votada ainda pode ser identificado pelo rótulo original, mas sem lhe atribuir um sentido que não foi determinado.</p>
 <h3>Votações divididas e ritmo</h3>
 <p>Uma votação é dividida com ao menos 3 votos no lado menor entre Favor e Contra, ou ao menos 3 abstenções. Com 1 ou 2 votos diferentes ou abstenções, é dissenso isolado; sem eles, unânime. Inconsistentes ficam separados no gráfico. A comparação individual conta apenas Favor/Contra na opção minoritária em votações divididas, sem empates; não há ordenação dos vereadores por esse indicador. Ritmo conta sessões listadas por mês e tipo, não horas de trabalho.</p>
@@ -800,3 +829,4 @@ def metodologia_sessoes(modelo: dict) -> str:
 <p>Contar presença e votos não mede qualidade do mandato. Comissões, debates, atendimento e votações simbólicas não aparecem nestes indicadores. Uma lista de abertura não mede permanência durante toda a sessão. A ausência de registro não prova ausência de trabalho; a cobertura do SISCAM e as pendências de coleta limitam todas as comparações.</p>
 <p>Encontrou erro? {_contestar("Presença ou votos", "Informe sessão, data, documento e fonte pública.")} por issue, informando a sessão, o documento e uma fonte pública. As regras valem igualmente para todos.</p>
 </section>'''
+    return corpo + (glossario.definicoes() if proprio else '')

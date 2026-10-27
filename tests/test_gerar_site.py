@@ -13,15 +13,22 @@ import unittest
 from html.parser import HTMLParser
 from pathlib import Path
 from unittest import mock
+from urllib.parse import urlsplit
 from xml.etree import ElementTree
 
 from coletor import gerar_site
 from coletor import novidades as N
+from coletor.site import inicio
 from coletor.site import paginas as P
 from coletor.site.modelo import TIPOS_DOC
+from tests import test_tabelas_empilhaveis, test_tabelas_rolaveis
+from tests.test_acessibilidade_html import analisar
+from tests.test_glossario import PaginaGlossario, TERMOS
 
 PAGINAS = ("index.html", "novidades.html", "leis.html", "projetos.html", "atividades.html", "sessoes.html", "ruido.html", "analises.html",
            "metodologia.html")
+if (inicio.carregar_memoria(gerar_site.RAIZ) or {}).get("homenageados"):
+    PAGINAS += ("memoria.html",)
 DOCUMENTOS = gerar_site.RAIZ / "data" / "documentos"
 
 
@@ -29,8 +36,11 @@ class TestGerarSite(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         saida = io.StringIO()
-        with mock.patch.object(sys, "argv", ["coletor.gerar_site"]), contextlib.redirect_stdout(saida):
+        with (mock.patch.object(sys, "argv", ["coletor.gerar_site"]),
+              mock.patch.object(inicio, "carregar_memoria", wraps=inicio.carregar_memoria) as carregar,
+              contextlib.redirect_stdout(saida)):
             gerar_site.main()
+        cls.carregamentos_memoria = carregar.call_count
         cls.mensagem = saida.getvalue()
         cls.saida = gerar_site.SAIDA
 
@@ -41,6 +51,83 @@ class TestGerarSite(unittest.TestCase):
                 self.assertTrue(arq.is_file(), f"{arq} não foi gerado")
                 conteudo = arq.read_text(encoding="utf-8")
                 self.assertIn("<html", conteudo.lower())
+
+    def test_todas_as_tabelas_em_todas_as_paginas(self):
+        paginas = sorted(self.saida.rglob("*.html"))
+        self.assertTrue(paginas)
+        total = 0
+        for caminho in paginas:
+            with self.subTest(pagina=str(caminho.relative_to(self.saida))):
+                texto = caminho.read_text(encoding="utf-8")
+                doc = test_tabelas_rolaveis.ContratoTabelas.conferir_tabelas(self, texto)
+                total += len(doc.tabelas)
+                # Toda tabela empilha em contêiner estreito: empilha + col-N, papéis ARIA e data-label não vazio
+                # em toda célula do corpo, igual ao cabeçalho da coluna (no mapa de votos, a referência curta).
+                empilhaveis = test_tabelas_empilhaveis.ContratoEmpilhavel.conferir_empilhamento(self, texto)
+                self.assertEqual(len(empilhaveis.tabelas), len(doc.tabelas))
+        self.assertGreater(total, 0)
+
+    def test_acessibilidade_em_todas_as_paginas(self):
+        paginas = sorted(self.saida.rglob("*.html"))
+        self.assertTrue(paginas)
+        for caminho in paginas:
+            with self.subTest(pagina=str(caminho.relative_to(self.saida))):
+                problemas = analisar(caminho.read_text(encoding="utf-8")).problemas
+                self.assertEqual(problemas, [], "\n".join(problemas[:10]))
+
+    def test_glossario_em_todas_as_paginas(self):
+        documentos = {}
+        for caminho in self.saida.rglob("*.html"):
+            with self.subTest(pagina=str(caminho.relative_to(self.saida))):
+                doc = PaginaGlossario(caminho.read_text(encoding="utf-8"))
+                documentos[caminho.relative_to(self.saida).as_posix()] = doc
+                self.assertFalse(doc.invalidos)
+                self.assertLessEqual(doc.templates, 1)
+                self.assertTrue(doc.usados <= doc.definidos, doc.usados - doc.definidos)
+                self.assertTrue(doc.usados <= TERMOS.keys())
+        for nome in ("leis.html", "projetos.html", "atividades.html", "ruido.html", "sessoes.html"):
+            with self.subTest(pagina=nome):
+                self.assertIn(nome, documentos)
+                self.assertTrue(documentos[nome].usados)
+                self.assertEqual(documentos[nome].templates, 1)
+        self.assertIn("metodologia.html", documentos)
+        for chave in TERMOS:
+            self.assertIn(f"g-{chave}", documentos["metodologia.html"].ids)
+
+    def test_html_gerado_dentro_do_orcamento(self):
+        paginas = sorted(self.saida.rglob("*.html"))
+        self.assertTrue(paginas)
+        for caminho in paginas:
+            with self.subTest(pagina=str(caminho.relative_to(self.saida))):
+                self.assertLessEqual(gerar_site.tamanho_gzip(caminho.read_bytes()), gerar_site.LIMITE_HTML_GZIP)
+
+    def test_memoria_publicada_e_rodape_em_todas_as_paginas(self):
+        self.assertEqual(self.carregamentos_memoria, 1)
+        memoria = inicio.carregar_memoria(gerar_site.RAIZ)
+        publicada = bool(memoria and memoria.get("homenageados"))
+        self.assertEqual((self.saida / "memoria.html").is_file(), publicada)
+        for caminho in self.saida.rglob("*.html"):
+            if caminho.name == "alertas.html":  # redirect separado, sem template/rodapé
+                continue
+            with self.subTest(pagina=str(caminho.relative_to(self.saida))):
+                html = caminho.read_text(encoding="utf-8")
+                if publicada:
+                    prefixo = urlsplit(N.URL_SITE).path if caminho.name == "404.html" else (
+                        "../" if caminho.parent.name == "vereadores" else "")
+                    rodape = html.split('<footer class="rodape">', 1)[1].split("</footer>", 1)[0]
+                    atual = ' aria-current="page"' if caminho.name == "memoria.html" else ""
+                    self.assertIn(f'<a href="{prefixo}memoria.html"{atual}>Memória de Niterói</a>', rodape)
+                else:
+                    self.assertNotIn("memoria.html", html)
+        index = (self.saida / "index.html").read_text(encoding="utf-8")
+        self.assertEqual('id="fm-titulo"' in index, publicada)
+
+    def test_rodape_sem_memoria_em_renderizacoes_isoladas(self):
+        with mock.patch.object(P, "MEMORIA_PUBLICADA", False):
+            for prefixo in ("", "../", urlsplit(N.URL_SITE).path):
+                with self.subTest(prefixo=prefixo):
+                    html = P.pagina("Página", "", "", prefixo=prefixo, caminho="pagina.html")
+                    self.assertNotIn("memoria.html", html)
 
     def test_integracao_sessoes_menu_metodologia_e_fichas(self):
         hrefs = [href for href, _ in P.NAV]
@@ -69,17 +156,19 @@ class TestGerarSite(unittest.TestCase):
 
     def test_gera_sem_pasta_de_sessoes(self):
         # Isola só a raiz opcional e a saída, sem renomear nem alterar data/.
-        with tempfile.TemporaryDirectory(prefix="site-sem-sessoes-", dir=self.saida.parent) as pasta:
+        with tempfile.TemporaryDirectory(prefix="site-sem-sessoes-") as pasta:
             raiz = Path(pasta)
             saida = raiz / "site"
             mensagem = io.StringIO()
             renderizar = gerar_site.pagina_sessoes.gerar_sessoes
             with (mock.patch.object(gerar_site, "RAIZ", raiz),
                   mock.patch.object(gerar_site, "SAIDA", saida),
+                  mock.patch.object(P, "MEMORIA_PUBLICADA", True),
                   mock.patch.object(gerar_site.modelo_sessoes, "montar_sessoes") as montar,
                   mock.patch.object(gerar_site.pagina_sessoes, "gerar_sessoes", wraps=renderizar) as pagina,
                   contextlib.redirect_stdout(mensagem)):
                 gerar_site.main()
+                self.assertFalse(P.MEMORIA_PUBLICADA)
             montar.assert_not_called()
             self.assertIsNone(pagina.call_args.args[0]["sessoes"])
             self.assertIn("Nenhuma sessão coletada disponível", (saida / "sessoes.html").read_text(encoding="utf-8"))
@@ -87,7 +176,11 @@ class TestGerarSite(unittest.TestCase):
             ficha = next((saida / "vereadores").glob("*.html")).read_text(encoding="utf-8")
             self.assertIn("Nenhum registro de frequência com este nome", ficha)
             for nome in PAGINAS:
-                self.assertTrue((saida / nome).is_file(), nome)
+                if nome != "memoria.html":
+                    self.assertTrue((saida / nome).is_file(), nome)
+            self.assertFalse((saida / "memoria.html").exists())
+            for caminho in saida.rglob("*.html"):
+                self.assertNotIn("memoria.html", caminho.read_text(encoding="utf-8"))
             self.assertEqual(list((saida / "dados").glob("vot-*.json")), [])
             manifesto = json.loads((saida / "dados/manifest.json").read_bytes())
             self.assertNotIn("build_ses", manifesto)
@@ -113,9 +206,15 @@ class TestGerarSite(unittest.TestCase):
         self.assertLessEqual(tamanho, gerar_site.LIMITE_HTML_GZIP)
 
     def test_recursos_estaticos_copiados(self):
-        for arq in gerar_site.FONTE_ESTATICA.iterdir():
-            with self.subTest(recurso=arq.name):
-                self.assertTrue((self.saida / arq.name).is_file())
+        for arq in gerar_site.FONTE_ESTATICA.rglob("*"):
+            relativo = arq.relative_to(gerar_site.FONTE_ESTATICA)
+            if not P.publicavel(relativo):
+                continue
+            if arq.is_file():
+                with self.subTest(recurso=str(relativo)):
+                    destino = self.saida / relativo
+                    self.assertTrue(destino.is_file())
+                    self.assertEqual(destino.read_bytes(), P.bytes_estaticos(arq))
 
     def test_json_do_cliente(self):
         dados = json.loads((self.saida / "dados" / "projetos.json").read_text(encoding="utf-8"))

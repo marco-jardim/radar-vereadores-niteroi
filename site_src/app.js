@@ -4,10 +4,37 @@
   var prefixo = raiz ? raiz.dataset.prefixo || "" : "";
 
   // ------------------------------------------------------------- tooltip
-  var tip = document.getElementById("tip");
-  function mostrarTip(el, x, y) {
+  // Abre com o ponteiro por cima e com o foco; no toque, só quando pointerType é "touch" (um toque abre, outro
+  // fecha). Fecha com Esc, toque ou clique fora, saída do foco ou rolagem. As marcas dos gráficos não recebem
+  // tabindex: só os links que já existem (pontos com página própria) ganham aria-describedby enquanto o tip aparece.
+  // Um único listener por tipo de evento no documento.
+  var tip = document.getElementById("tip"), tipAlvo = null, tipOrigem = "", tipDescrito = null;
+  // dentro: no foco, o link de um ponto do gráfico leva o data-tip na marca dentro dele (só links: painéis e
+  // regiões roláveis com tabindex não abrem o tip da primeira marca que contêm).
+  function alvoTip(t, dentro) {
+    if (!t) return null;
+    var el = typeof t.closest === "function" ? t.closest("[data-tip]") : null;
+    if (!el && dentro && /^a$/i.test(t.tagName || "") && typeof t.querySelector === "function") el = t.querySelector("[data-tip]");
+    return el || null;
+  }
+  function centro(el) {
+    var r = typeof el.getBoundingClientRect === "function" ? el.getBoundingClientRect() : { left: 0, top: 0, width: 0 };
+    return [r.left + r.width / 2, r.top];
+  }
+  function esconderTip() {
+    if (tipDescrito) {
+      if (typeof tipDescrito.removeAttribute === "function") tipDescrito.removeAttribute("aria-describedby");
+      tipDescrito = null;
+    }
+    tipAlvo = null;
+    tipOrigem = "";
+    tip.hidden = true;
+  }
+  function mostrarTip(el, x, y, origem) {
     tip.textContent = el.getAttribute("data-tip");
     tip.hidden = false;
+    tipAlvo = el;
+    tipOrigem = origem;
     var r = tip.getBoundingClientRect();
     var left = Math.min(window.innerWidth - r.width - 8, Math.max(8, x - r.width / 2));
     var top = y - r.height - 12;
@@ -15,31 +42,73 @@
     tip.style.left = left + "px";
     tip.style.top = top + "px";
   }
-  if (tip) {
-    document.addEventListener("mousemove", function (ev) {
-      var el = ev.target.closest && ev.target.closest("[data-tip]");
-      if (el) mostrarTip(el, ev.clientX, ev.clientY);
-      else tip.hidden = true;
+  // O alvo saiu da página (lista redesenhada, por exemplo): o tip não fica órfão na tela.
+  function alvoRemovido() { return !!tipAlvo && tipAlvo.isConnected === false; }
+  if (tip && typeof document.addEventListener === "function") {
+    var comPonteiro = typeof window.PointerEvent === "function";
+    document.addEventListener(comPonteiro ? "pointermove" : "mousemove", function (ev) {
+      if (ev.pointerType === "touch") return;
+      var el = alvoTip(ev.target);
+      if (el) mostrarTip(el, ev.clientX, ev.clientY, "ponteiro");
+      else if (!tip.hidden && (tipOrigem === "ponteiro" || alvoRemovido())) esconderTip();
+    });
+    document.addEventListener("pointerdown", function (ev) {
+      var el = alvoTip(ev.target);
+      if (el && ev.pointerType === "touch") {
+        if (el === tipAlvo && !tip.hidden) esconderTip();
+        else { var c = centro(el); mostrarTip(el, c[0], c[1], "toque"); }
+      } else if (!el && !tip.hidden) esconderTip();
     });
     document.addEventListener("focusin", function (ev) {
-      var el = ev.target.closest && ev.target.closest("[data-tip]");
-      if (el) { var r = el.getBoundingClientRect(); mostrarTip(el, r.left + r.width / 2, r.top); }
+      var el = alvoTip(ev.target, true);
+      if (!el) return;
+      var c = centro(el);
+      mostrarTip(el, c[0], c[1], "foco");
+      var foco = ev.target;
+      if (foco && typeof foco.getAttribute === "function" && !foco.getAttribute("aria-describedby")) {
+        foco.setAttribute("aria-describedby", "tip");
+        tipDescrito = foco;
+      }
     });
-    document.addEventListener("focusout", function () { tip.hidden = true; });
-    document.addEventListener("scroll", function () { tip.hidden = true; }, { passive: true });
+    document.addEventListener("focusout", function () { if (tipOrigem === "foco" || alvoRemovido()) esconderTip(); });
+    document.addEventListener("keydown", function (ev) {
+      if ((ev.key === "Escape" || ev.key === "Esc") && !tip.hidden) esconderTip();
+    });
+    document.addEventListener("scroll", function () { if (!tip.hidden) esconderTip(); }, { passive: true });
   }
 
   // ----------------------------------------------- placar da página inicial
-  var abas = document.querySelectorAll(".abas button");
+  // Abas no padrão WAI-ARIA (setas com volta, Home/End, tabindex móvel). Sem JS, o servidor mostra todos os
+  // painéis empilhados, cada um com seu título, e a lista de abas fica oculta: aqui ela aparece e só o painel da
+  // aba selecionada continua visível.
+  var listaAbas = document.querySelector('.abas[role="tablist"]');
+  var abas = listaAbas ? Array.prototype.slice.call(listaAbas.querySelectorAll('[role="tab"]')) : [];
   var ordem = document.getElementById("ordem");
   var soEleitos = document.getElementById("so-eleitos");
   var partidoPlacar = document.getElementById("f-partido-placar");
   function camel(s) { return s.replace(/-([a-z])/g, function (_, c) { return c.toUpperCase(); }); }
+  function painelDaAba(aba) { return document.getElementById(aba.getAttribute("aria-controls")); }
+  function abaSelecionada() {
+    return abas.filter(function (b) { return b.getAttribute("aria-selected") === "true"; })[0] || null;
+  }
+  function selecionarAba(aba, focar, ordenar) {
+    abas.forEach(function (b) {
+      var ativa = b === aba, painel = painelDaAba(b);
+      b.setAttribute("aria-selected", ativa ? "true" : "false");
+      b.setAttribute("tabindex", ativa ? "0" : "-1");
+      if (painel) painel.hidden = !ativa;
+    });
+    if (focar && typeof aba.focus === "function") aba.focus();
+    if (ordenar) aplicarPlacar();
+  }
 
   function aplicarPlacar() {
-    var sec = document.querySelector(".legislatura:not([hidden])");
+    // Sem abas (presença em sessoes.html), vale o primeiro bloco visível.
+    var aba = abaSelecionada();
+    var sec = aba ? painelDaAba(aba) : document.querySelector(".legislatura:not([hidden])");
     if (!sec) return;
     var lista = sec.querySelector(".placar");
+    if (!lista) return;
     var linhas = Array.prototype.slice.call(lista.children);
     var chave = ordem ? ordem.value : "leis-efeito";
     linhas.sort(function (a, b) {
@@ -54,13 +123,34 @@
       lista.appendChild(li);
     });
   }
-  abas.forEach(function (bt) {
-    bt.addEventListener("click", function () {
-      abas.forEach(function (b) { b.setAttribute("aria-selected", b === bt ? "true" : "false"); });
-      document.querySelectorAll(".legislatura").forEach(function (s) { s.hidden = s.id !== bt.dataset.alvo; });
-      aplicarPlacar();
+  if (abas.length && typeof listaAbas.addEventListener === "function" && abas.every(function (bt) {
+    var painel = painelDaAba(bt);
+    return typeof bt.addEventListener === "function" && painel && typeof painel.setAttribute === "function";
+  })) {
+    abas.forEach(function (bt) {
+      var painel = painelDaAba(bt);
+      painel.setAttribute("role", "tabpanel");
+      painel.setAttribute("tabindex", "0");
+      painel.setAttribute("aria-labelledby", bt.id);
     });
-  });
+    // A ordem do servidor já é a padrão: na abertura só oculta os outros painéis, sem reordenar.
+    selecionarAba(abaSelecionada() || abas[0], false, false);
+    listaAbas.hidden = false;
+    abas.forEach(function (bt) {
+      bt.addEventListener("click", function () { selecionarAba(bt, false, true); });
+    });
+    listaAbas.addEventListener("keydown", function (ev) {
+      var i = abas.indexOf(ev.target), n = abas.length, alvo = null;
+      if (i < 0) return;
+      if (ev.key === "ArrowRight" || ev.key === "Right") alvo = abas[(i + 1) % n];
+      else if (ev.key === "ArrowLeft" || ev.key === "Left") alvo = abas[(i - 1 + n) % n];
+      else if (ev.key === "Home") alvo = abas[0];
+      else if (ev.key === "End") alvo = abas[n - 1];
+      if (!alvo) return;
+      if (typeof ev.preventDefault === "function") ev.preventDefault();
+      selecionarAba(alvo, true, alvo !== abas[i]);
+    });
+  }
   [ordem, soEleitos, partidoPlacar].forEach(function (el) { if (el) el.addEventListener("change", aplicarPlacar); });
 
   // ---------------------------------------------- detalhe do SISCAM em diálogo
@@ -152,6 +242,11 @@
     var k = chaveImp(p);
     return '<span class="selo imp-' + k + '">' + (NOME_IMP[k] || "Não avaliado") + "</span>";
   }
+  // Espelho de lista_coautores (paginas.py): resumo clicável com todos os nomes, dentro de um <div>, nunca de um <p>.
+  function listaCoautores(resumo, nomes) {
+    return '<details class="coautores"><summary>' + esc(resumo) + "</summary><ul>" +
+      nomes.map(function (nome) { return "<li>" + esc(nome) + "</li>"; }).join("") + "</ul></details>";
+  }
   function autores(p) {
     var princ = p.au.filter(function (a) { return a[1] && a[1] === p.pr; });
     if (!princ.length) princ = p.au.slice(0, 1);
@@ -159,8 +254,8 @@
       return a[1] ? '<a class="chip chip-principal" href="' + prefixo + "vereadores/" + esc(a[1]) + '.html">' + esc(a[0]) + "</a>"
         : '<span class="chip chip-exec">' + esc(a[0]) + "</span>";
     }).join("");
-    var n = p.au.length - princ.length;
-    if (n > 0) html += '<span class="coautores" title="' + esc(p.au.filter(function (a) { return princ.indexOf(a) < 0; }).map(function (a) { return a[0]; }).join(", ")) + '">e ' + n + (n === 1 ? " coautor" : " coautores") + "</span>";
+    var outros = p.au.filter(function (a) { return princ.indexOf(a) < 0; }), n = outros.length;
+    if (n > 0) html += listaCoautores("e " + n + (n === 1 ? " coautor" : " coautores"), outros.map(function (a) { return a[0]; }));
     if (p.pt) html += '<span class="partido">' + esc(p.pt) + "</span>";
     return html;
   }
@@ -195,7 +290,7 @@
       (p.r ? '<p class="resumo-ia">' + esc(p.r) + "</p>" : "") +
       '<p class="ementa">' + esc(legivel(p.e)) + "</p>" +
       (meta.length ? '<p class="publico">' + meta.join(" · ") + "</p>" : "") +
-      '<p class="autoria">' + autores(p) + "</p>" + tags(p) + botoesSiscam(p.u, "PL " + p.n) + "</li>";
+      '<div class="autoria">' + autores(p) + "</div>" + tags(p) + botoesSiscam(p.u, "PL " + p.n) + "</li>";
   }
   function botoesSiscam(url, rotulo) {
     return '<p class="acoes-item"><button type="button" class="ver-siscam" data-url="' + esc(url) + '" data-rotulo="' + esc(rotulo) + '">' +
@@ -344,11 +439,26 @@
     mais.hidden = restam <= 0;
     mais.textContent = "Mostrar mais " + Math.min(PASSO, restam);
   }
-  function renderizar() {
-    var fatia = filtrados.slice(mostrando, mostrando + PASSO);
+  // "Mostrar mais": o foco vai ao primeiro item novo (o botão pode sumir quando a lista acaba) e #anuncio
+  // diz quantos itens entraram. Sem itens novos, o foco fica onde está.
+  function itensNaLista() { return resultados.children ? resultados.children.length : 0; }
+  function focarNovo(indice) {
+    var novo = resultados.children ? resultados.children[indice] : null;
+    if (!novo || typeof novo.focus !== "function") return;
+    novo.setAttribute("tabindex", "-1");
+    novo.focus();
+  }
+  function textoAdicionados(n) { return n + (n === 1 ? " item adicionado." : " itens adicionados."); }
+  function avisarLista(texto) { var a = $("anuncio"); if (a) a.textContent = texto; }
+  function renderizar(doBotao) {
+    var fatia = filtrados.slice(mostrando, mostrando + PASSO), antes = itensNaLista();
     resultados.insertAdjacentHTML("beforeend", fatia.map(item).join(""));
     mostrando += fatia.length;
     atualizarMais();
+    if (doBotao && fatia.length) {
+      focarNovo(antes);
+      avisarLista(textoAdicionados(fatia.length));
+    }
   }
   function limpar() {
     form.reset();
@@ -563,9 +673,9 @@
     resumo.textContent = erro && erro.atualizado ? "Site atualizado, recarregue a página" : "Não foi possível carregar os dados. Recarregue a página.";
   }
   function maisLista() {
-    if (!previa) { renderizar(); return; }
+    if (!previa) { renderizar(true); return; }
     mais.disabled = true;
-    completar().then(function (ok) { if (ok) renderizar(); }, erroPrevia);
+    completar().then(function (ok) { if (ok) renderizar(true); }, erroPrevia);
   }
   // Depois da primeira pintura: no evento load e, se houver, num momento ocioso do navegador.
   function depoisDaCarga(fn) {
@@ -727,8 +837,7 @@
       }).join("");
       var resto = d.autores.slice(3);
       if (resto.length) {
-        html += '<span class="coautores" title="' + esc(resto.map(function (a) { return a[0]; }).join(", ")) + '">e mais ' +
-          resto.length + (resto.length === 1 ? " autor" : " autores") + "</span>";
+        html += listaCoautores("e mais " + resto.length + (resto.length === 1 ? " autor" : " autores"), resto.map(function (a) { return a[0]; }));
       }
       return html;
     }
@@ -740,7 +849,7 @@
         (d.assunto ? '<p class="assunto">Assunto: ' + esc(d.assunto) + "</p>" : "") +
         '<p class="ementa">' + esc(legivel(d.ementa)) + "</p>" +
         '<p class="publico">' + esc(metaD(d).join(" · ")) + "</p>" +
-        '<p class="autoria">' + autoresD(d) + "</p>" + botoesSiscam(d.url, rotulo) + "</li>";
+        '<div class="autoria">' + autoresD(d) + "</div>" + botoesSiscam(d.url, rotulo) + "</li>";
     }
     function resumoD() {
       var porTipo = {};
@@ -770,15 +879,18 @@
       }
       renderizarD(manter);
     }
+    // anunciar: vem do "Mostrar mais"; o foco vai ao primeiro item novo, como na lista de projetos.
     function renderizarD(anunciar) {
-      var fim = Math.min(alvo, visiveis), novos = filtradosD.slice(mostrandoD, fim);
+      var fim = Math.min(alvo, visiveis), novos = filtradosD.slice(mostrandoD, fim), antes = itensNaLista();
       if (novos.length) resultados.insertAdjacentHTML("beforeend", novos.map(itemD).join(""));
       mostrandoD = Math.max(mostrandoD, fim);
       var restam = Math.max(0, totalD - mostrandoD);
       mais.disabled = false;
       mais.hidden = restam <= 0;
       mais.textContent = "Mostrar mais " + Math.min(PASSO, restam);
-      if (anunciar) avisar("Mostrando " + milhar(mostrandoD) + " de " + milhar(totalD) + " documentos.");
+      if (anunciar && novos.length) focarNovo(antes);
+      if (anunciar) avisar((novos.length ? textoAdicionados(novos.length) + " " : "") +
+        "Mostrando " + milhar(mostrandoD) + " de " + milhar(totalD) + " documentos.");
     }
     function erroD(erro) {
       resultados.setAttribute("aria-busy", "false");

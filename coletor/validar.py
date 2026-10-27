@@ -6,7 +6,7 @@ data/documentos/<tipo>/<ano>.json e de data/sessoes/<ano>.json (inclusive o form
 byte a byte gravado por coletor.arquivos; as duas pastas são opcionais), da geometria
 opcional (data/geo/bairros.json), do cache da IA (data/classificacao_ia.json), de
 data/meta.json e dos arquivos
-config/curadoria.json e config/vereadores.json, e acusa temporários de gravação
+config/curadoria.json, config/vereadores.json e config/memoria.json (opcional), e acusa temporários de gravação
 interrompida em data/. Cada verificação é uma função que recebe os dados já
 carregados e devolve a lista de problemas encontrados (vazia quando está tudo certo).
 
@@ -21,6 +21,7 @@ import json
 import os
 import re
 import sys
+import unicodedata
 from datetime import date
 from pathlib import Path
 
@@ -774,6 +775,200 @@ def validar_vereadores(cfg: object) -> list[str]:
     return problemas
 
 
+# ------------------------------------------------------------------------- memória
+def _memoria_texto(valor: object) -> bool:
+    return isinstance(valor, str) and bool(valor.strip())
+
+
+def _memoria_textos(item: dict, chaves: tuple[str, ...], rotulo: str) -> list[str]:
+    return [
+        f"{rotulo}: '{chave}' ausente ou vazio; deveria ser texto não vazio"
+        for chave in chaves if not _memoria_texto(item.get(chave))
+    ]
+
+
+def _memoria_data(valor: object) -> tuple[int, int, int] | None:
+    """Data parcial ordenável: um ano sem mês/dia vem antes das datas completas desse ano."""
+    if not isinstance(valor, str):
+        return None
+    if RE_ANO.fullmatch(valor):
+        return int(valor), 0, 0
+    if RE_DATA.fullmatch(valor):
+        try:
+            data = date.fromisoformat(valor)
+        except ValueError:
+            return None
+        return data.year, data.month, data.day
+    return None
+
+
+def _memoria_fontes(fontes: object, rotulo: str) -> list[str]:
+    if not isinstance(fontes, list) or not fontes:
+        return [f"{rotulo}: 'fontes' precisa de pelo menos uma fonte com título e URL HTTPS"]
+    problemas = []
+    for i, fonte in enumerate(fontes, 1):
+        r = f"{rotulo}: fonte {i}"
+        if not isinstance(fonte, dict):
+            problemas.append(f"{r} deveria ser um objeto")
+            continue
+        problemas += _memoria_textos(fonte, ("titulo",), r)
+        if not isinstance(fonte.get("url"), str) or not re.fullmatch(r"https://[^\s/]+\.[^\s/]+(/\S*)?", fonte["url"]):
+            problemas.append(f"{r}: 'url' deveria ser HTTPS com host contendo ponto e sem espaços")
+    return problemas
+
+
+def _memoria_nfc(valor: object, rotulo: str) -> list[str]:
+    """Confere todas as strings, inclusive chaves e campos editoriais opcionais."""
+    if isinstance(valor, str):
+        return [] if unicodedata.is_normalized("NFC", valor) else [f"{rotulo}: texto fora da normalização NFC"]
+    problemas = []
+    if isinstance(valor, dict):
+        for chave, item in valor.items():
+            problemas += _memoria_nfc(chave, f"{rotulo}: chave {chave!r}")
+            problemas += _memoria_nfc(item, f"{rotulo}.{chave}")
+    elif isinstance(valor, list):
+        for i, item in enumerate(valor, 1):
+            problemas += _memoria_nfc(item, f"{rotulo}[{i}]")
+    return problemas
+
+
+def _memoria_imagem(imagem: object, rotulo: str, ano_atual: int) -> list[str]:
+    if not isinstance(imagem, dict):
+        return [f"{rotulo}: 'imagem' deveria ser um objeto"]
+    r = f"{rotulo}: imagem"
+    problemas = _memoria_textos(imagem, ("credito",), r)
+    tipo = imagem.get("tipo")
+    if tipo not in ("propria", "dominio_publico"):
+        problemas.append(f"{r}: 'tipo' deveria ser propria ou dominio_publico")
+    if tipo == "dominio_publico":
+        if imagem.get("obra") != "fotografia":
+            problemas.append(f"{r}: domínio público só para fotografia (art. 44); outras obras exigem análise do art. 41")
+        problemas += _memoria_textos(imagem, ("autor",), r)
+        origem = imagem.get("url_origem")
+        if not isinstance(origem, str) or not re.fullmatch(r"https://[^\s/]+\.[^\s/]+(/\S*)?", origem):
+            problemas.append(f"{r}: 'url_origem' deveria ser HTTPS com host contendo ponto e sem espaços")
+        ano = imagem.get("ano_divulgacao")
+        if not _e_inteiro(ano):
+            problemas.append(f"{r}: 'ano_divulgacao' deveria ser inteiro")
+        elif ano + 70 >= ano_atual:
+            problemas.append(
+                f"{r}: domínio público exige ano_divulgacao + 70 < {ano_atual} "
+                "(art. 44 da Lei 9.610/98)"
+            )
+    return problemas
+
+
+def validar_memoria(caminho: Path | None = None, hoje: date | None = None) -> list[str]:
+    """Confere conteúdo, fontes, direitos das imagens e bytes de config/memoria.json, sem rede."""
+    caminho = caminho or RAIZ / "config" / "memoria.json"
+    arquivo = "config/memoria.json"
+    try:
+        bruto = caminho.read_bytes()
+    except FileNotFoundError:
+        aviso = f"{arquivo}: arquivo ausente; página de memória sem configuração"
+        print(f"::warning::{_anotacao(aviso)}" if os.environ.get("GITHUB_ACTIONS") else f"aviso: {aviso}", file=sys.stderr)
+        return []
+    except OSError as e:
+        return [f"{arquivo}: não foi possível ler o arquivo ({e})"]
+    try:
+        dados = json.loads(bruto.decode("utf-8"))
+    except ValueError as e:  # inclui UnicodeDecodeError
+        return [f"{arquivo}: não foi possível ler o JSON ({e})"]
+
+    problemas = _memoria_nfc(dados, arquivo)
+    try:
+        canonico = (json.dumps(dados, ensure_ascii=False, indent=1) + "\n").encode("utf-8")
+    except UnicodeEncodeError:
+        problemas.append(f"{arquivo}: texto não representável em UTF-8")
+    else:
+        if bruto != canonico:
+            problemas.append(
+                f"{arquivo}: fora do formato esperado (UTF-8, indentação de 1 espaço, "
+                "ordem das chaves preservada, quebras LF e quebra final)"
+            )
+    if not isinstance(dados, dict):
+        return problemas + [f"{arquivo}: deveria conter um objeto"]
+    problemas += _memoria_textos(dados, ("criterios",), arquivo)
+    pessoas, erros = _lista(dados, "homenageados", arquivo)
+    problemas += erros
+    vistos: set[str] = set()
+    hoje = hoje or date.today()
+    limite = (hoje.year, hoje.month, hoje.day)
+    ano_atual = hoje.year
+    for i, pessoa in enumerate(pessoas, 1):
+        r = f"{arquivo}: homenageado {i}"
+        if not isinstance(pessoa, dict):
+            problemas.append(f"{r} deveria ser um objeto")
+            continue
+        problemas += _memoria_textos(pessoa, ("id", "nome", "nome_completo", "categoria", "vinculo", "emblema"), r)
+        identificador = pessoa.get("id")
+        if not isinstance(identificador, str) or not re.fullmatch(r"[a-z0-9]+(-[a-z0-9]+)*", identificador):
+            problemas.append(f"{r}: 'id' deveria conter minúsculas e números separados por hífen")
+        if isinstance(identificador, str):
+            if identificador in vistos:
+                problemas.append(f"{r}: id {identificador!r} repetido")
+            vistos.add(identificador)
+        if pessoa.get("categoria") not in ("fundacao", "ciencia", "artes", "musica", "arquitetura"):
+            problemas.append(f"{r}: 'categoria' desconhecida")
+        biografia = pessoa.get("biografia")
+        if not isinstance(biografia, list) or not biografia or not all(_memoria_texto(t) for t in biografia):
+            problemas.append(f"{r}: 'biografia' deveria ser uma lista não vazia de textos não vazios")
+        for chave in ("nascimento", "morte"):
+            if chave not in pessoa:
+                problemas.append(f"{r}: sem a chave '{chave}'")
+            elif pessoa[chave] is not None and _memoria_data(pessoa[chave]) is None:
+                problemas.append(f"{r}: '{chave}' deveria ser AAAA, data válida AAAA-MM-DD ou null")
+        nascimento = _memoria_data(pessoa.get("nascimento"))
+        morte = _memoria_data(pessoa.get("morte"))
+        if morte is not None:
+            if morte > limite:
+                problemas.append(f"{r}: 'morte' posterior a hoje")
+            morte_fim = (morte[0], 12, 31) if morte[1] == 0 else morte
+            if nascimento is not None and morte_fim < nascimento:
+                problemas.append(f"{r}: 'morte' anterior a 'nascimento'")
+        for chave in ("nascimento_texto", "morte_texto", "lugar_de_memoria"):
+            if chave in pessoa:
+                problemas += _memoria_textos(pessoa, (chave,), r)
+        if pessoa.get("nascimento") is None and not _memoria_texto(pessoa.get("nascimento_texto")):
+            problemas.append(f"{r}: nascimento null exige 'nascimento_texto' não vazio")
+        if pessoa.get("morte") is None and not _memoria_texto(pessoa.get("morte_texto")):
+            problemas.append(f"{r}: somente falecidos; informe 'morte' ou 'morte_texto' não vazio")
+        emblema = pessoa.get("emblema")
+        if not isinstance(emblema, str) or not re.fullmatch(r"[a-z0-9-]+\.svg", emblema):
+            problemas.append(f"{r}: 'emblema' deveria ser um nome SVG sem diretórios ([a-z0-9-]+.svg)")
+        problemas += _memoria_imagem(pessoa.get("imagem"), r, ano_atual)
+        problemas += _memoria_fontes(pessoa.get("fontes"), r)
+
+    eventos, erros = _lista(dados, "linha_do_tempo", arquivo)
+    problemas += erros
+    anterior: tuple[int, int, int] | None = None
+    for i, evento in enumerate(eventos, 1):
+        r = f"{arquivo}: evento {i}"
+        if not isinstance(evento, dict):
+            problemas.append(f"{r} deveria ser um objeto")
+            continue
+        problemas += _memoria_textos(evento, ("titulo", "texto"), r)
+        inicio = _memoria_data(evento.get("data"))
+        if inicio is None:
+            problemas.append(f"{r}: 'data' deveria ser AAAA ou data válida AAAA-MM-DD")
+        else:
+            if inicio > limite:
+                problemas.append(f"{r}: 'data' posterior a hoje")
+            if anterior is not None and inicio < anterior:
+                problemas.append(f"{r}: linha_do_tempo fora de ordem por 'data'")
+            anterior = inicio
+        if "data_fim" in evento:
+            fim = _memoria_data(evento["data_fim"])
+            if fim is not None and fim[1:] == (0, 0):
+                fim = (fim[0], 12, 31)
+            if fim is None:
+                problemas.append(f"{r}: 'data_fim' deveria ser AAAA ou data válida AAAA-MM-DD")
+            elif inicio is not None and fim < inicio:
+                problemas.append(f"{r}: 'data_fim' anterior a 'data'")
+        problemas += _memoria_fontes(evento.get("fontes"), r)
+    return problemas
+
+
 # ------------------------------------------------------------------------ execução
 def _ler_json(arq: Path, rotulo: str) -> tuple[object, list[str]]:
     try:
@@ -834,6 +1029,7 @@ def validar_tudo(raiz: Path | None = None) -> list[str]:
 
     cfg, erros = _ler_json(raiz / "config" / "vereadores.json", "config/vereadores.json")
     problemas += erros or validar_vereadores(cfg)
+    problemas += validar_memoria(raiz / "config" / "memoria.json")
     return problemas
 
 
