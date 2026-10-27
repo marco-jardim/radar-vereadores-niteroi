@@ -67,10 +67,12 @@ class Arvore(HTMLParser):
             self.abas.append(a)
         if a.get("role") == "tablist":
             self.listas_abas.append(a)
-        if a.get("role") == "tabpanel":
+        if tag == "section" and "legislatura" in (a.get("class") or "").split():
             self.paineis.append(a)
-            if "legislatura" in (a.get("class") or "").split() and "hidden" in a:
+            if "hidden" in a:
                 self.problemas.append(f"{descricao} painel do placar oculto no HTML do servidor")
+            if any(chave in a for chave in ("role", "tabindex", "aria-labelledby")):
+                self.problemas.append(f"{descricao} painel do placar com semântica de aba antes do JS")
         if tag == "h3" and "titulo-legislatura" in (a.get("class") or "").split():
             self.titulos_legislatura += 1
 
@@ -78,8 +80,8 @@ class Arvore(HTMLParser):
         self.close()
         for aba in self.abas:
             alvo = self.ids.get(aba.get("aria-controls") or "")
-            if not alvo or alvo.get("role") != "tabpanel":
-                self.problemas.append(f"aba {aba} sem aria-controls para um role=tabpanel existente")
+            if not alvo:
+                self.problemas.append(f"aba {aba} sem aria-controls para um painel existente")
         return self.problemas
 
 
@@ -108,9 +110,9 @@ class TestPlacarSemJS(unittest.TestCase):
         for painel in self.arvore.paineis:
             with self.subTest(painel=painel["id"]):
                 self.assertNotIn("hidden", painel)
-                self.assertEqual(painel["tabindex"], "0")
-                self.assertEqual(painel["aria-labelledby"], "aba-" + painel["id"])
-                self.assertEqual(self.arvore.ids[painel["aria-labelledby"]]["role"], "tab")
+                self.assertNotIn("role", painel)
+                self.assertNotIn("tabindex", painel)
+                self.assertNotIn("aria-labelledby", painel)
         self.assertEqual(self.arvore.titulos_legislatura, len(legs))
         self.assertIn('<h3 class="titulo-legislatura">Legislatura 2025–2028</h3>', self.html)
         self.assertEqual(self.arvore.problemas, [])
@@ -131,8 +133,7 @@ class TestPlacarSemJS(unittest.TestCase):
                          '<button type="button" role="tab" id="aba-leg-2021-2024" aria-selected="false" '
                          'aria-controls="leg-2021-2024" tabindex="-1">2021-2024</button>')
         painel = P.painel_legislatura("2021-2024", "<ol class=\"placar\"></ol>")
-        self.assertTrue(painel.startswith('<section class="legislatura" id="leg-2021-2024" data-leg="2021-2024" '
-                                          'role="tabpanel" aria-labelledby="aba-leg-2021-2024" tabindex="0">'))
+        self.assertTrue(painel.startswith('<section class="legislatura" id="leg-2021-2024" data-leg="2021-2024">'))
         self.assertNotIn("hidden", painel)
         self.assertIn(" hidden>", P.lista_abas_legislatura([P.aba_legislatura("2021-2024", True)]))
 
@@ -200,8 +201,8 @@ class TestGraficosComLinks(unittest.TestCase):
 
 # ---------------------------------------------------------- site/ existente
 def fontes_do_gerador() -> list[Path]:
-    return [*(RAIZ / "coletor" / "site").glob("*.py"), RAIZ / "coletor" / "gerar_site.py",
-            *(p for p in P.FONTE_ESTATICA.rglob("*") if p.is_file())]
+    return [p for pasta in ("coletor", "config", "site_src")
+            for p in (RAIZ / pasta).rglob("*") if p.is_file()]
 
 
 class TestSiteGerado(unittest.TestCase):
@@ -212,7 +213,7 @@ class TestSiteGerado(unittest.TestCase):
             self.skipTest("site/ ausente; rode python -m coletor.gerar_site para a varredura de acessibilidade")
         recente = max(f.stat().st_mtime_ns for f in fontes_do_gerador())
         if any(pagina.stat().st_mtime_ns <= recente for pagina in paginas):
-            self.skipTest("site/ mais antigo que coletor/site/ ou site_src/; rode python -m coletor.gerar_site")
+            self.skipTest("site/ mais antigo que coletor/, config/ ou site_src/; rode python -m coletor.gerar_site")
         return paginas
 
     def test_aninhamento_abas_e_paineis(self):

@@ -32,13 +32,14 @@ function marca(texto) {
 const FORA = { tagName: "DIV", closest: () => null, querySelector: () => null };
 
 // abas: [{ id, sel }] na ordem do servidor; ponteiro: false simula navegador sem PointerEvent.
-function iniciarPagina({ abas = [], ponteiro = true } = {}) {
+function iniciarPagina({ abas = [], ponteiro = true, semApiPainel = false } = {}) {
   const eventos = {}, elementos = {};
   let focado = null;
   const tip = no({ hidden: true });
   elementos.tip = tip;
   const botoes = abas.map((a) => {
     const painel = no({ id: "leg-" + a.id, querySelector: () => null });
+    if (semApiPainel) delete painel.setAttribute;
     elementos["leg-" + a.id] = painel;
     const bt = no({ id: "aba-leg-" + a.id });
     Object.assign(bt.atributos, { role: "tab", id: "aba-leg-" + a.id, "aria-controls": "leg-" + a.id,
@@ -167,8 +168,25 @@ test("abas: o JS revela a lista, oculta os painéis inativos e mantém o tabinde
   assert.equal(pag.listaAbas.hidden, false);
   assert.deepEqual(estado(pag), [["true", "0", false], ["false", "-1", true]]);
   assert.equal(pag.focado(), null, "a abertura não move o foco");
+  pag.botoes.forEach((bt) => {
+    const painel = pag.elementos[bt.getAttribute("aria-controls")];
+    assert.equal(painel.getAttribute("role"), "tabpanel");
+    assert.equal(painel.getAttribute("tabindex"), "0");
+    assert.equal(painel.getAttribute("aria-labelledby"), bt.id);
+  });
   pag.botoes[1].eventos.click();
   assert.deepEqual(estado(pag), [["false", "-1", true], ["true", "0", false]]);
+});
+
+test("abas: sem API de painel preserva a lista oculta e todas as seções visíveis", () => {
+  const pag = iniciarPagina({ abas: [{ id: "atual", sel: true }, { id: "anterior" }], semApiPainel: true });
+  assert.equal(pag.listaAbas.hidden, true);
+  pag.botoes.forEach((bt) => {
+    const painel = pag.elementos[bt.getAttribute("aria-controls")];
+    assert.equal(painel.hidden, false);
+    assert.equal(painel.getAttribute("role"), null);
+    assert.equal(painel.getAttribute("tabindex"), null);
+  });
 });
 
 test("abas: setas com volta nas pontas, Home e End movem seleção, foco e painel", () => {

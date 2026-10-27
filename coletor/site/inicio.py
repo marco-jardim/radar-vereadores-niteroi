@@ -171,8 +171,7 @@ def faixa_memoria(memoria: dict | None, prefixo: str = "") -> str:
         if arquivo and (P.FONTE_ESTATICA / "memoria" / arquivo).is_file():
             caixa = ElementTree.parse(P.FONTE_ESTATICA / "memoria" / arquivo).getroot().get("viewBox")
             viewbox = f' viewBox="{P.esc(caixa)}"' if caixa else ""
-            emblema = (f'<svg class="emblema"{viewbox} role="img" aria-labelledby="fm-{identificador}">'
-                       f'<title id="fm-{identificador}">Emblema de {nome}</title>'
+            emblema = (f'<svg class="emblema"{viewbox} aria-hidden="true" focusable="false">'
                        f'<use href="{P.esc(P.url_estatica("memoria/" + arquivo, prefixo))}#emblema"/></svg>')
         itens.append(f'<li><a href="{P.esc(prefixo)}memoria.html#{identificador}">{emblema}<span>{nome}</span></a></li>')
     return (f'<section class="faixa-memoria" aria-labelledby="fm-titulo">'

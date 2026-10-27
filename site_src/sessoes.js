@@ -257,10 +257,23 @@
     function marcar(el) { if (comJs && el.querySelectorAll) ementas(el.querySelectorAll("li.votacao")); }
     marcar(doc);
     // Único listener de click no documento deste script; os cartões do servidor também o usam.
-    if (doc.addEventListener) doc.addEventListener("click", function (ev) {
-      var bt = ev.target.closest && ev.target.closest(".ver-ementa");
-      if (bt) alternarEmenta(bt, doc);
-    });
+    if (doc.addEventListener) {
+      doc.addEventListener("click", function (ev) {
+        var bt = ev.target.closest && ev.target.closest(".ver-ementa");
+        if (bt) alternarEmenta(bt, doc);
+      });
+      // toggle não propaga: a captura alcança também os cartões antes sem dimensões.
+      doc.addEventListener("toggle", function (ev) {
+        if (ev.target.tagName === "DETAILS" && ev.target.open) marcar(ev.target);
+      }, true);
+    }
+    if (typeof janela.addEventListener === "function") {
+      var esperaEmentas;
+      janela.addEventListener("resize", function () {
+        janela.clearTimeout(esperaEmentas);
+        esperaEmentas = janela.setTimeout(function () { marcar(doc); }, 160);
+      });
+    }
     var forms = Array.from(doc.querySelectorAll("form.filtros-sessoes"));
     if (!forms.length || !carregador) return;
     var manifestoInicial = carregador.manifesto();

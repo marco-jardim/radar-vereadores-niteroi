@@ -44,6 +44,8 @@ class TestMemoriaPagina(unittest.TestCase):
         # O template exige só estes três arquivos; demais recursos são opcionais.
         for nome in ("estilo.css", "dados.js", "app.js"):
             (self.estaticos / nome).write_text("", encoding="utf-8")
+        for nome in ("barlow-condensed", "public-sans", "fraunces"):
+            self.criar_estatico(f"fontes/OFL-{nome}.txt", "SIL Open Font License 1.1")
         self.memoria = {
             "criterios": "Critério editorial com fontes públicas, aplicado igualmente a todas as pessoas.",
             "homenageados": [{
@@ -167,12 +169,27 @@ class TestMemoriaPagina(unittest.TestCase):
                    f'href="{P.url_estatica("fontes/fraunces-latin-wght-normal.woff2")}">')
         self.assertEqual(cabeca.count(css), 1)
         self.assertEqual(cabeca.count(preload), 1)
+        self.assertLess(cabeca.index(preload), cabeca.index('<link rel="stylesheet"'))
         self.assertNotIn("fraunces-", corpo)
         css_publicado = P.bytes_estaticos(self.estaticos / "memoria.css").decode("utf-8")
         self.assertIn(P.url_estatica("fontes/fraunces-latin-wght-normal.woff2"), css_publicado)
         inicio = P.pagina("Início", "<h1>Início</h1>", ativo="index.html")
         self.assertNotIn("fraunces", inicio.casefold())
         self.assertNotIn("memoria.css", inicio)
+
+    def test_titulo_creditos_e_link_atual_no_rodape(self):
+        with patch.object(P, "MEMORIA_PUBLICADA", True):
+            pagina = gerar_memoria(self.memoria)
+            inicio = P.pagina("Início", "", "index.html")
+        titulo = "Cidade Sorriso · Radar dos Vereadores de Niterói"
+        self.assertIn(f"<title>{titulo}</title>", pagina)
+        self.assertIn(f'<meta property="og:title" content="{titulo}">', pagina)
+        self.assertIn("<h1>Cidade Sorriso — memória de Niterói</h1>", pagina)
+        self.assertIn('<a href="memoria.html" aria-current="page">Memória de Niterói</a>', pagina)
+        self.assertIn('<a href="memoria.html">Memória de Niterói</a>', inicio)
+        self.assertNotIn('<a href="memoria.html" aria-current=', inicio)
+        for nome in ("barlow-condensed", "public-sans", "fraunces"):
+            self.assertIn(f'href="{P.url_estatica(f"fontes/OFL-{nome}.txt")}"', pagina)
 
     def test_recursos_opcionais_ausentes(self):
         pagina = gerar_memoria(self.memoria)

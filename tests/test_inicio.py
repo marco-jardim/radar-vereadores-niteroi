@@ -211,13 +211,14 @@ class TestFaixaMemoria(unittest.TestCase):
         pagina = gerar_memoria(memoria)
         self.assertIn('id="fm-titulo" class="h-secao">Niterói que nos inspira</h2>', html)
         self.assertEqual(html.count('<svg class="emblema"'), 5)
+        self.assertEqual(html.count('aria-hidden="true" focusable="false"'), 5)
+        self.assertNotIn('role="img"', html)
+        self.assertNotIn("<title", html)
         self.assertEqual(len(ids(html)), len(set(ids(html))))
         for pessoa in memoria["homenageados"]:
             identificador, nome = pessoa["id"], pessoa["nome"]
             self.assertIn(f'href="memoria.html#{identificador}"', html)
             self.assertIn(f'<span>{P.esc(nome)}</span>', html)
-            self.assertIn(f'role="img" aria-labelledby="fm-{identificador}"', html)
-            self.assertIn(f'<title id="fm-{identificador}">Emblema de {P.esc(nome)}</title>', html)
             self.assertIn(f'<use href="{P.url_estatica("memoria/" + pessoa["emblema"])}#emblema"/>', html)
             self.assertIn(f'<article id="{identificador}"', pagina)
         self.assertIn('href="memoria.html">Conheça a Memória de Niterói</a>', html)

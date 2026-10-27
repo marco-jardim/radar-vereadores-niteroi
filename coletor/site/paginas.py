@@ -353,6 +353,9 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
     # Menu móvel (melhoria progressiva): opcional, como os demais estáticos fora de dados.js/app.js.
     navegacao = (f'<script src="{esc(url_estatica("navegacao.js", prefixo))}" defer onerror="{ERRO_NAVEGACAO}"></script>\n'
                  if (FONTE_ESTATICA / "navegacao.js").is_file() else "")
+    memoria_atual = ' aria-current="page"' if caminho == "memoria.html" else ""
+    link_memoria = (f'<p><a href="{esc(prefixo + "memoria.html")}"{memoria_atual}>Memória de Niterói</a></p>'
+                    if MEMORIA_PUBLICADA else "")
     return f"""<!doctype html>
 <html lang="pt-BR">
 <head>
@@ -387,7 +390,7 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
 </main>
 <footer class="rodape">
  <p>Dados públicos do <a href="https://consultaniteroi.siscam.com.br/">SISCAM da Câmara Municipal de Niterói</a>, coletados toda semana. Classificação por regras, curadoria com fonte e IA, explicada na <a href="{esc(prefixo)}metodologia.html">metodologia</a>. Código aberto sob GPL v3 no <a href="{REPO}">GitHub</a>. Encontrou um erro? <a href="{REPO}/issues/new">Abra uma issue</a>.</p>
-{('<p><a href="' + esc(prefixo + 'memoria.html') + '">Memória de Niterói</a></p>') if MEMORIA_PUBLICADA else ''}
+{link_memoria}
 {atribuicao_textura()}</footer>
 {(DIALOGO_SISCAM + chr(10)) if dialogo else ''}<div id="tip" role="tooltip" hidden></div>
 {navegacao}<script src="{esc(prefixo)}dados.js?v={versao_estatica('dados.js')}" defer></script>
@@ -767,8 +770,7 @@ def lista_abas_legislatura(abas: list[str]) -> str:
 
 def painel_legislatura(leg_id: str, conteudo: str) -> str:
     """Painel sem `hidden`: sem JS, cada legislatura aparece com o próprio título; app.js oculta as outras."""
-    return (f'<section class="legislatura" id="leg-{esc(leg_id)}" data-leg="{esc(leg_id)}" role="tabpanel" '
-            f'aria-labelledby="aba-leg-{esc(leg_id)}" tabindex="0">\n'
+    return (f'<section class="legislatura" id="leg-{esc(leg_id)}" data-leg="{esc(leg_id)}">\n'
             f'<h3 class="titulo-legislatura">Legislatura {esc(leg_id.replace("-", "–"))}</h3>\n'
             f'{conteudo}\n</section>')
 

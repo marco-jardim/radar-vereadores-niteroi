@@ -85,7 +85,7 @@ def gerar_memoria(memoria: dict | None) -> str | None:
              f'<ol class="linha-tempo-completa">{eventos}</ol></section>' if eventos else "")
     corpo = (
         '<div class="memoria">'
-        '<section class="memoria-abertura"><h1>Cidade Sorriso</h1>'
+        '<section class="memoria-abertura"><h1>Cidade Sorriso — memória de Niterói</h1>'
         '<p>Niterói é chamada de Cidade Sorriso (<a href="https://www.fazenda.niteroi.rj.gov.br/site/parabens-niteroi/">'
         'Prefeitura de Niterói</a>). Esta página reúne pessoas ligadas à cidade '
         'e uma linha do tempo de sua história, com fontes para consulta.</p></section>'
@@ -94,12 +94,14 @@ def gerar_memoria(memoria: dict | None) -> str | None:
         + f'</div>{linha}'
         '<section class="memoria-secao" aria-label="Créditos"><h2>Créditos</h2>'
         '<p>Os emblemas e a textura de azulejos são ilustrações próprias do projeto.</p>'
-        '<p>Fontes tipográficas Barlow Condensed, Public Sans e Fraunces: '
+        f'<p>Fontes tipográficas <a href="{P.esc(P.url_estatica("fontes/OFL-barlow-condensed.txt"))}">Barlow Condensed</a>, '
+        f'<a href="{P.esc(P.url_estatica("fontes/OFL-public-sans.txt"))}">Public Sans</a> e '
+        f'<a href="{P.esc(P.url_estatica("fontes/OFL-fraunces.txt"))}">Fraunces</a>: '
         'SIL Open Font License (OFL) 1.1.</p></section>'
         f'<p>Encontrou um erro? <a href="{P.esc(P.REPO + "/issues/new")}">Abra uma issue</a>.</p></div>'
     )
     pagina = P.pagina(
-        "Cidade Sorriso", corpo, ativo="", caminho="memoria.html",
+        "Cidade Sorriso · Radar dos Vereadores de Niterói", corpo, ativo="", caminho="memoria.html",
         descricao="Pessoas ligadas a Niterói, critérios de homenagem e marcos da história da Cidade Sorriso.",
         estilos=("memoria.css",),
     )
@@ -108,4 +110,4 @@ def gerar_memoria(memoria: dict | None) -> str | None:
     fonte = "fontes/fraunces-latin-wght-normal.woff2"
     if (P.FONTE_ESTATICA / fonte).is_file():
         links.append(f'<link rel="preload" as="font" type="font/woff2" crossorigin href="{P.esc(P.url_estatica(fonte))}">')
-    return pagina.replace("</head>", "\n".join(links) + "\n</head>", 1)
+    return pagina.replace('<link rel="stylesheet"', "\n".join(links) + '\n<link rel="stylesheet"', 1)
