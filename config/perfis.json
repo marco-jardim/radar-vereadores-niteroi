@@ -1227,10 +1227,22 @@
      "uf": "RJ",
      "partido": "PDT",
      "votos": 34539,
-     "resultado": "Média",
+     "resultado": "Eleito por média",
      "fonte": {
       "titulo": "TSE — Dados abertos: candidatos 2004",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
+     }
+    },
+    {
+     "ano": 2000,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PSD",
+     "votos": 0,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2000",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2000"
      }
     }
    ],
@@ -1290,6 +1302,18 @@
      "fonte": {
       "titulo": "TSE — Dados abertos: candidatos 2020",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2020"
+     }
+    },
+    {
+     "ano": 2016,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PV",
+     "votos": 4088,
+     "resultado": "Eleito por QP",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2016",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2016"
      }
     },
     {
@@ -1581,6 +1605,18 @@
      }
     },
     {
+     "ano": 2004,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": 13251,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 2004",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
+     }
+    },
+    {
      "ano": 2000,
      "cargo": "Vice-Prefeito",
      "uf": "RJ",
@@ -1590,6 +1626,42 @@
      "fonte": {
       "titulo": "TSE — Dados abertos: candidatos 2000",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2000"
+     }
+    },
+    {
+     "ano": 1996,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PFL",
+     "votos": 4319,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "TSE — Dados abertos: candidatos 1996",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-1996"
+     }
+    },
+    {
+     "ano": 1992,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PTB",
+     "votos": 2420,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "Wikipédia — Lista de vereadores de Niterói (revisão 70206495)",
+      "url": "https://pt.wikipedia.org/w/index.php?title=Lista_de_vereadores_de_Niter%C3%B3i&oldid=70206495"
+     }
+    },
+    {
+     "ano": 1988,
+     "cargo": "Vereador",
+     "uf": "RJ",
+     "partido": "PL",
+     "votos": 1418,
+     "resultado": "Eleito",
+     "fonte": {
+      "titulo": "Wikipédia — Lista de vereadores de Niterói (revisão 70206495)",
+      "url": "https://pt.wikipedia.org/w/index.php?title=Lista_de_vereadores_de_Niter%C3%B3i&oldid=70206495"
      }
     }
    ],
@@ -1728,7 +1800,7 @@
      "uf": "RJ",
      "partido": "PP",
      "votos": 2947,
-     "resultado": "Média",
+     "resultado": "Eleito por média",
      "fonte": {
       "titulo": "TSE — Dados abertos: candidatos 2008",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
@@ -1740,7 +1812,7 @@
      "uf": "RJ",
      "partido": "PCdoB",
      "votos": 11739,
-     "resultado": "Média",
+     "resultado": "Eleito por média",
      "fonte": {
       "titulo": "TSE — Dados abertos: candidatos 2004",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
@@ -2083,7 +2155,7 @@
      "uf": "RJ",
      "partido": "PDT",
      "votos": 3332,
-     "resultado": "Média",
+     "resultado": "Eleito por média",
      "fonte": {
       "titulo": "TSE — Dados abertos: candidatos 2008",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2008"
@@ -2403,7 +2475,7 @@
      "uf": "RJ",
      "partido": "PL",
      "votos": 17432,
-     "resultado": "Média",
+     "resultado": "Eleito por média",
      "fonte": {
       "titulo": "TSE — Dados abertos: candidatos 2004",
       "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2004"
