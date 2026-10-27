@@ -165,7 +165,7 @@ def _nome(modelo: dict, slug: str, prefixo: str = "", chip: bool = False, leg_id
 def _etiqueta_afastamento(afastamentos: list[dict]) -> str:
     """Reutiliza cargo e fonte do mandato enriquecido a partir do config."""
     return "".join(f'<span class="status">afastado: {P.esc(a["cargo"])} '
-                   f'(<a href="{P.esc(a["fonte"])}">fonte</a>)</span>' for a in afastamentos)
+                   f'({P.link_fonte(a["fonte"])})</span>' for a in afastamentos)
 
 
 def _barra_presenca(presenca: dict, afastado: bool = False) -> str:

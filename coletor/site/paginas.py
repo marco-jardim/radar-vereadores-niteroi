@@ -78,6 +78,14 @@ def esc(x) -> str:
     return html.escape(str(x if x is not None else ""))
 
 
+def link_fonte(url: str, texto: str = "fonte") -> str:
+    """Link de fonte escapado; só o host HTTPS do SISCAM abre em nova aba."""
+    destino = urlsplit(url)
+    nova_aba = destino.scheme == "https" and destino.netloc == urlsplit(SISCAM).netloc
+    atributos = ' target="_blank" rel="noopener"' if nova_aba else ""
+    return f'<a href="{esc(url)}"{atributos}>{esc(texto)}{NOVA_ABA if nova_aba else ""}</a>'
+
+
 def partido_html(partido: str | None) -> str:
     """Sigla do partido logo depois do nome (dentro do link ou chip do nome), em fonte menor.
 
@@ -1508,7 +1516,12 @@ def gerar_vereador(modelo: dict, pessoa: dict) -> str:
         if not m:
             continue
         me = m["metricas"]
-        afast = "".join(f'<p class="aviso">Afastou-se da Câmara para o cargo de {esc(a["cargo"])} (<a href="{esc(a["fonte"])}">fonte</a>). Nesse período a cadeira foi ocupada por suplente.</p>' for a in m["afastamentos"])
+        avisos = []
+        for a in m["afastamentos"]:
+            datas = "".join(f", {rotulo} {data_br(a[chave])}" for chave, rotulo in (
+                ("inicio", "a partir de"), ("aprovacao", "aprovado em"), ("fim", "até")) if a.get(chave))
+            avisos.append(f'<p class="aviso">Afastamento registrado: {esc(a["cargo"])}{datas} ({link_fonte(a["fonte"])}).</p>')
+        afast = "".join(avisos)
         cond = "Eleito" if m["eleito"] else "Suplente em exercício"
         med = lambda k: mediana_legislatura(modelo, leg["id"], k)
         proj = sorted(m["projetos_autor"], key=lambda p: p["data"] or "", reverse=True)
@@ -1629,6 +1642,12 @@ def secao_perfil(modelo: dict, pessoa: dict) -> str:
     if redes:
         itens = "".join(f'<li><a href="{esc(r["url"])}">{esc(NOME_REDE.get(r["rede"], r["rede"]))}</a></li>' for r in redes)
         linhas.append(f'<dt>Redes oficiais</dt><dd><ul class="perfil-redes">{itens}</ul></dd>')
+    # O perfil público resumido omite campos biográficos; consulte também o config por slug.
+    falecimento = perfil.get("falecimento") or ((modelo.get("perfis") or {}).get(pessoa.get("slug")) or {}).get("falecimento")
+    if falecimento:
+        fonte = falecimento["fonte"]
+        linhas.append(f'<dt>Falecimento</dt><dd>Faleceu em {esc(data_br(falecimento["data"]))} '
+                      f'(<a href="{esc(fonte["url"])}">{esc(fonte["titulo"])}</a>).</dd>')
     if not linhas:
         return ""
     fontes = perfil.get("fontes") or []

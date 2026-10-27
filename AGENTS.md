@@ -37,10 +37,10 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `coletor/site/glossario.py` | Glossário: links `a.glossario` para `metodologia.html#g-*` na prosa, definições num `<template>` por página e popover progressivo em `navegacao.js`. |
 | `coletor/site/graficos.py` | Gráficos SVG e tabelas acessíveis. |
 | `coletor/site/paginas.py` | HTML, navegação, componentes, diálogo SISCAM e metodologia. |
-| `config/vereadores.json` | Legislaturas, eleitos, partidos da eleição, apelidos, afastamentos e Mesa Diretora por biênio (`mesa`, ainda não exibida no site). |
+| `config/vereadores.json` | Legislaturas, eleitos, partidos da eleição, apelidos, afastamentos com datas e fontes e Mesa Diretora por biênio (`mesa`, ainda não exibida no site). |
 | `config/curadoria.json` | Rótulos e correções editoriais com fontes públicas. |
 | `config/memoria.json` | Conteúdo editorial da memória: critérios, homenageados e linha do tempo; validado por `coletor.validar`. |
-| `config/perfis.json` | Perfil público por nome do SISCAM: partido, votos e situação por mandato, outras eleições (TSE), links oficiais e fontes; validado por `coletor.validar`. |
+| `config/perfis.json` | Perfil público por nome do SISCAM: partido, votos e situação por mandato, outras eleições (TSE), links oficiais, falecimento opcional e fontes; validado por `coletor.validar`. |
 | `data/proposicoes/`, `data/documentos/`, `data/sessoes/` | Registros coletados por ano (documentos também por tipo). |
 | `data/classificacao_ia.json`, `data/meta.json` | Cache da IA e metadados das execuções. |
 | `data/geo/bairros.json` | Geometria opcional gerada por `coletor.geo`. |
@@ -158,8 +158,9 @@ fotografia pelo art. 44 da Lei 9.610/98, com `ano_divulgacao + 70 < ano atual`. 
 
 `coletor.validar` confere `config/perfis.json`; a ausência gera aviso (suplentes ficam sem partido e as fichas,
 sem perfil). Chaves de `vereadores` são o nome exato do SISCAM em maiúsculas; cada perfil tem só `mandatos`,
-`eleicoes`, `camara`, `site` e `redes`. Por mandato: legislatura existente em `config/vereadores.json`, `partido`
-não vazio, `votos` inteiro positivo (opcional), `situacao` em `eleito`/`eleita`/`suplente` e `fontes` HTTPS.
+`eleicoes`, `camara`, `site`, `redes` e, opcionalmente, `falecimento`. Por mandato: legislatura existente em
+`config/vereadores.json`, `partido` não vazio, `votos` inteiro positivo (opcional), `situacao` em
+`eleito`/`eleita`/`suplente` e `fontes` HTTPS.
 Quem está entre os eleitos da legislatura precisa do mesmo partido do config e não pode ser suplente; quem não
 está, só suplente. `eleicoes`, da mais recente para a mais antiga: `ano` 1945–2100, `cargo`, `partido` e
 `resultado` não vazios, `uf` com duas letras maiúsculas, `votos` inteiro ≥ 0 ou `null` e `fonte` HTTPS.
@@ -167,6 +168,20 @@ está, só suplente. `eleicoes`, da mais recente para a mais antiga: `ano` 1945�
 ou `linkedin`, com `url` e `fonte` HTTPS: página oficial da Câmara ou do vereador, ou o registro de candidatura
 no TSE (`fonte` = `https://dadosabertos.tse.jus.br/dataset/candidatos-<ano>`, como grava `coletor.tse`).
 Formato: JSON com `indent=1`, ordem das chaves preservada, UTF-8, LF e NFC.
+`falecimento` contém somente `data` (`AAAA-MM-DD` válida, não futura) e `fonte` (`{titulo, url}` HTTPS);
+quando presente, a ficha informa a data com link para a fonte, sem alterar as métricas históricas.
+
+### Validação dos afastamentos
+
+Cada item de `afastamentos` mantém `siscam`, `legislatura`, `cargo` (cargo ou motivo) e `fonte` HTTPS
+obrigatórios. Aceita somente os opcionais `inicio`, `fim`, `aprovacao` (datas ISO válidas dentro da legislatura
+ou `null`, com `fim` ≥ `inicio`), `ato` (URL HTTPS do requerimento/ata ou `null`), `evidencia` (`ata`,
+`requerimento`, `diario_oficial`, `prefeitura`, `alerj` ou `imprensa`), `suplentes` (lista de nomes SISCAM)
+e `nota` (texto factual curto). Fonte sem data é admitida; não invente início a partir da aprovação ou do
+primeiro registro observado. `siscam` e `suplentes` precisam estar entre eleitos de qualquer legislatura,
+`apelidos` ou chaves de `perfis.json`; só registre suplentes nomeados no documento citado. Novos apelidos
+exigem nome encontrado na frequência das sessões. Ordene por legislatura, `inicio` ou `aprovacao` (sem data
+primeiro), depois `siscam`. Preserve fontes de divergências nas notas e não duplique o mesmo afastamento.
 
 ### Validação da Mesa Diretora
 

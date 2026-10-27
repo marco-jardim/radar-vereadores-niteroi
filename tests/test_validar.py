@@ -77,7 +77,8 @@ VEREADORES = {
         {"id": "2021-2024", "eleitos": [{"nome": "A", "siscam": "ANA MARIA"}, {"nome": "J", "siscam": "JOSÉ ADRIANO - FOLHA"}]},
         {"id": "2025-2028", "eleitos": [{"nome": "A", "siscam": "ANA MARIA"}]},
     ],
-    "afastamentos": [{"siscam": "ANA MARIA", "legislatura": "2025-2028"}],
+    "afastamentos": [{"siscam": "ANA MARIA", "legislatura": "2025-2028", "cargo": "Secretária Municipal",
+                      "fonte": "https://exemplo.org/ato"}],
 }
 
 
@@ -314,6 +315,95 @@ class TestValidarVereadores(Afirmacoes):
     def test_formato_geral(self):
         self.assertProblema(V.validar_vereadores({}), "lista 'legislaturas'")
         self.assertProblema(V.validar_vereadores({"legislaturas": [{"id": "x"}]}), "sem a lista 'eleitos'")
+
+
+class TestValidarAfastamentos(Afirmacoes):
+    def cfg(self, **campos) -> dict:
+        cfg = copy.deepcopy(VEREADORES)
+        cfg["apelidos"] = {"_leia_me": "x", "BIA SUPLENTE": "Bia"}
+        cfg["afastamentos"][0].update(campos)
+        return cfg
+
+    def test_opcionais_nulos_e_sem_datas(self):
+        self.assertEqual(V.validar_vereadores(self.cfg()), [])  # fonte sem data é admitida
+        cfg = self.cfg(inicio=None, fim=None, aprovacao=None, ato=None, suplentes=[])
+        self.assertEqual(V.validar_vereadores(cfg), [])
+        del cfg["afastamentos"]
+        self.assertEqual(V.validar_vereadores(cfg), [])
+
+    def test_datas_e_evidencias_validas(self):
+        for evidencia in ("ata", "requerimento", "diario_oficial", "prefeitura", "alerj", "imprensa"):
+            with self.subTest(evidencia=evidencia):
+                cfg = self.cfg(inicio="2025-01-01", fim="2028-12-31", aprovacao="2025-01-02",
+                               evidencia=evidencia, ato="https://exemplo.org/ata", nota="Licença aprovada.")
+                self.assertEqual(V.validar_vereadores(cfg), [])
+
+    def test_nomes_conhecidos_inclusive_suplentes_e_perfis(self):
+        # Eleita de outra legislatura, apelido e perfil são igualmente admitidos.
+        perfis = {"vereadores": {"CAIO SUPLENTE": {}}}
+        for nome in ("JOSÉ ADRIANO - FOLHA", "BIA SUPLENTE", "CAIO SUPLENTE"):
+            with self.subTest(nome=nome):
+                cfg = self.cfg(siscam=nome, suplentes=[nome])
+                self.assertEqual(V.validar_vereadores(cfg, perfis), [])
+
+    def test_campos_obrigatorios(self):
+        for campo in ("siscam", "legislatura", "cargo", "fonte"):
+            for valor in (None, "", " "):
+                with self.subTest(campo=campo, valor=valor):
+                    self.assertProblema(V.validar_vereadores(self.cfg(**{campo: valor})), campo)
+            cfg = self.cfg()
+            del cfg["afastamentos"][0][campo]
+            self.assertProblema(V.validar_vereadores(cfg), campo)
+        # Datas conhecidas não dispensam a fonte obrigatória.
+        self.assertProblema(V.validar_vereadores(self.cfg(inicio="2025-01-01", fonte=None)), "fonte")
+
+    def test_datas_invalidas_e_fora_da_legislatura(self):
+        for campo in ("inicio", "fim", "aprovacao"):
+            for valor in ("2025-02-30", "2025-2-03", "03/02/2025", "2025-01-01T00:00", "", 20250101):
+                with self.subTest(campo=campo, valor=valor):
+                    self.assertProblema(V.validar_vereadores(self.cfg(**{campo: valor})), "ISO válida")
+            for valor in ("2024-12-31", "2029-01-01"):
+                with self.subTest(campo=campo, valor=valor):
+                    self.assertProblema(V.validar_vereadores(self.cfg(**{campo: valor})), "fora da legislatura")
+        self.assertProblema(V.validar_vereadores(self.cfg(inicio="2025-03-02", fim="2025-03-01")), "anterior")
+        self.assertEqual(V.validar_vereadores(self.cfg(inicio="2025-03-02", fim="2025-03-02")), [])
+        cfg = self.cfg(inicio="2025-01-01")
+        cfg["legislaturas"][1].update(inicio="2025-01-02", fim="2028-12-30")
+        self.assertProblema(V.validar_vereadores(cfg), "fora da legislatura")
+        cfg["afastamentos"][0].update(inicio="2025-01-02", fim="2028-12-31")
+        self.assertProblema(V.validar_vereadores(cfg), "fora da legislatura")
+
+    def test_demais_erros(self):
+        casos = [({"legislatura": "1999-2002"}, "inexistente"),
+                 ({"siscam": "DESCONHECIDO"}, "nomes conhecidos"),
+                 ({"siscam": "Ana Maria"}, "maiúsculas"),
+                 ({"fonte": "http://exemplo.org/ata"}, "HTTPS"),
+                 ({"ato": "http://exemplo.org/ata"}, "HTTPS"),
+                 ({"ato": "https://"}, "HTTPS"),
+                 ({"evidencia": "boato"}, "'evidencia'"),
+                 ({"evidencia": None}, "'evidencia'"),
+                 ({"suplentes": "BIA SUPLENTE"}, "lista"),
+                 ({"suplentes": ["DESCONHECIDO"]}, "nomes conhecidos"),
+                 ({"suplentes": ["_leia_me"]}, "nomes conhecidos"),
+                 ({"suplentes": [None]}, "nomes conhecidos"),
+                 ({"nota": ""}, "'nota'"),
+                 ({"extra": "x"}, "desconhecidos")]
+        for campos, trecho in casos:
+            with self.subTest(campos=campos):
+                self.assertProblema(V.validar_vereadores(self.cfg(**campos)), trecho)
+        self.assertProblema(V.validar_vereadores({**VEREADORES, "afastamentos": {}}), "lista")
+        self.assertProblema(V.validar_vereadores({**VEREADORES, "afastamentos": [None]}), "objeto")
+
+    def test_config_versionado_ordenado_e_formato(self):
+        raiz = Path(__file__).resolve().parent.parent
+        arq = raiz / "config" / "vereadores.json"
+        cfg = json.loads(arq.read_text(encoding="utf-8"))
+        perfis = json.loads((raiz / "config" / "perfis.json").read_text(encoding="utf-8"))
+        self.assertEqual(V.validar_vereadores(cfg, perfis), [])
+        self.assertEqual(arq.read_bytes(), (json.dumps(cfg, ensure_ascii=False, indent=1) + "\n").encode("utf-8"))
+        self.assertEqual(V._memoria_nfc(cfg, "config/vereadores.json"), [])
+        itens = cfg["afastamentos"]
+        self.assertEqual(itens, sorted(itens, key=lambda a: (a["legislatura"], a.get("inicio") or a.get("aprovacao") or "", a["siscam"])))
 
 
 class TestValidarMesa(Afirmacoes):

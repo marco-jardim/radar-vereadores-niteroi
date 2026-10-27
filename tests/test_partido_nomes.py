@@ -176,6 +176,19 @@ class TestPerfilDaFicha(unittest.TestCase):
         self.assertEqual(P.partido_html("P<&>"), '<span class="partido">P&lt;&amp;&gt;</span>')
         self.assertEqual(P.partido_html(""), "")
 
+    def test_falecimento_com_data_e_fonte_inclusive_perfil_resumido(self):
+        falecimento = {"data": "2026-09-05", "fonte": {"titulo": "G1 <notícia>", "url": "https://g1.globo.com/x?a=1&b=2"}}
+        bruto = {"mandatos": {}, "falecimento": falecimento}
+        # O modelo mantém o config completo por slug e resume o perfil da pessoa.
+        modelo = {**self.MODELO, "perfis": {"x": bruto}}
+        html = P.secao_perfil(modelo, self.pessoa(bruto))
+        self.assertIn('Faleceu em 05/09/2026 (<a href="https://g1.globo.com/x?a=1&amp;b=2">G1 &lt;notícia&gt;</a>).', html)
+        self.assertNotIn("target=", html)
+        pessoa = self.pessoa(None)
+        pessoa["perfil"] = bruto
+        self.assertEqual(P.secao_perfil(self.MODELO, pessoa), html)
+        self.assertNotIn("Falecimento", P.secao_perfil(self.MODELO, self.pessoa({"mandatos": {}})))
+
 
 class TestPartidoEmSessoesEGraficos(unittest.TestCase):
     def modelo(self) -> dict:
@@ -279,6 +292,24 @@ class TestValidarPerfis(unittest.TestCase):
                 problemas = self.validar({"ANA MARIA TESTE": self.perfil(eleicoes=eleicoes)})
                 self.assertTrue(any(trecho in p for p in problemas), problemas)
 
+    def test_falecimento(self):
+        bom = {"data": "2025-02-03", "fonte": FONTE}
+        self.assertEqual(self.validar({"ANA MARIA TESTE": self.perfil(falecimento=bom)}), [])
+        hoje = {**bom, "data": V.date.today().isoformat()}
+        self.assertEqual(self.validar({"ANA MARIA TESTE": self.perfil(falecimento=hoje)}), [])
+        casos = [(None, "objeto"), ([], "objeto"), ({}, "'data'"),
+                 ({**bom, "data": None}, "'data'"), ({**bom, "data": "2025-02-30"}, "ISO válida"),
+                 ({**bom, "data": "2025-2-03"}, "ISO válida"), ({**bom, "data": "03/02/2025"}, "ISO válida"),
+                 ({**bom, "data": "9999-12-31"}, "futura"),
+                 ({"data": bom["data"]}, "objeto"),
+                 ({**bom, "fonte": {"titulo": "G1", "url": "http://g1.globo.com/x"}}, "HTTPS"),
+                 ({**bom, "fonte": {"url": "https://g1.globo.com/x"}}, "titulo"),
+                 ({**bom, "extra": "x"}, "desconhecidos")]
+        for valor, trecho in casos:
+            with self.subTest(valor=valor):
+                problemas = self.validar({"ANA MARIA TESTE": self.perfil(falecimento=valor)})
+                self.assertTrue(any(trecho in p for p in problemas), problemas)
+
 
 class TestPerfisVersionados(unittest.TestCase):
     def test_config_versionado_valido(self):
@@ -289,7 +320,8 @@ class TestPerfisVersionados(unittest.TestCase):
         dados = json.loads((RAIZ / "config/perfis.json").read_text(encoding="utf-8"))
         for nome, perfil in dados["vereadores"].items():
             with self.subTest(vereador=nome):
-                self.assertEqual(list(perfil), ["mandatos", "eleicoes", "camara", "site", "redes"])
+                self.assertEqual([c for c in perfil if c != "falecimento"], ["mandatos", "eleicoes", "camara", "site", "redes"])
+                self.assertLessEqual(set(perfil), V.CAMPOS_PERFIL)
                 self.assertTrue(re.fullmatch(r"[A-ZÀ-Ý0-9 .\-]+", nome), nome)
 
 

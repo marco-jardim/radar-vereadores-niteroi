@@ -261,6 +261,27 @@ class TestPaginaSessoes(unittest.TestCase):
         self.assertIn('id="ordem"', html)
         self.assertIn("suplente em exercício", html)
 
+    def test_links_de_fontes_de_afastamento_so_abrem_siscam_em_nova_aba(self):
+        for url, nova_aba in (
+            (P.SISCAM + "DetalhesDocumentos.aspx?IdDocumento=277284", True),
+            (P.SISCAM + "Arquivos/Sessoes/ata.pdf", True),
+            ("https://example.org/ato?cargo=1&edicao=2", False),
+            ("https://consultaniteroi.siscam.com.br.example.org/ato", False),
+        ):
+            with self.subTest(url=url):
+                html = S._etiqueta_afastamento([{"cargo": "Licença <médica>", "fonte": url}])
+                link = next(n for n in Documento(html).nos if n["tag"] == "a")
+                self.assertEqual(link["attrs"]["href"], url)
+                self.assertIn("Licença &lt;médica&gt;", html)
+                if nova_aba:
+                    self.assertEqual(link["attrs"]["target"], "_blank")
+                    self.assertEqual(link["attrs"]["rel"], "noopener")
+                    self.assertIn(P.NOVA_ABA, html)
+                else:
+                    self.assertNotIn("target", link["attrs"])
+                    self.assertNotIn(P.NOVA_ABA, html)
+        self.assertIn("&lt;fonte&gt;", P.link_fonte("https://example.org/", "<fonte>"))
+
     def test_afastamento_por_mandato_com_fonte_base_curta_sem_barra_e_base_dez_com_barra(self):
         leg = self.modelo["sessoes"]["legislaturas"][1]
         afastamento = {"cargo": 'Administração <Regional> & Serviços',

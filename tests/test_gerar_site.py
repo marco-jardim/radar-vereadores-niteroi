@@ -279,6 +279,25 @@ class TestGerarSite(unittest.TestCase):
                     elif not href.startswith(("https://", "http://")):
                         self.assertNotIn("target", link)
 
+    def test_ficha_afastamento_neutro_com_datas_quando_conhecidas(self):
+        modelo = gerar_site.montar_modelo()
+        pessoa = next(iter(modelo["pessoas"].values()))
+        mandato = next(iter(pessoa["mandatos"].values()))
+        fonte = P.SISCAM + "DetalhesDocumentos.aspx?IdDocumento=277284"
+        for datas, texto in (
+            ({}, ""),
+            ({"inicio": "2023-12-08", "fim": "2024-03-31"},
+             ", a partir de 08/12/2023, até 31/03/2024"),
+            ({"aprovacao": "2021-02-03", "inicio": None, "fim": None}, ", aprovado em 03/02/2021"),
+        ):
+            with self.subTest(datas=datas):
+                mandato["afastamentos"] = [{"cargo": "Licença <médica>", "fonte": fonte, **datas}]
+                html = P.gerar_vereador(modelo, pessoa)
+                self.assertIn(f'<p class="aviso">Afastamento registrado: Licença &lt;médica&gt;{texto} '
+                              f'({P.link_fonte(fonte)}).</p>', html)
+                self.assertNotIn("Nesse período a cadeira foi ocupada por suplente", html)
+                self.assertNotIn("Afastou-se da Câmara para o cargo", html)
+
     def test_partido_ao_lado_dos_nomes_em_todas_as_paginas(self):
         """Todo link com nome de vereador traz o partido dentro do link (ou logo depois, na lista da home).
 

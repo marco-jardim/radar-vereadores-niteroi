@@ -744,7 +744,7 @@ def validar_curadoria(curadoria: object, numeros: set[str]) -> list[str]:
 
 
 # ---------------------------------------------------------------------- vereadores
-def validar_vereadores(cfg: object) -> list[str]:
+def validar_vereadores(cfg: object, perfis: object = None) -> list[str]:
     arquivo = "config/vereadores.json"
     if not isinstance(cfg, dict) or not isinstance(cfg.get("legislaturas"), list):
         return [f"{arquivo}: deveria ser um objeto com a lista 'legislaturas'"]
@@ -769,11 +769,70 @@ def validar_vereadores(cfg: object) -> list[str]:
             if nome.upper() in vistos:
                 problemas.append(f"{arquivo}: legislatura {leg_id!r}: siscam {nome!r} repetido")
             vistos.add(nome.upper())
-    for a in cfg.get("afastamentos", []):
-        nome = a.get("siscam") if isinstance(a, dict) else None
+    return problemas + _validar_afastamentos(cfg, perfis, arquivo) + _validar_mesa(cfg, arquivo)
+
+
+def _validar_afastamentos(cfg: dict, perfis: object, arquivo: str) -> list[str]:
+    """Licenças e exercício de outros cargos, sem inferir datas nem substituições."""
+    itens = cfg.get("afastamentos", [])
+    if not isinstance(itens, list):
+        return [f"{arquivo}: 'afastamentos' deveria ser uma lista"]
+    legs = {leg["id"]: leg for leg in cfg["legislaturas"] if isinstance(leg, dict) and isinstance(leg.get("id"), str)}
+    conhecidos = {e["siscam"] for leg in legs.values() for e in leg.get("eleitos") or []
+                  if isinstance(e, dict) and isinstance(e.get("siscam"), str)}
+    conhecidos |= {n for n in (cfg.get("apelidos") or {}) if isinstance(n, str) and not n.startswith("_")}
+    if isinstance(perfis, dict) and isinstance(perfis.get("vereadores"), dict):
+        conhecidos |= set(perfis["vereadores"])
+    obrigatorios = {"siscam", "legislatura", "cargo", "fonte"}
+    opcionais = {"inicio", "fim", "aprovacao", "ato", "evidencia", "suplentes", "nota"}
+    evidencias = ("ata", "requerimento", "diario_oficial", "prefeitura", "alerj", "imprensa")
+    problemas = []
+    for i, item in enumerate(itens, 1):
+        r = f"{arquivo}: afastamento {i}"
+        if not isinstance(item, dict):
+            problemas.append(f"{r} deveria ser um objeto")
+            continue
+        problemas += _memoria_textos(item, tuple(sorted(obrigatorios)), r)
+        extras = set(item) - obrigatorios - opcionais
+        if extras:
+            problemas.append(f"{r}: campos desconhecidos: {', '.join(sorted(extras))}")
+        nome = item.get("siscam")
         if not isinstance(nome, str) or nome != nome.upper():
-            problemas.append(f"{arquivo}: afastamento com siscam {nome!r} fora de maiúsculas")
-    return problemas + _validar_mesa(cfg, arquivo)
+            problemas.append(f"{r}: siscam {nome!r} fora de maiúsculas")
+        if not isinstance(nome, str) or nome not in conhecidos:
+            problemas.append(f"{r}: siscam não está entre os nomes conhecidos")
+        leg_id = item.get("legislatura")
+        leg = legs.get(leg_id) if isinstance(leg_id, str) else None
+        if leg is None:
+            problemas.append(f"{r}: legislatura inexistente")
+        for chave in ("inicio", "fim", "aprovacao"):
+            valor = item.get(chave)
+            if not data_valida(valor):
+                problemas.append(f"{r}: '{chave}' deveria ser data ISO válida AAAA-MM-DD ou null")
+            elif valor is not None and leg is not None:
+                anos = _anos_legislatura(leg)
+                if anos is not None:
+                    inicio = leg.get("inicio") or f"{anos[0]:04d}-01-01"
+                    fim = leg.get("fim") or f"{anos[1]:04d}-12-31"
+                    if not inicio <= valor <= fim:
+                        problemas.append(f"{r}: '{chave}' fora da legislatura")
+        inicio, fim = item.get("inicio"), item.get("fim")
+        if inicio and fim and data_valida(inicio) and data_valida(fim) and fim < inicio:
+            problemas.append(f"{r}: 'fim' anterior a 'inicio'")
+        if not _https(item.get("fonte")):
+            problemas.append(f"{r}: 'fonte' deveria ser URL HTTPS com host")
+        if item.get("ato") is not None and not _https(item["ato"]):
+            problemas.append(f"{r}: 'ato' deveria ser URL HTTPS com host ou null")
+        if "evidencia" in item and item["evidencia"] not in evidencias:
+            problemas.append(f"{r}: 'evidencia' deveria ser {', '.join(evidencias)}")
+        if "nota" in item and not _memoria_texto(item["nota"]):
+            problemas.append(f"{r}: 'nota' deveria ser texto não vazio")
+        suplentes = item.get("suplentes", [])
+        if not isinstance(suplentes, list):
+            problemas.append(f"{r}: 'suplentes' deveria ser uma lista")
+        elif any(not isinstance(n, str) or n not in conhecidos for n in suplentes):
+            problemas.append(f"{r}: 'suplentes' deve conter apenas nomes conhecidos do SISCAM")
+    return problemas
 
 
 # ---- mesa diretora
@@ -1047,7 +1106,7 @@ def validar_memoria(caminho: Path | None = None, hoje: date | None = None) -> li
 # ---- perfis
 REDES_PERFIL = ("instagram", "facebook", "x", "youtube", "tiktok", "threads", "linkedin")
 SITUACOES_PERFIL = ("eleito", "eleita", "suplente")
-CAMPOS_PERFIL = {"mandatos", "eleicoes", "camara", "site", "redes"}
+CAMPOS_PERFIL = {"mandatos", "eleicoes", "camara", "site", "redes", "falecimento"}
 URL_HTTPS = r"https://[^\s/]+\.[^\s/]+(/\S*)?"
 
 
@@ -1141,6 +1200,20 @@ def validar_perfis(caminho: Path | None = None, cfg: object = None) -> list[str]
         extras = set(perfil) - CAMPOS_PERFIL
         if extras:
             problemas.append(f"{r}: campos desconhecidos: {', '.join(sorted(extras))}")
+        if "falecimento" in perfil:
+            falecimento = perfil["falecimento"]
+            rf = f"{r}: falecimento"
+            if not isinstance(falecimento, dict):
+                problemas.append(f"{rf} deveria ser um objeto com data e fonte")
+            else:
+                if set(falecimento) - {"data", "fonte"}:
+                    problemas.append(f"{rf}: campos desconhecidos")
+                data = falecimento.get("data")
+                if data is None or not data_valida(data):
+                    problemas.append(f"{rf}: 'data' deveria ser data ISO válida AAAA-MM-DD")
+                elif date.fromisoformat(data) > date.today():
+                    problemas.append(f"{rf}: 'data' não pode ser futura")
+                problemas += _memoria_fontes([falecimento.get("fonte")], rf)
         mandatos = perfil.get("mandatos")
         if not isinstance(mandatos, dict):
             problemas.append(f"{r}: 'mandatos' deveria ser um objeto por legislatura")
@@ -1250,7 +1323,9 @@ def validar_tudo(raiz: Path | None = None) -> list[str]:
         problemas += erros or validar_curadoria(curadoria, numeros)
 
     cfg, erros = _ler_json(raiz / "config" / "vereadores.json", "config/vereadores.json")
-    problemas += erros or validar_vereadores(cfg)
+    arq_perfis = raiz / "config" / "perfis.json"
+    perfis = _ler_json(arq_perfis, "config/perfis.json")[0] if arq_perfis.exists() else None
+    problemas += erros or validar_vereadores(cfg, perfis)
     problemas += validar_memoria(raiz / "config" / "memoria.json")
     problemas += validar_perfis(raiz / "config" / "perfis.json", cfg if not erros else None)
     return problemas
