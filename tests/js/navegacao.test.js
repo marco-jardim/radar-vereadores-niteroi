@@ -55,7 +55,8 @@ function midia(estreita, { legado = false } = {}) {
 
 // Cabeçalho como em paginas.pagina(): marca, botão oculto e nav#menu-principal, com a página ativa marcada.
 // <html class="js"> como deixa o script do head; ponteiro=true expõe PointerEvent na janela.
-function montar({ estreita = true, comMatchMedia = true, legado = false, semBotao = false, ponteiro = false } = {}) {
+function montar({ estreita = true, comMatchMedia = true, legado = false, semBotao = false, ponteiro = false,
+  preparar = () => ({}) } = {}) {
   const documento = elemento("#document");
   const html = elemento("html", { class: "js" });
   html.classList = {
@@ -91,9 +92,10 @@ function montar({ estreita = true, comMatchMedia = true, legado = false, semBota
   const consultas = [];
   const janela = comMatchMedia ? { matchMedia: (q) => { consultas.push(q); m.media = q; return m; } } : {};
   if (ponteiro) janela.PointerEvent = function PointerEvent() {};
+  const extras = preparar(documento, janela, main);
   vm.runInNewContext(fonte, { document: documento, window: janela }, { filename: "navegacao.js" });
   return { documento, html, topo, botao, nav, links, marca, fora, midia: m, consultas, tiposDocumento,
-    focado: () => focado, js: () => html.classList.contains("js") };
+    focado: () => focado, js: () => html.classList.contains("js"), ...extras };
 }
 
 const expandido = (p) => p.botao.getAttribute("aria-expanded");
@@ -358,6 +360,94 @@ test("require expõe as funções puras sem tocar no DOM, e o CSS usa o mesmo li
   const estreito = css.split(`@media ${N.CONSULTA} {`)[1].split("\n}")[0];
   assert.ok(estreito.includes('.js .topo:not([data-menu="aberto"]) nav { display: none; }'));
   assert.ok(estreito.includes(".js .menu-botao { display: inline-flex;"));
+});
+
+function prepararGlossario({ suporte = true, template = true, definicao = true } = {}) {
+  return (doc, win, main) => {
+    const termos = ["veto", "parecer"].map((chave) => {
+      const link = elemento("a", { class: "glossario", "data-termo": chave,
+        href: `metodologia.html#g-${chave}` });
+      link.getBoundingClientRect = () => ({ left: 300, bottom: 490 });
+      link.insertAdjacentElement = (onde, pop) => {
+        assert.equal(onde, "afterend");
+        pop.pai = link.pai;
+        link.pai.filhos.splice(link.pai.filhos.indexOf(link) + 1, 0, pop);
+      };
+      main.anexar(link);
+      return link;
+    });
+    const modelo = elemento("template", { id: "glossario-defs" });
+    modelo.content = { querySelectorAll: () => definicao ? termos.map((link) => ({
+      getAttribute: (nome) => link.getAttribute(nome),
+      textContent: `Definição de ${link.getAttribute("data-termo")} <texto seguro>`
+    })) : [] };
+    if (template) main.anexar(modelo);
+    doc.getElementById = (id) => {
+      const procurar = (no) => no.getAttribute("id") === id ? no : no.filhos.map(procurar).find(Boolean);
+      return procurar(doc) || null;
+    };
+    doc.querySelectorAll = (seletor) => seletor === "a.glossario" ? termos : [];
+    const pops = [];
+    doc.createElement = (tag) => {
+      const pop = elemento(tag);
+      pop.style = {};
+      pop.alternancias = 0;
+      pop.togglePopover = () => { pop.alternancias++; };
+      pop.getBoundingClientRect = () => ({ width: 200, height: 100 });
+      pops.push(pop);
+      return pop;
+    };
+    win.innerWidth = 400;
+    win.innerHeight = 500;
+    win.HTMLElement = function HTMLElement() {};
+    if (suporte) win.HTMLElement.prototype.showPopover = function () {};
+    return { termos, pops, main };
+  };
+}
+
+test("glossário sem Popover mantém o link e não impede a navegação", () => {
+  const p = montar({ preparar: prepararGlossario({ suporte: false }) });
+  let impedido = false;
+  disparar(p.termos[0], "click", { preventDefault() { impedido = true; } });
+  assert.equal(impedido, false);
+  assert.equal(p.termos[0].getAttribute("href"), "metodologia.html#g-veto");
+  assert.equal(p.termos[0].getAttribute("aria-describedby"), null);
+  assert.equal(p.pops.length, 0);
+});
+
+test("glossário cria um popover irmão por link, descreve e alterna no clique", () => {
+  const p = montar({ preparar: prepararGlossario() });
+  assert.equal(p.pops.length, 2);
+  p.termos.forEach((link, i) => {
+    const pop = p.pops[i];
+    assert.equal(pop.tag, "span");
+    assert.equal(pop.getAttribute("popover"), "auto");
+    assert.equal(pop.getAttribute("role"), "tooltip");
+    assert.equal(pop.getAttribute("class"), "glossario-pop");
+    assert.equal(link.getAttribute("aria-describedby"), `gl-${i + 1}`);
+    assert.equal(pop.getAttribute("id"), `gl-${i + 1}`);
+    assert.equal(p.main.filhos[p.main.filhos.indexOf(link) + 1], pop);
+    assert.equal(pop.textContent, `Definição de ${link.getAttribute("data-termo")} <texto seguro>`);
+    let impedidos = 0;
+    for (let n = 0; n < 2; n++) disparar(link, "click", { preventDefault() { impedidos++; } });
+    assert.equal(impedidos, 2);
+    assert.equal(pop.alternancias, 2);
+    assert.equal(pop.style.left, "192px");
+    assert.equal(pop.style.top, "392px");
+    assert.equal(link.getAttribute("href"), `metodologia.html#g-${link.getAttribute("data-termo")}`);
+    disparar(link, "click", { ctrlKey: true, preventDefault() { assert.fail("clique modificado"); } });
+    assert.equal(pop.alternancias, 2);
+  });
+  assert.deepEqual([...p.tiposDocumento].sort(), ["click", "keydown", "mousedown"]);
+});
+
+test("glossário sem template ou sem definição não interfere nos links", () => {
+  for (const opcoes of [{ template: false }, { definicao: false }]) {
+    const p = montar({ preparar: prepararGlossario(opcoes) });
+    assert.equal(p.pops.length, 0);
+    disparar(p.termos[0], "click", { preventDefault() { assert.fail("link deve navegar"); } });
+    assert.equal(p.termos[0].getAttribute("aria-describedby"), null);
+  }
 });
 
 test("navegacao.js cabe em 4 KiB com gzip", () => {
