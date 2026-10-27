@@ -36,13 +36,15 @@ python -m coletor.vereadores_semanal [--saida relatorio.md] [--com-rede]
   maiúsculas, pelo `NM_CANDIDATO` (ou `NM_SOCIAL_CANDIDATO`); nomes do SISCAM com sufixo ` - APELIDO` também são
   tentados sem ele. Cargo municipal só em Niterói (homônimos de outros municípios são ignorados); cargo estadual ou
   federal exige uma única candidatura no RJ.
-- Sem casamento exato, duas alternativas, só entre candidaturas de Niterói (vereador, prefeito, vice) e do RJ:
+- Sem casamento pelo nome do SISCAM, os nomes civis de `coletor.tse.APELIDOS_TSE` (nome do SISCAM → outras grafias
+  no TSE, cada uma com a fonte da conferência em comentário) são tentados como nome exato, com as mesmas regras de
+  ambiguidade; o resumo mostra "casado por apelido (confira na revisão)".
+- Sem casamento exato nem por apelido, duas alternativas, só entre candidaturas de Niterói (vereador, prefeito, vice) e do RJ:
   nome de urna (`NM_URNA_CANDIDATO`, com e sem títulos como DR, PROFESSOR, PASTOR, DELEGADO, CORONEL) igual ao nome
   do SISCAM ou ao apelido depois de ` - `; depois, o nome do SISCAM (≥ 3 palavras) como subsequência ordenada do nome
   civil, com primeira e última palavras iguais. Cada alternativa só vale com um único candidato; o resumo lista esses
   casamentos para conferência, e um casamento aproximado que reusa a candidatura de outra pessoa vira homônimo.
-  Casos que nenhuma alternativa resolve podem ser fixados em `coletor.tse.APELIDOS_TSE` (nome do SISCAM → nome civil
-  no TSE), que dispensa as alternativas.
+  Casos que nenhuma alternativa resolve entram em `APELIDOS_TSE`.
 - Várias candidaturas da mesma pessoa no ano (troca de cargo, renúncia): ficam as aptas
   (`DS_SITUACAO_CANDIDATURA` = APTO ou detalhe deferido) e, se houver resultado divulgado, só as sem `#NULO`.
   Restando uma, ela vale; senão, o caso fica de fora com `::warning::` ("ambíguo"/"homônimo") e o que havia é mantido.
@@ -92,7 +94,7 @@ python -m coletor.vereadores_semanal [--saida relatorio.md] [--com-rede]
   reconhecível.
 - O site da Câmara pode estar fora do ar ou mudar de layout; nesses casos a verificação (c) só informa.
 - Homônimos no RJ em cargos estaduais/federais e nomes do SISCAM que nem o nome de urna nem o nome civil parcial
-  resolvem ficam sem casamento; fixe o nome civil em `coletor.tse.APELIDOS_TSE` ou complete à mão em
+  resolvem ficam sem casamento; acrescente a grafia do TSE em `coletor.tse.APELIDOS_TSE` ou complete à mão em
   `config/perfis.json`, com fonte. O casamento parcial pode, raramente, achar outra pessoa de nome parecido no RJ:
   confira os casamentos aproximados listados no resumo antes de aprovar o PR.
 - Contagens e detecções são pistas para revisão humana, não confirmação de licença, suplência ou filiação.

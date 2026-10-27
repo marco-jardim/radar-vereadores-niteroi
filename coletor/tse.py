@@ -11,7 +11,8 @@ config/perfis.json (inclusive suplentes). O casamento é exato depois da normali
 (sem acentos, maiúsculas, espaços colapsados), pelo nome civil ou social do TSE; sem
 ele, tenta o nome de urna (com e sem títulos como DR ou PROFESSOR) e o nome do SISCAM
 como subsequência do nome civil, só entre candidaturas de Niterói e do RJ e só com um
-único candidato. APELIDOS_TSE fixa à mão o nome civil de quem as alternativas não acham.
+único candidato. APELIDOS_TSE lista outras grafias do nome civil no TSE, conferidas à
+mão, tentadas como nome exato antes dessas alternativas.
 Cargos municipais só valem em Niterói; para cargos estaduais e federais, o nome deve
 corresponder a uma única candidatura no RJ. Com várias candidaturas da mesma pessoa no
 ano, ficam as aptas e com resultado. Homônimos de outros municípios são ignorados;
@@ -82,10 +83,21 @@ UFS_GERAIS = frozenset({"RJ", "BR"})
 SEM_RESULTADO = "Resultado não divulgado"
 
 # ---- casamento de nomes ------------------------------------------------------------
-# Nome no SISCAM → nome civil (NM_CANDIDATO) no TSE, para fixar à mão um casamento que
-# as alternativas automáticas (nome de urna, nome civil parcial) não resolvam. Com
-# entrada aqui, só esse nome é procurado, sem alternativas.
-APELIDOS_TSE: dict[str, str] = {}
+# Nome no SISCAM → outros nomes civis (NM_CANDIDATO) da mesma pessoa no TSE, como em
+# arquivos antigos com grafia diferente. São tentados como nome exato depois do nome do
+# SISCAM e antes das alternativas automáticas (nome de urna, nome civil parcial), com as
+# mesmas regras de ambiguidade. Cada entrada cita a fonte da conferência.
+WIKIPEDIA_VEREADORES = "https://pt.wikipedia.org/w/index.php?title=Lista_de_vereadores_de_Niter%C3%B3i&oldid=70206495"
+APELIDOS_TSE: dict[str, tuple[str, ...]] = {
+    # Gallo: eleito vereador em 1996 (PFL) e 2004 (PL) como "LUIZ CARLOS DE FREITAS" (urna GALLO);
+    # conferido em WIKIPEDIA_VEREADORES
+    "LUIZ CARLOS GALLO DE FREITAS": ("LUIZ CARLOS DE FREITAS",),
+    # Zaf: eleito em 2000 (PSD) como "JOSÉ ANTONIO TORO FERNANDES"; conferido em WIKIPEDIA_VEREADORES
+    "JOSÉ ANTONIO TORO FERNANDEZ": ("JOSÉ ANTONIO TORO FERNANDES",),
+    # Leandro Portugal: eleito em 2016 (PV, por QP) como "LEANDRO PORTUGAL FRAZEN DE LIMA";
+    # conferido em WIKIPEDIA_VEREADORES
+    "LEANDRO PORTUGAL FRANZEN DE LIMA": ("LEANDRO PORTUGAL FRAZEN DE LIMA",),
+}
 # títulos removidos do início do nome de urna ("DR EMANUEL ROCHA" → "EMANUEL ROCHA")
 TITULOS_URNA = frozenset({
     "DR", "DRA", "PROF", "PROFA", "PROFESSOR", "PROFESSORA", "PASTOR", "PASTORA",
@@ -93,7 +105,7 @@ TITULOS_URNA = frozenset({
 })
 MINIMO_TOKENS_PARCIAL = 3
 VIAS_APROXIMADAS = frozenset({"urna", "nome_parcial"})
-ROTULOS_VIA = {"apelido_tse": "APELIDOS_TSE", "urna": "nome de urna", "nome_parcial": "nome civil parcial"}
+ROTULOS_VIA = {"apelido_tse": "apelido", "urna": "nome de urna", "nome_parcial": "nome civil parcial"}
 
 LEIA_ME_PADRAO = (
     "Perfis dos vereadores por nome no SISCAM: mandatos, candidaturas (TSE), Câmara, site e redes. "
@@ -120,6 +132,7 @@ RESULTADOS = {
     "ELEITA": "Eleita",
     "ELEITO POR QP": "Eleito por QP",
     "ELEITO POR MEDIA": "Eleito por média",
+    "MEDIA": "Eleito por média",  # arquivos antigos: eleito pelas sobras ("MÉDIA")
     "SUPLENTE": "Suplente",
     "NAO ELEITO": "Não eleito",
     "2º TURNO": "2º turno",
@@ -653,25 +666,24 @@ def subsequencia(curto: list[str], longo: list[str]) -> bool:
 def casar(nome: str, indice: dict[str, list[dict]]) -> dict:
     """Casamento: municipal só em Niterói; estadual/federal único no RJ.
 
-    Ordem: nome exato (ou o fixado em APELIDOS_TSE); depois nome de urna, com e sem
-    título; depois nome do SISCAM como subsequência do nome civil. As alternativas só
-    olham as candidaturas elegíveis e só valem com um único candidato válido.
+    Ordem: nome exato do SISCAM (e sem o apelido " - X"); depois os nomes civis de
+    APELIDOS_TSE, também exatos; depois nome de urna, com e sem título; depois nome do
+    SISCAM como subsequência do nome civil. As alternativas automáticas só olham as
+    candidaturas elegíveis e só valem com um único candidato válido.
     Devolve {"estado": "casado"|"ambiguo"|"sem_candidatura", "via", "candidato",
     "ambiguos", "ignorados"} e, quando ambíguo, "motivo".
     """
     ignorados: list[dict] = []
-    fixado = APELIDOS_TSE.get(nome)
-    via = "apelido_tse" if fixado else "nome"
-    for variante in [normalizar(fixado)] if fixado else variantes(nome):
+    exatos = [(v, "nome", "ambíguo") for v in variantes(nome)]
+    exatos += [(normalizar(a), "apelido_tse", "ambíguo pelo apelido") for a in APELIDOS_TSE.get(nome, ())]
+    for variante, via, motivo in exatos:
         candidatos = indice.get(variante) or []
         relevantes = ([c for c in candidatos if _municipal(c) and c["ue"] == MUNICIPIO]
                       or [c for c in candidatos if not _municipal(c) and c["uf"] in UFS_GERAIS])
-        ignorados.extend(c for c in candidatos if c not in relevantes)
+        ignorados.extend(c for c in candidatos if c not in relevantes and c not in ignorados)
         if relevantes:
-            return _decidir(relevantes, via, ignorados, "ambíguo")
+            return _decidir(relevantes, via, ignorados, motivo)
     vazio = {"estado": "sem_candidatura", "via": None, "candidato": None, "ambiguos": [], "ignorados": ignorados}
-    if fixado:
-        return vazio
     elegiveis = _elegiveis(indice)
     chaves = chaves_siscam_urna(nome)
     por_urna = [c for c in elegiveis if c.get("chaves_urna", frozenset()) & chaves]
@@ -954,7 +966,7 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     pessoas = pessoas_de_interesse(cfg, perfis)
     alvos = {v for nome in pessoas for v in variantes(nome)}
-    alvos |= {normalizar(APELIDOS_TSE[nome]) for nome in pessoas if nome in APELIDOS_TSE}
+    alvos |= {normalizar(apelido) for nome in pessoas for apelido in APELIDOS_TSE.get(nome, ())}
     cache = Path(args.cache)
     versoes = carregar_versoes(cache)
     resultados: dict[int, dict] = {}

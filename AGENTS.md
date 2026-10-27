@@ -37,7 +37,7 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `coletor/site/glossario.py` | Glossário: links `a.glossario` para `metodologia.html#g-*` na prosa, definições num `<template>` por página e popover progressivo em `navegacao.js`. |
 | `coletor/site/graficos.py` | Gráficos SVG e tabelas acessíveis. |
 | `coletor/site/paginas.py` | HTML, navegação, componentes, diálogo SISCAM e metodologia. |
-| `config/vereadores.json` | Legislaturas, eleitos, partidos da eleição, apelidos e afastamentos. |
+| `config/vereadores.json` | Legislaturas, eleitos, partidos da eleição, apelidos, afastamentos e Mesa Diretora por biênio (`mesa`, ainda não exibida no site). |
 | `config/curadoria.json` | Rótulos e correções editoriais com fontes públicas. |
 | `config/memoria.json` | Conteúdo editorial da memória: critérios, homenageados e linha do tempo; validado por `coletor.validar`. |
 | `config/perfis.json` | Perfil público por nome do SISCAM: partido, votos e situação por mandato, outras eleições (TSE), links oficiais e fontes; validado por `coletor.validar`. |
@@ -167,6 +167,15 @@ está, só suplente. `eleicoes`, da mais recente para a mais antiga: `ano` 1945�
 ou `linkedin`, com `url` e `fonte` HTTPS: página oficial da Câmara ou do vereador, ou o registro de candidatura
 no TSE (`fonte` = `https://dadosabertos.tse.jus.br/dataset/candidatos-<ano>`, como grava `coletor.tse`).
 Formato: JSON com `indent=1`, ordem das chaves preservada, UTF-8, LF e NFC.
+
+### Validação da Mesa Diretora
+
+A chave opcional `mesa` de `config/vereadores.json` lista `{siscam, legislatura, bienio, cargo, fonte}`, como
+`afastamentos`. `coletor.validar` exige campos não vazios e sem extras, legislatura existente, `bienio` `AAAA-AAAA`
+com anos consecutivos dentro da legislatura, `cargo` entre Presidente, 1º/2º Vice-Presidente, 1º/2º Secretário e
+1º/2º Suplente, `siscam` entre os eleitos da legislatura ou os nomes conhecidos (eleitos de outra legislatura ou
+`apelidos`), `fonte` HTTPS (ata ou votação da sessão no SISCAM) e, por biênio, nenhum cargo repetido nem pessoa com
+dois cargos. Não invente nomes: quem ainda não está na configuração (como um suplente) entra primeiro em `apelidos`.
 
 ### Opções das CLIs
 

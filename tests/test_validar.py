@@ -316,6 +316,55 @@ class TestValidarVereadores(Afirmacoes):
         self.assertProblema(V.validar_vereadores({"legislaturas": [{"id": "x"}]}), "sem a lista 'eleitos'")
 
 
+class TestValidarMesa(Afirmacoes):
+    FONTE = "https://consultaniteroi.siscam.com.br/Arquivos/Sessoes/ata.doc"
+
+    def cfg(self, *itens: dict) -> dict:
+        cfg = copy.deepcopy(VEREADORES)
+        cfg["apelidos"] = {"_leia_me": "x", "CARLOS SUPLENTE": "Carlos"}
+        cfg["mesa"] = [{"siscam": "ANA MARIA", "legislatura": "2021-2024", "bienio": "2021-2022", "cargo": "Presidente",
+                        "fonte": self.FONTE, **item} for item in itens]
+        return cfg
+
+    def test_valida_e_opcional(self):
+        self.assertEqual(V.validar_vereadores(VEREADORES), [])
+        cfg = self.cfg({}, {"siscam": "JOSÉ ADRIANO - FOLHA", "cargo": "1º Secretário"},
+                       {"siscam": "CARLOS SUPLENTE", "cargo": "2º Suplente"},
+                       {"bienio": "2023-2024"}, {"legislatura": "2025-2028", "bienio": "2027-2028"})
+        self.assertEqual(V.validar_vereadores(cfg), [])
+
+    def test_erros(self):
+        casos = {
+            "campo vazio": ({"fonte": ""}, "campos ausentes ou vazios: fonte"),
+            "legislatura": ({"legislatura": "1999-2002"}, "inexistente"),
+            "biênio inválido": ({"bienio": "2021"}, "'bienio'"),
+            "biênio não consecutivo": ({"bienio": "2021-2023"}, "'bienio'"),
+            "biênio fora": ({"bienio": "2025-2026"}, "fora da legislatura"),
+            "cargo": ({"cargo": "Tesoureiro"}, "'cargo'"),
+            "pessoa": ({"siscam": "FULANO DESCONHECIDO"}, "nomes conhecidos"),
+            "fonte": ({"fonte": "http://exemplo.org/ata"}, "HTTPS"),
+            "campo extra": ({"observacao": "x"}, "desconhecidos"),
+        }
+        for nome, (item, trecho) in casos.items():
+            with self.subTest(caso=nome):
+                self.assertProblema(V.validar_vereadores(self.cfg(item)), trecho)
+        self.assertProblema(V.validar_vereadores({**VEREADORES, "mesa": {}}), "'mesa' deveria ser uma lista")
+
+    def test_repeticoes_no_bienio(self):
+        cargo_repetido = self.cfg({}, {"siscam": "JOSÉ ADRIANO - FOLHA"})
+        self.assertProblema(V.validar_vereadores(cargo_repetido), "cargo 'Presidente' repetido")
+        dois_cargos = self.cfg({}, {"cargo": "1º Suplente"})
+        self.assertProblema(V.validar_vereadores(dois_cargos), "dois cargos no biênio")
+        outro_bienio = self.cfg({}, {"bienio": "2023-2024"})
+        self.assertEqual(V.validar_vereadores(outro_bienio), [])
+
+    def test_config_versionado(self):
+        raiz = Path(__file__).resolve().parent.parent
+        cfg = json.loads((raiz / "config" / "vereadores.json").read_text(encoding="utf-8"))
+        self.assertIn("mesa", cfg)
+        self.assertEqual(V.validar_vereadores(cfg), [])
+
+
 # ---------------------------------------------------------------------- documentos
 class TestValidarDocumento(Afirmacoes):
     ARQ = "data/documentos/resolucao/2026.json"

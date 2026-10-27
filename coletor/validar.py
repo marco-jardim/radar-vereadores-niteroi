@@ -773,6 +773,79 @@ def validar_vereadores(cfg: object) -> list[str]:
         nome = a.get("siscam") if isinstance(a, dict) else None
         if not isinstance(nome, str) or nome != nome.upper():
             problemas.append(f"{arquivo}: afastamento com siscam {nome!r} fora de maiúsculas")
+    return problemas + _validar_mesa(cfg, arquivo)
+
+
+# ---- mesa diretora
+CARGOS_MESA = ("Presidente", "1º Vice-Presidente", "2º Vice-Presidente", "1º Secretário", "2º Secretário",
+               "1º Suplente", "2º Suplente")
+CAMPOS_MESA = ("siscam", "legislatura", "bienio", "cargo", "fonte")
+RE_HTTPS_MESA = re.compile(r"https://[^\s/]+\.[^\s/]+(/\S*)?")
+
+
+def _anos_legislatura(leg: dict) -> tuple[int, int] | None:
+    """Anos de início e fim por 'inicio'/'fim' ou, na falta deles, pelo id AAAA-AAAA."""
+    inicio, fim = str(leg.get("inicio") or "")[:4], str(leg.get("fim") or "")[:4]
+    if not (inicio.isdigit() and fim.isdigit()):
+        m = re.fullmatch(r"(\d{4})-(\d{4})", str(leg.get("id") or ""))
+        if not m:
+            return None
+        inicio, fim = m[1], m[2]
+    return int(inicio), int(fim)
+
+
+def _validar_mesa(cfg: dict, arquivo: str) -> list[str]:
+    """Composição da Mesa Diretora por biênio (chave opcional 'mesa')."""
+    mesa = cfg.get("mesa")
+    if mesa is None:
+        return []
+    if not isinstance(mesa, list):
+        return [f"{arquivo}: 'mesa' deveria ser uma lista"]
+    legs = {leg["id"]: leg for leg in cfg["legislaturas"] if isinstance(leg, dict) and isinstance(leg.get("id"), str)}
+    eleitos = {leg_id: {e.get("siscam") for e in leg.get("eleitos") or [] if isinstance(e, dict)} for leg_id, leg in legs.items()}
+    conhecidos = set().union(*eleitos.values()) if eleitos else set()
+    conhecidos |= {n for n in (cfg.get("apelidos") or {}) if isinstance(n, str) and not n.startswith("_")}
+    problemas = []
+    cargos: dict[tuple[tuple[str, str], str], str] = {}  # ((legislatura, biênio), cargo) → siscam
+    pessoas: dict[tuple[tuple[str, str], str], str] = {}  # ((legislatura, biênio), siscam) → cargo
+    for i, item in enumerate(mesa, 1):
+        r = f"{arquivo}: mesa {i}"
+        if not isinstance(item, dict):
+            problemas.append(f"{r} deveria ser um objeto")
+            continue
+        faltando = [c for c in CAMPOS_MESA if not _memoria_texto(item.get(c))]
+        if faltando:
+            problemas.append(f"{r}: campos ausentes ou vazios: {', '.join(faltando)}")
+            continue
+        extras = set(item) - set(CAMPOS_MESA)
+        if extras:
+            problemas.append(f"{r}: campos desconhecidos: {', '.join(sorted(extras))}")
+        nome, leg_id, bienio, cargo = item["siscam"], item["legislatura"], item["bienio"], item["cargo"]
+        r = f"{arquivo}: mesa {i} ({nome}, {bienio})"
+        leg = legs.get(leg_id)
+        if leg is None:
+            problemas.append(f"{r}: legislatura {leg_id!r} inexistente")
+        m = re.fullmatch(r"(\d{4})-(\d{4})", bienio)
+        anos = _anos_legislatura(leg) if leg is not None else None
+        if not m or int(m[2]) != int(m[1]) + 1:
+            problemas.append(f"{r}: 'bienio' deveria ser AAAA-AAAA, com anos consecutivos")
+        elif anos is not None and not (anos[0] <= int(m[1]) and int(m[2]) <= anos[1]):
+            problemas.append(f"{r}: biênio fora da legislatura {leg_id}")
+        if cargo not in CARGOS_MESA:
+            problemas.append(f"{r}: 'cargo' deveria ser {', '.join(CARGOS_MESA)}")
+        if nome not in eleitos.get(leg_id, set()) and nome not in conhecidos:
+            problemas.append(f"{r}: siscam {nome!r} não está entre os eleitos da legislatura nem entre os nomes conhecidos")
+        if not RE_HTTPS_MESA.fullmatch(item["fonte"]):
+            problemas.append(f"{r}: 'fonte' deveria ser URL HTTPS")
+        chave = (leg_id, bienio)
+        if (chave, cargo) in cargos:
+            problemas.append(f"{r}: cargo {cargo!r} repetido no biênio (já ocupado por {cargos[(chave, cargo)]})")
+        else:
+            cargos[(chave, cargo)] = nome
+        if (chave, nome) in pessoas:
+            problemas.append(f"{r}: mesma pessoa com dois cargos no biênio ({pessoas[(chave, nome)]} e {cargo})")
+        else:
+            pessoas[(chave, nome)] = cargo
     return problemas
 
 

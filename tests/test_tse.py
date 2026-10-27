@@ -207,6 +207,9 @@ class TestNormalizacao(unittest.TestCase):
         self.assertEqual(tse.resultado("NÃO ELEITO"), "Não eleito")
         self.assertEqual(tse.resultado("SUPLENTE"), "Suplente")
         self.assertEqual(tse.resultado("2º TURNO"), "2º turno")
+        self.assertEqual(tse.resultado("ELEITO"), "Eleito")
+        self.assertEqual(tse.resultado("MÉDIA"), "Eleito por média")  # arquivos antigos
+        self.assertEqual(tse.resultado("MEDIA"), "Eleito por média")
         for nulo in ("#NULO", "#NE", "#NULO#", "", None):
             self.assertEqual(tse.resultado(nulo), "Resultado não divulgado")
 
@@ -391,13 +394,50 @@ class TestCasamentoAlternativo(unittest.TestCase):
         self.assertEqual(casamentos["ANA TESTE"]["estado"], "ambiguo")
         self.assertIn("ANA MARIA TESTE", casamentos["ANA TESTE"]["motivo"])
 
-    def test_apelido_fixado(self):
+    def test_apelido_antes_das_alternativas(self):
         indice = self.indice(self.LINHAS_NITEROI, {"JOSE PEDRO DO GAS"})
-        with mock.patch.dict(tse.APELIDOS_TSE, {"ZE DO GAS": "JOSÉ PEDRO DO GÁS"}):
+        # sem o apelido, o nome de urna é ambíguo; com ele, o nome civil exato decide
+        with mock.patch.dict(tse.APELIDOS_TSE, {"ZE DO GAS": ("NOME QUE NAO EXISTE", "JOSÉ PEDRO DO GÁS")}):
             casamento = tse.casar("ZE DO GAS", indice)
         self.assertEqual((casamento["estado"], casamento["via"], casamento["candidato"]["sq"]), ("casado", "apelido_tse", "5005"))
-        with mock.patch.dict(tse.APELIDOS_TSE, {"DADO FOLY": "NOME QUE NAO EXISTE"}):
-            self.assertEqual(tse.casar("DADO FOLY", indice)["estado"], "sem_candidatura")  # sem alternativas
+        # apelido sem candidatura não impede as alternativas automáticas
+        with mock.patch.dict(tse.APELIDOS_TSE, {"DADO FOLY": ("NOME QUE NAO EXISTE",)}):
+            self.assertEqual(tse.casar("DADO FOLY", indice)["via"], "urna")
+
+    def test_nome_do_siscam_tem_prioridade_sobre_o_apelido(self):
+        # Gallo em 2000: candidato a vice-prefeito com o nome completo, sub judice (#NULO#)
+        indice = self.indice([
+            _cand_sit("NITERÓI", "VICE-PREFEITO", "6001", "LUIZ CARLOS GALLO DE FREITAS", "#NULO#", urna="GALLO"),
+            _cand_sit("NITERÓI", "VEREADOR", "6002", "LUIZ CARLOS DE FREITAS", "ELEITO", urna="LUIZ CARLOS"),
+        ], {"LUIZ CARLOS GALLO DE FREITAS", "LUIZ CARLOS DE FREITAS"}, ano=2000)
+        casamento = tse.casar("LUIZ CARLOS GALLO DE FREITAS", indice)
+        self.assertEqual((casamento["via"], casamento["candidato"]["sq"]), ("nome", "6001"))
+
+    def test_apelidos_versionados(self):
+        """Gallo (1996/2004), Zaf (2000) e Leandro Portugal (2016) com outra grafia no TSE."""
+        casos = {
+            "LUIZ CARLOS GALLO DE FREITAS": ("LUIZ CARLOS DE FREITAS", "GALLO", "PFL", "ELEITO", 1996),
+            "JOSÉ ANTONIO TORO FERNANDEZ": ("JOSÉ ANTONIO TORO FERNANDES", "ZAF", "PSD", "ELEITO", 2000),
+            "LEANDRO PORTUGAL FRANZEN DE LIMA": ("LEANDRO PORTUGAL FRAZEN DE LIMA", "LEANDRO PORTUGAL", "PV", "ELEITO POR QP", 2016),
+        }
+        for siscam, (civil, urna, partido, situacao, ano) in casos.items():
+            with self.subTest(siscam=siscam):
+                self.assertIn(civil, tse.APELIDOS_TSE[siscam])
+                alvos = {tse.normalizar(civil)}
+                indice = self.indice([_cand_sit("NITERÓI", "VEREADOR", "7001", civil, situacao, urna=urna, partido=partido)],
+                                     alvos, ano=ano)
+                casamento = tse.casar(siscam, indice)
+                self.assertEqual((casamento["estado"], casamento["via"]), ("casado", "apelido_tse"))
+                self.assertEqual(tse.item_eleicao(ano, casamento["candidato"], None)["partido"], partido)
+
+    def test_resumo_mostra_casamento_por_apelido(self):
+        relatorio = {"anos": {1996: {"casados": ["X"], "sem_candidatura": [], "ambiguos": [], "homonimos_ignorados": 0,
+                                     "votacao": True, "redes": False,
+                                     "aproximados": [("X", "apelido_tse", "Vereador (NITERÓI), nº 1, PFL, SQ 1")]}},
+                     "sem_nenhuma": [], "adicionados": [], "urls_ignoradas": []}
+        with contextlib.redirect_stdout(io.StringIO()) as saida:
+            tse.imprimir_resumo(relatorio)
+        self.assertIn("1996: X casado por apelido (confira na revisão)", saida.getvalue())
 
 
 # ---- execução completa --------------------------------------------------------------
