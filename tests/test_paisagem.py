@@ -1,4 +1,4 @@
-"""Marca, favicon e textura: XML, paleta, contraste, orçamento e bytes versionados."""
+"""Marca, favicon, textura, camadas da paisagem e PNG: XML, paleta, orçamento e bytes versionados."""
 from __future__ import annotations
 
 import contextlib
@@ -6,9 +6,13 @@ import gzip
 import io
 import json
 import re
+import struct
+import sys
 import tempfile
+import time
 import unittest
 import xml.etree.ElementTree as ET
+import zlib
 from pathlib import Path
 from unittest import mock
 
@@ -349,6 +353,226 @@ class CliTest(unittest.TestCase):
             with mock.patch.object(paisagem, "SAIDA", saida), contextlib.redirect_stderr(io.StringIO()):
                 self.assertEqual(paisagem.main([]), 2)
             self.assertFalse(saida.exists())
+
+    def test_camadas_e_og_combinadas_com_marca(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            saida = Path(tmp) / "site_src"
+            with (mock.patch.object(paisagem, "SAIDA", saida),
+                  mock.patch.object(paisagem, "LARGURA_OG", 64), mock.patch.object(paisagem, "ALTURA_OG", 34),
+                  contextlib.redirect_stdout(io.StringIO()) as out):
+                self.assertEqual(paisagem.main(["--marca", "--camadas", "--og"]), 0)
+            for nome, texto in paisagem.camadas_svg().items():
+                self.assertEqual((saida / "paisagem" / nome).read_bytes(), texto.encode("utf-8"))
+            self.assertEqual(pixels_png((saida / "og-radar.png").read_bytes()),
+                             (64, 34, paisagem.rasterizar(64, 34)))
+            self.assertTrue((saida / "marca.svg").exists())
+            self.assertEqual(sorted(p.name for p in saida.rglob("*") if p.is_file()),
+                             sorted([*paisagem.camadas_svg(), "favicon.svg", "marca.svg", "og-radar.png"]))
+            self.assertIn("og-radar.png", out.getvalue())
+            self.assertIn("gzip", out.getvalue())
+
+    def test_camadas_acima_do_orcamento_nao_gravam(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            saida = Path(tmp) / "site_src"
+            with (mock.patch.object(paisagem, "SAIDA", saida), mock.patch.object(paisagem, "LIMITE_CAMADAS_GZIP", 1),
+                  contextlib.redirect_stderr(io.StringIO()) as erro):
+                self.assertEqual(paisagem.main(["--marca", "--camadas"]), 1)
+            self.assertIn("camadas não gravadas", erro.getvalue())
+            self.assertFalse(saida.exists())
+
+
+# ---- camadas da paisagem
+NOMES_CAMADAS = ["fundo.svg", "baia.svg", "promontorio.svg", "orla.svg"]
+
+
+class CamadasTest(unittest.TestCase):
+    def setUp(self) -> None:
+        self.camadas = paisagem.camadas_svg()
+
+    def test_ordem_e_nomes(self) -> None:
+        self.assertEqual(list(self.camadas), NOMES_CAMADAS)
+
+    def test_xml_viewbox_comum_e_so_preto(self) -> None:
+        for nome, texto in self.camadas.items():
+            with self.subTest(nome=nome):
+                raiz = ET.fromstring(texto)
+                self.assertEqual(raiz.tag, f"{NS}svg")
+                self.assertEqual(raiz.get("viewBox"), "0 0 1600 600")
+                self.assertEqual(raiz.get("preserveAspectRatio"), "xMidYMax slice")
+                self.assertNotIn("width", raiz.attrib)
+                self.assertNotIn("height", raiz.attrib)
+                self.assertEqual(set(HEX.findall(texto)), {"#000"})
+                caminhos = list(raiz.iter(f"{NS}path"))
+                self.assertTrue(caminhos)
+                for elemento in raiz.iter():
+                    self.assertNotIn("stroke", elemento.attrib)
+                for caminho in caminhos:
+                    self.assertEqual(caminho.get("fill"), "#000")
+                    d = caminho.get("d")
+                    self.assertNotIn(".", d)
+                    pares = re.findall(r"(-?\d+),(-?\d+)", d)
+                    self.assertTrue(pares)
+                    for x, y in pares:
+                        self.assertTrue(0 <= int(x) <= 1600 and 0 <= int(y) <= 600, (x, y))
+                self.assertIsNone(raiz.find(f"{NS}title"))
+                self.assertNotIn("<!--", texto)
+                self.assertTrue(texto.endswith("</svg>\n"))
+                self.assertEqual(texto.count("\n"), 1)
+                self.assertNotIn("\r", texto)
+
+    def test_orcamento_gzip(self) -> None:
+        total = sum(len(gzip.compress(t.encode("utf-8"), compresslevel=9, mtime=0)) for t in self.camadas.values())
+        self.assertLessEqual(total, 18 * 1024)
+
+    def test_deterministico(self) -> None:
+        self.assertEqual(paisagem.camadas_svg(), self.camadas)
+
+    def test_versionadas_iguais_a_geracao(self) -> None:
+        """Mudou a silhueta? Rode `python -m coletor.paisagem --camadas`."""
+        for nome, texto in self.camadas.items():
+            with self.subTest(nome=nome):
+                self.assertEqual((RAIZ / "site_src" / "paisagem" / nome).read_bytes(), texto.encode("utf-8"))
+
+    def test_poligonos_inteiros_orientados(self) -> None:
+        for nome, poligonos in paisagem.silhuetas().items():
+            for p in poligonos:
+                with self.subTest(nome=nome):
+                    self.assertGreaterEqual(len(p), 3)
+                    self.assertGreater(paisagem._area_dupla(p), 0)
+                    self.assertTrue(all(isinstance(v, int) for ponto in p for v in ponto))
+
+
+# ---- PNG
+def blocos_png(dados: bytes) -> list[tuple[bytes, bytes]]:
+    """Separa os blocos do PNG conferindo assinatura, tamanhos e CRC de cada um."""
+    if dados[:8] != b"\x89PNG\r\n\x1a\n":
+        raise AssertionError("assinatura PNG inválida")
+    blocos = []
+    pos = 8
+    while pos < len(dados):
+        (tamanho,) = struct.unpack(">I", dados[pos:pos + 4])
+        tipo = dados[pos + 4:pos + 8]
+        corpo = dados[pos + 8:pos + 8 + tamanho]
+        (crc,) = struct.unpack(">I", dados[pos + 8 + tamanho:pos + 12 + tamanho])
+        if len(corpo) != tamanho or zlib.crc32(tipo + corpo) & 0xFFFFFFFF != crc:
+            raise AssertionError(f"bloco {tipo!r} truncado ou com CRC inválido")
+        blocos.append((tipo, corpo))
+        pos += 12 + tamanho
+    return blocos
+
+
+def pixels_png(dados: bytes) -> tuple[int, int, bytes]:
+    """Largura, altura e pixels RGB de um PNG gerado pelo módulo (filtro 0 em todas as linhas)."""
+    blocos = blocos_png(dados)
+    if blocos[0][0] != b"IHDR" or blocos[-1] != (b"IEND", b""):
+        raise AssertionError("IHDR deve vir primeiro e IEND por último")
+    largura, altura, bits, tipo_cor, compressao, filtro, entrelace = struct.unpack(">IIBBBBB", blocos[0][1])
+    if (bits, tipo_cor, compressao, filtro, entrelace) != (8, 2, 0, 0, 0):
+        raise AssertionError("esperado RGB de 8 bits sem entrelaçamento")
+    bruto = zlib.decompress(b"".join(corpo for tipo, corpo in blocos if tipo == b"IDAT"))
+    passo = 1 + 3 * largura
+    if len(bruto) != passo * altura:
+        raise AssertionError("tamanho dos dados descomprimidos incompatível")
+    linhas = [bruto[i * passo:(i + 1) * passo] for i in range(altura)]
+    if any(linha[0] != 0 for linha in linhas):
+        raise AssertionError("filtro de linha diferente de 0")
+    return largura, altura, b"".join(linha[1:] for linha in linhas)
+
+
+def pixel(pixels: bytes, largura: int, x: int, y: int) -> tuple[int, int, int]:
+    i = 3 * (y * largura + x)
+    return tuple(pixels[i:i + 3])
+
+
+class PngTest(unittest.TestCase):
+    LARGURA, ALTURA = 300, 158
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.pixels = paisagem.rasterizar(cls.LARGURA, cls.ALTURA)
+
+    def assertCorProxima(self, obtida: tuple[int, int, int], cor: str, tolerancia: int = 8) -> None:
+        esperada = paisagem._rgb(cor)
+        self.assertTrue(all(abs(a - b) <= tolerancia for a, b in zip(obtida, esperada)), f"{obtida} longe de {cor}")
+
+    def test_deterministico_e_tamanho(self) -> None:
+        self.assertEqual(len(self.pixels), 3 * self.LARGURA * self.ALTURA)
+        self.assertEqual(paisagem.rasterizar(self.LARGURA, self.ALTURA), self.pixels)
+
+    def test_pixels_conhecidos(self) -> None:
+        # Topo do céu, longe da marca.
+        self.assertCorProxima(pixel(self.pixels, self.LARGURA, self.LARGURA // 2, 0), "#0B2A3F")
+        # Centro do sol poente.
+        escala, ox, oy = paisagem.escala_quadro(self.LARGURA, self.ALTURA)
+        cx, cy, _ = paisagem.SOL_POENTE
+        self.assertCorProxima(pixel(self.pixels, self.LARGURA, int(ox + cx * escala), int(oy + cy * escala)),
+                              "#F2B544")
+        # Última linha: orla, a camada mais escura.
+        self.assertCorProxima(pixel(self.pixels, self.LARGURA, self.LARGURA // 2, self.ALTURA - 1), "#0E1B26")
+        # Interior do sol da marca, no canto superior esquerdo.
+        tamanho = self.ALTURA * paisagem.TAMANHO_MARCA / paisagem.LADO
+        margem = self.ALTURA * paisagem.MARGEM_MARCA
+        self.assertCorProxima(pixel(self.pixels, self.LARGURA, int(margem + 32 * tamanho), int(margem + 20 * tamanho)),
+                              "#F2B544")
+
+    def test_png_pequeno_valido(self) -> None:
+        dados = paisagem.png(self.LARGURA, self.ALTURA, self.pixels)
+        self.assertEqual([tipo for tipo, _ in blocos_png(dados)], [b"IHDR", b"IDAT", b"IEND"])
+        self.assertEqual(pixels_png(dados), (self.LARGURA, self.ALTURA, self.pixels))
+        with self.assertRaises(ValueError):
+            paisagem.png(2, 2, b"\x00" * 11)
+
+    def test_poligono_com_dois_pontos_falha(self) -> None:
+        linhas = [bytearray(12) for _ in range(4)]
+        with self.assertRaises(ValueError):
+            paisagem.preencher(linhas, 4, 4, [[(0, 0), (3, 3)]], (255, 255, 255))
+
+    def test_recorte_ao_quadro(self) -> None:
+        largura, altura = 20, 10
+        linhas = [bytearray(3 * largura) for _ in range(altura)]
+        paisagem.preencher(linhas, largura, altura, [[(-30, -40), (60, 5), (-10, 50)]], (255, 255, 255))
+        self.assertEqual(len(linhas), altura)
+        self.assertTrue(all(len(linha) == 3 * largura for linha in linhas))
+        self.assertEqual(bytes(linhas[5]), b"\xff" * (3 * largura))
+        # Totalmente fora do quadro, por qualquer lado: nada muda.
+        linhas = [bytearray(3 * largura) for _ in range(altura)]
+        fora = [[(-10, 0), (-5, 0), (-5, 9)], [(30, 0), (40, 0), (40, 9)], [(0, -9), (20, -9), (10, -1)],
+                [(0, 12), (20, 12), (10, 30)]]
+        paisagem.preencher(linhas, largura, altura, fora, (255, 255, 255))
+        self.assertTrue(all(linha == bytearray(3 * largura) for linha in linhas))
+
+    def test_cobertura_horizontal_exata(self) -> None:
+        largura, altura = 5, 5
+        linhas = [bytearray(3 * largura) for _ in range(altura)]
+        paisagem.preencher(linhas, largura, altura, [[(1.5, 0), (3.5, 0), (3.5, 4), (1.5, 4)]], (255, 255, 255))
+        for y in range(4):
+            self.assertEqual([linhas[y][3 * x] for x in range(largura)], [0, 128, 255, 128, 0])
+        self.assertEqual(linhas[4], bytearray(3 * largura))
+
+    def test_uniao_sem_cancelamento(self) -> None:
+        """Polígonos sobrepostos em sentidos opostos continuam pintados (união pela regra nonzero)."""
+        largura, altura = 6, 4
+        linhas = [bytearray(3 * largura) for _ in range(altura)]
+        horario = [(0, 0), (4, 0), (4, 4), (0, 4)]
+        paisagem.preencher(linhas, largura, altura, [horario, list(reversed([(2, 0), (6, 0), (6, 4), (2, 4)]))],
+                           (255, 255, 255))
+        self.assertTrue(all(linha == bytearray(b"\xff" * (3 * largura)) for linha in linhas))
+
+
+class PngCompletoLentoTest(unittest.TestCase):
+    """Gera a imagem 1200×630 inteira: o teste mais lento do módulo, sem pular."""
+
+    def test_og_versionado_igual_a_geracao(self) -> None:
+        """Mudou a paisagem ou a marca? Rode `python -m coletor.paisagem --og`."""
+        inicio = time.perf_counter()
+        gerado = paisagem.og_png()
+        print(f"og_png: {time.perf_counter() - inicio:.1f} s", file=sys.stderr)
+        largura, altura, pixels = pixels_png(gerado)
+        self.assertEqual((largura, altura), (1200, 630))
+        versionado = pixels_png((RAIZ / "site_src" / "og-radar.png").read_bytes())
+        # Bytes do zlib podem variar entre versões; os pixels não.
+        self.assertEqual(versionado[:2], (1200, 630))
+        self.assertTrue(versionado[2] == pixels, "pixels de site_src/og-radar.png diferem da geração")
 
 
 if __name__ == "__main__":
