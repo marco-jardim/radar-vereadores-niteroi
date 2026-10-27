@@ -15,6 +15,7 @@ from coletor import gerar_site
 from coletor import novidades as N
 from coletor.site import inicio as I
 from coletor.site import paginas as P
+from coletor.site.pagina_memoria import gerar_memoria
 from tests import test_tabelas_rolaveis
 from tests.test_design_tokens import compor, declaracoes, luminancia, regras, rgba, sem_comentarios
 from tests.test_geo import geo_completo
@@ -27,7 +28,7 @@ CHAVES_FASE = ("--ceu-1", "--ceu-2", "--sol", "--sol-x", "--sol-y", "--camada-1"
                "--veu", "--h1")
 # Marcadores das seções da home, na ordem do plano.
 ORDEM_HOME = ('id="t-hero"', 'id="t-quem"', 'class="tiles"', 'id="t-destaques"', 'id="t-mapa-home"', 'id="t-placar"',
-              'id="t-linha"', 'class="convite"')
+              'id="t-linha"', 'id="fm-titulo"', 'class="convite"')
 ALT_OG = "Paisagem de Niterói ao pôr do sol vista da baía, com a marca do Radar dos Vereadores"
 KIB = 1024
 
@@ -198,6 +199,42 @@ class TestLinhaDoTempo(unittest.TestCase):
         self.assertEqual(html.count("<li>"), len(memoria["linha_do_tempo"]))
 
 
+class TestFaixaMemoria(unittest.TestCase):
+    def test_sem_memoria_ou_homenageados(self):
+        for memoria in (None, {}, {"homenageados": []}, memoria_sintetica()):
+            with self.subTest(memoria=memoria):
+                self.assertEqual(I.faixa_memoria(memoria), "")
+
+    def test_emblemas_acessiveis_e_ancoras_da_memoria_real(self):
+        memoria = I.carregar_memoria(RAIZ)
+        html = I.faixa_memoria(memoria)
+        pagina = gerar_memoria(memoria)
+        self.assertIn('id="fm-titulo" class="h-secao">Niterói que nos inspira</h2>', html)
+        self.assertEqual(html.count('<svg class="emblema"'), 5)
+        self.assertEqual(len(ids(html)), len(set(ids(html))))
+        for pessoa in memoria["homenageados"]:
+            identificador, nome = pessoa["id"], pessoa["nome"]
+            self.assertIn(f'href="memoria.html#{identificador}"', html)
+            self.assertIn(f'<span>{P.esc(nome)}</span>', html)
+            self.assertIn(f'role="img" aria-labelledby="fm-{identificador}"', html)
+            self.assertIn(f'<title id="fm-{identificador}">Emblema de {P.esc(nome)}</title>', html)
+            self.assertIn(f'<use href="{P.url_estatica("memoria/" + pessoa["emblema"])}#emblema"/>', html)
+            self.assertIn(f'<article id="{identificador}"', pagina)
+        self.assertIn('href="memoria.html">Conheça a Memória de Niterói</a>', html)
+        self.assertEqual(html, I.faixa_memoria(memoria))
+
+    def test_prefixo_escape_e_emblema_ausente(self):
+        memoria = {"homenageados": [{"id": "nome", "nome": "Nome <b> & Cia", "emblema": "ausente.svg"}]}
+        with tempfile.TemporaryDirectory() as pasta, mock.patch.object(P, "FONTE_ESTATICA", Path(pasta)):
+            html = I.faixa_memoria(memoria, "../")
+        self.assertNotIn("<svg", html)
+        self.assertIn('href="../memoria.html#nome"><span>Nome &lt;b&gt; &amp; Cia</span>', html)
+        self.assertIn('href="../memoria.html">', html)
+        memoria = I.carregar_memoria(RAIZ)
+        html = I.faixa_memoria(memoria, "../")
+        self.assertIn(f'<use href="{P.url_estatica("memoria/" + memoria["homenageados"][0]["emblema"], "../")}#emblema"/>', html)
+
+
 class TestBlocosJuntos(unittest.TestCase):
     def test_ids_unicos_e_saida_deterministica(self):
         modelo = modelo_base(documentos=docs_mapa(), geo_bairros=geo_completo())
@@ -205,13 +242,13 @@ class TestBlocosJuntos(unittest.TestCase):
 
         def tudo() -> str:
             return (I.hero(modelo, P.url_estatica) + I.quem_e_meu_vereador(modelo) + I.mapa_home(modelo)
-                    + I.linha_do_tempo(memoria))
+                    + I.linha_do_tempo(memoria) + I.faixa_memoria(memoria))
 
         html = tudo()
         lista = ids(html)
         repetidos = [i for i, n in Counter(lista).items() if n > 1]
         self.assertEqual(repetidos, [])
-        for esperado in ("t-hero", "t-quem", "t-mapa-home", "t-linha", "lista-vereadores"):
+        for esperado in ("t-hero", "t-quem", "t-mapa-home", "t-linha", "fm-titulo", "lista-vereadores"):
             self.assertIn(esperado, lista)
         self.assertEqual(tudo(), html)
 
@@ -328,8 +365,9 @@ class TestFasesDoCeu(unittest.TestCase):
 
 class TestHomeIntegrada(unittest.TestCase):
     def test_ordem_das_secoes(self):
-        modelo = modelo_home(documentos=docs_mapa(), geo_bairros=geo_completo(), memoria=memoria_sintetica())
-        corpo = corpo_principal(P.gerar_index(modelo))
+        modelo = modelo_home(documentos=docs_mapa(), geo_bairros=geo_completo(), memoria=I.carregar_memoria(RAIZ))
+        with mock.patch.object(P, "MEMORIA_PUBLICADA", True):
+            corpo = corpo_principal(P.gerar_index(modelo))
         posicoes = [corpo.find(marca) for marca in ORDEM_HOME]
         self.assertNotIn(-1, posicoes, dict(zip(ORDEM_HOME, posicoes)))
         self.assertEqual(posicoes, sorted(posicoes))
@@ -342,7 +380,8 @@ class TestHomeIntegrada(unittest.TestCase):
         corpo = corpo_principal(P.gerar_index(modelo))
         self.assertNotIn('id="t-mapa-home"', corpo)
         self.assertNotIn('id="t-linha"', corpo)
-        restantes = [m for m in ORDEM_HOME if m not in ('id="t-mapa-home"', 'id="t-linha"')]
+        self.assertNotIn('id="fm-titulo"', corpo)
+        restantes = [m for m in ORDEM_HOME if m not in ('id="t-mapa-home"', 'id="t-linha"', 'id="fm-titulo"')]
         posicoes = [corpo.find(m) for m in restantes]
         self.assertNotIn(-1, posicoes)
         self.assertEqual(posicoes, sorted(posicoes))
@@ -351,6 +390,17 @@ class TestHomeIntegrada(unittest.TestCase):
         corpo = corpo_principal(P.gerar_index(modelo_home()))
         self.assertIn('id="t-linha"', corpo)
         self.assertEqual(corpo.count("<time datetime="), len(I.carregar_memoria(RAIZ)["linha_do_tempo"]))
+
+    def test_faixa_so_quando_pagina_publicada(self):
+        modelo = modelo_home(memoria=I.carregar_memoria(RAIZ))
+        with mock.patch.object(P, "MEMORIA_PUBLICADA", False):
+            html = P.gerar_index(modelo)
+        self.assertNotIn("memoria.html", html)
+        self.assertNotIn('id="fm-titulo"', html)
+        # Mesmo com a flag ligada, uma memória sem homenageados não gera faixa nem âncoras.
+        with mock.patch.object(P, "MEMORIA_PUBLICADA", True):
+            corpo = corpo_principal(P.gerar_index(modelo_home(memoria=None)))
+        self.assertNotIn("memoria.html", corpo)
 
     def test_ids_unicos_e_tabelas_acessiveis(self):
         html = P.gerar_index(modelo_home(documentos=docs_mapa(), geo_bairros=geo_completo(), memoria=memoria_sintetica()))

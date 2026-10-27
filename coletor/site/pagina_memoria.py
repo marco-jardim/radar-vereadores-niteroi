@@ -100,13 +100,11 @@ def gerar_memoria(memoria: dict | None) -> str | None:
     pagina = P.pagina(
         "Cidade Sorriso", corpo, ativo="", caminho="memoria.html",
         descricao="Pessoas ligadas a Niterói, critérios de homenagem e marcos da história da Cidade Sorriso.",
+        estilos=("memoria.css",),
     )
-    # O template ainda não recebe CSS/preloads específicos. Inserção restrita ao head
-    # desta página; a integração posterior pode incorporar esses parâmetros ao template.
+    # Fraunces é pré-carregada só nesta página editorial.
     links = []
     fonte = "fontes/fraunces-latin-wght-normal.woff2"
     if (P.FONTE_ESTATICA / fonte).is_file():
         links.append(f'<link rel="preload" as="font" type="font/woff2" crossorigin href="{P.esc(P.url_estatica(fonte))}">')
-    if (P.FONTE_ESTATICA / "memoria.css").is_file():
-        links.append(f'<link rel="stylesheet" href="{P.esc(P.url_estatica("memoria.css"))}">')
     return pagina.replace("</head>", "\n".join(links) + "\n</head>", 1)

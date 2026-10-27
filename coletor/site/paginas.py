@@ -40,6 +40,8 @@ NAV = [
 CLASSE_IMPACTO = {3: "imp-3", 2: "imp-2", 1: "imp-1", 0: "imp-0", None: "imp-x"}
 RAIZ = Path(__file__).resolve().parents[2]
 FONTE_ESTATICA = RAIZ / "site_src"
+# Definida a cada geração; testes e renderizações isoladas podem alternar a publicação.
+MEMORIA_PUBLICADA: bool = False
 # Imagem de compartilhamento (coletor.paisagem --og), com URL absoluta e versionada em toda página do template.
 IMAGEM_OG = "og-radar.png"
 ALT_IMAGEM_OG = "Paisagem de Niterói ao pôr do sol vista da baía, com a marca do Radar dos Vereadores"
@@ -384,6 +386,7 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
 </main>
 <footer class="rodape">
  <p>Dados públicos do <a href="https://consultaniteroi.siscam.com.br/">SISCAM da Câmara Municipal de Niterói</a>, coletados toda semana. Classificação por regras, curadoria com fonte e IA, explicada na <a href="{esc(prefixo)}metodologia.html">metodologia</a>. Código aberto sob GPL v3 no <a href="{REPO}">GitHub</a>. Encontrou um erro? <a href="{REPO}/issues/new">Abra uma issue</a>.</p>
+{('<p><a href="' + esc(prefixo + 'memoria.html') + '">Memória de Niterói</a></p>') if MEMORIA_PUBLICADA else ''}
 {atribuicao_textura()}</footer>
 {(DIALOGO_SISCAM + chr(10)) if dialogo else ''}<div id="tip" role="tooltip" hidden></div>
 {navegacao}<script src="{esc(prefixo)}dados.js?v={versao_estatica('dados.js')}" defer></script>
@@ -818,6 +821,7 @@ def gerar_index(modelo: dict) -> str:
         "quem": inicio.quem_e_meu_vereador(modelo),
         "mapa": inicio.mapa_home(modelo),
         "linha": inicio.linha_do_tempo(memoria),
+        "memoria": inicio.faixa_memoria(memoria) if MEMORIA_PUBLICADA else "",
     }
     extras = {k: (v + "\n\n" if v else "") for k, v in blocos_extras.items()}
 
@@ -862,7 +866,7 @@ def gerar_index(modelo: dict) -> str:
  {''.join(blocos)}
 </section>
 
-{extras["linha"]}<section class="convite">
+{extras["linha"]}{extras["memoria"]}<section class="convite">
  <a href="ruido.html"><strong>Sem efeito e polêmicas</strong><span>Homenagens, leis que só autorizam o prefeito, projetos repetidos e pautas que restringem direitos.</span></a>
  <a href="analises.html"><strong>Análises históricas</strong><span>Como a produção da Câmara mudou de 2021 a hoje, por tema, partido e tempo de tramitação.</span></a>
 </section>"""
