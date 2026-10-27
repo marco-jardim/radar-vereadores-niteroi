@@ -146,12 +146,27 @@
   .linha-tempo li { flex-basis: 85%; }
 }
 
+/* ---- memória: emblemas e nomes com links para os perfis editoriais */
+.faixa-memoria { --acento: var(--por-do-sol); }
+.faixa-memoria ul { display: flex; flex-wrap: wrap; gap: var(--esp-3); list-style: none; margin: 0; padding: 0; }
+.faixa-memoria li { flex: 1 1 10rem; min-width: 0; }
+.faixa-memoria li a {
+  display: flex; align-items: center; gap: var(--esp-2); min-height: 56px; padding: var(--esp-2);
+  color: var(--tinta); border: 1px solid var(--linha); border-radius: var(--raio-2); overflow-wrap: anywhere;
+}
+.faixa-memoria .emblema { width: 56px; height: 56px; flex: 0 0 56px; color: var(--baia); }
+.faixa-memoria li a:hover, .faixa-memoria li a:focus-visible { border-color: var(--baia); text-decoration: underline; }
+.faixa-memoria a:focus-visible { outline: 2px solid var(--foco); outline-offset: 3px; }
+.faixa-memoria > p { margin: var(--esp-3) 0 0; font-weight: 600; }
+
 /* ---- alto contraste: sem a ilustração, com bordas visíveis e foco do sistema */
 @media (forced-colors: active) {
   .ceu { display: none; }
   .hero-texto { border: 1px solid CanvasText; }
   .linha-tempo li, #cb-vereadores-lista { border-color: CanvasText; }
   #cb-vereadores-lista [role="option"][aria-selected="true"] { outline-color: Highlight; }
+  .faixa-memoria li a, .faixa-memoria li a:hover, .faixa-memoria li a:focus-visible { border-color: CanvasText; }
+  .faixa-memoria a:focus-visible { outline-color: Highlight; }
 }
 
 /* ---- impressão: sem camadas nem campo de busca; só texto e números */

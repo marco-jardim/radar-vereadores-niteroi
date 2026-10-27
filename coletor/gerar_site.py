@@ -17,7 +17,7 @@ from urllib.parse import urlsplit
 from coletor import novidades as N
 from coletor import regras_documentos as RD
 from coletor import regras_sessoes as RS
-from coletor.site import modelo_sessoes, pagina_sessoes
+from coletor.site import inicio, modelo_sessoes, pagina_memoria, pagina_sessoes
 from coletor.site import paginas as P
 from coletor.site.modelo import (
     DESFECHO_GRUPO, NOME_ALERTA, NOME_CATEGORIA, NOME_CATEGORIA_DOC, NOME_DESFECHO, NOME_SINAL, NOME_SUBCATEGORIA_DOC,
@@ -620,12 +620,19 @@ def main() -> None:
     modelo = montar_modelo()
     modelo["sessoes"] = modelo_sessoes.montar_sessoes(modelo) if (RAIZ / "data" / "sessoes").is_dir() else None
     modelo["geo_bairros"] = carregar_geo()
+    modelo["memoria"] = inicio.carregar_memoria(RAIZ)
+    # O próprio HTML da memória também recebe o link no rodapé. Reinicia a flag em toda execução.
+    P.MEMORIA_PUBLICADA = bool(modelo["memoria"] and modelo["memoria"].get("homenageados"))
+    memoria_html = pagina_memoria.gerar_memoria(modelo["memoria"])
+    P.MEMORIA_PUBLICADA = memoria_html is not None
     if SAIDA.exists():
         shutil.rmtree(SAIDA)
     (SAIDA / "vereadores").mkdir(parents=True)
     (SAIDA / "dados").mkdir()
     copiar_estaticos(FONTE_ESTATICA, SAIDA)
     escrever = lambda nome, conteudo: (SAIDA / nome).write_text(conteudo, encoding="utf-8")
+    if memoria_html is not None:
+        escrever("memoria.html", memoria_html)
     cliente = dados_cliente(modelo)
     projetos = json_compacto(cliente)
     (SAIDA / "dados/projetos.json").write_bytes(projetos)
