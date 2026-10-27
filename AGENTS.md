@@ -33,8 +33,8 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `coletor/site/modelo_sessoes.py` | Agregação de sessões, cobertura e métricas da Câmara e das pessoas. |
 | `coletor/site/pagina_sessoes.py` | Página de sessões, seção individual e metodologia `#sessoes`. |
 | `coletor/site/inicio.py` | Blocos da home: hero com camadas, “Quem é meu vereador?”, mapa de indicações da legislatura atual e linha do tempo de `config/memoria.json`. |
-| `coletor/site/pagina_memoria.py` | Gerador da página de memória; integração em andamento, ainda sem geração de `memoria.html` por `coletor.gerar_site`. |
-| `coletor/site/glossario.py` | Módulo do glossário; aplicação nas páginas em andamento, ainda não integrada ao gerador. |
+| `coletor/site/pagina_memoria.py` | Página de memória `memoria.html`, gerada por `coletor.gerar_site` quando há `config/memoria.json`; link no rodapé e faixa na home só quando publicada. |
+| `coletor/site/glossario.py` | Glossário: links `a.glossario` para `metodologia.html#g-*` na prosa, definições num `<template>` por página e popover progressivo em `navegacao.js`. |
 | `coletor/site/graficos.py` | Gráficos SVG e tabelas acessíveis. |
 | `coletor/site/paginas.py` | HTML, navegação, componentes, diálogo SISCAM e metodologia. |
 | `config/vereadores.json` | Legislaturas, eleitos, partidos da eleição, apelidos e afastamentos. |
@@ -49,7 +49,7 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `site_src/sessoes.js` | Filtros, mapa de votos, paginação e CSV de sessões. |
 | `site_src/inicio.js` | Só na home: céu vivo pelo fuso `America/Sao_Paulo` com fallback UTC−3, contagem dos números e combobox APG; até 6 KiB gzip. |
 | `site_src/inicio.css` | Só na home: fases do céu por `[data-ceu]`, com hexadecimais apenas nesses blocos; paralaxe sob `@supports (animation-timeline: scroll())` e sem movimento reduzido. |
-| `site_src/memoria.css` | Estilos da página de memória, cuja integração ao gerador está em andamento. |
+| `site_src/memoria.css` | Estilos da página de memória (só nela, com a Fraunces). |
 | `site_src/estilo.css` | Estilos, tokens, paleta e `@font-face`. |
 | `site_src/favicon.svg` | Ícone gerado por `coletor.paisagem`; não editar à mão. |
 | `site_src/marca.svg` | Símbolo `#marca`: ondas com `currentColor`, sol com `fill` herdado do `<use>` via token `--marca-sol`; gerado, não editar à mão. |
