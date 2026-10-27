@@ -4,3 +4,6 @@ __pycache__/
 .venv/
 .env
 *.tmp
+/worker/node_modules/
+/worker/.wrangler/
+/worker/coverage/
