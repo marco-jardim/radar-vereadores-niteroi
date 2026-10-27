@@ -109,7 +109,7 @@
     }
 
     // Toda troca de faixa recomeça com o menu fechado, sem estado anterior. Ao estreitar com o foco num link,
-    // o foco vai para o botão antes de a navegação sumir.
+    // o foco vai para o botão antes de a navegação sumir. Ao alargar, sai do botão que ficará oculto.
     function ajustar() {
       var estreito = !!midia.matches, ativo = doc.activeElement;
       if (estreito && !estado.estreito && ativo && typeof nav.contains === "function" && nav.contains(ativo) &&
@@ -117,6 +117,10 @@
       estado.estreito = estreito;
       estado.aberto = false;
       aplicar();
+      if (!estreito && ativo === botao && typeof nav.querySelector === "function") {
+        var link = nav.querySelector('a[aria-current="page"]') || nav.querySelector("a");
+        if (link && typeof link.focus === "function") link.focus();
+      }
     }
 
     function fechar(devolverFoco) {
@@ -134,9 +138,11 @@
     });
     // Foco que sai do cabeçalho por teclado ou programaticamente fecha; sem destino (saiu da página), também.
     topo.addEventListener("focusout", function (evento) {
-      if (!estado.aberto || ponteiro) return;
-      var destino = evento && evento.relatedTarget;
-      if (!destino || fora(topo, destino)) fechar(false);
+      if (estado.aberto && !ponteiro) {
+        var destino = evento && evento.relatedTarget;
+        if (!destino || fora(topo, destino)) fechar(false);
+      }
+      ponteiro = false;
     });
     // Um único ouvinte por tipo no documento.
     doc.addEventListener(pressao, function () { ponteiro = true; });

@@ -206,7 +206,7 @@ button { font: inherit; color: inherit; }
   /* Área de toque de 44px sem mudar o desenho do menu horizontal: o link (~29px) cresce 8px acima e abaixo, e o
      espaço entre linhas (16px) e colunas (16px) impede que as áreas vizinhas se sobreponham; o espaço de 8px
      entre a marca e a navegação, quando ela quebra de linha, também. */
-  .topo nav { row-gap: var(--esp-4); }
+  .topo nav { align-items: center; row-gap: var(--esp-4); }
   .topo nav a { position: relative; }
   .topo nav a::after { content: ""; position: absolute; top: -8px; bottom: -8px; left: -8px; right: -8px; }
 }
@@ -228,6 +228,13 @@ button { font: inherit; color: inherit; }
 }
 .tema button[aria-pressed="true"] { font-weight: 700; text-decoration: underline; text-underline-offset: 3px; border-bottom-width: 3px; }
 .tema button:focus-visible { outline: 3px solid var(--foco); outline-offset: 2px; }
+@media (min-width: 760px) {
+  /* Botões compactos, mas com alvo de 44px: só cresce na vertical, sem invadir o botão ao lado.
+     Os 12px entre linhas do grupo e os 16px da nav separam as áreas de toque. */
+  .tema { row-gap: var(--esp-3); }
+  .tema button { position: relative; min-height: 32px; padding: 2px var(--esp-2); }
+  .tema button::after { content: ""; position: absolute; min-height: 44px; top: -6px; bottom: -6px; left: 0; right: 0; }
+}
 @media (forced-colors: active) { .tema button[aria-pressed="true"] { border-style: double; } }
 .rodape { margin-top: 56px; padding-top: 16px; padding-bottom: 40px; border-top: 1px solid var(--linha); font-size: .85rem; color: var(--tinta-suave); }
 

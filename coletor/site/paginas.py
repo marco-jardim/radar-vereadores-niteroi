@@ -303,7 +303,9 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
     nav = "".join(
         f'<a href="{esc(prefixo + href)}"{" aria-current=\"page\"" if href == ativo else ""}>{esc(nome)}</a>' for href, nome in NAV
     )
-    caminho = caminho or ativo or "index.html"
+    caminho = caminho or ativo
+    if indexavel and not caminho:
+        raise ValueError("pagina(): informe caminho para a canônica")
     canonica = esc(N.URL_SITE + ("" if caminho == "index.html" else caminho))
     identidade = (f'<link rel="canonical" href="{canonica}">\n<meta property="og:url" content="{canonica}">'
                   if indexavel else '<meta name="robots" content="noindex">')

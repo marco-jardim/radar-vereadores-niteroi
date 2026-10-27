@@ -10,7 +10,7 @@ const zlib = require("node:zlib");
 const ARQUIVO = path.join(__dirname, "../../site_src/navegacao.js");
 const fonte = fs.readFileSync(ARQUIVO, "utf8");
 
-// DOM mínimo: atributos, árvore com contains/querySelector simples (tag e classes) e eventos que sobem até o documento.
+// DOM mínimo: atributos, árvore com contains/querySelector simples e eventos que sobem até o documento.
 function elemento(tag, atributos) {
   return {
     tag, atributos: Object.assign({}, atributos), ouvintes: {}, filhos: [], pai: null,
@@ -22,11 +22,13 @@ function elemento(tag, atributos) {
     contains(outro) { for (let no = outro; no; no = no.pai) if (no === this) return true; return false; },
     anexar(...filhos) { for (const f of filhos) { f.pai = this; this.filhos.push(f); } return this; },
     querySelector(seletor) {
-      const [tagAlvo, ...classes] = seletor.split(".");
+      const atributo = seletor.match(/\[([^=]+)="([^"]+)"\]$/);
+      const [tagAlvo, ...classes] = seletor.replace(/\[.*$/, "").split(".");
       const procurar = (no) => {
         for (const f of no.filhos) {
           const cls = (f.atributos.class || "").split(" ");
-          if (f.tag === tagAlvo && classes.every((c) => cls.includes(c))) return f;
+          if (f.tag === tagAlvo && classes.every((c) => cls.includes(c)) &&
+              (!atributo || f.getAttribute(atributo[1]) === atributo[2])) return f;
           const achado = procurar(f);
           if (achado) return achado;
         }
@@ -235,6 +237,20 @@ test("pressão de ponteiro fora não fecha no focusout; o clique fora fecha depo
   }
 });
 
+test("focusout consome a pressão que não virou clique, sem depender de uma tecla", () => {
+  for (const ponteiro of [true, false]) {
+    const p = montar({ ponteiro });
+    disparar(p.botao, "click");
+    disparar(p.links[1], ponteiro ? "pointerdown" : "mousedown");
+    disparar(p.botao, "focusout", { relatedTarget: null });
+    assert.equal(menu(p), "aberto");
+    // Outra saída de foco programática, sem clique nem keydown, não herda a pressão anterior.
+    p.links[1].focus();
+    disparar(p.links[1], "focusout", { relatedTarget: p.fora });
+    assert.equal(menu(p), "fechado");
+  }
+});
+
 test("Tab para fora pelo teclado, sem ponteiro, fecha o menu", () => {
   for (const ponteiro of [true, false]) {
     const p = montar({ ponteiro });
@@ -264,6 +280,27 @@ test("ao estreitar com o foco num link, o foco vai para o botão Menu", () => {
   q.fora.focus();
   q.midia.mudar(true);
   assert.equal(q.focado(), q.fora);
+});
+
+test("ao alargar com foco no Menu, foca a página atual ou o primeiro link", () => {
+  for (const legado of [false, true]) {
+    for (const atual of [true, false]) {
+      const p = montar({ legado });
+      if (!atual) p.links[1].removeAttribute("aria-current");
+      p.botao.focus();
+      p.midia.mudar(false);
+      assert.equal(p.botao.hasAttribute("hidden"), true);
+      assert.equal(p.focado(), p.links[atual ? 1 : 0]);
+    }
+  }
+  // Não rouba foco de links já visíveis nem de fora do cabeçalho.
+  for (const alvo of ["link", "fora"]) {
+    const p = montar();
+    const foco = alvo === "link" ? p.links[2] : p.fora;
+    foco.focus();
+    p.midia.mudar(false);
+    assert.equal(p.focado(), foco);
+  }
 });
 
 test("sem matchMedia, não lança, botão segue oculto e a navegação visível", () => {

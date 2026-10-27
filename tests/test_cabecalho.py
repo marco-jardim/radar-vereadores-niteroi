@@ -125,6 +125,16 @@ class TestCabecalho(unittest.TestCase):
         # Compatibilidade com chamadas posicionais antigas.
         self.assertIn(f'href="{N.URL_SITE}projetos.html"', P.pagina("Título", "", "projetos.html"))
 
+    def test_pagina_indexavel_exige_caminho_ou_ativo(self):
+        for caminho in (None, ""):
+            with self.subTest(caminho=caminho):
+                with self.assertRaisesRegex(ValueError, r"^pagina\(\): informe caminho para a canônica$"):
+                    P.pagina("Título", "", "", caminho=caminho)
+        html = P.pagina("Título", "", "", indexavel=False)
+        self.assertIn('<meta name="robots" content="noindex">', html)
+        self.assertNotIn('rel="canonical"', html)
+        self.assertNotIn('property="og:url"', html)
+
     def test_metadados_comuns_e_escape(self):
         html = P.pagina('Título "especial"', "", "index.html", descricao='Texto "citado"')
         nos = Cabecalho(html).nos
@@ -192,7 +202,7 @@ class TestCabecalho(unittest.TestCase):
         self.assertLess(html.index('class="menu-botao"'), html.index('id="menu-principal"'))
 
     def test_ficha_com_prefixo(self):
-        html = P.pagina("Ficha", "", "", prefixo="../")
+        html = P.pagina("Ficha", "", "", prefixo="../", caminho="vereadores/ana-de-souza.html")
         doc = Cabecalho(html)
         self.assertTrue(all(l["attrs"]["href"].startswith("../") for l in doc.links))
         self.assertEqual([l["attrs"]["href"] for l in doc.links], [f"../{href}" for href, _ in P.NAV])
