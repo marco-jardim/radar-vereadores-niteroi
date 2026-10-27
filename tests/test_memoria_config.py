@@ -125,6 +125,8 @@ class TestMemoriaConfig(unittest.TestCase):
                     dados = configuracao()
                     item = dados["homenageados"][0] if campo in ("nascimento", "morte") else dados["linha_do_tempo"][0]
                     item[campo] = valor
+                    if campo == "nascimento":
+                        item["morte"] = self.HOJE.isoformat()
                     self.assertEqual(self.validar(dados), [])
             for valor in ("1900-02-29", "2026-02-30", "2026-13-01", "2026-1-1", "26", "", 2026,
                           "2026-01-01T00:00", "2026\n"):
@@ -154,6 +156,35 @@ class TestMemoriaConfig(unittest.TestCase):
                                           morte=None, morte_texto="fim do século XVI")
         self.assertEqual(self.validar(dados), [])
 
+    def test_morte_nao_pode_ser_futura_nem_anterior_ao_nascimento(self):
+        for morte in ("2027", "2026-10-27"):
+            with self.subTest(morte=morte):
+                dados = configuracao()
+                dados["homenageados"][0]["morte"] = morte
+                self.assertProblema(self.validar(dados), "'morte' posterior a hoje")
+        for nascimento, morte in (("1900", "1899"), ("1900-02-01", "1900-01-31")):
+            with self.subTest(nascimento=nascimento, morte=morte):
+                dados = configuracao()
+                dados["homenageados"][0].update(nascimento=nascimento, morte=morte)
+                self.assertProblema(self.validar(dados), "'morte' anterior a 'nascimento'")
+        dados = configuracao()
+        dados["homenageados"][0].update(nascimento="1900-05-01", morte="1900")
+        self.assertNotIn("'morte' anterior a 'nascimento'", " ".join(self.validar(dados)))
+        for morte in ("2026", self.HOJE.isoformat()):
+            dados = configuracao()
+            dados["homenageados"][0]["morte"] = morte
+            self.assertEqual(self.validar(dados), [])
+
+    def test_evento_nao_pode_ser_futuro(self):
+        for data in ("2027", "2026-10-27"):
+            dados = configuracao()
+            dados["linha_do_tempo"][0]["data"] = data
+            self.assertProblema(self.validar(dados), "'data' posterior a hoje")
+        for data in ("2026", self.HOJE.isoformat()):
+            dados = configuracao()
+            dados["linha_do_tempo"][0]["data"] = data
+            self.assertEqual(self.validar(dados), [])
+
     def test_categorias_fechadas(self):
         for categoria in ("fundacao", "ciencia", "artes", "musica", "arquitetura"):
             dados = configuracao()
@@ -165,19 +196,23 @@ class TestMemoriaConfig(unittest.TestCase):
             self.assertProblema(self.validar(dados), "'categoria'")
 
     def test_fontes_de_pessoas_e_eventos(self):
-        fontes_invalidas = ([], None, "https://exemplo.org", ["https://exemplo.org"], [{}],
-                            [{"titulo": "", "url": "https://exemplo.org"}],
-                            [{"titulo": "Fonte", "url": "http://exemplo.org"}],
-                            [{"titulo": "Fonte", "url": ""}], [{"titulo": "Fonte", "url": None}])
+        fontes_invalidas = (([], "'fontes' precisa"), (None, "'fontes' precisa"),
+                            ("https://exemplo.org", "'fontes' precisa"),
+                            (["https://exemplo.org"], "fonte 1 deveria ser um objeto"),
+                            ([{}], "'titulo' ausente ou vazio"),
+                            ([{"titulo": "", "url": "https://exemplo.org"}], "'titulo' ausente ou vazio"))
         for lista in ("homenageados", "linha_do_tempo"):
-            for fontes in fontes_invalidas:
+            for fontes, trecho in fontes_invalidas:
                 with self.subTest(lista=lista, fontes=fontes):
                     dados = configuracao()
                     dados[lista][0]["fontes"] = fontes
-                    self.assertTrue(self.validar(dados))
-            dados = configuracao()
-            dados[lista][0]["fontes"].append({"titulo": "Outra fonte", "url": "http://exemplo.org"})
-            self.assertProblema(self.validar(dados), "'url' deveria começar com https://")
+                    self.assertProblema(self.validar(dados), trecho)
+            for url in ("http://exemplo.org", "", None, "https://", "https://localhost", "https://exemplo.org/a b",
+                        "https://exem plo.org", "https://exemplo.org\n"):
+                with self.subTest(lista=lista, url=url):
+                    dados = configuracao()
+                    dados[lista][0]["fontes"].append({"titulo": "Outra fonte", "url": url})
+                    self.assertProblema(self.validar(dados), "'url' deveria ser HTTPS com host contendo ponto e sem espaços")
 
     def test_ids_unicos_e_formato(self):
         dados = configuracao()
@@ -203,6 +238,8 @@ class TestMemoriaConfig(unittest.TestCase):
         dados = configuracao()
         evento = dados["linha_do_tempo"][0]
         evento.update(data="1900-01-01", data_fim="1900")
+        self.assertEqual(self.validar(dados), [])
+        evento["data_fim"] = "1899"
         self.assertProblema(self.validar(dados), "'data_fim' anterior a 'data'")
         for fim in ("1900-01-01", "1901"):
             evento["data_fim"] = fim
@@ -214,7 +251,7 @@ class TestMemoriaConfig(unittest.TestCase):
         self.assertProblema(self.validar(dados), "linha_do_tempo fora de ordem")
 
     def test_dominio_publico_prazo_e_campos(self):
-        imagem = {"tipo": "dominio_publico", "credito": "Acervo público", "autor": "Fotógrafo",
+        imagem = {"tipo": "dominio_publico", "obra": "fotografia", "credito": "Acervo público", "autor": "Fotógrafo",
                   "ano_divulgacao": self.HOJE.year - 71, "url_origem": "https://exemplo.org/foto"}
         dados = configuracao()
         dados["homenageados"][0]["imagem"] = imagem
@@ -229,17 +266,31 @@ class TestMemoriaConfig(unittest.TestCase):
             del incompleta["homenageados"][0]["imagem"][chave]
             self.assertProblema(self.validar(incompleta), f"'{chave}'")
         for chave, valor in (("autor", " "), ("ano_divulgacao", "1955"), ("ano_divulgacao", True),
-                             ("url_origem", "http://exemplo.org/foto"), ("url_origem", "")):
+                             ("url_origem", "http://exemplo.org/foto"), ("url_origem", ""),
+                             ("url_origem", "https://"), ("url_origem", "https://localhost"),
+                             ("url_origem", "https://exemplo.org/a b"), ("url_origem", "https://exem plo.org")):
             invalida = copy.deepcopy(dados)
             invalida["homenageados"][0]["imagem"][chave] = valor
             self.assertProblema(self.validar(invalida), f"'{chave}'")
 
+    def test_dominio_publico_artigo_44_restrito_a_fotografia(self):
+        for obra in (None, "pintura", "escultura", "", []):
+            with self.subTest(obra=obra):
+                dados = configuracao()
+                imagem = {"tipo": "dominio_publico", "credito": "Acervo", "autor": "Artista",
+                          "ano_divulgacao": 1900, "url_origem": "https://exemplo.org/obra"}
+                if obra is not None:
+                    imagem["obra"] = obra
+                dados["homenageados"][0]["imagem"] = imagem
+                self.assertProblema(self.validar(dados), "domínio público só para fotografia (art. 44); outras obras exigem análise do art. 41")
+
     def test_imagem_tipo_credito_e_emblema(self):
-        for imagem in (None, {}, {"tipo": "externa", "credito": "Fonte"},
-                       {"tipo": "propria", "credito": " "}):
+        for imagem, trecho in ((None, "'imagem' deveria ser um objeto"), ({}, "'credito' ausente ou vazio"),
+                               ({"tipo": "externa", "credito": "Fonte"}, "'tipo' deveria ser propria ou dominio_publico"),
+                               ({"tipo": "propria", "credito": " "}, "'credito' ausente ou vazio")):
             dados = configuracao()
             dados["homenageados"][0]["imagem"] = imagem
-            self.assertTrue(self.validar(dados))
+            self.assertProblema(self.validar(dados), trecho)
         for emblema in ("../x.svg", "pasta/x.svg", "X.svg", "x.png", "x.svg\n", None):
             dados = configuracao()
             dados["homenageados"][0]["emblema"] = emblema

@@ -10,4 +10,6 @@ coletor/** text eol=lf
 tests/js/** text eol=lf
 *.woff2 binary
 *.png binary
+*.py text eol=lf
+# Reafirma a precedência das fixtures: preserva os bytes mesmo para extensões acima.
 tests/fixtures/** -text

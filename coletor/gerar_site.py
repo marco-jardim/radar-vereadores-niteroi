@@ -591,14 +591,11 @@ def copiar_estaticos(fonte: Path, saida: Path) -> None:
     """Publica a árvore estática sem arquivos ocultos nem documentação Markdown."""
     for arq in sorted(fonte.rglob("*")):
         relativo = arq.relative_to(fonte)
-        if any(parte.startswith(".") for parte in relativo.parts) or arq.suffix.lower() == ".md":
+        if not arq.is_file() or not P.publicavel(relativo):
             continue
         destino = saida / relativo
-        if arq.is_dir():
-            destino.mkdir(parents=True, exist_ok=True)
-        else:
-            destino.parent.mkdir(parents=True, exist_ok=True)
-            destino.write_bytes(P.bytes_estaticos(arq))
+        destino.parent.mkdir(parents=True, exist_ok=True)
+        destino.write_bytes(P.bytes_estaticos(arq, raiz=fonte))
 
 
 def main() -> None:

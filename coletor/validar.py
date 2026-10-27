@@ -812,8 +812,8 @@ def _memoria_fontes(fontes: object, rotulo: str) -> list[str]:
             problemas.append(f"{r} deveria ser um objeto")
             continue
         problemas += _memoria_textos(fonte, ("titulo",), r)
-        if not isinstance(fonte.get("url"), str) or not fonte["url"].startswith("https://"):
-            problemas.append(f"{r}: 'url' deveria começar com https://")
+        if not isinstance(fonte.get("url"), str) or not re.fullmatch(r"https://[^\s/]+\.[^\s/]+(/\S*)?", fonte["url"]):
+            problemas.append(f"{r}: 'url' deveria ser HTTPS com host contendo ponto e sem espaços")
     return problemas
 
 
@@ -841,10 +841,12 @@ def _memoria_imagem(imagem: object, rotulo: str, ano_atual: int) -> list[str]:
     if tipo not in ("propria", "dominio_publico"):
         problemas.append(f"{r}: 'tipo' deveria ser propria ou dominio_publico")
     if tipo == "dominio_publico":
+        if imagem.get("obra") != "fotografia":
+            problemas.append(f"{r}: domínio público só para fotografia (art. 44); outras obras exigem análise do art. 41")
         problemas += _memoria_textos(imagem, ("autor",), r)
         origem = imagem.get("url_origem")
-        if not isinstance(origem, str) or not origem.startswith("https://"):
-            problemas.append(f"{r}: 'url_origem' deveria começar com https://")
+        if not isinstance(origem, str) or not re.fullmatch(r"https://[^\s/]+\.[^\s/]+(/\S*)?", origem):
+            problemas.append(f"{r}: 'url_origem' deveria ser HTTPS com host contendo ponto e sem espaços")
         ano = imagem.get("ano_divulgacao")
         if not _e_inteiro(ano):
             problemas.append(f"{r}: 'ano_divulgacao' deveria ser inteiro")
@@ -890,7 +892,9 @@ def validar_memoria(caminho: Path | None = None, hoje: date | None = None) -> li
     pessoas, erros = _lista(dados, "homenageados", arquivo)
     problemas += erros
     vistos: set[str] = set()
-    ano_atual = (hoje or date.today()).year
+    hoje = hoje or date.today()
+    limite = (hoje.year, hoje.month, hoje.day)
+    ano_atual = hoje.year
     for i, pessoa in enumerate(pessoas, 1):
         r = f"{arquivo}: homenageado {i}"
         if not isinstance(pessoa, dict):
@@ -914,6 +918,14 @@ def validar_memoria(caminho: Path | None = None, hoje: date | None = None) -> li
                 problemas.append(f"{r}: sem a chave '{chave}'")
             elif pessoa[chave] is not None and _memoria_data(pessoa[chave]) is None:
                 problemas.append(f"{r}: '{chave}' deveria ser AAAA, data válida AAAA-MM-DD ou null")
+        nascimento = _memoria_data(pessoa.get("nascimento"))
+        morte = _memoria_data(pessoa.get("morte"))
+        if morte is not None:
+            if morte > limite:
+                problemas.append(f"{r}: 'morte' posterior a hoje")
+            morte_fim = (morte[0], 12, 31) if morte[1] == 0 else morte
+            if nascimento is not None and morte_fim < nascimento:
+                problemas.append(f"{r}: 'morte' anterior a 'nascimento'")
         for chave in ("nascimento_texto", "morte_texto", "lugar_de_memoria"):
             if chave in pessoa:
                 problemas += _memoria_textos(pessoa, (chave,), r)
@@ -940,11 +952,15 @@ def validar_memoria(caminho: Path | None = None, hoje: date | None = None) -> li
         if inicio is None:
             problemas.append(f"{r}: 'data' deveria ser AAAA ou data válida AAAA-MM-DD")
         else:
+            if inicio > limite:
+                problemas.append(f"{r}: 'data' posterior a hoje")
             if anterior is not None and inicio < anterior:
                 problemas.append(f"{r}: linha_do_tempo fora de ordem por 'data'")
             anterior = inicio
         if "data_fim" in evento:
             fim = _memoria_data(evento["data_fim"])
+            if fim is not None and fim[1:] == (0, 0):
+                fim = (fim[0], 12, 31)
             if fim is None:
                 problemas.append(f"{r}: 'data_fim' deveria ser AAAA ou data válida AAAA-MM-DD")
             elif inicio is not None and fim < inicio:

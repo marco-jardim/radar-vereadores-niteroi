@@ -106,35 +106,68 @@ def versao_bytes(conteudo: bytes) -> str:
     return hashlib.sha1(conteudo).hexdigest()[:10]
 
 
-def css_publicado(texto: str, base_dir: Path, *, origem: Path | None = None,
-                  _pilha: tuple[Path, ...] = ()) -> str:
-    """Versiona URLs relativas, preservando aspas, espaços e fragmentos."""
-    padrao = r'''url\(\s*(?:"(?P<duplas>[^"]*)"|'(?P<simples>[^']*)'|(?P<sem_aspas>[^\s)'\"]+))\s*\)'''
+def publicavel(relativo: Path) -> bool:
+    """Regra única de publicação de arquivos da árvore estática."""
+    return not any(parte.startswith(".") for parte in relativo.parts) and relativo.suffix.lower() != ".md"
 
-    def reescrever(m: re.Match[str]) -> str:
-        grupo = next(g for g in ("duplas", "simples", "sem_aspas") if m.group(g) is not None)
-        url = m.group(grupo)
+
+def css_publicado(texto: str, base_dir: Path, *, origem: Path | None = None,
+                  raiz: Path | None = None, _pilha: tuple[Path, ...] = ()) -> str:
+    """Versiona referências locais em url(), @import e image-set, sem publicar alvos excluídos."""
+    raiz = (raiz or FONTE_ESTATICA).resolve()
+    string = r'"(?:\\.|[^"\\])*"' + r"|'(?:\\.|[^'\\])*'"
+    padrao = r'''(?<![\w-])url\(\s*(?:"(?P<duplas>[^"]*)"|'(?P<simples>[^']*)'|(?P<sem_aspas>(?:\\.|[^\s)'\"])+))\s*\)'''
+
+    def versionar(url: str, sem_aspas: bool = False) -> str:
         if not url or url.startswith(("/", "#")) or "?" in url or re.match(r"[a-z][a-z0-9+.-]*:", url, re.I):
-            return m.group()
+            return url
+        if sem_aspas and ("\\" in url or "%" in url):
+            raise ValueError(f"CSS {origem or base_dir}: alvo {url!r}: URL com escape não suportada")
         nome, separador, fragmento = url.partition("#")
-        alvo = base_dir / nome
+        alvo = (base_dir / nome).resolve()
         try:
-            versao = versao_bytes(bytes_estaticos(alvo, _pilha))
+            relativo = alvo.relative_to(raiz)
+            if not publicavel(relativo):
+                raise ValueError("alvo excluído da publicação")
+            versao = versao_bytes(bytes_estaticos(alvo, _pilha, raiz=raiz))
         except (OSError, ValueError) as erro:
             raise ValueError(f"CSS {origem or base_dir}: não foi possível publicar o alvo {url!r} ({alvo}): {erro}") from erro
-        inicio, fim = m.span(grupo)
-        inicio -= m.start()
-        fim -= m.start()
-        return m.group()[:inicio] + f"{nome}?v={versao}{separador}{fragmento}" + m.group()[fim:]
+        return f"{nome}?v={versao}{separador}{fragmento}"
 
-    # Comentários e strings fora de url() não são referências a recursos.
-    tokens = rf"""/\*.*?\*/|{padrao}|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'"""
-    return re.sub(tokens, lambda m: reescrever(m) if m.group("duplas") is not None
-                  or m.group("simples") is not None or m.group("sem_aspas") is not None else m.group(),
-                  texto, flags=re.I | re.S)
+    # A pilha distingue entradas de image-set de strings em funções internas, como type().
+    pilha: list[tuple[str, int]] = []
+
+    def reescrever(m: re.Match[str]) -> str:
+        token = m.group()
+        for grupo in ("duplas", "simples", "sem_aspas", "importacao", "string"):
+            if m.group(grupo) is None:
+                continue
+            inicio, fim = m.span(grupo)
+            if grupo == "string":
+                if not pilha or pilha[-1][0] not in ("image-set", "-webkit-image-set"):
+                    return token
+                antes = re.sub(r"/\*.*?\*/", "", texto[pilha[-1][1]:m.start()], flags=re.S)
+                if antes.strip():
+                    return token
+            if grupo in ("importacao", "string"):
+                inicio += 1
+                fim -= 1
+            url = texto[inicio:fim]
+            return token[:inicio - m.start()] + versionar(url, grupo == "sem_aspas") + token[fim - m.start():]
+        if m.group("funcao") is not None or token == "(":
+            pilha.append(((m.group("funcao") or "").lower(), m.end()))
+        elif token == ")" and pilha:
+            pilha.pop()
+        elif token == "," and pilha:
+            pilha[-1] = (pilha[-1][0], m.end())
+        return token
+
+    tokens = (rf"/\*.*?\*/|{padrao}|(?<![\w-])@import\s+(?P<importacao>{string})|"
+              rf"(?P<string>{string})|(?P<funcao>[\w-]+)\(|[(),]")
+    return re.sub(tokens, reescrever, texto, flags=re.I | re.S)
 
 
-def bytes_estaticos(caminho: Path, _pilha: tuple[Path, ...] = ()) -> bytes:
+def bytes_estaticos(caminho: Path, _pilha: tuple[Path, ...] = (), *, raiz: Path | None = None) -> bytes:
     """Lê os bytes a publicar, reescrevendo dependências CSS sem ciclos."""
     caminho = caminho.resolve()
     if caminho in _pilha:
@@ -142,7 +175,7 @@ def bytes_estaticos(caminho: Path, _pilha: tuple[Path, ...] = ()) -> bytes:
     conteudo = caminho.read_bytes()
     if caminho.suffix.lower() == ".css":
         return css_publicado(conteudo.decode("utf-8"), caminho.parent, origem=caminho,
-                             _pilha=(*_pilha, caminho)).encode("utf-8")
+                             raiz=raiz, _pilha=(*_pilha, caminho)).encode("utf-8")
     return conteudo
 
 
@@ -267,7 +300,7 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
     )
     extras = "\n".join(f'<script src="{esc(prefixo + nome)}?v={versao_estatica(nome)}" defer></script>'
                        for nome in scripts if (FONTE_ESTATICA / nome).is_file())
-    icone = url_estatica("favicon.svg", prefixo) if (FONTE_ESTATICA / "favicon.svg").is_file() else f"{prefixo}favicon.svg"
+    icone = f'<link rel="icon" href="{esc(url_estatica("favicon.svg", prefixo))}" type="image/svg+xml">' if (FONTE_ESTATICA / "favicon.svg").is_file() else ""
     return f"""<!doctype html>
 <html lang="pt-BR">
 <head>
@@ -281,7 +314,7 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{prefixo}estilo.css?v={versao_estatica('estilo.css')}">
-<link rel="icon" href="{icone}" type="image/svg+xml">
+{icone}
 <link rel="alternate" type="application/rss+xml" title="Novidades · Radar dos Vereadores de Niterói" href="{prefixo}{N.FEED}">
 {cabecalho_dados(manifesto, ativo, prefixo)}
 </head>

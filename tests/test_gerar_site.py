@@ -115,7 +115,7 @@ class TestGerarSite(unittest.TestCase):
     def test_recursos_estaticos_copiados(self):
         for arq in gerar_site.FONTE_ESTATICA.rglob("*"):
             relativo = arq.relative_to(gerar_site.FONTE_ESTATICA)
-            if any(parte.startswith(".") for parte in relativo.parts) or arq.suffix.lower() == ".md":
+            if not P.publicavel(relativo):
                 continue
             if arq.is_file():
                 with self.subTest(recurso=str(relativo)):
