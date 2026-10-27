@@ -4,10 +4,11 @@ A marca é um sol poente sobre três ondas que lembram as barras do placar: meio
 cortado pelo horizonte e três traços ondulados de comprimento decrescente, alinhados à
 esquerda como barras de um gráfico. A mesma geometria produz o favicon (SVG autônomo,
 com cores próprias para os temas claro e escuro) e a marca do cabeçalho (sprite
-`<symbol id="marca">` cujas ondas herdam `currentColor` da página).
+`<symbol id="marca">` sem cores fixas: o sol herda `fill` e as ondas `currentColor` da
+página, pelos tokens de estilo.css).
 
 Uso: python -m coletor.paisagem --marca
-Grava site_src/favicon.svg e site_src/marca.svg. Mesma geometria, mesmos bytes.
+Grava favicon.svg e marca.svg em site_src/. Mesma geometria, mesmos bytes.
 """
 from __future__ import annotations
 
@@ -22,11 +23,11 @@ SAIDA = RAIZ / "site_src"
 SVG_NS = "http://www.w3.org/2000/svg"
 TITULO = "Radar dos Vereadores de Niterói"
 
-# Paleta do site (literais de estilo.css); só estas cores entram nos SVGs.
-DOURADO = "#F2B544"  # --dourado
-POR_DO_SOL = "#E8743B"  # --por-do-sol-area
+# Paleta do site (literais de estilo.css); só estas cores entram no favicon.
+DOURADO = "#F2B544"  # --dourado, sol no tema escuro
+POR_DO_SOL = "#B4491A"  # --por-do-sol do tema claro (≈ 5,4:1 sobre a aba branca)
 BAIA = "#13476B"  # --baia, tema claro
-BAIA_CLARA = "#9CC6E4"  # ondas no tema escuro
+BAIA_CLARA = "#9CC6E4"  # --baia do tema escuro, ondas
 
 
 # ---- geometria
@@ -74,7 +75,7 @@ def _viewbox() -> str:
 def favicon_svg() -> str:
     """Favicon autônomo: classes para que a media query troque as cores no tema escuro.
 
-    Sem fundo próprio: no claro, sol #E8743B e ondas #13476B contra a aba branca; no
+    Sem fundo próprio: no claro, sol #B4491A e ondas #13476B contra a aba branca; no
     escuro, sol #F2B544 e ondas #9CC6E4. Todas as formas ficam com contraste ≥ 3:1.
     """
     estilo = (f".s{{fill:{POR_DO_SOL}}}"
@@ -89,13 +90,24 @@ def favicon_svg() -> str:
 
 
 def marca_svg() -> str:
-    """Sprite do cabeçalho: `<use href="marca.svg?v=…#marca">` herda a cor das ondas."""
+    """Sprite do cabeçalho: `<use href="marca.svg?v=…#marca">` herda `fill` (sol) e `color` (ondas).
+
+    As cores vêm de `.marca svg` em estilo.css (`--marca-sol` e `--baia`), por tema.
+    """
     return (f'<svg xmlns="{SVG_NS}" viewBox="{_viewbox()}">'
             f'<symbol id="marca" viewBox="{_viewbox()}">'
-            f'<path fill="{DOURADO}" d="{caminho_sol()}"/>'
+            f'<path d="{caminho_sol()}"/>'
             f'<path fill="none" stroke="currentColor" stroke-width="{numero(ESPESSURA_ONDA)}" '
             f'stroke-linecap="round" d="{caminho_ondas()}"/>'
             "</symbol></svg>\n")
+
+
+def exibir(caminho: Path) -> str:
+    """Caminho gravado, relativo à raiz do repositório quando estiver dentro dela."""
+    try:
+        return caminho.resolve().relative_to(RAIZ).as_posix()
+    except ValueError:
+        return str(caminho)
 
 
 def gravar(caminho: Path, texto: str) -> None:
@@ -106,7 +118,7 @@ def gravar(caminho: Path, texto: str) -> None:
 # ---- cli
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--marca", action="store_true", help="grava site_src/favicon.svg e site_src/marca.svg")
+    ap.add_argument("--marca", action="store_true", help="grava favicon.svg e marca.svg em site_src/")
     args = ap.parse_args(argv)
     if not args.marca:
         ap.print_usage(sys.stderr)
@@ -115,7 +127,7 @@ def main(argv: list[str] | None = None) -> int:
     for nome, texto in (("favicon.svg", favicon_svg()), ("marca.svg", marca_svg())):
         destino = SAIDA / nome
         gravar(destino, texto)
-        print(f"site_src/{nome}: {len(texto.encode('utf-8'))} bytes")
+        print(f"{exibir(destino)}: {len(texto.encode('utf-8'))} bytes")
     return 0
 
 

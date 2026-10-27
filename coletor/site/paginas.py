@@ -37,7 +37,10 @@ NAV = [
 ]
 CLASSE_IMPACTO = {3: "imp-3", 2: "imp-2", 1: "imp-1", 0: "imp-0", None: "imp-x"}
 FONTE_ESTATICA = Path(__file__).resolve().parents[2] / "site_src"
-SCRIPT_CABECA = 'document.documentElement.classList.add("js");try{var t=localStorage.getItem("radar-tema");if(t==="claro"||t==="escuro")document.documentElement.dataset.theme=t==="escuro"?"dark":"light"}catch(e){}'
+# Antes do CSS: marca "js" (menu móvel já recolhido na primeira pintura) só se navegacao.js puder montar o menu,
+# e aplica o tema salvo. navegacao.js tira a classe se não montar o menu; o onerror da sua tag também.
+SCRIPT_CABECA = '(function(d,r){if(window.matchMedia&&d.addEventListener)r.classList.add("js");try{var t=localStorage.getItem("radar-tema");if(t==="claro"||t==="escuro")r.dataset.theme=t==="escuro"?"dark":"light"}catch(e){}})(document,document.documentElement)'
+ERRO_NAVEGACAO = "document.documentElement.classList.remove('js')"
 LIMITE_ITENS_RUIDO = 30
 PASSO_LISTA = 40  # itens por "Mostrar mais"; igual a PASSO em site_src/app.js
 # Sem filtros, projetos.html carrega só a prévia (pl-recentes, as PASSO_LISTA primeiras linhas) e traz o resumo
@@ -312,7 +315,7 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
                      for nome in ("fontes/public-sans-latin-wght-normal.woff2", "fontes/barlow-condensed-latin-700-normal.woff2")
                      if (FONTE_ESTATICA / nome).is_file())
     # Menu móvel (melhoria progressiva): opcional, como os demais estáticos fora de dados.js/app.js.
-    navegacao = (f'<script src="{esc(url_estatica("navegacao.js", prefixo))}" defer></script>\n'
+    navegacao = (f'<script src="{esc(url_estatica("navegacao.js", prefixo))}" defer onerror="{ERRO_NAVEGACAO}"></script>\n'
                  if (FONTE_ESTATICA / "navegacao.js").is_file() else "")
     return f"""<!doctype html>
 <html lang="pt-BR">

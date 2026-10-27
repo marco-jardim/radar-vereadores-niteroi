@@ -198,7 +198,22 @@ class TestCabecalho(unittest.TestCase):
         self.assertEqual([l["attrs"]["href"] for l in doc.links], [f"../{href}" for href, _ in P.NAV])
         self.assertFalse(any("aria-current" in l["attrs"] for l in doc.links))
         versao = hashlib.sha1((P.FONTE_ESTATICA / "navegacao.js").read_bytes()).hexdigest()[:10]
-        self.assertIn(f'<script src="../navegacao.js?v={versao}" defer></script>', html)
+        self.assertIn(f'<script src="../navegacao.js?v={versao}" defer onerror="{P.ERRO_NAVEGACAO}"></script>', html)
+
+    def test_classe_js_condicionada_e_desfeita_se_navegacao_falhar(self):
+        self.assertIn("if(window.matchMedia&&d.addEventListener)r.classList.add(\"js\")", P.SCRIPT_CABECA)
+        self.assertEqual(P.ERRO_NAVEGACAO, "document.documentElement.classList.remove('js')")
+        doc = Cabecalho(P.pagina("Início", "", "index.html"))
+        tags = [s["attrs"] for s in doc.scripts if (s["attrs"].get("src") or "").startswith("navegacao.js")]
+        self.assertEqual(len(tags), 1)
+        self.assertEqual(tags[0]["onerror"], P.ERRO_NAVEGACAO)
+        self.assertIn("defer", tags[0])
+        # Sem js, a grade de duas colunas segue visível; com js, o menu nasce recolhido abaixo de 760px.
+        css = (RAIZ / "site_src/estilo.css").read_text(encoding="utf-8")
+        estreito = css.split("@media (max-width: 759.98px) {", 1)[1].split("\n}", 1)[0]
+        self.assertIn('.js .topo:not([data-menu="aberto"]) nav { display: none; }', estreito)
+        self.assertIn(".js .menu-botao {", estreito)
+        self.assertNotIn("[data-menu]", estreito.replace('[data-menu="aberto"]', ""))
 
     def test_ordem_dos_scripts(self):
         srcs = externos(P.pagina("Sessões", "", "sessoes.html", scripts=("sessoes.js",)))
@@ -219,7 +234,7 @@ class TestCabecalho(unittest.TestCase):
                 (fonte / "sessoes.js").write_bytes(b"// sessoes")
                 html = P.pagina("Início", "", "index.html", prefixo="../", scripts=("sessoes.js",))
                 versao = hashlib.sha1(conteudo).hexdigest()[:10]
-                self.assertIn(f'<script src="../navegacao.js?v={versao}" defer></script>', html)
+                self.assertIn(f'<script src="../navegacao.js?v={versao}" defer onerror="{P.ERRO_NAVEGACAO}"></script>', html)
                 self.assertEqual([s.split("?v=")[0] for s in externos(html)],
                                  ["../navegacao.js", "../dados.js", "../app.js", "../sessoes.js"])
 

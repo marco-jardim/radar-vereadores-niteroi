@@ -28,6 +28,8 @@ PARES = (
     ("baia", "fundo", 4.5), ("baia", "superficie", 4.5),
     ("mar", "fundo", 4.5), ("mar", "superficie", 4.5),
     ("por-do-sol", "fundo", 4.5), ("por-do-sol", "superficie", 4.5),
+    # Sol da marca do cabeçalho: forma gráfica.
+    ("marca-sol", "fundo", 3), ("marca-sol", "superficie", 3),
     # .n-alerta usa --alerta como cor de texto, sobre o fundo (placar) e sobre a superfície.
     ("alerta", "fundo", 4.5), ("alerta", "superficie", 4.5),
     ("efeito", "fundo", 3), ("efeito", "superficie", 3),

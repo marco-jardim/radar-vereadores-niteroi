@@ -14,7 +14,7 @@ from coletor import paisagem
 
 RAIZ = Path(__file__).resolve().parents[1]
 NS = "{http://www.w3.org/2000/svg}"
-PALETA = {"#F2B544", "#E8743B", "#13476B", "#9CC6E4", "#0B2A3F", "#E6EEF4", "#F7F2E9", "#0E1B26",
+PALETA = {"#F2B544", "#E8743B", "#B4491A", "#13476B", "#9CC6E4", "#0B2A3F", "#E6EEF4", "#F7F2E9", "#0E1B26",
           "#FFFFFF", "#14283A"}
 HEX = re.compile(r"#[0-9A-Fa-f]{6}\b|#[0-9A-Fa-f]{3}\b")
 ABA_CLARA = "#FFFFFF"
@@ -63,11 +63,21 @@ class MarcaTest(unittest.TestCase):
             self.assertNotIn("height", raiz.attrib)
 
     def test_cores_so_da_paleta(self) -> None:
-        for texto in (self.favicon, self.marca):
-            cores = HEX.findall(texto)
-            self.assertTrue(cores)
-            for cor in cores:
-                self.assertIn(cor.upper(), PALETA, cor)
+        cores = HEX.findall(self.favicon)
+        self.assertTrue(cores)
+        for cor in cores:
+            self.assertIn(cor.upper(), PALETA, cor)
+        # A marca não fixa cores: tudo vem dos tokens da página.
+        self.assertEqual(HEX.findall(self.marca), [])
+
+    def test_constantes_de_cor_existem_em_estilo_css(self) -> None:
+        css = (RAIZ / "site_src" / "estilo.css").read_text(encoding="utf-8").upper()
+        constantes = {nome: valor for nome, valor in vars(paisagem).items()
+                      if nome.isupper() and isinstance(valor, str) and HEX.fullmatch(valor)}
+        self.assertTrue(constantes)
+        for nome, valor in constantes.items():
+            with self.subTest(constante=nome):
+                self.assertIn(valor.upper(), css)
 
     def test_tamanho_e_formato(self) -> None:
         for texto in (self.favicon, self.marca):
@@ -113,6 +123,14 @@ class MarcaTest(unittest.TestCase):
         self.assertEqual(simbolo.get("id"), "marca")
         self.assertTrue(simbolo.get("viewBox"))
         self.assertNotIn("var(", self.marca)
+        # O sol herda fill do <svg> do cabeçalho (.marca svg em estilo.css); as ondas usam currentColor.
+        sol, ondas = list(simbolo.iter(f"{NS}path"))
+        self.assertNotIn("fill", sol.attrib)
+        self.assertEqual(ondas.get("stroke"), "currentColor")
+        self.assertEqual(ondas.get("fill"), "none")
+        self.assertNotIn('fill="#', self.marca)
+        css = (RAIZ / "site_src" / "estilo.css").read_text(encoding="utf-8")
+        self.assertIn(".marca svg { fill: var(--marca-sol); color: var(--baia); }", css)
 
     def test_favicon_titulo_e_media_query(self) -> None:
         raiz = ET.fromstring(self.favicon)
@@ -168,6 +186,9 @@ class CliTest(unittest.TestCase):
             self.assertEqual(sorted(p.name for p in saida.iterdir()), ["favicon.svg", "marca.svg"])
             self.assertIn("favicon.svg", out.getvalue())
             self.assertIn("bytes", out.getvalue())
+            # O caminho exibido é o da saída real, não um "site_src/" fixo.
+            self.assertIn(str(saida / "marca.svg"), out.getvalue())
+            self.assertEqual(paisagem.exibir(paisagem.RAIZ / "site_src" / "favicon.svg"), "site_src/favicon.svg")
 
     def test_sem_opcao_nao_grava(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

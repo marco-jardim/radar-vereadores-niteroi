@@ -34,6 +34,8 @@
   --por-do-sol: #B4491A;
   --por-do-sol-area: #E8743B;
   --dourado: #F2B544;
+  /* Sol da marca (coletor/paisagem.py): por do sol no claro, dourado no escuro; forma gráfica, ≥ 3:1. */
+  --marca-sol: #B4491A;
   /* Selo de impacto alto (texto ≥ 4,5:1 sobre o fundo do selo) e borda de campos (≥ 3:1). */
   --selo-alto-fundo: #0B7A5E;
   --selo-alto-texto: #FFFFFF;
@@ -68,7 +70,7 @@
     --alerta: #EC6A7C; --alerta-fundo: #3D1E26; --exec: #4C88D4; --foco: #7DB8E8;
     --legislacao: #A784CF; --resolucao: #6F5A8C;
     --mapa-borda: #E3ECF2;
-    --baia: #9CC6E4; --mar: #5FB3CF; --por-do-sol: #F08A55;
+    --baia: #9CC6E4; --mar: #5FB3CF; --por-do-sol: #F08A55; --marca-sol: #F2B544;
     --selo-alto-fundo: #22A07D; --selo-alto-texto: #0E1B26; --borda-campo: #6F8496;
   }
 }
@@ -79,7 +81,7 @@
   --alerta: #EC6A7C; --alerta-fundo: #3D1E26; --exec: #4C88D4; --foco: #7DB8E8;
   --legislacao: #A784CF; --resolucao: #6F5A8C;
   --mapa-borda: #E3ECF2;
-  --baia: #9CC6E4; --mar: #5FB3CF; --por-do-sol: #F08A55;
+  --baia: #9CC6E4; --mar: #5FB3CF; --por-do-sol: #F08A55; --marca-sol: #F2B544;
   --selo-alto-fundo: #22A07D; --selo-alto-texto: #0E1B26; --borda-campo: #6F8496;
 }
 /* Controles nativos e barras de rolagem acompanham o tema. Estes blocos não declaram cores. */
@@ -175,12 +177,16 @@ button { font: inherit; color: inherit; }
 }
 .marca { font: 700 1.5rem/1 var(--display); text-decoration: none; }
 .marca span { font-weight: 500; color: var(--tinta-suave); }
+/* Sprite marca.svg: o sol herda fill e as ondas herdam currentColor do <svg> que contém o <use>. */
+.marca svg { fill: var(--marca-sol); color: var(--baia); }
 .topo nav { display: flex; flex-wrap: wrap; gap: 4px 16px; }
 .topo nav a { text-decoration: none; font-weight: 600; font-size: .93rem; padding: 2px 0; border-bottom: 2px solid transparent; }
 .topo nav a:hover { border-bottom-color: var(--linha); }
 .topo nav a[aria-current="page"] { border-bottom-color: var(--tinta); }
-/* Menu móvel: navegacao.js mostra o botão e marca data-menu abaixo de 760px. Sem JS (ou sem matchMedia),
-   o botão fica oculto e a navegação vira grade de duas colunas com alvos de toque de 44px. */
+/* Menu móvel abaixo de 760px. O script do head marca <html class="js"> antes do CSS, então a primeira pintura
+   já sai com o cabeçalho compacto, o botão visível e a navegação recolhida; navegacao.js marca data-menu="aberto"
+   ao abrir. Sem a classe js (sem JS, sem matchMedia ou se navegacao.js falhar), o botão fica oculto e a navegação
+   vira grade de duas colunas com alvos de toque de 44px. */
 .menu-botao {
   flex: none; min-width: 44px; min-height: 44px; padding: 0 var(--esp-3); cursor: pointer; font-weight: 600;
   color: var(--tinta); background: var(--superficie); border: 1px solid var(--borda-campo); border-radius: var(--raio-1);
@@ -190,16 +196,30 @@ button { font: inherit; color: inherit; }
   .topo { align-items: center; }
   .topo nav { flex-basis: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 var(--esp-2); }
   .topo nav a { display: flex; align-items: center; min-height: 44px; padding: var(--esp-2) var(--esp-1); line-height: 1.3; }
-  .topo[data-menu] { padding-top: var(--esp-3); padding-bottom: var(--esp-3); gap: var(--esp-2) var(--esp-3); }
-  .topo[data-menu] .marca { flex: 1 1 0; min-width: 0; font-size: 1.25rem; }
-  .topo[data-menu="fechado"] nav { display: none; }
+  .js .topo { padding-top: var(--esp-3); padding-bottom: var(--esp-3); gap: var(--esp-2) var(--esp-3); }
+  .js .topo .marca { flex: 1 1 0; min-width: 0; font-size: 1.25rem; }
+  /* Vence o [hidden] do navegador só nesta faixa; acima de 760px o botão continua oculto. */
+  .js .menu-botao { display: inline-flex; align-items: center; justify-content: center; }
+  .js .topo:not([data-menu="aberto"]) nav { display: none; }
 }
 @media (min-width: 760px) {
-  /* Área de toque de 44px sem mudar o desenho do menu horizontal. */
+  /* Área de toque de 44px sem mudar o desenho do menu horizontal: o link (~29px) cresce 8px acima e abaixo, e o
+     espaço entre linhas (16px) e colunas (16px) impede que as áreas vizinhas se sobreponham; o espaço de 8px
+     entre a marca e a navegação, quando ela quebra de linha, também. */
+  .topo nav { row-gap: var(--esp-4); }
   .topo nav a { position: relative; }
-  .topo nav a::after { content: ""; position: absolute; top: -10px; bottom: -10px; left: -8px; right: -8px; }
+  .topo nav a::after { content: ""; position: absolute; top: -8px; bottom: -8px; left: -8px; right: -8px; }
 }
-@media print { .menu-botao { display: none; } }
+@media print { .menu-botao, .js .menu-botao { display: none; } }
+/* Alto contraste: o estado aberto não depende só da cor (borda mais grossa), e a página atual tem traço mais
+   grosso que as bordas que o modo forçado torna visíveis nos demais links. */
+@media (forced-colors: active) {
+  .menu-botao[aria-expanded="true"] {
+    forced-color-adjust: none; background: ButtonText; color: ButtonFace; border: 3px solid ButtonText;
+  }
+  .menu-botao[aria-expanded="true"]:focus-visible { outline-color: Highlight; }
+  .topo nav a[aria-current="page"] { border-bottom: 4px solid CanvasText; text-decoration: underline; text-underline-offset: 6px; }
+}
 .tema { display: flex; flex-wrap: wrap; gap: var(--esp-1); align-items: center; margin-left: auto; grid-column: 1 / -1; }
 .tema[hidden] { display: none; }
 .tema button {

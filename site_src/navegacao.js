@@ -1,5 +1,6 @@
 /* Menu principal em telas estreitas, como melhoria progressiva do cabeçalho de paginas.pagina().
-   Sem o botão, a navegação ou matchMedia, nada muda: os links continuam visíveis (grade do CSS). */
+   O script do head marca <html class="js"> e o CSS já pinta o menu recolhido. Se faltar o botão, a navegação,
+   matchMedia ou a API de eventos, ou se algo falhar, a classe sai e os links voltam a aparecer (grade do CSS). */
 (function () {
   "use strict";
 
@@ -7,8 +8,13 @@
   var CONSULTA = "(max-width: 759.98px)";
 
   function ehEscape(evento) {
-    var tecla = evento && evento.key;
-    return tecla === "Escape" || tecla === "Esc";
+    if (!evento || evento.defaultPrevented || evento.isComposing) return false;
+    return evento.key === "Escape" || evento.key === "Esc";
+  }
+
+  // Desfaz o recolhimento feito pelo CSS: sem menu funcional, a navegação fica sempre visível.
+  function semJs(doc) {
+    try { doc.documentElement.classList.remove("js"); } catch (e) {}
   }
 
   // Verdadeiro só quando dá para afirmar que o alvo está fora do elemento.
@@ -68,16 +74,28 @@
     grupo.removeAttribute("hidden");
   }
 
+  // Todo caminho sem menu funcional (retorno antecipado ou exceção) tira a classe js.
   function iniciar(doc, win) {
-    if (!doc || typeof doc.querySelector !== "function") return null;
+    var menu = null;
+    try { menu = montarMenu(doc, win); } catch (e) { menu = null; }
+    if (!menu) semJs(doc);
+    return menu;
+  }
+
+  function montarMenu(doc, win) {
+    if (!doc || typeof doc.querySelector !== "function" || typeof doc.addEventListener !== "function") return null;
     var topo = doc.querySelector("header.topo");
-    if (!topo || typeof topo.querySelector !== "function" || typeof topo.setAttribute !== "function") return null;
+    if (!topo || typeof topo.querySelector !== "function" || typeof topo.setAttribute !== "function" ||
+        typeof topo.addEventListener !== "function") return null;
     var nav = topo.querySelector("nav"), botao = topo.querySelector("button.menu-botao");
     if (!nav || !botao || typeof botao.setAttribute !== "function" || typeof botao.addEventListener !== "function") return null;
     var midia = win && typeof win.matchMedia === "function" ? win.matchMedia(CONSULTA) : null;
+    if (!midia) return null;
     var estado = { estreito: false, aberto: false };
-    // Clique dentro do cabeçalho que tira o foco sem destino (Safari não foca links e botões ao clicar).
-    var pressionado = false;
+    // Pressão de ponteiro em curso: o focusout que ela causa não fecha o menu, para o clique chegar ao alvo
+    // (Safari nem foca links e botões ao clicar). O clique fora fecha depois, pelo ouvinte de click.
+    var ponteiro = false;
+    var pressao = typeof win.PointerEvent === "function" ? "pointerdown" : "mousedown";
 
     function aplicar() {
       botao.setAttribute("aria-expanded", estado.aberto ? "true" : "false");
@@ -90,9 +108,13 @@
       }
     }
 
-    // Toda troca de faixa recomeça com o menu fechado, sem estado anterior.
+    // Toda troca de faixa recomeça com o menu fechado, sem estado anterior. Ao estreitar com o foco num link,
+    // o foco vai para o botão antes de a navegação sumir.
     function ajustar() {
-      estado.estreito = !!(midia && midia.matches);
+      var estreito = !!midia.matches, ativo = doc.activeElement;
+      if (estreito && !estado.estreito && ativo && typeof nav.contains === "function" && nav.contains(ativo) &&
+          typeof botao.focus === "function") botao.focus();
+      estado.estreito = estreito;
       estado.aberto = false;
       aplicar();
     }
@@ -110,29 +132,24 @@
       estado.aberto = !estado.aberto;
       aplicar();
     });
-    if (typeof topo.addEventListener === "function") {
-      topo.addEventListener("mousedown", function () { pressionado = true; });
-      topo.addEventListener("focusout", function (evento) {
-        var destino = evento && evento.relatedTarget, clique = pressionado;
-        pressionado = false;
-        if (!estado.aberto) return;
-        if (destino ? fora(topo, destino) : !clique) fechar(false);
-      });
-    }
-    if (typeof doc.addEventListener === "function") {
-      doc.addEventListener("click", function (evento) {
-        pressionado = false;
-        if (estado.aberto && fora(topo, evento && evento.target)) fechar(false);
-      });
-      doc.addEventListener("keydown", function (evento) {
-        pressionado = false;
-        if (estado.aberto && ehEscape(evento)) fechar(true);
-      });
-    }
-    if (midia) {
-      if (typeof midia.addEventListener === "function") midia.addEventListener("change", ajustar);
-      else if (typeof midia.addListener === "function") midia.addListener(ajustar);
-    }
+    // Foco que sai do cabeçalho por teclado ou programaticamente fecha; sem destino (saiu da página), também.
+    topo.addEventListener("focusout", function (evento) {
+      if (!estado.aberto || ponteiro) return;
+      var destino = evento && evento.relatedTarget;
+      if (!destino || fora(topo, destino)) fechar(false);
+    });
+    // Um único ouvinte por tipo no documento.
+    doc.addEventListener(pressao, function () { ponteiro = true; });
+    doc.addEventListener("click", function (evento) {
+      ponteiro = false;
+      if (estado.aberto && fora(topo, evento && evento.target)) fechar(false);
+    });
+    doc.addEventListener("keydown", function (evento) {
+      ponteiro = false;
+      if (estado.aberto && ehEscape(evento)) fechar(true);
+    });
+    if (typeof midia.addEventListener === "function") midia.addEventListener("change", ajustar);
+    else if (typeof midia.addListener === "function") midia.addListener(ajustar);
     ajustar();
     return { estado: estado, fechar: fechar, ajustar: ajustar };
   }
@@ -140,7 +157,9 @@
   if (typeof module !== "undefined" && module.exports) {
     module.exports = { CONSULTA: CONSULTA, ehEscape: ehEscape, fora: fora, iniciar: iniciar };
   } else if (typeof document !== "undefined") {
-    iniciarTema(document, typeof window !== "undefined" ? window : null);
-    iniciar(document, typeof window !== "undefined" ? window : null);
+    var janela = typeof window !== "undefined" ? window : null;
+    // Falha no tema não impede o menu nem deixa a navegação recolhida.
+    try { iniciarTema(document, janela); } catch (e) {}
+    iniciar(document, janela);
   }
 })();

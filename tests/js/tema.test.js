@@ -7,7 +7,7 @@ const path = require("node:path");
 const vm = require("node:vm");
 
 // Conferido byte a byte por test_cabecalho.py; executa o mesmo código anterior ao CSS.
-const SCRIPT_CABECA = 'document.documentElement.classList.add("js");try{var t=localStorage.getItem("radar-tema");if(t==="claro"||t==="escuro")document.documentElement.dataset.theme=t==="escuro"?"dark":"light"}catch(e){}';
+const SCRIPT_CABECA = '(function(d,r){if(window.matchMedia&&d.addEventListener)r.classList.add("js");try{var t=localStorage.getItem("radar-tema");if(t==="claro"||t==="escuro")r.dataset.theme=t==="escuro"?"dark":"light"}catch(e){}})(document,document.documentElement)';
 const fonte = fs.readFileSync(path.join(__dirname, "../../site_src/navegacao.js"), "utf8");
 
 function elemento(atributos = {}) {
@@ -30,9 +30,13 @@ function montar({ salvo = null, falha = false, executar = true, legado = false, 
   const grupo = elemento({ hidden: "" });
   grupo.querySelectorAll = () => botoes;
   const metas = ["light", "dark"].map((tema) => elemento({ media: `(prefers-color-scheme: ${tema})` }));
-  const raiz = { dataset: {}, classList: { add(classe) { raiz.classe = classe; } } };
+  const raiz = { dataset: {}, classList: {
+    add(classe) { raiz.classe = classe; },
+    remove(classe) { raiz.removida = classe; }
+  } };
   const documento = {
     documentElement: raiz,
+    addEventListener() {},
     querySelector: (seletor) => seletor === ".tema" ? grupo : null,
     querySelectorAll: () => metas
   };
@@ -73,19 +77,36 @@ test("sem executar JS o controle permanece hidden, inclusive no template", () =>
   assert.match(template, /<div class="tema" role="group" aria-label="Tema" hidden>/);
 });
 
-test("o script do head sempre marca js, aceita apenas claro ou escuro e cabe em 400 bytes", () => {
+test("o script do head marca js com matchMedia e eventos, aceita apenas claro ou escuro e cabe em 400 bytes", () => {
   assert.ok(Buffer.byteLength(SCRIPT_CABECA) <= 400);
+  const capaz = { window: { matchMedia() {} } };
   for (const [salvo, esperado] of [["claro", "light"], ["escuro", "dark"], ["auto", undefined], ["azul", undefined]]) {
     const raiz = { dataset: {}, classList: { add: (classe) => assert.equal(classe, "js") } };
-    vm.runInNewContext(SCRIPT_CABECA, { document: { documentElement: raiz }, localStorage: { getItem: () => salvo } });
+    vm.runInNewContext(SCRIPT_CABECA, { ...capaz, document: { documentElement: raiz, addEventListener() {} },
+      localStorage: { getItem: () => salvo } });
     assert.equal(raiz.dataset.theme, esperado);
   }
   let marcou = false;
   assert.doesNotThrow(() => vm.runInNewContext(SCRIPT_CABECA, {
-    document: { documentElement: { classList: { add() { marcou = true; } } } },
+    ...capaz,
+    document: { documentElement: { classList: { add() { marcou = true; } } }, addEventListener() {} },
     get localStorage() { throw Error("indisponível"); }
   }));
   assert.equal(marcou, true);
+  // Sem matchMedia ou sem addEventListener, o menu não recolhe (sem js), mas o tema salvo ainda vale.
+  for (const contexto of [{ window: {}, comEventos: true }, { ...capaz, comEventos: false }]) {
+    const raiz = { dataset: {}, classList: { add: () => assert.fail("não deveria marcar js") } };
+    const documento = { documentElement: raiz };
+    if (contexto.comEventos) documento.addEventListener = () => {};
+    vm.runInNewContext(SCRIPT_CABECA, { window: contexto.window, document: documento, localStorage: { getItem: () => "escuro" } });
+    assert.equal(raiz.dataset.theme, "dark");
+  }
+});
+
+test("navegacao.js tira a classe js quando a página não tem o menu", () => {
+  const p = montar({ salvo: "claro" });
+  assert.equal(p.raiz.classe, "js");
+  assert.equal(p.raiz.removida, "js");
 });
 
 test("valor inválido vira automático e as três escolhas persistem e atualizam aria-pressed", () => {
