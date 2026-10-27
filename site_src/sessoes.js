@@ -199,31 +199,44 @@
     else classe = { "Abstenção": "abstencao", Ausente: "ausente", Presidente: "presidia" }[voto];
     return classe ? [classe].concat(GLIFOS[classe]) : ["cru", voto, voto];
   }
-  function cabecalhoFaixa(v) {
+  function curtoFaixa(v) {
     var numero = String(v.numero || "").split("/")[0], sigla = { pl: "PL", pdl: "PDL", resolucao: "PR", veto: "Veto" }[v.materia];
-    var curto = sigla && numero ? sigla + " " + numero : v.documento.replace(/\/\d{4}\b/g, ""), data = dataBr(v.data), limite = limiteFaixa(v);
-    return '<th scope="col"' + (limite ? ' class="faixa-sem-comparacao"' : "") + '><a href="#v-' + esc(v.id) + '"><abbr title="' + esc(v.documento + ", " + data) + '">' + esc(data.slice(0, 5)) + '</abbr><br>' + esc(curto) + (limite ? '<span aria-hidden="true"> *</span><span class="so-leitor"> · ' + esc(limite) + '</span>' : "") + '</a></th>';
+    return sigla && numero ? sigla + " " + numero : v.documento.replace(/\/\d{4}\b/g, "");
+  }
+  // Mesma marcação de graficos.abre_tabela/fecha_tabela/cab_coluna/cab_linha/celula: papéis ARIA e data-label.
+  // faixa-larga acima de 12 colunas, como pagina_sessoes.FAIXA_LARGA.
+  var TH = '<th scope="col" role="columnheader"';
+  function tabela(classe, colunas, caption, cab, corpo) {
+    return '<table class="' + classe + 'empilha col-' + colunas + '" role="table"><caption>' + caption + '</caption><thead role="rowgroup"><tr role="row">' + cab + '</tr></thead><tbody role="rowgroup">' + corpo + '</tbody></table>';
+  }
+  function celula(rotulo, atributos, conteudo) { return '<td role="cell" data-label="' + esc(rotulo) + '"' + atributos + '>' + conteudo + '</td>'; }
+  function cabLinha(conteudo) { return '<th scope="row" role="rowheader" data-label="Vereador">' + conteudo + '</th>'; }
+  function cabecalhoFaixa(v) {
+    var curto = curtoFaixa(v), data = dataBr(v.data), limite = limiteFaixa(v);
+    return TH + (limite ? ' class="faixa-sem-comparacao"' : "") + '><a href="#v-' + esc(v.id) + '"><abbr title="' + esc(v.documento + ", " + data) + '">' + esc(data.slice(0, 5)) + '</abbr><br>' + esc(curto) + (limite ? '<span aria-hidden="true"> *</span><span class="so-leitor"> · ' + esc(limite) + '</span>' : "") + '</a></th>';
   }
   // Retorna o conteúdo de .faixa-votos. A composição vem do servidor, não dos nomes brutos dos votos.
   function faixa(lista, membros, leg, ano, vereador) {
     ano = Number(ano);
     var votacoes = lista.filter(function (v) { return v.classe === "dividida" && Number(v.ano) === Number(ano); }).sort(function (a, b) { return -recente(a, b); });
     if (!votacoes.length) return '<p class="vazio">Nenhuma votação dividida disponível para o mapa neste ano.</p>';
+    var colunas = ["Vereador", "Com a maioria", "Diferente da maioria", "Abstenção", "Ausente"];
+    var rotulos = votacoes.map(function (v) { return dataBr(v.data).slice(0, 5) + " " + curtoFaixa(v); });
     var resumo = [], linhas = membros.slice().sort(function (a, b) { return cmp(a.nome.toLowerCase(), b.nome.toLowerCase()) || cmp(a.slug, b.slug); }).map(function (p) {
-      var contagens = { maioria: 0, diferente: 0, abstencao: 0, ausente: 0 }, celulas = votacoes.map(function (v) {
+      var contagens = { maioria: 0, diferente: 0, abstencao: 0, ausente: 0 }, celulas = votacoes.map(function (v, i) {
         var c = votoFaixa(v, p.slug);
         if (contagens[c[0]] !== undefined) contagens[c[0]] += 1;
-        return '<td class="voto-' + c[0] + (limiteFaixa(v) ? ' faixa-sem-comparacao' : '') + '"><span aria-hidden="true">' + esc(c[1]) + '</span><span class="so-leitor">' + esc(c[2]) + '</span></td>';
+        return celula(rotulos[i], ' class="voto-' + c[0] + (limiteFaixa(v) ? ' faixa-sem-comparacao' : '') + '"', '<span aria-hidden="true">' + esc(c[1]) + '</span><span class="so-leitor">' + esc(c[2]) + '</span>');
       }).join("");
-      var inicio = '<tr data-vereador="' + esc(p.slug) + '"' + (p.slug === vereador ? ' class="vereador-destaque"' : '') + '><th scope="row">' + nome(p, false) + '</th>';
-      resumo.push('<tr><th scope="row">' + nome(p, false) + '</th>' + Object.keys(contagens).map(function (k) { return '<td>' + contagens[k] + '</td>'; }).join("") + '</tr>');
+      var inicio = '<tr role="row" data-vereador="' + esc(p.slug) + '"' + (p.slug === vereador ? ' class="vereador-destaque"' : '') + '>' + cabLinha(nome(p, false));
+      resumo.push('<tr role="row">' + cabLinha(nome(p, false)) + Object.keys(contagens).map(function (k, i) { return celula(colunas[i + 1], "", contagens[k]); }).join("") + '</tr>');
       return inicio + celulas + '</tr>';
     });
     var legenda = Object.keys(GLIFOS).map(function (c) { var g = GLIFOS[c]; return '<li><span class="glifo-voto voto-' + c + '" aria-hidden="true">' + g[0] + '</span>' + esc(g[0] ? g[1] : "Célula vazia: " + g[1]) + '</li>'; }).join("");
     var titulo = 'Resumo por vereador · votações divididas de ' + ano;
     return '<h3>Votações divididas de ' + ano + '</h3><ul class="leg-graf leg-votos" aria-label="Legenda do mapa de votos">' + legenda + '</ul><p class="nota">Linhas parecidas indicam votos parecidos nas votações divididas deste ano; não indicam grupo político. Nomes em ordem alfabética, sem agrupamento por voto.</p>' +
-      '<div class="faixa-rolagem" role="region" tabindex="0" aria-label="Mapa de votos de ' + ano + ', legislatura ' + esc(leg.rotulo) + ': tabela com rolagem horizontal"><table class="faixa"><caption>Vereador × votação dividida de ' + ano + ', em ordem cronológica. A cor compara o voto à opção mais votada entre Favor e Contra, independentemente do sentido do parecer. * Coluna sem comparação: empate, sentido não determinado ou placar inconsistente.</caption><thead><tr><th scope="col">Vereador</th>' + votacoes.map(cabecalhoFaixa).join("") + '</tr></thead><tbody>' + linhas.join("") + '</tbody></table></div>' +
-      '<div class="tabela-graf tabela-resumo" role="region" tabindex="0" aria-label="' + titulo + '"><table><caption>' + titulo + '</caption><thead><tr>' + ["Vereador", "Com a maioria", "Diferente da maioria", "Abstenção", "Ausente"].map(function (c) { return '<th scope="col">' + c + '</th>'; }).join("") + '</tr></thead><tbody>' + resumo.join("") + '</tbody></table></div><p class="nota">O resumo conta apenas as colunas com comparação determinada. Presidência, células vazias, votos em branco/nulos e colunas marcadas não entram nessas quatro contagens. <a href="#divididas-' + esc(leg.id) + '">Ver outros anos nas listas de votações</a>.</p>';
+      '<div class="faixa-rolagem" role="region" tabindex="0" aria-label="Mapa de votos de ' + ano + ', legislatura ' + esc(leg.rotulo) + ': vereador × votação dividida">' + tabela(votacoes.length + 1 > 12 ? "faixa faixa-larga " : "faixa ", votacoes.length + 1, 'Vereador × votação dividida de ' + ano + ', em ordem cronológica. A cor compara o voto à opção mais votada entre Favor e Contra, independentemente do sentido do parecer. * Coluna sem comparação: empate, sentido não determinado ou placar inconsistente.', TH + '>Vereador</th>' + votacoes.map(cabecalhoFaixa).join(""), linhas.join("")) + '</div>' +
+      '<div class="tabela-graf tabela-resumo" role="region" tabindex="0" aria-label="' + titulo + '">' + tabela("", colunas.length, titulo, colunas.map(function (c) { return TH + '>' + c + '</th>'; }).join(""), resumo.join("")) + '</div><p class="nota">O resumo conta apenas as colunas com comparação determinada. Presidência, células vazias, votos em branco/nulos e colunas marcadas não entram nessas quatro contagens. <a href="#divididas-' + esc(leg.id) + '">Ver outros anos nas listas de votações</a>.</p>';
   }
   // Mesmo escape de app.js, inclusive neutralização de fórmulas de planilha.
   function celulaCsv(v) {

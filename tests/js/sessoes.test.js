@@ -96,11 +96,21 @@ test("ordenações são estáveis e não alteram a lista; apertada usa margem Fa
 test("faixa de outro ano tem paridade byte a byte com a tabela conferida pelo Python", () => {
   const html = S.faixa(dados(), fixture.membros.slice().reverse(), fixture.leg, 2025, "");
   const esperada = fs.readFileSync(path.join(__dirname, "fixtures/faixa_sessoes.html"), "utf8").trim();
-  assert.equal(html.match(/<table class="faixa">.*?<\/table>/s)[0], esperada);
+  // A tabela inteira, inclusive classes empilháveis (faixa empilha col-N), papéis ARIA e data-label.
+  assert.equal(html.match(/<table class="faixa empilha col-\d+" role="table">.*?<\/table>/s)[0], esperada);
   assert.match(html, /role="region" tabindex="0" aria-label="Mapa de votos de 2025/);
   assert.match(html, /Resumo por vereador · votações divididas de 2025/);
   assert.match(S.faixa(dados(), fixture.membros, fixture.leg, 2025, "bia"), /data-vereador="bia" class="vereador-destaque"/);
   assert.match(S.faixa(dados(), fixture.membros, fixture.leg, 2026, ""), /Nenhuma votação dividida/);
+});
+
+test("faixa: rótulo neutro e faixa-larga só acima de 12 colunas, como pagina_sessoes.FAIXA_LARGA", () => {
+  const votacoes = (n) => Array.from({ length: n }, (_, i) => ({ ...dados()[2], id: "x-" + i }));
+  const doze = S.faixa(votacoes(11), fixture.membros, fixture.leg, 2025, "");
+  assert.match(doze, /<table class="faixa empilha col-12" role="table">/);
+  assert.match(doze, /aria-label="Mapa de votos de 2025, legislatura [^"]*: vereador × votação dividida"/);
+  assert.doesNotMatch(doze, /aria-label="[^"]*rolagem/);
+  assert.match(S.faixa(votacoes(12), fixture.membros, fixture.leg, 2025, ""), /<table class="faixa faixa-larga empilha col-13" role="table">/);
 });
 
 test("glifos da faixa preservam texto, presidência, branco, nulo e limitação de comparação", () => {
@@ -338,7 +348,7 @@ test("VM: ano redesenha faixa; vereador destaca linha, rotula cartão e div depe
   const tela = iniciar({ query: "?ano=2025&vereador=bia" });
   await assentar();
   assert.equal(tela.mapa.dataset.ano, "2025");
-  assert.match(tela.mapa.innerHTML, /<table class="faixa">/);
+  assert.match(tela.mapa.innerHTML, /<table class="faixa(?: faixa-larga)? empilha col-\d+" role="table">/);
   assert.match(tela.lista.innerHTML, /voto-pessoal/);
   assert.match(tela.lista.innerHTML, /votou contra o projeto/);
   assert.equal(tela.linhas[1].classList.destacado, true);

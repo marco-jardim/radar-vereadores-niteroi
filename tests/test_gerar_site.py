@@ -21,7 +21,7 @@ from coletor import novidades as N
 from coletor.site import inicio
 from coletor.site import paginas as P
 from coletor.site.modelo import TIPOS_DOC
-from tests import test_tabelas_rolaveis
+from tests import test_tabelas_empilhaveis, test_tabelas_rolaveis
 from tests.test_acessibilidade_html import analisar
 from tests.test_glossario import PaginaGlossario, TERMOS
 
@@ -58,9 +58,13 @@ class TestGerarSite(unittest.TestCase):
         total = 0
         for caminho in paginas:
             with self.subTest(pagina=str(caminho.relative_to(self.saida))):
-                doc = test_tabelas_rolaveis.ContratoTabelas.conferir_tabelas(
-                    self, caminho.read_text(encoding="utf-8"))
+                texto = caminho.read_text(encoding="utf-8")
+                doc = test_tabelas_rolaveis.ContratoTabelas.conferir_tabelas(self, texto)
                 total += len(doc.tabelas)
+                # Toda tabela empilha em contêiner estreito: empilha + col-N, papéis ARIA e data-label não vazio
+                # em toda célula do corpo, igual ao cabeçalho da coluna (no mapa de votos, a referência curta).
+                empilhaveis = test_tabelas_empilhaveis.ContratoEmpilhavel.conferir_empilhamento(self, texto)
+                self.assertEqual(len(empilhaveis.tabelas), len(doc.tabelas))
         self.assertGreater(total, 0)
 
     def test_acessibilidade_em_todas_as_paginas(self):

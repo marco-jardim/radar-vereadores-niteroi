@@ -57,12 +57,47 @@ def legenda(series: list[tuple[str, str]]) -> str:
     return f'<ul class="leg-graf">{itens}</ul>'
 
 
+# ---- tabelas empilháveis
+# Em contêiner estreito para o número de colunas (classe col-N), o CSS (fim de site_src/estilo.css) transforma cada
+# linha num cartão: o cabeçalho de linha vira o título e cada célula mostra o rótulo de data-label, que é o texto do
+# cabeçalho da coluna. Como trocar o display das partes apaga a semântica de tabela em alguns navegadores, toda
+# tabela leva papéis ARIA explícitos. Todos os construtores de tabela passam por estas funções.
+TR = '<tr role="row">'
+
+
+def abre_tabela(colunas: int, classe: str = "") -> str:
+    """<table> empilhável; classe extra vem antes de "empilha col-N"."""
+    return f'<table class="{classe + " " if classe else ""}empilha col-{colunas}" role="table">'
+
+
+def cab_coluna(conteudo: str, atributos: str = "") -> str:
+    """Cabeçalho de coluna; conteúdo já escapado."""
+    return f'<th scope="col" role="columnheader"{atributos}>{conteudo}</th>'
+
+
+def cab_linha(conteudo: str, rotulo: str, atributos: str = "") -> str:
+    """Cabeçalho de linha (título do cartão); rotulo é o texto puro do cabeçalho da primeira coluna."""
+    return f'<th scope="row" role="rowheader" data-label="{esc(rotulo)}"{atributos}>{conteudo}</th>'
+
+
+def celula(conteudo: str, rotulo: str, atributos: str = "") -> str:
+    """Célula de dados; rotulo é o texto puro do cabeçalho da coluna, mostrado no cartão."""
+    return f'<td role="cell" data-label="{esc(rotulo)}"{atributos}>{conteudo}</td>'
+
+
+def fecha_tabela(cabecalhos: str, linhas: str) -> str:
+    """thead (cabeçalhos já montados), tbody e fechamento da tabela aberta por abre_tabela."""
+    return f'<thead role="rowgroup">{TR}{cabecalhos}</tr></thead><tbody role="rowgroup">{linhas}</tbody></table>'
+
+
 def tabela(cabecalho: list[str], linhas: list[list], titulo: str) -> str:
-    th = "".join(f"<th scope=\"col\">{esc(c)}</th>" for c in cabecalho)
-    trs = "".join("<tr>" + "".join(f"<td>{esc(_fmt(c) if isinstance(c, (int, float)) else c)}</td>" for c in l) + "</tr>" for l in linhas)
+    th = "".join(cab_coluna(esc(c)) for c in cabecalho)
+    trs = "".join(TR + "".join((cab_linha if i == 0 else celula)(esc(_fmt(c) if isinstance(c, (int, float)) else c), cabecalho[i])
+                               for i, c in enumerate(l)) + "</tr>" for l in linhas)
+    # pagina_sessoes._grafico insere o caption logo depois de 'role="table">' e nomeia a coluna vazia.
     return (f'<details class="tabela-graf"><summary>Ver os números em tabela</summary>'
             f'<div class="tabela-rolavel" role="region" tabindex="0" aria-label="{esc(titulo)}">'
-            f'<table><thead><tr>{th}</tr></thead><tbody>{trs}</tbody></table></div></details>')
+            f'{abre_tabela(len(cabecalho))}{fecha_tabela(th, trs)}</div></details>')
 
 
 def _corte_limpo(inferior: int, superior: int) -> int:

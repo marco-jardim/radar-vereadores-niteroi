@@ -17,6 +17,7 @@ from coletor.site import modelo as M
 from coletor.site import paginas as P
 from tests.apoio import ler_fixture
 from tests.test_documentos_site import CFG, DOCS, doc, montar
+from tests.test_tabelas_empilhaveis import sem_empilhamento
 
 MICHEL = [{"id": 275, "nome": "Michel Salim Saad Neto"}]
 # DOCS de test_documentos_site com os cinco tipos em 2026 (coleta completa) e 2025 só com moção (coleta parcial),
@@ -286,8 +287,12 @@ class TestPaginasMetricas(unittest.TestCase):
     def setUpClass(cls):
         cls.modelo = montar(DOCS_METRICAS)
 
+    # As asserções de linhas comparam conteúdo e ordem das células sem os papéis ARIA e data-label das tabelas
+    # empilháveis, conferidos em tests/test_tabelas_empilhaveis.py.
     def test_ruido_com_homenagens(self):
-        html = P.gerar_ruido(self.modelo)
+        bruto = P.gerar_ruido(self.modelo)
+        self.assertIn('<td role="cell" data-label="% da produção">25%</td>', bruto)
+        html = sem_empilhamento(bruto)
         self.assertIn('<a href="#homenagens">Homenagens</a>', html)
         self.assertIn('id="homenagens"', html)
         self.assertIn("Homenagens por ano e tipo de documento", html)
@@ -306,7 +311,9 @@ class TestPaginasMetricas(unittest.TestCase):
         self.assertIn("Sem dados: nenhum ano tem os cinco tipos de documento coletados", sem_ano_completo)
 
     def test_atividades_com_resumos(self):
-        html = P.gerar_atividades(self.modelo, {"build_doc": "x", "arquivos": {"doc-mocao-2026": {"familia": "doc", "ano": 2026}}})
+        bruto = P.gerar_atividades(self.modelo, {"build_doc": "x", "arquivos": {"doc-mocao-2026": {"familia": "doc", "ano": 2026}}})
+        self.assertIn('<td role="cell" data-label="Mais citado (concentração)" class="txt">Icaraí (100%)</td>', bruto)
+        html = sem_empilhamento(bruto)
         self.assertIn('<a href="#pedidos-informacao">Requerimentos de informação</a>', html)
         self.assertIn('id="bairros"', html)
         self.assertIn("<caption>Requerimentos de informação por vereador, legislatura 2025-2028</caption>", html)
@@ -335,12 +342,16 @@ class TestPaginasMetricas(unittest.TestCase):
         self.assertIn(">0%</p><p class=\"tile-rotulo\">sem bairro identificado", html)
 
     def test_pagina_do_vereador(self):
-        html = P.gerar_vereador(self.modelo, self.modelo["pessoas"]["ana-maria-teste"])
+        bruto = P.gerar_vereador(self.modelo, self.modelo["pessoas"]["ana-maria-teste"])
+        self.assertIn('<tr role="row"><th scope="row" role="rowheader" data-label="Legislatura">2025-2028</th>', bruto)
+        html = sem_empilhamento(bruto)
         self.assertIn("<caption>Homenagens por legislatura</caption>", html)
         self.assertIn('<tr><th scope="row">2025-2028</th><td>1</td><td>4</td><td>0</td><td>25%</td></tr>', html)
         self.assertIn("<caption>Homenagens por ano</caption>", html)
         self.assertIn('<tr><th scope="row">2026</th><td>1</td><td>4</td><td>0</td><td>25%</td></tr>', html)
-        self.assertNotIn('<tr><th scope="row">2025</th>', html)
+        # 2025 é parcial: fora da tabela de homenagens por ano (o gráfico de documentos por ano ainda o mostra).
+        homenagens_ano = html.split("<caption>Homenagens por ano</caption>", 1)[1].split("</table>", 1)[0]
+        self.assertNotIn('<th scope="row">2025</th>', homenagens_ano)
         self.assertIn(self.NOTA_PARCIAIS, html)
         self.assertIn("<caption>Requerimentos de informação por legislatura</caption>", html)
         self.assertIn('<tr><th scope="row">2025-2028</th><td>1</td><td>1</td><td>100%</td><td>30</td><td>1</td>'

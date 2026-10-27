@@ -81,7 +81,8 @@ class TestAlternativasGraficos(ContratoTabelas):
         self.assertEqual([no["tag"] for no in doc.tabelas[0]], ["details", "div"])
         self.assertEqual(doc.tabelas[0][-1]["attrs"]["class"], "tabela-rolavel")
         self.assertEqual(doc.tabelas[0][-1]["attrs"]["aria-label"], "Produção anual")
-        self.assertIn("<table>", texto)  # pagina_sessoes._grafico insere o caption neste literal.
+        # pagina_sessoes._grafico insere o caption logo depois deste literal.
+        self.assertIn('<table class="empilha col-2" role="table">', texto)
         with self.assertRaises(TypeError):
             G.tabela(["Total"], [[3]])
 
@@ -101,7 +102,7 @@ class TestAlternativasGraficos(ContratoTabelas):
                 self.assertEqual(doc.tabelas[0][-1]["attrs"]["aria-label"], titulo)
                 self.assertEqual(doc.ids, {})
                 self.assertNotIn("<anual>", texto)
-                self.assertIn("<table>", texto)
+                self.assertEqual(texto.count('role="table">'), 1)
 
     def test_mapa_inteiro_continua_xml_valido(self):
         titulo = 'Indicações por bairro & "região"'

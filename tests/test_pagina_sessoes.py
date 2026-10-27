@@ -206,7 +206,8 @@ class TestPaginaSessoes(unittest.TestCase):
         dic["rotulos"] = {m: r for m, r in dic["rotulos"].items() if m in materias}
         self.assertEqual(dic, fixture["dic"])
         html = S._mapa_votos(modelo, modelo["sessoes"], leg)
-        tabela = re.search(r'<table class="faixa">.*?</table>', html).group()
+        # A tabela inteira, inclusive classes empilháveis (faixa empilha col-N), papéis ARIA e data-label.
+        tabela = re.search(r'<table class="faixa empilha col-\d+" role="table">.*?</table>', html).group()
         self.assertEqual(tabela, (pasta / "faixa_sessoes.html").read_text(encoding="utf-8").strip())
         # O mesmo HTML cobre caption, cabeçalhos abbr, glifos, so-leitor e nomes sem link.
         self.assertIn('role="region" tabindex="0"', html)
@@ -485,12 +486,15 @@ class TestPaginaSessoes(unittest.TestCase):
             ano = faixa["attrs"]["data-ano"]
             self.assertEqual(faixa["attrs"]["id"], "faixa-2025-2028" if ano == "2026" else "faixa-2021-2024")
             tabela = Documento.descendentes(faixa, "table")[0]
-            self.assertEqual(tabela["attrs"]["class"], "faixa")
+            self.assertEqual(tabela["attrs"]["class"], "faixa empilha col-4")  # Vereador + 3 votações
+            self.assertEqual(tabela["attrs"]["role"], "table")
             regiao = tabela["pai"]
             self.assertEqual(regiao["attrs"]["role"], "region")
             self.assertEqual(regiao["attrs"]["tabindex"], "0")
             self.assertIn(ano, regiao["attrs"]["aria-label"])
-            self.assertIn("rolagem horizontal", regiao["attrs"]["aria-label"])
+            # Rótulo neutro: no contêiner estreito a matriz vira cartões, sem rolagem horizontal.
+            self.assertIn("vereador × votação dividida", regiao["attrs"]["aria-label"])
+            self.assertNotIn("rolagem", regiao["attrs"]["aria-label"])
             caption = Documento.descendentes(tabela, "caption")[0]
             self.assertIn("ordem cronológica", Documento.texto(caption))
             cab = Documento.descendentes(tabela, "thead")[0]

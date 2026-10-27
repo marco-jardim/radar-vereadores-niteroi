@@ -240,10 +240,20 @@ Não há carregamento automático de `.env`. A IA usa `POST /chat/completions`, 
 - Preserve colunas, escape de HTML e os espelhos `PASSO_LISTA`/`PASSO`, `plano_docs`/`fatiasDocs` e as fixtures
   de paridade. Sessões têm contrato próprio, consolidado na próxima seção.
 - Toda tabela fica em `div.tabela-rolavel[role=region][tabindex=0][aria-label]`, com rótulo acessível único
-  na página e foco por teclado. Exceções: os wrappers já roláveis `tabela-resumo` e `faixa-rolagem`,
-  que preservam seus próprios `role="region"`, `tabindex="0"` e rótulo (`aria-label` ou `aria-labelledby`).
-  Esses wrappers mantêm `overflow-x: auto` e `position: relative`: contêm os spans `.so-leitor` absolutos
-  das células; sem o bloco de contenção, eles escapam do recorte e alargam a página.
+  na página e foco por teclado. Exceções: os wrappers `tabela-resumo` e `faixa-rolagem`, que preservam seus
+  próprios `role="region"`, `tabindex="0"` e rótulo (`aria-label` ou `aria-labelledby`).
+- Tabelas empilham em vez de rolar: toda `<table>` sai pelos auxiliares de `graficos.py` (`abre_tabela`,
+  `fecha_tabela`, `cab_coluna`, `cab_linha`, `celula`, usados por `tabela`, `paginas.tabela_resumo` e a faixa
+  de sessões) com classes `empilha col-N` (N colunas), papéis ARIA explícitos (`table`, `rowgroup`, `row`,
+  `columnheader`, `rowheader`, `cell`) e `data-label` em toda célula do corpo, igual ao texto do cabeçalho
+  da coluna (no cabeçalho de linha, o da primeira coluna). Os wrappers são contêineres (`container-type:
+  inline-size`); no fim de `estilo.css`, `@container (max-width: …)` por faixa de `col-N` transforma cada linha
+  em cartão: `thead` fora da tela como `.so-leitor` (nunca `display: none`), cabeçalho de linha como título e
+  `td::before` com `attr(data-label)`. Regras genéricas, sem CSS por tabela. Os wrappers mantêm
+  `overflow-x: auto` só como alternativa sem container queries, e `position: relative`: contêm os spans
+  `.so-leitor` absolutos das células; sem o bloco de contenção, eles escapam do recorte e alargam a página.
+  Meta: nenhuma tabela com rolagem horizontal a 320, 375 e 414 px. `tests/test_tabelas_empilhaveis.py` confere
+  os construtores e `TestGerarSite` confere todas as tabelas do site gerado.
 
 ### Home e interações acessíveis
 
@@ -299,8 +309,8 @@ Não há carregamento automático de `.env`. A IA usa `POST /chat/completions`, 
 ### Responsividade e meios de saída
 
 - Nas grades autoajustáveis, use `minmax(min(100%, Npx), 1fr)`, sem mínimos fixos > 288 px.
-  A meta é nenhuma rolagem horizontal da página a 320 px; confira com Playwright na QA, preservando
-  a rolagem local das tabelas conforme o contrato acima.
+  A meta é nenhuma rolagem horizontal da página a 320 px; confira com Playwright na QA. As tabelas
+  empilham em cartões conforme o contrato acima, sem rolagem horizontal própria a 320, 375 e 414 px.
 - Alvos de toque dos controles principais têm ≥ 44 px; chips, tags e `.ver-siscam`, ≥ 24 px.
   No desktop, navegação e tema podem ampliar a área de toque por pseudoelementos sem ampliar o desenho.
 - A textura decorativa fica em `body::before`, com `mask-image` de `textura-bairros.svg`,
@@ -416,6 +426,16 @@ Esta é a referência única para sessões; a CLI está em "Pipeline e comandos"
 - Preserve `cartao_votacao`/`_mapa_votos`, rótulos e a paridade de `tests/js/fixtures/sessoes.json` com
   `faixa_sessoes.html` e `cartao_sessoes.html`, conferida por Python e JS. Referências abreviadas e nomes
   curtos vêm do JSON; notas técnicas ficam só no HTML inicial e em Qualidade dos dados.
+- A faixa (`<table class="faixa empilha col-N" role="table">`, com `faixa-larga` antes de `empilha` acima de
+  12 colunas, `pagina_sessoes.FAIXA_LARGA`) e o resumo por vereador saem iguais de `pagina_sessoes._mapa_votos`
+  e de `sessoes.js` (`faixa`): papéis ARIA e `data-label` com a referência curta do cabeçalho (`"25/03 PL 280"`,
+  nunca o título longo do `<abbr>`). O rótulo da região é neutro (“Mapa de votos de <ano>, legislatura …:
+  vereador × votação dividida”), sem mencionar rolagem. Abaixo de 56rem de contêiner (100rem com `faixa-larga`,
+  que não cabe nem no desktop), cada vereador vira um cartão com ladrilhos rotulados
+  (`repeat(auto-fill, minmax(5.5rem, 1fr))`); ladrilhos `.voto-vazio` somem só no cartão, e quem só tem células
+  vazias fica com o nome. A faixa fica fora do limiar genérico de 9 colunas ou mais. A regra da primeira coluna
+  fixa (`.sessoes .faixa tr > :first-child` com `position: sticky; left: 0`) vale para a matriz larga e para
+  navegadores sem container queries.
 - CSV é UTF-8 com BOM e fórmulas neutralizadas; inclui "não consta" no produto pessoa × votação filtrada.
   Em inconsistentes, não atribui votos a pessoas, assim como os cartões. Não confunda filtrar por vereador
   (selecionar votações) com exportar somente as linhas dessa pessoa.

@@ -440,18 +440,35 @@ def _voto_faixa(v: dict, slug: str) -> tuple[str, str, str]:
     return classe, *VOTOS_FAIXA[classe]
 
 
-def _cabecalho_faixa(v: dict) -> str:
-    documento = _documento(v)
+def _curto_faixa(v: dict) -> str:
     numero = str(v.get("numero") or "").split("/")[0]
     sigla = {"pl": "PL", "pdl": "PDL", "resolucao": "PR", "veto": "Veto"}.get(v.get("materia"))
-    curto = f"{sigla} {numero}" if sigla and numero else re.sub(r"/\d{4}\b", "", documento)
+    return f"{sigla} {numero}" if sigla and numero else re.sub(r"/\d{4}\b", "", _documento(v))
+
+
+FAIXA_LARGA = 12  # acima deste número de colunas, a matriz empilha até contêineres de 100rem (estilo.css)
+
+
+def _classe_faixa(colunas: int) -> str:
+    """faixa-larga mantém o cartão por vereador também no desktop, onde a matriz já não caberia."""
+    return "faixa faixa-larga" if colunas > FAIXA_LARGA else "faixa"
+
+
+def _rotulo_faixa(v: dict) -> str:
+    """Referência curta do cabeçalho ("25/03 PL 280"), rótulo das células no cartão empilhado."""
+    return f'{P.data_br(v.get("data"))[:5]} {_curto_faixa(v)}'
+
+
+def _cabecalho_faixa(v: dict) -> str:
+    documento = _documento(v)
+    curto = _curto_faixa(v)
     data = P.data_br(v.get("data"))
     limite = _limite_faixa(v)
     marca = (f'<span aria-hidden="true"> *</span><span class="so-leitor"> · {P.esc(limite)}</span>' if limite else '')
     classe = ' class="faixa-sem-comparacao"' if limite else ''
-    return (f'<th scope="col"{classe}><a href="#v-{P.esc(v["id"])}">'
-            f'<abbr title="{P.esc(documento + ", " + data)}">{P.esc(data[:5])}</abbr><br>'
-            f'{P.esc(curto)}{marca}</a></th>')
+    return G.cab_coluna(f'<a href="#v-{P.esc(v["id"])}">'
+                        f'<abbr title="{P.esc(documento + ", " + data)}">{P.esc(data[:5])}</abbr><br>'
+                        f'{P.esc(curto)}{marca}</a>', classe)
 
 
 def _mapa_votos(modelo: dict, dados: dict, leg: dict) -> str:
@@ -464,6 +481,7 @@ def _mapa_votos(modelo: dict, dados: dict, leg: dict) -> str:
     ano = max(_ano(v) for v in divididas)
     votacoes = list(reversed(_recentes([v for v in divididas if _ano(v) == ano])))
     membros = _pessoas_leg(modelo, dados, leg)
+    rotulos = [_rotulo_faixa(v) for v in votacoes]
     linhas, resumo = [], []
     for slug in membros:
         pessoa = _pessoa(modelo, slug, leg["id"])
@@ -476,13 +494,13 @@ def _mapa_votos(modelo: dict, dados: dict, leg: dict) -> str:
         if not eleito and slug in (modelo.get("pessoas") or {}):
             nome += '<span class="status">suplente em exercício</span>'
         celulas, contagens = [], defaultdict(int)
-        for v in votacoes:
+        for v, referencia in zip(votacoes, rotulos):
             classe, glifo, rotulo = _voto_faixa(v, slug)
             contagens[classe] += 1
             marca = ' faixa-sem-comparacao' if _limite_faixa(v) else ''
-            celulas.append(f'<td class="voto-{classe}{marca}"><span aria-hidden="true">{P.esc(glifo)}</span>'
-                           f'<span class="so-leitor">{P.esc(rotulo)}</span></td>')
-        linhas.append(f'<tr data-vereador="{P.esc(slug)}"><th scope="row">{nome}</th>{"".join(celulas)}</tr>')
+            celulas.append(G.celula(f'<span aria-hidden="true">{P.esc(glifo)}</span>'
+                                    f'<span class="so-leitor">{P.esc(rotulo)}</span>', referencia, f' class="voto-{classe}{marca}"'))
+        linhas.append(f'<tr role="row" data-vereador="{P.esc(slug)}">{G.cab_linha(nome, "Vereador")}{"".join(celulas)}</tr>')
         resumo.append([nome, *[contagens[c] for c in ("maioria", "diferente", "abstencao", "ausente")]])
     legenda = ''.join(f'<li><span class="glifo-voto voto-{c}" aria-hidden="true">{g}</span>'
                       f'{P.esc(r if g else "Célula vazia: " + r)}</li>' for c, (g, r) in VOTOS_FAIXA.items())
@@ -490,12 +508,12 @@ def _mapa_votos(modelo: dict, dados: dict, leg: dict) -> str:
             f'<ul class="leg-graf leg-votos" aria-label="Legenda do mapa de votos">{legenda}</ul>'
             '<p class="nota">Linhas parecidas indicam votos parecidos nas votações divididas deste ano; '
             'não indicam grupo político. Nomes em ordem alfabética, sem agrupamento por voto.</p>'
-            f'<div class="faixa-rolagem" role="region" tabindex="0" aria-label="Mapa de votos de {ano}, legislatura {P.esc(leg["rotulo"])}: tabela com rolagem horizontal">'
-            f'<table class="faixa"><caption>Vereador × votação dividida de {ano}, em ordem cronológica. '
+            f'<div class="faixa-rolagem" role="region" tabindex="0" aria-label="Mapa de votos de {ano}, legislatura {P.esc(leg["rotulo"])}: vereador × votação dividida">'
+            f'{G.abre_tabela(len(votacoes) + 1, _classe_faixa(len(votacoes) + 1))}<caption>Vereador × votação dividida de {ano}, em ordem cronológica. '
             'A cor compara o voto à opção mais votada entre Favor e Contra, independentemente do sentido do parecer. '
             '* Coluna sem comparação: empate, sentido não determinado ou placar inconsistente.</caption>'
-            '<thead><tr><th scope="col">Vereador</th>' + ''.join(_cabecalho_faixa(v) for v in votacoes)
-            + '</tr></thead><tbody>' + ''.join(linhas) + '</tbody></table></div>'
+            + G.fecha_tabela(G.cab_coluna("Vereador") + ''.join(_cabecalho_faixa(v) for v in votacoes), ''.join(linhas))
+            + '</div>'
             + P.tabela_resumo(f'Resumo por vereador · votações divididas de {ano}',
                               ["Vereador", "Com a maioria", "Diferente da maioria", "Abstenção", "Ausente"], resumo)
             + '<p class="nota">O resumo conta apenas as colunas com comparação determinada. Presidência, células vazias, '
@@ -504,11 +522,11 @@ def _mapa_votos(modelo: dict, dados: dict, leg: dict) -> str:
 
 
 def _grafico(titulo: str, subtitulo: str, rotulos: list[str], series: list[tuple], eixo: str) -> str:
-    """Acrescenta caption e cabeçalhos de linha à alternativa do componente SVG."""
+    """Acrescenta caption e nomeia a coluna dos cabeçalhos de linha na alternativa do componente SVG."""
     grafico = G.colunas_empilhadas(titulo, subtitulo, rotulos, series)
-    grafico = grafico.replace('<table>', f'<table><caption>{P.esc(titulo)}</caption>')
-    grafico = grafico.replace('<th scope="col"></th>', f'<th scope="col">{P.esc(eixo)}</th>')
-    return re.sub(r'<tr><td>(.*?)</td>', r'<tr><th scope="row">\1</th>', grafico)
+    grafico = grafico.replace('role="table">', f'role="table"><caption>{P.esc(titulo)}</caption>', 1)
+    grafico = grafico.replace(G.cab_coluna(""), G.cab_coluna(P.esc(eixo)))
+    return grafico.replace('<th scope="row" role="rowheader" data-label="">', f'<th scope="row" role="rowheader" data-label="{P.esc(eixo)}">')
 
 
 def _grafico_placares(dados: dict, leg: dict) -> str:

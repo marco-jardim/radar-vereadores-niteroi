@@ -564,8 +564,9 @@ li.projeto { content-visibility: auto; contain-intrinsic-size: auto 220px; }
     var(--superficie);
 }
 .tabela-rolavel:focus-visible, .tabela-resumo:focus-visible, .sessoes .faixa-rolagem:focus-visible { outline: 3px solid var(--foco); outline-offset: 2px; }
-/* Bloco de contenção: sem ele, os .so-leitor absolutos das células escapam do recorte e alargam a página. */
-.tabela-rolavel, .tabela-resumo, .sessoes .faixa-rolagem { position: relative; }
+/* Bloco de contenção: sem ele, os .so-leitor absolutos das células escapam do recorte e alargam a página.
+   Também são os contêineres consultados pelo empilhamento das tabelas (fim do arquivo). */
+.tabela-rolavel, .tabela-resumo, .sessoes .faixa-rolagem { position: relative; container-type: inline-size; }
 
 /* ------------------------------------------------------- vereador e outros */
 .mandato { margin: var(--esp-6) 0 var(--esp-7); }
@@ -727,4 +728,84 @@ details.bloco summary { cursor: pointer; font: 600 var(--fs-1)/1.3 var(--display
 @media print {
   .sessoes details::details-content { display: block; content-visibility: visible; }
   .sessoes .faixa, .sessoes .faixa th, .sessoes .faixa td { background: white !important; }
+}
+
+/* ---------------------------------------------------- tabelas empilhadas */
+/* Quando o contêiner (.tabela-rolavel, .tabela-resumo, .faixa-rolagem) fica estreito para o número de colunas
+   (col-N), cada linha vira um cartão: o cabeçalho de linha é o título e cada célula mostra à esquerda o rótulo de
+   data-label, igual ao cabeçalho da coluna. O thead sai da tela como .so-leitor, sem display: none, e os papéis ARIA
+   do HTML mantêm a semântica de tabela. Sem container queries, a tabela continua larga e o contêiner rola. */
+@container (max-width: 24rem) {
+  .empilha.col-3, .empilha.col-3 :is(caption, tbody, tr) { display: block; }
+  .empilha.col-3 thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .empilha.col-3 tr { margin-bottom: var(--esp-2); border: 1px solid var(--linha); border-radius: var(--raio-1); }
+  .empilha.col-3 th { display: block; font-weight: 700; text-align: left; }
+  .empilha.col-3 td { display: flow-root; text-align: right; }
+  .empilha.col-3 tr > :last-child { border-bottom: 0; }
+  .empilha.col-3 td::before { content: attr(data-label); float: left; max-width: 60%; margin-right: var(--esp-3); font-weight: 600; color: var(--tinta-suave); text-align: left; }
+}
+@container (max-width: 34rem) {
+  .empilha.col-4, .empilha.col-4 :is(caption, tbody, tr) { display: block; }
+  .empilha.col-4 thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .empilha.col-4 tr { margin-bottom: var(--esp-2); border: 1px solid var(--linha); border-radius: var(--raio-1); }
+  .empilha.col-4 th { display: block; font-weight: 700; text-align: left; }
+  .empilha.col-4 td { display: flow-root; text-align: right; }
+  .empilha.col-4 tr > :last-child { border-bottom: 0; }
+  .empilha.col-4 td::before { content: attr(data-label); float: left; max-width: 60%; margin-right: var(--esp-3); font-weight: 600; color: var(--tinta-suave); text-align: left; }
+}
+@container (max-width: 44rem) {
+  .empilha:is(.col-5, .col-6), .empilha:is(.col-5, .col-6) :is(caption, tbody, tr) { display: block; }
+  .empilha:is(.col-5, .col-6) thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .empilha:is(.col-5, .col-6) tr { margin-bottom: var(--esp-2); border: 1px solid var(--linha); border-radius: var(--raio-1); }
+  .empilha:is(.col-5, .col-6) th { display: block; font-weight: 700; text-align: left; }
+  .empilha:is(.col-5, .col-6) td { display: flow-root; text-align: right; }
+  .empilha:is(.col-5, .col-6) tr > :last-child { border-bottom: 0; }
+  .empilha:is(.col-5, .col-6) td::before { content: attr(data-label); float: left; max-width: 60%; margin-right: var(--esp-3); font-weight: 600; color: var(--tinta-suave); text-align: left; }
+}
+@container (max-width: 56rem) {
+  .empilha:is(.col-7, .col-8), .empilha:is(.col-7, .col-8) :is(caption, tbody, tr) { display: block; }
+  .empilha:is(.col-7, .col-8) thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .empilha:is(.col-7, .col-8) tr { margin-bottom: var(--esp-2); border: 1px solid var(--linha); border-radius: var(--raio-1); }
+  .empilha:is(.col-7, .col-8) th { display: block; font-weight: 700; text-align: left; }
+  .empilha:is(.col-7, .col-8) td { display: flow-root; text-align: right; }
+  .empilha:is(.col-7, .col-8) tr > :last-child { border-bottom: 0; }
+  .empilha:is(.col-7, .col-8) td::before { content: attr(data-label); float: left; max-width: 60%; margin-right: var(--esp-3); font-weight: 600; color: var(--tinta-suave); text-align: left; }
+}
+/* Nove colunas ou mais. O mapa de votos fica fora: tem limiares e cartões próprios (abaixo). */
+@container (max-width: 64rem) {
+  .empilha:not(.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .faixa), .empilha:not(.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .faixa) :is(caption, tbody, tr) { display: block; }
+  .empilha:not(.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .faixa) thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .empilha:not(.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .faixa) tr { margin-bottom: var(--esp-2); border: 1px solid var(--linha); border-radius: var(--raio-1); }
+  .empilha:not(.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .faixa) th { display: block; font-weight: 700; text-align: left; }
+  .empilha:not(.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .faixa) td { display: flow-root; text-align: right; }
+  .empilha:not(.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .faixa) tr > :last-child { border-bottom: 0; }
+  .empilha:not(.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .faixa) td::before { content: attr(data-label); float: left; max-width: 60%; margin-right: var(--esp-3); font-weight: 600; color: var(--tinta-suave); text-align: left; }
+}
+/* Mapa de votos: abaixo de 56rem (ou de 100rem, mais que a largura do conteúdo, com faixa-larga: mais de 12
+   colunas, que não cabem nem no desktop) vira um cartão por vereador, com as votações em ladrilhos rotulados pela
+   referência curta; células vazias (fora do mandato/não consta) somem, e quem só tem vazias fica só com o nome.
+   As regras são completas e vêm por último, com seletores mais específicos, para valer com ou sem o limiar
+   genérico de col-N (de que a faixa de 9 colunas ou mais fica fora). A matriz com a primeira coluna fixa (sticky)
+   fica para contêineres mais largos e navegadores sem container queries. */
+@container (max-width: 56rem) {
+  .sessoes .faixa.empilha, .sessoes .faixa.empilha :is(caption, tbody) { display: block; }
+  .sessoes .faixa.empilha thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .sessoes .faixa.empilha tr { display: grid; grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr)); gap: var(--esp-1); margin: 0 var(--esp-2) var(--esp-2); padding: var(--esp-2); border: 1px solid var(--linha); border-radius: var(--raio-1); }
+  .sessoes .faixa.empilha .vereador-destaque { border: 2px solid var(--tinta); }
+  .sessoes .faixa.empilha tr > :first-child { grid-column: 1 / -1; position: static; display: block; min-width: 0; max-width: none; padding: 0; border: 0; text-align: left; font-weight: 700; }
+  .sessoes .faixa.empilha td { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: var(--esp-1); border: 1px solid var(--linha); border-radius: var(--raio-1); text-align: center; }
+  .sessoes .faixa.empilha td.faixa-sem-comparacao { border-style: dashed; border-color: var(--voto-abstencao); }
+  .sessoes .faixa.empilha td.voto-vazio { display: none; }
+  .sessoes .faixa.empilha td::before { content: attr(data-label); max-width: none; margin: 0; font-size: var(--fs--1); line-height: 1.4; font-weight: 600; color: var(--tinta-suave); }
+}
+@container (max-width: 100rem) {
+  .sessoes .faixa.faixa-larga, .sessoes .faixa.faixa-larga :is(caption, tbody) { display: block; }
+  .sessoes .faixa.faixa-larga thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .sessoes .faixa.faixa-larga tr { display: grid; grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr)); gap: var(--esp-1); margin: 0 var(--esp-2) var(--esp-2); padding: var(--esp-2); border: 1px solid var(--linha); border-radius: var(--raio-1); }
+  .sessoes .faixa.faixa-larga .vereador-destaque { border: 2px solid var(--tinta); }
+  .sessoes .faixa.faixa-larga tr > :first-child { grid-column: 1 / -1; position: static; display: block; min-width: 0; max-width: none; padding: 0; border: 0; text-align: left; font-weight: 700; }
+  .sessoes .faixa.faixa-larga td { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: var(--esp-1); border: 1px solid var(--linha); border-radius: var(--raio-1); text-align: center; }
+  .sessoes .faixa.faixa-larga td.faixa-sem-comparacao { border-style: dashed; border-color: var(--voto-abstencao); }
+  .sessoes .faixa.faixa-larga td.voto-vazio { display: none; }
+  .sessoes .faixa.faixa-larga td::before { content: attr(data-label); max-width: none; margin: 0; font-size: var(--fs--1); line-height: 1.4; font-weight: 600; color: var(--tinta-suave); }
 }

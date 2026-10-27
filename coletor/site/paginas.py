@@ -645,16 +645,17 @@ def _celula(v) -> str:
 def tabela_resumo(legenda: str, cabecalho: list[str], linhas: list[list], texto: tuple[int, ...] = ()) -> str:
     """Tabela com legenda, cabeçalhos de coluna e, na primeira célula de cada linha, cabeçalho de linha.
 
-    texto: índices das colunas de texto (classe "txt", alinhadas à esquerda). O contêiner rola na horizontal e
-    recebe foco pelo teclado (região rotulada pela legenda).
+    texto: índices das colunas de texto (classe "txt", alinhadas à esquerda). Em contêiner estreito, as linhas viram
+    cartões (graficos.abre_tabela); sem container queries, o contêiner rola na horizontal. Ele recebe foco pelo
+    teclado (região rotulada pela legenda).
     """
     cls = lambda i: ' class="txt"' if i in texto else ""
-    th = "".join(f'<th scope="col"{cls(i)}>{esc(c)}</th>' for i, c in enumerate(cabecalho))
-    corpo = "".join(f'<tr><th scope="row">{_celula(l[0])}</th>'
-                    + "".join(f"<td{cls(i)}>{_celula(c)}</td>" for i, c in enumerate(l[1:], start=1)) + "</tr>"
+    th = "".join(G.cab_coluna(esc(c), cls(i)) for i, c in enumerate(cabecalho))
+    corpo = "".join(G.TR + G.cab_linha(_celula(l[0]), cabecalho[0])
+                    + "".join(G.celula(_celula(c), cabecalho[i], cls(i)) for i, c in enumerate(l[1:], start=1)) + "</tr>"
                     for l in linhas)
     return (f'<div class="tabela-graf tabela-resumo" role="region" tabindex="0" aria-label="{esc(legenda)}">'
-            f'<table><caption>{esc(legenda)}</caption><thead><tr>{th}</tr></thead><tbody>{corpo}</tbody></table></div>')
+            f'{G.abre_tabela(len(cabecalho))}<caption>{esc(legenda)}</caption>{G.fecha_tabela(th, corpo)}</div>')
 
 
 def nome_autor(modelo: dict, s: str) -> str:
