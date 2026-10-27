@@ -12,7 +12,7 @@ A coleta é programada semanalmente pelo GitHub Actions; o site é estático, pu
 
 | Página | Conteúdo |
 | --- | --- |
-| Início (`index.html`) | Placar por vereador e leis com efeito mais recentes. |
+| Início (`index.html`) | Paisagem de Niterói, “Quem é meu vereador?”, números, destaques, mapa de indicações, placar e linha do tempo da cidade. |
 | Novidades (`novidades.html`) | Apresentações de PLs, leis, vetos e vetos derrubados; também em RSS (`feed.xml`). |
 | Leis aprovadas (`leis.html`) | Leis com filtros por impacto, tema, vereador e partido. |
 | Projetos (`projetos.html`) | Projetos de lei, inclusive em tramitação e sem êxito. |
@@ -28,7 +28,12 @@ O endereço antigo `alertas.html` redireciona para `ruido.html`; `dados/` conté
 
 Com JavaScript, o cabeçalho oferece os temas Automático, Claro e Escuro e um menu recolhível no celular.
 Sem JavaScript, os links de navegação permanecem visíveis.
+Na página inicial, o céu acompanha a hora de Niterói e a busca de vereadores funciona por teclado;
+sem JavaScript, permanece a lista de nomes. A linha do tempo reúne eventos com fontes públicas.
 O layout é responsivo, com adaptação ao alto contraste do sistema e impressão sem controles nem textura.
+As abas do placar têm navegação por teclado; coautores podem ser expandidos e os tooltips dos gráficos
+com links também abrem pelo foco. “Mostrar mais” leva o foco ao primeiro item novo e anuncia a inclusão.
+Nas sessões, é possível expandir ementas longas; sem JavaScript, elas aparecem inteiras.
 
 **Limites importantes:** impacto é estimado pela ementa, não resultado comprovado. Contar documentos,
 presenças ou votos não mede a qualidade do mandato. Os critérios valem igualmente para qualquer autor,
