@@ -4,8 +4,8 @@
  "homenageados": [
   {
    "id": "arariboia",
-   "nome": "Araribóia",
-   "nome_completo": "Araribóia, batizado Martim Afonso de Sousa",
+   "nome": "Arariboia",
+   "nome_completo": "Arariboia, batizado Martim Afonso de Sousa",
    "nascimento": null,
    "nascimento_texto": "século XVI",
    "morte": null,
@@ -16,9 +16,9 @@
     "Foi uma liderança do povo temiminó.",
     "Aliou-se aos portugueses nas disputas contra franceses e tamoios na região da Baía de Guanabara.",
     "Recebeu uma sesmaria na região onde hoje fica o bairro de São Lourenço, em Niterói.",
-    "Foi batizado com o nome de Martim Afonso e recebeu da Coroa portuguesa o posto colonial de capitão-mor de sua aldeia."
+    "Foi batizado com o nome de Martim Afonso de Sousa e recebeu da Coroa portuguesa o posto colonial de capitão-mor de sua aldeia."
    ],
-   "lugar_de_memoria": "Monumento a Araribóia, na Praça Arariboia, no Centro de Niterói.",
+   "lugar_de_memoria": "Monumento a Arariboia, na Praça Arariboia, no Centro de Niterói.",
    "emblema": "arariboia.svg",
    "imagem": {
     "tipo": "propria",
@@ -50,7 +50,7 @@
    "nascimento": "1865-04-28",
    "morte": "1950-05-08",
    "categoria": "ciencia",
-   "vinculo": "Transferiu-se para Niterói em 1919 e fundou o Instituto Vital Brazil, que dá nome ao bairro onde funciona.",
+   "vinculo": "Transferiu-se para Niterói em 1919 e fundou o Instituto Vital Brazil.",
    "biografia": [
     "Nasceu em Campanha, Minas Gerais, e formou-se em medicina no Rio de Janeiro em 1891.",
     "Pesquisou o ofidismo e demonstrou a especificidade dos soros antiofídicos.",
@@ -187,7 +187,7 @@
   {
    "data": "1573-11-22",
    "titulo": "Fundação de Niterói",
-   "texto": "A cidade comemora sua fundação em 22 de novembro de 1573, associada à aldeia de São Lourenço dos Índios, liderada por Araribóia.",
+   "texto": "A cidade comemora sua fundação em 22 de novembro de 1573, associada à aldeia de São Lourenço dos Índios, liderada por Arariboia.",
    "fontes": [
     {
      "titulo": "Aniversário de Niterói — Prefeitura de Niterói",
