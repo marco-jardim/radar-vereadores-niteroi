@@ -18,7 +18,7 @@
     "Recebeu uma sesmaria na região onde hoje fica o bairro de São Lourenço, em Niterói.",
     "Foi batizado com o nome de Martim Afonso de Sousa e recebeu da Coroa portuguesa o posto colonial de capitão-mor de sua aldeia."
    ],
-   "lugar_de_memoria": "Monumento a Arariboia, na Praça Arariboia, no Centro de Niterói.",
+   "lugar_de_memoria": "Estátua de Arariboia, na orla do Centro de Niterói, na Avenida Rio Branco, reposicionada em 2025.",
    "emblema": "arariboia.svg",
    "imagem": {
     "tipo": "propria",
@@ -35,7 +35,11 @@
     },
     {
      "titulo": "Niterói: histórico e formação administrativa — Biblioteca do IBGE",
-     "url": "https://biblioteca.ibge.gov.br/biblioteca-catalogo.html?id=31751&view=detalhes"
+     "url": "https://biblioteca.ibge.gov.br/index.php/biblioteca-catalogo?view=detalhes&id=31751"
+    },
+    {
+     "titulo": "Obra na praça reposiciona estátua de Arariboia — Prefeitura de Niterói",
+     "url": "https://niteroi.rj.gov.br/obra-na-praca-reposiciona-estatua-de-arariboia-para-frente-das-aguas-da-baia-de-guanabara-e-resgata-conexao-historica/"
     },
     {
      "titulo": "Arariboia — Wikipédia (apoio)",
@@ -52,9 +56,9 @@
    "categoria": "ciencia",
    "vinculo": "Transferiu-se para Niterói em 1919 e fundou o Instituto Vital Brazil.",
    "biografia": [
-    "Nasceu em Campanha, Minas Gerais, e formou-se em medicina no Rio de Janeiro em 1891.",
+    "Nasceu em Campanha, Minas Gerais, e concluiu o curso de medicina no Rio de Janeiro em 1891.",
     "Pesquisou o ofidismo e demonstrou a especificidade dos soros antiofídicos.",
-    "Assumiu em 1901 a direção do Instituto Soroterápico de São Paulo, atual Instituto Butantan.",
+    "Organizou, em 1899, o laboratório que deu origem ao Instituto Butantan e dirigiu a instituição, oficialmente fundada em 1901.",
     "Fundou em Niterói o Instituto Vital Brazil, criado em 3 de junho de 1919.",
     "Morreu na cidade do Rio de Janeiro em 8 de maio de 1950."
    ],
@@ -76,6 +80,10 @@
     {
      "titulo": "Vital Brazil — Ciência e Cientistas Brasileiros/as, Unifesp",
      "url": "https://cienciaecientistas.unifesp.br/cientistas/vital-brazil"
+    },
+    {
+     "titulo": "História do cientista — Instituto Vital Brazil",
+     "url": "https://www.rj.gov.br/vitalbrazil/index.php/node/128"
     }
    ]
   },
@@ -83,7 +91,8 @@
    "id": "antonio-parreiras",
    "nome": "Antônio Parreiras",
    "nome_completo": "Antônio Diogo da Silva Parreiras",
-   "nascimento": "1860-01-20",
+   "nascimento": "1860",
+   "nascimento_texto": "20 ou 21 de janeiro de 1860 (as fontes divergem)",
    "morte": "1937-10-17",
    "categoria": "artes",
    "vinculo": "Nasceu e morreu em Niterói, onde manteve casa e ateliê e ensinou pintura.",
@@ -106,6 +115,14 @@
      "url": "https://enciclopedia.itaucultural.org.br/pessoa187/antonio-parreiras"
     },
     {
+     "titulo": "Museu Antonio Parreiras — Funarj",
+     "url": "https://www.rj.gov.br/funarj/node/127"
+    },
+    {
+     "titulo": "Antonio Parreiras — Fundação de Arte de Niterói",
+     "url": "https://culturaniteroi.com.br/blog/mapeamentocultural/210"
+    },
+    {
      "titulo": "Museus — Prefeitura de Niterói",
      "url": "https://niteroi.rj.gov.br/museus/"
     },
@@ -118,7 +135,7 @@
   {
    "id": "ismael-silva",
    "nome": "Ismael Silva",
-   "nome_completo": "Milton de Oliveira Ismael da Silva",
+   "nome_completo": "Ismael Silva",
    "nascimento": "1905-09-14",
    "morte": "1978-03-14",
    "categoria": "musica",
@@ -127,10 +144,10 @@
     "Foi compositor e cantor de samba.",
     "Mudou-se com a mãe para o Rio de Janeiro após a morte do pai, quando tinha três anos.",
     "Participou, em 1928, da formação da Deixa Falar, no bairro do Estácio.",
-    "Compôs com Nilton Bastos e teve sambas gravados por Francisco Alves, como Se você jurar.",
+    "Compôs com Nilton Bastos e teve sambas gravados por Francisco Alves, como Se você jurar, em dueto com Mário Reis.",
     "Também compôs com Noel Rosa e é autor de Antonico."
    ],
-   "lugar_de_memoria": "Rua Ismael Silva, perto da Praça de São Domingos, em Niterói.",
+   "lugar_de_memoria": "Rua Ismael Silva, junto à Praça de São Domingos, no Gragoatá, em Niterói.",
    "emblema": "ismael-silva.svg",
    "imagem": {
     "tipo": "propria",
@@ -159,7 +176,7 @@
     "Foi arquiteto e formou-se na Escola Nacional de Belas Artes em 1934.",
     "Projetou edifícios públicos de Brasília, incluindo o Congresso Nacional e o Palácio da Alvorada.",
     "Foi autor do projeto do Museu de Arte Contemporânea de Niterói.",
-    "Filiou-se ao PCB em 1945 e, segundo nota do partido, recebeu em 1992 o título de presidente de honra."
+    "Filiou-se ao PCB em 1945. Em nota de 2012, o partido informa que ele foi eleito presidente de honra em 1992; um obituário do The Guardian o descreve como presidente do partido de 1992 a 1996."
    ],
    "lugar_de_memoria": "Museu de Arte Contemporânea de Niterói, no Mirante da Boa Viagem.",
    "emblema": "oscar-niemeyer.svg",
@@ -169,6 +186,18 @@
    },
    "fontes": [
     {
+     "titulo": "Biografia 1930–1940 — Fundação Oscar Niemeyer",
+     "url": "https://www.niemeyer.org.br/biografia/1930-1940"
+    },
+    {
+     "titulo": "Biografia 1955–1960 — Fundação Oscar Niemeyer",
+     "url": "https://www.niemeyer.org.br/biografia/1955-1960"
+    },
+    {
+     "titulo": "Museu de Arte Contemporânea de Niterói — Fundação Oscar Niemeyer",
+     "url": "https://www.niemeyer.org.br/obra/pro193"
+    },
+    {
      "titulo": "Museus — Prefeitura de Niterói",
      "url": "https://niteroi.rj.gov.br/museus/"
     },
@@ -177,8 +206,8 @@
      "url": "https://pcb.org.br/portal2/3982"
     },
     {
-     "titulo": "Oscar Niemeyer — Wikipédia (apoio)",
-     "url": "https://pt.wikipedia.org/wiki/Oscar_Niemeyer"
+     "titulo": "Oscar Niemeyer obituary — The Guardian",
+     "url": "https://www.theguardian.com/artanddesign/2012/dec/06/oscar-niemeyer-obituary"
     }
    ]
   }
@@ -202,11 +231,11 @@
   {
    "data": "1819-05-10",
    "titulo": "Vila Real da Praia Grande",
-   "texto": "Um alvará elevou a povoação a vila, com o nome de Vila Real da Praia Grande; a vila foi instalada em 11 de agosto do mesmo ano.",
+   "texto": "Um alvará de 10 de maio de 1819 elevou a povoação a vila, com o nome de Vila Real da Praia Grande; a vila foi instalada em 11 de agosto do mesmo ano.",
    "fontes": [
     {
      "titulo": "Niterói: histórico e formação administrativa — Biblioteca do IBGE",
-     "url": "https://biblioteca.ibge.gov.br/biblioteca-catalogo.html?id=31751&view=detalhes"
+     "url": "https://biblioteca.ibge.gov.br/index.php/biblioteca-catalogo?view=detalhes&id=31751"
     }
    ]
   },
@@ -217,7 +246,7 @@
    "fontes": [
     {
      "titulo": "Niterói: histórico e formação administrativa — Biblioteca do IBGE",
-     "url": "https://biblioteca.ibge.gov.br/biblioteca-catalogo.html?id=31751&view=detalhes"
+     "url": "https://biblioteca.ibge.gov.br/index.php/biblioteca-catalogo?view=detalhes&id=31751"
     }
    ]
   },
@@ -228,7 +257,7 @@
    "fontes": [
     {
      "titulo": "Niterói: histórico e formação administrativa — Biblioteca do IBGE",
-     "url": "https://biblioteca.ibge.gov.br/biblioteca-catalogo.html?id=31751&view=detalhes"
+     "url": "https://biblioteca.ibge.gov.br/index.php/biblioteca-catalogo?view=detalhes&id=31751"
     }
    ]
   },
@@ -244,7 +273,7 @@
     },
     {
      "titulo": "Niterói: histórico e formação administrativa — Biblioteca do IBGE",
-     "url": "https://biblioteca.ibge.gov.br/biblioteca-catalogo.html?id=31751&view=detalhes"
+     "url": "https://biblioteca.ibge.gov.br/index.php/biblioteca-catalogo?view=detalhes&id=31751"
     }
    ]
   },
@@ -266,15 +295,19 @@
   {
    "data": "1975-03-15",
    "titulo": "Fusão dos estados",
-   "texto": "A fusão da Guanabara com o Rio de Janeiro entrou em vigor; a capital passou à cidade do Rio de Janeiro.",
+   "texto": "A fusão dos estados da Guanabara e do Rio de Janeiro entrou em vigor; a capital do novo estado passou a ser a cidade do Rio de Janeiro.",
    "fontes": [
+    {
+     "titulo": "Lei Complementar nº 20, de 1º de julho de 1974 — Planalto",
+     "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp20.htm"
+    },
     {
      "titulo": "Guanabara, o efêmero estado criado por JK e extinto pela ditadura militar — Agência Senado",
      "url": "https://www12.senado.leg.br/noticias/especiais/arquivo-s/guanabara-o-efemero-estado-criado-por-jk-e-extinto-pela-ditadura-militar"
     },
     {
      "titulo": "Niterói: histórico e formação administrativa — Biblioteca do IBGE",
-     "url": "https://biblioteca.ibge.gov.br/biblioteca-catalogo.html?id=31751&view=detalhes"
+     "url": "https://biblioteca.ibge.gov.br/index.php/biblioteca-catalogo?view=detalhes&id=31751"
     }
    ]
   },
@@ -286,6 +319,10 @@
     {
      "titulo": "Museus — Prefeitura de Niterói",
      "url": "https://niteroi.rj.gov.br/museus/"
+    },
+    {
+     "titulo": "Museu de Arte Contemporânea de Niterói — Fundação Oscar Niemeyer",
+     "url": "https://www.niemeyer.org.br/obra/pro193"
     }
    ]
   },
