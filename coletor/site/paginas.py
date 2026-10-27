@@ -1512,7 +1512,7 @@ def comparacao(valor, mediana, maior_melhor: bool = True, sufixo: str = "") -> s
 
 
 def gerar_vereador(modelo: dict, pessoa: dict) -> str:
-    from coletor.site import pagina_sessoes
+    from coletor.site import pagina_sessoes, resumo
 
     secoes = []
     for leg in reversed(modelo["legislaturas"]):
@@ -1579,7 +1579,8 @@ def gerar_vereador(modelo: dict, pessoa: dict) -> str:
  <h1>{esc(pessoa['nome'])}{partido_html(partido_atual(modelo, pessoa['slug']))}</h1>
  <p class="siscam">Nome no SISCAM: {esc(pessoa['nome_siscam'])}</p>
 </section>
-{perfil + chr(10) if perfil else ''}{LEGENDA_BARRA}
+{perfil + chr(10) if perfil else ''}{resumo.secao_resumo(modelo, pessoa, '../')}
+{LEGENDA_BARRA}
 {''.join(secoes)}{pagina_sessoes.secao_sessoes_vereador(modelo, pessoa)}{secao_atividade(modelo, pessoa) if tem_docs else ''}"""
     return pagina(f"{pessoa['nome']} · Radar dos Vereadores de Niterói", corpo, "", "../",
                   f"Leis e projetos de {pessoa['nome']} na Câmara de Niterói: quantas leis com efeito, quantas sem efeito prático e quais pautas polêmicas.",
@@ -1793,11 +1794,16 @@ def gerar_metodologia(modelo: dict) -> str:
     defs_doc = "".join(f"<dt>{esc(v)}</dt><dd>{esc(DESC_CATEGORIA_DOC.get(k, ''))}</dd>" for k, v in NOME_CATEGORIA_DOC.items())
     corpo = f"""<section class="abertura texto">
 <h1>Metodologia</h1>
-<nav class="indice" aria-label="Nesta página"><a href="#glossario">Glossário</a><a href="#impacto">Impacto e efeito</a><a href="#atividades">Atividades</a><a href="#sessoes">Sessões</a></nav>
+<nav class="indice" aria-label="Nesta página"><a href="#glossario">Glossário</a><a href="#resumo">Resumo em números</a><a href="#impacto">Impacto e efeito</a><a href="#atividades">Atividades</a><a href="#sessoes">Sessões</a></nav>
 <p>Este site mede a produção de cada vereador em projetos de lei, não seu trabalho inteiro. Indicações, moções, requerimentos, projetos de decreto legislativo e de resolução aparecem à parte, na página <a href="atividades.html">Atividades</a>, e não entram nos números de projetos e leis. A página <a href="sessoes.html">Sessões e votações</a> e a seção "Presença e votos" de cada vereador mostram os registros plenários, com as <a href="#sessoes">regras de contagem e limitações</a>. Comissões, fiscalização fora do SISCAM e atendimento à população não aparecem no site.</p>
 
 <h2>De onde vêm os dados</h2>
 <p>Toda semana, uma GitHub Action baixa do <a href="https://consultaniteroi.siscam.com.br/">SISCAM</a> os projetos de lei de cada ano desde 2021 e, para os novos ou com tramitação alterada, a autoria e a tramitação completa. Só a composição das legislaturas e a curadoria são editadas à mão, em arquivos públicos.</p>
+
+<h2 id="resumo">Resumo em números das fichas</h2>
+<p>Este resumo não usa IA: um template determinístico aplica as mesmas frases, na mesma ordem, a todas as pessoas, por legislatura, da mais recente para a mais antiga. Os números vêm do modelo usado nas demais seções da ficha: listas de presença e votações do SISCAM, projetos de lei como autor principal (incluindo leis via substitutivo) e documentos de qualquer autoria. Cargos na Mesa Diretora, exercício de outro cargo e licenças vêm da configuração pública, com links para as fontes; a lista não é exaustiva.</p>
+<p>Sessões em exercício conta as listas deliberativas em que a pessoa consta, sobre o total incluído na legislatura. Meses são estimados pelos dias entre a primeira e a última deliberativa ÷ (365,25/12) × (sessões listadas ÷ total), não por datas de posse. Presença efetiva usa P/C/V ÷ (P/C/V + A): justificadas, outro cargo e licenças ficam fora da base. Participação nominal usa votou ÷ (possíveis − presidindo). Os dois percentuais exigem base de dez; meses e participação nominal são arredondados a uma casa decimal. Os três bairros mais citados vêm das indicações pela regra da ementa, com desempate alfabético; não representam pedidos atendidos. Divergências usam as votações divididas com sentido conhecido, como em <a href="#sessoes">Sessões</a>.</p>
+<p>Não há comparação entre vereadores, médias ou avaliação de qualidade no resumo. Sem registro não significa ausência de trabalho: a cobertura da coleta é limitada, listas não medem permanência e os dados não cobrem todo o exercício do mandato.</p>
 
 <h2 id="novidades">Novidades da semana</h2>
 <p>A página <a href="novidades.html">Novidades</a> e o <a href="{N.FEED}">feed RSS</a> não comparam uma coleta com a anterior nem guardam estado entre coletas: cada evento sai de uma data já registrada no SISCAM.</p>

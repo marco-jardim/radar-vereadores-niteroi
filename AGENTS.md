@@ -317,6 +317,15 @@ Não há carregamento automático de `.env`. A IA usa `POST /chat/completions`, 
 
 ### Home e interações acessíveis
 
+- Cada ficha publica “Resumo em números” depois do perfil, por legislatura (mais recente primeiro),
+  em `coletor/site/resumo.py`: funções puras, frases e ordem fixas para todos, sem IA, adjetivos ou comparação
+  entre vereadores. Reusa `mandatos.linhas_mandatos` para sessões em exercício, meses estimados e cargos com
+  fontes; presença efetiva e faltas, PLs como autor principal e leis, tipos de documentos, três bairros das
+  indicações (empates alfabéticos) e votos vêm do modelo. Percentuais exigem base ≥ 10; nas nominais a base é
+  possíveis menos presidindo. Ausência de registro não significa ausência de trabalho. A metodologia está em
+  `metodologia.html#resumo`; `tests/test_resumo.py` e `TestGerarSite` conferem números e neutralidade em todas
+  as pessoas da base, com `PALAVRAS_PROIBIDAS`. Não acrescentar inferências, médias ou frases personalizadas.
+
 - `analises.html#mandatos-atividade` publica uma tabela alfabética por legislatura, incluindo suplentes em exercício,
   sem faixas de carreira, correlação ou comparação entre grupos. `coletor/site/mandatos.py` conta vitórias para
   vereador cujo resultado começa por “Eleito”, até o ano eleitoral do recorte; a ficha mostra todos os anos registrados.
