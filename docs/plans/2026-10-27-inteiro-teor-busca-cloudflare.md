@@ -433,6 +433,40 @@ Ao fim de **cada wave**: revisão de QA da integração entre as phases e corre�
   - S1. Em `D:\git\radar-vereadores-niteroi\coletor\trechos.py`, divisão determinística por parágrafo, com alvo de 1.200 caracteres, máximo de 2.000 e sobreposição de 200.
   - S2. Cada trecho é `{id, documento, arquivo, posicao, inicio, fim, sha256}`, com `id = sha1(documento|arquivo|posicao|sha256)[:16]`. **O trecho guarda offsets, não o texto**, que é lido do `.txt` (achado 22).
   - S3. Normalização NFC e de espaços antes de calcular os offsets. Constante `VERSAO_TRECHOS`.
+- **T1.2.5 Limpeza de texto antes de salvar e de gerar vetores** (pedido do humano em 27/10/2026). `router: role=implementer class=implement risk=high scope=multi needs=edit`
+  - S1. **Novo módulo** `D:\git\radar-vereadores-niteroi\coletor\limpeza.py`, com a constante `VERSAO_LIMPEZA`. É determinístico e só usa a biblioteca padrão. A ordem do pipeline é: extrair, limpar, mascarar, dividir em trechos.
+  - S2. **Cabeçalhos e rodapés por documento.** Remove linhas que se repetem no topo ou no fim (até 4 linhas de cada borda) em pelo menos metade das páginas, quando há pelo menos 2 páginas separadas por `\f`. Nos docx, o texto de `header*.xml` e `footer*.xml` sai do corpo salvo e fica só contado no manifesto.
+  - S3. **Ruído de página.** Remove:
+    - numeração ("Página 1 de 3", "- 2 -", "2/5", número sozinho na linha);
+    - linhas só com separadores;
+    - linhas de OCR com menos de 40% de caracteres alfanuméricos ou com menos de 3 caracteres úteis;
+    - linhas em branco repetidas.
+  - S4. **Clichês do corpus (timbres).** Remove as linhas normalizadas (sem acento, minúsculas, espaços colapsados, dígitos trocados por `#`) que aparecem em pelo menos 2% dos documentos do escopo, ou em 20 documentos ou mais. Exemplos: "camara municipal de niteroi", "gabinete do vereador …", o endereço e o telefone da Câmara, "estado do rio de janeiro".
+    - A lista é **gerada** por `python -m coletor.limpeza --gerar-cliches` a partir do texto bruto em cache. Fica versionada em `D:\git\radar-vereadores-niteroi\data\textos\cliches.json` (gravada por `salvar_mapa`, cada linha normalizada com a contagem de documentos), para que qualquer pessoa audite o que foi cortado.
+    - A lista **congela** por `VERSAO_LIMPEZA`. O incremental usa a lista congelada. Recalcular exige `--recalcular-cliches`, sobe a versão e reprocessa tudo com `--reprocessar-versao`.
+    - **Nunca cortar** linhas que contenham a ementa, "Art.", "§", "Parágrafo", "Inciso", "Justificativa", "Sala das Sessões", nomes de vereadores ou suplentes de `D:\git\radar-vereadores-niteroi\config\vereadores.json`, nem números de lei ou de processo.
+  - S5. **Rastro no manifesto.** Cada arquivo registra:
+    - `limpeza: {versao, linhas_removidas, por_regra: {cabecalho_rodape, numeracao, ruido_ocr, cliche}}`;
+    - `sha256_bruto`, o hash do texto extraído antes da limpeza e da máscara.
+
+    O texto bruto fica só no cache local, que não é público. O original no R2 continua sendo a prova.
+  - S6. **Trechos para vetores.** Recebem o texto já limpo. Trechos com menos de 80 caracteres úteis não geram vetor, ficam só na busca por palavras, e a contagem vai para o manifesto.
+  - **Testes** (`D:\git\radar-vereadores-niteroi\tests\test_limpeza.py`):
+    - cabeçalho repetido em 3 de 4 páginas é cortado; linha igual que aparece em só 1 página é mantida;
+    - documento de 1 página não sofre o corte por repetição;
+    - numeração nos vários formatos;
+    - linha de OCR ruidosa cortada; linha curta legítima ("Art. 1º") mantida;
+    - clichê cortado; linha protegida (Art., ementa, nome de vereador, "Lei nº 3.456/2020") mantida mesmo frequente;
+    - geração da lista determinística, com mesma entrada dando os mesmos bytes, e limiar exato (2% e 20 documentos);
+    - lista congelada usada no incremental;
+    - idempotência (limpar duas vezes dá o mesmo resultado);
+    - contagens por regra;
+    - integração com máscara e trechos;
+    - trecho curto sem vetor.
+  - **Aceitação:**
+    - Na amostra auditada da T2.1.2 S3 (mais 30 documentos com cortes), zero cortes de conteúdo normativo, de justificativa ou de assinatura de vereador.
+    - Pelo menos 90% das linhas com timbre da Câmara e dos gabinetes removidas nessa amostra.
+    - Redução de tamanho registrada no relatório.
 - **T1.2.4 CI com as ferramentas** (orquestrador). Em `D:\git\radar-vereadores-niteroi\.github\workflows\testes.yml`, rodar `apt-get install -y poppler-utils tesseract-ocr tesseract-ocr-por`, para que os testes de PDF e OCR não sejam pulados (achado 25). `router: role=general class=mechanical risk=low scope=single needs=edit`
 
 **Novos testes**
@@ -536,10 +570,11 @@ Também `D:\git\radar-vereadores-niteroi\tests\test_remocoes.py`:
     - Só os que ainda não estão no manifesto, ou que estão em status reprocessável (`pendente_ferramenta`, ou `escaneado_sem_ocr` com `--ocr`), ou cuja versão mudou com `--reprocessar-versao`.
     - Excluir os itens removidos, por `D:\git\radar-vereadores-niteroi\coletor\remocoes.py` (`esta_removido`).
   - S2. **Download.** Mesmos User-Agent, tentativas e espera de `D:\git\radar-vereadores-niteroi\coletor\siscam.py`. Quatro workers. Cache em `D:\radar-niteroi-cache\arquivos\<sha256>`, ou no caminho de `RADAR_CACHE`.
-  - S3. **Processamento**, nesta ordem:
+  - S3. **Processamento**, em duas passadas na carga inicial. Na primeira, extrai o texto bruto para o cache e gera `D:\git\radar-vereadores-niteroi\data\textos\cliches.json`. Na segunda, limpa e grava. Para cada arquivo, nesta ordem:
     1. SHA-256 do original;
-    2. `extrair` (com OCR quando `--ocr`);
-    3. máscara;
+    2. `extrair` (com OCR quando `--ocr`); o bruto vai para `D:\radar-niteroi-cache\texto_bruto\<sha256>.txt`;
+    3. `limpeza` (T1.2.5), com a lista de clichês congelada;
+    4. máscara;
     4. trechos;
     5. gravar `D:\git\radar-vereadores-niteroi-textos\textos\<tipo>\<ano>\<documento>\<arquivo>.txt` (UTF-8, LF, NFC, já mascarado);
     6. gravar `D:\git\radar-vereadores-niteroi-textos\trechos\<tipo>\<ano>.jsonl`, só com offsets e ordem estável.
