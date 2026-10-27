@@ -56,7 +56,7 @@ class TestCpf(unittest.TestCase):
         texto = f"Vereador Fulano, CPF {CPF_B}, telefone (21) 3333-4444, fulano@exemplo.com"
         saida, contagens = mascarar(texto, lib)
         self.assertEqual(saida, "Vereador Fulano, CPF [CPF omitido], telefone (21) 3333-4444, fulano@exemplo.com")
-        self.assertEqual(contagens, {"cpf": 1, "rg": 0, "telefone": 0, "email": 0})
+        self.assertEqual(contagens, {"cpf": 1, "rg": 0, "telefone": 0, "email": 0, "documento": 0})
 
 
 class TestRg(unittest.TestCase):
@@ -280,7 +280,7 @@ class TestIdempotenciaVarrer(unittest.TestCase):
 
     def test_contagens(self) -> None:
         _, contagens = mascarar(self.TEXTO)
-        self.assertEqual(contagens, {"cpf": 2, "rg": 1, "telefone": 3, "email": 2})
+        self.assertEqual(contagens, {"cpf": 2, "rg": 1, "telefone": 3, "email": 2, "documento": 0})
 
     def test_idempotente(self) -> None:
         uma, _ = mascarar(self.TEXTO)
@@ -310,17 +310,17 @@ class TestIdempotenciaVarrer(unittest.TestCase):
         self.assertEqual([a["tipo"] for a in varrer(mascarado + " Novo: (21) 98888-7777")], ["telefone"])
 
     def test_texto_vazio(self) -> None:
-        self.assertEqual(mascarar(""), ("", {"cpf": 0, "rg": 0, "telefone": 0, "email": 0}))
+        self.assertEqual(mascarar(""), ("", {"cpf": 0, "rg": 0, "telefone": 0, "email": 0, "documento": 0}))
         self.assertEqual(varrer(""), [])
 
     def test_varrer_e_mais_amplo_que_mascarar(self) -> None:
-        texto = "Protocolo nº 2026-1234, telefone 26201234 e CPF 529 982 247 25"
+        texto = "Protocolo nº 2026-1234, código 26201234 e CPF 529 982 247 25"
         saida, contagens = mascarar(texto)
         self.assertEqual(sum(contagens.values()), 0)  # protegidos ou ambíguos para mascarar
         achados = varrer(texto)
         self.assertEqual([a["tipo"] for a in achados], ["telefone", "telefone", "cpf"])
-        # "2026-1234" tem separador (forte); "26201234" é só dígitos corridos (fraco)
-        self.assertEqual([a["forte"] for a in achados], [True, False, True])
+        # "2026-1234" logo depois de protocolo e "26201234" só de dígitos: fracos
+        self.assertEqual([a["forte"] for a in achados], [False, False, True])
 
     def test_forca_das_ocorrencias(self) -> None:
         casos = {
@@ -342,17 +342,53 @@ class TestIdempotenciaVarrer(unittest.TestCase):
         with tempfile.TemporaryDirectory() as nome:
             pasta = Path(nome)
             (pasta / "a.txt").write_text("CPF 529.982.247-25 e protocolo 26201234", encoding="utf-8")
-            (pasta / "b.txt").write_text("Processo nº 2024-1234, tel (21) 2620-1234", encoding="utf-8")
+            (pasta / "b.txt").write_text("Processo nº 2024-1234, Ofício nº 3456-7890, tel (21) 2620-1234",
+                                         encoding="utf-8")
             (pasta / "c.txt").write_text("Sem dados pessoais.", encoding="utf-8")
             resultado = mascara.medir(pasta)
         self.assertEqual(resultado, {
             "documentos": 3,
-            "mascarados": {"cpf": 1, "rg": 0, "telefone": 1, "email": 0},
-            "restantes": {"telefone_forte": 1, "telefone_fraco": 1},
+            "mascarados": {"cpf": 1, "rg": 0, "telefone": 1, "email": 0, "documento": 0},
+            "restantes": {"telefone_forte": 1, "telefone_fraco": 2},
             "documentos_com_forte": 1,
-            "documentos_com_fraco": 1,
+            "documentos_com_fraco": 2,
         })
         self.assertNotIn("2620", json.dumps(resultado))
+
+    def test_forca_por_contexto(self) -> None:
+        casos = {
+            "Ação por conta do Programa 2045.1234": False,   # código orçamentário
+            "Lei Ordinária 2620 1234": False,                # coluna de tabela depois de "lei"
+            "Protocolo nº: 212620-1234": False,
+            "Protocolo do dia 10/05 202112345": False,
+            "Código 2620 1234": False,
+            "Código 2620.1234": False,
+            "cel. 2620 1234": True,
+            "Contato: 2620.1234": True,
+            "Fone 26201234": True,
+            "(21) 2620 1234": True,
+            "021 2620 1234": True,
+            "+55 21 2620 1234": True,
+            "Código 2620-1234": True,
+        }
+        for texto, forte in casos.items():
+            with self.subTest(texto=texto):
+                achados = varrer(texto)
+                self.assertEqual([(a["tipo"], a["forte"]) for a in achados], [("telefone", forte)])
+
+    def test_varrer_ignora_links_marcacao_e_metadados(self) -> None:
+        for texto in (
+            "https://www.niteroi.rj.gov.br/decreto-n-98765-4321",
+            "ver leismunicipais.com.br/lei-2620-1234 e www.exemplo.org/2620-1234",
+            "<dc:date>2021-05-10T14:32:15.123456789</dc:date>",
+            "<dc:date>2021-05-10T14:32:52.998224725</dc:date>",  # CPF válido no carimbo
+            '<ext uri="{28A0092B-C50C-407E-A947-70E740481C1C}"/>',
+            '<w:pgSz width="26.20123456"/>',
+        ):
+            with self.subTest(texto=texto):
+                self.assertEqual(varrer(texto), [])
+                self.assertEqual(mascarar(texto)[0], texto)  # links e metadados intactos
+        self.assertTrue(mascara.cpf_valido("52998224725"))
 
     def test_varrer_ignora_so_as_protecoes_explicitas(self) -> None:
         texto = ("em 12/03/2024, mandato 2021-2024, CEP 24020-000, CNPJ 11.222.333/0001-81, "
@@ -367,6 +403,220 @@ class TestIdempotenciaVarrer(unittest.TestCase):
         self.assertEqual(varrer("gabinete@camaraniteroi.rj.gov.br e x@niteroi.rj.gov.br"), [])
         self.assertEqual([a["tipo"] for a in varrer("Ligue (11) 3333-4444")], ["telefone"])
         self.assertEqual([a["tipo"] for a in varrer("Escreva para (fulano@exemplo.org).")], ["email"])
+
+
+class TestQuartaMedicao(unittest.TestCase):
+    """Formas da quarta medição no corpus real (com dígitos sintéticos)."""
+
+    def test_url_continua_depois_de_quebra_de_linha(self) -> None:
+        texto = ("Disponível em https://www.scielo.br/pdf/pcp/\n"
+                 "v12nspe1/2620-1234-pcp-12-spe1-2026.pdf\nTexto seguinte")
+        _sem_mudanca(self, texto)
+        self.assertEqual(varrer(texto), [])
+        # só uma quebra de linha; uma palavra comum na linha seguinte encerra a URL
+        saida, _ = mascarar("Ver www.exemplo.com.br/\nLigue 2620-1234")
+        self.assertEqual(saida, "Ver www.exemplo.com.br/\nLigue [telefone omitido]")
+
+    def test_doi(self) -> None:
+        for texto in ("DOI: 10.1111/j.2620-1234.2012.tb12345.x",
+                      "doi:10.1590/S0102-311X2012000100001 e mais",
+                      "https://doi.org/10.1000/2620-1234"):
+            with self.subTest(texto=texto):
+                _sem_mudanca(self, texto)
+                self.assertEqual(varrer(texto), [])
+
+    def test_decimais_nao_sao_telefone_nem_cpf(self) -> None:
+        for texto in ("passa a ser de 1,04712345678", "| 3,14159265358 | 2,71828182845 |",
+                      "valor 1.234,52998224725", "índice 1.04712345678"):
+            with self.subTest(texto=texto):
+                _sem_mudanca(self, texto)
+                self.assertEqual(varrer(texto), [])
+        # telefones colados por vírgula continuam mascarados
+        self.assertEqual(mascarar("2620-1234,2620-5678")[0], "[telefone omitido],[telefone omitido]")
+
+    def test_digitos_corridos_de_tabela_ficam(self) -> None:
+        for texto in ("                              2025                          1,04712345678",
+                      "   7612345", "Valor 2126201234", "Total 21998887777 e 02126201234"):
+            with self.subTest(texto=texto):
+                _sem_mudanca(self, texto)
+        self.assertEqual([a["forte"] for a in varrer("Valor 2126201234")], [False])
+        # com rótulo, dígitos corridos ainda são telefone
+        self.assertEqual(mascarar("Tel. 2126201234")[0], "Tel. [telefone omitido]")
+        self.assertEqual(mascarar("https://wa.me/5521998887777")[0], "https://wa.me/[telefone omitido]")
+
+
+class TestTerceiraMedicao(unittest.TestCase):
+    """Formas da terceira medição no corpus real (com dígitos sintéticos)."""
+
+    def test_rotulo_de_identidade_com_erro_de_ocr(self) -> None:
+        self.assertTrue(mascara.cpf_valido("12345678909"))
+        casos = {
+            "Identdede: 12345678909": "Identdede: [CPF omitido]",       # 11 dígitos, DV de CPF
+            "Idenlidade: 123456789": "Idenlidade: [RG omitido]",
+            "IDENTIDADE nº 12345678901": "IDENTIDADE nº [RG omitido]",  # 11 dígitos sem DV válido
+            "R. G. 12.345.678-9": "R. G. [RG omitido]",
+            "rg: 123456789": "rg: [RG omitido]",
+        }
+        for texto, esperado in casos.items():
+            with self.subTest(texto=texto):
+                saida, _ = mascarar(texto)
+                self.assertEqual(saida, esperado)
+                self.assertEqual(mascarar(saida)[0], saida)
+                self.assertFalse([a for a in varrer(saida) if a["forte"]])
+        # sem a marca ":"/"nº" nem "carteira"/"cédula", variante de "identidade" não é rótulo
+        _sem_mudanca(self, "Identdede visual 123456789")
+
+    def test_url_quebrada_pela_diagramacao(self) -> None:
+        texto = "Disponível em: scielo.br/pdf/pcp/ v12nspe1/ 1234-5678.pdf e mais"
+        _sem_mudanca(self, texto)
+        self.assertEqual(varrer(texto), [])
+        texto = "Fonte: www.exemplo.org/artigos/ v3n2/ 2620-1234"
+        _sem_mudanca(self, texto)
+        self.assertEqual(varrer(texto), [])
+        # depois do endereço, palavra comum encerra a URL: o telefone seguinte é mascarado
+        saida, _ = mascarar("Ver www.exemplo.com.br/ e ligue 2620-1234")
+        self.assertEqual(saida, "Ver www.exemplo.com.br/ e ligue [telefone omitido]")
+        saida, _ = mascarar("Ver www.exemplo.com.br/ (21) 2620-1234")
+        self.assertEqual(saida, "Ver www.exemplo.com.br/ [telefone omitido]")
+
+    def test_protocolo_e_sic_e_ouvidoria(self) -> None:
+        for texto in ("Pedido E-SIC nº 2620-1234", "Protocolo e-SIC 2620-1234", "SIC: 2620-1234",
+                      "Ouvidoria nº 2620-1234", "Pedido eSIC nº 2620-1234"):
+            with self.subTest(texto=texto):
+                _sem_mudanca(self, texto)
+                achados = varrer(texto)
+                self.assertEqual([(a["tipo"], a["forte"]) for a in achados], [("telefone", False)])
+        # sem o contexto, o mesmo número com hífen é forte
+        self.assertEqual([a["forte"] for a in varrer("Código 2620-1234")], [True])
+
+
+class TestSegundaMedicao(unittest.TestCase):
+    """Formas da segunda medição no corpus real (com dígitos sintéticos)."""
+
+    def test_intervalo_de_anos_nao_e_telefone(self) -> None:
+        for texto in ("cientista Vital Brazil (1865-1950)", "poeta (1922 – 1990) e músico",
+                      "período 1500-1600", "obras de 2000-2100"):
+            with self.subTest(texto=texto):
+                _sem_mudanca(self, texto)
+                self.assertEqual(varrer(texto), [])
+        # anos fora da faixa ou fora de ordem não são intervalo
+        self.assertEqual(mascarar("Contato: 2100-2200")[0], "Contato: [telefone omitido]")
+        self.assertEqual([a["tipo"] for a in varrer("Código 2150-1990")], ["telefone"])
+
+    def test_documentos_pessoais_rotulados(self) -> None:
+        casos = {
+            "ID: 12345 MF/RJ – CNH 12345678901": "ID: 12345 MF/RJ – CNH [documento omitido]",
+            "RENACH RJ123456789": "RENACH [documento omitido]",
+            "Título de eleitor nº 1234 5678 9012": "Título de eleitor nº [documento omitido]",
+            "titulo eleitoral: 123456789012": "titulo eleitoral: [documento omitido]",
+            "PIS/PASEP: 123.45678.90-1": "PIS/PASEP: [documento omitido]",
+            "NIS 12345678901": "NIS [documento omitido]",
+            "NIT nº 12345678901": "NIT nº [documento omitido]",
+            "Passaporte FZ123456": "Passaporte [documento omitido]",
+            "CTPS 1234567 série 0012": "CTPS [documento omitido] série 0012",
+            "carteira de trabalho 1234567": "carteira de trabalho [documento omitido]",
+            "Cartão SUS 123 4567 8901 2345": "Cartão SUS [documento omitido]",
+            "cartão do SUS: 123456789012345": "cartão do SUS: [documento omitido]",
+            "CNS: 123456789012345": "CNS: [documento omitido]",
+        }
+        for texto, esperado in casos.items():
+            with self.subTest(texto=texto):
+                self.assertEqual([(a["tipo"], a["forte"]) for a in varrer(texto)], [("documento", True)])
+                saida, contagens = mascarar(texto)
+                self.assertEqual(saida, esperado)
+                self.assertEqual(contagens["documento"], 1)
+                self.assertEqual(mascarar(saida), (saida, {tipo: 0 for tipo in mascara.TIPOS}))
+                self.assertEqual(varrer(saida), [])
+
+    def test_documento_sem_rotulo_ou_curto_fica(self) -> None:
+        for texto in ("CNH válida até 10/10/2025", "PIS 2024", "nitrato 12345678",
+                      "Unidade de piso 12345678", "CNH emitida pelo órgão estadual 12345678901"):
+            with self.subTest(texto=texto):
+                _sem_mudanca(self, texto)
+
+    def test_valores_de_planilha_xml(self) -> None:
+        for texto in ('<c r="B2" s="1"><v>12345.123456789</v></c>',
+                      '<x:c si="12"/><v>21998887777</v>',
+                      "<si><t>21998887777</t></si>", "<f>2126201234</f>"):
+            with self.subTest(texto=texto):
+                _sem_mudanca(self, texto)
+                self.assertEqual(varrer(texto), [])
+        # texto de célula que não é só número continua mascarado
+        self.assertEqual(mascarar("<t>Tel. (21) 2620-1234</t>")[0], "<t>Tel. [telefone omitido]</t>")
+
+    def test_medir_conta_documentos(self) -> None:
+        with tempfile.TemporaryDirectory() as nome:
+            pasta = Path(nome)
+            (pasta / "a.txt").write_text("CNH 12345678901 e Vital Brazil (1865-1950)", encoding="utf-8")
+            resultado = mascara.medir(pasta)
+        self.assertEqual(resultado["mascarados"]["documento"], 1)
+        self.assertEqual(resultado["restantes"], {})
+
+
+class TestFormasDoCorpusReal(unittest.TestCase):
+    """Formas medidas no corpus real (com dígitos sintéticos)."""
+
+    def test_telefones_que_escapavam_sao_mascarados(self) -> None:
+        casos = {
+            "[telefone omitido] –– cel.  2620-1234": "[telefone omitido] –– cel.  [telefone omitido]",
+            "            (21) 2620-1234": "            [telefone omitido]",
+            "CELULAR:    (21)2620-1234": "CELULAR:    [telefone omitido]",
+            "Celular: 021-2620-1234": "Celular: [telefone omitido]",
+            "      (21) 26201234": "      [telefone omitido]",
+            # celulares antigos de 8 dígitos começando por 6–9
+            "Tel. (21) 2620-1234 –– cel.  9876-5432": "Tel. [telefone omitido] –– cel.  [telefone omitido]",
+            "            (21) 9876-5432": "            [telefone omitido]",
+            "CELULAR:    (21)9876-5432": "CELULAR:    [telefone omitido]",
+            "Celular: 021-9876-5432": "Celular: [telefone omitido]",
+            "      (21) 98765432": "      [telefone omitido]",
+            # palavra de ato em outra linha ou coluna (-layout) não protege o telefone
+            "Ata da sessão\n            (21) 9876-5432": "Ata da sessão\n            [telefone omitido]",
+            "Termo de posse          (21) 2620-1234": "Termo de posse          [telefone omitido]",
+            # ponto como separador só com rótulo ou DDD
+            "Tel.: 2620.1234": "Tel.: [telefone omitido]",
+            "(21) 2620.1234": "[telefone omitido]",
+            # link de WhatsApp continua pessoal
+            "https://wa.me/5521998887777": "https://wa.me/[telefone omitido]",
+        }
+        for texto, esperado in casos.items():
+            with self.subTest(texto=texto):
+                saida, _ = mascarar(texto)
+                self.assertEqual(saida, esperado)
+                self.assertEqual(mascarar(saida)[0], saida)  # idempotente
+                self.assertFalse([a for a in varrer(saida) if a["forte"]])
+
+    def test_numeros_que_nao_sao_telefone_ficam(self) -> None:
+        for texto in ("Ação por conta do Programa 2045.1234", "Lei Ordinária 2620 1234",
+                      "Protocolo nº: 212620-1234", "Protocolo do dia 10/05 202112345",
+                      "Código 9876 5432", "Código 98765432"):
+            with self.subTest(texto=texto):
+                _sem_mudanca(self, texto)
+
+    def test_documento_misto_sem_ocorrencias_fortes(self) -> None:
+        documento = "\n".join([
+            "Ação por conta do Programa 2045.1234 e da Ação 2046.5678",
+            "Lei Ordinária 3456 7890",
+            "<dc:date>2021-05-10T14:32:52.998224725</dc:date>",
+            '<w:pgSz width="26.20123456"/>',
+            "Ver https://www.niteroi.rj.gov.br/decreto-n-98765-4321 e www.exemplo.gov.br/lei/2620-1234",
+            '<ext uri="{28A0092B-C50C-407E-A947-70E740481C1C}"/>',
+            "Protocolo nº: 212620-1234; Protocolo do dia 10/05 202112345",
+            "Tel. (21) 2620-1234 –– cel.  9876-5432",
+            "            (21) 9876-5432",
+            "CELULAR:    (21)9876-5432",
+            "Celular: 021-9876-5432",
+            "      (21) 98765432",
+        ])
+        mascarado, contagens = mascarar(documento)
+        self.assertEqual(contagens, {"cpf": 0, "rg": 0, "telefone": 6, "email": 0, "documento": 0})
+        for intacto in ("Programa 2045.1234", "Ação 2046.5678", "Lei Ordinária 3456 7890",
+                        "decreto-n-98765-4321", "www.exemplo.gov.br/lei/2620-1234", "nº: 212620-1234",
+                        "10/05 202112345", "2021-05-10T14:32:52.998224725", 'width="26.20123456"'):
+            self.assertIn(intacto, mascarado)
+        achados = varrer(mascarado)
+        self.assertEqual([a for a in achados if a["forte"]], [])
+        self.assertTrue(achados)  # os números ambíguos continuam contados como fracos
+        self.assertTrue(all(a["tipo"] == "telefone" for a in achados))
 
 
 if __name__ == "__main__":
