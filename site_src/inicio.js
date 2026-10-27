@@ -172,7 +172,7 @@
       if (conteudo) el.textContent = conteudo;
       return el;
     }
-    // O servidor já emite o campo (sem deslocar o layout); só sem ele o campo é criado aqui.
+    // O servidor já emite o campo oculto; só sem ele o campo é criado aqui.
     var entrada = secao.querySelector("#cb-vereadores"), lista = secao.querySelector("#cb-vereadores-lista"),
       aviso = secao.querySelector("#cb-vereadores-status");
     if (!entrada && !lista && !aviso) {
@@ -266,6 +266,7 @@
         if (i >= 0) { ir(itens[i].href); return; }
       }
     });
+    secao.classList.add("cb-ativo");
     return { entrada: entrada, lista: lista, aviso: aviso, opcoes: opcoes };
   }
 

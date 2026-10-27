@@ -3,8 +3,6 @@ from __future__ import annotations
 
 from html import escape
 from html.parser import HTMLParser
-import gzip
-from pathlib import Path
 import re
 import unittest
 from unittest.mock import patch
@@ -169,35 +167,6 @@ class TestGlossarioPublicado(unittest.TestCase):
             with self.subTest(tag=tag):
                 doc = PaginaGlossario(f'<{tag}><a class="glossario" data-termo="veto">veto</a></{tag}>')
                 self.assertIn(tag, doc.invalidos)
-
-    def test_glossario_nas_paginas_geradas(self):
-        raiz = Path(__file__).resolve().parents[1]
-        saida = raiz / "site"
-        paginas = sorted(saida.rglob("*.html")) if saida.is_dir() else []
-        fontes = [p for pasta in ("coletor", "config", "site_src")
-                  for p in (raiz / pasta).rglob("*") if p.is_file()]
-        atualizado_em = max(p.stat().st_mtime_ns for p in fontes)
-        if not paginas or any(p.stat().st_mtime_ns <= atualizado_em for p in paginas):
-            self.skipTest("site/ ausente ou desatualizado; rode python -m coletor.gerar_site")
-        documentos = {}
-        for caminho in paginas:
-            with self.subTest(pagina=str(caminho.relative_to(saida))):
-                bruto = caminho.read_bytes()
-                doc = PaginaGlossario(bruto.decode("utf-8"))
-                documentos[caminho.relative_to(saida).as_posix()] = doc
-                self.assertFalse(doc.invalidos)
-                self.assertLessEqual(doc.templates, 1)
-                self.assertTrue(doc.usados <= doc.definidos, doc.usados - doc.definidos)
-                self.assertTrue(doc.usados <= TERMOS.keys())
-                self.assertLessEqual(len(gzip.compress(bruto, mtime=0)), 100 * 1024)
-        for nome in ("leis.html", "projetos.html", "atividades.html", "ruido.html", "sessoes.html"):
-            with self.subTest(pagina=nome):
-                self.assertIn(nome, documentos)
-                self.assertTrue(documentos[nome].usados)
-                self.assertEqual(documentos[nome].templates, 1)
-        self.assertIn("metodologia.html", documentos)
-        for chave in TERMOS:
-            self.assertIn(f"g-{chave}", documentos["metodologia.html"].ids)
 
 
 if __name__ == "__main__":

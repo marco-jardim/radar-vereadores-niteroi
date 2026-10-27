@@ -104,8 +104,8 @@
 }
 
 /* ---- quem é meu vereador (combobox de inicio.js sobre a lista <details> do servidor)
-   O campo vem no HTML para não deslocar o layout quando o script o ativa; sem JS, só a lista. */
-html:not(.js) .cb-campo { display: none; }
+   O campo vem no HTML, mas só aparece depois de inicio.js ativá-lo; sem o script, só a lista. */
+.quem-vereador:not(.cb-ativo) .cb-campo { display: none; }
 .cb-campo { position: relative; }
 .quem-vereador > p { max-width: 75ch; color: var(--tinta-suave); margin: 0 0 var(--esp-3); }
 #cb-vereadores-rotulo { display: block; font-weight: 600; margin-bottom: var(--esp-1); }

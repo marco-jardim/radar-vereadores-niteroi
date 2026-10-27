@@ -84,6 +84,28 @@ def externos(html: str) -> list[str]:
 
 
 class TestCabecalho(unittest.TestCase):
+    def test_marca_opcional_decorativa_com_versao_e_prefixo(self):
+        with tempfile.TemporaryDirectory() as pasta:
+            fonte = Path(pasta)
+            for nome in ("estilo.css", "dados.js", "app.js"):
+                (fonte / nome).write_bytes(b"/* recurso de teste */")
+            with mock.patch.object(P, "FONTE_ESTATICA", fonte):
+                html = P.pagina("Início", "", "index.html")
+                self.assertNotIn('class="marca-simbolo"', html)
+                self.assertIn('>Radar dos Vereadores <span>Niterói</span></a>', html)
+                conteudo = b'<svg xmlns="http://www.w3.org/2000/svg"><symbol id="marca"/></svg>'
+                (fonte / "marca.svg").write_bytes(conteudo)
+                versao = hashlib.sha1(conteudo).hexdigest()[:10]
+                for prefixo in ("", "../", "/radar-vereadores-niteroi/"):
+                    with self.subTest(prefixo=prefixo):
+                        html = P.pagina("Início", "", "index.html", prefixo=prefixo)
+                        self.assertIn(
+                            f'<a class="marca" href="{prefixo}index.html">'
+                            '<svg class="marca-simbolo" aria-hidden="true" focusable="false" '
+                            'viewBox="0 0 64 64" width="28" height="28">'
+                            f'<use href="{prefixo}marca.svg?v={versao}#marca"/></svg>'
+                            'Radar dos Vereadores <span>Niterói</span></a>', html)
+
     def test_classe_js_no_head_antes_do_estilo(self):
         html = P.pagina("Título", "<p>corpo</p>", "index.html")
         cab = html.split("</head>", 1)[0]

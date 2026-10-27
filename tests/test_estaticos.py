@@ -12,6 +12,15 @@ from coletor.site import paginas as P
 
 
 class TestEstaticos(unittest.TestCase):
+    def test_fontes_woff2_validas_e_ate_60_kib_brutos(self):
+        fontes = sorted((P.FONTE_ESTATICA / "fontes").glob("*.woff2"))
+        self.assertTrue(fontes)
+        for caminho in fontes:
+            with self.subTest(fonte=caminho.name):
+                conteudo = caminho.read_bytes()
+                self.assertTrue(conteudo.startswith(b"wOF2"))
+                self.assertLessEqual(len(conteudo), 60 * 1024)
+
     def setUp(self):
         temporario = tempfile.TemporaryDirectory(prefix="estaticos-")
         self.addCleanup(temporario.cleanup)

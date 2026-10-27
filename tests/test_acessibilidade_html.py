@@ -1,20 +1,17 @@
 """Acessibilidade do HTML: aninhamento válido, abas do placar, coautores e gráficos com links.
 
-Os testes de unidade chamam os renderizadores diretamente, sem site/. A varredura de site/ reusa a saída
-existente, sem gerá-la, e é pulada se ela estiver ausente ou mais antiga que os fontes do gerador.
+Os testes de unidade chamam os renderizadores diretamente, sem site/. A varredura completa usa a saída
+recém-gerada em tests/test_gerar_site.py.
 """
 from __future__ import annotations
 
 import unittest
 from html.parser import HTMLParser
-from pathlib import Path
 
-from coletor import gerar_site
 from coletor.site import graficos as G
 from coletor.site import paginas as P
 from tests.test_documentos_site import montar
 
-RAIZ = Path(__file__).resolve().parents[1]
 VAZIOS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
 CAMPOS = {"input", "select", "textarea"}
 
@@ -197,30 +194,6 @@ class TestGraficosComLinks(unittest.TestCase):
         for html in ruins:
             with self.subTest(html=html):
                 self.assertTrue(analisar(html).problemas)
-
-
-# ---------------------------------------------------------- site/ existente
-def fontes_do_gerador() -> list[Path]:
-    return [p for pasta in ("coletor", "config", "site_src")
-            for p in (RAIZ / pasta).rglob("*") if p.is_file()]
-
-
-class TestSiteGerado(unittest.TestCase):
-    def paginas(self) -> list[Path]:
-        saida = gerar_site.SAIDA
-        paginas = sorted(saida.rglob("*.html")) if saida.is_dir() else []
-        if not paginas:
-            self.skipTest("site/ ausente; rode python -m coletor.gerar_site para a varredura de acessibilidade")
-        recente = max(f.stat().st_mtime_ns for f in fontes_do_gerador())
-        if any(pagina.stat().st_mtime_ns <= recente for pagina in paginas):
-            self.skipTest("site/ mais antigo que coletor/, config/ ou site_src/; rode python -m coletor.gerar_site")
-        return paginas
-
-    def test_aninhamento_abas_e_paineis(self):
-        for pagina in self.paginas():
-            with self.subTest(pagina=str(pagina.relative_to(gerar_site.SAIDA))):
-                problemas = analisar(pagina.read_text(encoding="utf-8")).problemas
-                self.assertEqual(problemas, [], "\n".join(problemas[:10]))
 
 
 if __name__ == "__main__":

@@ -346,6 +346,9 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
                      f'<meta property="og:image:alt" content="{esc(ALT_IMAGEM_OG)}">\n'
                      f'<meta name="twitter:image" content="{url_og}">\n')
     icone = f'<link rel="icon" href="{esc(url_estatica("favicon.svg", prefixo))}" type="image/svg+xml">' if (FONTE_ESTATICA / "favicon.svg").is_file() else ""
+    marca = ('<svg class="marca-simbolo" aria-hidden="true" focusable="false" viewBox="0 0 64 64" width="28" height="28">'
+             f'<use href="{esc(url_estatica("marca.svg", prefixo))}#marca"/></svg>'
+             if (FONTE_ESTATICA / "marca.svg").is_file() else "")
     # Fontes críticas auto-hospedadas: a URL do preload é a mesma da url() publicada em estilo.css (com ?v=).
     fontes = "".join(f'<link rel="preload" as="font" type="font/woff2" crossorigin href="{esc(url_estatica(nome, prefixo))}">\n'
                      for nome in ("fontes/public-sans-latin-wght-normal.woff2", "fontes/barlow-condensed-latin-700-normal.woff2")
@@ -381,7 +384,7 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
 <body>
 <a class="pular" href="#conteudo">Ir para o conteúdo</a>
 <header class="topo">
- <a class="marca" href="{esc(prefixo)}index.html">Radar dos Vereadores <span>Niterói</span></a>
+ <a class="marca" href="{esc(prefixo)}index.html">{marca}Radar dos Vereadores <span>Niterói</span></a>
  <button class="menu-botao" type="button" aria-expanded="false" aria-controls="menu-principal" hidden>Menu</button>
  <nav id="menu-principal" aria-label="Principal">{nav}<div class="tema" role="group" aria-label="Tema" hidden><button type="button" data-tema="auto" aria-pressed="true">Automático</button><button type="button" data-tema="claro" aria-pressed="false">Claro</button><button type="button" data-tema="escuro" aria-pressed="false">Escuro</button></div></nav>
 </header>

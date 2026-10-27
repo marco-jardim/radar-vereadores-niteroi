@@ -4,9 +4,7 @@ from __future__ import annotations
 import gzip
 import re
 import unittest
-from pathlib import Path
 
-from coletor import gerar_site
 from coletor.site import paginas as P
 from tests.test_design_tokens import declaracoes as ler_declaracoes
 from tests.test_design_tokens import regras, sem_comentarios
@@ -127,19 +125,6 @@ def tamanho_fonte(valor: str) -> str | None:
     return tamanho.group()
 
 
-def paginas_atuais(caso: unittest.TestCase) -> list[Path]:
-    """Reusa site/ de test_gerar_site, sem chamar o gerador novamente."""
-    saida = gerar_site.SAIDA
-    paginas = sorted(saida.rglob("*.html")) if saida.is_dir() else []
-    raiz = Path(__file__).resolve().parents[1]
-    atualizado_em = max(p.stat().st_mtime_ns for pasta in ("coletor", "config", "site_src")
-                        for p in (raiz / pasta).rglob("*") if p.is_file())
-    if (not paginas or saida.stat().st_mtime_ns <= atualizado_em
-            or any(pagina.stat().st_mtime_ns <= atualizado_em for pagina in paginas)):
-        caso.skipTest("site/ ausente ou desatualizado; rode python -m coletor.gerar_site")
-    return paginas
-
-
 # Os orçamentos sintéticos de sessões já são cobertos por tests/test_pagina_sessoes.py.
 
 
@@ -225,12 +210,6 @@ class TestResponsivoCSS(unittest.TestCase):
     def test_css_publicado_ate_16_kib_gzip(self):
         publicado = P.bytes_estaticos(P.FONTE_ESTATICA / "estilo.css")
         self.assertLessEqual(len(gzip.compress(publicado, compresslevel=9, mtime=0)), 16 * 1024)
-
-    def test_html_gerado_dentro_do_orcamento(self):
-        for pagina in paginas_atuais(self):
-            with self.subTest(pagina=str(pagina.relative_to(gerar_site.SAIDA))):
-                tamanho = len(gzip.compress(pagina.read_bytes(), compresslevel=9, mtime=0))
-                self.assertLessEqual(tamanho, gerar_site.LIMITE_HTML_GZIP)
 
     def test_cores_forcadas_sem_textura_e_com_foco_highlight(self):
         regras_forcadas = [(lista, ler_declaracoes(corpo)) for contexto, lista, corpo in self.regras

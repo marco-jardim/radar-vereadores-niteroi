@@ -337,8 +337,8 @@ Não há carregamento automático de `.env`. A IA usa `POST /chat/completions`, 
 O gerador imprime tamanhos brutos/gzip, soma e máximo das famílias e avisos `::warning::` para os tetos
 oficiais de HTML/JSON/carga inicial. Não confunda esses tetos com alvos de apresentação; os testes do mapa
 de votos também têm um cenário sintético de até 65 KiB para a página com mapa.
-`tests/test_responsivo_css.py` também confere o teto de 100 KiB por HTML usando o `site/` existente,
-sem regenerá-lo; essa checagem é pulada se a saída estiver ausente ou desatualizada em relação ao CSS.
+`tests/test_gerar_site.py` (`TestGerarSite`) confere no site recém-gerado o teto de 100 KiB por HTML,
+a varredura de acessibilidade (sem bloco em `<p>`, sem focável em `role="img"`, abas) e a do glossário.
 
 ## Sessões: coleta, regras e apresentação
 

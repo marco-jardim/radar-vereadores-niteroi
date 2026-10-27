@@ -169,10 +169,11 @@ def figura(titulo: str, subtitulo: str, corpo_svg: str, leg: str, tab: str, rotu
     # role="img" torna os filhos apresentacionais: com links (pontos e rótulos com página própria), o SVG vira um
     # grupo rotulado, para que eles continuem expostos a leitores de tela. As marcas nunca recebem tabindex.
     papel = "group" if "<a " in corpo_svg else "img"
+    nome = "" if "aria-labelledby=" in corpo_svg.split(">", 1)[0] else f' aria-label="{esc(rotulo)}"'
     return f"""<figure class="grafico">
  <figcaption><h3>{esc(titulo)}</h3>{f'<p>{esc(subtitulo)}</p>' if subtitulo else ''}</figcaption>
  {leg}
- <div class="svg-box">{corpo_svg.replace('<svg ', f'<svg role="{papel}" aria-label="{esc(rotulo)}" ', 1)}</div>
+ <div class="svg-box">{corpo_svg.replace('<svg ', f'<svg role="{papel}"{nome} ', 1)}</div>
  {tab}
 </figure>"""
 

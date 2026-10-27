@@ -161,10 +161,11 @@ class TestQuemEMeuVereador(unittest.TestCase):
                       'aria-controls="cb-vereadores-lista" autocomplete="off">', html)
         self.assertIn('<ul role="listbox" id="cb-vereadores-lista" aria-labelledby="cb-vereadores-rotulo" hidden></ul>', html)
         self.assertIn('<p class="so-leitor" aria-live="polite" id="cb-vereadores-status"></p></div>', html)
-        # Sem JS, o campo some (a classe js vem de SCRIPT_CABECA); na impressão também.
+        # Mesmo com o script do cabeçalho, o campo só aparece se inicio.js conseguir ativá-lo.
+        self.assertNotIn("cb-ativo", html)
         css = sem_comentarios(CSS_INICIO.read_text(encoding="utf-8"))
         ocultos = [(c, s) for c, s, corpo in regras(css) if ".cb-campo" in s and declaracoes(corpo).get("display", "").startswith("none")]
-        self.assertIn(((), "html:not(.js) .cb-campo"), ocultos)
+        self.assertIn(((), ".quem-vereador:not(.cb-ativo) .cb-campo"), ocultos)
         self.assertTrue(any(c == ("@media print",) for c, _ in ocultos))
 
     def test_resumo_com_eleitos_e_suplentes(self):
@@ -204,6 +205,11 @@ class TestMapaHome(unittest.TestCase):
         html = I.mapa_home(modelo_base(documentos=docs_mapa(), geo_bairros=geo_completo()))
         self.assertTrue(html.startswith('<section class="mapa-home" aria-labelledby="t-mapa-home"><h2 id="t-mapa-home"'))
         self.assertIn('class="mapa-bairros"', html)
+        svg = re.search(r'<svg\b[^>]*class="mapa-bairros"[^>]*>', html).group()
+        self.assertIn('aria-labelledby="', svg)
+        self.assertNotIn('aria-label="', svg)
+        titulo = re.search(r'aria-labelledby="([^"]+)"', svg).group(1)
+        self.assertIn(f'<title id="{titulo}">', html)
         self.assertIn(f"Indicações por bairro, legislatura {ATUAL}", html)
         # Só as indicações da legislatura atual: Icaraí com 1, Badu fora, uma sem bairro.
         self.assertIn("50% sem bairro identificado (1 de 2 indicações)", html)
@@ -442,6 +448,7 @@ class TestFasesDoCeu(unittest.TestCase):
         self.assertEqual(nomes, Counter({"marca": 1, "titulo": 1}))
         titulo = next(s for _, s, corpo in regras(css) if declaracoes(corpo).get("view-transition-name") == "titulo")
         self.assertIn(".hero h1", titulo)
+        self.assertIn(".memoria-abertura h1", titulo)
 
 
 class TestHomeIntegrada(unittest.TestCase):
@@ -551,7 +558,9 @@ def fontes_do_css_global() -> list[str]:
 
 class TestOrcamentoDaHome(unittest.TestCase):
     def html_sintetico(self) -> bytes:
-        return P.gerar_index(modelo_home(documentos=docs_mapa(), geo_bairros=geo_completo())).encode("utf-8")
+        with mock.patch.object(P, "MEMORIA_PUBLICADA", True):
+            return P.gerar_index(modelo_home(documentos=docs_mapa(), geo_bairros=geo_completo(),
+                                           memoria=I.carregar_memoria(RAIZ))).encode("utf-8")
 
     def html_home(self) -> bytes:
         """A home gerada em site/, se for mais nova que o código da geração; senão, a de um modelo sintético."""
@@ -566,10 +575,12 @@ class TestOrcamentoDaHome(unittest.TestCase):
         self.assertLessEqual(gz(self.html_sintetico()), 100 * KIB)
 
     def test_carga_da_home_ate_300_kib(self):
+        html = self.html_home()
+        emblemas = sorted(set(re.findall(r'<use href="(memoria/[^"?#]+\.svg)', html.decode("utf-8"))))
+        self.assertTrue(emblemas)
         textos = ["estilo.css", "inicio.css", "navegacao.js", "inicio.js", "dados.js", "app.js",
-                  *(f"paisagem/{c}.svg" for c in I.CAMADAS if (P.FONTE_ESTATICA / f"paisagem/{c}.svg").is_file()),
-                  "textura-bairros.svg"]
-        self.assertEqual(len(textos), 11)  # seis CSS/JS, quatro máscaras e a textura de body::before
+                   *(f"paisagem/{c}.svg" for c in I.CAMADAS if (P.FONTE_ESTATICA / f"paisagem/{c}.svg").is_file()),
+                   "textura-bairros.svg", "favicon.svg", "marca.svg", *emblemas]
         fontes = fontes_do_css_global()
         # Todas as faces que a home pode pedir: Barlow 500/600/700 e Public Sans normal/itálico, latin e latin-ext.
         self.assertEqual(len(fontes), 10, fontes)
@@ -578,7 +589,7 @@ class TestOrcamentoDaHome(unittest.TestCase):
         tamanhos = {nome: gz(P.bytes_estaticos(P.FONTE_ESTATICA / nome)) for nome in textos}
         # WOFF2 já é comprimido e não é servido com gzip: conta os bytes brutos.
         tamanhos.update({nome: len(P.bytes_estaticos(P.FONTE_ESTATICA / nome)) for nome in fontes})
-        tamanhos["index.html"] = gz(self.html_home())
+        tamanhos["index.html"] = gz(html)
         total = sum(tamanhos.values())
         self.assertLessEqual(total, 300 * KIB, tamanhos)
 

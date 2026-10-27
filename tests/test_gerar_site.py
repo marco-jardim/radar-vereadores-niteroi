@@ -22,6 +22,8 @@ from coletor.site import inicio
 from coletor.site import paginas as P
 from coletor.site.modelo import TIPOS_DOC
 from tests import test_tabelas_rolaveis
+from tests.test_acessibilidade_html import analisar
+from tests.test_glossario import PaginaGlossario, TERMOS
 
 PAGINAS = ("index.html", "novidades.html", "leis.html", "projetos.html", "atividades.html", "sessoes.html", "ruido.html", "analises.html",
            "metodologia.html")
@@ -60,6 +62,40 @@ class TestGerarSite(unittest.TestCase):
                     self, caminho.read_text(encoding="utf-8"))
                 total += len(doc.tabelas)
         self.assertGreater(total, 0)
+
+    def test_acessibilidade_em_todas_as_paginas(self):
+        paginas = sorted(self.saida.rglob("*.html"))
+        self.assertTrue(paginas)
+        for caminho in paginas:
+            with self.subTest(pagina=str(caminho.relative_to(self.saida))):
+                problemas = analisar(caminho.read_text(encoding="utf-8")).problemas
+                self.assertEqual(problemas, [], "\n".join(problemas[:10]))
+
+    def test_glossario_em_todas_as_paginas(self):
+        documentos = {}
+        for caminho in self.saida.rglob("*.html"):
+            with self.subTest(pagina=str(caminho.relative_to(self.saida))):
+                doc = PaginaGlossario(caminho.read_text(encoding="utf-8"))
+                documentos[caminho.relative_to(self.saida).as_posix()] = doc
+                self.assertFalse(doc.invalidos)
+                self.assertLessEqual(doc.templates, 1)
+                self.assertTrue(doc.usados <= doc.definidos, doc.usados - doc.definidos)
+                self.assertTrue(doc.usados <= TERMOS.keys())
+        for nome in ("leis.html", "projetos.html", "atividades.html", "ruido.html", "sessoes.html"):
+            with self.subTest(pagina=nome):
+                self.assertIn(nome, documentos)
+                self.assertTrue(documentos[nome].usados)
+                self.assertEqual(documentos[nome].templates, 1)
+        self.assertIn("metodologia.html", documentos)
+        for chave in TERMOS:
+            self.assertIn(f"g-{chave}", documentos["metodologia.html"].ids)
+
+    def test_html_gerado_dentro_do_orcamento(self):
+        paginas = sorted(self.saida.rglob("*.html"))
+        self.assertTrue(paginas)
+        for caminho in paginas:
+            with self.subTest(pagina=str(caminho.relative_to(self.saida))):
+                self.assertLessEqual(gerar_site.tamanho_gzip(caminho.read_bytes()), gerar_site.LIMITE_HTML_GZIP)
 
     def test_memoria_publicada_e_rodape_em_todas_as_paginas(self):
         self.assertEqual(self.carregamentos_memoria, 1)

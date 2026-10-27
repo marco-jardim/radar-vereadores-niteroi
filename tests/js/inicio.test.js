@@ -53,6 +53,9 @@ class No {
     this.childNodes = [];
     this.parentNode = null;
     this.ouvintes = {};
+    this.classList = {
+      add: (nome) => this.setAttribute("class", [...new Set((this.getAttribute("class") || "").split(/\s+/).filter(Boolean).concat(nome))].join(" "))
+    };
     if (tag === "input") this.value = "";
     for (const f of filhos) this.appendChild(typeof f === "string" ? texto(f) : f);
   }
@@ -129,7 +132,7 @@ function campoServidor() {
 }
 
 // Página inicial com céu, números e "Quem é meu vereador?", como gerar_index e P.tile.
-function montar({ ceu = true, valores = VALORES, busca = true, campo = true, janela = {}, contexto = {}, visibilidade = "visible" } = {}) {
+function montar({ ceu = true, valores = VALORES, busca = true, campo = true, janela = {}, contexto = {}, visibilidade = "visible", preparar } = {}) {
   const doc = documento();
   doc.visibilityState = visibilidade;
   const main = new No("main");
@@ -148,6 +151,7 @@ function montar({ ceu = true, valores = VALORES, busca = true, campo = true, jan
       [new No("h2", { id: "t-quem" }, ["Quem é meu vereador?"]), ...(campoEl ? [campoEl] : []), detalhes]));
   }
   doc.appendChild(main);
+  if (preparar) preparar(doc);
   vm.runInNewContext(fonte, Object.assign({ document: doc, window: janela }, contexto), { filename: "inicio.js" });
   return { doc, ceu: ceuEl, tiles, detalhes, campo: campoEl, janela };
 }
@@ -315,6 +319,7 @@ function montarBusca({ campo = true } = {}) {
 test("reusa o campo do servidor sem inserir nada; a lista original fica no DOM e fechada", () => {
   const b = montarBusca();
   const pai = b.detalhes.parentNode;
+  assert.equal(pai.getAttribute("class"), "quem-vereador cb-ativo");
   assert.deepEqual(pai.filhos.map((f) => f.tag), ["h2", "div", "details"]);
   assert.equal(pai.filhos[1], b.campo);
   assert.deepEqual(b.campo.filhos.map((f) => f.tag), ["label", "input", "ul", "p"]);
@@ -338,6 +343,7 @@ test("reusa o campo do servidor sem inserir nada; a lista original fica no DOM e
 test("sem o campo do servidor, cria o mesmo campo antes da lista original", () => {
   const b = montarBusca({ campo: false });
   const pai = b.detalhes.parentNode;
+  assert.equal(pai.getAttribute("class"), "quem-vereador cb-ativo");
   assert.deepEqual(pai.filhos.map((f) => f.tag), ["h2", "div", "details"]);
   const campo = pai.filhos[1];
   assert.equal(campo.getAttribute("class"), "cb-campo");
@@ -360,6 +366,21 @@ test("não ativa duas vezes o mesmo campo", () => {
   vm.runInNewContext(fonte, { document: b.doc, window: {} });
   assert.equal(b.lista.filhos.length, 4);
   assert.equal(b.entrada.ouvintes.input.length, 1);
+  assert.equal(b.detalhes.parentNode.getAttribute("class"), "quem-vereador cb-ativo");
+});
+
+test("campo só é revelado após ligar os eventos; falha preserva a lista alternativa", () => {
+  for (const falhar of [
+    (doc) => doc.getElementById("cb-vereadores-status").parentNode.childNodes.pop(),
+    (doc) => { doc.getElementById("cb-vereadores").addEventListener = null; },
+    (doc) => { doc.getElementById("cb-vereadores-lista").addEventListener = () => { throw Error("evento"); }; }
+  ]) {
+    const p = montar({ preparar: falhar });
+    assert.equal(p.detalhes.parentNode.getAttribute("class"), "quem-vereador");
+    assert.equal(p.doc.querySelectorAll("#lista-vereadores li").length, VEREADORES.length);
+  }
+  const css = fs.readFileSync(path.join(__dirname, "../../site_src/inicio.css"), "utf8");
+  assert.match(css, /\.quem-vereador:not\(\.cb-ativo\) \.cb-campo\s*\{\s*display:\s*none;/);
 });
 
 test("consulta vazia ou só com espaços fica fechada; seta para baixo mostra todos", () => {
