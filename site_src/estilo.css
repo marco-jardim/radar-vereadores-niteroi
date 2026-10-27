@@ -38,7 +38,7 @@
   --selo-alto-fundo: #0B7A5E;
   --selo-alto-texto: #FFFFFF;
   --borda-campo: #7A8A97;
-  --display: "Barlow Condensed", "Barlow Condensed fallback", "Arial Narrow", sans-serif;
+  --display: "Barlow Condensed", "Barlow Condensed fallback", "Barlow Condensed fallback largo", sans-serif;
   --texto: "Public Sans", "Public Sans fallback", system-ui, sans-serif;
   /* Escala tipográfica de razão 1,2, fluida entre telas pequenas e grandes. */
   --fs--1: clamp(.8125rem, .8rem + .08vw, .8333rem);
@@ -144,9 +144,15 @@
   size-adjust: 107%; ascent-override: 88.8%; descent-override: 23.4%; line-gap-override: 0%;
 }
 @font-face {
-  font-family: "Barlow Condensed fallback"; src: local("Arial Narrow"), local("Arial");
-  size-adjust: 92%; ascent-override: 108.7%; descent-override: 21.7%; line-gap-override: 0%;
+  font-family: "Barlow Condensed fallback"; src: local("Arial Narrow");
+  size-adjust: 100%; ascent-override: 100%; descent-override: 20%; line-gap-override: 0%;
 }
+/* Sem Arial Narrow (Linux, Android, macOS sem Office), a Arial reduzida aproxima a largura condensada. */
+@font-face {
+  font-family: "Barlow Condensed fallback largo"; src: local("Arial");
+  size-adjust: 82%; ascent-override: 122%; descent-override: 24.4%; line-gap-override: 0%;
+}
+::placeholder { color: var(--tinta-fraca); opacity: 1; }
 
 * { box-sizing: border-box; }
 .so-leitor { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }

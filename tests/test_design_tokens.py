@@ -36,6 +36,9 @@ PARES = (
     ("tinta", "efeito-fundo", 4.5), ("tinta", "sem-efeito-fundo", 4.5), ("tinta", "alerta-fundo", 4.5),
     ("borda-campo", "superficie", 3), ("borda-campo", "fundo", 3),
     ("foco", "fundo", 3), ("foco", "superficie", 3),
+    # Glifos do mapa de votos: texto nas células (superfície) e gráfico na legenda (fundo).
+    ("voto-maioria", "superficie", 4.5), ("voto-diferente", "superficie", 4.5), ("voto-abstencao", "superficie", 4.5),
+    ("voto-maioria", "fundo", 3), ("voto-diferente", "fundo", 3), ("voto-abstencao", "fundo", 3),
 )
 # Fontes com preload em pagina(), na mesma ordem do <head>.
 FONTES_CRITICAS = ("fontes/public-sans-latin-wght-normal.woff2", "fontes/barlow-condensed-latin-700-normal.woff2")
@@ -331,7 +334,8 @@ class TestFontes(unittest.TestCase):
 
     def test_fallbacks_metricos_nas_pilhas(self):
         fallbacks = {f["font-family"].strip("\"'"): f for f in self.faces if "url(" not in f.get("src", "")}
-        self.assertEqual(set(fallbacks), {"Public Sans fallback", "Barlow Condensed fallback"})
+        self.assertEqual(set(fallbacks),
+                         {"Public Sans fallback", "Barlow Condensed fallback", "Barlow Condensed fallback largo"})
         for nome, face in fallbacks.items():
             with self.subTest(fonte=nome):
                 self.assertTrue(face["src"].startswith("local("))
@@ -340,7 +344,9 @@ class TestFontes(unittest.TestCase):
         self.assertIn('local("Arial Narrow")', fallbacks["Barlow Condensed fallback"]["src"])
         base = temas(self.css)["claro"]
         self.assertTrue(base["texto"].startswith('"Public Sans", "Public Sans fallback",'))
-        self.assertTrue(base["display"].startswith('"Barlow Condensed", "Barlow Condensed fallback",'))
+        self.assertTrue(base["display"].startswith(
+            '"Barlow Condensed", "Barlow Condensed fallback", "Barlow Condensed fallback largo",'))
+        self.assertEqual(fallbacks["Barlow Condensed fallback largo"]["src"], 'local("Arial")')
 
 
 class TestCabecalho(unittest.TestCase):
