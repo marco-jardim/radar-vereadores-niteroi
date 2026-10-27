@@ -11,7 +11,6 @@ DESCRICOES_EMBLEMAS = {
     "vital-brazil": "serpente estilizada e frasco",
     "antonio-parreiras": "paleta e moldura com horizonte",
     "ismael-silva": "pandeiro e pauta",
-    "oscar-niemeyer": "a curva do MAC sobre a rampa",
 }
 
 
