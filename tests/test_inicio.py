@@ -210,7 +210,7 @@ class TestFaixaMemoria(unittest.TestCase):
         html = I.faixa_memoria(memoria)
         pagina = gerar_memoria(memoria)
         self.assertIn('id="fm-titulo" class="h-secao">Niterói que nos inspira</h2>', html)
-        self.assertEqual(html.count('<svg class="emblema"'), 5)
+        self.assertEqual(html.count('<svg class="emblema"'), len(memoria["homenageados"]))
         self.assertEqual(len(ids(html)), len(set(ids(html))))
         for pessoa in memoria["homenageados"]:
             identificador, nome = pessoa["id"], pessoa["nome"]

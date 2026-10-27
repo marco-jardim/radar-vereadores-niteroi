@@ -44,7 +44,8 @@ class EmblemasTest(unittest.TestCase):
 
     def test_emblemas_xml_simbolos_cores_e_tamanho(self) -> None:
         caminhos = self.emblemas()
-        self.assertEqual(len(caminhos), 5)
+        config = json.loads((RAIZ / "config" / "memoria.json").read_text(encoding="utf-8"))
+        self.assertEqual(len(caminhos), len(config["homenageados"]))
         for caminho in caminhos:
             with self.subTest(emblema=caminho.name):
                 raiz = self.ler_svg(caminho, 6 * 1024)
