@@ -305,11 +305,15 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
     fontes = "".join(f'<link rel="preload" as="font" type="font/woff2" crossorigin href="{esc(url_estatica(nome, prefixo))}">\n'
                      for nome in ("fontes/public-sans-latin-wght-normal.woff2", "fontes/barlow-condensed-latin-700-normal.woff2")
                      if (FONTE_ESTATICA / nome).is_file())
+    # Menu móvel (melhoria progressiva): opcional, como os demais estáticos fora de dados.js/app.js.
+    navegacao = (f'<script src="{esc(url_estatica("navegacao.js", prefixo))}" defer></script>\n'
+                 if (FONTE_ESTATICA / "navegacao.js").is_file() else "")
     return f"""<!doctype html>
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.classList.add("js")</script>
 <title>{esc(titulo)}</title>
 <meta name="description" content="{desc}">
 <meta property="og:title" content="{esc(titulo)}">
@@ -323,7 +327,8 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
 <a class="pular" href="#conteudo">Ir para o conteúdo</a>
 <header class="topo">
  <a class="marca" href="{prefixo}index.html">Radar dos Vereadores <span>Niterói</span></a>
- <nav aria-label="Principal">{nav}</nav>
+ <button class="menu-botao" type="button" aria-expanded="false" aria-controls="menu-principal" hidden>Menu</button>
+ <nav id="menu-principal" aria-label="Principal">{nav}</nav>
 </header>
 <main id="conteudo" data-prefixo="{prefixo}">
 {corpo}
@@ -332,7 +337,7 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
  <p>Dados públicos do <a href="https://consultaniteroi.siscam.com.br/">SISCAM da Câmara Municipal de Niterói</a>, coletados toda semana. Classificação por regras, curadoria com fonte e IA, explicada na <a href="{prefixo}metodologia.html">metodologia</a>. Código aberto sob GPL v3 no <a href="{REPO}">GitHub</a>. Encontrou um erro? <a href="{REPO}/issues/new">Abra uma issue</a>.</p>
 </footer>
 {(DIALOGO_SISCAM + chr(10)) if dialogo else ''}<div id="tip" role="tooltip" hidden></div>
-<script src="{prefixo}dados.js?v={versao_estatica('dados.js')}" defer></script>
+{navegacao}<script src="{prefixo}dados.js?v={versao_estatica('dados.js')}" defer></script>
 <script src="{prefixo}app.js?v={versao_estatica('app.js')}" defer></script>
 {extras}
 </body>
