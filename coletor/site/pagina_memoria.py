@@ -86,7 +86,8 @@ def gerar_memoria(memoria: dict | None) -> str | None:
     corpo = (
         '<div class="memoria">'
         '<section class="memoria-abertura"><h1>Cidade Sorriso</h1>'
-        '<p>Niterói é chamada de Cidade Sorriso. Esta página reúne pessoas ligadas à cidade '
+        '<p>Niterói é chamada de Cidade Sorriso (<a href="https://www.fazenda.niteroi.rj.gov.br/site/parabens-niteroi/">'
+        'Prefeitura de Niterói</a>). Esta página reúne pessoas ligadas à cidade '
         'e uma linha do tempo de sua história, com fontes para consulta.</p></section>'
         f'{criterios}<div class="memoria-pessoas">'
         + "".join(_homenageado(pessoa) for pessoa in memoria["homenageados"])

@@ -7,7 +7,7 @@
    "nome": "Arariboia",
    "nome_completo": "Arariboia, batizado Martim Afonso de Sousa",
    "nascimento": null,
-   "nascimento_texto": "século XVI",
+   "nascimento_texto": "data desconhecida",
    "morte": null,
    "morte_texto": "fim do século XVI (as fontes divergem entre 1587 e 1589)",
    "categoria": "fundacao",
@@ -18,7 +18,7 @@
     "Recebeu uma sesmaria na região onde hoje fica o bairro de São Lourenço, em Niterói.",
     "Foi batizado com o nome de Martim Afonso de Sousa e recebeu da Coroa portuguesa o posto colonial de capitão-mor de sua aldeia."
    ],
-   "lugar_de_memoria": "Estátua de Arariboia, na orla do Centro de Niterói, na Avenida Rio Branco, reposicionada em 2025.",
+   "lugar_de_memoria": "Estátua de Arariboia, na orla do Centro de Niterói, na Avenida Rio Branco, reposicionada em 10 de abril de 2025.",
    "emblema": "arariboia.svg",
    "imagem": {
     "tipo": "propria",
@@ -100,7 +100,7 @@
     "Foi pintor, desenhista e ilustrador, com produção de paisagens e cenas históricas.",
     "Ingressou na Academia Imperial de Belas Artes em 1883 e deixou a instituição em 1884 para acompanhar Georg Grimm.",
     "Participou do Grupo Grimm, que praticava pintura ao ar livre na região da Boa Viagem, em Niterói.",
-    "Fundou a Escola do Ar Livre em Niterói, em 1891.",
+    "Fundou a Escola do Ar Livre em Niterói, no fim do século XIX.",
     "Publicou em 1926 a autobiografia História de um pintor contada por ele mesmo."
    ],
    "lugar_de_memoria": "Museu Antônio Parreiras, na antiga casa-ateliê do pintor, no Ingá.",
@@ -176,7 +176,7 @@
     "Foi arquiteto e formou-se na Escola Nacional de Belas Artes em 1934.",
     "Projetou edifícios públicos de Brasília, incluindo o Congresso Nacional e o Palácio da Alvorada.",
     "Foi autor do projeto do Museu de Arte Contemporânea de Niterói.",
-    "Filiou-se ao PCB em 1945. Em nota de 2012, o partido informa que ele foi eleito presidente de honra em 1992; um obituário do The Guardian o descreve como presidente do partido de 1992 a 1996."
+    "Filiou-se ao PCB em 1945. Segundo nota publicada pelo partido em 2012, foi eleito seu presidente de honra em 1992. O obituário do The Guardian o identifica como presidente entre 1992 e 1996, sem qualificar o cargo como honorário."
    ],
    "lugar_de_memoria": "Museu de Arte Contemporânea de Niterói, no Mirante da Boa Viagem.",
    "emblema": "oscar-niemeyer.svg",
@@ -280,15 +280,19 @@
   {
    "data": "1974-03-04",
    "titulo": "Ponte Rio–Niterói",
-   "texto": "Foi inaugurada a ponte sobre a Baía de Guanabara, oficialmente Ponte Presidente Costa e Silva.",
+   "texto": "Foi inaugurada a Ponte Rio–Niterói, sobre a Baía de Guanabara, denominada Ponte Presidente Costa e Silva.",
    "fontes": [
     {
      "titulo": "Guanabara, o efêmero estado criado por JK e extinto pela ditadura militar — Agência Senado",
      "url": "https://www12.senado.leg.br/noticias/especiais/arquivo-s/guanabara-o-efemero-estado-criado-por-jk-e-extinto-pela-ditadura-militar"
     },
     {
-     "titulo": "Ponte Rio-Niterói — Wikipédia (apoio)",
-     "url": "https://pt.wikipedia.org/wiki/Ponte_Rio-Niter%C3%B3i"
+     "titulo": "Niterói: histórico e formação administrativa — Biblioteca do IBGE",
+     "url": "https://biblioteca.ibge.gov.br/index.php/biblioteca-catalogo?view=detalhes&id=31751"
+    },
+    {
+     "titulo": "50 anos da Ponte Rio–Niterói — ANTT",
+     "url": "https://www.gov.br/antt/pt-br/centrais-de-conteudo/fotografias/eventos/50-anos-ponte-rio-niteroi-4-3-2024"
     }
    ]
   },
@@ -328,8 +332,8 @@
   },
   {
    "data": "2021",
-   "titulo": "Início da cobertura do Radar",
-   "texto": "Ano inicial dos dados da Câmara reunidos pelo Radar dos Vereadores de Niterói.",
+   "titulo": "Primeiro ano dos dados do Radar",
+   "texto": "Primeiro ano abrangido pelos dados da Câmara reunidos pelo Radar dos Vereadores de Niterói.",
    "fontes": [
     {
      "titulo": "Metodologia — Radar dos Vereadores de Niterói",
