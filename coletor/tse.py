@@ -97,6 +97,14 @@ APELIDOS_TSE: dict[str, tuple[str, ...]] = {
     # Leandro Portugal: eleito em 2016 (PV, por QP) como "LEANDRO PORTUGAL FRAZEN DE LIMA";
     # conferido em WIKIPEDIA_VEREADORES
     "LEANDRO PORTUGAL FRANZEN DE LIMA": ("LEANDRO PORTUGAL FRAZEN DE LIMA",),
+    # confirmado pelo mantenedor em 2026-10-27
+    "EMANUEL JORGE ROCHA": ("EMANUEL JORGE MENDES DA ROCHA",),
+    # confirmado pelo mantenedor em 2026-10-27
+    "BENNY BRIOLLY": ("BENNY BRIOLLY ROSA DA SILVA SANTOS",),
+}
+# identidade confirmada pelo mantenedor em 2026-10-27; fixada por SQ_CANDIDATO
+CANDIDATURAS_FIXADAS: dict[str, dict[int, str]] = {
+    "BENNY BRIOLLY": {2020: "190000675864", 2026: "190002543064"},
 }
 # títulos removidos do início do nome de urna ("DR EMANUEL ROCHA" → "EMANUEL ROCHA")
 TITULOS_URNA = frozenset({
@@ -486,10 +494,12 @@ class IndiceCandidatos(dict):
     """
 
     elegiveis: list[dict]
+    por_sq: dict[str, dict]
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.elegiveis = []
+        self.por_sq = {}
 
 
 def _elegivel(cargo_chave: str, ue: str, uf: str) -> bool:
@@ -530,6 +540,7 @@ def ler_candidatos(caminho: Path, alvos: set[str]) -> IndiceCandidatos:
     exato procurado, para contar homônimos ignorados.
     """
     por_sq: dict[str, dict] = {}
+    sqs_fixados = {sq for anos in CANDIDATURAS_FIXADAS.values() for sq in anos.values()}
     for valores in linhas_csv(caminho, COLUNAS_CANDIDATOS, OBRIGATORIAS_CANDIDATOS):
         linha = dict(zip(COLUNAS_CANDIDATOS, valores))
         nomes = sorted({n for n in (normalizar(linha["NM_CANDIDATO"]), normalizar(linha["NM_SOCIAL_CANDIDATO"])) if n})
@@ -538,7 +549,7 @@ def ler_candidatos(caminho: Path, alvos: set[str]) -> IndiceCandidatos:
             continue
         ue, cargo_chave, uf = normalizar(linha["NM_UE"]), normalizar(linha["DS_CARGO"]), linha["SG_UF"] or ""
         elegivel = _elegivel(cargo_chave, ue, uf)
-        if not elegivel and not any(n in alvos for n in nomes):
+        if not elegivel and sq not in sqs_fixados and not any(n in alvos for n in nomes):
             continue
         turno = _inteiro(linha["NR_TURNO"]) or 1
         anterior = por_sq.get(sq)
@@ -562,6 +573,7 @@ def ler_candidatos(caminho: Path, alvos: set[str]) -> IndiceCandidatos:
             "turno": turno,
         }
     indice = IndiceCandidatos()
+    indice.por_sq = por_sq
     for sq in sorted(por_sq):
         for nome in por_sq[sq]["nomes"]:
             indice.setdefault(nome, []).append(por_sq[sq])
@@ -663,16 +675,25 @@ def subsequencia(curto: list[str], longo: list[str]) -> bool:
     return all(palavra in restante for palavra in curto)
 
 
-def casar(nome: str, indice: dict[str, list[dict]]) -> dict:
+def casar(nome: str, indice: dict[str, list[dict]], ano: int | None = None) -> dict:
     """Casamento: municipal só em Niterói; estadual/federal único no RJ.
 
-    Ordem: nome exato do SISCAM (e sem o apelido " - X"); depois os nomes civis de
-    APELIDOS_TSE, também exatos; depois nome de urna, com e sem título; depois nome do
+    Ordem: SQ_CANDIDATO fixado para o ano, se houver; nome exato do SISCAM (e sem o
+    apelido " - X"); depois os nomes civis de APELIDOS_TSE, também exatos;
+    depois nome de urna, com e sem título; depois nome do
     SISCAM como subsequência do nome civil. As alternativas automáticas só olham as
     candidaturas elegíveis e só valem com um único candidato válido.
     Devolve {"estado": "casado"|"ambiguo"|"sem_candidatura", "via", "candidato",
     "ambiguos", "ignorados"} e, quando ambíguo, "motivo".
     """
+    sq_fixado = CANDIDATURAS_FIXADAS.get(nome, {}).get(ano)
+    if sq_fixado:
+        por_sq = getattr(indice, "por_sq", None)
+        if por_sq is None:
+            por_sq = {c["sq"]: c for candidatos in indice.values() for c in candidatos}
+        candidato = por_sq.get(sq_fixado)
+        return {"estado": "casado" if candidato else "sem_candidatura", "via": "sq_fixado",
+                "candidato": candidato, "ambiguos": [], "ignorados": []}
     ignorados: list[dict] = []
     exatos = [(v, "nome", "ambíguo") for v in variantes(nome)]
     exatos += [(normalizar(a), "apelido_tse", "ambíguo pelo apelido") for a in APELIDOS_TSE.get(nome, ())]
@@ -881,6 +902,9 @@ def atualizar_perfis(perfis: dict, cfg: dict, resultados: dict[int, dict]) -> di
             "aproximados": [(n, casamentos[n]["via"], descrever(casamentos[n]["candidato"])) for n in pessoas
                             if casamentos.get(n, {}).get("estado") == "casado"
                             and casamentos[n].get("via") in (*VIAS_APROXIMADAS, "apelido_tse")],
+            "fixados": [(n, casamentos[n]["candidato"]["sq"]) for n in pessoas
+                        if casamentos.get(n, {}).get("estado") == "casado"
+                        and casamentos[n].get("via") == "sq_fixado"],
             "sem_candidatura": [n for n in pessoas if casamentos.get(n, {}).get("estado", "sem_candidatura") == "sem_candidatura"],
             "homonimos_ignorados": sum(len(c.get("ignorados") or []) for c in casamentos.values()),
             "votacao": resultados[ano].get("votos") is not None,
@@ -903,7 +927,7 @@ def processar_ano(ano: int, pessoas: list[str], alvos: set[str], cache: Path, ve
         aviso(f"candidaturas de {ano} indisponíveis; eleições desse ano ficam como estão")
         return None
     indice = ler_candidatos(arquivo, alvos)
-    casamentos = {nome: casar(nome, indice) for nome in pessoas}
+    casamentos = {nome: casar(nome, indice, ano) for nome in pessoas}
     resolver_conflitos(casamentos)
     sqs = {c["candidato"]["sq"] for c in casamentos.values() if c["estado"] == "casado"}
     votos = redes = None
@@ -929,7 +953,10 @@ def imprimir_resumo(relatorio: dict) -> None:
             f"votação: {'sim' if r['votacao'] else 'não'}; redes: {'sim' if r['redes'] else 'não'}"
         )
         for nome, via, candidato in r["aproximados"]:
-            print(f"{ano}: {nome} casado por {ROTULOS_VIA[via]} (confira na revisão): {candidato}")
+            revisao = "confirmado" if via == "apelido_tse" else "confira na revisão"
+            print(f"{ano}: {nome} casado por {ROTULOS_VIA[via]} ({revisao}): {candidato}")
+        for nome, sq in r.get("fixados", []):
+            print(f"{ano}: {nome} fixado por SQ (confirmado): {sq}")
         for nome, motivo, opcoes in r["ambiguos"]:
             aviso(f"{ano}: {nome} {motivo}, ignorado: {'; '.join(opcoes)}")
     if relatorio["sem_nenhuma"]:

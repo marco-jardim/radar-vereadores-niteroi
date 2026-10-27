@@ -301,9 +301,10 @@ class TestCasamentoAlternativo(unittest.TestCase):
     def tearDown(self):
         self._tmp.cleanup()
 
-    def indice(self, linhas: list[list[str]], alvos: set[str], ano: int = 2024):
+    def indice(self, linhas: list[list[str]], alvos: set[str], ano: int = 2024,
+               cabecalho: list[str] = CAB_CAND_SIT):
         caminho = self.dir / f"consulta_cand_{ano}.zip"
-        _zip(caminho, {f"consulta_cand_{ano}_RJ.csv": [CAB_CAND_SIT, *linhas]})
+        _zip(caminho, {f"consulta_cand_{ano}_RJ.csv": [cabecalho, *linhas]})
         return tse.ler_candidatos(caminho, alvos)
 
     def test_troca_de_cargo_fica_com_a_candidatura_apta(self):
@@ -370,7 +371,8 @@ class TestCasamentoAlternativo(unittest.TestCase):
 
     def test_nome_civil_parcial(self):
         indice = self.indice(self.LINHAS_NITEROI, {"EMANUEL JORGE ROCHA"})
-        casamento = tse.casar("EMANUEL JORGE ROCHA", indice)
+        with mock.patch.dict(tse.APELIDOS_TSE, {}, clear=True):
+            casamento = tse.casar("EMANUEL JORGE ROCHA", indice)
         self.assertEqual((casamento["estado"], casamento["via"], casamento["candidato"]["sq"]), ("casado", "nome_parcial", "5001"))
         self.assertTrue(tse.subsequencia("EMANUEL JORGE ROCHA".split(), "EMANUEL JORGE MENDES DA ROCHA".split()))
         self.assertFalse(tse.subsequencia("JORGE ROCHA".split(), "JORGE MENDES ROCHA".split()))  # menos de 3 palavras
@@ -419,6 +421,8 @@ class TestCasamentoAlternativo(unittest.TestCase):
             "LUIZ CARLOS GALLO DE FREITAS": ("LUIZ CARLOS DE FREITAS", "GALLO", "PFL", "ELEITO", 1996),
             "JOSÉ ANTONIO TORO FERNANDEZ": ("JOSÉ ANTONIO TORO FERNANDES", "ZAF", "PSD", "ELEITO", 2000),
             "LEANDRO PORTUGAL FRANZEN DE LIMA": ("LEANDRO PORTUGAL FRAZEN DE LIMA", "LEANDRO PORTUGAL", "PV", "ELEITO POR QP", 2016),
+            "EMANUEL JORGE ROCHA": ("EMANUEL JORGE MENDES DA ROCHA", "DR EMANUEL ROCHA", "PL", "SUPLENTE", 2024),
+            "BENNY BRIOLLY": ("BENNY BRIOLLY ROSA DA SILVA SANTOS", "BENNY BRIOLLY", "PSOL", "ELEITO", 2024),
         }
         for siscam, (civil, urna, partido, situacao, ano) in casos.items():
             with self.subTest(siscam=siscam):
@@ -437,11 +441,72 @@ class TestCasamentoAlternativo(unittest.TestCase):
                      "sem_nenhuma": [], "adicionados": [], "urls_ignoradas": []}
         with contextlib.redirect_stdout(io.StringIO()) as saida:
             tse.imprimir_resumo(relatorio)
-        self.assertIn("1996: X casado por apelido (confira na revisão)", saida.getvalue())
+        self.assertIn("1996: X casado por apelido (confirmado)", saida.getvalue())
+        self.assertNotIn("confira na revisão", saida.getvalue())
+
+    def test_nome_social_normalizado_antes_do_nome_de_urna(self):
+        civil = "NOME CIVIL SINTETICO"
+        indice = self.indice([
+            [*_cand_sit("NITERÓI", "VEREADOR", "8001", civil, "ELEITO", urna="OUTRA URNA"), "  Ána   Social Teste "],
+            [*_cand_sit("NITERÓI", "VEREADOR", "8002", "OUTRA PESSOA", "SUPLENTE", urna="ANA SOCIAL TESTE"), "#NULO"],
+        ], {"ANA SOCIAL TESTE"}, cabecalho=[*CAB_CAND_SIT, "NM_SOCIAL_CANDIDATO"])
+        casamento = tse.casar("ANA SOCIAL TESTE", indice)
+        self.assertEqual((casamento["estado"], casamento["via"], casamento["candidato"]["sq"]),
+                         ("casado", "nome", "8001"))
+        perfis = {"vereadores": {"ANA SOCIAL TESTE": {}}}
+        resultados = {2024: {"casamentos": {"ANA SOCIAL TESTE": casamento}}}
+        relatorio = tse.atualizar_perfis(perfis, {}, resultados)
+        with contextlib.redirect_stdout(io.StringIO()) as saida, contextlib.redirect_stderr(io.StringIO()) as erros:
+            tse.imprimir_resumo(relatorio)
+        self.assertNotIn(civil, str(relatorio) + saida.getvalue() + erros.getvalue())
+
+    def test_sq_fixado_tem_prioridade_e_so_vale_no_ano_confirmado(self):
+        indice = self.indice([
+            _cand_sit("NITERÓI", "VEREADOR", "8001", "NOME CIVIL SINTETICO", "SUPLENTE", urna="OUTRA URNA"),
+            _cand_sit("NITERÓI", "VEREADOR", "8002", "ANA SOCIAL TESTE", "ELEITO"),
+        ], {"ANA SOCIAL TESTE"})
+        with mock.patch.dict(tse.CANDIDATURAS_FIXADAS, {"ANA SOCIAL TESTE": {2024: "8001"}}):
+            casamento = tse.casar("ANA SOCIAL TESTE", indice, 2024)
+            self.assertEqual((casamento["estado"], casamento["via"], casamento["candidato"]["sq"]),
+                             ("casado", "sq_fixado", "8001"))
+            self.assertEqual(tse.casar("ANA SOCIAL TESTE", indice, 2020)["candidato"]["sq"], "8002")
+
+    def test_sq_fixado_ausente_nao_usa_alternativas(self):
+        indice = self.indice([
+            _cand_sit("NITERÓI", "VEREADOR", "8001", "ANA SOCIAL TESTE", "ELEITO"),
+        ], {"ANA SOCIAL TESTE"})
+        with mock.patch.dict(tse.CANDIDATURAS_FIXADAS, {"ANA SOCIAL TESTE": {2024: "800"}}):
+            casamento = tse.casar("ANA SOCIAL TESTE", indice, 2024)
+        self.assertEqual(casamento["estado"], "sem_candidatura")
+        self.assertIsNone(casamento["candidato"])
+
+    def test_candidaturas_fixadas_versionadas(self):
+        self.assertEqual(tse.CANDIDATURAS_FIXADAS["BENNY BRIOLLY"],
+                         {2020: "190000675864", 2026: "190002543064"})
 
 
 # ---- execução completa --------------------------------------------------------------
 class TestExecucao(Base):
+    def test_sq_fixado_no_importador_sem_nome_civil_no_relatorio_ou_log(self):
+        civil = "NOME CIVIL SINTETICO RESERVADO"
+        _zip(self.cache / "consulta_cand_2024.zip", {"consulta_cand_2024_RJ.csv": [
+            CAB_CAND, _cand("NITERÓI", "VEREADOR", "8001", civil, "PSOL", "ELEITO", urna="ANA SOCIAL TESTE"),
+        ]})
+        cfg = {"legislaturas": [], "apelidos": {}}
+        perfis = {"vereadores": {"ANA SOCIAL TESTE": {}}}
+        saida, erros = io.StringIO(), io.StringIO()
+        with mock.patch.dict(tse.CANDIDATURAS_FIXADAS, {"ANA SOCIAL TESTE": {2024: "8001"}}), \
+                mock.patch("coletor.tse.urllib.request.urlopen", side_effect=AssertionError("rede proibida")), \
+                contextlib.redirect_stdout(saida), contextlib.redirect_stderr(erros):
+            dados = tse.processar_ano(2024, ["ANA SOCIAL TESTE"], {"ANA SOCIAL TESTE"}, self.cache, {}, True)
+            relatorio = tse.atualizar_perfis(perfis, cfg, {2024: dados})
+            tse.imprimir_resumo(relatorio)
+        self.assertEqual(dados["casamentos"]["ANA SOCIAL TESTE"]["via"], "sq_fixado")
+        self.assertEqual(relatorio["anos"][2024]["fixados"], [("ANA SOCIAL TESTE", "8001")])
+        self.assertIn("2024: ANA SOCIAL TESTE fixado por SQ (confirmado): 8001", saida.getvalue())
+        self.assertNotIn("confira na revisão", saida.getvalue())
+        self.assertNotIn(civil, str(relatorio) + saida.getvalue() + erros.getvalue() + tse.texto_perfis(perfis))
+
     def test_atualiza_perfis(self):
         codigo, saida, erros = self.rodar()
         self.assertEqual(codigo, 0, erros)
