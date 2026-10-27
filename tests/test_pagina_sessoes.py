@@ -165,11 +165,18 @@ class TestPaginaSessoes(unittest.TestCase):
         self.assertEqual(pagina.call_args.args[2], "sessoes.html")
         self.assertTrue(pagina.call_args.kwargs["dialogo"])
         doc = Documento(html)
-        scripts = [n for n in doc.nos if n["tag"] == "script"]
+        # O manifesto embutido (type="application/json"), se houver, fica fora desta conferência.
+        scripts = [n for n in doc.nos if n["tag"] == "script" and n["attrs"].get("type") != "application/json"]
         self.assertEqual(pagina.call_args.kwargs["scripts"], ("sessoes.js",))
-        self.assertEqual(len(scripts), 3)
-        self.assertTrue(all(n["attrs"].get("src", "").startswith(("app.js?", "dados.js?", "sessoes.js?")) for n in scripts))
-        self.assertTrue(all(not Documento.texto(n).strip() for n in scripts))
+        externos = [n for n in scripts if n["attrs"].get("src")]
+        self.assertEqual([n["attrs"]["src"].split("?", 1)[0] for n in externos],
+                         ["navegacao.js", "dados.js", "app.js", "sessoes.js"])
+        self.assertTrue(all("?v=" in n["attrs"]["src"] for n in externos))
+        self.assertTrue(all(not Documento.texto(n).strip() for n in externos))
+        inline = [n for n in scripts if "src" not in n["attrs"]]
+        self.assertEqual(len(inline), 1)
+        self.assertNotIn("type", inline[0]["attrs"])
+        self.assertEqual(Documento.texto(inline[0]), 'document.documentElement.classList.add("js")')
         self.assertIn('id="siscam-dialogo"', html)
         self.assertNotIn('<iframe', html)
         blocos = [n for n in doc.nos if n["attrs"].get("id", "").startswith("sessoes-leg-")]

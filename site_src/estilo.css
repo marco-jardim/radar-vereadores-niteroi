@@ -179,6 +179,27 @@ button { font: inherit; color: inherit; }
 .topo nav a { text-decoration: none; font-weight: 600; font-size: .93rem; padding: 2px 0; border-bottom: 2px solid transparent; }
 .topo nav a:hover { border-bottom-color: var(--linha); }
 .topo nav a[aria-current="page"] { border-bottom-color: var(--tinta); }
+/* Menu móvel: navegacao.js mostra o botão e marca data-menu abaixo de 760px. Sem JS (ou sem matchMedia),
+   o botão fica oculto e a navegação vira grade de duas colunas com alvos de toque de 44px. */
+.menu-botao {
+  flex: none; min-width: 44px; min-height: 44px; padding: 0 var(--esp-3); cursor: pointer; font-weight: 600;
+  color: var(--tinta); background: var(--superficie); border: 1px solid var(--borda-campo); border-radius: var(--raio-1);
+}
+.menu-botao[aria-expanded="true"] { color: var(--superficie); background: var(--tinta); border-color: var(--tinta); }
+@media (max-width: 759.98px) {
+  .topo { align-items: center; }
+  .topo nav { flex-basis: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 var(--esp-2); }
+  .topo nav a { display: flex; align-items: center; min-height: 44px; padding: var(--esp-2) var(--esp-1); line-height: 1.3; }
+  .topo[data-menu] { padding-top: var(--esp-3); padding-bottom: var(--esp-3); gap: var(--esp-2) var(--esp-3); }
+  .topo[data-menu] .marca { flex: 1 1 0; min-width: 0; font-size: 1.25rem; }
+  .topo[data-menu="fechado"] nav { display: none; }
+}
+@media (min-width: 760px) {
+  /* Área de toque de 44px sem mudar o desenho do menu horizontal. */
+  .topo nav a { position: relative; }
+  .topo nav a::after { content: ""; position: absolute; top: -10px; bottom: -10px; left: -8px; right: -8px; }
+}
+@media print { .menu-botao { display: none; } }
 .rodape { margin-top: 56px; padding-top: 16px; padding-bottom: 40px; border-top: 1px solid var(--linha); font-size: .85rem; color: var(--tinta-suave); }
 
 .abertura { padding: 40px 0 12px; max-width: 72ch; }
