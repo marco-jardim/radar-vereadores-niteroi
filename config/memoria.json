@@ -1,0 +1,304 @@
+{
+ "_leia_me": "Conteúdo da página de memória. Todo fato precisa de fonte pública HTTPS. Imagens só próprias ou em domínio público pelo art. 44 da Lei 9.610/98. Para contestar ou sugerir, abra uma issue.",
+ "criterios": "Não homenageamos quem exerceu mandato eletivo ou função executiva na direção de partido político. Cargos coloniais, títulos honorários e militância pessoal não excluem e são mencionados com neutralidade.",
+ "homenageados": [
+  {
+   "id": "arariboia",
+   "nome": "Araribóia",
+   "nome_completo": "Araribóia, batizado Martim Afonso de Sousa",
+   "nascimento": null,
+   "nascimento_texto": "século XVI",
+   "morte": null,
+   "morte_texto": "fim do século XVI (as fontes divergem entre 1587 e 1589)",
+   "categoria": "fundacao",
+   "vinculo": "Liderou a aldeia de São Lourenço dos Índios, cuja posse em 1573 é o marco associado à fundação de Niterói.",
+   "biografia": [
+    "Foi uma liderança do povo temiminó.",
+    "Aliou-se aos portugueses nas disputas contra franceses e tamoios na região da Baía de Guanabara.",
+    "Recebeu uma sesmaria na região onde hoje fica o bairro de São Lourenço, em Niterói.",
+    "Foi batizado com o nome de Martim Afonso e recebeu da Coroa portuguesa o posto colonial de capitão-mor de sua aldeia."
+   ],
+   "lugar_de_memoria": "Monumento a Araribóia, na Praça Arariboia, no Centro de Niterói.",
+   "emblema": "arariboia.svg",
+   "imagem": {
+    "tipo": "propria",
+    "credito": "Ilustração própria do projeto"
+   },
+   "fontes": [
+    {
+     "titulo": "Arariboia — Os Brasis e suas Memórias",
+     "url": "https://osbrasisesuasmemorias.com.br/arariboia/"
+    },
+    {
+     "titulo": "A Cidade — Prefeitura de Niterói",
+     "url": "https://niteroi.rj.gov.br/niteroi/"
+    },
+    {
+     "titulo": "Niterói: histórico e formação administrativa — Biblioteca do IBGE",
+     "url": "https://biblioteca.ibge.gov.br/biblioteca-catalogo.html?id=31751&view=detalhes"
+    },
+    {
+     "titulo": "Arariboia — Wikipédia (apoio)",
+     "url": "https://pt.wikipedia.org/wiki/Arariboia"
+    }
+   ]
+  },
+  {
+   "id": "vital-brazil",
+   "nome": "Vital Brazil",
+   "nome_completo": "Vital Brazil Mineiro da Campanha",
+   "nascimento": "1865-04-28",
+   "morte": "1950-05-08",
+   "categoria": "ciencia",
+   "vinculo": "Transferiu-se para Niterói em 1919 e fundou o Instituto Vital Brazil, que dá nome ao bairro onde funciona.",
+   "biografia": [
+    "Nasceu em Campanha, Minas Gerais, e formou-se em medicina no Rio de Janeiro em 1891.",
+    "Pesquisou o ofidismo e demonstrou a especificidade dos soros antiofídicos.",
+    "Assumiu em 1901 a direção do Instituto Soroterápico de São Paulo, atual Instituto Butantan.",
+    "Fundou em Niterói o Instituto Vital Brazil, criado em 3 de junho de 1919.",
+    "Morreu na cidade do Rio de Janeiro em 8 de maio de 1950."
+   ],
+   "lugar_de_memoria": "Instituto Vital Brazil, no bairro Vital Brazil, em Niterói.",
+   "emblema": "vital-brazil.svg",
+   "imagem": {
+    "tipo": "propria",
+    "credito": "Ilustração própria do projeto"
+   },
+   "fontes": [
+    {
+     "titulo": "Vital Brazil — Biblioteca Virtual Oswaldo Cruz, Fiocruz",
+     "url": "https://oswaldocruz.fiocruz.br/index.php/acervos/correspondencias/correspondencia-cientifica/vital-brazil"
+    },
+    {
+     "titulo": "História do Instituto Vital Brazil — Governo do Estado do Rio de Janeiro",
+     "url": "https://www.rj.gov.br/vitalbrazil/index.php/node/16"
+    },
+    {
+     "titulo": "Vital Brazil — Ciência e Cientistas Brasileiros/as, Unifesp",
+     "url": "https://cienciaecientistas.unifesp.br/cientistas/vital-brazil"
+    }
+   ]
+  },
+  {
+   "id": "antonio-parreiras",
+   "nome": "Antônio Parreiras",
+   "nome_completo": "Antônio Diogo da Silva Parreiras",
+   "nascimento": "1860-01-20",
+   "morte": "1937-10-17",
+   "categoria": "artes",
+   "vinculo": "Nasceu e morreu em Niterói, onde manteve casa e ateliê e ensinou pintura.",
+   "biografia": [
+    "Foi pintor, desenhista e ilustrador, com produção de paisagens e cenas históricas.",
+    "Ingressou na Academia Imperial de Belas Artes em 1883 e deixou a instituição em 1884 para acompanhar Georg Grimm.",
+    "Participou do Grupo Grimm, que praticava pintura ao ar livre na região da Boa Viagem, em Niterói.",
+    "Fundou a Escola do Ar Livre em Niterói, em 1891.",
+    "Publicou em 1926 a autobiografia História de um pintor contada por ele mesmo."
+   ],
+   "lugar_de_memoria": "Museu Antônio Parreiras, na antiga casa-ateliê do pintor, no Ingá.",
+   "emblema": "antonio-parreiras.svg",
+   "imagem": {
+    "tipo": "propria",
+    "credito": "Ilustração própria do projeto"
+   },
+   "fontes": [
+    {
+     "titulo": "Antônio Parreiras — Enciclopédia Itaú Cultural",
+     "url": "https://enciclopedia.itaucultural.org.br/pessoa187/antonio-parreiras"
+    },
+    {
+     "titulo": "Museus — Prefeitura de Niterói",
+     "url": "https://niteroi.rj.gov.br/museus/"
+    },
+    {
+     "titulo": "Antônio Parreiras — Wikipédia (apoio)",
+     "url": "https://pt.wikipedia.org/wiki/Ant%C3%B4nio_Parreiras"
+    }
+   ]
+  },
+  {
+   "id": "ismael-silva",
+   "nome": "Ismael Silva",
+   "nome_completo": "Milton de Oliveira Ismael da Silva",
+   "nascimento": "1905-09-14",
+   "morte": "1978-03-14",
+   "categoria": "musica",
+   "vinculo": "Nasceu em Jurujuba, em Niterói, e mudou-se ainda criança para a cidade do Rio de Janeiro.",
+   "biografia": [
+    "Foi compositor e cantor de samba.",
+    "Mudou-se com a mãe para o Rio de Janeiro após a morte do pai, quando tinha três anos.",
+    "Participou, em 1928, da formação da Deixa Falar, no bairro do Estácio.",
+    "Compôs com Nilton Bastos e teve sambas gravados por Francisco Alves, como Se você jurar.",
+    "Também compôs com Noel Rosa e é autor de Antonico."
+   ],
+   "lugar_de_memoria": "Rua Ismael Silva, perto da Praça de São Domingos, em Niterói.",
+   "emblema": "ismael-silva.svg",
+   "imagem": {
+    "tipo": "propria",
+    "credito": "Ilustração própria do projeto"
+   },
+   "fontes": [
+    {
+     "titulo": "Ismael Silva — Enciclopédia Itaú Cultural",
+     "url": "https://enciclopedia.itaucultural.org.br/pessoas/40898-ismael-silva"
+    },
+    {
+     "titulo": "Ismael Silva — Dicionário Cravo Albin da Música Popular Brasileira",
+     "url": "https://dicionariompb.com.br/artista/ismael-silva/"
+    }
+   ]
+  },
+  {
+   "id": "oscar-niemeyer",
+   "nome": "Oscar Niemeyer",
+   "nome_completo": "Oscar Ribeiro de Almeida Niemeyer Soares Filho",
+   "nascimento": "1907-12-15",
+   "morte": "2012-12-05",
+   "categoria": "arquitetura",
+   "vinculo": "Projetou o Museu de Arte Contemporânea de Niterói, inaugurado em 2 de setembro de 1996.",
+   "biografia": [
+    "Foi arquiteto e formou-se na Escola Nacional de Belas Artes em 1934.",
+    "Projetou edifícios públicos de Brasília, incluindo o Congresso Nacional e o Palácio da Alvorada.",
+    "Foi autor do projeto do Museu de Arte Contemporânea de Niterói.",
+    "Filiou-se ao PCB em 1945 e, segundo nota do partido, recebeu em 1992 o título de presidente de honra."
+   ],
+   "lugar_de_memoria": "Museu de Arte Contemporânea de Niterói, no Mirante da Boa Viagem.",
+   "emblema": "oscar-niemeyer.svg",
+   "imagem": {
+    "tipo": "propria",
+    "credito": "Ilustração própria do projeto"
+   },
+   "fontes": [
+    {
+     "titulo": "Museus — Prefeitura de Niterói",
+     "url": "https://niteroi.rj.gov.br/museus/"
+    },
+    {
+     "titulo": "Oscar Niemeyer: uma legenda comunista para a história — PCB",
+     "url": "https://pcb.org.br/portal2/3982"
+    },
+    {
+     "titulo": "Oscar Niemeyer — Wikipédia (apoio)",
+     "url": "https://pt.wikipedia.org/wiki/Oscar_Niemeyer"
+    }
+   ]
+  }
+ ],
+ "linha_do_tempo": [
+  {
+   "data": "1573-11-22",
+   "titulo": "Fundação de Niterói",
+   "texto": "A cidade comemora sua fundação em 22 de novembro de 1573, associada à aldeia de São Lourenço dos Índios, liderada por Araribóia.",
+   "fontes": [
+    {
+     "titulo": "Aniversário de Niterói — Prefeitura de Niterói",
+     "url": "https://niteroi.rj.gov.br/aniversario-de-niteroi-prefeitura-promove-20-dias-de-shows-por-toda-a-cidade/"
+    },
+    {
+     "titulo": "A Cidade — Prefeitura de Niterói",
+     "url": "https://niteroi.rj.gov.br/niteroi/"
+    }
+   ]
+  },
+  {
+   "data": "1819-05-10",
+   "titulo": "Vila Real da Praia Grande",
+   "texto": "Um alvará elevou a povoação a vila, com o nome de Vila Real da Praia Grande; a vila foi instalada em 11 de agosto do mesmo ano.",
+   "fontes": [
+    {
+     "titulo": "Niterói: histórico e formação administrativa — Biblioteca do IBGE",
+     "url": "https://biblioteca.ibge.gov.br/biblioteca-catalogo.html?id=31751&view=detalhes"
+    }
+   ]
+  },
+  {
+   "data": "1835-03-26",
+   "titulo": "Capital da província",
+   "texto": "A Lei Provincial nº 2 fez da Vila da Praia Grande a capital da província do Rio de Janeiro.",
+   "fontes": [
+    {
+     "titulo": "Niterói: histórico e formação administrativa — Biblioteca do IBGE",
+     "url": "https://biblioteca.ibge.gov.br/biblioteca-catalogo.html?id=31751&view=detalhes"
+    }
+   ]
+  },
+  {
+   "data": "1835-03-28",
+   "titulo": "Cidade de Niterói",
+   "texto": "A Lei Provincial nº 6 elevou a vila à categoria de cidade, com o nome de Niterói.",
+   "fontes": [
+    {
+     "titulo": "Niterói: histórico e formação administrativa — Biblioteca do IBGE",
+     "url": "https://biblioteca.ibge.gov.br/biblioteca-catalogo.html?id=31751&view=detalhes"
+    }
+   ]
+  },
+  {
+   "data": "1894",
+   "data_fim": "1903",
+   "titulo": "Capital em Petrópolis",
+   "texto": "Durante a Revolta da Armada, a capital do estado foi transferida para Petrópolis. Voltou a Niterói em 1903.",
+   "fontes": [
+    {
+     "titulo": "A Revolta da Armada e a mudança da capital do Estado do Rio para Petrópolis — Instituto Histórico de Petrópolis",
+     "url": "https://ihp.org.br/revolda-da-armada-e-a-mudanca-da-capital-do-estado-do-rio-para-petropolis-a/"
+    },
+    {
+     "titulo": "Niterói: histórico e formação administrativa — Biblioteca do IBGE",
+     "url": "https://biblioteca.ibge.gov.br/biblioteca-catalogo.html?id=31751&view=detalhes"
+    }
+   ]
+  },
+  {
+   "data": "1974-03-04",
+   "titulo": "Ponte Rio–Niterói",
+   "texto": "Foi inaugurada a ponte sobre a Baía de Guanabara, oficialmente Ponte Presidente Costa e Silva.",
+   "fontes": [
+    {
+     "titulo": "Guanabara, o efêmero estado criado por JK e extinto pela ditadura militar — Agência Senado",
+     "url": "https://www12.senado.leg.br/noticias/especiais/arquivo-s/guanabara-o-efemero-estado-criado-por-jk-e-extinto-pela-ditadura-militar"
+    },
+    {
+     "titulo": "Ponte Rio-Niterói — Wikipédia (apoio)",
+     "url": "https://pt.wikipedia.org/wiki/Ponte_Rio-Niter%C3%B3i"
+    }
+   ]
+  },
+  {
+   "data": "1975-03-15",
+   "titulo": "Fusão dos estados",
+   "texto": "A fusão da Guanabara com o Rio de Janeiro entrou em vigor; a capital passou à cidade do Rio de Janeiro.",
+   "fontes": [
+    {
+     "titulo": "Guanabara, o efêmero estado criado por JK e extinto pela ditadura militar — Agência Senado",
+     "url": "https://www12.senado.leg.br/noticias/especiais/arquivo-s/guanabara-o-efemero-estado-criado-por-jk-e-extinto-pela-ditadura-militar"
+    },
+    {
+     "titulo": "Niterói: histórico e formação administrativa — Biblioteca do IBGE",
+     "url": "https://biblioteca.ibge.gov.br/biblioteca-catalogo.html?id=31751&view=detalhes"
+    }
+   ]
+  },
+  {
+   "data": "1996-09-02",
+   "titulo": "Museu de Arte Contemporânea",
+   "texto": "Foi inaugurado o MAC Niterói, projeto de Oscar Niemeyer, no Mirante da Boa Viagem.",
+   "fontes": [
+    {
+     "titulo": "Museus — Prefeitura de Niterói",
+     "url": "https://niteroi.rj.gov.br/museus/"
+    }
+   ]
+  },
+  {
+   "data": "2021",
+   "titulo": "Início da cobertura do Radar",
+   "texto": "Ano inicial dos dados da Câmara reunidos pelo Radar dos Vereadores de Niterói.",
+   "fontes": [
+    {
+     "titulo": "Metodologia — Radar dos Vereadores de Niterói",
+     "url": "https://marco-jardim.github.io/radar-vereadores-niteroi/metodologia.html"
+    }
+   ]
+  }
+ ]
+}
