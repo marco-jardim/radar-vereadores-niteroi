@@ -172,6 +172,48 @@ test("ementa longa ganha um botão sem duplicar texto; curta não; alternar troc
   assert.deepEqual([bt.atributos["aria-expanded"], bt.textContent, comprida.e.classes.has("ementa-aberta")], ["false", "Ver ementa completa", false]);
 });
 
+test("ementas: toggle em captura e resize reavaliam corte visual sem duplicar botões", () => {
+  const eventos = {}, eventosJanela = {}, temporizadores = new Map();
+  let numero = 0, leituras = 0;
+  const ementa = () => ({ id: "", textContent: "Texto curto", clientHeight: 0, scrollHeight: 0, depois: "",
+    insertAdjacentHTML(_, html) { this.depois += html; } });
+  const oculta = ementa(), responsiva = ementa();
+  const cartoes = [oculta, responsiva].map((e, i) => ({ id: "v-" + i, querySelector: () => e }));
+  const details = { tagName: "DETAILS", open: false,
+    querySelectorAll: () => [cartoes[0]] };
+  const document = {
+    documentElement: { classList: { contains: () => true } },
+    querySelectorAll(q) { if (q === "li.votacao") { leituras++; return cartoes; } return []; },
+    addEventListener(tipo, fn, captura) {
+      assert.equal(eventos[tipo], undefined, "um ouvinte por tipo no documento");
+      eventos[tipo] = { fn, captura };
+    }
+  };
+  const window = { document,
+    addEventListener(tipo, fn) { eventosJanela[tipo] = fn; },
+    setTimeout(fn) { temporizadores.set(++numero, fn); return numero; },
+    clearTimeout(id) { temporizadores.delete(id); } };
+  vm.runInNewContext(fonte, { window });
+  assert.equal(oculta.depois, "", "fechado: não há dimensões para detectar corte");
+  assert.equal(eventos.toggle.captura, true, "toggle não propaga");
+  oculta.clientHeight = 40; oculta.scrollHeight = 80;
+  eventos.toggle.fn({ target: details });
+  assert.equal(oculta.depois, "", "fechamento não marca");
+  details.open = true;
+  eventos.toggle.fn({ target: details });
+  assert.match(oculta.depois, /ver-ementa/);
+  responsiva.clientHeight = 40; responsiva.scrollHeight = 70;
+  const antes = leituras;
+  eventosJanela.resize(); eventosJanela.resize();
+  assert.equal(leituras, antes, "resize aguarda o debounce");
+  assert.equal(temporizadores.size, 1);
+  for (const fn of temporizadores.values()) fn();
+  assert.equal(leituras, antes + 1);
+  assert.match(responsiva.depois, /ver-ementa/);
+  eventos.toggle.fn({ target: details });
+  assert.equal(oculta.depois.match(/ver-ementa/g).length, 1);
+});
+
 test("CSV tem BOM, pessoa × votação, escape e fórmulas neutralizadas; não atribui inconsistentes", () => {
   assert.equal(S.celulaCsv('Texto, "aspas"\nlinha'), '"Texto, ""aspas""\nlinha"');
   for (const formula of ["=1+1", "+cmd", "-2", "@SOMA(A1)", "\tTabulação", "\rRetorno"]) assert.equal(S.celulaCsv(formula), '"\'' + formula + '"');

@@ -174,8 +174,8 @@ class TestGlossarioPublicado(unittest.TestCase):
         raiz = Path(__file__).resolve().parents[1]
         saida = raiz / "site"
         paginas = sorted(saida.rglob("*.html")) if saida.is_dir() else []
-        fontes = [raiz / "coletor/gerar_site.py", *sorted((raiz / "coletor/site").glob("*.py")),
-                  raiz / "site_src/estilo.css", raiz / "site_src/navegacao.js"]
+        fontes = [p for pasta in ("coletor", "config", "site_src")
+                  for p in (raiz / pasta).rglob("*") if p.is_file()]
         atualizado_em = max(p.stat().st_mtime_ns for p in fontes)
         if not paginas or any(p.stat().st_mtime_ns <= atualizado_em for p in paginas):
             self.skipTest("site/ ausente ou desatualizado; rode python -m coletor.gerar_site")

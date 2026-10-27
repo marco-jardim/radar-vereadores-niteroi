@@ -80,7 +80,10 @@
         typeof doc.createElement !== "function") return;
     var modelo = doc.getElementById("glossario-defs");
     if (!modelo || !modelo.content || typeof modelo.content.querySelectorAll !== "function") return;
-    var definicoes = Object.create(null), numero = 0;
+    var definicoes = Object.create(null), numero = 0, fecharTodos = [];
+    if (typeof win.addEventListener === "function") win.addEventListener("scroll", function () {
+      fecharTodos.forEach(function (fechar) { fechar(); });
+    }, { passive: true });
     modelo.content.querySelectorAll("p[data-termo]").forEach(function (p) {
       definicoes[p.getAttribute("data-termo")] = p.textContent;
     });
@@ -88,7 +91,7 @@
       var texto = definicoes[link.getAttribute("data-termo")];
       if (!texto || typeof link.insertAdjacentElement !== "function" ||
           typeof link.addEventListener !== "function" || typeof link.getBoundingClientRect !== "function") return;
-      var pop = doc.createElement("span"), id;
+      var pop = doc.createElement("span"), id, abertoNaPressao = false;
       if (typeof pop.togglePopover !== "function") return;
       do { id = "gl-" + (++numero); } while (doc.getElementById(id));
       pop.setAttribute("id", id);
@@ -98,11 +101,24 @@
       pop.textContent = texto;
       link.insertAdjacentElement("afterend", pop);
       link.setAttribute("aria-describedby", id);
+      function aberto() { return pop.matches(":popover-open"); }
+      function fechar() { if (aberto()) pop.hidePopover(); }
+      fecharTodos.push(fechar);
+      link.addEventListener("pointerdown", function () { abertoNaPressao = aberto(); });
+      link.addEventListener("focusout", fechar);
       link.addEventListener("click", function (evento) {
+        var fecharNoClique = abertoNaPressao;
+        abertoNaPressao = false;
         if (evento.defaultPrevented || evento.ctrlKey || evento.metaKey || evento.shiftKey || evento.altKey ||
             (evento.button != null && evento.button !== 0)) return;
         var alvo = link.getBoundingClientRect();
-        try { pop.togglePopover(); } catch (e) { return; }
+        try {
+          if (fecharNoClique) fechar();
+          else {
+            try { pop.togglePopover({ source: link }); }
+            catch (e) { pop.togglePopover(); }
+          }
+        } catch (e) { return; }
         evento.preventDefault();
         var caixa = pop.getBoundingClientRect();
         pop.style.left = Math.max(8, Math.min(alvo.left, win.innerWidth - caixa.width - 8)) + "px";

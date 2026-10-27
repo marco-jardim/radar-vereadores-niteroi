@@ -362,7 +362,7 @@ test("require expõe as funções puras sem tocar no DOM, e o CSS usa o mesmo li
   assert.ok(estreito.includes(".js .menu-botao { display: inline-flex;"));
 });
 
-function prepararGlossario({ suporte = true, template = true, definicao = true } = {}) {
+function prepararGlossario({ suporte = true, template = true, definicao = true, semSource = false } = {}) {
   return (doc, win, main) => {
     const termos = ["veto", "parecer"].map((chave) => {
       const link = elemento("a", { class: "glossario", "data-termo": chave,
@@ -392,7 +392,16 @@ function prepararGlossario({ suporte = true, template = true, definicao = true }
       const pop = elemento(tag);
       pop.style = {};
       pop.alternancias = 0;
-      pop.togglePopover = () => { pop.alternancias++; };
+      pop.aberto = false;
+      pop.tentativas = [];
+      pop.matches = (seletor) => { assert.equal(seletor, ":popover-open"); return pop.aberto; };
+      pop.hidePopover = () => { pop.aberto = false; };
+      pop.togglePopover = (opcoes) => {
+        pop.tentativas.push(opcoes);
+        if (semSource && opcoes) throw new TypeError("source não suportado");
+        pop.alternancias++;
+        pop.aberto = !pop.aberto;
+      };
       pop.getBoundingClientRect = () => ({ width: 200, height: 100 });
       pops.push(pop);
       return pop;
@@ -400,8 +409,10 @@ function prepararGlossario({ suporte = true, template = true, definicao = true }
     win.innerWidth = 400;
     win.innerHeight = 500;
     win.HTMLElement = function HTMLElement() {};
+    const eventosJanela = {};
+    win.addEventListener = (tipo, fn, opcoes) => { eventosJanela[tipo] = { fn, opcoes }; };
     if (suporte) win.HTMLElement.prototype.showPopover = function () {};
-    return { termos, pops, main };
+    return { termos, pops, main, eventosJanela };
   };
 }
 
@@ -432,6 +443,7 @@ test("glossário cria um popover irmão por link, descreve e alterna no clique",
     for (let n = 0; n < 2; n++) disparar(link, "click", { preventDefault() { impedidos++; } });
     assert.equal(impedidos, 2);
     assert.equal(pop.alternancias, 2);
+    assert.equal(pop.tentativas[0].source, link, "o link é o invocador do popover");
     assert.equal(pop.style.left, "192px");
     assert.equal(pop.style.top, "392px");
     assert.equal(link.getAttribute("href"), `metodologia.html#g-${link.getAttribute("data-termo")}`);
@@ -439,6 +451,47 @@ test("glossário cria um popover irmão por link, descreve e alterna no clique",
     assert.equal(pop.alternancias, 2);
   });
   assert.deepEqual([...p.tiposDocumento].sort(), ["click", "keydown", "mousedown"]);
+});
+
+test("glossário: source tem fallback para implementações antigas", () => {
+  const p = montar({ preparar: prepararGlossario({ semSource: true }) });
+  disparar(p.termos[0], "click", { preventDefault() {} });
+  assert.equal(p.pops[0].aberto, true);
+  assert.equal(p.pops[0].tentativas.length, 2);
+  assert.equal(p.pops[0].tentativas[0].source, p.termos[0]);
+  assert.equal(p.pops[0].tentativas[1], undefined);
+});
+
+test("glossário: light-dismiss entre pointerdown e click não reabre; teclado ainda alterna", () => {
+  const p = montar({ ponteiro: true, preparar: prepararGlossario() });
+  const link = p.termos[0], pop = p.pops[0];
+  const clicar = () => disparar(link, "click", { preventDefault() {} });
+  clicar();
+  assert.equal(pop.aberto, true);
+  disparar(link, "pointerdown");
+  pop.hidePopover(); // light-dismiss nativo antes do click do mesmo link
+  clicar();
+  assert.equal(pop.aberto, false);
+  assert.equal(pop.alternancias, 1);
+  clicar(); // ativação pelo teclado, sem pointerdown
+  assert.equal(pop.aberto, true);
+  disparar(link, "pointerdown");
+  clicar(); // também fecha quando o navegador não o dispensou antes
+  assert.equal(pop.aberto, false);
+  assert.deepEqual([...p.tiposDocumento].sort(), ["click", "keydown", "pointerdown"]);
+});
+
+test("glossário: rolagem passiva da janela e saída do foco fecham o popover", () => {
+  const p = montar({ preparar: prepararGlossario() });
+  const link = p.termos[0], pop = p.pops[0];
+  const clicar = () => disparar(link, "click", { preventDefault() {} });
+  clicar();
+  assert.equal(p.eventosJanela.scroll.opcoes.passive, true);
+  p.eventosJanela.scroll.fn();
+  assert.equal(pop.aberto, false);
+  clicar();
+  disparar(link, "focusout");
+  assert.equal(pop.aberto, false);
 });
 
 test("glossário sem template ou sem definição não interfere nos links", () => {

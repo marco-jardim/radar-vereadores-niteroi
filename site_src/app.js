@@ -123,7 +123,16 @@
       lista.appendChild(li);
     });
   }
-  if (abas.length) {
+  if (abas.length && typeof listaAbas.addEventListener === "function" && abas.every(function (bt) {
+    var painel = painelDaAba(bt);
+    return typeof bt.addEventListener === "function" && painel && typeof painel.setAttribute === "function";
+  })) {
+    abas.forEach(function (bt) {
+      var painel = painelDaAba(bt);
+      painel.setAttribute("role", "tabpanel");
+      painel.setAttribute("tabindex", "0");
+      painel.setAttribute("aria-labelledby", bt.id);
+    });
     // A ordem do servidor já é a padrão: na abertura só oculta os outros painéis, sem reordenar.
     selecionarAba(abaSelecionada() || abas[0], false, false);
     listaAbas.hidden = false;

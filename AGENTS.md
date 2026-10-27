@@ -248,16 +248,17 @@ Não há carregamento automático de `.env`. A IA usa `POST /chat/completions`, 
 ### Home e interações acessíveis
 
 - A home segue a ordem hero → “Quem é meu vereador?” → números → destaques → mapa → placar → linha do tempo
-  → convites. Blocos sem dados podem ser omitidos. `inicio.css` e `inicio.js` são carregados só na home;
-  sem JavaScript, permanecem a lista de vereadores em `<details>` e os números reais do servidor.
+  → faixa “Niterói que nos inspira” → convites. Blocos sem dados podem ser omitidos. `inicio.css` e `inicio.js`
+  são carregados só na home; sem JavaScript, permanecem a lista de vereadores em `<details>` e os números reais do servidor.
 - Tooltips abrem por hover ou foco; alternar por toque exige `pointerType === "touch"`. Fecham com Esc,
   interação fora, saída do foco ou rolagem. `aria-describedby` fica nos links focalizáveis, nunca se adiciona
   `tabindex` às marcas dos gráficos. Gráficos com links usam `role="group"`, não `role="img"`.
 - Autoria usa `<div class="cartao-autor">` ou `<div class="autoria">`, com `<details class="coautores">`
   para os demais nomes; não envolva esses blocos em `<p>`. Preserve a paridade da marcação Python/JavaScript.
 - As abas do placar seguem APG: `tablist` sai com `hidden` e o JavaScript o revela; setas, Home/End e
-  `tabindex` móvel controlam seleção e foco. Os painéis saem sem `hidden`, com `h3.titulo-legislatura`
-  visível sem JavaScript, para manter todas as legislaturas legíveis.
+  `tabindex` móvel controlam seleção e foco. Os painéis saem como `<section>` sem `hidden`, `role` ou `tabindex`,
+  com `h3.titulo-legislatura` visível sem JavaScript. Ao revelar as abas, o JS acrescenta `role="tabpanel"`,
+  `tabindex="0"` e `aria-labelledby`, para manter todas as legislaturas legíveis sem JS.
 - “Mostrar mais” nas listas de PLs, documentos e votações leva o foco ao primeiro item novo e anuncia
   a inclusão numa região `aria-live="polite"`, inclusive quando o botão desaparece no último lote.
 

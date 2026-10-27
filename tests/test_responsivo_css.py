@@ -131,7 +131,9 @@ def paginas_atuais(caso: unittest.TestCase) -> list[Path]:
     """Reusa site/ de test_gerar_site, sem chamar o gerador novamente."""
     saida = gerar_site.SAIDA
     paginas = sorted(saida.rglob("*.html")) if saida.is_dir() else []
-    atualizado_em = CSS.stat().st_mtime_ns
+    raiz = Path(__file__).resolve().parents[1]
+    atualizado_em = max(p.stat().st_mtime_ns for pasta in ("coletor", "config", "site_src")
+                        for p in (raiz / pasta).rglob("*") if p.is_file())
     if (not paginas or saida.stat().st_mtime_ns <= atualizado_em
             or any(pagina.stat().st_mtime_ns <= atualizado_em for pagina in paginas)):
         caso.skipTest("site/ ausente ou desatualizado; rode python -m coletor.gerar_site")
