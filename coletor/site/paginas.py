@@ -106,8 +106,52 @@ def versao_bytes(conteudo: bytes) -> str:
     return hashlib.sha1(conteudo).hexdigest()[:10]
 
 
+def css_publicado(texto: str, base_dir: Path, *, origem: Path | None = None,
+                  _pilha: tuple[Path, ...] = ()) -> str:
+    """Versiona URLs relativas, preservando aspas, espaços e fragmentos."""
+    padrao = r'''url\(\s*(?:"(?P<duplas>[^"]*)"|'(?P<simples>[^']*)'|(?P<sem_aspas>[^\s)'\"]+))\s*\)'''
+
+    def reescrever(m: re.Match[str]) -> str:
+        grupo = next(g for g in ("duplas", "simples", "sem_aspas") if m.group(g) is not None)
+        url = m.group(grupo)
+        if not url or url.startswith(("/", "#")) or "?" in url or re.match(r"[a-z][a-z0-9+.-]*:", url, re.I):
+            return m.group()
+        nome, separador, fragmento = url.partition("#")
+        alvo = base_dir / nome
+        try:
+            versao = versao_bytes(bytes_estaticos(alvo, _pilha))
+        except (OSError, ValueError) as erro:
+            raise ValueError(f"CSS {origem or base_dir}: não foi possível publicar o alvo {url!r} ({alvo}): {erro}") from erro
+        inicio, fim = m.span(grupo)
+        inicio -= m.start()
+        fim -= m.start()
+        return m.group()[:inicio] + f"{nome}?v={versao}{separador}{fragmento}" + m.group()[fim:]
+
+    # Comentários e strings fora de url() não são referências a recursos.
+    tokens = rf"""/\*.*?\*/|{padrao}|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'"""
+    return re.sub(tokens, lambda m: reescrever(m) if m.group("duplas") is not None
+                  or m.group("simples") is not None or m.group("sem_aspas") is not None else m.group(),
+                  texto, flags=re.I | re.S)
+
+
+def bytes_estaticos(caminho: Path, _pilha: tuple[Path, ...] = ()) -> bytes:
+    """Lê os bytes a publicar, reescrevendo dependências CSS sem ciclos."""
+    caminho = caminho.resolve()
+    if caminho in _pilha:
+        raise ValueError(f"Ciclo de recursos CSS: {' -> '.join(map(str, (*_pilha, caminho)))}")
+    conteudo = caminho.read_bytes()
+    if caminho.suffix.lower() == ".css":
+        return css_publicado(conteudo.decode("utf-8"), caminho.parent, origem=caminho,
+                             _pilha=(*_pilha, caminho)).encode("utf-8")
+    return conteudo
+
+
 def versao_estatica(nome: str) -> str:
-    return versao_bytes((FONTE_ESTATICA / nome).read_bytes())
+    return versao_bytes(bytes_estaticos(FONTE_ESTATICA / nome))
+
+
+def url_estatica(nome_relativo: str, prefixo: str = "") -> str:
+    return f"{prefixo}{nome_relativo}?v={versao_estatica(nome_relativo)}"
 
 
 def _cmp(x, y) -> int:
@@ -223,6 +267,7 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
     )
     extras = "\n".join(f'<script src="{esc(prefixo + nome)}?v={versao_estatica(nome)}" defer></script>'
                        for nome in scripts if (FONTE_ESTATICA / nome).is_file())
+    icone = url_estatica("favicon.svg", prefixo) if (FONTE_ESTATICA / "favicon.svg").is_file() else f"{prefixo}favicon.svg"
     return f"""<!doctype html>
 <html lang="pt-BR">
 <head>
@@ -236,7 +281,7 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{prefixo}estilo.css?v={versao_estatica('estilo.css')}">
-<link rel="icon" href="{prefixo}favicon.svg" type="image/svg+xml">
+<link rel="icon" href="{icone}" type="image/svg+xml">
 <link rel="alternate" type="application/rss+xml" title="Novidades · Radar dos Vereadores de Niterói" href="{prefixo}{N.FEED}">
 {cabecalho_dados(manifesto, ativo, prefixo)}
 </head>

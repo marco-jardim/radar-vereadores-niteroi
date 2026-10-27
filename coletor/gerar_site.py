@@ -587,6 +587,20 @@ def carregar_geo(raiz: Path | None = None) -> dict | None:
     return geo
 
 
+def copiar_estaticos(fonte: Path, saida: Path) -> None:
+    """Publica a árvore estática sem arquivos ocultos nem documentação Markdown."""
+    for arq in sorted(fonte.rglob("*")):
+        relativo = arq.relative_to(fonte)
+        if any(parte.startswith(".") for parte in relativo.parts) or arq.suffix.lower() == ".md":
+            continue
+        destino = saida / relativo
+        if arq.is_dir():
+            destino.mkdir(parents=True, exist_ok=True)
+        else:
+            destino.parent.mkdir(parents=True, exist_ok=True)
+            destino.write_bytes(P.bytes_estaticos(arq))
+
+
 def main() -> None:
     modelo = montar_modelo()
     modelo["sessoes"] = modelo_sessoes.montar_sessoes(modelo) if (RAIZ / "data" / "sessoes").is_dir() else None
@@ -595,8 +609,7 @@ def main() -> None:
         shutil.rmtree(SAIDA)
     (SAIDA / "vereadores").mkdir(parents=True)
     (SAIDA / "dados").mkdir()
-    for arq in FONTE_ESTATICA.iterdir():
-        shutil.copy(arq, SAIDA / arq.name)
+    copiar_estaticos(FONTE_ESTATICA, SAIDA)
     escrever = lambda nome, conteudo: (SAIDA / nome).write_text(conteudo, encoding="utf-8")
     cliente = dados_cliente(modelo)
     projetos = json_compacto(cliente)
