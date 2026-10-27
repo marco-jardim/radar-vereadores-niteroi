@@ -4,6 +4,8 @@
   // Contratos espelhados: fatia_votacoes (gerar_site.py), cartao_votacao e _mapa_votos
   // (pagina_sessoes.py). Notas técnicas só existem no HTML do servidor/Qualidade dos dados.
   var PASSO = 40;
+  // Acima deste número de caracteres a ementa recolhida (CSS só com .js) ganha botão.
+  var LIMIAR_EMENTA = 180;
   var COLUNAS = ["id", "s", "d", "ts", "m", "doc", "n", "e", "r", "t", "to", "cl", "sx", "mj", "q", "ql", "nt", "v"];
   var SENTIDOS = ["favor_mantem", "favor_derruba", "favor_aprova", "favor_rejeita"];
   var GLIFOS = { maioria: ["■", "com a maioria"], diferente: ["◆", "diferente da maioria"],
@@ -165,6 +167,24 @@
     return '<li class="projeto votacao" id="v-' + esc(v.id) + '"' + atributos + '><p class="cab">' + titulo + '<span>' + esc(dataBr(v.data)) + '</span><span>' + esc(v.titulo_sessao || "Sessão não identificada") + '</span></p><p class="desfecho">Resultado oficial: ' + esc(v.resultado || "não informado") + '</p><p class="ementa">' + esc(legivel(v.ementa || "Ementa não disponível na base coletada.")) + '</p>' + placar(dic, v) + notas + pessoal + nomes + acoes + '<a class="contestar" href="' + REPO + '/issues/new?' + esc(consulta.toString()) + '">contestar</a></li>';
   }
 
+  // Comportamento, não marcação do cartão: o mesmo .ementa é recolhido/expandido, sem duplicar texto.
+  // Também recebe botão a ementa curta que já transborda as duas linhas (telas estreitas).
+  function ementas(cartoes) {
+    Array.prototype.forEach.call(cartoes, function (li) {
+      var e = li.querySelector && li.querySelector(".ementa");
+      if (!e || e.id || (e.textContent.trim().length <= LIMIAR_EMENTA && !(e.scrollHeight > e.clientHeight + 1))) return;
+      e.id = li.id + "-ementa";
+      e.insertAdjacentHTML("afterend", '<button type="button" class="link ver-ementa" aria-expanded="false" aria-controls="' + esc(e.id) + '">Ver ementa completa</button>');
+    });
+  }
+  function alternarEmenta(bt, doc) {
+    var e = doc.getElementById(bt.getAttribute("aria-controls")), aberta = bt.getAttribute("aria-expanded") !== "true";
+    if (!e) return;
+    e.classList.toggle("ementa-aberta", aberta);
+    bt.setAttribute("aria-expanded", String(aberta));
+    bt.textContent = aberta ? "Ver menos" : "Ver ementa completa";
+  }
+
   function limiteFaixa(v) {
     if (v.qualidade === "inconsistente") return "placar inconsistente; sem atribuição nominal";
     if (!determinada(v)) return "sentido não determinado";
@@ -224,14 +244,23 @@
     return "\ufeff" + linhas.map(function (l) { return l.map(celulaCsv).join(","); }).join("\n");
   }
 
-  var api = { PASSO: PASSO, padrao: padrao, lerUrl: lerUrl, consultaUrl: consultaUrl, validarEstado: validarEstado,
+  var api = { PASSO: PASSO, LIMIAR_EMENTA: LIMIAR_EMENTA, ementas: ementas, alternarEmenta: alternarEmenta, padrao: padrao, lerUrl: lerUrl, consultaUrl: consultaUrl, validarEstado: validarEstado,
     hidratar: hidratar, rotulo: rotulo, filtrar: filtrar, paginar: paginar, contagem: contagem,
     cartao: cartao, faixa: faixa, votoFaixa: votoFaixa, celulaCsv: celulaCsv, csv: csv, iniciar: iniciar };
   if (typeof module !== "undefined") module.exports = api;
   if (raiz) { raiz.RadarSessoes = api; iniciar(raiz); }
 
   function iniciar(janela) {
-    var doc = janela.document, carregador = janela.RadarArquivos;
+    var doc = janela.document, carregador = janela.RadarArquivos, raizHtml = doc.documentElement;
+    // Sem .js (navegacao.js falhou) a ementa já aparece inteira: nenhum botão.
+    var comJs = !raizHtml || !raizHtml.classList || raizHtml.classList.contains("js");
+    function marcar(el) { if (comJs && el.querySelectorAll) ementas(el.querySelectorAll("li.votacao")); }
+    marcar(doc);
+    // Único listener de click no documento deste script; os cartões do servidor também o usam.
+    if (doc.addEventListener) doc.addEventListener("click", function (ev) {
+      var bt = ev.target.closest && ev.target.closest(".ver-ementa");
+      if (bt) alternarEmenta(bt, doc);
+    });
     var forms = Array.from(doc.querySelectorAll("form.filtros-sessoes"));
     if (!forms.length || !carregador) return;
     var manifestoInicial = carregador.manifesto();
@@ -274,20 +303,26 @@
       function destacar() {
         mapa.querySelectorAll("tr[data-vereador]").forEach(function (tr) { tr.classList.toggle("vereador-destaque", tr.dataset.vereador === st.vereador); });
       }
-      function renderizar(alvo) {
+      // foco: índice do primeiro cartão novo de "Mostrar mais"; recebe o foco mesmo quando o botão some.
+      function renderizar(alvo, foco) {
         var novos = filtradas.slice(mostrando, alvo);
         lista.insertAdjacentHTML("beforeend", novos.map(function (v) { return cartao(dic, v, st.vereador); }).join(""));
         mostrando += novos.length;
         mais.hidden = mostrando >= filtradas.length;
         mais.textContent = "Mostrar mais " + Math.min(PASSO, filtradas.length - mostrando);
-        contador.textContent = contagem(filtradas) + " · mostrando " + mostrando + " de " + filtradas.length;
+        contador.textContent = (foco >= 0 && mostrando > foco ? plural(mostrando - foco, "votação adicionada", "votações adicionadas") + " · " : "") +
+          contagem(filtradas) + " · mostrando " + mostrando + " de " + filtradas.length;
+        marcar(lista);
+        var v = foco >= 0 && filtradas[Math.min(foco, filtradas.length - 1)], alvoFoco = v && doc.getElementById("v-" + v.id);
+        if (alvoFoco) { alvoFoco.setAttribute("tabindex", "-1"); alvoFoco.focus(); }
       }
-      function carregar(alvo, escreverUrl, destino) {
+      function carregar(alvo, escreverUrl, destino, foco) {
         st = estado(); preencher();
         if (escreverUrl) gravar();
         var atual = ++pedido, m = carregador.manifesto(), anos = st.ano === "todos" ? leg.anos : [st.ano];
         var nomes = ["dic-ses"].concat(anos.map(function (a) { return "vot-" + a; }).filter(function (n) { return !m || !!m.arquivos[n]; }));
         lista.setAttribute("aria-busy", "true"); botaoCsv.disabled = true; mais.disabled = true;
+        contador.textContent = "Carregando votações…";
         return carregador.carregar(nomes).then(function (pacote) {
           if (atual !== pedido) return;
           dic = pacote.arquivos[0];
@@ -298,7 +333,7 @@
           mostrando = 0; lista.innerHTML = "";
           if (!filtradas.length) lista.innerHTML = '<li class="vazio">Nenhuma votação com esses filtros. <button type="button" class="link" data-acao="limpar">Limpar filtros</button>.</li>';
           if (destino) alvo = Math.max(alvo, filtradas.findIndex(function (v) { return "v-" + v.id === destino; }) + 1);
-          renderizar(alvo);
+          renderizar(alvo, foco);
           if (st.ano === "todos") { mapa.innerHTML = mapaInicial; mapa.dataset.ano = anoMapa; }
           else { mapa.innerHTML = faixa(todas, membros, leg, st.ano, st.vereador); mapa.dataset.ano = st.ano; }
           destacar();
@@ -331,8 +366,9 @@
         if (!bt) return;
         if (bt.dataset.acao === "limpar") limpar();
         if (bt.dataset.acao === "mais") {
-          if (!filtradas) carregar(PASSO * 2, true);
-          else { renderizar(mostrando + PASSO); gravar(); }
+          // Antes da primeira carga a lista do servidor mostrava PASSO cartões.
+          if (!filtradas) carregar(PASSO * 2, true, null, PASSO);
+          else { renderizar(mostrando + PASSO, mostrando); gravar(); }
         }
         if (bt.dataset.acao === "csv" && filtradas && !botaoCsv.disabled) baixar();
         else if (bt.dataset.acao === "csv" && !filtradas && !botaoCsv.disabled) {

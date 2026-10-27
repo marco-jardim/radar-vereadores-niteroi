@@ -676,7 +676,8 @@ details.bloco summary { cursor: pointer; font: 600 var(--fs-1)/1.3 var(--display
 .sessoes .faixa .voto-cru { font-size: var(--fs--1); }
 .sessoes .faixa-sem-comparacao { border-inline: 1px dashed var(--voto-abstencao); }
 .sessoes .votacao { border-left-color: var(--voto-diferente); max-width: none; padding-right: var(--esp-3); }
-.sessoes .votacao .ementa { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.js .sessoes .votacao .ementa:not(.ementa-aberta) { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.ver-ementa { min-height: 24px; font-size: var(--fs--1); color: var(--tinta-suave); }
 .sessoes .votacao .mini-barra { max-width: 440px; height: 14px; margin: var(--esp-3) 0 var(--esp-2); }
 .sessoes .votacao .mini-n { color: var(--tinta); }
 .sessoes .votacao .qualidade-voto { border-left: 2px solid var(--ausente); padding-left: var(--esp-2); margin-top: var(--esp-2); }

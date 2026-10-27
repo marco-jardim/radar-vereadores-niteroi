@@ -212,6 +212,28 @@ class TestPaginaSessoes(unittest.TestCase):
         self.assertIn('role="region" tabindex="0"', html)
         self.assertLessEqual(len(gzip.compress((RAIZ / "site_src/sessoes.js").read_bytes(), mtime=0)), 12 * 1024)
 
+    def test_fixture_compartilhada_do_cartao(self):
+        """Mesmo cartão em cartao_votacao e em sessoes.js; a fixture é conferida, nunca regravada."""
+        from coletor.regras_sessoes import resumo_placar
+
+        pasta = RAIZ / "tests/js/fixtures"
+        fixture = json.loads((pasta / "sessoes.json").read_text(encoding="utf-8"))
+        leg, membros = fixture["leg"], fixture["membros"]
+        modelo = {"pessoas": {p["slug"]: {"nome": p["nome"], "mandatos": {leg["id"]: {"eleito": True}}}
+                               for p in membros if p["pagina"]},
+                  "sessoes": {"por_pessoa": {p["slug"]: {"nome": p["nome"], "condicao": p["condicao"],
+                                                        "sem_pagina": not p["pagina"], leg["id"]: {}}
+                                             for p in membros}}}
+        base = fixture["votacoes"][0]
+        # O modelo real deriva URL e resumo; o cliente os reconstrói de dic-ses e da fatia.
+        v = {**base, "url_documento": fixture["dic"]["url_detalhe"] + str(base["id_documento"]),
+             "resumo": resumo_placar({"totais": base["totais"], "sentido": base["sentido"], "materia": base["materia"]})}
+        self.assertEqual(S.cartao_votacao(modelo, v), (pasta / "cartao_sessoes.html").read_text(encoding="utf-8").strip())
+        # Sem JS a ementa aparece inteira: o recorte em duas linhas só vale com html.js.
+        css = (RAIZ / "site_src/estilo.css").read_text(encoding="utf-8")
+        self.assertIn(".js .sessoes .votacao .ementa:not(.ementa-aberta) {", css)
+        self.assertNotRegex(css, r"(?m)^\.sessoes \.votacao \.ementa \{")
+
     def test_presenca_bases_e_contrato_do_placar(self):
         r = self.modelo["sessoes"]["por_pessoa"]["pessoa-00"]["2025-2028"]
         r["presenca"] = presenca(P=4, C=1, V=0, J=1, A=0, L=2, denominador=6, presentes=5, pct=83)
