@@ -388,7 +388,7 @@ class TestFontes(unittest.TestCase):
         outro = montar_sessoes(modelo, invertidos, {})
         self.assertEqual(json.dumps(resultado, ensure_ascii=False), json.dumps(outro, ensure_ascii=False))
         self.assertEqual((modelo, registros), antes)
-        self.assertEqual(set(resultado), {"anos", "cobertura", "legislaturas", "sessoes", "votacoes", "por_pessoa",
+        self.assertEqual(set(resultado), {"anos", "cobertura", "exercicio", "legislaturas", "sessoes", "votacoes", "por_pessoa",
                                            "mediana_presenca", "placares_por_ano", "ritmo", "qualidade"})
 
     def test_le_arquivos_na_raiz_e_aproveita_documentos_do_modelo(self):

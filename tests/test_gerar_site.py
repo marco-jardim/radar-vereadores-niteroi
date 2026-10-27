@@ -53,6 +53,15 @@ class TestGerarSite(unittest.TestCase):
                 conteudo = arq.read_text(encoding="utf-8")
                 self.assertIn("<html", conteudo.lower())
 
+    def test_analises_publica_mandatos_e_atividade(self):
+        texto = (self.saida / "analises.html").read_text(encoding="utf-8")
+        self.assertIn('id="mandatos-atividade"', texto)
+        self.assertIn('Mandatos e atividade na Câmara', texto)
+        self.assertIn('data-ordem-mandatos', texto)
+        self.assertIn('data-ocultar-cargos', texto)
+        self.assertIn('estimativa pelas listas de frequência', texto)
+        # O teto de 100 KiB gzip para esta página também é verificado no teste geral de orçamento.
+
     def test_todas_as_tabelas_em_todas_as_paginas(self):
         paginas = sorted(self.saida.rglob("*.html"))
         self.assertTrue(paginas)

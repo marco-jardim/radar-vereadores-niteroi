@@ -317,6 +317,14 @@ Não há carregamento automático de `.env`. A IA usa `POST /chat/completions`, 
 
 ### Home e interações acessíveis
 
+- `analises.html#mandatos-atividade` publica uma tabela alfabética por legislatura, incluindo suplentes em exercício,
+  sem faixas de carreira, correlação ou comparação entre grupos. `coletor/site/mandatos.py` conta vitórias para
+  vereador cujo resultado começa por “Eleito”, até o ano eleitoral do recorte; a ficha mostra todos os anos registrados.
+  Meses estimados = intervalo das deliberativas em dias ÷ (365,25/12) × (presença `listadas` / total incluído).
+  A cobertura vem de `modelo_sessoes.exercicio`; não usar o denominador efetivo como tempo em exercício.
+  Percentuais exigem base ≥ 10; taxas mensais, meses positivos. Valores ausentes ficam vazios nos `data-*` e por último
+  na ordenação. Controles de ordem/filtro de cargos só aparecem após inicialização do JS; sem JS, todas as linhas ficam visíveis.
+
 - A home segue a ordem hero → “Quem é meu vereador?” → números → destaques → mapa → placar → linha do tempo
   → faixa “Niterói que nos inspira” → convites. Blocos sem dados podem ser omitidos. `inicio.css` e `inicio.js`
   são carregados só na home; sem JavaScript, permanecem a lista de vereadores em `<details>` e os números reais do servidor.

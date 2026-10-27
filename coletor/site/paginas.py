@@ -19,6 +19,7 @@ from coletor import novidades as N
 from coletor.classificar import ALERTAS, CATEGORIAS, CONFIANCA_MINIMA
 from coletor.site import graficos as G
 from coletor.site.glossario import ColetorGlossario, secao_glossario
+from coletor.site.mandatos import anos_eleito, secao_mandatos
 from coletor.site.modelo import (
     DESC_CATEGORIA_DOC, DESC_SINAL, DESFECHO_GRUPO, NOME_ALERTA, NOME_CATEGORIA, NOME_CATEGORIA_DOC, NOME_DESFECHO, NOME_EIXO,
     NOME_IMPACTO, NOME_SINAL, NOME_SUBCATEGORIA_DOC, NOME_TEMA, NOME_TIPO_DOC, TIPOS_DOC, com_efeito, mediana_legislatura,
@@ -1477,7 +1478,8 @@ def gerar_analises(modelo: dict) -> str:
  <p>Como a produção legislativa de Niterói evoluiu desde 2021: quanto vira lei, quanto disso tem efeito, quanto tempo leva e quais temas dominam. Cada gráfico tem uma tabela com os números.</p>
 </section>
 <div class="graficos">{g1}{g2}{g3}{g4}{g5}</div>
-{''.join(blocos_leg)}"""
+{''.join(blocos_leg)}
+{secao_mandatos(modelo)}"""
     return pagina("Análises · Radar dos Vereadores de Niterói", corpo, "analises.html", caminho="analises.html")
 
 
@@ -1634,6 +1636,11 @@ def secao_perfil(modelo: dict, pessoa: dict) -> str:
             continue
         linhas.append(f'<dt>Mandato {esc(leg_id)}</dt><dd>{esc(texto_mandato(situacao, partido, votos))}</dd>')
     eleicoes = [texto_eleicao(e) for e in perfil.get("eleicoes") or []]
+    anos = anos_eleito(perfil)
+    if anos:
+        vezes = "vez" if len(anos) == 1 else "vezes"
+        linhas.append(f'<dt>Histórico eleitoral</dt><dd>Eleito vereador {len(anos)} {vezes}: '
+                      + ", ".join(map(str, anos)) + '</dd>')
     if eleicoes:
         itens = "".join(f"<li>{esc(t)}</li>" for t in eleicoes)
         linhas.append(f'<dt>Eleições</dt><dd><ul class="perfil-eleicoes">{itens}</ul></dd>')
