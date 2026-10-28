@@ -1,0 +1,9 @@
+{
+  "name": "radar-vereadores-niteroi-worker",
+  "private": true,
+  "description": "Worker de busca do Radar dos Vereadores de Niterói; wrangler em versão fixa (coletor/nuvem/wrangler.py, VERSAO_WRANGLER).",
+  "license": "GPL-3.0-only",
+  "devDependencies": {
+    "wrangler": "4.154.0"
+  }
+}

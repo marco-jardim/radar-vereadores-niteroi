@@ -1,24 +1,36 @@
 """Sincronização do Git com D1, Vectorize e R2 (plano T2.2.1 S3, passos a–i).
 
-Ordem de uma execução:
+Ordem de uma execução (etapas `r2`, `d1`, `vetores` e `exportar`, escolhidas por `etapas`):
 
-a. barreira de PII: `mascara.varrer` em todo trecho e ementa a enviar; uma ocorrência
-   forte aborta antes de qualquer escrita (`ErroBarreira`, sem os valores);
+a. barreira de PII: `mascara.varrer` em todo trecho, ementa e motivo de remoção a enviar; uma
+   ocorrência forte aborta antes de qualquer escrita (`ErroBarreira`, sem os valores);
 b. migrações pendentes de `worker/migrations/`;
-c. R2: originais que faltam (HEAD antes; bytes do cache `RADAR_CACHE/arquivos/<sha256>`,
-   conferidos pelo hash), enviados com `If-None-Match: *`; originais removidos saem;
-d. D1: diferença das tabelas-base contra o Git (gravar o que mudou, apagar o que saiu do
-   Git ou entrou em `config/remocoes.json`) e o FTS dos trechos alterados;
-e. Vectorize: vetores só dos trechos vetorizáveis novos ou alterados (diferença contra
-   `trechos_indexados` pelo sha256) e das ementas de indicações e moções
-   (`ementa:doc:<id>`); ids que saíram são apagados; espera o processamento;
-f. `estado_indice`, gravado só no fim e só sem falhas;
-g. `--exportar`: dump das tabelas-base, vetores em JSONL gzip (mtime 0) e `SHA256SUMS`,
-   enviados com `If-None-Match: *` a `<bucket de exportações>/<versao>/`;
-h. `--reconstruir`: limpa o D1 e reenvia tudo (com o cache de embeddings);
+c. `r2`: originais que faltam (verificação antes; bytes do cache `RADAR_CACHE/arquivos/<sha256>`,
+   conferidos pelo hash), em até 4 envios simultâneos, com `If-None-Match: *` na via S3 (na via
+   REST, PUT sem condição depois da verificação); originais removidos saem. Um original que
+   falha deixa de fora, na mesma execução, a linha em `arquivos`, as de `arquivo_documento`,
+   os trechos (e o FTS) e os vetores daquele arquivo: tudo ou nada por arquivo;
+d. `d1`: diferença das tabelas-base contra o Git (gravar o que mudou, apagar o que saiu do
+   Git ou entrou em `config/remocoes.json`). Cada bloco de trechos vai no mesmo lote atômico
+   das suas linhas de `trechos_fts`; se os conjuntos de ids de `trechos` e `trechos_fts`
+   divergirem (duas consultas `LIMIT 1`), o FTS é refeito;
+e. `vetores`: confere o índice (1.024 dimensões e índices de metadados `tipo`, `ano`,
+   `legislatura`); vetores só dos trechos vetorizáveis e das ementas de indicações e moções
+   (`ementa:doc:<id>`) novos ou alterados (diferença contra `trechos_indexados`, cujo `sha256`
+   cobre texto e metadados). Antes do upsert, os ids ainda não registrados entram como
+   `pendente`; depois, com o hash real. Saem do índice os ids registrados que deixaram o Git, os
+   trechos apagados nesta execução e as ementas dos documentos apagados; ao fim, espera
+   `processedUpToMutation` e `processedUpToDatetime` ≥ início da execução;
+f. `estado_indice`, gravado só no fim, só sem falhas e só com as etapas `r2`, `d1` e `vetores`;
+g. `exportar`: dump das tabelas-base, vetores em JSONL gzip (mtime 0) e `SHA256SUMS`, enviados a
+   `<bucket de exportações>/<versao>/`; se o `SHA256SUMS` da versão já está no bucket, nada é
+   reenviado (e um conteúdo diferente vira aviso);
+h. `--reconstruir`: limpa o D1, reenvia tudo (com o cache de embeddings) e apaga do índice
+   todo vetor listado que o Git não tem;
 i. `--simular`: só leituras; o plano é o mesmo, sem nenhuma escrita.
 
-Uma segunda execução sem mudanças no Git não faz nenhuma escrita.
+Uma segunda execução sem mudanças no Git, no mesmo commit, não faz nenhuma escrita (um commit
+novo regrava `estado_indice`, que guarda o commit).
 """
 from __future__ import annotations
 
@@ -28,21 +40,30 @@ import io
 import json
 from collections import Counter
 from collections.abc import Callable, Iterable, Sequence
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
-from coletor.nuvem.banco import (COLUNAS, COMPARAR, FTS, PASTA_MIGRACOES, TABELAS_BASE, Alteracao, ler_tabela,
-                                 literal, q)
-from coletor.nuvem.cloudflare import DIMENSOES
-from coletor.nuvem.fonte import Fonte, carregar_fonte, normalizar_busca, rowid_fts, sha256, varrer_fonte
+from coletor.nuvem.banco import (COLUNAS, COMPARAR, FTS, PASTA_MIGRACOES, TABELAS_BASE, Alteracao, fts_divergente,
+                                 ler_tabela, literal, q)
+from coletor.nuvem.cloudflare import DIMENSOES, INDICES_METADADOS
+from coletor.nuvem.fonte import (Fonte, Original, carregar_fonte, normalizar_busca, rowid_fts, sha256, sha_indexado,
+                                 varrer_fonte)
 from coletor.nuvem.local import CacheEmbeddings, como_float32, empacotar
 from coletor.nuvem.rede import ErroNuvem
 from coletor.trechos import VERSAO_TRECHOS
 
 LOTE_SINCRONIZACAO = 500  # vetores por rodada de embeddings + upsert + trechos_indexados
 TABELAS_GIT = tuple(t for t in TABELAS_BASE if t != "trechos_indexados")
+ETAPAS = ("r2", "d1", "vetores", "exportar")
+ETAPAS_PADRAO = ("r2", "d1", "vetores")
+ETAPAS_COMPLETAS = frozenset({"r2", "d1", "vetores"})  # necessárias para gravar estado_indice
+PENDENTE = "pendente"  # trechos_indexados.sha256 de um vetor com upsert em curso
+TRABALHADORES_R2 = 4
+PROGRESSO_R2 = 100  # um aviso de progresso a cada N originais
+FOLGA_RELOGIO = timedelta(seconds=60)  # diferença tolerada entre o relógio local e o do Vectorize
 ESCRITAS = ("migracoes", "r2_enviar", "r2_apagar", "d1_instrucoes", "vetores_upsert", "vetores_apagar",
             "estado_indice", "exportacao_enviar")
 TIPOS_CONTEUDO = {
@@ -61,7 +82,7 @@ MAX_META_DOCUMENTOS = 1500
 
 
 class ErroBarreira(RuntimeError):
-    """Ocorrência forte de dado pessoal num trecho ou ementa; a mensagem não traz os valores."""
+    """Ocorrência forte de dado pessoal num trecho, ementa ou motivo; a mensagem não traz os valores."""
 
     def __init__(self, ocorrencias: list[dict]) -> None:
         self.ocorrencias = ocorrencias
@@ -75,7 +96,7 @@ class ErroBarreira(RuntimeError):
 class Ambiente:
     nome: str
     banco: Any
-    r2: Any
+    r2: Any  # None: sem R2 (--sem-r2)
     bucket_arquivos: str
     bucket_exportacoes: str
     vetores: Any
@@ -97,6 +118,7 @@ class Relatorio:
     versao: str | None = None
     estado_gravado: bool = False
     exportados: list[str] = field(default_factory=list)
+    etapas: tuple[str, ...] = ()
 
     @property
     def escritas(self) -> int:
@@ -105,6 +127,8 @@ class Relatorio:
     def texto(self) -> str:
         titulo = "Plano (simulação: nada foi gravado)" if self.simulado else "Plano"
         linhas = [f"{titulo}:"]
+        if self.etapas:
+            linhas.append(f"  etapas: {','.join(self.etapas)}")
         linhas += [f"  {k}: {v}" for k, v in sorted(self.plano.items())]
         if not self.simulado:
             linhas.append("Feito:")
@@ -116,6 +140,20 @@ class Relatorio:
         linhas += [f"Aviso: {a}" for a in self.avisos]
         linhas += [f"Falha: {f}" for f in self.falhas]
         return "\n".join(linhas)
+
+
+def etapas_validas(etapas: Iterable[str] | str | None) -> tuple[str, ...]:
+    """Etapas na ordem de execução; `"r2,d1"` ou uma sequência. ValueError com nome desconhecido."""
+    if etapas is None:
+        return ETAPAS_PADRAO
+    if isinstance(etapas, str):
+        etapas = [e.strip() for e in etapas.split(",") if e.strip()]
+    pedidas = set(etapas)
+    desconhecidas = sorted(pedidas - set(ETAPAS))
+    if desconhecidas or not pedidas:
+        raise ValueError(f"etapas inválidas: {', '.join(desconhecidas) or '(nenhuma)'} "
+                         f"(use {','.join(ETAPAS)})")
+    return tuple(e for e in ETAPAS if e in pedidas)
 
 
 # ---------------------------------------------------------------- estado atual
@@ -132,7 +170,7 @@ def ler_atual(banco) -> dict[str, Any]:
                                  f"WHERE {q('id')} = 1")
         if linhas:
             atual["estado_indice"] = tuple(linhas[0][c] for c in colunas)
-    atual["fts"] = (banco.consultar(f"SELECT count(*) AS n FROM {FTS}")[0]["n"] if FTS in existentes else 0)
+    atual["fts_divergente"] = fts_divergente(banco)
     return atual
 
 
@@ -184,7 +222,7 @@ def _valores_vetores(ambiente: Ambiente, fonte: Fonte, ids: Sequence[str]) -> di
             valores[i] = v
         else:
             faltam.append(i)
-    if faltam:
+    if faltam:  # get_by_ids em lotes de 100, no ritmo global da API
         for item in ambiente.vetores.obter(faltam):
             valores[item["id"]] = como_float32(item["values"])
     ausentes = [i for i in ids if i not in valores]
@@ -216,16 +254,27 @@ def _exportar(fonte: Fonte, ambiente: Ambiente, versao: str, pasta: Path, rel: R
     arquivos = montar_exportacao(fonte, ambiente, versao)
     destino = Path(pasta) / versao
     destino.mkdir(parents=True, exist_ok=True)
-    # SHA256SUMS por último: quem o encontra no bucket encontra também os arquivos que ele lista
-    for nome in sorted(arquivos, key=lambda n: (n == "SHA256SUMS", n)):
-        dados = arquivos[nome]
+    for nome, dados in sorted(arquivos.items()):
         local = destino / nome
         if not local.is_file() or local.read_bytes() != dados:
             local.write_bytes(dados)
+    if ambiente.r2 is None:
+        rel.avisos.append(f"exportação {versao}: gravada só em {destino} (sem R2)")
+        return
+    rel.exportados.extend(f"{versao}/{nome}" for nome in sorted(arquivos, key=lambda n: (n == "SHA256SUMS", n)))
+    no_bucket = ambiente.r2.obter(ambiente.bucket_exportacoes, f"{versao}/SHA256SUMS")
+    if no_bucket is not None:  # a versão já foi publicada inteira: nada é reenviado
+        if no_bucket != arquivos["SHA256SUMS"]:
+            rel.avisos.append(f"exportação {versao}: o SHA256SUMS do bucket difere do gerado agora; "
+                              "nada foi reenviado (confira o determinismo da exportação)")
+        return
+    condicional = getattr(ambiente.r2, "put_condicional", True)
+    # SHA256SUMS por último: quem o encontra no bucket encontra também os arquivos que ele lista
+    for nome in sorted(arquivos, key=lambda n: (n == "SHA256SUMS", n)):
         tipo = TIPOS_EXPORTACAO.get(Path(nome).suffix, "text/plain; charset=utf-8")
-        if ambiente.r2.enviar(ambiente.bucket_exportacoes, f"{versao}/{nome}", dados, tipo, se_ausente=True):
+        if ambiente.r2.enviar(ambiente.bucket_exportacoes, f"{versao}/{nome}", arquivos[nome], tipo,
+                              se_ausente=condicional):
             rel.feitas["exportacao_enviar"] += 1
-        rel.exportados.append(f"{versao}/{nome}")
 
 
 # ---------------------------------------------------------------- embeddings
@@ -264,18 +313,139 @@ def tipo_conteudo(formato: str | None) -> str:
     return TIPOS_CONTEUDO.get(formato or "", "application/octet-stream")
 
 
+def documentos_meta(documentos: Iterable[str], limite: int = MAX_META_DOCUMENTOS) -> str:
+    """Ids em ordem, separados por vírgula, até `limite` caracteres, sem nunca cortar um id ao meio."""
+    saida = ""
+    for doc in sorted(documentos):
+        proximo = f"{saida},{doc}" if saida else doc
+        if len(proximo) > limite:
+            break
+        saida = proximo
+    return saida
+
+
+def conferir_indice(ambiente: Ambiente) -> None:
+    """Pré-voo do Vectorize: dimensões e índices de metadados do contrato (seção 8.2); ErroNuvem se faltar."""
+    info = ambiente.vetores.info() or {}
+    dimensoes = info.get("dimensions", (info.get("config") or {}).get("dimensions"))
+    if dimensoes != ambiente.dimensoes:
+        raise ErroNuvem(f"Vectorize: índice com {dimensoes} dimensões (esperadas {ambiente.dimensoes}); nada enviado")
+    indices = ambiente.vetores.indices_metadados()
+    errados = [f"{nome} ({tipo})" for nome, tipo in sorted(INDICES_METADADOS.items()) if indices.get(nome) != tipo]
+    if errados:
+        raise ErroNuvem("Vectorize: faltam índices de metadados " + ", ".join(errados)
+                        + " (npx wrangler vectorize create-metadata-index); nada enviado")
+
+
+# ---------------------------------------------------------------- R2
+def _r2_originais(ambiente: Ambiente, fonte: Fonte, atual: dict, cache: Path, simular: bool, rel: Relatorio,
+                  avisar: Callable[[str], Any]) -> set[str]:
+    """Envia os originais que faltam (4 em paralelo); devolve as chaves de arquivo cujo original falhou."""
+    conhecidos = {(linha[1], linha[6]) for linha in atual["arquivos"].values()}
+    candidatos = [o for _, o in sorted(fonte.originais.items()) if (o.sha256, o.chave_r2) not in conhecidos]
+    rel.plano["r2_verificar"] = len(candidatos)
+    rel.plano["r2_enviar"] += 0
+    condicional = getattr(ambiente.r2, "put_condicional", True)
+
+    def tratar(original: Original) -> tuple[Original, str]:
+        if ambiente.r2.existe(ambiente.bucket_arquivos, original.chave_r2):
+            return original, "existe"
+        caminho = Path(cache) / "arquivos" / original.sha256
+        dados = caminho.read_bytes() if caminho.is_file() else None
+        if dados is None or sha256(dados) != original.sha256:
+            return original, "falha"
+        if simular:
+            return original, "enviar"
+        gravou = ambiente.r2.enviar(ambiente.bucket_arquivos, original.chave_r2, dados,
+                                    tipo_conteudo(original.formato),
+                                    {"documentos": documentos_meta(original.documentos)}, se_ausente=condicional)
+        return original, "enviado" if gravou else "enviar"
+
+    falhou: set[str] = set()
+    falhas: list[tuple[str, str]] = []
+    if candidatos:
+        with ThreadPoolExecutor(max_workers=TRABALHADORES_R2, thread_name_prefix="radar-r2") as pool:
+            futuros = [pool.submit(tratar, o) for o in candidatos]
+            try:
+                for n, futuro in enumerate(as_completed(futuros), 1):
+                    original, estado = futuro.result()
+                    if estado == "falha":
+                        falhas.append((original.sha256, f"original {original.sha256} ausente ou diferente no cache "
+                                                        f"({', '.join(sorted(original.arquivos))})"))
+                        falhou.update(original.arquivos)
+                    elif estado in ("enviar", "enviado"):
+                        rel.plano["r2_enviar"] += 1
+                        if estado == "enviado":
+                            rel.feitas["r2_enviar"] += 1
+                    if n % PROGRESSO_R2 == 0 or n == len(futuros):
+                        avisar(f"R2: {n}/{len(futuros)} originais conferidos")
+            except BaseException:
+                for futuro in futuros:
+                    futuro.cancel()
+                raise
+    rel.falhas.extend(m for _, m in sorted(falhas))
+
+    rel.plano["r2_apagar"] += 0
+    for chave in sorted(fonte.remover_r2):
+        if ambiente.r2.existe(ambiente.bucket_arquivos, chave):
+            rel.plano["r2_apagar"] += 1
+            if not simular:
+                ambiente.r2.apagar(ambiente.bucket_arquivos, chave)
+                rel.feitas["r2_apagar"] += 1
+    return falhou
+
+
+# ---------------------------------------------------------------- D1
+def _sem_falhas(tabela: str, linhas: dict[tuple, tuple], falhou: set[str]) -> dict[tuple, tuple]:
+    """Tira as linhas dos arquivos cujo original falhou (o D1 fica como estava para eles)."""
+    if not falhou:
+        return linhas
+    if tabela in ("arquivos", "arquivo_documento"):
+        return {k: v for k, v in linhas.items() if k[0] not in falhou}
+    if tabela == "trechos":  # na linha completa e na projeção de COMPARAR, `arquivo` é a 3ª coluna
+        return {k: v for k, v in linhas.items() if v[2] not in falhou}
+    return linhas
+
+
+def _linha_fts(trecho: tuple) -> tuple:
+    return rowid_fts(trecho[0]), trecho[0], normalizar_busca(trecho[4])
+
+
+def _textos_trechos(banco, ids: Sequence[str]) -> list[tuple]:
+    """(id, texto) dos trechos já no D1 (para refazer o FTS de arquivos mantidos como estavam)."""
+    saida: list[tuple] = []
+    for i in range(0, len(ids), 100):
+        lista = ", ".join(literal(x) for x in ids[i:i + 100])
+        saida += [(r["id"], r["texto"]) for r in
+                  banco.consultar(f"SELECT {q('id')} AS id, {q('texto')} AS texto FROM {q('trechos')} "
+                                  f"WHERE {q('id')} IN ({lista})")]
+    return saida
+
+
 # ---------------------------------------------------------------- sincronização
 def sincronizar(raiz: str | Path, textos: str | Path | None, ambiente: Ambiente, *, liberados,
                 cache: str | Path, simular: bool = False, reconstruir: bool = False,
                 exportar: str | Path | None = None, commit: str | None = None,
-                agora: Callable[[], datetime] | None = None) -> Relatorio:
+                agora: Callable[[], datetime] | None = None, etapas: Iterable[str] | str | None = None,
+                progresso: Callable[[str], Any] | None = None) -> Relatorio:
     """Leva o estado do Git à nuvem do `ambiente`; devolve o plano e o que foi feito.
 
-    Sobe `ErroBarreira` (PII), `coletor.nuvem.fonte.ErroFonte` (Git inconsistente) ou
+    `etapas`: subconjunto de `r2`, `d1`, `vetores`, `exportar` (padrão: as três primeiras;
+    `exportar` entra sozinho quando há `exportar`). Sem R2 no ambiente (`--sem-r2`), a etapa
+    `r2` sai. Sobe `ErroBarreira` (PII), `coletor.nuvem.fonte.ErroFonte` (Git inconsistente) ou
     `ErroNuvem` (falha de chamada); nesses casos `estado_indice` não é gravado.
     """
     agora = agora or (lambda: datetime.now(timezone.utc))
+    inicio = agora().astimezone(timezone.utc)
+    avisar = progresso or (lambda texto: None)
+    pedidas = set(etapas_validas(etapas))
+    if exportar is not None:
+        pedidas.add("exportar")
     rel = Relatorio(simulado=simular)
+    if ambiente.r2 is None and "r2" in pedidas:
+        pedidas.discard("r2")
+        rel.avisos.append("etapa r2 pulada: sem R2 neste ambiente (--sem-r2)")
+    rel.etapas = tuple(e for e in ETAPAS if e in pedidas)
     fonte = carregar_fonte(raiz, textos, liberados)
     rel.avisos.extend(fonte.avisos)
 
@@ -285,10 +455,10 @@ def sincronizar(raiz: str | Path, textos: str | Path | None, ambiente: Ambiente,
         raise ErroBarreira(fortes)
 
     banco = ambiente.banco
-    # (b) migrações
+    # (b) migrações (as tabelas são lidas por todas as etapas e gravadas por d1 e vetores)
     pendentes = banco.pendentes(ambiente.pasta_migracoes)
     rel.plano["migracoes"] = len(pendentes)
-    if pendentes and not simular:
+    if pendentes and not simular and pedidas & {"d1", "vetores"}:
         rel.feitas["migracoes"] += len(banco.migrar(ambiente.pasta_migracoes))
 
     atual = ler_atual(banco)
@@ -296,129 +466,145 @@ def sincronizar(raiz: str | Path, textos: str | Path | None, ambiente: Ambiente,
     if reconstruir:
         indexados_antigos = atual["trechos_indexados"]
         atual = {t: {} for t in TABELAS_BASE}
-        atual.update({"estado_indice": None, "fts": 0, "trechos_indexados": indexados_antigos})
+        atual.update({"estado_indice": None, "fts_divergente": False, "trechos_indexados": indexados_antigos})
 
     # (c) R2: originais que faltam e originais removidos
-    falhou_r2: set[str] = set()
-    conhecidos = {(linha[1], linha[6]) for linha in atual["arquivos"].values()}
-    candidatos = [o for _, o in sorted(fonte.originais.items()) if (o.sha256, o.chave_r2) not in conhecidos]
-    rel.plano["r2_verificar"] = len(candidatos)
-    rel.plano["r2_enviar"] += 0
-    for original in candidatos:
-        if ambiente.r2.existe(ambiente.bucket_arquivos, original.chave_r2):
-            continue
-        caminho = Path(cache) / "arquivos" / original.sha256
-        dados = caminho.read_bytes() if caminho.is_file() else None
-        if dados is None or sha256(dados) != original.sha256:
-            rel.falhas.append(f"original {original.sha256} ausente ou diferente no cache "
-                              f"({', '.join(sorted(original.arquivos))})")
-            falhou_r2.update(original.arquivos)
-            continue
-        rel.plano["r2_enviar"] += 1
-        if not simular:
-            documentos = ",".join(sorted(original.documentos))[:MAX_META_DOCUMENTOS]
-            if ambiente.r2.enviar(ambiente.bucket_arquivos, original.chave_r2, dados, tipo_conteudo(original.formato),
-                                  {"documentos": documentos}, se_ausente=True):
-                rel.feitas["r2_enviar"] += 1
-    rel.plano["r2_apagar"] += 0
-    for chave in sorted(fonte.remover_r2):
-        if ambiente.r2.existe(ambiente.bucket_arquivos, chave):
-            rel.plano["r2_apagar"] += 1
-            if not simular:
-                ambiente.r2.apagar(ambiente.bucket_arquivos, chave)
-                rel.feitas["r2_apagar"] += 1
+    falhou: set[str] = set()
+    nao_conferidos: set[str] = set()
+    if "r2" in pedidas:
+        falhou = _r2_originais(ambiente, fonte, atual, Path(cache), simular, rel, avisar)
+    else:  # sem a etapa r2, `r2_chave` só vai ao D1 para originais já conferidos (invariante do D1)
+        conhecidos = {(linha[1], linha[6]) for linha in atual["arquivos"].values()}
+        for original in fonte.originais.values():
+            if (original.sha256, original.chave_r2) not in conhecidos:
+                nao_conferidos.update(original.arquivos)
+        if nao_conferidos:
+            rel.avisos.append(f"{len(nao_conferidos)} arquivo(s) sem r2_chave no D1: o original não foi conferido "
+                              "(etapa r2 fora desta execução)")
 
-    # (d) D1: diferença das tabelas-base e FTS
+    # (d) D1: diferença das tabelas-base e FTS (calculada sempre: os vetores usam os apagados)
+    refazer_fts = reconstruir or atual["fts_divergente"]
     alteracoes: list[Alteracao] = []
     if reconstruir:
         alteracoes += [Alteracao.de(t, limpar=True) for t in (*TABELAS_GIT, "estado_indice")]
-        alteracoes.append(Alteracao.de(FTS, limpar=True))
         rel.plano["d1_limpar"] = len(TABELAS_GIT) + 2
-    gravados_trechos: list[tuple] = []
-    apagados_trechos: list[tuple] = []
+    apagados: dict[str, list[tuple]] = {}
     for tabela in TABELAS_GIT:
         colunas, _ = COLUNAS[tabela]
-        desejado = fonte.linhas[tabela]
-        corrente = atual[tabela]
-        if tabela == "arquivos" and falhou_r2:  # sem o original no R2, a linha do arquivo fica como está
-            desejado = {k: v for k, v in desejado.items() if k[0] not in falhou_r2}
-            corrente = {k: v for k, v in corrente.items() if k[0] not in falhou_r2}
+        desejado = _sem_falhas(tabela, fonte.linhas[tabela], falhou)
+        corrente = _sem_falhas(tabela, atual[tabela], falhou)
+        if tabela == "arquivos" and nao_conferidos:
+            desejado = {k: (v[:6] + (None,) if k[0] in nao_conferidos else v) for k, v in desejado.items()}
         projecao = [colunas.index(c) for c in COMPARAR[tabela]] if tabela in COMPARAR else None
         gravar = [linha for chave, linha in sorted(desejado.items())
                   if corrente.get(chave) != (tuple(linha[i] for i in projecao) if projecao else linha)]
         apagar = [chave for chave in sorted(corrente) if chave not in desejado]
         rel.plano[f"d1_{tabela}_gravar"] = len(gravar)
         rel.plano[f"d1_{tabela}_apagar"] = len(apagar)
-        alteracoes.append(Alteracao.de(tabela, gravar, apagar))
+        apagados[tabela] = apagar
         if tabela == "trechos":
-            gravados_trechos, apagados_trechos = gravar, apagar
-    if reconstruir or atual["fts"] != len(atual["trechos"]):
+            if not refazer_fts:  # cada bloco de trechos vai no mesmo lote atômico do seu FTS
+                alteracoes.append(Alteracao.de(tabela, gravar, apagar, fts_linha=_linha_fts,
+                                               fts_rowid=lambda chave: rowid_fts(chave[0])))
+                rel.plano["d1_trechos_fts_gravar"] = len(gravar)
+                rel.plano["d1_trechos_fts_apagar"] = len(apagar) + sum(1 for t in gravar
+                                                                       if (t[0],) in atual["trechos"])
+                continue
+        alteracoes.append(Alteracao.de(tabela, gravar, apagar))
+    if refazer_fts:
         if not reconstruir:
             rel.plano["d1_fts_reconstruir"] = 1
-            alteracoes.append(Alteracao.de(FTS, limpar=True))
-        todos = [fonte.linhas["trechos"][k] for k in sorted(fonte.linhas["trechos"])]
-        alteracoes.append(Alteracao.de(FTS, gravar=[(rowid_fts(t[0]), t[0], normalizar_busca(t[4])) for t in todos]))
-        rel.plano["d1_trechos_fts_gravar"] = len(todos)
-    else:
-        apagar_fts = [(rowid_fts(k[0]),) for k in apagados_trechos]
-        apagar_fts += [(rowid_fts(t[0]),) for t in gravados_trechos if (t[0],) in atual["trechos"]]
-        gravar_fts = [(rowid_fts(t[0]), t[0], normalizar_busca(t[4])) for t in gravados_trechos]
-        rel.plano["d1_trechos_fts_gravar"] = len(gravar_fts)
-        rel.plano["d1_trechos_fts_apagar"] = len(apagar_fts)
-        alteracoes.append(Alteracao.de(FTS, gravar=gravar_fts, apagar=apagar_fts))
-    if not simular and any(not a.vazia() for a in alteracoes):
+        alteracoes.append(Alteracao.de(FTS, limpar=True))
+        desejados_trechos = _sem_falhas("trechos", fonte.linhas["trechos"], falhou)
+        linhas_fts = [_linha_fts(desejados_trechos[k]) for k in sorted(desejados_trechos)]
+        mantidos = sorted(k[0] for k, v in atual["trechos"].items() if v[2] in falhou)
+        if mantidos and "d1" in pedidas and not simular:
+            # arquivos com original em falha continuam com os trechos que já tinham (texto lido do D1)
+            linhas_fts += [(rowid_fts(i), i, normalizar_busca(texto)) for i, texto in _textos_trechos(banco, mantidos)]
+        alteracoes.append(Alteracao.de(FTS, gravar=linhas_fts))
+        rel.plano["d1_trechos_fts_gravar"] = len(desejados_trechos) + len(mantidos)
+    if "d1" in pedidas and not simular and any(not a.vazia() for a in alteracoes):
         rel.feitas["d1_instrucoes"] += banco.aplicar(alteracoes)
 
     # (e) Vectorize
-    desejados = fonte.vetores
-    indexados = {chave[0]: linha[1] for chave, linha in atual["trechos_indexados"].items()}
-    reembeddar = reconstruir or (estado is not None and estado[6] != ambiente.modelo)
-    novos = [i for i in sorted(desejados) if reembeddar or indexados.get(i) != desejados[i][0]]
-    removidos = [i for i in sorted(indexados) if i not in desejados]
-    rel.plano["vetores_upsert"] = len(novos)
-    rel.plano["vetores_apagar"] = len(removidos)
-    cache_emb = ambiente.cache_embeddings
-    rel.plano["embeddings"] = sum(1 for i in novos if not (cache_emb and cache_emb.obter(desejados[i][0])))
-    if not simular:
-        ultima = None
-        if removidos:
-            mutacoes = ambiente.vetores.apagar(removidos)
-            ultima = mutacoes[-1] if mutacoes else ultima
-            rel.feitas["vetores_apagar"] += len(removidos)
-            rel.feitas["d1_instrucoes"] += banco.aplicar(
-                [Alteracao.de("trechos_indexados", apagar=[(i,) for i in removidos])])
-        for bloco in _blocos(novos, LOTE_SINCRONIZACAO):
-            valores = _embeddings(ambiente, [(desejados[i][0], desejados[i][2]) for i in bloco], rel)
-            mutacoes = ambiente.vetores.upsert(
-                [{"id": i, "values": v, "metadata": desejados[i][1]} for i, v in zip(bloco, valores)])
-            ultima = mutacoes[-1] if mutacoes else ultima
-            rel.feitas["vetores_upsert"] += len(bloco)
-            # o upsert aceito é durável: o progresso fica registrado mesmo se a execução parar depois
-            rel.feitas["d1_instrucoes"] += banco.aplicar(
-                [Alteracao.de("trechos_indexados", gravar=[(i, desejados[i][0]) for i in bloco])])
-        if ultima is not None:
-            ambiente.vetores.esperar(ultima)
+    if "vetores" in pedidas:
+        _vetores(ambiente, fonte, atual, estado, falhou, apagados, reconstruir, simular, inicio, rel)
 
-    # (f) estado_indice: só no fim e só sem falhas
+    # (f) estado_indice: só no fim, sem falhas e com as etapas que formam uma sincronização completa
     rel.versao = calcular_versao(fonte, ambiente.modelo)
     if rel.falhas:
         rel.avisos.append("estado_indice não gravado: a sincronização teve falhas")
         return rel
-    conjunto = hashlib.sha256("".join(f"{i} {fonte.trechos[i].sha256}\n" for i in sorted(fonte.trechos))
-                              .encode("utf-8")).hexdigest()
-    data = agora().astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    novo = (1, rel.versao, commit, fonte.sha256_manifestos, len(fonte.trechos), conjunto, ambiente.modelo,
-            VERSAO_TRECHOS, data)
-    if reconstruir or estado is None or tuple(estado[:8]) != novo[:8]:
-        rel.plano["estado_indice"] = 1
-        if not simular:
-            banco.aplicar([Alteracao.de("estado_indice", gravar=[novo])])
-            rel.feitas["estado_indice"] += 1
-            rel.estado_gravado = True
-    else:
+    if not ETAPAS_COMPLETAS <= pedidas:
         rel.plano["estado_indice"] = 0
+        rel.avisos.append("estado_indice não gravado: etapas parciais (" + ",".join(rel.etapas) + ")")
+    else:
+        conjunto = hashlib.sha256("".join(f"{i} {fonte.trechos[i].sha256}\n" for i in sorted(fonte.trechos))
+                                  .encode("utf-8")).hexdigest()
+        data = agora().astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        novo = (1, rel.versao, commit, fonte.sha256_manifestos, len(fonte.trechos), conjunto, ambiente.modelo,
+                VERSAO_TRECHOS, data)
+        # o commit faz parte da comparação: um commit novo regrava a linha, mesmo sem outra mudança
+        if reconstruir or estado is None or tuple(estado[:8]) != novo[:8]:
+            rel.plano["estado_indice"] = 1
+            if not simular:
+                banco.aplicar([Alteracao.de("estado_indice", gravar=[novo])])
+                rel.feitas["estado_indice"] += 1
+                rel.estado_gravado = True
+        else:
+            rel.plano["estado_indice"] = 0
 
     # (g) exportação
-    if exportar is not None:
-        _exportar(fonte, ambiente, rel.versao, Path(exportar), rel, simular)
+    if "exportar" in pedidas:
+        _exportar(fonte, ambiente, rel.versao, Path(exportar) if exportar is not None
+                  else Path(cache) / "exportacoes", rel, simular)
     return rel
+
+
+def _vetores(ambiente: Ambiente, fonte: Fonte, atual: dict, estado, falhou: set[str],
+             apagados: dict[str, list[tuple]], reconstruir: bool, simular: bool, inicio: datetime,
+             rel: Relatorio) -> None:
+    banco = ambiente.banco
+    conferir_indice(ambiente)  # pré-voo (só leituras), antes de qualquer embedding
+    # ids de arquivos com original em falha: nem enviados nem apagados nesta execução
+    congelados = {t.id for t in fonte.trechos.values() if t.arquivo in falhou}
+    congelados |= {k[0] for k, v in atual["trechos"].items() if v[2] in falhou}
+    desejados = {i: v for i, v in fonte.vetores.items() if i not in congelados}
+    alvo = {i: sha_indexado(v[0], v[1]) for i, v in desejados.items()}
+    indexados = {chave[0]: linha[1] for chave, linha in atual["trechos_indexados"].items()}
+    reembeddar = reconstruir or (estado is not None and estado[6] != ambiente.modelo)
+    novos = [i for i in sorted(alvo) if reembeddar or indexados.get(i) != alvo[i]]
+    candidatos = set(indexados)
+    candidatos |= {k[0] for k in apagados.get("trechos", [])}
+    candidatos |= {f"ementa:{k[0]}" for k in apagados.get("documentos", [])}
+    if reconstruir:  # o índice inteiro: também vetores órfãos que nunca entraram em trechos_indexados
+        candidatos |= set(ambiente.vetores.listar_ids())
+    removidos = sorted(i for i in candidatos if i not in fonte.vetores and i not in congelados)
+    rel.plano["vetores_upsert"] = len(novos)
+    rel.plano["vetores_apagar"] = len(removidos)
+    cache_emb = ambiente.cache_embeddings
+    rel.plano["embeddings"] = sum(1 for i in novos if not (cache_emb and cache_emb.obter(desejados[i][0])))
+    if simular:
+        return
+    ultima = None
+    if removidos:
+        mutacoes = ambiente.vetores.apagar(removidos)
+        ultima = mutacoes[-1] if mutacoes else ultima
+        rel.feitas["vetores_apagar"] += len(removidos)
+        rel.feitas["d1_instrucoes"] += banco.aplicar(
+            [Alteracao.de("trechos_indexados", apagar=[(i,) for i in removidos])])
+    for bloco in _blocos(novos, LOTE_SINCRONIZACAO):
+        valores = _embeddings(ambiente, [(desejados[i][0], desejados[i][2]) for i in bloco], rel)
+        # registrados antes do upsert: um vetor enviado nunca fica fora de trechos_indexados (e sai
+        # do índice se o Git deixar de tê-lo); os já registrados mantêm o hash antigo até o fim
+        sem_registro = [(i, PENDENTE) for i in bloco if i not in indexados]
+        if sem_registro:
+            rel.feitas["d1_instrucoes"] += banco.aplicar([Alteracao.de("trechos_indexados", gravar=sem_registro)])
+        mutacoes = ambiente.vetores.upsert(
+            [{"id": i, "values": v, "metadata": desejados[i][1]} for i, v in zip(bloco, valores)])
+        ultima = mutacoes[-1] if mutacoes else ultima
+        rel.feitas["vetores_upsert"] += len(bloco)
+        rel.feitas["d1_instrucoes"] += banco.aplicar(
+            [Alteracao.de("trechos_indexados", gravar=[(i, alvo[i]) for i in bloco])])
+    # sempre: confere que as mutações desta execução foram processadas antes de gravar o estado
+    ambiente.vetores.esperar(ultima, desde=inicio - FOLGA_RELOGIO if ultima is not None else None)

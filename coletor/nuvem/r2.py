@@ -6,6 +6,10 @@ por caminho (`/<bucket>/<chave>`). Operações: `enviar` (PUT, por padrão com
 `existe` (HEAD), `obter` (GET), `apagar` (DELETE, usado só pela remoção) e `listar`
 (ListObjectsV2). Credenciais em `R2_ACCESS_KEY_ID` e `R2_SECRET_ACCESS_KEY`; o
 segredo nunca aparece em mensagens.
+
+Sem as chaves S3, `R2Rest` faz as mesmas operações pela API REST do Cloudflare com o token
+Bearer (variável de ambiente ou login OAuth do wrangler); `coletor.nuvem.ambientes` escolhe
+automaticamente.
 """
 from __future__ import annotations
 
@@ -104,6 +108,8 @@ def chave_r2(sha256: str) -> str:
 class R2:
     """Cliente S3 mínimo do R2."""
 
+    put_condicional = True  # `If-None-Match: *` atômico no PUT
+
     def __init__(self, chave_acesso: str, segredo: str, *, conta: str | None = None, endpoint: str | None = None,
                  regiao: str = REGIAO, tentativas: int = TENTATIVAS, dormir: Callable[[float], Any] = time.sleep,
                  relogio: Callable[[], datetime] | None = None) -> None:
@@ -185,4 +191,67 @@ class R2:
             token = next((el.text for el in raiz.iter()
                           if el.tag.rsplit("}", 1)[-1] == "NextContinuationToken"), None)
             if truncado != "true" or not token:
+                return chaves
+
+
+class R2Rest:
+    """R2 pela API REST do Cloudflare com token Bearer (sem chaves S3), mesma interface de `R2`.
+
+    `…/accounts/{conta}/r2/buckets/{bucket}/objects/{chave}`, com a chave codificada por inteiro
+    (`/` vira `%2F`): PUT com os bytes no corpo, GET e DELETE. A existência é um GET com
+    `Range: bytes=0-0` (404 = ausente). Não há `If-None-Match` nesta via (`put_condicional` é
+    False): quem envia confere antes e faz o PUT sem condição, o que basta para os originais
+    (chave = SHA-256 do conteúdo) e para as exportações (versão inteira pulada se o `SHA256SUMS`
+    já existe). Metadados personalizados (`x-amz-meta-*`) só vão pela via S3 e são ignorados aqui.
+    """
+
+    put_condicional = False
+
+    def __init__(self, cf) -> None:  # cf: coletor.nuvem.cloudflare.Cloudflare
+        self.cf = cf
+
+    def __repr__(self) -> str:
+        return f"R2Rest(conta={self.cf.conta!r})"
+
+    @staticmethod
+    def caminho(bucket: str, chave: str = "") -> str:
+        base = f"r2/buckets/{urllib.parse.quote(bucket, safe='')}/objects"
+        return base + ("/" + urllib.parse.quote(chave, safe="") if chave else "")
+
+    def enviar(self, bucket: str, chave: str, dados: bytes, tipo: str = "application/octet-stream",
+               metadados: Mapping[str, str] | None = None, se_ausente: bool = True) -> bool:
+        """PUT do objeto; com `se_ausente`, confere antes e devolve False se já existia."""
+        if se_ausente and self.existe(bucket, chave):
+            return False
+        self.cf.pedir("PUT", self.caminho(bucket, chave), corpo=dados, cabecalhos={"Content-Type": tipo})
+        return True
+
+    def existe(self, bucket: str, chave: str) -> bool:
+        r = self.cf.pedir("GET", self.caminho(bucket, chave), cabecalhos={"Range": "bytes=0-0"}, aceitar=(404, 416))
+        return r.status != 404
+
+    def obter(self, bucket: str, chave: str) -> bytes | None:
+        r = self.cf.pedir("GET", self.caminho(bucket, chave), aceitar=(404,))
+        return None if r.status == 404 else r.corpo
+
+    def apagar(self, bucket: str, chave: str) -> None:
+        self.cf.pedir("DELETE", self.caminho(bucket, chave), aceitar=(404,))
+
+    def listar(self, bucket: str, prefixo: str = "") -> list[str]:
+        """Chaves sob `prefixo` (`GET …/objects?prefix=…&cursor=…`)."""
+        chaves: list[str] = []
+        cursor = None
+        while True:
+            params = {"prefix": prefixo, "per_page": "1000"}
+            if cursor:
+                params["cursor"] = cursor
+            consulta = urllib.parse.urlencode(sorted(params.items()), quote_via=urllib.parse.quote)
+            r = self.cf.pedir("GET", self.caminho(bucket) + "?" + consulta, cabecalhos={"Accept": "application/json"})
+            dados = r.json() or {}
+            if not isinstance(dados, dict) or not dados.get("success", False):
+                raise ErroNuvem(f"R2 {bucket}: listagem sem sucesso", r.status)
+            chaves.extend(o["key"] for o in dados.get("result") or [] if isinstance(o, dict) and o.get("key"))
+            info = dados.get("result_info") or {}
+            cursor = info.get("cursor")
+            if not (info.get("is_truncated") and cursor):
                 return chaves

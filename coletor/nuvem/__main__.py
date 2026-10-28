@@ -5,6 +5,8 @@ Exemplos:
   python -m coletor.nuvem --ambiente staging
   python -m coletor.nuvem --ambiente production --exportar D:\\radar-niteroi-cache\\exportacoes
   python -m coletor.nuvem --ambiente production --reconstruir
+  python -m coletor.nuvem --ambiente staging --etapas r2
+  python -m coletor.nuvem --ambiente staging --etapas d1,vetores --sem-r2
 
 Código de saída: 0 sem falhas; 1 com falhas (barreira de PII, Git inconsistente,
 chamada à nuvem ou originais ausentes no cache); 2 em uso inválido.
@@ -21,7 +23,7 @@ from coletor import mascara
 from coletor.nuvem.ambientes import AMBIENTES, ambiente_local, ambiente_remoto
 from coletor.nuvem.fonte import ErroFonte
 from coletor.nuvem.rede import ErroNuvem
-from coletor.nuvem.sincronizar import ErroBarreira, sincronizar
+from coletor.nuvem.sincronizar import ETAPAS, ETAPAS_PADRAO, ErroBarreira, etapas_validas, sincronizar
 
 RAIZ = Path(__file__).resolve().parents[2]
 
@@ -64,23 +66,35 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--raiz", type=Path, default=RAIZ, help=argparse.SUPPRESS)
     p.add_argument("--cache", type=Path, help="cache local (padrão: RADAR_CACHE)")
     p.add_argument("--commit", help="commit dos manifestos (padrão: GITHUB_SHA ou git rev-parse HEAD)")
+    p.add_argument("--etapas", default=",".join(ETAPAS_PADRAO), metavar="LISTA",
+                   help=f"etapas separadas por vírgula, entre {','.join(ETAPAS)} (padrão: {','.join(ETAPAS_PADRAO)}; "
+                        "--exportar acrescenta exportar). estado_indice só é gravado com r2, d1 e vetores")
+    p.add_argument("--sem-r2", action="store_true",
+                   help="não usa o R2: pula a etapa r2 e o envio da exportação (sem gravar estado_indice)")
     args = p.parse_args(argv)
 
+    try:
+        etapas = etapas_validas(args.etapas)
+    except ValueError as e:
+        p.error(str(e))
     cache = args.cache or cache_padrao()
     if args.ambiente != "local" and args.sqlite:
         p.error("--sqlite só vale para --ambiente local")
     try:
         if args.ambiente == "local":
             ambiente = ambiente_local(args.sqlite or cache / "local.sqlite", somente_leitura=args.simular)
+            if args.sem_r2:
+                ambiente.r2 = None
         else:
-            ambiente = ambiente_remoto(args.ambiente, cache)
+            ambiente = ambiente_remoto(args.ambiente, cache, sem_r2=args.sem_r2)
     except (ErroNuvem, OSError, KeyError, ValueError) as e:
         print(f"erro: {e}", file=sys.stderr)
         return 1
     try:
         rel = sincronizar(args.raiz, args.textos or textos_padrao(), ambiente, liberados=mascara.liberados(args.raiz),
                           cache=cache, simular=args.simular, reconstruir=args.reconstruir, exportar=args.exportar,
-                          commit=args.commit or commit_atual(args.raiz))
+                          commit=args.commit or commit_atual(args.raiz), etapas=etapas,
+                          progresso=lambda texto: print(texto, file=sys.stderr, flush=True))
     except ErroBarreira as e:
         print(str(e), file=sys.stderr)
         return 1

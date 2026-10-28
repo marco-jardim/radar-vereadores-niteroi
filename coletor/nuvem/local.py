@@ -17,11 +17,12 @@ import os
 import struct
 import tempfile
 from collections.abc import Iterable, Mapping, Sequence
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 from coletor.arquivos import gravar_atomico
-from coletor.nuvem.cloudflare import DIMENSOES
+from coletor.nuvem.cloudflare import DIMENSOES, INDICES_METADADOS
 
 MODELO_LOCAL = "local:shake256-1024"
 
@@ -67,6 +68,8 @@ def _gravar_bytes(caminho: Path, dados: bytes) -> None:
 
 class R2Local:
     """Buckets como pastas: `<raiz>/<bucket>/<chave>`; `If-None-Match: *` simulado."""
+
+    put_condicional = True
 
     def __init__(self, raiz: str | os.PathLike) -> None:
         self.raiz = Path(raiz)
@@ -148,11 +151,23 @@ class VetoresLocal:
         return [{"id": i, "metadata": dados[i]["metadata"], "values": desempacotar(dados[i]["values"])}
                 for i in ids if i in dados]
 
-    def esperar(self, mutacao: str | None) -> dict:
-        return {"processedUpToMutation": mutacao, "vectorCount": len(self._carregar())}
+    def info(self) -> dict:
+        """Como o `info` do Vectorize: dimensões, contagem e a última mutação (síncrona, já processada)."""
+        return {"dimensions": DIMENSOES, "vectorCount": len(self._carregar()),
+                "processedUpToMutation": f"local-{self._mutacoes}" if self._mutacoes else None,
+                "processedUpToDatetime": datetime.now(timezone.utc).isoformat()}
+
+    def indices_metadados(self) -> dict[str, str]:
+        return dict(INDICES_METADADOS)
+
+    def esperar(self, mutacao: str | None, desde: datetime | None = None, **_: Any) -> dict:
+        return {**self.info(), "processedUpToMutation": mutacao}
 
     def ids(self) -> list[str]:
         return sorted(self._carregar())
+
+    def listar_ids(self) -> list[str]:
+        return self.ids()
 
 
 class CacheEmbeddings:

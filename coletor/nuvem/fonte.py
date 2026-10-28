@@ -72,13 +72,23 @@ def sha256(dados: bytes) -> str:
 
 
 def normalizar_busca(texto: str) -> str:
-    """Forma da busca por palavras: NFD sem marcas (Mn) e minúsculas ("Licença" -> "licenca").
+    """Forma da busca por palavras: NFD, sem marcas Mn, NFC e minúsculas ("Licença" -> "licenca").
 
-    O Worker normaliza a consulta da mesma forma (`normalize("NFD")`, sem `\\p{Mn}`,
-    `toLowerCase()`).
+    O Worker normaliza a consulta com exatamente
+    `s.normalize("NFD").replace(/\\p{Mn}/gu, "").normalize("NFC").toLowerCase()`;
+    os pares de `tests/fixtures/contratos/normalizacao.json` valem para as duas implementações.
     """
     decomposto = unicodedata.normalize("NFD", texto)
     return unicodedata.normalize("NFC", "".join(c for c in decomposto if unicodedata.category(c) != "Mn")).lower()
+
+
+def sha_indexado(sha_texto: str, meta: dict) -> str:
+    """`trechos_indexados.sha256`: SHA-256 de (sha256 do texto + metadados em JSON com chaves ordenadas).
+
+    Mudar só os metadados (tipo, ano, legislatura, documento) também reenvia o vetor.
+    """
+    return sha256((sha_texto + json.dumps(meta, ensure_ascii=False, sort_keys=True, separators=(",", ":")))
+                  .encode("utf-8"))
 
 
 def rowid_fts(id_trecho: str) -> int:
@@ -304,7 +314,7 @@ def carregar_fonte(raiz: str | Path, textos: str | Path | None, liberados) -> Fo
         "arquivo_documento": arquivo_documento,
         "trechos": {(t.id,): (t.id, t.documento, t.arquivo, t.posicao, t.texto, t.sha256) for t in trechos.values()},
         "remocoes": linhas_remocoes,
-        "trechos_indexados": {(i,): (i, v[0]) for i, v in vetores.items()},
+        "trechos_indexados": {(i,): (i, sha_indexado(v[0], v[1])) for i, v in vetores.items()},
     }
     return Fonte(linhas, trechos, vetores, ementas, originais, remover_r2, sha_manifestos, avisos)
 
@@ -363,11 +373,13 @@ def _trechos(textos: Path | None, com_texto: dict[str, tuple[int, dict]], removi
 
 # ---------------------------------------------------------------- barreira de PII
 def varrer_fonte(fonte: Fonte, liberados) -> tuple[list[dict], int]:
-    """Ocorrências fortes de `mascara.varrer` em todo trecho e ementa a enviar (sem o valor) e o total de fracas."""
+    """Ocorrências fortes de `mascara.varrer` em todo trecho, ementa e motivo de remoção a enviar
+    (sem o valor) e o total de fracas."""
     fortes: list[dict] = []
     fracas = 0
     alvos = [(f"trecho {t.id} ({t.arquivo})", t.texto) for _, t in sorted(fonte.trechos.items())]
     alvos += [(f"ementa {d}", texto) for d, texto in sorted(fonte.ementas.items())]
+    alvos += [(f"remocao {chave[0]}", linha[2] or "") for chave, linha in sorted(fonte.linhas["remocoes"].items())]
     for origem, texto in alvos:
         for o in mascara.varrer(texto, liberados):
             if o["forte"]:

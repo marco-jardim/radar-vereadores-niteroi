@@ -1,0 +1,86 @@
+{
+ "descricao": "Pares entrada -> sa\u00edda da normaliza\u00e7\u00e3o da busca por palavras (contrato, se\u00e7\u00e3o 8.1): coletor.nuvem.fonte.normalizar_busca e o Worker devem produzir a mesma sa\u00edda.",
+ "funcao_js": "s.normalize(\"NFD\").replace(/\\p{Mn}/gu, \"\").normalize(\"NFC\").toLowerCase()",
+ "pares": [
+  {
+   "entrada": "Licen\u00e7a",
+   "saida": "licenca"
+  },
+  {
+   "entrada": "LICEN\u00c7A Ambiental",
+   "saida": "licenca ambiental"
+  },
+  {
+   "entrada": "Niter\u00f3i",
+   "saida": "niteroi"
+  },
+  {
+   "entrada": "S\u00e3o Gon\u00e7alo",
+   "saida": "sao goncalo"
+  },
+  {
+   "entrada": "A\u00c7\u00c3O",
+   "saida": "acao"
+  },
+  {
+   "entrada": "Prac\u0327a",
+   "saida": "praca"
+  },
+  {
+   "entrada": "\u00d1and\u00fa",
+   "saida": "nandu"
+  },
+  {
+   "entrada": "Vi\u1ec7t",
+   "saida": "viet"
+  },
+  {
+   "entrada": "\u0130stanbul",
+   "saida": "istanbul"
+  },
+  {
+   "entrada": "\u212b",
+   "saida": "a"
+  },
+  {
+   "entrada": "\u1f08\u03b8\u1fc6\u03bd\u03b1\u03b9",
+   "saida": "\u03b1\u03b8\u03b7\u03bd\u03b1\u03b9"
+  },
+  {
+   "entrada": "Stra\u00dfe",
+   "saida": "stra\u00dfe"
+  },
+  {
+   "entrada": "\ufb01m",
+   "saida": "\ufb01m"
+  },
+  {
+   "entrada": "N\u00ba 29/2024",
+   "saida": "n\u00ba 29/2024"
+  },
+  {
+   "entrada": "a\u20dd",
+   "saida": "a\u20dd"
+  },
+  {
+   "entrada": "\u0915\u093f",
+   "saida": "\u0915\u093f"
+  },
+  {
+   "entrada": "\ud55c\uae00",
+   "saida": "\ud55c\uae00"
+  },
+  {
+   "entrada": "a\ud83d\ude00",
+   "saida": "a\ud83d\ude00"
+  },
+  {
+   "entrada": "  Espa\u00e7os  ",
+   "saida": "  espacos  "
+  },
+  {
+   "entrada": "",
+   "saida": ""
+  }
+ ]
+}

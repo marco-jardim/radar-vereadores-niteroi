@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import json
+import shutil
+import tempfile
 import threading
 import unittest
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -11,6 +13,7 @@ from coletor.nuvem import banco, cloudflare
 from coletor.nuvem.cloudflare import D1, Cloudflare, Vectorize, WorkersAI
 from coletor.nuvem.r2 import R2
 from coletor.nuvem.rede import ErroNuvem, espera_retry_after, redigir, requisitar
+from coletor.nuvem.wrangler import VERSAO_WRANGLER
 
 TOKEN = "tok-SEGREDO-0123456789abcdef"
 
@@ -358,16 +361,21 @@ class TestBancoRemoto(unittest.TestCase):
                 stdout = stderr = ""
             return R()
 
+        pasta = Path(tempfile.mkdtemp(prefix="radar-worker-"))
+        self.addCleanup(shutil.rmtree, pasta, ignore_errors=True)
         remoto = banco.BancoRemoto(D1Falso(), "radar-niteroi-staging", ambiente_wrangler="staging",
                                    executar=executar, limiar_arquivo=0, env_extra={"CLOUDFLARE_API_TOKEN": TOKEN},
-                                   comando_npx="npx")
+                                   comando_npx="npx", pasta_worker=pasta)
         linhas = [(f"doc:{i}", "pl", None, 2024, None, "Ementa d'água", None, None, None) for i in range(300)]
         n = remoto.aplicar([banco.Alteracao.de("documentos", gravar=linhas)])
         self.assertGreater(n, 0)
         comando, kw, conteudo = chamadas[0]
-        self.assertEqual(comando[1:6], ["wrangler", "d1", "execute", "radar-niteroi-staging", "--remote"])
+        self.assertEqual(comando[:3], ["npx", "--yes", f"wrangler@{VERSAO_WRANGLER}"])  # versão fixada
+        self.assertEqual(comando[3:8], ["d1", "execute", "radar-niteroi-staging", "--remote", "--yes"])
         self.assertEqual(comando[-2:], ["--env", "staging"])
         self.assertEqual(kw["env"]["CI"], "true")
+        self.assertEqual(kw["timeout"], 900)
+        self.assertEqual(kw["cwd"], str(pasta))
         self.assertEqual(kw["env"]["CLOUDFLARE_API_TOKEN"], TOKEN)
         self.assertIn("'Ementa d''água'", conteudo)
         self.assertNotIn("BEGIN", conteudo)

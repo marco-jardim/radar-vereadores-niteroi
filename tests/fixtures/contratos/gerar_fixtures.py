@@ -4,7 +4,8 @@ A pasta `tests/fixtures/contratos/` funciona como uma raiz de repositório em
 miniatura: registros sintéticos no formato real de `data/proposicoes/`,
 `data/documentos/` e `data/sessoes/` (substitutivos aninhados no PL), o manifesto
 `data/textos/manifesto-2024.json`, a lista de clichês `data/textos/cliches.json`,
-`config/remocoes.json` e a árvore `dados-textos/` (textos e trechos).
+`config/remocoes.json`, a árvore `dados-textos/` (textos e trechos) e
+`normalizacao.json` (pares da normalização da busca, para Python e JavaScript).
 
 Este gerador é uma implementação de referência das regras do contrato: fila (sem
 indicações e moções), documentos que citam cada arquivo, documento principal (o PL
@@ -71,6 +72,39 @@ GUID_EXPEDIENTE = "00000000-0000-4000-8000-0000000000c3"
 LIBERADOS = frozenset({"@camaraniteroi.rj.gov.br", "@niteroi.rj.gov.br", "2126201234"})
 PESSOAS = [("FULANO SINTETICO DE TAL", "Fulano Sintético")]
 CLICHES = {limpeza.normalizar_linha("CÂMARA MUNICIPAL DE NITERÓI"): 40}
+
+# Pares da normalização da busca por palavras (contrato, seção 8.1), compartilhados pelos testes
+# Python (coletor.nuvem.fonte.normalizar_busca) e JavaScript (Worker). JSON só com ASCII (\uXXXX).
+FUNCAO_JS_NORMALIZACAO = 's.normalize("NFD").replace(/\\p{Mn}/gu, "").normalize("NFC").toLowerCase()'
+PARES_NORMALIZACAO = [
+    ("Licen\u00e7a", "licenca"),
+    ("LICEN\u00c7A Ambiental", "licenca ambiental"),
+    ("Niter\u00f3i", "niteroi"),
+    ("S\u00e3o Gon\u00e7alo", "sao goncalo"),
+    ("A\u00c7\u00c3O", "acao"),
+    ("Prac\u0327a", "praca"),  # c + cedilha combinante
+    ("\u00d1and\u00fa", "nandu"),
+    ("Vi\u1ec7t", "viet"),  # duas marcas sobre o e
+    ("\u0130stanbul", "istanbul"),  # I com ponto: NFD separa o ponto (Mn) antes das minúsculas
+    ("\u212b", "a"),  # sinal de angstrom: decomposição canônica
+    ("\u1f08\u03b8\u1fc6\u03bd\u03b1\u03b9", "\u03b1\u03b8\u03b7\u03bd\u03b1\u03b9"),
+    ("Stra\u00dfe", "stra\u00dfe"),  # minúsculas simples, sem expandir o ß
+    ("\ufb01m", "\ufb01m"),  # ligadura: só compatibilidade, NFD não muda
+    ("N\u00ba 29/2024", "n\u00ba 29/2024"),
+    ("a\u20dd", "a\u20dd"),  # marca envolvente (Me) fica
+    ("\u0915\u093f", "\u0915\u093f"),  # marca com espaçamento (Mc) fica
+    ("\ud55c\uae00", "\ud55c\uae00"),  # hangul: NFD e NFC se desfazem
+    ("a\U0001f600", "a\U0001f600"),
+    ("  Espa\u00e7os  ", "  espacos  "),  # espaços preservados
+    ("", ""),
+]
+NORMALIZACAO = {
+    "descricao": "Pares entrada -> sa\u00edda da normaliza\u00e7\u00e3o da busca por palavras (contrato, "
+                 "se\u00e7\u00e3o 8.1): coletor.nuvem.fonte.normalizar_busca e o Worker devem produzir a mesma "
+                 "sa\u00edda.",
+    "funcao_js": FUNCAO_JS_NORMALIZACAO,
+    "pares": [{"entrada": e, "saida": s} for e, s in PARES_NORMALIZACAO],
+}
 
 EMENTA_PL = "Institui o Programa Municipal Sintético de Leitura nas Praças de Niterói."
 EMENTA_REQ = "Requer informações sintéticas sobre a manutenção das praças do município."
@@ -405,6 +439,7 @@ def gerar(destino: Path) -> None:
     cliches = limpeza.carregar_cliches(caminho_cliches)
     versao_limpeza = limpeza.versao_efetiva(destino)
     gravar_bytes(destino / "config" / "remocoes.json", _json_config(REMOCOES))
+    gravar_bytes(destino / "normalizacao.json", json.dumps(NORMALIZACAO, ensure_ascii=True, indent=1) + "\n")
 
     manifestos, textos, lista_trechos = montar(cliches, versao_limpeza)
     for ano, manifesto in sorted(manifestos.items()):

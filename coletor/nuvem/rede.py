@@ -10,6 +10,7 @@ import email.utils
 import json
 import re
 import socket
+import threading
 import time
 import urllib.error
 import urllib.parse
@@ -89,6 +90,43 @@ def espera_retry_after(valor: str | None, agora: datetime | None = None) -> floa
     if data.tzinfo is None:
         data = data.replace(tzinfo=timezone.utc)
     return max(0.0, (data - (agora or datetime.now(timezone.utc))).total_seconds())
+
+
+def data_iso(texto: Any) -> datetime | None:
+    """Data ISO 8601 (com `Z` ou deslocamento; sem fuso, UTC); None se ausente ou inválida."""
+    if not isinstance(texto, str) or not texto.strip():
+        return None
+    try:
+        data = datetime.fromisoformat(texto.strip().replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    return data if data.tzinfo else data.replace(tzinfo=timezone.utc)
+
+
+class Ritmo:
+    """No máximo `por_segundo` requisições por segundo, somadas todas as threads que o compartilham.
+
+    O limite global da API do Cloudflare é de 1.200 requisições a cada 5 minutos por usuário
+    (4 por segundo); o ambiente remoto compartilha um `Ritmo(4)` entre D1, Vectorize, Workers AI e R2 REST.
+    """
+
+    def __init__(self, por_segundo: float = 4.0, *, relogio: Callable[[], float] = time.monotonic,
+                 dormir: Callable[[float], Any] = time.sleep) -> None:
+        if por_segundo <= 0:
+            raise ValueError("por_segundo precisa ser positivo")
+        self.intervalo = 1.0 / por_segundo
+        self.relogio = relogio
+        self.dormir = dormir
+        self._proximo: float | None = None
+        self._trava = threading.Lock()
+
+    def aguardar(self) -> None:
+        with self._trava:
+            agora = self.relogio()
+            if self._proximo is not None and agora < self._proximo:
+                self.dormir(self._proximo - agora)
+                agora = self._proximo
+            self._proximo = agora + self.intervalo
 
 
 def _trecho(dados: bytes, limite: int = 300) -> str:

@@ -7,18 +7,23 @@ tabela) e viram instruções conforme o destino:
   INTEGER)` no `rowid` do FTS (o D1 recebe parâmetros como texto). Usado no SQLite
   local e nos lotes REST do D1;
 - modo `literal`: valores embutidos, até 100.000 bytes por instrução. Usado nos
-  arquivos `.sql` aplicados com `npx wrangler d1 execute <db> --remote --file`
-  (cargas grandes).
+  arquivos `.sql` aplicados com `wrangler d1 execute <db> --remote --yes --file`
+  (só cargas muito grandes, acima de `LIMIAR_ARQUIVO` instruções: a importação
+  bloqueia o banco enquanto roda).
+
+As instruções saem em **unidades**: instruções que só valem juntas (um bloco de
+trechos e as linhas correspondentes de `trechos_fts`) vão sempre na mesma requisição
+de lote, que o D1 aplica de forma atômica. Assim uma falha no meio da carga nunca
+deixa o FTS divergente dos trechos.
 
 Migrações: a pasta única `worker/migrations/`; localmente, aplicadas pelo `sqlite3`
 com a mesma tabela `d1_migrations` do wrangler; no D1, por
-`npx wrangler d1 migrations apply <db> --remote`.
+`wrangler d1 migrations apply <db> --remote` (versão fixada em `coletor.nuvem.wrangler`).
 """
 from __future__ import annotations
 
 import math
 import os
-import shutil
 import sqlite3
 import subprocess
 import tempfile
@@ -28,11 +33,10 @@ from pathlib import Path
 from typing import Any
 
 from coletor.nuvem.cloudflare import D1, MAX_BYTES_INSTRUCAO, MAX_PARAMETROS
-from coletor.nuvem.rede import ErroNuvem, redigir
+from coletor.nuvem.wrangler import PASTA_WORKER, TIMEOUT_WRANGLER, Wrangler, npx  # noqa: F401 - npx reexportado
 
 RAIZ = Path(__file__).resolve().parents[2]
 PASTA_MIGRACOES = RAIZ / "worker" / "migrations"
-PASTA_WORKER = RAIZ / "worker"
 
 # tabela -> (colunas, chave primária); contrato, seção 8.1
 COLUNAS: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
@@ -55,8 +59,9 @@ TABELAS_BASE = ("documentos", "autoria", "pessoas", "arquivos", "arquivo_documen
                 "trechos_indexados")
 # colunas comparadas na diferença (o texto do trecho é determinado pelo sha256, que entra no id)
 COMPARAR = {"trechos": ("id", "documento", "arquivo", "posicao", "sha256")}
-LIMIAR_ARQUIVO = 400  # acima disto, a carga no D1 remoto vai por arquivo .sql e wrangler
+LIMIAR_ARQUIVO = 5000  # acima disto, a carga no D1 remoto vai por arquivo .sql e wrangler (bloqueia o banco)
 LINHAS_POR_INSTRUCAO = 500
+BYTES_UNIDADE_TRECHOS = 40_000  # texto somado de um bloco de trechos (o FTS repete o texto normalizado)
 
 
 @dataclass
@@ -68,13 +73,21 @@ class Alteracao:
     apagar: list[tuple] = field(default_factory=list)
     limpar: bool = False
     substituir: bool = True  # INSERT OR REPLACE (FTS: INSERT simples, depois de apagar)
+    # só em `trechos`: linha do FTS de cada linha gravada e rowid do FTS de cada chave apagada;
+    # com elas, cada bloco de trechos sai numa unidade junto com o FTS correspondente
+    fts_linha: Callable[[tuple], tuple] | None = None
+    fts_rowid: Callable[[tuple], int] | None = None
 
     @classmethod
-    def de(cls, tabela: str, gravar: Iterable[tuple] = (), apagar: Iterable[tuple] = (), limpar: bool = False):
+    def de(cls, tabela: str, gravar: Iterable[tuple] = (), apagar: Iterable[tuple] = (), limpar: bool = False, *,
+           fts_linha: Callable[[tuple], tuple] | None = None, fts_rowid: Callable[[tuple], int] | None = None):
         if tabela == FTS:
             return cls(FTS, COLUNAS_FTS, ("rowid",), list(gravar), list(apagar), limpar, substituir=False)
         colunas, chave = COLUNAS[tabela]
-        return cls(tabela, colunas, chave, list(gravar), list(apagar), limpar)
+        if (fts_linha is None) != (fts_rowid is None):
+            raise ValueError("fts_linha e fts_rowid andam juntos")
+        return cls(tabela, colunas, chave, list(gravar), list(apagar), limpar, fts_linha=fts_linha,
+                   fts_rowid=fts_rowid)
 
     def vazia(self) -> bool:
         return not (self.gravar or self.apagar or self.limpar)
@@ -179,17 +192,61 @@ def instrucoes_apagar(tabela: str, chave: Sequence[str], chaves: Iterable[Sequen
     return _agrupar(cabeca, itens(), ");", max_parametros, max_bytes, max_linhas, tabela)
 
 
-def instrucoes(alteracoes: Iterable[Alteracao], modo: str = "parametros") -> list[tuple[str, tuple]]:
-    """Instruções na ordem das alterações; em cada uma, limpar, apagar e depois gravar."""
-    saida: list[tuple[str, tuple]] = []
+def _blocos_chaves(chaves: Sequence[tuple], largura: int) -> Iterable[list[tuple]]:
+    passo = max(1, MAX_PARAMETROS // max(1, largura))
+    for i in range(0, len(chaves), passo):
+        yield list(chaves[i:i + passo])
+
+
+def _blocos_linhas(linhas: Sequence[tuple], largura: int, max_bytes: int | None = None) -> Iterable[list[tuple]]:
+    """Blocos que cabem numa instrução (100 parâmetros) e com o texto somado até `max_bytes`."""
+    max_bytes = BYTES_UNIDADE_TRECHOS if max_bytes is None else max_bytes
+    passo = max(1, MAX_PARAMETROS // max(1, largura))
+    bloco: list[tuple] = []
+    tamanho = 0
+    for linha in linhas:
+        peso = sum(len(v.encode("utf-8")) for v in linha if isinstance(v, str))
+        if bloco and (len(bloco) >= passo or tamanho + peso > max_bytes):
+            yield bloco
+            bloco, tamanho = [], 0
+        bloco.append(linha)
+        tamanho += peso
+    if bloco:
+        yield bloco
+
+
+def unidades(alteracoes: Iterable[Alteracao], modo: str = "parametros") -> list[list[tuple[str, tuple]]]:
+    """Unidades atômicas na ordem das alterações; em cada alteração, limpar, apagar e depois gravar.
+
+    Sem FTS acoplado, cada instrução é uma unidade. Em `trechos` com `fts_linha`/`fts_rowid`,
+    cada bloco apagado leva o DELETE do FTS, e cada bloco gravado leva o DELETE dos rowids do
+    bloco no FTS (idempotente), o INSERT dos trechos e o INSERT do FTS: tudo numa só unidade.
+    """
+    saida: list[list[tuple[str, tuple]]] = []
     for a in alteracoes:
         if a.limpar:
-            saida.append((f"DELETE FROM {q(a.tabela)};", ()))
-        if a.apagar:
-            saida.extend(instrucoes_apagar(a.tabela, a.chave, a.apagar, modo=modo))
-        if a.gravar:
-            saida.extend(instrucoes_gravar(a.tabela, a.colunas, a.gravar, modo=modo, substituir=a.substituir))
+            saida.append([(f"DELETE FROM {q(a.tabela)};", ())])
+        if a.fts_linha is None or a.fts_rowid is None:
+            if a.apagar:
+                saida.extend([i] for i in instrucoes_apagar(a.tabela, a.chave, a.apagar, modo=modo))
+            if a.gravar:
+                saida.extend([i] for i in instrucoes_gravar(a.tabela, a.colunas, a.gravar, modo=modo,
+                                                              substituir=a.substituir))
+            continue
+        for bloco in _blocos_chaves(a.apagar, len(a.chave)):
+            saida.append(instrucoes_apagar(a.tabela, a.chave, bloco, modo=modo)
+                         + instrucoes_apagar(FTS, ("rowid",), [(a.fts_rowid(k),) for k in bloco], modo=modo))
+        for bloco in _blocos_linhas(a.gravar, len(a.colunas)):
+            fts = [a.fts_linha(linha) for linha in bloco]
+            saida.append(instrucoes_apagar(FTS, ("rowid",), [(f[0],) for f in fts], modo=modo)
+                         + instrucoes_gravar(a.tabela, a.colunas, bloco, modo=modo, substituir=a.substituir)
+                         + instrucoes_gravar(FTS, COLUNAS_FTS, fts, modo=modo, substituir=False))
     return saida
+
+
+def instrucoes(alteracoes: Iterable[Alteracao], modo: str = "parametros") -> list[tuple[str, tuple]]:
+    """Instruções na ordem das alterações (as unidades de `unidades`, em sequência)."""
+    return [i for u in unidades(alteracoes, modo) for i in u]
 
 
 def nomes_migracoes(pasta: Path = PASTA_MIGRACOES) -> list[str]:
@@ -280,32 +337,37 @@ class BancoLocal:
 
 
 # ---------------------------------------------------------------- D1 remoto
-def npx() -> str:
-    caminho = shutil.which("npx") or shutil.which("npx.cmd")
-    if not caminho:
-        raise ErroNuvem("npx não encontrado no PATH (necessário para o wrangler)")
-    return caminho
-
-
 class BancoRemoto:
-    """D1 pela API REST (leituras e cargas pequenas) e pelo wrangler (migrações e cargas grandes)."""
+    """D1 pela API REST (leituras e cargas em lotes atômicos) e pelo wrangler (migrações e cargas enormes).
+
+    Até `LIMIAR_ARQUIVO` (5.000) instruções, a carga vai em lotes REST, com as unidades inteiras.
+    Acima disso, num arquivo `.sql` por `wrangler d1 execute --remote --yes --file`: a importação
+    bloqueia o banco (o Worker fica sem responder) enquanto roda.
+    """
 
     pagina: int | None = 5000
 
     def __init__(self, d1: D1, nome: str, *, ambiente_wrangler: str | None = None,
                  pasta_worker: Path = PASTA_WORKER, executar: Callable[..., Any] = subprocess.run,
                  limiar_arquivo: int = LIMIAR_ARQUIVO, segredos: Sequence[str] = (),
-                 env_extra: dict[str, str] | None = None, comando_npx: str | None = None) -> None:
+                 env_extra: dict[str, str] | None = None, comando_npx: str | None = None,
+                 remover_env: Sequence[str] = (), credencial=None, timeout: float = TIMEOUT_WRANGLER) -> None:
         self.d1 = d1
-        self.comando_npx = comando_npx
-        self.env_extra = dict(env_extra or {})
         self.nome = nome
         self.ambiente_wrangler = ambiente_wrangler
-        self.pasta_worker = Path(pasta_worker)
-        self.executar = executar
         self.limiar_arquivo = limiar_arquivo
         self.segredos = tuple(segredos)
-        self.comandos: list[list[str]] = []
+        self.credencial = credencial
+        self.wrangler = Wrangler(pasta_worker, comando_npx=comando_npx, env_extra=env_extra,
+                                 remover_env=remover_env, executor=executar, timeout=timeout,
+                                 segredos=self._segredos)
+
+    def _segredos(self) -> tuple[str, ...]:
+        return (*self.segredos, *(self.credencial.segredos() if self.credencial is not None else ()))
+
+    @property
+    def comandos(self) -> list[list[str]]:
+        return self.wrangler.comandos
 
     def fechar(self) -> None:
         pass
@@ -325,18 +387,9 @@ class BancoRemoto:
         aplicadas = self.migracoes_aplicadas()
         return [n for n in nomes_migracoes(pasta) if n not in aplicadas]
 
-    def _wrangler(self, *args: str) -> None:
-        comando = [self.comando_npx or npx(), "wrangler", *args]
-        if self.ambiente_wrangler:
-            comando += ["--env", self.ambiente_wrangler]
-        self.comandos.append(comando)
-        env = {**os.environ, **self.env_extra, "CI": "true"}  # sem perguntas interativas
-        r = self.executar(comando, cwd=str(self.pasta_worker), env=env, capture_output=True, text=True,
-                          encoding="utf-8", errors="replace")
-        if getattr(r, "returncode", 1) != 0:
-            saida = redigir(((getattr(r, "stderr", "") or "") + (getattr(r, "stdout", "") or ""))[-800:],
-                            self.segredos)
-            raise ErroNuvem(f"wrangler {' '.join(args[:3])} falhou ({r.returncode}): {saida}")
+    def _wrangler(self, *args: str) -> str:
+        args_env = [*args, *(["--env", self.ambiente_wrangler] if self.ambiente_wrangler else [])]
+        return self.wrangler.executar(*args_env)
 
     def migrar(self, pasta: Path = PASTA_MIGRACOES) -> list[str]:
         pendentes = self.pendentes(pasta)
@@ -346,32 +399,74 @@ class BancoRemoto:
 
     def aplicar(self, alteracoes: Sequence[Alteracao]) -> int:
         validas = [a for a in alteracoes if not a.vazia()]
-        lista = instrucoes(validas)
-        if not lista:
+        lista_unidades = unidades(validas)
+        total = sum(len(u) for u in lista_unidades)
+        if not total:
             return 0
-        if len(lista) <= self.limiar_arquivo:
-            self.d1.lote(lista)
-            return len(lista)
+        if total <= self.limiar_arquivo:
+            self.d1.lote_unidades(lista_unidades)
+            return total
         literais = instrucoes(validas, modo="literal")
         with tempfile.TemporaryDirectory(prefix="radar-d1-") as pasta:
             arquivo = Path(pasta) / "carga.sql"
             arquivo.write_text("".join(sql + "\n" for sql, _ in literais), encoding="utf-8", newline="\n")
-            self._wrangler("d1", "execute", self.nome, "--remote", f"--file={arquivo}")
+            # importação: bloqueia o banco enquanto roda; --yes dispensa a confirmação
+            self._wrangler("d1", "execute", self.nome, "--remote", "--yes", f"--file={arquivo}")
         return len(literais)
 
 
 def ler_tabela(banco, tabela: str, colunas: Sequence[str], chave: Sequence[str]) -> dict[tuple, tuple]:
-    """Linhas atuais: chave primária -> valores de `colunas`, lidas em páginas no D1 remoto."""
-    seletor = f"SELECT {', '.join(q(c) for c in colunas)} FROM {q(tabela)} ORDER BY {', '.join(q(c) for c in chave)}"
+    """Linhas atuais: chave primária -> valores de `colunas`.
+
+    No D1 remoto, em páginas por conjunto de chaves (`WHERE (chave) > (última) ORDER BY chave LIMIT n`),
+    sem OFFSET: cada página lê só as suas linhas, e o custo não cresce com a posição.
+    """
+    seletor = f"SELECT {', '.join(q(c) for c in colunas)} FROM {q(tabela)}"
+    ordem = f" ORDER BY {', '.join(q(c) for c in chave)}"
     linhas: list[dict] = []
     if banco.pagina is None:
-        linhas = banco.consultar(seletor)
+        linhas = banco.consultar(seletor + ordem)
     else:
-        deslocamento = 0
+        ultima: tuple | None = None
         while True:
-            pagina = banco.consultar(f"{seletor} LIMIT {banco.pagina} OFFSET {deslocamento}")
+            onde = ""
+            if ultima is not None:
+                if len(chave) == 1:
+                    onde = f" WHERE {q(chave[0])} > {literal(ultima[0])}"
+                else:
+                    onde = (f" WHERE ({', '.join(q(c) for c in chave)}) > "
+                            f"({', '.join(literal(v) for v in ultima)})")
+            pagina = banco.consultar(f"{seletor}{onde}{ordem} LIMIT {banco.pagina}")
             linhas.extend(pagina)
             if len(pagina) < banco.pagina:
                 break
-            deslocamento += banco.pagina
+            ultima = tuple(pagina[-1][c] for c in chave)
     return {tuple(r[c] for c in chave): tuple(r[c] for c in colunas) for r in linhas}
+
+
+# ---------------------------------------------------------------- conferência do FTS
+_HEX = "'0123456789abcdef'"
+
+
+def sql_rowid_fts(coluna: str) -> str:
+    """Expressão SQL de `int(id, 16) >> 1` para ids de 16 hexadecimais minúsculos (sem estouro de 64 bits)."""
+    termos = [f"(instr({_HEX}, substr({coluna}, {k}, 1)) - 1) * {16 ** (15 - k)}" for k in range(1, 16)]
+    return f"(({' + '.join(termos)}) * 8 + ((instr({_HEX}, substr({coluna}, 16, 1)) - 1) >> 1))"
+
+
+def sql_fts_divergente() -> tuple[str, str]:
+    """Duas consultas `LIMIT 1`: trecho sem a linha do FTS no rowid certo; linha do FTS sem trecho
+    ou fora do rowid do id. Qualquer resultado indica conjuntos de ids diferentes."""
+    sem_fts = (f"SELECT t.{q('id')} AS id FROM {q('trechos')} AS t WHERE NOT EXISTS (SELECT 1 FROM {FTS} AS f "
+               f"WHERE f.rowid = {sql_rowid_fts('t.' + q('id'))} AND f.{q('id')} = t.{q('id')}) LIMIT 1")
+    sem_trecho = (f"SELECT f.{q('id')} AS id FROM {FTS} AS f WHERE f.rowid != {sql_rowid_fts('f.' + q('id'))} "
+                  f"OR NOT EXISTS (SELECT 1 FROM {q('trechos')} AS t WHERE t.{q('id')} = f.{q('id')}) LIMIT 1")
+    return sem_fts, sem_trecho
+
+
+def fts_divergente(banco) -> bool:
+    """True se os ids de `trechos_fts` e `trechos` não são o mesmo conjunto (com os rowids do contrato)."""
+    existentes = banco.tabelas()
+    if FTS not in existentes or "trechos" not in existentes:
+        return False
+    return any(banco.consultar(sql) for sql in sql_fts_divergente())

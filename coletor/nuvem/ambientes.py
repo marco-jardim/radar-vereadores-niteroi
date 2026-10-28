@@ -1,24 +1,38 @@
 """Montagem dos ambientes `local`, `staging` e `production`.
 
 Os nomes e ids de D1, Vectorize e buckets vêm de `worker/wrangler.jsonc` (produção no
-nível superior, staging em `env.staging`). Credenciais só por variáveis de ambiente:
-`CLOUDFLARE_API_TOKEN` (ou `CLOUDFLARE_API_TOKEN_DADOS`), `CLOUDFLARE_ACCOUNT_ID`
-(padrão: `account_id` do wrangler), `R2_ACCESS_KEY_ID` e `R2_SECRET_ACCESS_KEY`.
+nível superior, staging em `env.staging`). Credenciais:
+
+- token da API: `CLOUDFLARE_API_TOKEN` (ou `CLOUDFLARE_API_TOKEN_DADOS`); sem eles, o login
+  OAuth do wrangler (`coletor.nuvem.credenciais`), renovado com `wrangler whoami`. Com o login
+  OAuth, os subprocessos do wrangler **não** recebem `CLOUDFLARE_API_TOKEN` e usam o próprio login;
+- conta: `CLOUDFLARE_ACCOUNT_ID` (padrão: `account_id` do wrangler);
+- R2: com `R2_ACCESS_KEY_ID` e `R2_SECRET_ACCESS_KEY`, a via S3 (`R2`, SigV4); sem elas, a API
+  REST com o token Bearer (`R2Rest`). `sem_r2=True` dispensa o R2.
+
+Todas as chamadas à API do Cloudflare de um ambiente remoto compartilham um `Ritmo` de 4
+requisições por segundo (limite global de 1.200 a cada 5 minutos).
 """
 from __future__ import annotations
 
 import json
 import os
 import re
-from collections.abc import Mapping
+import subprocess
+from collections.abc import Callable, Mapping
 from pathlib import Path
+from typing import Any
 
 from coletor.nuvem.banco import PASTA_MIGRACOES, PASTA_WORKER, BancoLocal, BancoRemoto
-from coletor.nuvem.cloudflare import D1, MODELO, Cloudflare, Vectorize, WorkersAI, token_do_ambiente
+from coletor.nuvem.cloudflare import D1, MODELO, Cloudflare, Vectorize, WorkersAI
+from coletor.nuvem.credenciais import VARIAVEIS_TOKEN, Credencial, credencial_do_ambiente
 from coletor.nuvem.local import MODELO_LOCAL, CacheEmbeddings, R2Local, VetoresLocal, embeddings_falsos
-from coletor.nuvem.r2 import R2
-from coletor.nuvem.rede import ErroNuvem
+from coletor.nuvem.r2 import R2, R2Rest
+from coletor.nuvem.rede import ErroNuvem, Ritmo
 from coletor.nuvem.sincronizar import Ambiente
+from coletor.nuvem.wrangler import TIMEOUT_WHOAMI, Wrangler, listar_vetores
+
+REQUISICOES_POR_SEGUNDO = 4.0
 
 AMBIENTES = ("local", "staging", "production")
 BUCKET_ARQUIVOS_LOCAL = "radar-niteroi-arquivos"
@@ -84,18 +98,45 @@ def ambiente_local(sqlite: str | os.PathLike, *, somente_leitura: bool = False,
                     embeddings_falsos, MODELO_LOCAL, pasta_migracoes=pasta_migracoes)
 
 
-def ambiente_remoto(nome: str, cache: Path, env: Mapping[str, str] = os.environ) -> Ambiente:
+def credencial_remota(env: Mapping[str, str] = os.environ, *, pasta_worker: Path = PASTA_WORKER,
+                      executar: Callable[..., Any] = subprocess.run, comando_npx: str | None = None) -> Credencial:
+    """Token das variáveis de ambiente ou login OAuth do wrangler, renovado por `wrangler whoami`."""
+
+    def whoami() -> None:
+        # sem CLOUDFLARE_API_TOKEN: o wrangler usa (e renova) o próprio login OAuth; a saída não é mostrada
+        Wrangler(pasta_worker, comando_npx=comando_npx, executor=executar, remover_env=VARIAVEIS_TOKEN).executar(
+            "whoami", ci=False, timeout=TIMEOUT_WHOAMI)
+
+    return credencial_do_ambiente(env, executar_whoami=whoami)
+
+
+def ambiente_remoto(nome: str, cache: Path, env: Mapping[str, str] = os.environ, *, sem_r2: bool = False,
+                    pasta_worker: Path = PASTA_WORKER, executar: Callable[..., Any] = subprocess.run,
+                    ritmo: Ritmo | None = None, comando_npx: str | None = None) -> Ambiente:
     if nome not in ("staging", "production"):
         raise ValueError(nome)
-    cfg = config_wrangler(nome)
-    token = token_do_ambiente(env)
+    cfg = config_wrangler(nome, Path(pasta_worker) / "wrangler.jsonc")
+    credencial = credencial_remota(env, pasta_worker=pasta_worker, executar=executar, comando_npx=comando_npx)
     conta = env.get("CLOUDFLARE_ACCOUNT_ID") or cfg["conta"]
     if not conta:
         raise ErroNuvem("defina CLOUDFLARE_ACCOUNT_ID")
-    cf = Cloudflare(conta, token)
+    cf = Cloudflare(conta, credencial, ritmo=ritmo or Ritmo(REQUISICOES_POR_SEGUNDO))
+    env_extra = {"CLOUDFLARE_ACCOUNT_ID": conta}
+    remover: tuple[str, ...] = ()
+    if credencial.oauth:
+        remover = ("CLOUDFLARE_API_TOKEN",)  # o wrangler usa o próprio login OAuth
+    else:
+        env_extra["CLOUDFLARE_API_TOKEN"] = credencial.token()
     banco = BancoRemoto(D1(cf, cfg["banco_id"]), cfg["banco"], ambiente_wrangler=cfg["env"],
-                        segredos=(token, env.get("R2_SECRET_ACCESS_KEY") or ""),
-                        env_extra={"CLOUDFLARE_API_TOKEN": token, "CLOUDFLARE_ACCOUNT_ID": conta})
-    r2 = R2.do_ambiente(conta, env)
-    return Ambiente(nome, banco, r2, cfg["arquivos"], cfg["exportacoes"], Vectorize(cf, cfg["indice"]),
+                        segredos=(env.get("R2_SECRET_ACCESS_KEY") or "",), credencial=credencial,
+                        env_extra=env_extra, remover_env=remover, pasta_worker=pasta_worker, executar=executar,
+                        comando_npx=comando_npx)
+    if sem_r2:
+        r2 = None
+    elif env.get("R2_ACCESS_KEY_ID") and env.get("R2_SECRET_ACCESS_KEY"):
+        r2 = R2.do_ambiente(conta, env)
+    else:
+        r2 = R2Rest(cf)
+    vetores = Vectorize(cf, cfg["indice"], listar_alternativo=lambda: listar_vetores(banco.wrangler, cfg["indice"]))
+    return Ambiente(nome, banco, r2, cfg["arquivos"], cfg["exportacoes"], vetores,
                     WorkersAI(cf).embeddings, MODELO, cache_embeddings=CacheEmbeddings(cache / "embeddings", MODELO))
