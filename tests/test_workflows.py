@@ -71,6 +71,7 @@ class TestWorkflows(unittest.TestCase):
         cls.textos = (RAIZ / ".github/workflows/textos.yml").read_text(encoding="utf-8")
         cls.backend = (RAIZ / ".github/workflows/backend.yml").read_text(encoding="utf-8")
         cls.coleta = (RAIZ / ".github/workflows/coleta.yml").read_text(encoding="utf-8")
+        cls.site = (RAIZ / ".github/workflows/site.yml").read_text(encoding="utf-8")
 
     def job(self, workflow: str, nome: str) -> str:
         return secao(secao(workflow, "jobs"), nome, 2)
@@ -86,7 +87,7 @@ class TestWorkflows(unittest.TestCase):
     def test_textos_disparos_e_barreira_de_sucesso(self):
         eventos = secao(self.textos, "on")
         self.assertEqual(set(re.findall(r"^  ([\w_]+):", eventos, re.MULTILINE)),
-                         {"workflow_run", "workflow_dispatch", "pull_request"})
+                         {"workflow_run", "workflow_dispatch", "pull_request", "push"})
         anterior = secao(eventos, "workflow_run", 2)
         self.assertEqual(valor(anterior, "workflows", 4), '["Coleta semanal"]')
         self.assertEqual(valor(anterior, "types", 4), "[completed]")
@@ -95,8 +96,27 @@ class TestWorkflows(unittest.TestCase):
         condicao = valor(publicar, "if", 4)
         self.assertIn("github.ref == 'refs/heads/main'", condicao)
         self.assertIn("github.event_name == 'workflow_dispatch'", condicao)
+        self.assertIn("github.event_name == 'push'", condicao)
         self.assertIn("github.event.workflow_run.conclusion == 'success'", condicao)
         self.assertEqual(valor(passo_contendo(publicar, "actions/checkout@"), "ref", 10), "main")
+
+    def test_textos_remocoes_disparam_pipeline_normal_sem_esperar_coleta(self):
+        push = secao(secao(self.textos, "on"), "push", 2)
+        self.assertEqual(valor(push, "branches", 4), "[main]")
+        self.assertEqual(valor(push, "paths", 4), '["config/remocoes.json"]')
+        job = self.job(self.textos, "publicar")
+        for comando in ("python -m coletor.textos", "python -m coletor.validar", "python -m coletor.nuvem"):
+            with self.subTest(comando=comando):
+                passo = passo_contendo(job, comando)
+                self.assertNotRegex(passo, r"(?m)^        if:")
+        sincronizar = passo_contendo(job, "python -m coletor.nuvem")
+        self.assertIn('--ambiente production --exportar "$EXPORTACOES"', sincronizar)
+
+    def test_site_workflow_run_somente_coleta_em_main(self):
+        anterior = secao(secao(self.site, "on"), "workflow_run", 2)
+        self.assertEqual(valor(anterior, "workflows", 4), '["Coleta semanal"]')
+        self.assertEqual(valor(anterior, "types", 4), "[completed]")
+        self.assertEqual(valor(anterior, "branches", 4), "[main]")
 
     def test_permissoes_minimas_por_job(self):
         for workflow in (self.textos, self.backend):
@@ -166,6 +186,48 @@ class TestWorkflows(unittest.TestCase):
         self.assertEqual(ordem, sorted(ordem))
         self.assertIn("for tentativa in 1 2 3; do", job)
         self.assertNotIn("commit_textos", job)
+
+    def test_textos_nuvem_recebe_commit_publicado_de_dados_textos(self):
+        job = self.job(self.textos, "publicar")
+        sincronizar = passo_contendo(job, "python -m coletor.nuvem")
+        self.assertIn('--commit-dados-textos "$(git -C "$RADAR_TEXTOS" rev-parse HEAD)"', sincronizar)
+        self.assertLess(job.index('git -C "$RADAR_TEXTOS" push origin HEAD:dados-textos'),
+                        job.index(sincronizar))
+
+    def test_textos_registra_somente_log_de_expurgo_com_tres_tentativas(self):
+        job = self.job(self.textos, "publicar")
+        registro = passo_contendo(job, 'git commit --only -m "Registra expurgo de exportações"')
+        sincronizar = passo_contendo(job, "python -m coletor.nuvem")
+        self.assertLess(job.index(sincronizar), job.index(registro))
+        self.assertIn("steps.sincronizar.outcome == 'success'", valor(registro, "if", 8))
+        self.assertIn("steps.sincronizar.outcome == 'failure'", valor(registro, "if", 8))
+        self.assertIn("if git diff HEAD --quiet -- docs/backend.md; then\n            exit 0", registro)
+        self.assertEqual(re.findall(r"(?m)^          git add (.+)$", registro), ["-- docs/backend.md"])
+        self.assertEqual(re.findall(r"(?m)^          git commit (.+)$", registro),
+                         ['--only -m "Registra expurgo de exportações" -- docs/backend.md'])
+        self.assertIn("for tentativa in 1 2 3; do", registro)
+        self.assertIn("git pull --rebase origin main && git push origin HEAD:main", registro)
+        self.assertIn("git rebase --abort", registro)
+        self.assertIn("sleep 5", registro)
+        self.assertTrue(registro.rstrip().endswith("exit 1"))
+
+    def test_textos_falha_nuvem_preserva_manifestos_publicados_e_orienta_retomada(self):
+        job = self.job(self.textos, "publicar")
+        manifesto = passo_contendo(job, "id: manifestos")
+        self.assertIn('if git pull --rebase origin main && git push origin HEAD:main; then\n'
+                      '              echo "publicado=true" >> "$GITHUB_OUTPUT"\n'
+                      '              exit 0', manifesto)
+        self.assertEqual(manifesto.count('echo "publicado=true"'), 1)
+        self.assertEqual(valor(passo_contendo(job, "python -m coletor.nuvem"), "id", 8), "sincronizar")
+        aviso = passo_contendo(job, "::error::")
+        self.assertEqual(valor(aviso, "if", 8),
+                         "failure() && steps.manifestos.outputs.publicado == 'true' && "
+                         "steps.sincronizar.outcome == 'failure'")
+        self.assertIn("workflow_dispatch", aviso)
+        self.assertLess(job.index("python -m coletor.nuvem"), job.index(aviso))
+        restaurar = passo_contendo(job, "git restore --staged --worktree")
+        self.assertEqual(valor(restaurar, "if", 8),
+                         "failure() && steps.manifestos.outputs.publicado != 'true'")
 
     def test_textos_ferramentas_cache_e_node_antes_da_nuvem(self):
         for nome in ("verificar", "publicar"):
@@ -259,7 +321,8 @@ class TestWorkflows(unittest.TestCase):
         self.assertNotIn(".dados-textos", artefato)
         self.assertNotIn(".radar-cache", artefato)
         restaurar = passo_contendo(job, "git restore --staged --worktree")
-        self.assertEqual(valor(restaurar, "if", 8), "failure()")
+        self.assertEqual(valor(restaurar, "if", 8),
+                         "failure() && steps.manifestos.outputs.publicado != 'true'")
         self.assertLess(job.index(artefato), job.index(restaurar))
 
     def test_backend_disparos_testes_e_promocao(self):

@@ -27,6 +27,12 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `coletor/classificar.py` | Taxonomia, regras, prompt, chamadas à IA, cache e curadoria dos PLs. |
 | `coletor/ia.py` | Cliente OpenCode Go compartilhado (`/chat/completions`, Bearer, `x-opencode-session`, tentativas). |
 | `coletor/temas.py` | Temas por IA por pessoa e legislatura, só com ementas mascaradas, validação, contagem pelo código e cache. |
+| `coletor/textos.py` | Pipeline incremental de inteiro teor: fila, download, extração, limpeza, máscara, trechos, manifestos e commit de `dados-textos` após barreira de PII. |
+| `coletor/nuvem/` | Sincronização e exportação: `__main__` (CLI), `sincronizar` (orquestração e expurgo), `fonte` (Git), `banco` (SQL), `cloudflare` (D1/Vectorize/embeddings), `r2` (originais e exportações), `credenciais` (tokens/OAuth), `wrangler` (subprocessos), `local` (adaptadores offline), `ambientes` (composição) e `rede` (HTTP). |
+| `coletor/mascara.py` | Mascaramento de dados pessoais, listas explícitas de contatos liberados e barreira de PII (`varrer`). |
+| `coletor/limpeza.py` | Limpeza determinística antes da máscara, com proteção do conteúdo legislativo e geração controlada de clichês. |
+| `coletor/trechos.py` | Normalização e divisão determinística do texto em trechos, com offsets Python/UTF-16 e ids estáveis. |
+| `coletor/extratores/` | Detecção e extração dos formatos de arquivo; PDF/OCR usam ferramentas externas, demais formatos têm extratores locais. |
 | `coletor/site/temas_html.py` | Bloco “Temas (agrupados por IA)” da ficha, separado do “Resumo em números”, que continua sem IA. |
 | `coletor/arquivos.py` | Serialização e gravação atômica dos JSONs versionados. |
 | `coletor/validar.py` | Validação de dados, configuração e temporários, sem alterar arquivos. |
@@ -53,6 +59,8 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `data/proposicoes/`, `data/documentos/`, `data/sessoes/` | Registros coletados por ano (documentos também por tipo). |
 | `data/classificacao_ia.json`, `data/meta.json` | Cache da IA e metadados das execuções. |
 | `data/temas_ia.json` | Cache dos temas por IA (rótulos por pessoa e legislatura e classificação por documento). |
+| `data/textos/` | Manifestos anuais `manifesto-<ano>.json` do inteiro teor; os textos e trechos ficam na branch `dados-textos`, não aqui. |
+| `data/textos/cliches.json` | Clichês do corpus usados na limpeza, gerados por `coletor.limpeza`; recalcular exige subir `VERSAO_LIMPEZA`. |
 | `data/geo/bairros.json` | Geometria opcional gerada por `coletor.geo`. |
 | `site_src/app.js` | Listas de PLs/documentos, carregador compartilhado e diálogo SISCAM. |
 | `site_src/navegacao.js` | Menu móvel e tema, até 4 KiB gzip; um listener por tipo no documento em cada script, sem alterar `app.js` para essas funções. |
@@ -107,8 +115,10 @@ versionada; o código também trata sua ausência conforme os contratos abaixo.
 
 ## Pipeline e comandos
 
-Ordem: **`siscam` → `documentos` → `sessoes` → `classificar` → `validar` → `gerar_site`**.
-Os três primeiros e a classificação rodam na coleta; a geração fica no workflow de publicação.
+Ordem: **`siscam` → `documentos` → `sessoes` → `classificar` → `temas` → `validar`** na coleta;
+depois **`textos` → `validar --textos` → `nuvem`** em `textos.yml`.
+`temas` roda após `classificar` em `coleta.yml`; `gerar_site` fica no workflow de publicação do site,
+após sua própria validação/testes, sem depender da sincronização de textos.
 
 1. `siscam` lista PLs por ano e baixa detalhes novos ou alterados, além da fila de revisão de substitutivos.
    Salva `data/proposicoes/<ano>.json` e a chave `coleta` de `data/meta.json`.
@@ -119,9 +129,12 @@ Os três primeiros e a classificação rodam na coleta; a geração fica no work
 4. `classificar` faz novas chamadas à IA para ementas sem cache válido, quando habilitadas. Grava
    `data/classificacao_ia.json` ao usar IA e a chave `classificacao` dos metadados; a combinação final das
    camadas acontece na geração, não num arquivo de projetos classificados.
-5. `validar` confere `data/` e `config/`, inclusive o formato byte a byte de documentos e sessões
+5. `temas` classifica e agrupa ementas mascaradas por pessoa e legislatura, com cache em `data/temas_ia.json`.
+6. `validar` confere `data/` e `config/`, inclusive o formato byte a byte de documentos e sessões
    (pastas opcionais), geometria e temporários. Não grava; retorna código 1 se houver problemas.
-6. `gerar_site` combina curadoria, regras e cache, calcula métricas e recria `site/`. As páginas principais
+7. `textos` gera textos mascarados e trechos em `dados-textos` e manifestos em `data/textos/`.
+   Após `validar --textos DIR`, `nuvem` sincroniza D1, Vectorize e R2 e pode exportar projeções.
+8. `gerar_site` combina curadoria, regras e cache, calcula métricas e recria `site/`. As páginas principais
    seguem `paginas.NAV`: início, novidades, leis, projetos, atividades, sessões, sem efeito e polêmicas
    (`ruido.html`), análises, busca e metodologia. Também gera `vereadores/*.html`, `feed.xml`, o redirect
    `alertas.html` → `ruido.html`, `404.html`, `dados/*`, estáticos e `.nojekyll`. A 404 usa o template comum,
@@ -272,11 +285,32 @@ O `motivo` é público no Git e não deve conter dados pessoais.
 - **Temas:** carga manual integral com chave: `python -m coletor.temas --limite 0 --max-minutos 0`.
   Zero (ou opção omitida) significa sem limite/sem prazo. A publicação anterior permanece até a conclusão
   das novas classificações; respostas inválidas não são reenviadas enquanto o hash da amostra não mudar.
+- **Textos:** `python -m coletor.textos` é incremental; `--anos` filtra ano/intervalo inclusivo dos manifestos
+  (padrão: todos) e `--tipos` aceita `pl,requerimento,pdl,resolucao,ata` (padrão: todos).
+  `--max-arquivos` (500; 0 = sem limite) limita extrações; reconstruções do cache bruto ficam fora desse teto.
+  `--max-minutos` é prazo positivo, sem prazo por padrão; o restante fica pendente. `--ocr` habilita
+  pdftoppm/Tesseract para páginas escaneadas; `--sem-rede` usa só cache, marcando `pendente_download` sem ele.
+  `--reprocessar-versao` inclui entradas de versões antigas; alterações de configuração já são reprocessadas.
+  `--verificar` confere integridade, trechos e PII sem gravar; `--amostra` (20; 0 = todas) limita reextrações
+  nessa conferência. `--so-extrair` só baixa/extrai para o cache bruto, sem manifesto nem textos publicados,
+  e não combina com `--commit-textos`. Este último aplica a barreira de PII e commita em `dados-textos`,
+  sem push. `--textos DIR` escolhe o worktree, `--cache DIR` escolhe o cache e `--workers` usa
+  `COLETOR_WORKERS` ou 4. `--forcar-trava` substitui trava abandonada e religa a pasta dos textos à raiz atual;
+  não use para concorrer com uma execução ativa.
+- **Nuvem:** `python -m coletor.nuvem --ambiente local|staging|production` exige ambiente explícito;
+  `--simular` só lê e mostra o plano, sem escrita. `--exportar DIR` grava dump, vetores e `SHA256SUMS`
+  em `DIR/<versao>/` e envia ao bucket de exportações; `--reconstruir` recria D1 e Vectorize pelo Git.
+  `--textos DIR` e `--cache DIR` substituem os caminhos do ambiente; `--sqlite ARQ` só vale no ambiente local
+  (padrão: `<cache>/local.sqlite`). `--commit` identifica o commit dos manifestos (padrão: `GITHUB_SHA` ou
+  `git rev-parse HEAD`); `--commit-dados-textos` identifica o commit publicado da branch `dados-textos`,
+  separado do commit dos manifestos. `--etapas` seleciona `r2,d1,vetores,exportar` por vírgulas
+  (padrão: `r2,d1,vetores`; `--exportar` acrescenta `exportar`). `--sem-r2` pula R2 e o envio da exportação;
+  `estado_indice` só é gravado sem falhas e com `r2`, `d1` e `vetores`.
 - **Arquivos:** `python -m coletor.arquivos --reformatar` regrava apenas `data/proposicoes/*.json` e
   `data/classificacao_ia.json`, conferindo antes de qualquer gravação que o conteúdo não muda.
 - **Auditoria:** `python -m coletor.regras_sessoes --auditoria` imprime distribuições e problemas, sem gravar.
 - **Geometria:** `python -m coletor.geo --entrada bairros-overpass.json`; `--tolerancia` muda o valor inicial
-  de 25 m. Veja o contrato de mapas abaixo. Validador e gerador não têm opções próprias de CLI.
+  de 25 m. Veja o contrato de mapas abaixo. O validador aceita `--textos DIR`; o gerador não tem opções próprias de CLI.
 
 Para uma carga histórica de documentos, prefira execuções manuais ano a ano via `anos_documentos`; não
 presuma duração fixa. Os pendentes podem ser atendidos depois com `python -m coletor.documentos --so-detalhes`.
@@ -308,6 +342,15 @@ Não exponha chaves em commits, exemplos reais ou logs.
 | `CLASSIFICADOR_LOTE` | `15`; projetos por chamada à IA. |
 | `CLASSIFICADOR_CONFIANCA_MINIMA` | `0.75`; limiar de exibição dos alertas da IA. |
 | `RADAR_COLETA` | Com `1`, pula testes de comparação com a base versionada e algumas checagens dessa base. |
+| `RADAR_CACHE` | Cache local de originais/extrações/embeddings: padrão `D:\radar-niteroi-cache` no Windows e `~/.cache/radar-niteroi` nos demais sistemas; `--cache` prevalece. |
+| `RADAR_TEXTOS` | Worktree de `dados-textos`; padrão local `radar-vereadores-niteroi-textos` ao lado do repositório (em `D:\git` para `textos` no Windows); `--textos` prevalece. |
+| `CLOUDFLARE_API_TOKEN` | Token da API usado pela nuvem; prevalece sobre `CLOUDFLARE_API_TOKEN_DADOS`. Sem ambos, pode usar login OAuth do Wrangler. |
+| `CLOUDFLARE_API_TOKEN_DADOS` | Token de conteúdo do CI (D1, Vectorize e R2); alternativa ao token genérico na CLI. |
+| `CLOUDFLARE_API_TOKEN_DEPLOY` | Secret de migração/deploy em `backend.yml`, passado como `CLOUDFLARE_API_TOKEN`; não usado pelo job de textos. |
+| `CLOUDFLARE_API_TOKEN_LEITURA` | Secret somente leitura da simulação de PR em `textos.yml`, passado como `CLOUDFLARE_API_TOKEN`. |
+| `CLOUDFLARE_ACCOUNT_ID` | Conta Cloudflare; sem variável, a nuvem usa o `account_id` da configuração do Worker. |
+| `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` | Credenciais S3/SigV4 do R2; sem o par, a nuvem usa a API REST com a credencial Cloudflare. |
+| `WRANGLER_CONFIG` | Caminho da configuração de login OAuth do Wrangler para a descoberta de credenciais, não o `worker/wrangler.jsonc`. |
 | `GITHUB_ACTIONS` | Quando não vazia, o validador emite problemas como `::error::`. |
 | `GITHUB_RUN_ID` | Se presente, identifica a sessão da IA; fora do Actions, usa identificador aleatório. |
 
@@ -680,23 +723,31 @@ Esta é a referência única para sessões; a CLI está em "Pipeline e comandos"
   `github-actions[bot]`, `git pull --rebase` e push. Em falha (`failure()` ou reserva falha), preserva `data/`
   inteiro como artefato por 14 dias; uma execução sem mudanças não cria artefato só por não haver commit.
 - `site.yml`: pushes em `main` nos caminhos `coletor/**`, `config/**`, `data/**`, `site_src/**`, `tests/**`,
-  `.github/workflows/site.yml` ou `testes.yml`; também manual e após coleta bem-sucedida.
+  `.github/workflows/site.yml` ou `testes.yml`; também manual e após coleta bem-sucedida em `main`.
   Chama testes sobre `main`, gera no SHA retornado e confere o checkout antes de publicar no Pages.
   Pages deve usar a fonte GitHub Actions. Geração e publicação têm permissões separadas.
-- `textos.yml`: após coleta bem-sucedida em `main` ou manual em `main`, Ubuntu 24.04, OCR com poppler e
+- `textos.yml`: após coleta bem-sucedida em `main`, manual em `main` ou push em `main` que altere
+  `config/remocoes.json` (propaga remoções sem esperar a coleta), Ubuntu 24.04, OCR com poppler e
   Tesseract/português (versões no log), cache `RADAR_CACHE`, até 1500 arquivos/120 min. Valida textos e roda
   testes com `RADAR_COLETA=1`; publica `dados-textos` **antes** de commitar os manifestos em `main` (sem campo
   `commit_textos`), com até três tentativas de rebase/push. Node 22 e `npm ci` em `worker/` precedem a
-  sincronização/exportação de produção; atesta manifestos e `SHA256SUMS`. Só esse job recebe escrita de
-  conteúdo, OIDC e atestações, no Environment `production`. Falhas preservam manifestos/exportações por
-  14 dias antes de restaurar os manifestos locais, nunca o cache bruto ou textos bloqueados por PII.
-  PR usa staging com `--simular`, sem commit/push; fork ou secret ausente gera aviso e pula a simulação.
-  Tokens são `CLOUDFLARE_API_TOKEN_DADOS`/`CLOUDFLARE_API_TOKEN_DEPLOY`, conforme `docs/backend.md`.
+  sincronização/exportação de produção, com os commits dos manifestos e de `dados-textos` separados;
+  atesta manifestos e `SHA256SUMS`. Após a nuvem, só `docs/backend.md`, se alterado pelo log de expurgo,
+  é commitado como “Registra expurgo de exportações”, com até três tentativas de rebase/push.
+  Só esse job recebe escrita de conteúdo, OIDC e atestações, no Environment `production`.
+  Falhas preservam manifestos/exportações por
+  14 dias, nunca o cache bruto ou textos bloqueados por PII. Só restaura manifestos locais se o push deles
+  não foi concluído; falha na nuvem após esse push emite `::error::` orientando reexecução por `workflow_dispatch`.
+  PR usa staging com `--simular`, sem commit/push, com `CLOUDFLARE_API_TOKEN_LEITURA`; fork ou secret ausente
+  gera `::notice::` e pula a simulação. Produção usa `CLOUDFLARE_API_TOKEN_DADOS`; deploy usa
+  `CLOUDFLARE_API_TOKEN_DEPLOY` em `backend.yml`, conforme `docs/backend.md`.
 - `backend.yml`: PRs de `worker/**` executam `npm ci`, testes e typecheck com Node 22; push em `main`
   testa, migra/publica staging e executa integração (ou smoke de saúde/busca). Só depois migra/publica
   produção com `COMMIT` igual ao SHA do evento, protegido pelo Environment `production`; Git só leitura.
 - Coleta, textos e publicação usam `cancel-in-progress: false`; textos compartilha o grupo `coleta`,
-  exceto PRs (`textos-pr-${{ github.ref }}`). Não interrompa coleta em andamento sem necessidade.
+  exceto PRs (`textos-pr-${{ github.ref }}`). O GitHub mantém só uma execução pendente por grupo:
+  uma pendente mais nova substitui a anterior, mesmo com `cancel-in-progress: false` (a execução ativa continua).
+  Não interrompa coleta em andamento sem necessidade.
 
 ## Curadoria e neutralidade editorial
 
