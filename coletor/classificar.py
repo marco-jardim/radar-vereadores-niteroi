@@ -153,8 +153,7 @@ def chamar_ia(itens: list[dict], chave: str, sessao: str) -> dict[int, dict]:
         ],
     }
     def decodificar(texto: str) -> dict[int, dict]:
-        texto = re.sub(r"^```(?:json)?|```$", "", texto.strip(), flags=re.M)
-        dados = json.loads(texto[texto.find("{"): texto.rfind("}") + 1])
+        dados = ia.decodificar_json(texto)
         return {int(i["id"]): i for i in dados.get("itens", []) if "id" in i}
 
     return ia.chamar(corpo, chave, sessao, base_url=BASE_URL, decodificar=decodificar,

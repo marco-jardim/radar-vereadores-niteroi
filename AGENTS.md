@@ -269,6 +269,9 @@ O `motivo` é público no Git e não deve conter dados pessoais.
   parcial e os metadados; não equivalem a interromper à força o processo durante uma gravação.
 - **Classificador:** `--sem-ia` impede novas chamadas, sem apagar o cache; `--limite N` limita os projetos
   pendentes enviados à IA (sem limite por padrão). O gerador continua lendo o cache mesmo sem chave.
+- **Temas:** carga manual integral com chave: `python -m coletor.temas --limite 0 --max-minutos 0`.
+  Zero (ou opção omitida) significa sem limite/sem prazo. A publicação anterior permanece até a conclusão
+  das novas classificações; respostas inválidas não são reenviadas enquanto o hash da amostra não mudar.
 - **Arquivos:** `python -m coletor.arquivos --reformatar` regrava apenas `data/proposicoes/*.json` e
   `data/classificacao_ia.json`, conferindo antes de qualquer gravação que o conteúdo não muda.
 - **Auditoria:** `python -m coletor.regras_sessoes --auditoria` imprime distribuições e problemas, sem gravar.

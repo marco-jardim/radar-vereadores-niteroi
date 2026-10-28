@@ -4,9 +4,11 @@ from __future__ import annotations
 import copy
 import json
 import os
+import re
 import signal
 import tempfile
 import unittest
+from html import unescape
 from pathlib import Path
 from unittest import mock
 
@@ -16,6 +18,11 @@ from coletor.site.temas_html import bloco_temas
 
 LEG = "2025-2028"
 ROTULOS = ["Transporte coletivo", "Educação municipal"]
+
+
+def texto_visivel(html: str) -> str:
+    """Retira marcação antes de decodificar entidades e normalizar a prosa."""
+    return T._normalizar(unescape(re.sub(r"<[^>]*>", " ", html)))
 
 
 def documento(i: int, tipo: str = "indicacao") -> dict:
@@ -44,13 +51,55 @@ def cache_completo(m):
     return docs, cache
 
 
-def ia_falsa(docs, chave, sessao, liberados, rotulos=None):
+def ia_falsa(docs, chave, sessao, liberados, rotulos=None, **kwargs):
     if rotulos is None:
         return {"rotulos": ["Transporte coletivo"]}
     return {"itens": [{"id": d["id"], "rotulo": rotulos[0]} for d in docs]}
 
 
 class TestValidacaoTemas(unittest.TestCase):
+    def test_palavras_inocuas_e_flexoes_explicitas(self):
+        permitidos = ["Direitos humanos", "Ensino médio", "Centro histórico", "Direito animal"]
+        self.assertEqual(T.validar_rotulos({"rotulos": permitidos}), permitidos)
+        for termo in (*T.PALAVRAS_PROIBIDAS, *T.TERMOS_IDEOLOGICOS, *T.FLEXOES_PROIBIDAS):
+            with self.subTest(termo=termo), self.assertRaisesRegex(ValueError, "proibido"):
+                T.validar_rotulos({"rotulos": ["Pauta " + termo]})
+
+    def test_partidos_de_todas_as_eleicoes_nomes_e_apelidos(self):
+        partidos = set()
+
+        def percorrer(valor):
+            if isinstance(valor, dict):
+                for k, v in valor.items():
+                    if k == "partido":
+                        partidos.add(v)
+                    else:
+                        percorrer(v)
+            elif isinstance(valor, list):
+                for v in valor:
+                    percorrer(v)
+
+        for nome in ("vereadores", "perfis"):
+            percorrer(json.loads((T.RAIZ / "config" / f"{nome}.json").read_text(encoding="utf-8")))
+        self.assertTrue(partidos)
+        for partido in partidos | set(T.PARTIDOS_PALAVRAS_COMUNS):
+            for grafia in (partido, partido.lower(), partido.upper()):
+                with self.subTest(partido=grafia), self.assertRaises(ValueError):
+                    T.validar_rotulos({"rotulos": ["Pauta " + grafia]})
+        for nome in ("Paulo Eduardo Gomes", "Benny Briolly"):
+            with self.subTest(nome=nome), self.assertRaisesRegex(ValueError, "proibido"):
+                T.validar_rotulos({"rotulos": ["Homenagem " + nome]})
+        m = modelo()
+        m["pessoas"]["ana"]["apelidos"] = ["Zefirino"]
+        with self.assertRaisesRegex(ValueError, "proibido"):
+            T.validar_rotulos({"rotulos": ["Homenagem Zefirino"]}, T.termos_proibidos(m))
+
+    def test_pontuacao_final_normalizada_e_pontuacao_interna_recusada(self):
+        self.assertEqual(T.validar_rotulos({"rotulos": ["  Transporte coletivo, ", "Educação municipal."]}), ROTULOS)
+        with self.assertRaises(ValueError):
+            T.validar_rotulos({"rotulos": ["Transporte, coletivo"]})
+        self.assertIn("sem pontuação", T.PROMPT_ROTULOS)
+
     def test_rotulos_proibidos_e_quantidade_palavras(self):
         for r in ("Mais produtivo", "Pauta polêmica", "Acima da média", "Gestão conservadora",
                   "Esquerda municipal", "Pauta do PSOL", "Pauta do PT", "Pauta liberal",
@@ -120,8 +169,27 @@ class TestValidacaoTemas(unittest.TestCase):
             T.agrupar(m, cache)
         self.assertIn("motivos", cache[f"pessoa:ana:{LEG}"])
 
+    def test_respostas_cercadas_e_decodificacao_dentro_das_tentativas(self):
+        from tests.test_ia import resposta
+
+        def cercada(dados):
+            return resposta("```json\n" + json.dumps(dados, ensure_ascii=False) + "\n```")
+
+        cache = {}
+        retornos = [resposta("```json\nnão é JSON\n```"), cercada({"rotulos": ROTULOS}),
+                    cercada({"itens": [{"id": i, "rotulo": ROTULOS[i % 2]} for i in range(1, 5)]})]
+        with mock.patch.dict(os.environ, {"OPENCODE_API_KEY": "falsa"}), \
+                mock.patch("urllib.request.urlopen", side_effect=retornos) as transporte, \
+                mock.patch("coletor.ia.time.sleep") as esperar:
+            estat = T.agrupar(modelo(), cache)
+        self.assertEqual(transporte.call_count, 3)
+        esperar.assert_called_once_with(5)
+        self.assertEqual(estat["documentos_novos"], 4)
+        self.assertEqual(cache[f"pessoa:ana:{LEG}"]["rotulos"], ROTULOS)
+        self.assertIn("Transporte coletivo: 2 documentos", bloco_temas(modelo(), modelo()["pessoas"]["ana"], cache))
+
     def test_id_alheio_na_execucao_nao_entra_no_cache(self):
-        def alheio(docs, chave, sessao, liberados, rotulos=None):
+        def alheio(docs, chave, sessao, liberados, rotulos=None, **kwargs):
             return ia_falsa(docs, chave, sessao, liberados) if rotulos is None else {
                 "itens": [{"id": 9999, "rotulo": rotulos[0]}]}
         cache = {}
@@ -133,6 +201,13 @@ class TestValidacaoTemas(unittest.TestCase):
 
 
 class TestFontePrompt(unittest.TestCase):
+    def test_prazo_e_corpo_mascarado_chegam_ao_cliente(self):
+        with mock.patch.object(T.ia, "chamar", return_value={}) as chamar:
+            T.chamar_ia([dict(documento(1), ementa="Email maria@example.com")],
+                        "falsa", "sessao", (), prazo=123)
+        self.assertEqual(chamar.call_args.kwargs["prazo"], 123)
+        self.assertNotIn("maria@example.com", json.dumps(chamar.call_args.args[0]))
+
     def test_autoria_pl_principal_documentos_e_mascara(self):
         m = modelo()
         p = m["pessoas"]["ana"]
@@ -169,6 +244,106 @@ class TestFontePrompt(unittest.TestCase):
 
 
 class TestCacheExecucao(unittest.TestCase):
+    def test_falha_nao_repete_cobranca_sem_mudar_amostra(self):
+        m, cache = modelo(), {}
+        with mock.patch.dict(os.environ, {"OPENCODE_API_KEY": "falsa"}), \
+                mock.patch.object(T, "chamar_ia", return_value={"rotulos": ["Gestão produtiva"]}) as chamar:
+            T.agrupar(m, cache)
+            self.assertRegex(cache[f"pessoa:ana:{LEG}"]["falha_amostra"], r"^[0-9a-f]{64}$")
+            T.agrupar(m, cache)
+            self.assertEqual(chamar.call_count, 1)
+            m["atividade"]["ana"]["documentos"][0]["ementa"] += " Alteração."
+            T.agrupar(m, cache)
+            self.assertEqual(chamar.call_count, 2)
+
+    def test_rotulos_pendentes_preservam_publicacao_e_trocam_ao_concluir(self):
+        m = modelo(40)
+        docs, cache = cache_completo(m)
+        chave = f"pessoa:ana:{LEG}"
+        anterior = bloco_temas(m, m["pessoas"]["ana"], cache)
+        self.assertTrue(anterior)
+        novos = ["Serviços municipais"]
+
+        def chamar(docs, chave, sessao, liberados, rotulos=None, **kwargs):
+            if rotulos is None:
+                return {"rotulos": novos}
+            return ia_falsa(docs, chave, sessao, liberados, rotulos)
+
+        # A versão anterior também continua legível durante atualização editorial.
+        with mock.patch.object(T, "VERSAO_TEMAS", T.VERSAO_TEMAS + "-nova"), \
+                mock.patch.dict(os.environ, {"OPENCODE_API_KEY": "falsa"}), \
+                mock.patch.object(T, "chamar_ia", side_effect=chamar):
+            T.agrupar(m, cache, limite=2)
+            self.assertEqual(cache[chave]["rotulos"], ROTULOS)
+            self.assertEqual(cache[chave]["rotulos_pendentes"]["rotulos"], novos)
+            self.assertEqual(bloco_temas(m, m["pessoas"]["ana"], cache), anterior)
+            T.agrupar(m, cache)
+            self.assertNotIn("rotulos_pendentes", cache[chave])
+            self.assertEqual(cache[chave]["rotulos"], novos)
+            self.assertIn("Serviços municipais: 40 documentos", bloco_temas(m, m["pessoas"]["ana"], cache))
+            self.assertTrue(all(k in cache[chave]["documentos"] for k in cache if k.startswith("doc:")))
+
+    def test_publicacao_da_primeira_versao_sobrevive_a_migracao_do_hash(self):
+        m = modelo(40)
+        docs = T.documentos_da_pessoa(m, m["pessoas"]["ana"], LEG, ())
+        reg = dict(registro(total=40), versao="2026-10-v1")
+        cache = {f"pessoa:ana:{LEG}": reg}
+        for d in docs:
+            lista = json.dumps(ROTULOS, ensure_ascii=False, separators=(",", ":"))
+            h = T.hashlib.sha1(f'2026-10-v1|{T.MODELO}|{d["ementa"]}|{lista}'.encode()).hexdigest()[:16]
+            cache["doc:" + h] = ROTULOS[d["id"] % 2]
+        anterior = bloco_temas(m, m["pessoas"]["ana"], cache)
+        self.assertTrue(anterior)
+        self.rodar(m, cache, limite=2)
+        self.assertEqual(bloco_temas(m, m["pessoas"]["ana"], cache), anterior)
+
+    def test_crescimento_com_rotulos_novos_mantem_ultima_base_completa(self):
+        m = modelo(40)
+        _, cache = cache_completo(m)
+        anterior = bloco_temas(m, m["pessoas"]["ana"], cache)
+        m["atividade"]["ana"]["documentos"].extend(documento(i) for i in range(41, 45))
+        self.rodar(m, cache, limite=2)
+        self.assertEqual(bloco_temas(m, m["pessoas"]["ana"], cache), anterior)
+        self.rodar(m, cache)
+        self.assertIn("Transporte coletivo: 44 documentos", bloco_temas(m, m["pessoas"]["ana"], cache))
+
+    def test_mascara_nao_invalida_hash_bruto_nem_vaza_digest_no_prompt(self):
+        m = modelo()
+        m["atividade"]["ana"]["documentos"][0]["ementa"] = "Contato maria@example.com"
+        self.rodar(m, cache := {})
+        antes = arquivos.texto_mapa(cache)
+        with mock.patch.object(mascara, "VERSAO_MASCARA", "outra"), \
+                mock.patch.object(mascara, "mascarar", return_value=("mascaramento diferente", {})):
+            _, chamar = self.rodar(m, cache)
+            chamar.assert_not_called()
+        self.assertEqual(arquivos.texto_mapa(cache), antes)
+        docs = T.documentos_da_pessoa(m, m["pessoas"]["ana"], LEG, ())
+        enviado = json.loads(T.mensagens(docs, ())[1]["content"])
+        self.assertEqual(set(enviado["documentos"][0]), {"id", "tipo", "ementa"})
+        self.assertNotIn("maria@example.com", arquivos.texto_mapa(cache))
+        hash_antes = T.chave_classificacao(docs[-1], cache[f"pessoa:ana:{LEG}"])
+        m["atividade"]["ana"]["documentos"][0]["ementa"] = "Contato outra@example.com"
+        docs = T.documentos_da_pessoa(m, m["pessoas"]["ana"], LEG, ())
+        self.assertNotEqual(hash_antes, T.chave_classificacao(docs[-1], cache[f"pessoa:ana:{LEG}"]))
+
+    def test_poda_orfaos_em_toda_gravacao_e_preserva_outras_pessoas(self):
+        m = modelo()
+        _, cache = cache_completo(m)
+        cache["doc:" + "a" * 16] = "Transporte coletivo"
+        salvos = []
+        self.rodar(m, cache, amostra={"ninguem"}, salvar=lambda c: salvos.append(copy.deepcopy(c)))
+        self.assertTrue(salvos)
+        self.assertNotIn("doc:" + "a" * 16, cache)
+        self.assertTrue(bloco_temas(m, m["pessoas"]["ana"], cache))
+        self.assertTrue(all("doc:" + "a" * 16 not in c for c in salvos))
+
+    def test_zero_significa_execucao_integral_e_prazo_chega_ao_cliente(self):
+        estat, chamar = self.rodar(modelo(65), {}, limite=0, max_minutos=0)
+        self.assertEqual(estat["documentos_novos"], 65)
+        self.assertTrue(all(c.kwargs["prazo"] is None for c in chamar.call_args_list))
+        _, chamar = self.rodar(modelo(), {}, max_minutos=1, relogio=lambda: 100)
+        self.assertTrue(all(c.kwargs["prazo"] == 160 for c in chamar.call_args_list))
+
     def test_carregar_cache_ausente_ou_presente_apenas_leitura(self):
         with tempfile.TemporaryDirectory() as tmp:
             caminho = Path(tmp) / "temas_ia.json"
@@ -233,7 +408,7 @@ class TestCacheExecucao(unittest.TestCase):
             def salvar(c):
                 salvos.append(copy.deepcopy(c))
 
-            def chamar(*args):
+            def chamar(*args, **kwargs):
                 nonlocal chamadas
                 chamadas += 1
                 if modo == "teclado" and chamadas == 3:
@@ -270,7 +445,7 @@ class TestCacheExecucao(unittest.TestCase):
         m["pessoas"]["bia"] = dict(m["pessoas"]["ana"], slug="bia")
         m["atividade"]["bia"] = {"documentos": [documento(10), documento(11)]}
 
-        def invalida(docs, chave, sessao, liberados, rotulos=None):
+        def invalida(docs, chave, sessao, liberados, rotulos=None, **kwargs):
             return ia_falsa(docs, chave, sessao, liberados) if rotulos is None else {}
 
         with mock.patch.dict(os.environ, {"OPENCODE_API_KEY": "falsa"}), \
@@ -287,7 +462,7 @@ class TestCacheExecucao(unittest.TestCase):
                 mock.patch.dict(os.environ, {"OPENCODE_API_KEY": "falsa"}):
             anterior = signal.getsignal(signal.SIGTERM)
 
-            def chamar(docs, chave, sessao, liberados, rotulos=None):
+            def chamar(docs, chave, sessao, liberados, rotulos=None, **kwargs):
                 retorno = ia_falsa(docs, chave, sessao, liberados, rotulos)
                 if rotulos is not None:
                     signal.getsignal(signal.SIGTERM)(signal.SIGTERM, None)
@@ -311,6 +486,13 @@ class TestCacheExecucao(unittest.TestCase):
 
 
 class TestHtmlTemas(unittest.TestCase):
+    def test_neutralidade_ignora_atributos_mas_verifica_texto_e_entidades(self):
+        texto = texto_visivel('<p class="so-leitor" title="produtiva">Agrupar n&atilde;o &eacute; avaliar.</p>')
+        self.assertIn("agrupar nao e avaliar.", texto)
+        self.assertNotRegex(texto, r"(?<!\w)(?:so|produtiva)(?!\w)")
+        texto = texto_visivel('<p class="so-leitor">Gest&atilde;o produtiva</p>')
+        self.assertRegex(texto, r"(?<!\w)produtiva(?!\w)")
+
     def test_renderiza_so_validado_com_frase_fixa_e_links_locais(self):
         m = modelo()
         docs, cache = cache_completo(m)
@@ -337,15 +519,30 @@ class TestHtmlTemas(unittest.TestCase):
         self.assertIn('href="&quot;/raiz/metodologia.html#temas"', html)
         self.assertNotIn("<img", html)
 
-    def test_neutralidade_todas_as_pessoas_da_base_sem_ia_cache_vazio(self):
-        # Percorre eleitos e suplentes reconhecidos pelo mesmo modelo usado nas fichas.
-        m = M.montar_modelo()
-        self.assertTrue(m["pessoas"])
-        cache = {}
+    def test_neutralidade_todas_as_pessoas_da_base_com_cache_validado(self):
+        # Toda pessoa real recebe a mesma base sintética, inclusive os suplentes.
+        pessoas = M.montar_modelo()["pessoas"]
+        self.assertTrue(pessoas)
+        esperado = None
         with mock.patch("urllib.request.urlopen", side_effect=AssertionError("rede")), \
                 mock.patch.object(T, "chamar_ia", side_effect=AssertionError("IA")):
-            T.agrupar(m, cache, usar_ia=False)
-            for p in m["pessoas"].values():
+            for real in pessoas.values():
+                m = modelo()
+                p = copy.deepcopy(real)
+                s = p["slug"]
+                p["mandatos"] = {LEG: {"projetos_autor": [], "projetos_coautor": []}}
+                m["pessoas"] = {s: p}
+                m["atividade"][s] = m["atividade"].pop("ana")
+                docs = T.documentos_da_pessoa(m, p, LEG, ())
+                cache = {f"pessoa:{s}:{LEG}": registro()}
+                cache.update({T.chave_classificacao(d, registro()): ROTULOS[d["id"] % 2] for d in docs})
                 with self.subTest(pessoa=p["slug"]):
-                    self.assertEqual(bloco_temas(m, p, cache), "")
-        self.assertEqual(cache, {})
+                    html = bloco_temas(m, p, cache)
+                    self.assertTrue(html)
+                    self.assertIn("Agrupar não é avaliar.", html)
+                    self.assertEqual(html.count("2 documentos (ex.: "), 2)
+                    self.assertEqual(html, esperado or html)
+                    esperado = html
+                    texto = texto_visivel(html)
+                    for termo in (*T.PALAVRAS_PROIBIDAS, *T.TERMOS_IDEOLOGICOS, *T.FLEXOES_PROIBIDAS):
+                        self.assertNotRegex(texto, r"(?<!\w)" + re.escape(T._normalizar(termo)) + r"(?!\w)")

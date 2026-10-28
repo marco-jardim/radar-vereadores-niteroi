@@ -5,7 +5,7 @@ from html import escape
 
 from coletor import mascara
 from coletor.site.modelo import URL_DETALHE
-from coletor.temas import RAIZ, documentos_da_pessoa, temas_validados
+from coletor.temas import RAIZ, documentos_da_pessoa, temas_validados, termos_proibidos
 
 
 def bloco_temas(modelo: dict, pessoa: dict, cache: dict, prefixo: str = "../") -> str:
@@ -22,12 +22,13 @@ def bloco_temas(modelo: dict, pessoa: dict, cache: dict, prefixo: str = "../") -
 
     blocos = []
     liberados = mascara.liberados(RAIZ)
+    proibidos = termos_proibidos(modelo)
     for leg in sorted(modelo.get("legislaturas") or [], key=lambda l: l["inicio"], reverse=True):
         registro = cache.get(f'pessoa:{pessoa["slug"]}:{leg["id"]}') or {}
         if not registro:
             continue
         docs = documentos_da_pessoa(modelo, pessoa, leg["id"], liberados)
-        temas, _ = temas_validados(docs, registro, cache)
+        temas, _ = temas_validados(docs, registro, cache, proibidos)
         if not temas:
             continue
         linhas = []

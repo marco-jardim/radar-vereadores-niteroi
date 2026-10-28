@@ -15,6 +15,45 @@ def resposta(texto: str = '{"ok":true}'):
 
 
 class TestClienteIa(unittest.TestCase):
+    def test_decodificador_json_preserva_entradas_e_erros_historicos(self):
+        esperado = {"itens": [{"id": "1", "rotulo": "Educação municipal"}]}
+        objeto = json.dumps(esperado, ensure_ascii=False)
+        for texto in (objeto, "```json\n" + objeto + "\n```",
+                      "```\n" + objeto + "\n```", "Antes " + objeto + " depois"):
+            with self.subTest(texto=texto):
+                self.assertEqual(ia.decodificar_json(texto), esperado)
+        for texto in ("não é JSON", "```json\n{inválido}\n```", "{} {}", "[]"):
+            with self.subTest(texto=texto), self.assertRaises(json.JSONDecodeError):
+                ia.decodificar_json(texto)
+        with self.assertRaises(AttributeError):
+            ia.decodificar_json(None)
+
+    def test_prazo_limita_timeout_e_impede_tentativa_sem_tempo(self):
+        transporte = mock.Mock(return_value=resposta())
+        ia.chamar({}, "x", "s", base_url="https://exemplo.invalid", prazo=107,
+                  relogio=lambda: 100, transporte=transporte)
+        self.assertEqual(transporte.call_args.kwargs, {"timeout": 7})
+        transporte.reset_mock()
+        self.assertEqual(ia.chamar({}, "x", "s", base_url="https://exemplo.invalid", prazo=100,
+                                  relogio=lambda: 100, transporte=transporte), {})
+        transporte.assert_not_called()
+
+    def test_prazo_limita_esperas_inclusive_retry_after(self):
+        for erro in (TimeoutError(), urllib.error.HTTPError(
+                "https://exemplo.invalid", 429, "limite", {"Retry-After": "999"}, io.BytesIO(b"limite"))):
+            agora = 100
+
+            def esperar(segundos):
+                nonlocal agora
+                agora += segundos
+
+            transporte = mock.Mock(side_effect=erro)
+            espera = mock.Mock(side_effect=esperar)
+            self.assertEqual(ia.chamar({}, "x", "s", base_url="https://exemplo.invalid", prazo=102,
+                                      relogio=lambda: agora, transporte=transporte, esperar=espera), {})
+            espera.assert_called_once_with(2)
+            self.assertEqual(transporte.call_count, 1)
+
     def test_post_corpo_sessao_e_timeout(self):
         transporte = mock.Mock(return_value=resposta())
         corpo = {"model": "modelo", "messages": [{"role": "user", "content": "ação"}]}

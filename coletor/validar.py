@@ -1843,6 +1843,81 @@ def _validar_arquivos_textos(raiz: Path, pasta: Path, entradas: dict[str, tuple[
     return problemas
 
 
+def validar_cache_temas(raiz: Path | None = None) -> list[str]:
+    """Cache opcional de temas: esquema fechado e bytes de salvar_mapa, sem rede."""
+    from coletor.temas import validar_rotulos
+
+    caminho = (raiz or RAIZ) / "data" / "temas_ia.json"
+    arquivo = "data/temas_ia.json"
+    if not caminho.exists():
+        return []
+    try:
+        bruto = caminho.read_bytes()
+        cache = json.loads(bruto.decode("utf-8"))
+    except (OSError, ValueError):
+        return [f"{arquivo}: JSON ou UTF-8 inválido"]
+    if not isinstance(cache, dict):
+        return [f"{arquivo}: deve ser um mapa"]
+    problemas = []
+    if bruto != texto_mapa(cache).encode("utf-8"):
+        problemas.append(f"{arquivo}: formato de bytes difere de coletor.arquivos.salvar_mapa")
+
+    def conjunto(registro, rotulo, pendente=False):
+        if not isinstance(registro, dict):
+            problemas.append(f"{rotulo}: registro deve ser um mapa")
+            return
+        obrigatorios = {"rotulos", "total_base", "versao", "modelo"}
+        extras = {"documentos"} if pendente else {"documentos", "rotulos_pendentes", "falha_amostra", "motivos"}
+        if set(registro) - obrigatorios - extras:
+            problemas.append(f"{rotulo}: campos desconhecidos")
+        if "rotulos" in registro or pendente:
+            if not obrigatorios <= set(registro):
+                problemas.append(f"{rotulo}: campos obrigatórios ausentes")
+            try:
+                if validar_rotulos(registro) != registro.get("rotulos"):
+                    raise ValueError
+            except ValueError:
+                problemas.append(f"{rotulo}: rótulos inválidos ou não normalizados")
+            if type(registro.get("total_base")) is not int or registro["total_base"] < 0:
+                problemas.append(f"{rotulo}: total_base inválido")
+            if any(not isinstance(registro.get(c), str) or not registro[c].strip()
+                   for c in ("versao", "modelo")):
+                problemas.append(f"{rotulo}: versão ou modelo inválido")
+        elif not ({"falha_amostra", "rotulos_pendentes"} & set(registro)):
+            problemas.append(f"{rotulo}: registro sem rótulos, pendência ou falha")
+        if "documentos" in registro:
+            refs = registro["documentos"]
+            if (not isinstance(refs, list) or any(not isinstance(r, str) or
+                    not re.fullmatch(r"doc:[0-9a-f]{16}", r) for r in refs)
+                    or (isinstance(refs, list) and refs != sorted(set(refs)))):
+                problemas.append(f"{rotulo}: referências de documentos inválidas")
+        if "motivos" in registro:
+            motivos = registro["motivos"]
+            permitidos = {"resposta descartada: JSON, rótulo ou classificação inválida",
+                          "tema descartado: menos de 2 documentos"}
+            if not isinstance(motivos, list) or any(not isinstance(m, str) or m not in permitidos for m in motivos):
+                problemas.append(f"{rotulo}: motivos inválidos")
+        if "falha_amostra" in registro and (not isinstance(registro["falha_amostra"], str)
+                or not re.fullmatch(r"[0-9a-f]{64}", registro["falha_amostra"])):
+            problemas.append(f"{rotulo}: hash de falha inválido")
+        if "rotulos_pendentes" in registro:
+            conjunto(registro["rotulos_pendentes"], rotulo + ": rotulos_pendentes", True)
+
+    for chave, valor in cache.items():
+        rotulo = f"{arquivo}: {chave}"
+        if re.fullmatch(r"pessoa:[a-z0-9]+(?:-[a-z0-9]+)*:\d{4}-\d{4}", chave):
+            conjunto(valor, rotulo)
+        elif re.fullmatch(r"doc:[0-9a-f]{16}", chave):
+            try:
+                if valor != "outros" and validar_rotulos({"rotulos": [valor]}) != [valor]:
+                    raise ValueError
+            except ValueError:
+                problemas.append(f"{rotulo}: classificação inválida")
+        else:
+            problemas.append(f"{rotulo}: chave inválida (pessoa: ou doc:)")
+    return problemas
+
+
 def _ler_json(arq: Path, rotulo: str) -> tuple[object, list[str]]:
     try:
         return json.loads(arq.read_text(encoding="utf-8")), []
@@ -1878,6 +1953,7 @@ def validar_tudo(raiz: Path | None = None, pasta_textos: Path | None = None) -> 
     ids, numeros = indices(arquivos)
     problemas += validar_documentos(raiz, ids)
     problemas += validar_sessoes(raiz)
+    problemas += validar_cache_temas(raiz)
 
     arq_geo = raiz / "data" / "geo" / "bairros.json"
     if arq_geo.exists():  # mapa opcional: sem geometria, permanecem gráficos e tabelas

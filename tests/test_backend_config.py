@@ -78,7 +78,9 @@ class TestBackendConfig(unittest.TestCase):
                     self.assertEqual({item["binding"] for item in cfg[grupo]}, bindings)
                 self.assertEqual(cfg["ai"]["binding"], "AI")
                 self.assertEqual(cfg["version_metadata"]["binding"], "CF_VERSION_METADATA")
-                self.assertEqual(cfg["triggers"]["crons"], ["17 7 * * *"])
+                # o cron de verificação roda só em produção: no staging compararia o Git de produção
+                # com os recursos de staging
+                self.assertEqual(cfg["triggers"]["crons"], ["17 7 * * *"] if nome == "production" else [])
                 self.assertEqual(len(cfg["ratelimits"]), 1)
                 limite = cfg["ratelimits"][0]
                 self.assertEqual(limite["name"], "LIMITE")
@@ -116,7 +118,7 @@ class TestBackendConfig(unittest.TestCase):
                     self.assertEqual(banco["migrations_dir"], "migrations")
                 crons = cfg["triggers"]["crons"]
                 self.assertIsInstance(crons, list)
-                self.assertTrue(crons)
+                self.assertEqual(bool(crons), nome == "production")
                 self.assertTrue(all(isinstance(cron, str) and cron.strip() for cron in crons))
 
     def test_prefixo_de_todos_os_recursos(self):
