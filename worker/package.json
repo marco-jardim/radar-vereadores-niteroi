@@ -1,9 +1,19 @@
 {
   "name": "radar-vereadores-niteroi-worker",
   "private": true,
+  "type": "module",
   "description": "Worker de busca do Radar dos Vereadores de Niterói; wrangler em versão fixa (coletor/nuvem/wrangler.py, VERSAO_WRANGLER).",
   "license": "GPL-3.0-only",
+  "scripts": {
+    "test": "vitest run --coverage",
+    "test:rapido": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
   "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "0.8.19",
+    "@vitest/coverage-istanbul": "3.0.9",
+    "typescript": "5.8.3",
+    "vitest": "3.0.9",
     "wrangler": "4.154.0"
   }
 }

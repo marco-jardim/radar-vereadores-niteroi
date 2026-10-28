@@ -147,6 +147,21 @@ s.normalize("NFD").replace(/\p{Mn}/gu, "").normalize("NFC").toLowerCase()
 
 e junta por `trechos_fts.id = trechos.id`. Os pares de `tests\fixtures\contratos\normalizacao.json` valem para as duas implementações (o teste Python já os confere; o do Worker entra com ele).
 
+## API do Worker
+
+Código em `worker\src\`, detalhes em `worker\README.md`. Só leitura, `GET`/`HEAD`/`OPTIONS`, erros `{erro, codigo}`:
+
+| Rota | Conteúdo | Cache API |
+|---|---|---|
+| `/api/busca?q=&modo=palavras\|semantica\|hibrida&tipo=&ano=&autor=&legislatura=&pagina=` | FTS5 (`bm25`, termos entre aspas), Vectorize (`topK` 50, `returnMetadata: "indexed"`, filtros `tipo`/`ano`/`legislatura`) e RRF k = 60; autor no D1; 10 por página, até a página 50 | 60 s |
+| `/api/documento/:id` | metadados, autoria, arquivos não removidos e substitutivos | 1 dia |
+| `/api/original/:sha256` | download do R2 privado; `remocoes` consultada antes da Cache API (410) | 1 dia, `no-store` para o cliente |
+| `/api/versao`, `/api/saude` | `COMMIT`, `CF_VERSION_METADATA` e `estado_indice`; D1 e última verificação | não |
+
+As chaves de cache da busca e do documento incluem um resumo de `estado_indice`. CORS só para `ORIGENS_CORS` e
+`localhost`; Rate Limiting de 60 por minuto com o IP resumido por SHA-256; `METRICAS` só com o modo e a contagem.
+A Cache API não opera em `*.workers.dev`. Testes: `npm test` e `npm run typecheck` em `worker\`.
+
 **Carga em staging com o login OAuth** (sem chaves S3; na raiz do repositório, com `RADAR_CACHE` e `RADAR_TEXTOS` definidos ou `--cache`/`--textos`):
 
 ```powershell
