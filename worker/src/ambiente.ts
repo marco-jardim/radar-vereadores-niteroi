@@ -79,7 +79,7 @@ export interface Env {
   LIMITE?: RateLimit;
   METRICAS?: AnalyticsEngineDataset;
   CF_VERSION_METADATA?: MetadadosVersao;
-  /** `production`, `staging` ou outro rótulo; só informativo em /api/versao. */
+  /** `staging` libera CORS local; os demais rótulos aceitam só as origens HTTPS configuradas. */
   AMBIENTE?: string;
   /** Origens CORS separadas por vírgula (config/backend.json → origens_cors, injetadas no deploy). */
   ORIGENS_CORS?: string;

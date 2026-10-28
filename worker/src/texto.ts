@@ -11,6 +11,8 @@ export function normalizar(s: string): string {
 const RE_CONTROLE = /[\p{Cc}\p{Cf}]/gu;
 const RE_ALFANUMERICO = /[\p{L}\p{N}]/u;
 const RE_PALAVRA = /[\p{L}\p{N}]+/gu;
+const PALAVRAS_VAZIAS = new Set("de da do das dos a o as os e em no na nos nas para por com que um uma uns umas ao aos ou se".split(" "));
+export const MAX_TERMOS = 10;
 
 /**
  * Termos da consulta: a consulta normalizada dividida por espaços, sem repetição e só os que têm
@@ -38,6 +40,24 @@ export function palavrasAlvo(lista: string[]): Set<string> {
   const alvos = new Set<string>();
   for (const t of lista) for (const m of t.matchAll(RE_PALAVRA)) alvos.add(m[0]);
   return alvos;
+}
+
+/** Mesma consulta para MATCH, embedding e cache: até dez palavras distintas, só uma curta. */
+export function termosBusca(lista: string[]): { termos: string[]; truncada: boolean } {
+  const saida: string[] = [];
+  let curta = false;
+  let truncada = false;
+  for (const palavra of palavrasAlvo(lista)) {
+    if (PALAVRAS_VAZIAS.has(palavra)) continue;
+    const pequena = [...palavra].length < 3;
+    if (saida.length >= MAX_TERMOS || (pequena && curta)) {
+      truncada = true;
+      continue;
+    }
+    saida.push(palavra);
+    if (pequena) curta = true;
+  }
+  return { termos: saida, truncada };
 }
 
 const ESCAPES: Record<string, string> = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };

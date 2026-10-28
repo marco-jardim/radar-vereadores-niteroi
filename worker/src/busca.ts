@@ -1,7 +1,7 @@
 // GET /api/busca: palavras (D1 FTS5), significado (Workers AI + Vectorize) e fusão RRF.
 import type { ContextoExecucao, D1Instrucao, Env, OpcoesConsultaVetor } from "./ambiente";
 import { ErroHttp, guardarCache, json, lerCache, sha256Hex } from "./http";
-import { consultaFts, destacar, palavrasAlvo, termos } from "./texto";
+import { consultaFts, destacar, palavrasAlvo, termos, termosBusca } from "./texto";
 
 export const MODOS = ["palavras", "semantica", "hibrida"] as const;
 export const TIPOS = ["pl", "substitutivo", "requerimento", "indicacao", "mocao", "pdl", "resolucao", "ata"] as const;
@@ -28,7 +28,6 @@ const RE_TRECHO = /^[0-9a-f]{16}$/;
 const RE_EMENTA = /^ementa:(doc:[1-9][0-9]*)$/;
 const RE_AUTOR = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const RE_LEGISLATURA = /^[0-9]{4}-[0-9]{4}$/;
-const PALAVRAS_VAZIAS = new Set("de da do das dos a o as os e em no na nos nas para por com que um uma uns umas ao aos ou se".split(" "));
 
 export interface Parametros {
   q: string;
@@ -39,6 +38,7 @@ export interface Parametros {
   legislatura: string | null;
   pagina: number;
   termos: string[];
+  consulta_truncada: boolean;
 }
 
 function invalido(nome: string): ErroHttp {
@@ -75,16 +75,18 @@ export function lerParametros(url: URL): Parametros {
   if (legislatura !== null && !RE_LEGISLATURA.test(legislatura)) throw invalido("legislatura");
   const paginaTexto = um("pagina") ?? "1";
   if (!/^[0-9]{1,3}$/.test(paginaTexto) || Number(paginaTexto) < 1 || Number(paginaTexto) > MAX_PAGINA) throw invalido("pagina");
-  const palavras = [...palavrasAlvo(lista)];
-  if (palavras.every((t) => [...t].length < 3) || palavras.every((t) => PALAVRAS_VAZIAS.has(t))) {
+  const normalizada = termosBusca(lista);
+  if (normalizada.termos.every((t) => [...t].length < 3)) {
     throw new ErroHttp(400, "consulta_muito_generica", "Use ao menos um termo mais específico na consulta.");
   }
-  return { q, modo: modo as Modo, tipo, ano, autor, legislatura, pagina: Number(paginaTexto), termos: lista };
+  return { q, modo: modo as Modo, tipo, ano, autor, legislatura, pagina: Number(paginaTexto),
+    termos: normalizada.termos, consulta_truncada: normalizada.truncada };
 }
 
-/** URL canônica da Cache API: só os parâmetros conhecidos, em ordem fixa, e a versão do índice. */
+/** URL canônica da Cache API: parâmetros conhecidos, versão da consulta e versão do índice. */
 export function chaveBusca(origem: string, p: Parametros, indice: string, lista = false): string {
   const s = new URLSearchParams();
+  s.set("_consulta", "2");
   s.set("q", p.termos.join(" "));
   s.set("modo", p.modo);
   if (p.tipo !== null) s.set("tipo", p.tipo);
@@ -421,6 +423,7 @@ async function hidratar(env: Env, itens: Fundido[], alvos: Set<string>): Promise
 
 export interface RespostaBusca {
   consulta: string;
+  consulta_truncada: boolean;
   modo: Modo;
   filtros: { tipo: string | null; ano: number | null; autor: string | null; legislatura: string | null };
   pagina: number;
@@ -478,6 +481,7 @@ export async function buscar(env: Env, p: Parametros, ctx: ContextoExecucao, ori
   const resultados = await hidratar(env, pagina, palavrasAlvo(p.termos));
   const corpo: RespostaBusca = {
     consulta: p.q,
+    consulta_truncada: p.consulta_truncada,
     modo,
     filtros: { tipo: p.tipo, ano: p.ano, autor: p.autor, legislatura: p.legislatura },
     pagina: p.pagina,
@@ -499,7 +503,7 @@ export async function rotaBusca(url: URL, env: Env, ctx: ContextoExecucao, indic
     const corpo: RespostaBusca = await guardada.json();
     const headers = new Headers(guardada.headers);
     headers.delete("Content-Length");
-    return new Response(JSON.stringify({ ...corpo, consulta: p.q }), { status: 200, headers });
+    return new Response(JSON.stringify({ ...corpo, consulta: p.q, consulta_truncada: p.consulta_truncada }), { status: 200, headers });
   }
   const corpo = await buscar(env, p, ctx, url.origin, indice);
   try {

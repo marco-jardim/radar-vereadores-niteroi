@@ -1,6 +1,6 @@
 import { env } from "cloudflare:test";
 import { describe, expect, it } from "vitest";
-import { consultaFts, destacar, escaparHtml, normalizar, palavrasAlvo, termos } from "../src/texto";
+import { MAX_TERMOS, consultaFts, destacar, escaparHtml, normalizar, palavrasAlvo, termos, termosBusca } from "../src/texto";
 
 describe("normalizar", () => {
   it("segue os pares do contrato (tests/fixtures/contratos/normalizacao.json), iguais ao Python", () => {
@@ -30,6 +30,20 @@ describe("termos e consultaFts", () => {
 
   it("palavras-alvo são as partes alfanuméricas dos termos", () => {
     expect([...palavrasAlvo(termos("29/2024 near(calendario"))]).toEqual(["29", "2024", "near", "calendario"]);
+  });
+
+  it("remove palavras vazias mesmo com pontuação, sem gastar o limite de dez termos", () => {
+    const lista = termosBusca(termos('DE, "da" do/das dos a o as os e em no na nos nas para por com que um uma uns umas ao aos ou se LICENÇA ambiental'));
+    expect(lista).toEqual({ termos: ["licenca", "ambiental"], truncada: false });
+    expect(consultaFts(lista.termos)).toBe('"licenca" "ambiental"');
+  });
+
+  it("limita palavras reais, inclusive dentro de um termo com pontuação, e aceita só uma curta", () => {
+    const dez = Array.from({ length: MAX_TERMOS }, (_, i) => `termo${i}`);
+    expect(termosBusca(termos(`${dez.join("-")}-extra`))).toEqual({ termos: dez, truncada: true });
+    expect(termosBusca(termos(`${dez.join(" ")} TERMO0`))).toEqual({ termos: dez, truncada: false });
+    expect(termosBusca(termos("lei x ab 12 saúde y"))).toEqual({ termos: ["lei", "x", "saude"], truncada: true });
+    expect(termosBusca(termos("lei 𐐀𐐁"))).toEqual({ termos: ["lei", "𐐨𐐩"], truncada: false });
   });
 });
 

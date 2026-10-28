@@ -6,6 +6,13 @@ import { sha256Hex } from "../src/http";
 import { chaveR2 } from "../src/original";
 import { normalizar } from "../src/texto";
 
+let origemTeste = "https://api.teste";
+
+/** A Cache API é compartilhada no pool; embeddings não dependem do estado do índice. */
+export function isolarCache(): void {
+  origemTeste = `https://api-${crypto.randomUUID()}.teste`;
+}
+
 export const sha = (n: number): string => `${"ab".repeat(31)}${n.toString(16).padStart(2, "0")}`;
 export const idTrecho = (n: number): string => n.toString(16).padStart(16, "0");
 export const URL_SISCAM = "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=";
@@ -269,7 +276,7 @@ export function criarEnv(extra: Partial<Env> = {}): Env {
 
 export async function pedir(caminho: string, init: RequestInit = {}, e: Env = criarEnv()): Promise<Response> {
   const ctx = createExecutionContext();
-  const r = await worker.fetch(new Request(`https://api.teste${caminho}`, init), e, ctx);
+  const r = await worker.fetch(new Request(`${origemTeste}${caminho}`, init), e, ctx);
   await waitOnExecutionContext(ctx);
   return r;
 }

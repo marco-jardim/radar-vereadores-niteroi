@@ -230,9 +230,10 @@ class TestVectorize(Base):
 
     def test_apagar_por_ids(self):
         self.iniciar(self._responder)
-        Vectorize(self.cf, "x").apagar([f"id{i}" for i in range(2500)])
+        Vectorize(self.cf, "x").apagar([f"id{i}" for i in range(250)])
         corpos = [json.loads(p["corpo"]) for p in self.servidor.pedidos]
-        self.assertEqual([len(c["ids"]) for c in corpos], [1000, 1000, 500])
+        # a API real recusa mais de 100 ids por chamada (erro 40007)
+        self.assertEqual([len(c["ids"]) for c in corpos], [100, 100, 50])
         self.assertTrue(all(p["caminho"].endswith("/delete_by_ids") for p in self.servidor.pedidos))
 
     def test_espera_a_mutacao(self):

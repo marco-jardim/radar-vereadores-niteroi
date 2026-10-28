@@ -2,6 +2,7 @@ import { env } from "cloudflare:test";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { D1Database, D1Instrucao, Env } from "../src/ambiente";
 import { ordemArquivo } from "../src/documento";
+import { origemPermitida } from "../src/http";
 import worker, { clienteLimite } from "../src/index";
 import { MAX_CACHE_ORIGINAL, chaveR2, nomeArquivo } from "../src/original";
 import { AiFalsa, LimiteFalso, VetoresFalsos, buscarJson, carregar, criarEnv, pedir, sha, trechoDe } from "./dados";
@@ -13,13 +14,38 @@ beforeEach(async () => {
 const SITE = "https://marco-jardim.github.io";
 
 describe("CORS", () => {
-  it("permite as origens configuradas e localhost, com Vary: Origin", async () => {
-    for (const origem of [SITE, "http://localhost:8000", "http://127.0.0.1:5173", "http://localhost"]) {
-      const r = await pedir("/api/busca?q=calendario&modo=palavras", { headers: { Origin: origem } });
+  it("permite as origens HTTPS configuradas em produção e staging, com Vary: Origin", async () => {
+    for (const AMBIENTE of ["production", "staging"]) {
+      const r = await pedir("/api/busca?q=calendario&modo=palavras", { headers: { Origin: SITE } }, criarEnv({ AMBIENTE }));
       expect(r.status).toBe(200);
-      expect(r.headers.get("Access-Control-Allow-Origin")).toBe(origem);
+      expect(r.headers.get("Access-Control-Allow-Origin")).toBe(SITE);
       expect(r.headers.get("Vary")).toBe("Origin");
       expect(r.headers.get("Access-Control-Expose-Headers")).toContain("X-Radar-Indice");
+    }
+  });
+
+  it("localhost e 127.0.0.1 só são permitidos em staging, mesmo se configurados em produção", async () => {
+    for (const origem of ["http://localhost:8000", "http://127.0.0.1:5173", "http://localhost", "http://127.0.0.1"]) {
+      for (const AMBIENTE of ["production", "staging", undefined]) {
+        for (const method of ["GET", "HEAD", "OPTIONS"]) {
+          const r = await pedir("/api/busca?q=calendario&modo=palavras", { method, headers: { Origin: origem } },
+            criarEnv({ AMBIENTE, ORIGENS_CORS: `${SITE},${origem}` }));
+          expect(r.status).toBe(AMBIENTE === "staging" ? (method === "OPTIONS" ? 204 : 200) : 403);
+          expect(r.headers.get("Access-Control-Allow-Origin")).toBe(AMBIENTE === "staging" ? origem : null);
+          await r.text();
+        }
+      }
+    }
+  });
+
+  it("fora dos locais de staging só aceita origens HTTPS exatas, nunca HTTP configurado", () => {
+    for (const ambiente of ["production", "staging", undefined]) {
+      const lista = `${SITE},http://site.example,https://site.example/caminho,https://localhost:8000`;
+      expect(origemPermitida(SITE, lista, ambiente)).toBe(true);
+      for (const origem of ["http://site.example", "https://site.example/caminho", "https://localhost:8000", `${SITE}/`,
+        "https://marco-jardim.github.io.mal.example", "http://localhost.mal:80", "null"]) {
+        expect(origemPermitida(origem, lista, ambiente), origem).toBe(false);
+      }
     }
   });
 
@@ -149,6 +175,32 @@ describe("limites, cabeçalhos e erros", () => {
     expect(r.status).toBe(200);
     expect(r.headers.get("Cache-Control")).toBe("no-store");
     expect(await r.text()).toBe("");
+    expect(ai.chamadas).toHaveLength(0);
+    expect(vetores.chamadas).toHaveLength(0);
+  });
+
+  it("HEAD /api/busca valida os mesmos parâmetros do GET, sem banco ou busca", async () => {
+    const ai = new AiFalsa();
+    const vetores = new VetoresFalsos([]);
+    const db: D1Database = {
+      prepare() { throw new Error("HEAD inválido não deve ler D1"); },
+      batch() { throw new Error("HEAD inválido não deve ler D1"); },
+    };
+    const e = criarEnv({ DB: db, AI: ai, VETORES: vetores });
+    const consultas = ["", "q=a", `q=${"x".repeat(201)}`, "q=**", "q=de", "q=ab+xy", "q=calendario&q=licenca",
+      ...["modo=outro", "tipo=outro", "ano=1800", "autor=Nome", "legislatura=2025", "pagina=0", "pagina=51", "ano=2025&ano=2026"]
+        .map((filtro) => `q=calendario&${filtro}`)];
+    for (const consulta of consultas) {
+      const caminho = `/api/busca?${consulta}`;
+      const get = await pedir(caminho);
+      const head = await pedir(caminho, { method: "HEAD" }, e);
+      expect(get.status, consulta).toBe(400);
+      expect(head.status, consulta).toBe(get.status);
+      expect(head.headers.get("Content-Type")).toBe(get.headers.get("Content-Type"));
+      expect(head.headers.get("Cache-Control")).toBe("no-store");
+      expect(await head.text()).toBe("");
+      await get.text();
+    }
     expect(ai.chamadas).toHaveLength(0);
     expect(vetores.chamadas).toHaveLength(0);
   });
@@ -397,6 +449,16 @@ describe("wrangler.jsonc", () => {
     const locais = ["http://127.0.0.1:8000", "http://localhost:8000"];
     expect(config.vars.ORIGENS_CORS.split(",").sort()).toEqual([...backend.origens_cors].sort());
     expect(config.env.staging.vars.ORIGENS_CORS.split(",").sort()).toEqual([...backend.origens_cors, ...locais].sort());
+    expect(config.vars.AMBIENTE).toBe("production");
+    expect(config.env.staging.vars.AMBIENTE).toBe("staging");
+    for (const origem of backend.origens_cors) {
+      expect(origem.startsWith("https://")).toBe(true);
+      expect(origemPermitida(origem, config.vars.ORIGENS_CORS, config.vars.AMBIENTE)).toBe(true);
+    }
+    for (const origem of locais) {
+      expect(origemPermitida(origem, config.vars.ORIGENS_CORS, config.vars.AMBIENTE)).toBe(false);
+      expect(origemPermitida(origem, config.env.staging.vars.ORIGENS_CORS, config.env.staging.vars.AMBIENTE)).toBe(true);
+    }
     for (const ambiente of [config, config.env.staging]) expect(ambiente.vars.URL_SITE).toBe(criarEnv().URL_SITE);
   });
 

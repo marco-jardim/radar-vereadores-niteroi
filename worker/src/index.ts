@@ -3,7 +3,7 @@
 // Privacidade: nenhuma consulta, IP ou erro é registrado (observabilidade desligada no wrangler.jsonc);
 // METRICAS recebe só o modo e a contagem de resultados.
 import type { ContextoExecucao, Env } from "./ambiente";
-import { rotaBusca } from "./busca";
+import { lerParametros, rotaBusca } from "./busca";
 import { verificar } from "./cron";
 import { rotaDocumento } from "./documento";
 import { chaveIndice, lerEstado } from "./estado";
@@ -73,6 +73,7 @@ async function rotear(request: Request, url: URL, env: Env, ctx: ContextoExecuca
   if (rota === "saude" && semArgumento) return saude(env);
   // HEAD tem os cabeçalhos da rota, sem FTS, embedding, Vectorize nem hidratação.
   if (rota === "busca" && semArgumento && request.method === "HEAD") {
+    lerParametros(url);
     return new Response(null, { status: 200, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } });
   }
 
@@ -114,7 +115,7 @@ function finalizar(r: Response, request: Request, env: Env, contexto: Contexto):
 export async function tratar(request: Request, env: Env, ctx: ContextoExecucao): Promise<Response> {
   const origem = request.headers.get("Origin");
   const contexto: Contexto = {
-    cors: origem !== null && origemPermitida(origem, env.ORIGENS_CORS) ? origem : null,
+    cors: origem !== null && origemPermitida(origem, env.ORIGENS_CORS, env.AMBIENTE) ? origem : null,
     indice: "desconhecido",
   };
   let resposta: Response;

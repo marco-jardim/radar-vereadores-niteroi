@@ -277,8 +277,9 @@ Código em `worker\src\`, detalhes em `worker\README.md`. Só leitura, `GET`/`HE
 As chaves de cache incluem um resumo de `estado_indice` e da lista ordenada de `remocoes`, lidos no mesmo lote
 D1: uma remoção invalida o cache mesmo sem atualizar o estado numa sincronização parcial. Busca e documento
 permitem no máximo 60 s de cache no cliente; erros e respostas com `aviso` sempre usam `no-store`.
-CORS só para `ORIGENS_CORS` (igual a `config/backend.json` nos dois ambientes) e
-`localhost`; Rate Limiting de 60 por minuto com IPv4 ou prefixo IPv6 /64 resumido por SHA-256; `METRICAS` só com o modo e a contagem.
+CORS em produção só para origens HTTPS exatas de `ORIGENS_CORS` (igual a `config/backend.json`);
+somente `AMBIENTE=staging` permite também `http://localhost[:porta]` e `http://127.0.0.1[:porta]`.
+Rate Limiting de 60 por minuto com IPv4 ou prefixo IPv6 /64 resumido por SHA-256; `METRICAS` só com o modo e a contagem.
 A Cache API não opera em `*.workers.dev`. Testes: `npm test` e `npm run typecheck` em `worker\`.
 
 **Filtros e limitação semântica.** Vectorize usa `topK = 50`; com autor ou `tipo=substitutivo`, usa
@@ -292,7 +293,16 @@ Portanto ainda podem faltar resultados fora dos 100 primeiros; não há garantia
 por autor ou substitutivo. Consultas D1 de candidatos são divididas em lotes para respeitar os 100 parâmetros
 por instrução.
 
-`HEAD /api/busca` responde 200 só com cabeçalhos, sem executar a busca.
+**Consulta normalizada.** Após remover acentos e converter para minúsculas, a busca usa palavras
+alfanuméricas distintas, na ordem original, sem as palavras vazias (`PALAVRAS_VAZIAS` em `texto.ts`).
+Conserva até dez termos, dos quais no máximo um tem menos de três caracteres; os demais são ignorados.
+`consulta_truncada` na resposta informa esse descarte (não a simples remoção de palavras vazias/repetidas);
+`consulta` preserva a entrada. MATCH, embedding e suas chaves de cache usam os mesmos termos efetivos:
+acrescentar palavras vazias não exige novo embedding. Sem termo específico de ao menos três caracteres,
+retorna 400 `consulta_muito_generica`.
+
+`HEAD /api/busca` valida os mesmos parâmetros do GET: retorna 200 se válidos ou 400 se inválidos,
+sempre sem corpo e sem executar a busca (nem consultar D1, AI ou Vectorize).
 
 ### Cron diário de verificação
 

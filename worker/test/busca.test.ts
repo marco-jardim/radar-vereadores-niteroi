@@ -247,13 +247,13 @@ describe("busca por significado (Workers AI + Vectorize simulados)", () => {
     const { r, corpo } = await buscarJson({ q: "poda de árvores", modo: "semantica", tipo: "indicacao", ano: "2025",
       legislatura: "2025-2028" }, e);
     expect(r.status).toBe(200);
-    expect(ai.chamadas).toEqual([{ modelo: "@cf/baai/bge-m3", entrada: { text: ["poda de arvores"] } }]);
+    expect(ai.chamadas).toEqual([{ modelo: "@cf/baai/bge-m3", entrada: { text: ["poda arvores"] } }]);
     expect(vetores.chamadas[0]!.opcoes).toEqual({ topK: 50, returnMetadata: "indexed",
       filter: { tipo: { $eq: "indicacao" }, ano: { $eq: 2025 }, legislatura: { $eq: "2025-2028" } } });
     expect(vetores.chamadas[0]!.vetor).toHaveLength(1024);
     expect(docs(corpo)).toEqual(["doc:403", "doc:401"]);
     expect(corpo.resultados[0]).toMatchObject({ tipo: "indicacao", arquivo: null, url_original: null, sha256: null,
-      origem: "semantica", trecho: "Indica a <mark>poda</mark> <mark>de</mark> <mark>árvores</mark> na Rua Gama." });
+      origem: "semantica", trecho: "Indica a <mark>poda</mark> de <mark>árvores</mark> na Rua Gama." });
     expect(corpo.limitado).toBe(false);
   });
 
@@ -299,14 +299,17 @@ describe("busca por significado (Workers AI + Vectorize simulados)", () => {
 
   it("Vectorize indisponível: híbrida cai para palavras com aviso (sem cache); semântica responde 503", async () => {
     let caso = 0;
+    const consultas = ["calendario", "licenca", "regimento", "praca"];
+    const totais = [13, 2, 1, 1];
     for (const extra of [{ VETORES: new VetoresFalsos([], true) }, { AI: new AiFalsa({ data: [[1, 2]] }) },
       { AI: undefined }, { AI: new AiFalsa(null) }]) {
-      const q = `calendario${"?".repeat(++caso)}`;
+      const q = consultas[caso]!;
+      const total = totais[caso++]!;
       const e = criarEnv(extra);
       const { r, corpo } = await buscarJson({ q, modo: "hibrida" }, e);
       expect(r.status).toBe(200);
       expect(r.headers.get("Cache-Control")).toBe("no-store");
-      expect(corpo).toMatchObject({ modo: "palavras", aviso: AVISO_SEMANTICA, total: 13 });
+      expect(corpo).toMatchObject({ modo: "palavras", aviso: AVISO_SEMANTICA, total });
       const de_novo = await buscarJson({ q, modo: "hibrida" }, e);
       expect(de_novo.r.headers.get("X-Radar-Cache")).toBe("MISS");
       const s = await buscarJson({ q, modo: "semantica" }, e);
@@ -317,6 +320,49 @@ describe("busca por significado (Workers AI + Vectorize simulados)", () => {
 });
 
 describe("regressões da revisão de busca", () => {
+  it("retira stopwords do MATCH de trechos e ementas, inclusive com pontuação", async () => {
+    for (const q of ['"de" licença para', "de-de LICENÇA com"]) {
+      const { r, corpo } = await buscarJson({ q, modo: "palavras" });
+      expect(r.status).toBe(200);
+      expect(docs(corpo).sort()).toEqual(["doc:102", "doc:202"]);
+      expect(corpo.consulta_truncada).toBe(false);
+    }
+  });
+
+  it("ignora termos além de dez e mais de um curto; informa o descarte mesmo no cache", async () => {
+    const dez = "licenca ambiental simplificada sera concedida pela secretaria competente ate trinta";
+    for (const [q, truncada, cache] of [[`${dez} inexistente`, true, "MISS"], [dez, false, "HIT"],
+      [`${dez} inexistente`, true, "HIT"]] as const) {
+      const { r, corpo } = await buscarJson({ q, modo: "palavras" });
+      expect(r.status).toBe(200);
+      expect(docs(corpo)).toEqual(["doc:102"]);
+      expect(corpo).toMatchObject({ consulta: q, consulta_truncada: truncada });
+      expect(r.headers.get("X-Radar-Cache")).toBe(cache);
+    }
+    const { r, corpo } = await buscarJson({ q: "licenca em a ab xy 12", modo: "palavras" });
+    expect(r.status).toBe(200);
+    expect(corpo.consulta_truncada).toBe(true);
+    expect(lerParametros(new URL("https://x/api/busca?q=licenca+em+a+ab+xy+12")).termos).toEqual(["licenca", "ab"]);
+  });
+
+  it("o embedding usa a mesma consulta limitada e compartilha cache com stopwords extras", async () => {
+    const ai = new AiFalsa();
+    const vetores = new VetoresFalsos([]);
+    const e = criarEnv({ AI: ai, VETORES: vetores });
+    const dez = "licenca ambiental simplificada sera concedida pela secretaria competente ate trinta";
+    await buscarJson({ q: dez, modo: "semantica" }, e);
+    // Filtro diferente evita cache de ranking/resposta, mas não de embedding.
+    const { corpo } = await buscarJson({ q: `de ${dez} para inexistente`, modo: "hibrida", ano: "2022" }, e);
+    expect(corpo.consulta_truncada).toBe(true);
+    expect(ai.chamadas).toEqual([{ modelo: "@cf/baai/bge-m3", entrada: { text: [dez] } }]);
+    expect(vetores.chamadas).toHaveLength(2);
+    await buscarJson({ q: 'de "LICENÇA" para', modo: "semantica" }, e);
+    await buscarJson({ q: "licenca", modo: "semantica", ano: "2022" }, e);
+    expect(ai.chamadas).toHaveLength(2);
+    expect(ai.chamadas[1]!.entrada).toEqual({ text: ["licenca"] });
+    expect(vetores.chamadas).toHaveLength(4);
+  });
+
   it.each(["palavras", "semantica", "hibrida"])("filtra substitutivo pelo arquivo e devolve o trecho no PL em %s", async (modo) => {
     const vetores = new VetoresFalsos([trechoDe("siscam:1001").id, trechoDe("siscam:1201").id,
       trechoDe("siscam:1301").id]);
@@ -364,7 +410,7 @@ describe("regressões da revisão de busca", () => {
   it("recusa consultas genéricas antes de FTS ou AI, sem mudar o escape dos demais termos", async () => {
     const ai = new AiFalsa();
     const vetores = new VetoresFalsos([]);
-    for (const q of ["de", "da do das dos", "a o e em no na", "para por com que um uma", '"para"', "ab xy 12"]) {
+    for (const q of ["de", "da do das dos", "a o e em no na", "para por com que um uma", '"para"', "ab xy 12", "para ab", "de-de", "de/para"]) {
       const { r, corpo } = await buscarJson({ q }, criarEnv({ AI: ai, VETORES: vetores }));
       expect(r.status, q).toBe(400);
       expect(corpo.codigo).toBe("consulta_muito_generica");

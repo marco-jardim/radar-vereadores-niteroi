@@ -36,9 +36,16 @@ export function erroInterno(): ErroHttp {
 
 const RE_LOCAL = /^http:\/\/(localhost|127\.0\.0\.1)(:[0-9]{1,5})?$/;
 
-/** Origens de `ORIGENS_CORS` (config/backend.json → origens_cors) e localhost/127.0.0.1 em http. */
-export function origemPermitida(origem: string, lista: string | undefined): boolean {
-  if (RE_LOCAL.test(origem)) return true;
+/** Origens HTTPS exatas de `ORIGENS_CORS`; localhost/127.0.0.1 em HTTP só no staging. */
+export function origemPermitida(origem: string, lista: string | undefined, ambiente?: string): boolean {
+  if (RE_LOCAL.test(origem)) return ambiente === "staging";
+  try {
+    const url = new URL(origem);
+    if (url.protocol !== "https:" || url.origin !== origem ||
+      url.hostname === "localhost" || url.hostname === "127.0.0.1") return false;
+  } catch {
+    return false;
+  }
   for (const item of (lista ?? "").split(",")) {
     if (item.trim() !== "" && item.trim() === origem) return true;
   }
