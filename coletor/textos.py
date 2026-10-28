@@ -307,7 +307,7 @@ def detalhe_seguro(detalhe: str, liberados: Iterable[str]) -> str:
     `mascara.varrer` (forte ou fraca) que tenha sobrado, `DETALHE_OMITIDO`."""
     texto, _ = mascara.mascarar(detalhe or "", liberados)
     texto = texto[:300]
-    if texto and mascara.varrer(texto, liberados):
+    if texto and (mascara.varrer(texto, liberados) or mascara.varrer_estrito(texto, liberados)):
         return DETALHE_OMITIDO
     return texto
 
@@ -342,7 +342,8 @@ def processar(entrada: dict, chave: str, resultado: Resultado, ementa: str, clic
     limpo, contagens = limpeza.limpar(bruto, cliches, protecao, ementa=ementa, ocr_paginas=ocr_paginas)
     mascarado, mascarados = mascara.mascarar(limpo, liberados, ocr_paginas=ocr_paginas)
     texto = trechos.normalizar(mascarado)
-    fortes = sorted({o["tipo"] for o in mascara.varrer(texto, liberados, ocr_paginas=ocr_paginas) if o["forte"]})
+    fortes = sorted({o["tipo"] for o in mascara.varrer(texto, liberados, ocr_paginas=ocr_paginas) if o["forte"]}
+                    | {o["tipo"] for o in mascara.varrer_estrito(texto, liberados)})
     if fortes:  # barreira de PII: nada é gravado com ocorrência forte
         raise BarreiraPII(chave, fortes)
     if not texto:
@@ -1850,7 +1851,9 @@ def verificar(raiz: Path = RAIZ, pasta_textos: Path | None = None, cache: Path |
             falha(k, "texto fora de UTF-8")
             continue
         fortes = sorted({o["tipo"] for o in mascara.varrer(conteudo[:-1] if conteudo.endswith("\n") else conteudo,
-                                                            liberados) if o["forte"]})
+                                                            liberados) if o["forte"]}
+                        | {o["tipo"] for o in mascara.varrer_estrito(
+                            conteudo[:-1] if conteudo.endswith("\n") else conteudo, liberados)})
         if fortes:
             falha(k, f"ocorrência forte de mascara.varrer ({', '.join(fortes)})")
         if sha256(dados) != e["sha256_texto"]:
@@ -1893,7 +1896,8 @@ def verificar(raiz: Path = RAIZ, pasta_textos: Path | None = None, cache: Path |
                 conteudo = p.read_bytes().decode("utf-8")
             except (OSError, UnicodeDecodeError):
                 continue
-            fortes = sorted({o["tipo"] for o in mascara.varrer(conteudo, liberados) if o["forte"]})
+            fortes = sorted({o["tipo"] for o in mascara.varrer(conteudo, liberados) if o["forte"]}
+                            | {o["tipo"] for o in mascara.varrer_estrito(conteudo, liberados)})
             if fortes:
                 falha(chave_do_caminho(rel), f"ocorrência forte de mascara.varrer ({', '.join(fortes)})")
 
@@ -1978,7 +1982,8 @@ def barreira(pasta: Path, caminhos: Iterable[str], liberados: Iterable[str]) -> 
     for rel in sorted(caminhos):
         conteudo = (pasta / rel).read_bytes().decode("utf-8")
         texto = conteudo[:-1] if conteudo.endswith("\n") else conteudo
-        tipos = sorted({o["tipo"] for o in mascara.varrer(texto, liberados) if o["forte"]})
+        tipos = sorted({o["tipo"] for o in mascara.varrer(texto, liberados) if o["forte"]}
+                       | {o["tipo"] for o in mascara.varrer_estrito(texto, liberados)})
         if tipos:
             bloqueios.append({"chave": chave_do_caminho(rel), "caminho": rel, "tipos": tipos})
     return bloqueios

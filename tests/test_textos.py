@@ -772,6 +772,36 @@ class TestInterrupcao(_Base):
 
 
 class TestBarreira(_Base):
+    def test_detector_estrito_bloqueia_processamento_mesmo_com_pontos_cegos(self) -> None:
+        casos = ("CPF 529,982.247-25", "ID: 12.345,678-9, IFP/RJ",
+                 "<<Contato: Tel (21) 99999-\n1234>>", "pessoa@exemplo.org")
+        for texto in casos:
+            with self.subTest(texto=texto):
+                entrada = {"sha256_original": "a" * 64, "documento": "doc:1"}
+                with mock.patch.object(textos.limpeza, "limpar", return_value=(texto, {})), \
+                        mock.patch.object(mascara, "mascarar", return_value=(texto, {})), \
+                        mock.patch.object(mascara, "varrer", return_value=[]):
+                    with self.assertRaises(textos.BarreiraPII):
+                        textos.processar(entrada, "siscam:1", Resultado(**_extracao(texto)), "", {}, {}, (), "1", "cfg")
+
+    def test_processamento_passou_paginas_ocr_a_barreira(self) -> None:
+        resultado = _extracao("Texto público.")
+        resultado.update(formato="pdf", confianca_paginas={2: 90.0}, paginas=2, paginas_ocr=1)
+        with mock.patch.object(textos.limpeza, "limpar", return_value=("Texto público.", {})), \
+                mock.patch.object(mascara, "mascarar", return_value=("Texto público.", {})), \
+                mock.patch.object(mascara, "varrer", return_value=[]) as contextual, \
+                mock.patch.object(mascara, "varrer_estrito", return_value=[{"tipo": "cpf"}]):
+            with self.assertRaises(textos.BarreiraPII):
+                textos.processar({"sha256_original": "a" * 64}, "siscam:1", Resultado(**resultado),
+                                 "", {}, {}, (), "1", "cfg")
+        contextual.assert_called_with("Texto público.", frozenset(), ocr_paginas={2})
+
+    def test_detalhe_seguro_tambem_usa_estrita(self) -> None:
+        texto = "ID: 12.345,678-9 IFP/RJ"
+        with mock.patch.object(mascara, "mascarar", return_value=(texto, {})), \
+                mock.patch.object(mascara, "varrer", return_value=[]):
+            self.assertEqual(textos.detalhe_seguro(texto, ()), textos.DETALHE_OMITIDO)
+
     def test_texto_com_ocorrencia_forte_nao_e_gravado(self) -> None:
         def sem_mascara(texto, liberados=frozenset(), ocr_paginas=None):
             return texto, {tipo: 0 for tipo in mascara.TIPOS}
@@ -790,6 +820,17 @@ class TestBarreira(_Base):
 
 @unittest.skipIf(shutil.which("git") is None, "git indisponível")
 class TestCommitTextos(_Base):
+    def test_commit_tambem_usa_detector_estrito(self) -> None:
+        self.rodar()
+        alvo = self.dir_textos / "textos/pl/2024/127858/siscam-900002.txt"
+        alvo.write_bytes(alvo.read_bytes() + b"CPF 529,982.247-25\n")
+        with mock.patch.object(mascara, "varrer", return_value=[]):
+            codigo, err = self.commit()
+        self.assertEqual(codigo, 1)
+        self.assertIn("cpf", err)
+        self.assertNotIn("529", err)
+        self.assertEqual(self.git("rev-list", "--count", "HEAD").strip(), "1")
+
     def setUp(self) -> None:
         super().setUp()
         self.dir_textos.mkdir()
@@ -872,6 +913,19 @@ class TestCommitTextos(_Base):
 
 
 class TestVerificar(_Base):
+    def test_estrita_na_verificacao_de_texto_e_orfao(self) -> None:
+        self.rodar()
+        alvo = self.dir_textos / "textos/requerimento/2024/290001/siscam-900003.txt"
+        alvo.write_bytes(alvo.read_bytes() + b"ID: 12.345,678-9 IFP/RJ\n")
+        orfao = alvo.with_name("siscam-999999.txt")
+        orfao.write_bytes(b"ID: 12.345,678-9 IFP/RJ\n")
+        with mock.patch.object(mascara, "varrer", return_value=[]):
+            verificacao = self.verificar()
+        motivos = {(f["chave"], f["motivo"]) for f in verificacao["falhas"]}
+        for chave in ("siscam:900003", "siscam:999999"):
+            self.assertIn((chave, "ocorrência forte de mascara.varrer (rg)"), motivos)
+        self.assertNotIn("12.345", json.dumps(verificacao, ensure_ascii=False))
+
     def test_detecta_adulteracao_e_nao_comparavel(self) -> None:
         self.rodar()
         rel = self.verificar()

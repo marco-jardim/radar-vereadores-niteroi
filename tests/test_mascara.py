@@ -9,10 +9,12 @@ Uso: python -m unittest tests.test_mascara
 from __future__ import annotations
 
 import json
+import random
 import tempfile
 import time
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from coletor import mascara
 from coletor.mascara import liberados, mascarar, varrer
@@ -312,7 +314,7 @@ class TestEmail(unittest.TestCase):
 
 class TestEmailAuditoriaV5(unittest.TestCase):
     def test_versao(self) -> None:
-        self.assertEqual(mascara.VERSAO_MASCARA, "7")
+        self.assertEqual(mascara.VERSAO_MASCARA, "8")
 
     def _email_mascarado(self, texto: str, esperado: str) -> None:
         for paginas in (None, {1}, {2}):
@@ -1146,6 +1148,151 @@ class TestNumerosOcr(unittest.TestCase):
         _sem_mudanca(self, texto)
         self.assertEqual(mascarar(texto, ocr_paginas={2})[0], texto)
         self.assertNotIn("numero", [a["tipo"] for a in varrer(texto)])
+
+
+class TestMascaraV8(unittest.TestCase):
+    """Regressões sintéticas do vazamento, sombra e barreira independente."""
+
+    def _limpo(self, texto: str, tipo: str, paginas=None) -> str:
+        self.assertIn(tipo, {o["tipo"] for o in mascara.varrer_estrito(texto)})
+        saida, contagens = mascarar(texto, ocr_paginas=paginas)
+        self.assertIn(mascara.SUBSTITUICOES[tipo], saida)
+        self.assertGreater(contagens[tipo], 0)
+        self.assertEqual(mascara.varrer_estrito(saida), [])
+        self.assertFalse([o for o in varrer(saida, ocr_paginas=paginas) if o["forte"]])
+        self.assertEqual(mascarar(saida, ocr_paginas=paginas), (saida, dict.fromkeys(mascara.TIPOS, 0)))
+        return saida
+
+    def test_repros_do_vazamento(self) -> None:
+        casos = (
+            ("inscrito no CPF sob o nº 529,982.247-25", "cpf"),
+            ("CPF 529.982,247/25", "cpf"),
+            ("529,982.247-25", "cpf"),
+            ("Identidade nº 12.345,678-9", "rg"),
+            ("RG 12.345,678-9", "rg"),
+            ("ID: 12.345.678-9, IFP/RJ", "rg"),
+            ("Id: 12.345.678-9 SSP-RJ", "rg"),
+            ("ID: 12345678-9", "rg"),
+        )
+        for texto, tipo in casos:
+            for paginas in (None, {1}):
+                with self.subTest(texto=texto, paginas=paginas):
+                    self._limpo(texto, tipo, paginas)
+
+    def test_negativos(self) -> None:
+        casos = (
+            "R$ 529.982,24", "Valor 1.234,56", "ID do processo 123",
+            "ID do documento: 123456789", "ID: 12345 MF/RJ",
+            "Identidade de gênero, Lei 13.709/2018", "Identidade, 22.11.2020",
+            "RG: 13.709/2018", "RG 12.03.2024", "4406, 4407", "Tel: 24320-5902",
+            "Contato: 2000-2021", "valor 1.234,52998224725", "CNPJ 11.222.333/0001-81",
+            "Processo 0001234-56.2024.8.19.0002",
+        )
+        for texto in casos:
+            with self.subTest(texto=texto):
+                _sem_mudanca(self, texto)
+                self.assertEqual(mascara.varrer_estrito(texto), [])
+        self.assertEqual(mascarar("4406, 4407", ocr_paginas={1})[0], "4406, 4407")
+        texto = "Telefone do gabinete: (21) 2620-1234"
+        _sem_mudanca(self, texto, {"2126201234"})
+        self.assertEqual(mascara.varrer_estrito(texto, {"2126201234"}), [])
+
+    def test_identidade_rejeitada_nao_esconde_rotulo_de_rg_seguinte(self) -> None:
+        texto = "Identidade visual, RG 12.345,678-9"
+        self.assertEqual(self._limpo(texto, "rg"), "Identidade visual, RG [RG omitido]")
+
+    def test_tracos_quebras_e_offsets(self) -> None:
+        prefixo = "Art. 1º – "
+        for traco in mascara._TRACOS + "-":
+            for quebra in ("", "\n", " \n", "\r\n", " \r\n  "):
+                for rotulo, valor, tipo in (
+                    ("CPF ", "529.982.247" + traco + quebra + "25", "cpf"),
+                    ("Tel ", "(21) 99999" + traco + quebra + "1234", "telefone"),
+                    ("RG ", "12.345.678" + traco + quebra + "9", "rg"),
+                ):
+                    with self.subTest(traco=traco, quebra=quebra, tipo=tipo):
+                        texto = prefixo + rotulo + valor + "; fim."
+                        saida = self._limpo(texto, tipo)
+                        self.assertEqual(saida, prefixo + rotulo + mascara.SUBSTITUICOES[tipo] + "; fim.")
+                        achados = [o for o in varrer(texto) if o["tipo"] == tipo and o["forte"]]
+                        self.assertTrue(achados)
+                        self.assertEqual([texto[o["inicio"]:o["fim"]] for o in achados], [valor])
+
+    def test_invisiveis_e_espacos_especiais(self) -> None:
+        from coletor import trechos
+
+        for valor, tipo in (("CPF 529.\u200b982.247\u00a0-\u00a025", "cpf"),
+                            ("Tel\u00a0(21)\u00a0999\u200b99-1234", "telefone")):
+            with self.subTest(tipo=tipo):
+                saida, contagens = mascarar(valor)
+                self.assertEqual(contagens[tipo], 1)
+                self.assertIn(mascara.SUBSTITUICOES[tipo], saida)
+                self.assertEqual(mascara.varrer_estrito(trechos.normalizar(saida)), [])
+                self.assertEqual(mascarar(saida)[0], saida)
+
+    def test_marcacao_nao_esconde_rotulos(self) -> None:
+        for texto in ('<<Contato: Tel. (21) 99999-1234 CPF 52998224725>>',
+                      '<campo valor="Tel (21) 99999-1234 CPF 52998224725"/>'):
+            with self.subTest(texto=texto):
+                saida, contagens = mascarar(texto)
+                self.assertEqual((contagens["cpf"], contagens["telefone"]), (1, 1))
+                self.assertEqual(mascara.varrer_estrito(saida), [])
+                self.assertEqual(mascarar(saida)[0], saida)
+        for texto in ('<p class="texto">…</p>', '<w:pgSz width="26.20123456"/>'):
+            _sem_mudanca(self, texto)
+            self.assertEqual(mascara.varrer_estrito(texto), [])
+
+    def test_dominio_corrompido_nao_libera_email_pessoal(self) -> None:
+        self.assertFalse(mascara._email_liberado(
+            "fulano@gmail.com/camara.leg.br", set(), mascara.DOMINIOS_LIBERADOS))
+        for sufixo in ("/camara.leg.br", "(camara.leg.br)", "/x@camara.leg.br"):
+            with self.subTest(sufixo=sufixo):
+                saida, _ = mascarar("fulano@gmail.com" + sufixo)
+                self.assertTrue("fulano@gmail.com" not in saida or mascara.varrer_estrito(saida))
+
+    def test_estrita_independente(self) -> None:
+        texto = "CPF 529,982.247-25; ID: 12.345,678-9; Tel (21) 99999-1234; fulano@exemplo.org"
+        auxiliares = {nome: mock.Mock(side_effect=AssertionError) for nome in
+                      ("_detectar", "_protegidos", "_emails_ocr", "_zonas", "_Sombra")}
+        with mock.patch.multiple(mascara, **auxiliares):
+            achados = mascara.varrer_estrito(texto)
+        self.assertEqual({o["tipo"] for o in achados}, {"cpf", "rg", "telefone", "email"})
+        self.assertTrue(all(set(o) == {"tipo", "inicio", "fim"} for o in achados))
+        self.assertEqual(achados, sorted(achados, key=lambda o: (o["inicio"], o["fim"], o["tipo"])))
+
+    def test_propriedade_cpfs_validos(self) -> None:
+        sorteio = random.Random(20261028)
+        for _ in range(100):
+            digitos = [sorteio.randrange(10) for _ in range(9)]
+            for n in (9, 10):
+                digitos.append(sum(digitos[i] * (n + 1 - i) for i in range(n)) * 10 % 11 % 10)
+            cpf = "".join(map(str, digitos))
+            self.assertTrue(mascara.cpf_valido(cpf))
+            valor = (cpf[:3] + sorteio.choice(".,") + cpf[3:6] + sorteio.choice(".,") + cpf[6:9]
+                     + sorteio.choice(mascara._TRACOS + "-") + sorteio.choice(("", "\n", " \r\n  ")) + cpf[9:])
+            for antes, depois in (("<<", ">>"), ("Lista, ", "; fim"), ("OCR\n", "\n")):
+                with self.subTest(cpf=cpf, contexto=antes):
+                    self._limpo(antes + valor + depois, "cpf")
+
+    def test_desempenho_das_barreiras(self) -> None:
+        linha = ("Processo" + " " * 80 + "Lei" + " " * 60 + "matrícula" + " " * 70 + "Valor"
+                 + " " * 50 + "R$ 1.234,56" + " " * 40 + "nº" + " " * 30 + ":\n")
+        texto = linha * (5_000_000 // len(linha))
+        for detector in (mascara.varrer_estrito, varrer):
+            with self.subTest(detector=detector.__name__):
+                inicio = time.perf_counter()
+                achados = detector(texto)
+                self.assertLess(time.perf_counter() - inicio, 3.0)
+                self.assertEqual(achados, [])
+
+    def test_desempenho_da_sombra(self) -> None:
+        linha = "Art. 1º – Processo" + " " * 80 + "R$ 1.234,56 – nº 12-\n3\n"
+        texto = linha * (5_000_000 // len(linha))
+        inicio = time.perf_counter()
+        saida, contagens = mascarar(texto)
+        self.assertLess(time.perf_counter() - inicio, 3.0)
+        self.assertEqual(saida, texto)
+        self.assertEqual(sum(contagens.values()), 0)
 
 
 if __name__ == "__main__":

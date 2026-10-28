@@ -20,6 +20,17 @@ LIBERADOS = frozenset({"@camaraniteroi.rj.gov.br", "@niteroi.rj.gov.br", "212620
 
 
 class TestValidarTextos(unittest.TestCase):
+    def test_estrita_no_validador_de_texto_e_orfao(self):
+        texto = "ID: 12.345,678-9 IFP/RJ\n"
+        alvo = self.caminho()
+        alvo.write_bytes(alvo.read_bytes() + texto.encode("utf-8"))
+        alvo.with_name("siscam-999999.txt").write_bytes(texto.encode("utf-8"))
+        with mock.patch.object(V.mascara, "varrer", return_value=[]):
+            problemas = self.assertProblema("ocorrência forte")
+        for chave in ("siscam:900001", "siscam:999999"):
+            self.assertIn(f"{chave}: ocorrência forte de mascara.varrer (rg)", problemas)
+        self.assertNotIn("12.345", " ".join(problemas))
+
     def setUp(self):
         temporario = tempfile.TemporaryDirectory()
         self.addCleanup(temporario.cleanup)

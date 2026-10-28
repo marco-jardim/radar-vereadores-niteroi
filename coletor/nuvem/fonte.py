@@ -381,6 +381,15 @@ def _trechos(textos: Path | None, com_texto: dict[str, tuple[int, dict]], removi
 
 
 # ---------------------------------------------------------------- barreira de PII
+def _ocorrencias(texto: str, liberados) -> list[dict]:
+    """Acrescenta achados estritos sem duplicar ocorrências fortes sobrepostas."""
+    achados = mascara.varrer(texto, liberados)
+    fortes = [(o["inicio"], o["fim"]) for o in achados if o["forte"]]
+    extras = [{**o, "forte": True} for o in mascara.varrer_estrito(texto, liberados)
+              if not any(o["inicio"] < b and o["fim"] > a for a, b in fortes)]
+    return sorted(achados + extras, key=lambda o: (o["inicio"], o["fim"], o["tipo"]))
+
+
 def varrer_fonte(fonte: Fonte, liberados) -> tuple[list[dict], int]:
     """Varre cada arquivo completo uma vez e atribui fortes aos trechos sobrepostos.
 
@@ -398,7 +407,7 @@ def varrer_fonte(fonte: Fonte, liberados) -> tuple[list[dict], int]:
         if arquivo not in fonte.textos_arquivos:
             raise ErroFonte(f"{arquivo}: texto completo ausente para a barreira de PII")
         texto = fonte.textos_arquivos[arquivo]
-        for o in mascara.varrer(texto, liberados):
+        for o in _ocorrencias(texto, liberados):
             sobrepostos = [t for t in trechos if o["inicio"] < t.fim and o["fim"] > t.inicio]
             if not sobrepostos:
                 continue
@@ -412,7 +421,7 @@ def varrer_fonte(fonte: Fonte, liberados) -> tuple[list[dict], int]:
     alvos = [(f"ementa {d}", texto) for d, texto in sorted(fonte.ementas.items())]
     alvos += [(f"remocao {chave[0]}", linha[2] or "") for chave, linha in sorted(fonte.linhas["remocoes"].items())]
     for origem, texto in alvos:
-        for o in mascara.varrer(texto, liberados):
+        for o in _ocorrencias(texto, liberados):
             if o["forte"]:
                 fortes.append({"origem": origem, "tipo": o["tipo"], "inicio": o["inicio"], "fim": o["fim"]})
             else:

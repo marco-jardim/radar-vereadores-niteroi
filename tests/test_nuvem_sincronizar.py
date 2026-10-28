@@ -130,6 +130,38 @@ class Base(unittest.TestCase):
 
 
 class TestBarreiraContextual(unittest.TestCase):
+    def test_detector_estrito_no_texto_completo_e_nas_ementas(self):
+        casos = (("CPF 529,982.247-25", "cpf"), ("ID: 12.345,678-9, IFP/RJ", "rg"),
+                 ("<<Tel (21) 99999-\n1234>>", "telefone"), ("pessoa@exemplo.org", "email"))
+        for texto, tipo in casos:
+            with self.subTest(tipo=tipo):
+                meio = len(texto) // 2
+                fonte = self._fonte(texto, [(0, meio), (meio, len(texto))])
+                fonte.ementas["doc:2"] = texto
+                fonte.linhas["remocoes"][("siscam:2", "a" * 64)] = (
+                    "siscam:2", "a" * 64, texto, "2026-01-01")
+                with mock.patch.object(mascara, "varrer", return_value=[]):
+                    fortes, fracas = varrer_fonte(fonte, ())
+                self.assertEqual(fracas, 0)
+                self.assertTrue(any(o["origem"].startswith("trecho ") and o["tipo"] == tipo for o in fortes))
+                self.assertTrue(any(o["origem"] == "ementa doc:2" and o["tipo"] == tipo for o in fortes))
+                self.assertTrue(any(o["origem"] == "remocao siscam:2" and o["tipo"] == tipo for o in fortes))
+                self.assertNotIn(texto, json.dumps(fortes, ensure_ascii=False))
+
+    def test_estrita_preserva_recorte_e_ignora_ocorrencias_fora_do_trecho(self):
+        texto = "ID: 12.345,678-9\nTexto público."
+        inicio = texto.index("12.")
+        fim = texto.index("\n")
+        fonte = self._fonte(texto, [(inicio + 2, fim - 1), (fim + 1, len(texto))])
+        with mock.patch.object(mascara, "varrer", return_value=[]):
+            fortes, fracas = varrer_fonte(fonte, ())
+        self.assertEqual(fracas, 0)
+        self.assertEqual(fortes, [{"origem": "trecho 0000000000000000 (siscam:1)",
+                                  "tipo": "rg", "inicio": 0, "fim": fim - inicio - 3}])
+        fonte = self._fonte(texto, [(fim + 1, len(texto))])
+        with mock.patch.object(mascara, "varrer", return_value=[]):
+            self.assertEqual(varrer_fonte(fonte, ()), ([], 0))
+
     def _fonte(self, texto: str, intervalos: list[tuple[int, int]]) -> Fonte:
         trechos = {}
         for i, (inicio, fim) in enumerate(intervalos):

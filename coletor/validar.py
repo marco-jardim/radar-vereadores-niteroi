@@ -1756,7 +1756,8 @@ def _validar_arquivos_textos(raiz: Path, pasta: Path, entradas: dict[str, tuple[
         texto = conteudo[:-1] if conteudo.endswith("\n") else conteudo
         # O contrato não grava confianca_paginas/ocr_paginas nem liberados por entrada.
         # Sem os metadados do cache, aplica a mesma barreira normal de textos.barreira.
-        fortes = sorted({o["tipo"] for o in mascara.varrer(texto, liberados) if o["forte"]})
+        fortes = sorted({o["tipo"] for o in mascara.varrer(texto, liberados) if o["forte"]}
+                        | {o["tipo"] for o in mascara.varrer_estrito(texto, liberados)})
         if fortes:
             problemas.append(f"{chave}: ocorrência forte de mascara.varrer ({', '.join(fortes)})")
         if not conteudo.endswith("\n") or trechos.normalizar(texto) != texto:
