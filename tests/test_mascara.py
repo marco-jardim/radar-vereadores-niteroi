@@ -59,6 +59,55 @@ class TestCpf(unittest.TestCase):
         self.assertEqual(contagens, {"cpf": 1, "rg": 0, "telefone": 0, "email": 0, "documento": 0})
 
 
+class TestCpfSeparadoresMistos(unittest.TestCase):
+    """CPF com separadores trocados pelo OCR (dígitos sintéticos)."""
+
+    def _mascarado_limpo(self, texto: str, esperado: str) -> None:
+        saida, contagens = mascarar(texto)
+        self.assertEqual(saida, esperado)
+        self.assertEqual(contagens["cpf"], 1)
+        self.assertEqual(mascarar(saida), (saida, {tipo: 0 for tipo in mascara.TIPOS}))  # idempotente
+        self.assertFalse([a for a in varrer(saida) if a["forte"]])
+
+    def test_caso_do_lote_real(self) -> None:
+        self.assertTrue(mascara.cpf_valido("12345678909"))
+        self._mascarado_limpo("DENISE FULANA, RG. [RG omitido], CPF. 123.456 789-09, Casada",
+                              "DENISE FULANA, RG. [RG omitido], CPF. [CPF omitido], Casada")
+
+    def test_dv_valido_com_qualquer_separador(self) -> None:
+        for cpf in ("529 982 247 25", "529/982/247/25", "529-982-247-25", "529.982.247 - 25",
+                    "529.982.247- 25", "529982247 25", "529.982247-25", "529 982.247/25", "529.982 247-25"):
+            with self.subTest(cpf=cpf):
+                self._mascarado_limpo(f"Número {cpf}, fim.", "Número [CPF omitido], fim.")
+
+    def test_dv_invalido_sem_rotulo_fica(self) -> None:
+        for texto in ("Código 529 982 247 26", "Número 529/982/247/26.", "Item 529.982 247-26"):
+            with self.subTest(texto=texto):
+                _sem_mudanca(self, texto)
+
+    def test_dv_invalido_com_rotulo(self) -> None:
+        self.assertFalse(mascara.cpf_valido("12345678900"))
+        casos = {
+            "CPF: 123.456.789-00": "CPF: [CPF omitido]",
+            "C.P.F. 123 456 789 00": "C.P.F. [CPF omitido]",
+            "CPF/MF nº 123.456 789-00": "CPF/MF nº [CPF omitido]",
+            "cpf 12345678900, solteiro": "cpf [CPF omitido], solteiro",
+            "CPF nº 123/456/789-00": "CPF nº [CPF omitido]",
+            "inscrito no CPF sob 123.456.789-00": "inscrito no CPF sob [CPF omitido]",
+        }
+        for texto, esperado in casos.items():
+            with self.subTest(texto=texto):
+                self._mascarado_limpo(texto, esperado)
+
+    def test_rotulo_longe_ou_marca_nao_valem(self) -> None:
+        _sem_mudanca(self, "CPF do declarante, conforme o registro 123.456.789-00")
+        _sem_mudanca(self, "[CPF omitido] e 123.456.789-00")
+        _sem_mudanca(self, "CPFs 123.456.789-00")
+
+    def test_rotulo_de_rg_nao_corta_cpf(self) -> None:
+        self._mascarado_limpo("RG nº, CPF 123.456 789-09", "RG nº, CPF [CPF omitido]")
+
+
 class TestRg(unittest.TestCase):
     def test_rg_com_rotulo(self) -> None:
         casos = {
@@ -316,7 +365,10 @@ class TestIdempotenciaVarrer(unittest.TestCase):
     def test_varrer_e_mais_amplo_que_mascarar(self) -> None:
         texto = "Protocolo nº 2026-1234, código 26201234 e CPF 529 982 247 25"
         saida, contagens = mascarar(texto)
-        self.assertEqual(sum(contagens.values()), 0)  # protegidos ou ambíguos para mascarar
+        # o protocolo e os dígitos corridos ficam (protegidos ou ambíguos); o CPF com
+        # espaços é mascarado
+        self.assertEqual(contagens, {"cpf": 1, "rg": 0, "telefone": 0, "email": 0, "documento": 0})
+        self.assertEqual(saida, "Protocolo nº 2026-1234, código 26201234 e CPF [CPF omitido]")
         achados = varrer(texto)
         self.assertEqual([a["tipo"] for a in achados], ["telefone", "telefone", "cpf"])
         # "2026-1234" logo depois de protocolo e "26201234" só de dígitos: fracos

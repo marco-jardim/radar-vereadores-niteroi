@@ -1,0 +1,11 @@
+{
+ "remocoes": [
+  {
+   "chave": "siscam:900004",
+   "sha256": "fa0b85dd45022b83a97322b122308c1f80fe68f9a4a0fc72b483f086c306d8ab",
+   "motivo": "Exemplo sintético de pedido de titular (art. 18 da LGPD).",
+   "fonte": "https://github.com/marco-jardim/radar-vereadores-niteroi/issues",
+   "data": "2026-01-15"
+  }
+ ]
+}

@@ -26,6 +26,7 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `coletor/classificar.py` | Taxonomia, regras, prompt, chamadas à IA, cache e curadoria dos PLs. |
 | `coletor/arquivos.py` | Serialização e gravação atômica dos JSONs versionados. |
 | `coletor/validar.py` | Validação de dados, configuração e temporários, sem alterar arquivos. |
+| `coletor/remocoes.py` | Leitura de `config/remocoes.json` com cache: `carregar`, `chaves_removidas` e `esta_removido` (chave **ou** SHA-256); o expurgo não fica aqui. |
 | `coletor/geo.py` | Conversão offline do Overpass em limites simplificados dos bairros, com fonte OSM/ODbL. |
 | `coletor/paisagem.py` | Marca e favicon (`--marca`), textura dos bairros (`--textura`), camadas da paisagem (`--camadas`) e imagem de compartilhamento (`--og`); geração offline em `site_src/`, comparada por bytes nos SVGs e por pixels no PNG. |
 | `coletor/novidades.py` | Eventos dos PLs pelas datas dos dados, semanas e feed RSS. |
@@ -67,6 +68,7 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `worker/` | Worker de busca TypeScript; `wrangler.jsonc` com produção no nível superior e staging em `env.staging`. |
 | `scripts/testes.ps1` | Executor paralelo local equivalente ao discover; o CI segue sequencial. |
 | `docs/backend.md` | Recursos Cloudflare, ferramentas, credenciais e rollback. |
+| `docs/contratos/textos.md` | Contrato congelado de chaves, manifesto `data/textos/manifesto-<ano>.json`, `dados-textos`, D1, Vectorize e remoções; fixtures em `tests/fixtures/contratos/` (geradas por `gerar_fixtures.py`). |
 | `.github/workflows/` | Testes, coleta semanal e publicação. |
 | `site/` | Saída gerada e ignorada pelo Git. |
 

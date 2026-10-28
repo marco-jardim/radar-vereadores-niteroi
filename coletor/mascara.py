@@ -2,7 +2,11 @@
 
 Regras de `mascarar`:
 - **CPF** é mascarado sempre, de qualquer pessoa, com ou sem pontuação, mas só
-  quando os dígitos verificadores são válidos.
+  quando os dígitos verificadores são válidos. Entre os grupos 3-3-3-2 vale um
+  separador por intervalo: ".", " ", "/", "-" (com espaço opcional de cada lado) ou
+  nenhum, como em "123.456 789-09" (OCR). Com o rótulo "CPF" ("cpf", "c.p.f.",
+  "CPF/MF", "CPF nº", "CPF:") até `JANELA_ROTULO_CPF` caracteres antes, o número é
+  mascarado mesmo com DV inválido (erros de OCR), e as proteções gerais não valem.
 - **RG** é mascarado quando o rótulo "RG" ou "R.G." aparece até 20 caracteres antes
   do número; "identidade" só vale como rótulo seguido de "nº"/"n."/":" ou precedido
   de "carteira"/"cédula" (evita "identidade de gênero, Lei 13.709/2018"); variantes de
@@ -70,6 +74,8 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 
+# Mudar qualquer regra de `mascarar` muda os textos gravados: suba esta versão.
+VERSAO_MASCARA = "1"
 TIPOS = ("cpf", "rg", "telefone", "email", "documento")
 SUBSTITUICOES = {
     "cpf": "[CPF omitido]",
@@ -111,10 +117,16 @@ _RE_EMAIL = re.compile(
     r"(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z]{2,}(?![\w-])"
 )
 _RE_EMAIL_COMPLETO = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+# Um separador por intervalo entre os grupos 3-3-3-2: ".", " ", "/", "-" (com espaço
+# opcional de cada lado) ou nenhum.
+_SEP_CPF = r"(?: ?- ?|[. /])?"
 _RE_CPF = re.compile(
-    r"(?P<a>\d)(?<!\d\d)(?<!\d[.,/-]\d)(?P<b>\d\d)(?P<s1>\.?)(?P<c>\d{3})(?P<s2>\.?)(?P<d>\d{3})"
-    r"(?P<s3>[-.]?)(?P<e>\d{2})(?!\d)(?![.,/-]\d)"
+    rf"(?P<a>\d)(?<!\d\d)(?<!\d[.,/-]\d)(?P<b>\d\d)(?P<s1>{_SEP_CPF})(?P<c>\d{{3}})"
+    rf"(?P<s2>{_SEP_CPF})(?P<d>\d{{3}})(?P<s3>{_SEP_CPF})(?P<e>\d{{2}})(?!\d)(?![.,/-]\d)"
 )
+# Rótulo de CPF ("cpf", "c.p.f.", "cpf/mf", "cpf nº", "cpf:") no texto dobrado.
+JANELA_ROTULO_CPF = 15
+_RE_ROTULO_CPF = re.compile(r"(?<![a-z0-9])c\.? ?p\.? ?f(?![a-z])")
 _RE_RG = re.compile(
     r"(?P<rotulo>[RrIi](?<![\w.][RrIi])"
     # "identidade" e erros comuns de OCR ("Identdede", "Idenlidade"): iden…d…
@@ -497,6 +509,16 @@ def _antes(texto: str, inicio: int) -> str:
     return _dobrar(trecho)
 
 
+def _rotulo_cpf(texto: str, inicio: int) -> bool:
+    """Se há rótulo de CPF até JANELA_ROTULO_CPF caracteres antes da posição; as marcas
+    de substituição ("[CPF omitido]") não contam como rótulo."""
+    trecho = texto[max(0, inicio - JANELA_ROTULO_CPF):inicio]
+    for marca in SUBSTITUICOES.values():
+        trecho = trecho.replace(marca, " ")
+    trecho = _RE_MARCA_CORTADA.sub(" ", trecho)
+    return _RE_ROTULO_CPF.search(_dobrar(trecho)) is not None
+
+
 def _numero_de_ato(texto: str, inicio: int) -> bool:
     """Se o número que contém a posição `inicio` vem logo depois de lei, processo e afins."""
     s = inicio
@@ -534,6 +556,20 @@ def _detectar(texto: str, liberados_: Iterable[str]) -> list[tuple[int, int, str
             tipo = "_liberado" if _email_liberado(m.group(), conjunto, dominios) else "email"
             aceitos.incluir(m.start(), m.end(), tipo)
 
+    # CPF antes do RG: um rótulo de RG até 20 caracteres antes não pode reivindicar só
+    # o começo de um CPF com espaço ("RG nº, CPF 123.456 789-09").
+    for m in _RE_CPF.finditer(texto):
+        digitos = "".join(m.group(g) for g in "abcde")
+        rotulado = _rotulo_cpf(texto, m.start())
+        if not rotulado and not cpf_valido(digitos):
+            continue
+        formatado = m.group("s1") == "." and m.group("s2") == "." and m.group("s3").strip() == "-"
+        if not formatado and marcacao.sobrepoe(m.start(), m.end()):
+            continue  # metadado ou marcação; CPF formatado é mascarado sempre
+        if not (formatado or rotulado) and gerais.sobrepoe(m.start(), m.end()):
+            continue
+        aceitos.incluir(m.start(), m.end(), "cpf")
+
     for m in _RE_RG.finditer(texto):
         ini, fim = m.span("numero")
         if sum(c.isdigit() for c in m.group("numero")) < 5:
@@ -552,15 +588,6 @@ def _detectar(texto: str, liberados_: Iterable[str]) -> list[tuple[int, int, str
     for ini, fim in _documentos(texto):
         if not gerais.sobrepoe(ini, fim) and not marcacao.sobrepoe(ini, fim):
             aceitos.incluir(ini, fim, "documento")
-
-    for m in _RE_CPF.finditer(texto):
-        digitos = "".join(m.group(g) for g in "abcde")
-        if not cpf_valido(digitos):
-            continue
-        formatado = m.group("s1") == "." and m.group("s2") == "." and m.group("s3") == "-"
-        if not formatado and (gerais.sobrepoe(m.start(), m.end()) or marcacao.sobrepoe(m.start(), m.end())):
-            continue
-        aceitos.incluir(m.start(), m.end(), "cpf")
 
     for m in _a_partir(_RE_CANDIDATO_TELEFONE, _RE_TELEFONE, texto):
         ini, fim = m.span()
