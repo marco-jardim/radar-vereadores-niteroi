@@ -89,13 +89,23 @@ jobs:
           timeout --kill-after=2m 25m python -m coletor.sessoes $args
 
       - name: Classificar projetos (regras, curadoria e IA)
-        timeout-minutes: 90
+        timeout-minutes: 75
         env:
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
           OPENCODE_MODEL: ${{ vars.OPENCODE_MODEL }}
         run: |
           if [ -z "$OPENCODE_MODEL" ]; then unset OPENCODE_MODEL; fi
           python -m coletor.classificar
+
+      - name: Agrupar temas (bloco separado do resumo sem IA)
+        timeout-minutes: 15
+        continue-on-error: true
+        env:
+          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+          OPENCODE_MODEL: ${{ vars.OPENCODE_MODEL }}
+        run: |
+          if [ -z "$OPENCODE_MODEL" ]; then unset OPENCODE_MODEL; fi
+          python -m coletor.temas --limite 2000 --max-minutos 12
 
       - name: Validar dados e executar testes
         id: validar

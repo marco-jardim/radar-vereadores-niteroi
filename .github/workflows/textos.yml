@@ -1,0 +1,181 @@
+name: Extrair e sincronizar textos
+
+on:
+  workflow_run:
+    workflows: ["Coleta semanal"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.event_name == 'pull_request' && format('textos-pr-{0}', github.ref) || 'coleta' }}
+  cancel-in-progress: false
+
+jobs:
+  verificar:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    environment: staging
+    permissions:
+      contents: read
+    env:
+      RADAR_TEXTOS: ${{ github.workspace }}/.dados-textos
+      RADAR_CACHE: ${{ github.workspace }}/.radar-cache
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Abrir worktree de textos publicados (somente leitura)
+        run: git worktree add --detach "$RADAR_TEXTOS" origin/dados-textos
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Instalar Wrangler fixado
+        working-directory: worker
+        run: npm ci
+
+      - name: Verificar sincronização sem escrita
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN_DADOS }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          PR_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
+        run: |
+          if [ "$PR_REPOSITORY" != "$GITHUB_REPOSITORY" ] || [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "::notice::simulação staging ignorada: PR de fork ou token de dados indisponível"
+            exit 0
+          fi
+          python -m coletor.nuvem --ambiente staging --simular --textos "$RADAR_TEXTOS"
+
+  publicar:
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+    environment: production
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    env:
+      RADAR_TEXTOS: ${{ github.workspace }}/.dados-textos
+      RADAR_CACHE: ${{ github.workspace }}/.radar-cache
+      EXPORTACOES: ${{ github.workspace }}/.exportacoes
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Preparar worktree e identidade dos commits
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git worktree add -b dados-textos "$RADAR_TEXTOS" origin/dados-textos
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar ferramentas de extração e registrar versões
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q poppler-utils tesseract-ocr tesseract-ocr-por
+          pdftotext -v 2>&1 | head -1
+          pdftoppm -v 2>&1 | head -1
+          tesseract --version 2>&1 | head -1
+          tesseract --list-langs
+
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.RADAR_CACHE }}
+          key: textos-${{ runner.os }}-ocr-v1-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            textos-${{ runner.os }}-ocr-v1-
+
+      - name: Extrair textos e commitar após a barreira de PII
+        timeout-minutes: 130
+        run: python -m coletor.textos --ocr --max-arquivos 1500 --max-minutos 120 --commit-textos --textos "$RADAR_TEXTOS"
+
+      - name: Validar manifestos e textos e executar testes
+        env:
+          RADAR_COLETA: "1"
+        run: |
+          python -m coletor.validar --textos "$RADAR_TEXTOS"
+          python -m unittest discover -s tests -t .
+
+      # O manifesto só pode ser publicado depois que seus textos estiverem no remoto.
+      - name: Publicar dados-textos antes do manifesto
+        run: git -C "$RADAR_TEXTOS" push origin HEAD:dados-textos
+
+      - name: Commitar manifestos em main e publicar com até três tentativas
+        run: |
+          git add data/textos
+          if ! git diff --cached --quiet; then
+            git commit -m "Atualiza manifestos de inteiro teor ($(date -u +%Y-%m-%d))"
+          fi
+          for tentativa in 1 2 3; do
+            if git pull --rebase origin main && git push origin HEAD:main; then
+              exit 0
+            fi
+            git rebase --abort 2>/dev/null || true
+            echo "::warning::falha ao publicar manifesto (tentativa $tentativa de 3)"
+            sleep 5
+          done
+          exit 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Instalar Wrangler fixado
+        working-directory: worker
+        run: npm ci
+
+      - name: Sincronizar produção e exportar projeções
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN_DADOS }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: python -m coletor.nuvem --ambiente production --exportar "$EXPORTACOES" --textos "$RADAR_TEXTOS" --commit "$(git rev-parse HEAD)"
+
+      - name: Atestar manifestos e somas da exportação
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            data/textos/manifesto-*.json
+            .exportacoes/**/SHA256SUMS
+
+      - name: Preservar manifestos não publicados e exportações em falha
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: textos-nao-publicados-${{ github.run_id }}
+          path: |
+            data/textos/
+            .exportacoes/
+          include-hidden-files: true
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Restaurar manifestos locais após preservar o artefato
+        if: failure()
+        run: |
+          git restore --staged --worktree -- data/textos
+          git clean -fdq -- data/textos
+          echo "::warning::consulte o artefato textos-nao-publicados-$GITHUB_RUN_ID; a próxima execução refaz o trabalho de forma idempotente. Cache bruto e textos que falharam na barreira de PII não são publicados como artefato."

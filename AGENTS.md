@@ -662,9 +662,11 @@ Esta é a referência única para sessões; a CLI está em "Pipeline e comandos"
   1. `siscam`: passo de 90 min.
   2. `documentos`: `continue-on-error`, passo de 120 min, `timeout --kill-after=2m 110m`, `--max-minutos 100`.
   3. `sessoes`: `continue-on-error`, passo de 30 min, `timeout --kill-after=2m 25m`, `--max-minutos 20`.
-  4. `classificar`: passo de 90 min; secret `OPENCODE_API_KEY`, variável opcional `OPENCODE_MODEL`
+  4. `classificar`: passo de 75 min; secret `OPENCODE_API_KEY`, variável opcional `OPENCODE_MODEL`
      (se vazia, é removida do ambiente para usar o padrão).
-  5. Validação e testes Python com `RADAR_COLETA=1`.
+  5. `temas`: `continue-on-error`, passo de 15 min, `--limite 2000 --max-minutos 12`, mesmos secret e
+     tratamento de modelo da classificação. Temas formam bloco separado; o resumo continua sem IA.
+  6. Validação e testes Python com `RADAR_COLETA=1`.
   Se validação/testes falharem, restaura documentos/sessões versionados, remove novos arquivos dessas pastas
   e temporários e **repete validação e testes**. Falha na reserva impede commit; estatísticas dessas etapas
   em `meta.json` permanecem. Só com uma dessas barreiras aprovada faz `git add data`, commit como
@@ -674,7 +676,20 @@ Esta é a referência única para sessões; a CLI está em "Pipeline e comandos"
   `.github/workflows/site.yml` ou `testes.yml`; também manual e após coleta bem-sucedida.
   Chama testes sobre `main`, gera no SHA retornado e confere o checkout antes de publicar no Pages.
   Pages deve usar a fonte GitHub Actions. Geração e publicação têm permissões separadas.
-- Coleta e publicação usam `cancel-in-progress: false`; não interrompa coleta em andamento sem necessidade.
+- `textos.yml`: após coleta bem-sucedida em `main` ou manual em `main`, Ubuntu 24.04, OCR com poppler e
+  Tesseract/português (versões no log), cache `RADAR_CACHE`, até 1500 arquivos/120 min. Valida textos e roda
+  testes com `RADAR_COLETA=1`; publica `dados-textos` **antes** de commitar os manifestos em `main` (sem campo
+  `commit_textos`), com até três tentativas de rebase/push. Node 22 e `npm ci` em `worker/` precedem a
+  sincronização/exportação de produção; atesta manifestos e `SHA256SUMS`. Só esse job recebe escrita de
+  conteúdo, OIDC e atestações, no Environment `production`. Falhas preservam manifestos/exportações por
+  14 dias antes de restaurar os manifestos locais, nunca o cache bruto ou textos bloqueados por PII.
+  PR usa staging com `--simular`, sem commit/push; fork ou secret ausente gera aviso e pula a simulação.
+  Tokens são `CLOUDFLARE_API_TOKEN_DADOS`/`CLOUDFLARE_API_TOKEN_DEPLOY`, conforme `docs/backend.md`.
+- `backend.yml`: PRs de `worker/**` executam `npm ci`, testes e typecheck com Node 22; push em `main`
+  testa, migra/publica staging e executa integração (ou smoke de saúde/busca). Só depois migra/publica
+  produção com `COMMIT` igual ao SHA do evento, protegido pelo Environment `production`; Git só leitura.
+- Coleta, textos e publicação usam `cancel-in-progress: false`; textos compartilha o grupo `coleta`,
+  exceto PRs (`textos-pr-${{ github.ref }}`). Não interrompa coleta em andamento sem necessidade.
 
 ## Curadoria e neutralidade editorial
 
