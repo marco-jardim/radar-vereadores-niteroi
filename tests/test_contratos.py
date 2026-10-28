@@ -40,7 +40,7 @@ CAMPOS = {
     "trechos", "trechos_vetorizaveis", "r2_chave", "processado_em",
 }
 CAMPOS_TRECHO = {"id", "documento", "arquivo", "posicao", "inicio", "fim", "inicio_utf16", "fim_utf16",
-                 "sha256", "vetorizavel"}
+                 "sha256", "vetorizavel", "baixa_confianca"}
 TIPOS = {"pl", "substitutivo", "requerimento", "pdl", "resolucao", "ata"}
 PRIORIDADE = {"pl": 0, "requerimento": 1, "pdl": 2, "resolucao": 3, "ata": 4}
 SEM_PROCESSAMENTO = {"removido", "pendente_download", "duplicata"}
@@ -478,12 +478,17 @@ class TestTextosETrechos(_Base):
 
     def test_trechos_iguais_a_dividir_e_contagens(self) -> None:
         todos = [t for lista in self.trechos.values() for t in lista]
+        self.assertTrue(any(t["baixa_confianca"] for t in todos))
+        self.assertTrue(any(not t["baixa_confianca"] for t in todos))
         for chave, e in self.manifesto.items():
             if not self.com_texto(e):
                 continue
             with self.subTest(chave=chave):
                 deste = sorted((t for t in todos if t["arquivo"] == chave), key=lambda t: t["posicao"])
-                self.assertEqual(deste, trechos.dividir(self.texto(chave), e["documento"], chave))
+                baixas = {n for n, c in _gerador().EXTRACOES[chave]["confianca_paginas"].items()
+                          if c < CONFIANCA_MINIMA}
+                self.assertEqual(deste, trechos.dividir(self.texto(chave), e["documento"], chave, baixas))
+                self.assertTrue(all(type(t["baixa_confianca"]) is bool for t in deste))
                 self.assertEqual([t["posicao"] for t in deste], list(range(len(deste))))
                 self.assertEqual(len(deste), e["trechos"])
                 self.assertEqual(sum(t["vetorizavel"] for t in deste), e["trechos_vetorizaveis"])

@@ -30,7 +30,7 @@ import hashlib
 import re
 import unicodedata
 
-VERSAO_TRECHOS = "2"
+VERSAO_TRECHOS = "3"
 ALVO = 1200
 MAXIMO = 2000
 SOBREPOSICAO = 200
@@ -165,14 +165,17 @@ def _inicio_sobreposto(texto: str, ini_anterior: int, fim_anterior: int,
 
 
 # ---------------------------------------------------------------- trechos
-def dividir(texto: str, documento: str, arquivo: str) -> list[dict]:
+def dividir(texto: str, documento: str, arquivo: str,
+            paginas_baixa_confianca: set[int] | None = None) -> list[dict]:
     """Divide o texto normalizado em trechos com offsets.
 
     Cada trecho é `{id, documento, arquivo, posicao, inicio, fim, inicio_utf16,
-    fim_utf16, sha256, vetorizavel}`, com `sha256` dos bytes UTF-8 de
+    fim_utf16, sha256, vetorizavel, baixa_confianca}`, com `sha256` dos bytes UTF-8 de
     `texto[inicio:fim]` e `id = sha1(f"{documento}|{arquivo}|{posicao}|{sha256}")[:16]`.
     O texto precisa já estar normalizado (`normalizar(texto) == texto`); caso
     contrário os offsets não corresponderiam ao `.txt` gravado e é ValueError.
+    `paginas_baixa_confianca` usa base 1 nas quebras de página do texto final;
+    basta sobrepor texto de uma dessas páginas para excluir o trecho da busca.
     """
     if not texto or not texto.strip():
         return []
@@ -180,6 +183,13 @@ def dividir(texto: str, documento: str, arquivo: str) -> list[dict]:
         raise ValueError("texto não normalizado: aplique trechos.normalizar antes de dividir")
     unidades = _unidades(texto)
     astrais = [m.start() for m in _RE_ASTRAL.finditer(texto)]
+    intervalos_baixos: list[tuple[int, int]] = []
+    inicio_pagina = 0
+    for n, pagina in enumerate(paginas(texto), 1):
+        fim_pagina = inicio_pagina + len(pagina)
+        if paginas_baixa_confianca and n in paginas_baixa_confianca and fim_pagina > inicio_pagina:
+            intervalos_baixos.append((inicio_pagina, fim_pagina))
+        inicio_pagina = fim_pagina + len(SEPARADOR_PAGINA)
 
     def utf16(i: int) -> int:
         # cada caractere fora do plano básico ocupa duas unidades UTF-16
@@ -198,6 +208,7 @@ def dividir(texto: str, documento: str, arquivo: str) -> list[dict]:
             else:
                 break
         trecho = _trecho(texto, documento, arquivo, len(trechos), ini, fim)
+        trecho["baixa_confianca"] = any(ini < b and fim > a for a, b in intervalos_baixos)
         trecho["inicio_utf16"], trecho["fim_utf16"] = utf16(ini), utf16(fim)
         trechos.append(trecho)
         j += 1

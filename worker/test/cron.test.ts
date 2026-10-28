@@ -15,7 +15,7 @@ interface Entrada {
   tipo: string; status: string; sha256_original: string; r2_chave: string | null;
   bytes: number; trechos: number;
 }
-interface Trecho { id: string; arquivo: string; sha256: string }
+interface Trecho { id: string; arquivo: string; sha256: string; baixa_confianca?: boolean }
 let manifestos: Map<number, Record<string, unknown>>;
 let trechos: Map<string, Trecho[]>;
 let respostas: Map<string, string | number>;
@@ -76,6 +76,22 @@ function bancoComFalha(teste: (sql: string) => boolean): D1Database {
 }
 
 describe("cron de verificação", () => {
+  it("confere apenas trechos indexáveis, mantendo a contagem publicada inclusive baixa confiança", async () => {
+    const entrada = await incluir(1);
+    entrada.trechos = 2;
+    trechos.get("trechos/pl/2021.jsonl")!.push({ id: idTrecho(2), arquivo: "siscam:1", sha256: hash, baixa_confianca: true });
+    expect(await verificar(criarEnv(), DATA)).toMatchObject({ amostra: 1, ok: 1, falhas: [] });
+    await env.DB.prepare("INSERT INTO trechos (id, documento, arquivo, posicao, texto, sha256) VALUES (?, 'doc:1', 'siscam:1', 1, 'Baixa confiança', ?)").bind(idTrecho(2), hash).run();
+    expect(await verificar(criarEnv(), DATA)).toMatchObject({ ok: 0, falhas: [{ etapa: "trechos", codigo: "hash_divergente", chave: "siscam:1" }] });
+  });
+
+  it("aceita arquivo com todos os trechos de baixa confiança e nenhum no D1", async () => {
+    await incluir(1);
+    trechos.get("trechos/pl/2021.jsonl")![0]!.baixa_confianca = true;
+    await env.DB.prepare("DELETE FROM trechos").run();
+    expect(await verificar(criarEnv(), DATA)).toMatchObject({ amostra: 1, ok: 1, falhas: [] });
+  });
+
   it("verifica todos os anos, hashes intactos e JSONL compartilhado só uma vez; só escreve verificacoes", async () => {
     await incluir(1);
     await incluir(2);

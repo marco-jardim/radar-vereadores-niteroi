@@ -97,6 +97,7 @@ class TestDividir(unittest.TestCase):
             "fim_utf16": len(texto),
             "sha256": sha,
             "vetorizavel": False,  # menos de 80 letras e dígitos
+            "baixa_confianca": False,
         })
 
     def test_offsets_utf16(self) -> None:
@@ -188,7 +189,23 @@ class TestDividir(unittest.TestCase):
         c = dividir(texto, "doc:9", "siscam:2")
         self.assertEqual([t["sha256"] for t in a], [t["sha256"] for t in c])
         self.assertTrue(all(x["id"] != y["id"] for x, y in zip(a, c)))
-        self.assertEqual(trechos.VERSAO_TRECHOS, "2")
+        self.assertEqual(trechos.VERSAO_TRECHOS, "3")
+
+    def test_baixa_confianca_por_pagina_e_sobreposicao(self) -> None:
+        texto = normalizar(_paragrafo(25) + "\f" + _paragrafo(25) + "\f" + _paragrafo(25))
+        limites = [m for m, c in enumerate(texto) if c == "\f"]
+        lista = dividir(texto, "doc:1", "siscam:2", {2})
+        self.assertTrue(any(t["baixa_confianca"] for t in lista))
+        self.assertTrue(any(not t["baixa_confianca"] for t in lista))
+        for t in lista:
+            self.assertEqual(t["baixa_confianca"], t["inicio"] < limites[1] - 1 and t["fim"] > limites[0] + 2)
+        self.assertEqual(lista, dividir(texto, "doc:1", "siscam:2", {2}))
+        self.assertEqual([dict(t, baixa_confianca=False) for t in lista], dividir(texto, "doc:1", "siscam:2"))
+
+    def test_pagina_vazia_nao_contamina_trecho_agrupado(self) -> None:
+        texto = normalizar("Texto nativo.\f\fOutro texto nativo.")
+        self.assertFalse(any(t["baixa_confianca"] for t in dividir(texto, "doc:1", "siscam:2", {2})))
+        self.assertTrue(all(t["baixa_confianca"] for t in dividir(texto, "doc:1", "siscam:2", {3})))
 
     def test_acentos_e_nfc(self) -> None:
         bruto = unicodedata.normalize("NFD", "\n\n".join(_paragrafo(10, f"Ação {i}.") for i in range(5)))

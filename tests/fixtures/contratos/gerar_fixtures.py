@@ -222,6 +222,10 @@ TEXTO_ANEXO = "\f".join([
         "~ ,; .",
         "Página 2 de 2",
     ]),
+    # Parágrafo abaixo do limite de unidade e grande demais para agrupar com as
+    # páginas anteriores: um trecho baixo, sem retirar os seis trechos já indexáveis.
+    "Art. 9º " + ("A conservação das estantes comunitárias será registrada em relatório público, "
+                   "com a descrição dos materiais e das intervenções previstas. " * 30)[:1760] + ".",
 ])
 
 TEXTO_SUBSTITUTIVO = "\f".join([
@@ -292,7 +296,7 @@ EXTRACOES = {
                       "paginas": 0, "paginas_ocr": 0, "confianca": None, "confianca_paginas": {},
                       "status": "ok", "detalhe": "", "cabecalhos_omitidos": 2, "texto": TEXTO_PL},
     "siscam:900002": {"formato": "pdf", "extrator": "pdftotext+tesseract", "versao_extrator": "25.07.0+5.5.3",
-                      "paginas": 2, "paginas_ocr": 1, "confianca": 87.43, "confianca_paginas": {2: 87.43},
+                      "paginas": 3, "paginas_ocr": 2, "confianca": 70.0, "confianca_paginas": {2: 87.43, 3: 45.0},
                       "status": "ok_ocr", "detalhe": "", "cabecalhos_omitidos": 0, "texto": TEXTO_ANEXO},
     "siscam:900003": {"formato": "doc", "extrator": "doc", "versao_extrator": VERSAO_EXTRATORES,
                       "paginas": 0, "paginas_ocr": 0, "confianca": None, "confianca_paginas": {},

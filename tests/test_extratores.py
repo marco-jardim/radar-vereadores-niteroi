@@ -627,6 +627,21 @@ class TestZip(ComFerramentasFalsas):
 
 # ------------------------------------------------------------------- PDF e OCR com ferramentas falsas
 class TestPdfFalso(ComFerramentasFalsas):
+    def test_confianca_por_pagina_reutilizada_do_cache_sem_refazer_ocr(self) -> None:
+        from coletor.extratores import ocr
+        self.configurar(paginas=[PAGINA_LONGA, "", ""])
+        cache = self.pasta / "cache-ocr"
+        lidas = [("Texto da segunda página", 40.0, 4), ("Texto da terceira página", 90.0, 4)]
+        with mock.patch.object(ocr, "_ocr_pagina", side_effect=lidas) as executar:
+            primeira = extratores.extrair(fx.pdf_misto(), ocr=True, ferramentas=self.ferr, cache_ocr=cache)
+            self.assertEqual(executar.call_count, 2)
+        with mock.patch.object(ocr, "_ocr_pagina", side_effect=AssertionError("não deve refazer OCR")):
+            segunda = extratores.extrair(fx.pdf_misto(), ocr=True, ferramentas=self.ferr, cache_ocr=cache)
+        self.assertEqual(primeira, segunda)
+        self.assertEqual(segunda.confianca_paginas, {2: 40.0, 3: 90.0})
+        self.assertEqual(segunda.status, "ok_ocr")  # média global alta não promove a página 2
+        self.assertEqual(segunda.texto.split("\n\f\n"), [PAGINA_LONGA.rstrip(), lidas[0][0], lidas[1][0]])
+
     def test_pdf_com_texto(self) -> None:
         r = extratores.extrair(fx.pdf_texto(), ferramentas=self.ferr)
         self.assertEqual((r.formato, r.status, r.extrator, r.versao_extrator),

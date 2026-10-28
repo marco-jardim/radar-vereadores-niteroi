@@ -130,6 +130,8 @@ def _gravar_cache(arquivo: Path, lido: tuple[str, float | None, int]) -> None:
     """Gravação atômica da página no cache; o temporário tem nome único (mkstemp) na
     mesma pasta, para que duas linhas de execução nunca disputem o mesmo arquivo."""
     arquivo.parent.mkdir(parents=True, exist_ok=True)
+    # A média do TSV já fica neste cache por página; reconstruir trechos reutiliza
+    # o valor, sem precisar conservar TSVs nem chamar Tesseract novamente.
     texto, conf, palavras = lido
     conteudo = json.dumps({"confianca": conf, "palavras": palavras, "texto": texto},
                           ensure_ascii=False, sort_keys=True).encode("utf-8")

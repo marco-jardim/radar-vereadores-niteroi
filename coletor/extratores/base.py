@@ -45,7 +45,9 @@ class Resultado:
     - `paginas_escaneadas`: páginas (base 1) com menos de 100 caracteres úteis no
       texto do PDF, candidatas ao OCR;
     - `confianca`: confiança média do OCR (0–100, ponderada pelas palavras) ou None;
-    - `confianca_paginas`: confiança por página com OCR;
+    - `confianca_paginas`: média por página (base 1) cujo texto do OCR foi usado;
+      páginas nativas não entram. Preservada no cache bruto para filtrar a busca
+      por `CONFIANCA_MINIMA` sem repetir OCR;
     - `status`: um de `STATUS`; `detalhe`: motivo legível de erro, pendência ou aviso.
       `ok_parcial`: há páginas com texto (do PDF ou do OCR) e páginas escaneadas que
       ficaram sem OCR (desligado, adiado ou com falha); o texto disponível é mantido e

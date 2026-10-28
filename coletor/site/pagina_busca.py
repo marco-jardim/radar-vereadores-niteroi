@@ -74,7 +74,8 @@ recebem reconhecimento óptico de caracteres (OCR) em português. Páginas sem t
 receber OCR mesmo em um PDF misto. O selo OCR identifica esse processo; OCR de baixa confiança
 indica confiança média inferior a 60. Essa medida não é garantia de exatidão: nomes, tabelas e números
 podem conter erros. O selo Extração parcial indica que apenas parte do arquivo pôde ser extraída.
-Cabeçalhos, rodapés repetidos e ruído são removidos por regras. Confira o original.</p></section>
+Cabeçalhos, rodapés repetidos e ruído são removidos por regras. Confira o original.</p>
+<p>Páginas com confiança de OCR inferior a 60 são mantidas nos textos publicados, mas não são indexadas para busca.</p></section>
 <section id="busca"><h2>Como funciona a busca</h2>
 <p>A <a href="busca.html">busca</a> por palavras usa FTS5 e ordenação BM25, sem distinguir acentos,
 com até 500 candidatos. A busca por significado compara vetores de trechos com o modelo bge-m3,

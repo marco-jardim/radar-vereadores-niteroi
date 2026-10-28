@@ -70,7 +70,8 @@ export function candidatosDoDia<T extends { chave: string; tipo: string; ano: nu
 }
 
 /** Só retém hashes da amostra; o resto do JSONL vive no máximo por uma linha. */
-export async function lerHashesTrechos(body: ReadableStream<Uint8Array>, chaves: ReadonlySet<string>, sinal: AbortSignal): Promise<Map<string, HashTrecho[]>> {
+export async function lerHashesTrechos(body: ReadableStream<Uint8Array>, chaves: ReadonlySet<string>, sinal: AbortSignal,
+  totais = new Map<string, number>()): Promise<Map<string, HashTrecho[]>> {
   const hashes = new Map<string, HashTrecho[]>([...chaves].map((chave) => [chave, []]));
   const leitor = body.pipeThrough(new TextDecoderStream()).getReader();
   const cancelar = (): void => { void leitor.cancel(sinal.reason).catch(() => undefined); };
@@ -85,6 +86,9 @@ export async function lerHashesTrechos(body: ReadableStream<Uint8Array>, chaves:
     if (!destino) return;
     if (typeof trecho.id !== "string" || !/^[0-9a-f]{16}$/.test(trecho.id) ||
         typeof trecho.sha256 !== "string" || !HASH.test(trecho.sha256)) throw new Error("trecho");
+    if (trecho.baixa_confianca !== undefined && typeof trecho.baixa_confianca !== "boolean") throw new Error("trecho");
+    totais.set(trecho.arquivo, (totais.get(trecho.arquivo) ?? 0) + 1);
+    if (trecho.baixa_confianca === true) return;
     destino.push({ id: trecho.id, sha256: trecho.sha256 });
   }
   try {
@@ -264,10 +268,11 @@ export async function verificar(env: Env, agora = new Date(), opcoes: OpcoesVeri
     for (const [caminho, grupo] of porCaminho) {
       let esperados = new Map<string, HashTrecho[]>(grupo.map((a) => [a.chave, []]));
       let trechosLidos = true;
+      const totais = new Map<string, number>();
       try {
         const lidos = await raw(caminho, referenciaTextos ?? env.CRON_TEXTOS_BRANCH ?? "dados-textos", async (r, sinal) => {
           if (!r.body) throw new Error("corpo");
-          return lerHashesTrechos(r.body, new Set(grupo.map((a) => a.chave)), sinal);
+          return lerHashesTrechos(r.body, new Set(grupo.map((a) => a.chave)), sinal, totais);
         }, grupo.every((a) => a.trechos === 0));
         if (lidos) esperados = lidos;
       } catch { trechosLidos = false; }
@@ -305,7 +310,7 @@ export async function verificar(env: Env, agora = new Date(), opcoes: OpcoesVeri
               .bind(arquivo.chave).all<HashTrecho>(), prazo);
             const esperado = esperados.get(arquivo.chave)!;
             const hashes = new Map(esperado.map((t) => [t.id, t.sha256]));
-            if (esperado.length !== arquivo.trechos || hashes.size !== esperado.length || linhas.results.length !== esperado.length ||
+            if ((totais.get(arquivo.chave) ?? 0) !== arquivo.trechos || hashes.size !== esperado.length || linhas.results.length !== esperado.length ||
                 linhas.results.some((t) => hashes.get(t.id) !== t.sha256)) falhar("trechos", "hash_divergente", arquivo.chave);
           } catch { falhar("d1", "leitura", arquivo.chave); }
         }

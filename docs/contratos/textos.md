@@ -26,7 +26,7 @@ Cada arquivo segue, nesta ordem:
      `None` (só as regras de borda);
 4. `coletor.mascara.mascarar(texto, mascara.liberados(RAIZ))`;
 5. `coletor.trechos.normalizar` de novo (idempotente) — este é o **texto final**, gravado no `.txt`;
-6. `coletor.trechos.dividir(texto_final, documento_principal, chave_do_arquivo)`;
+6. `coletor.trechos.dividir(texto_final, documento_principal, chave_do_arquivo, paginas_baixa_confianca)`;
 7. barreira: `coletor.mascara.varrer(texto_final, liberados)` sem nenhuma ocorrência forte, antes de gravar,
    commitar ou carregar.
 
@@ -177,7 +177,7 @@ Todos os campos estão sempre presentes (sem extras); "nulo" é `null` no JSON.
 | `ok_ocr` | extratores | Todas as páginas escaneadas lidas pelo OCR, confiança média ≥ `CONFIANCA_MINIMA` (60) | sim | sim | por versão ou configuração |
 | `vazio_legitimo` | extratores ou limpeza | Zero caracteres úteis (arquivo vazio, OCR sem texto) ou texto esvaziado pela limpeza | sim | não | por versão ou configuração |
 | `ok_parcial` | extratores | Há páginas com texto (do PDF ou do OCR) e páginas escaneadas sem OCR (desligado, adiado pelo orçamento ou com falha); o texto disponível é gravado e pesquisável | não (listado no relatório) | sim | com `--ocr` |
-| `ocr_baixa_confianca` | extratores | OCR com confiança média < 60; o texto é gravado e pesquisável | não (listado no relatório) | sim | por versão |
+| `ocr_baixa_confianca` | extratores | OCR com confiança média < 60; o texto é publicado, mas só as partes de alta confiança são pesquisáveis (seção 7.2) | não (listado no relatório) | sim | por versão |
 | `escaneado_sem_ocr` | extratores | Páginas escaneadas sem OCR e **nenhuma** página com texto | não | não | com `--ocr` |
 | `pendente_ferramenta` | extratores | pdftotext, pdftoppm, tesseract ou o idioma `por` ausente | não | não | sempre |
 | `erro_formato` | extratores | Arquivo malformado, truncado, criptografado ou acima dos limites (`detalhe` diz o motivo) | não | não | por versão |
@@ -186,7 +186,8 @@ Todos os campos estão sempre presentes (sem extras); "nulo" é `null` no JSON.
 | `duplicata` | `coletor.textos` | Mesmo original de outra chave (seção 6.2) | — | não | quando o original muda |
 
 **Sucesso** = `ok`, `ok_ocr` ou `vazio_legitimo`. A base das metas é o conjunto de arquivos do escopo, exceto
-`removido` e `duplicata`. `ok_parcial` e `ocr_baixa_confianca` têm texto pesquisável, mas cada caso entra no relatório.
+`removido` e `duplicata`. `ok_parcial` e `ocr_baixa_confianca` mantêm o texto publicado, mas cada caso entra no relatório;
+a confiança por página determina quais trechos podem entrar na busca, independentemente do status agregado.
 
 ## 6. Remoções e duplicatas
 
@@ -262,11 +263,32 @@ dos `.txt` de `textos/<tipo>/<ano>/`. Campos, exatamente os de `trechos.dividir`
 | `inicio`, `fim` | inteiro | Offsets em pontos de código (`texto[inicio:fim]`) |
 | `inicio_utf16`, `fim_utf16` | inteiro | Offsets em unidades UTF-16 (`texto.slice(inicio_utf16, fim_utf16)` em JavaScript) |
 | `sha256` | texto | SHA-256 do UTF-8 de `texto[inicio:fim]` |
-| `vetorizavel` | booleano | Ao menos `MIN_CARACTERES_VETOR` (80) letras e dígitos; os demais ficam só na busca por palavras |
+| `vetorizavel` | booleano | Ao menos `MIN_CARACTERES_VETOR` (80) letras e dígitos; sem baixa confiança, os demais ficam só na busca por palavras |
+| `baixa_confianca` | booleano | O intervalo do trecho sobrepõe texto de alguma página OCR com confiança média < `CONFIANCA_MINIMA` (60); excluído da busca por palavras e por significado |
+
+Decisão humana de 28/10/2026: os textos completos e todos os trechos permanecem publicados em `dados-textos`
+para auditoria, inclusive os de baixa confiança. A confiança média de cada página OCR (base 1) já é calculada
+do TSV do Tesseract, guardada no cache de páginas (`confianca`, junto de texto e número de palavras) e em
+`Resultado.confianca_paginas`, preservada também no cache bruto (`texto_bruto/<sha256>.json`). Reprocessar
+a divisão não exige refazer OCR. Páginas nativas não são marcadas como baixas. As quebras `\f`, preservadas
+pela limpeza e pela máscara, situam as páginas no texto final; basta sobrepor uma página baixa para marcar
+o trecho inteiro, inclusive sua sobreposição com o anterior. Uma página vazia não contamina trechos vizinhos.
+Em cache antigo sem dados por página, um arquivo `ocr_baixa_confianca` trata todas as páginas OCR como baixas
+(as `paginas_escaneadas`, quando conhecidas; sem essa localização, todas as páginas do texto). Isso inclui
+ZIPs sem confiança localizada. `VERSAO_TRECHOS = "3"` aplica o reprocessamento por versão.
+`vetorizavel` e a contagem `trechos_vetorizaveis` continuam descrevendo tamanho, não elegibilidade ao índice.
+O validador offline confere o booleano e os offsets, mas não reconstitui confiança sem o cache bruto.
+JSONL de versões anteriores sem o campo continua legível; a versão 3 exige o booleano em cada trecho.
 
 ## 8. Projeções no Cloudflare
 
 D1, Vectorize e R2 são reconstruíveis a partir do Git (`python -m coletor.nuvem --reconstruir`).
+
+Trechos com `baixa_confianca: true` nunca entram em `trechos`, `trechos_fts`, `trechos_indexados` nem
+Vectorize; uma sincronização incremental também retira os que já estavam indexados. As linhas de `documentos`
+e `arquivos` permanecem, com o status do arquivo. Exportações novas seguem esse conteúdo filtrado do D1.
+A auditoria do Worker conta todas as linhas do JSONL contra o manifesto, mas compara os hashes do D1 apenas
+com as linhas não marcadas. `estado_indice.total` e `sha256_conjunto` também cobrem só trechos indexados.
 
 ### 8.1 Tabelas D1 (`worker/migrations/`, esquema inicial e migrações incrementais)
 
@@ -293,7 +315,7 @@ D1, Vectorize e R2 são reconstruíveis a partir do Git (`python -m coletor.nuve
 - Metadados: `{tipo, ano, legislatura, documento}`, com `ano` numérico, `tipo` e `legislatura` texto e
   `documento` como na seção 2.2. Índices de metadados: `tipo` (string), `ano` (number) e `legislatura` (string).
   O filtro por autor é feito no D1.
-- Só trechos com `vetorizavel: true` viram vetor; duplicatas e removidos nunca.
+- Só trechos com `vetorizavel: true` e sem `baixa_confianca: true` viram vetor; duplicatas e removidos nunca.
 
 ### 8.3 R2
 

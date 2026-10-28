@@ -114,7 +114,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from . import arquivos, extratores, limpeza, mascara, remocoes, trechos
-from .extratores import VERSAO_EXTRATORES, Resultado
+from .extratores import CONFIANCA_MINIMA, VERSAO_EXTRATORES, Resultado
 
 RAIZ = Path(__file__).resolve().parent.parent
 ROTULOS_ATA = frozenset({"Ata"})
@@ -348,7 +348,12 @@ def processar(entrada: dict, chave: str, resultado: Resultado, ementa: str, clic
         raise BarreiraPII(chave, fortes)
     if not texto:
         entrada["status"], entrada["detalhe"] = "vazio_legitimo", ESVAZIADO
-    lista = trechos.dividir(texto, entrada["documento"], chave)
+    baixas = {n for n, conf in resultado.confianca_paginas.items() if conf < CONFIANCA_MINIMA}
+    if resultado.status == "ocr_baixa_confianca" and not resultado.confianca_paginas:
+        # Cache antigo sem confiança por página: não promove OCR de confiança baixa.
+        # Quando conhecidas, as candidatas ao OCR preservam as páginas nativas.
+        baixas = set(resultado.paginas_escaneadas) or set(range(1, len(trechos.paginas(texto)) + 1))
+    lista = trechos.dividir(texto, entrada["documento"], chave, baixas)
     conteudo = (texto + "\n").encode("utf-8")
     entrada.update({
         "limpeza": {
@@ -1872,7 +1877,10 @@ def verificar(raiz: Path = RAIZ, pasta_textos: Path | None = None, cache: Path |
                 "trechos_vetorizaveis"):
             falha(k, "contagem de trechos não confere com o manifesto")
         elif e.get("versao_trechos") == trechos.VERSAO_TRECHOS:
-            if lista != trechos.dividir(texto, e["documento"], k):
+            # A confiança vem do cache bruto, não do manifesto público. Aqui se
+            # conferem tipo do sinalizador e divisão; reprocessar recalcula a confiança.
+            if (any(type(t.get("baixa_confianca")) is not bool for t in lista)
+                    or [dict(t, baixa_confianca=False) for t in lista] != trechos.dividir(texto, e["documento"], k)):
                 falha(k, "trechos não conferem com o texto")
         else:
             for t in lista:

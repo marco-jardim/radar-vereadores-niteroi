@@ -279,7 +279,7 @@ class TestSincronizacaoCompleta(Base):
         self.assertEqual(sorted(r[0] for r in self.consultar(
             "SELECT documento FROM arquivo_documento WHERE arquivo = 'siscam:900001'")), ["doc:127858", "doc:266596"])
         self.assertEqual(self.consultar("SELECT ocr, confianca FROM arquivos WHERE id = 'siscam:900002'"),
-                         [(1, 87.4)])
+                         [(1, 70.0)])
 
         # texto do trecho = conteudo[:-1][inicio:fim], conferido pelo sha256
         for texto, sha in self.consultar("SELECT texto, sha256 FROM trechos"):
@@ -343,6 +343,33 @@ class TestSincronizacaoCompleta(Base):
 
 
 class TestDiferenca(Base):
+    def test_baixa_confianca_excluida_e_retirada_incrementalmente(self):
+        caminho = self.textos / "trechos" / "pl" / "2024.jsonl"
+        publicado = caminho.read_bytes()
+        lista = [json.loads(linha) for linha in publicado.splitlines()]
+        baixos = {t["id"] for t in lista if t["baixa_confianca"]}
+        self.assertTrue(baixos)
+        # Simula o índice anterior à decisão humana, inclusive os vetores.
+        for t in lista:
+            t["baixa_confianca"] = False
+        caminho.write_text("".join(json.dumps(t) + "\n" for t in lista), encoding="utf-8")
+        self.sincronizar()
+        self.assertTrue(baixos <= set(self.vetores()))
+        caminho.write_bytes(publicado)
+        rel = self.sincronizar(exportar=self.tmp / "exportacoes")
+        self.assertEqual(rel.falhas, [])
+        self.assertEqual(rel.plano["vetores_apagar"], len(baixos))
+        self.assertEqual(rel.plano["d1_trechos_apagar"], len(baixos))
+        for tabela in ("trechos", "trechos_fts", "trechos_indexados"):
+            ids = {r[0] for r in self.consultar(f"SELECT id FROM {tabela}")}
+            self.assertFalse(baixos & ids)
+        self.assertFalse(baixos & set(self.vetores()))
+        self.assertEqual(self.consultar("SELECT status FROM arquivos WHERE id = 'siscam:900002'"), [("ok_ocr",)])
+        self.assertEqual(caminho.read_bytes(), publicado)  # publicação não é apagada
+        dump = next((self.tmp / "exportacoes").rglob("d1-*.sql")).read_text(encoding="utf-8")
+        self.assertFalse(any(i in dump for i in baixos))
+        self.assertEqual(self.sincronizar().escritas, 0)
+
     def test_novos_alterados_e_removidos(self):
         self.remover("siscam:900002", SHA_900002)
         primeira = self.sincronizar()

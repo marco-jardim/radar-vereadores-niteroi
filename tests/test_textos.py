@@ -181,6 +181,45 @@ class _Base(unittest.TestCase):
 
 
 class TestContrato(_Base):
+    def test_baixa_confianca_preservada_no_cache_bruto_e_reprocessamento(self) -> None:
+        self.rodar()
+        chave = "siscam:900002"
+        sha = G.sha256(G.ORIGINAIS[chave])
+        meta = json.loads((self.cache / "texto_bruto" / f"{sha}.json").read_bytes())
+        self.assertEqual(meta["confianca_paginas"], {"2": 87.43, "3": 45.0})
+        resultado = textos.resultado_de_meta(meta, G.TEXTO_ANEXO)
+        self.assertEqual(resultado.confianca_paginas, {2: 87.43, 3: 45.0})
+        antes = self.saida()
+        m = self.manifesto()
+        m[chave]["versao_trechos"] = "2"
+        self.salvar_manifesto(m)
+        self.extraidos.clear()
+        self.rodar(reprocessar_versao=True)
+        self.assertEqual(self.extraidos, [])
+        self.assertEqual(self.saida(), antes)
+        lista = [t for t in self.trechos_de("trechos/pl/2024.jsonl") if t["arquivo"] == chave]
+        self.assertEqual([t["baixa_confianca"] for t in lista], [False, True])
+        self.assertIn("Art. 9º", (self.dir_textos / "textos/pl/2024/127858/siscam-900002.txt").read_text(encoding="utf-8"))
+        self.assertEqual(self.verificar()["falhas"], [])
+
+    def test_status_baixo_sem_paginas_no_cache_usa_fallback(self) -> None:
+        chave = "siscam:900002"
+        original = G.ORIGINAIS[chave]
+        self.extracoes[original] = {**self.extracoes[original], "status": "ocr_baixa_confianca", "confianca": 40.0,
+                                    "confianca_paginas": {}, "paginas_escaneadas": [2, 3]}
+        self.rodar()
+        lista = [t for t in self.trechos_de("trechos/pl/2024.jsonl") if t["arquivo"] == chave]
+        self.assertTrue(all(t["baixa_confianca"] for t in lista))
+        self.assertTrue((self.dir_textos / "textos/pl/2024/127858/siscam-900002.txt").is_file())
+
+    def test_limiar_inclusivo_e_status_global_nao_decide_por_pagina(self) -> None:
+        original = G.ORIGINAIS["siscam:900002"]
+        self.extracoes[original] = {**self.extracoes[original], "status": "ocr_baixa_confianca", "confianca": 59.95,
+                                    "confianca_paginas": {2: 60.0, 3: 59.9}}
+        self.rodar()
+        lista = [t for t in self.trechos_de("trechos/pl/2024.jsonl") if t["arquivo"] == "siscam:900002"]
+        self.assertEqual([t["baixa_confianca"] for t in lista], [False, True])
+
     def test_reproduz_as_fixtures_do_contrato(self) -> None:
         estat = self.rodar()
         self.assert_igual_as_fixtures()

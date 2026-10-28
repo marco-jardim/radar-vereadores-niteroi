@@ -1490,7 +1490,7 @@ CAMPOS_ENTRADA_TEXTO = frozenset(textos.entrada_vazia([], "", "", "", "", ""))
 CONTAGENS_TEXTO = ("paginas", "paginas_ocr", "cabecalhos_omitidos", "chars", "trechos", "trechos_vetorizaveis")
 VERSOES_TEXTO = ("versao_extrator", "versao_extratores", "versao_limpeza", "versao_mascara", "versao_trechos")
 CAMPOS_TRECHO = frozenset({"id", "documento", "arquivo", "posicao", "inicio", "fim",
-                           "inicio_utf16", "fim_utf16", "sha256", "vetorizavel"})
+                           "inicio_utf16", "fim_utf16", "sha256", "vetorizavel", "baixa_confianca"})
 
 
 def _hash_texto(valor: object, tamanho: int = 64) -> bool:
@@ -1717,7 +1717,8 @@ def validar_textos(raiz: Path | None = None, pasta_textos: Path | None = None) -
 
 def _validar_trecho_texto(t: object, texto: str, documento: str, chave: str, posicao: int) -> bool:
     """Offsets, hash, id e vetor: independe da versão do algoritmo de divisão."""
-    if not isinstance(t, dict) or set(t) != CAMPOS_TRECHO:
+    if (not isinstance(t, dict) or set(t) not in (CAMPOS_TRECHO, CAMPOS_TRECHO - {"baixa_confianca"})
+            or ("baixa_confianca" in t and type(t["baixa_confianca"]) is not bool)):
         return False
     for campo in ("posicao", "inicio", "fim", "inicio_utf16", "fim_utf16"):
         if not _e_inteiro(t[campo]) or t[campo] < 0:
@@ -1839,7 +1840,9 @@ def _validar_arquivos_textos(raiz: Path, pasta: Path, entradas: dict[str, tuple[
             if any(not _validar_trecho_texto(t, texto, e["documento"], chave, i) for i, t in enumerate(itens)):
                 problemas.append(f"{chave}: campos, offsets, id ou hash dos trechos não conferem com o texto")
             elif trechos.normalizar(texto) == texto and e.get("versao_trechos") == trechos.VERSAO_TRECHOS:
-                if itens != trechos.dividir(texto, e["documento"], chave):
+                # Confiança por página só existe no cache bruto, não no manifesto.
+                if (any(type(t.get("baixa_confianca")) is not bool for t in itens)
+                        or [dict(t, baixa_confianca=False) for t in itens] != trechos.dividir(texto, e["documento"], chave)):
                     problemas.append(f"{chave}: trechos não conferem com a divisão do texto")
     return problemas
 

@@ -351,6 +351,7 @@ def _trechos(textos: Path | None, com_texto: dict[str, tuple[int, dict]], removi
         raise ErroFonte(f"{chave}: trechos sem entrada com texto no manifesto")
 
     trechos: dict[str, Trecho] = {}
+    ids_vistos: set[str] = set()
     for chave in sorted(com_texto, key=ordem_chave):
         ano, e = com_texto[chave]
         lista = sorted(por_arquivo.get(chave, []), key=lambda t: t["posicao"])
@@ -373,8 +374,13 @@ def _trechos(textos: Path | None, com_texto: dict[str, tuple[int, dict]], removi
             pedaco = texto[t["inicio"]:t["fim"]]
             if sha256(pedaco.encode("utf-8")) != t["sha256"]:
                 raise ErroFonte(f"{chave}: trecho {t['id']} não confere com o texto (sha256)")
-            if t["id"] in trechos:
+            if t["id"] in ids_vistos:
                 raise ErroFonte(f"trecho {t['id']} repetido")
+            ids_vistos.add(t["id"])
+            if "baixa_confianca" in t and type(t["baixa_confianca"]) is not bool:
+                raise ErroFonte(f"{chave}: baixa_confianca deve ser booleano")
+            if t.get("baixa_confianca") is True:
+                continue  # Publicado para auditoria, mas fora de D1/FTS/Vectorize.
             trechos[t["id"]] = Trecho(t["id"], t["documento"], chave, t["posicao"], pedaco, t["sha256"],
                                       bool(t.get("vetorizavel")), e["tipo"], ano, t["inicio"], t["fim"])
     return trechos

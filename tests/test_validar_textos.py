@@ -63,6 +63,15 @@ class TestValidarTextos(unittest.TestCase):
         self.assertEqual(self.validar(), [])
         self.liberados.assert_called_once_with(self.raiz)
 
+    def test_baixa_confianca_booleano_aceito_e_tipo_invalido_rejeitado(self):
+        caminho = self.pasta / "trechos" / "pl" / "2024.jsonl"
+        lista = [json.loads(linha) for linha in caminho.read_bytes().splitlines()]
+        self.assertTrue(any(t["baixa_confianca"] for t in lista))
+        self.assertEqual(self.validar(), [])
+        lista[0]["baixa_confianca"] = "true"
+        caminho.write_bytes("".join(textos.linha_trecho(t) + "\n" for t in lista).encode("utf-8"))
+        self.assertProblema("campos, offsets")
+
     def test_pasta_opcional_ausente(self):
         shutil.rmtree(self.raiz / "data" / "textos")
         self.assertEqual(self.validar(False), [])
