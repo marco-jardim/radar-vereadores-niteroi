@@ -344,6 +344,89 @@ class TestDiferenca(Base):
         self.assertEqual(self.consultar("SELECT total FROM estado_indice"), [(5,)])
 
 
+class TestEmentasFts(Base):
+    def test_todos_documentos_com_ementa_mascarada_normalizada(self):
+        caminho = self.raiz / "data" / "documentos" / "indicacao" / "2024.json"
+        dados = json.loads(caminho.read_text(encoding="utf-8"))
+        dados[0]["ementa"] = "Indica manutenção do poste. Contato pessoa@example.org."
+        caminho.write_text(json.dumps(dados, ensure_ascii=False), encoding="utf-8")
+        fonte = carregar_fonte(self.raiz, self.textos, G.LIBERADOS)
+        self.assertEqual(fonte.linhas["ementas_fts"], {
+            (ident,): (ident, normalizar_busca(texto)) for ident, texto in fonte.ementas.items()})
+        self.assertNotIn("pessoa@example.org", fonte.ementas["doc:290006"])
+        self.sincronizar()
+        self.assertEqual(self.contar("ementas_fts"), self.contar("documentos"))
+        self.assertEqual(dict(self.consultar("SELECT documento, texto_norm FROM ementas_fts")),
+                         {i: normalizar_busca(t) for i, t in fonte.ementas.items()})
+        self.assertTrue(any(i.startswith("sessao:") for i in fonte.ementas))
+        self.assertIn("doc:266596", fonte.ementas)  # substitutivo, sem colisão com PL/sessão
+        # doc:290001 (requerimento da fixture) já fala em "manutenção"; doc:290006 é a indicação alterada
+        self.assertEqual(self.consultar("SELECT documento FROM ementas_fts WHERE ementas_fts MATCH 'manutencao' "
+                                        "ORDER BY documento"), [("doc:290001",), ("doc:290006",)])
+        self.assertEqual(self.sincronizar().escritas, 0)
+
+    def test_alteracao_exclusao_e_retomada(self):
+        self.sincronizar()
+        caminho = self.raiz / "data" / "documentos" / "indicacao" / "2024.json"
+        dados = json.loads(caminho.read_text(encoding="utf-8"))
+        dados[0]["ementa"] = "Indica iluminação do poste."
+        caminho.write_text(json.dumps(dados, ensure_ascii=False), encoding="utf-8")
+        rel = self.sincronizar()
+        self.assertEqual(rel.plano["d1_ementas_fts_gravar"], 1)
+        self.assertEqual(rel.plano["d1_ementas_fts_apagar"], 1)
+        self.assertEqual(self.consultar("SELECT texto_norm FROM ementas_fts WHERE documento = 'doc:290006'"),
+                         [("indica iluminacao do poste.",)])
+        self.assertEqual(self.consultar("SELECT documento FROM ementas_fts WHERE ementas_fts MATCH 'poda'"), [])
+        # Uma carga interrompida depois do DELETE é reparada, mesmo com documentos já atualizado.
+        with sqlite3.connect(self.sqlite) as con:
+            con.execute("DELETE FROM ementas_fts WHERE documento = 'doc:290006'")
+        self.assertEqual(self.sincronizar().plano["d1_ementas_fts_gravar"], 1)
+        self.assertEqual(self.sincronizar().escritas, 0)
+        caminho.write_text("[]\n", encoding="utf-8")
+        rel = self.sincronizar()
+        self.assertEqual(rel.plano["d1_ementas_fts_apagar"], 1)
+        self.assertEqual(rel.plano["d1_ementas_fts_gravar"], 0)
+        self.assertEqual(self.consultar("SELECT documento FROM ementas_fts WHERE documento = 'doc:290006'"), [])
+        self.assertEqual(self.sincronizar().escritas, 0)
+
+    def test_migracao_incremental_preenche_sem_regravar_documentos(self):
+        self.assertIn("0003_ementas_fts.sql", banco.nomes_migracoes())
+        self.sincronizar()
+        with sqlite3.connect(self.sqlite) as con:
+            con.execute("DROP TABLE ementas_fts")
+            con.execute("DELETE FROM d1_migrations WHERE name = '0003_ementas_fts.sql'")
+        rel = self.sincronizar()
+        self.assertEqual(rel.feitas["migracoes"], 1)
+        self.assertEqual(rel.plano["d1_documentos_gravar"], 0)
+        self.assertEqual(rel.plano["d1_trechos_gravar"], 0)
+        self.assertEqual(rel.plano["d1_ementas_fts_gravar"], self.contar("documentos"))
+        self.assertEqual(self.sincronizar().escritas, 0)
+
+    def test_repetir_lote_nao_duplica_ementa(self):
+        self.sincronizar()
+        alteracao = banco.Alteracao.de("ementas_fts", gravar=[("doc:290006", "indica iluminacao do poste.")])
+        unidades = banco.unidades([alteracao])
+        self.assertEqual(len(unidades), 1)
+        self.assertEqual(len(unidades[0]), 2)  # DELETE + INSERT sempre juntos no lote remoto
+        local = banco.BancoLocal(self.sqlite)
+        try:
+            local.aplicar([alteracao])
+            local.aplicar([alteracao])  # resposta perdida e repetição do mesmo lote
+        finally:
+            local.fechar()
+        self.assertEqual(self.consultar("SELECT texto_norm FROM ementas_fts WHERE documento = 'doc:290006'"),
+                         [("indica iluminacao do poste.",)])
+
+    def test_remocao_de_arquivo_preserva_ementa_publica(self):
+        self.sincronizar()
+        antes = self.consultar("SELECT documento, texto_norm FROM ementas_fts ORDER BY documento")
+        self.remover("siscam:900002", SHA_900002)
+        rel = self.sincronizar()
+        self.assertEqual(rel.plano["d1_ementas_fts_apagar"], 0)
+        self.assertEqual(rel.plano["d1_ementas_fts_gravar"], 0)
+        self.assertEqual(self.consultar("SELECT documento, texto_norm FROM ementas_fts ORDER BY documento"), antes)
+
+
 class TestSegurancaEFalhas(Base):
     def test_fonte_conserva_texto_completo_e_intervalos(self):
         texto = "Introdução\nE-SIC Protocolo nº 001189202514, datada de hoje.\n"
@@ -458,6 +541,7 @@ class TestExportacaoEReconstrucao(Base):
 
         dump = (pasta / f"d1-{versao}.sql").read_text(encoding="utf-8")
         self.assertNotIn('INSERT INTO "trechos_fts"', dump)
+        self.assertNotIn('INSERT INTO "ementas_fts"', dump)
         self.assertEqual(dump.count('INSERT INTO "trechos" '), 6)
         self.assertEqual(dump.count('INSERT INTO "documentos" '), 9)
 
@@ -490,6 +574,7 @@ class TestExportacaoEReconstrucao(Base):
         con.execute("DELETE FROM trechos")
         con.execute("DELETE FROM documentos WHERE tipo = 'pl'")
         con.execute("INSERT INTO trechos_fts (rowid, id, texto_norm) VALUES (1, 'lixo', 'lixo')")
+        con.execute("INSERT INTO ementas_fts (documento, texto_norm) VALUES ('lixo', 'lixo')")
         con.execute("INSERT INTO pessoas VALUES ('fantasma', 'Fantasma', NULL)")
         con.commit()
         con.close()
@@ -499,6 +584,8 @@ class TestExportacaoEReconstrucao(Base):
         self.assertEqual(self.contar("trechos"), 6)
         self.assertEqual(self.contar("trechos_fts"), 6)
         self.assertEqual(self.contar("documentos"), 9)
+        self.assertEqual(self.contar("ementas_fts"), 9)
+        self.assertEqual(self.consultar("SELECT documento FROM ementas_fts WHERE documento = 'lixo'"), [])
         self.assertEqual(self.consultar("SELECT slug FROM pessoas"), [("fulano-sintetico-de-tal",)])
         self.assertEqual(self.consultar("SELECT count(*) FROM trechos_fts WHERE id = 'lixo'"), [(0,)])
         self.assertEqual(self.contar("estado_indice"), 1)

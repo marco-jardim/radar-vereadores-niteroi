@@ -136,35 +136,49 @@ const lotesIds = (ids: string[]): string[][] => {
 
 export interface Candidato {
   documento: string;
-  /** Id do trecho; `null` para a ementa de indicação ou moção. */
+  /** Id do trecho; `null` para uma correspondência na ementa. */
   trecho: string | null;
   pontuacao: number;
 }
 
 export async function porPalavras(env: Env, p: Parametros): Promise<{ itens: Candidato[]; limitado: boolean }> {
   const onde: string[] = [];
-  const valores: unknown[] = [consultaFts(p.termos), LIMITE_CANDIDATOS_FTS];
+  const consulta = consultaFts(p.termos);
+  const valores: unknown[] = [consulta, LIMITE_CANDIDATOS_FTS, consulta, LIMITE_CANDIDATOS_FTS];
   filtrar(p, "t.documento", "t.arquivo", onde, valores);
   onde.push(SEM_REMOCAO);
+  const ondeEmentas: string[] = ["1 = 1"];
+  // Remoções são de arquivos: a ementa mascarada continua pública, como no site.
+  filtrar(p, "d.id", null, ondeEmentas, valores);
   valores.push(LIMITE_TRECHOS);
   const sql =
     "WITH classificados AS MATERIALIZED (" +
     "SELECT id, rank FROM trechos_fts WHERE trechos_fts MATCH ? ORDER BY rank LIMIT ?), " +
+    "ementas_classificadas AS MATERIALIZED (" +
+    "SELECT documento, rank FROM ementas_fts WHERE ementas_fts MATCH ? ORDER BY rank LIMIT ?), " +
     "filtrados AS MATERIALIZED (SELECT t.id, t.documento, c.rank FROM classificados AS c " +
     "JOIN trechos AS t ON t.id = c.id " +
     "JOIN documentos AS d ON d.id = t.documento LEFT JOIN arquivos AS a ON a.id = t.arquivo " +
-    `WHERE ${onde.join(" AND ")}), melhores AS (` +
+    `WHERE ${onde.join(" AND ")} UNION ALL ` +
+    "SELECT NULL AS id, d.id AS documento, c.rank FROM ementas_classificadas AS c " +
+    `JOIN documentos AS d ON d.id = c.documento WHERE ${ondeEmentas.join(" AND ")}), melhores AS (` +
     "SELECT documento, MIN(rank) AS r FROM filtrados GROUP BY documento) " +
-    "SELECT m.documento, m.r, (SELECT MIN(f.id) FROM filtrados AS f " +
-    "WHERE f.documento = m.documento AND f.rank = m.r) AS trecho, " +
-    "(SELECT COUNT(*) FROM classificados) AS candidatos FROM melhores AS m ORDER BY m.r, trecho LIMIT ?";
-  const { results } = await env.DB.prepare(sql).bind(...valores).all<{ trecho: string; documento: string; r: number; candidatos: number }>();
+    "SELECT m.documento, m.r, (SELECT f.id FROM filtrados AS f " +
+    "WHERE f.documento = m.documento AND f.rank = m.r ORDER BY f.id LIMIT 1) AS trecho, " +
+    "(SELECT COUNT(*) FROM classificados) AS candidatos, " +
+    "(SELECT COUNT(*) FROM ementas_classificadas) AS candidatos_ementas " +
+    "FROM melhores AS m ORDER BY m.r, trecho, m.documento LIMIT ?";
+  const { results } = await env.DB.prepare(sql).bind(...valores).all<{
+    trecho: string | null; documento: string; r: number; candidatos: number; candidatos_ementas: number;
+  }>();
   const itens: Candidato[] = [];
   for (const linha of results) {
     // bm25 é negativo (mais negativo, mais relevante): a pontuação publicada é o oposto.
     itens.push({ documento: linha.documento, trecho: linha.trecho, pontuacao: -linha.r });
   }
-  return { itens, limitado: results.length >= LIMITE_TRECHOS || (results[0]?.candidatos ?? 0) >= LIMITE_CANDIDATOS_FTS };
+  return { itens, limitado: results.length >= LIMITE_TRECHOS ||
+    (results[0]?.candidatos ?? 0) >= LIMITE_CANDIDATOS_FTS ||
+    (results[0]?.candidatos_ementas ?? 0) >= LIMITE_CANDIDATOS_FTS };
 }
 
 function vetorDe(saida: unknown): number[] {

@@ -268,7 +268,7 @@ dos `.txt` de `textos/<tipo>/<ano>/`. Campos, exatamente os de `trechos.dividir`
 
 D1, Vectorize e R2 são reconstruíveis a partir do Git (`python -m coletor.nuvem --reconstruir`).
 
-### 8.1 Tabelas D1 (`worker/migrations/0001_inicial.sql`)
+### 8.1 Tabelas D1 (`worker/migrations/`, esquema inicial e migrações incrementais)
 
 | Tabela | Colunas | Chave e índices | Conteúdo |
 | --- | --- | --- | --- |
@@ -280,6 +280,7 @@ D1, Vectorize e R2 são reconstruíveis a partir do Git (`python -m coletor.nuve
 | `trechos` | `id` TEXT, `documento` TEXT, `arquivo` TEXT, `posicao` INTEGER, `texto` TEXT, `sha256` TEXT | PK `id`; índice (`documento`) | Texto lido do `.txt` pelos offsets e conferido pelo `sha256` |
 | `trechos_fts` | `id` (UNINDEXED), `texto_norm` | FTS5 com `tokenize='unicode61'`; `rowid` = `int(id, 16) >> 1` | Busca por palavras; reconstruível, fora das exportações. O suporte do D1 a `remove_diacritics` não foi confirmado: `texto_norm` é o texto do trecho já normalizado por `coletor.nuvem.fonte.normalizar_busca` (NFD, sem marcas `Mn`, NFC e minúsculas: "Licença" → "licenca"), e a consulta é normalizada do mesmo jeito, no Worker com exatamente `s.normalize("NFD").replace(/\p{Mn}/gu, "").normalize("NFC").toLowerCase()`; os pares de `tests/fixtures/contratos/normalizacao.json` valem para as duas implementações |
 | `trechos_indexados` | `id` TEXT, `sha256` TEXT | PK `id` | Vetores já enviados ao Vectorize (trechos e `ementa:doc:<id>`), para a diferença incremental. `sha256` = SHA-256 (hexadecimal) da concatenação do `sha256` do texto com os metadados do vetor em JSON (chaves ordenadas, sem espaços, UTF-8), de modo que mudar só os metadados também reenvia o vetor; `pendente` marca um upsert em curso |
+| `ementas_fts` | `documento` (UNINDEXED), `texto_norm` | FTS5 com `tokenize='unicode61'`; `rowid` interno, sem significado externo | Uma linha por documento, inclusive substitutivos, sessões, indicações e moções, com a ementa mascarada normalizada por `normalizar_busca`, como em `trechos_fts`. Comparação, atualização, remoção e junção usam o identificador completo (`doc:<id>` ou `sessao:<id>`), nunca o `rowid`. Migração `0003_ementas_fts.sql`; sincronização incremental, reconstruível com `--reconstruir`, fora das exportações. Remover arquivos não remove a ementa pública |
 | `remocoes` | `chave` TEXT, `sha256` TEXT, `motivo` TEXT, `data` TEXT | PK (`chave`, `sha256`) | Cópia de `config/remocoes.json` sem `fonte` |
 | `estado_indice` | `id` INTEGER (= 1), `versao` TEXT, `commit` TEXT, `sha256_manifestos` TEXT, `total` INTEGER, `sha256_conjunto` TEXT, `modelo` TEXT, `versao_trechos` TEXT, `data` TEXT | PK `id` | Uma linha, gravada só no fim de uma sincronização completa. `commit`: commit de `main` dos manifestos; `sha256_manifestos`: SHA-256 da concatenação dos bytes de `data/textos/manifesto-*.json` em ordem crescente de ano; `sha256_conjunto`: SHA-256 das linhas `"<id> <sha256>\n"` de todos os trechos, ordenadas por `id` |
 | `verificacoes` | `data` TEXT, `amostra` INTEGER, `ok` INTEGER, `falhas_json` TEXT | PK `data` (carimbo ISO UTC) | Única escrita do Worker (cron): conferência dos hashes por amostragem |

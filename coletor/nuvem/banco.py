@@ -46,6 +46,7 @@ COLUNAS: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
     "arquivos": (("id", "sha256", "formato", "status", "ocr", "confianca", "r2_chave"), ("id",)),
     "arquivo_documento": (("arquivo", "documento"), ("arquivo", "documento")),
     "trechos": (("id", "documento", "arquivo", "posicao", "texto", "sha256"), ("id",)),
+    "ementas_fts": (("documento", "texto_norm"), ("documento",)),
     "remocoes": (("chave", "sha256", "motivo", "data"), ("chave", "sha256")),
     "trechos_indexados": (("id", "sha256"), ("id",)),
     "estado_indice": (("id", "versao", "commit", "sha256_manifestos", "total", "sha256_conjunto", "modelo",
@@ -83,6 +84,9 @@ class Alteracao:
            fts_linha: Callable[[tuple], tuple] | None = None, fts_rowid: Callable[[tuple], int] | None = None):
         if tabela == FTS:
             return cls(FTS, COLUNAS_FTS, ("rowid",), list(gravar), list(apagar), limpar, substituir=False)
+        if tabela == "ementas_fts":
+            colunas, chave = COLUNAS[tabela]
+            return cls(tabela, colunas, chave, list(gravar), list(apagar), limpar, substituir=False)
         colunas, chave = COLUNAS[tabela]
         if (fts_linha is None) != (fts_rowid is None):
             raise ValueError("fts_linha e fts_rowid andam juntos")
@@ -218,7 +222,9 @@ def _blocos_linhas(linhas: Sequence[tuple], largura: int, max_bytes: int | None 
 def unidades(alteracoes: Iterable[Alteracao], modo: str = "parametros") -> list[list[tuple[str, tuple]]]:
     """Unidades atômicas na ordem das alterações; em cada alteração, limpar, apagar e depois gravar.
 
-    Sem FTS acoplado, cada instrução é uma unidade. Em `trechos` com `fts_linha`/`fts_rowid`,
+    Em `ementas_fts`, cada bloco gravado apaga antes os mesmos documentos na mesma unidade:
+    repetir um lote após falha de rede não duplica linhas, mesmo sem unicidade no FTS5.
+    Nos demais casos sem FTS acoplado, cada instrução é uma unidade. Em `trechos` com `fts_linha`/`fts_rowid`,
     cada bloco apagado leva o DELETE do FTS, e cada bloco gravado leva o DELETE dos rowids do
     bloco no FTS (idempotente), o INSERT dos trechos e o INSERT do FTS: tudo numa só unidade.
     """
@@ -226,6 +232,12 @@ def unidades(alteracoes: Iterable[Alteracao], modo: str = "parametros") -> list[
     for a in alteracoes:
         if a.limpar:
             saida.append([(f"DELETE FROM {q(a.tabela)};", ())])
+        if a.tabela == "ementas_fts":
+            saida.extend([i] for i in instrucoes_apagar(a.tabela, a.chave, a.apagar, modo=modo))
+            for bloco in _blocos_linhas(a.gravar, len(a.colunas)):
+                saida.append(instrucoes_apagar(a.tabela, a.chave, [(linha[0],) for linha in bloco], modo=modo)
+                             + instrucoes_gravar(a.tabela, a.colunas, bloco, modo=modo, substituir=False))
+            continue
         if a.fts_linha is None or a.fts_rowid is None:
             if a.apagar:
                 saida.extend([i] for i in instrucoes_apagar(a.tabela, a.chave, a.apagar, modo=modo))

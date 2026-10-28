@@ -1,7 +1,8 @@
 import { env } from "cloudflare:test";
 import { beforeEach, describe, expect, it } from "vitest";
 import type { D1Database } from "../src/ambiente";
-import { AVISO_SEMANTICA, TOPK_AUTOR, compararIds, fundir, lerParametros } from "../src/busca";
+import { AVISO_SEMANTICA, TOPK_AUTOR, compararIds, fundir, lerParametros, porPalavras } from "../src/busca";
+import { normalizar } from "../src/texto";
 import { AiFalsa, MetricasFalsas, VetoresFalsos, buscarJson, carregar, criarEnv, idTrecho, sha, trechoDe } from "./dados";
 
 beforeEach(async () => {
@@ -15,9 +16,10 @@ describe("busca por palavras (FTS5)", () => {
     for (const q of ["licenca", "LICENÇA", "Licença ambiental"]) {
       const { r, corpo } = await buscarJson({ q, modo: "palavras" });
       expect(r.status).toBe(200);
-      expect(docs(corpo)).toEqual(["doc:102"]);
+      expect(docs(corpo).sort()).toEqual(["doc:102", "doc:202"]);
     }
-    const { corpo } = await buscarJson({ q: "praca", modo: "palavras" });
+    // Só o trecho contém "quadra": conserva a cobertura de metadados/escape do inteiro teor.
+    const { corpo } = await buscarJson({ q: "praca quadra", modo: "palavras" });
     const res = corpo.resultados[0];
     expect(res).toMatchObject({
       documento: "doc:103", tipo: "pl", numero: "3/2023", ano: 2023, ementa: "Cria a Praça da Juventude.",
@@ -31,6 +33,69 @@ describe("busca por palavras (FTS5)", () => {
     expect(res.pontuacao).toBeGreaterThan(0);
     expect(Object.keys(res).sort()).toEqual(["ano", "arquivo", "confianca", "documento", "ementa", "numero", "ocr",
       "origem", "pontuacao", "sha256", "status", "tipo", "trecho", "url_original", "url_siscam"]);
+  });
+
+  it("acha indicação sem inteiro teor pela ementa e aplica todos os filtros no D1", async () => {
+    const ementa = "Indica manutenção do poste <script> na Rua Alfa & Beta.";
+    await env.DB.batch([
+      env.DB.prepare("UPDATE documentos SET ementa = ? WHERE id = 'doc:401'").bind(ementa),
+      env.DB.prepare("DELETE FROM ementas_fts WHERE documento = 'doc:401'"),
+      env.DB.prepare("INSERT INTO ementas_fts (documento, texto_norm) VALUES (?, ?)")
+        .bind("doc:401", normalizar(ementa)),
+    ]);
+    const filtros = { tipo: "indicacao", ano: "2025", legislatura: "2025-2028", autor: "carla-dias" };
+    const { r, corpo } = await buscarJson({ q: "poste", modo: "palavras", ...filtros });
+    expect(r.status).toBe(200);
+    expect(docs(corpo)).toEqual(["doc:401"]);
+    expect(corpo.resultados[0]).toMatchObject({ arquivo: null, url_original: null, sha256: null,
+      origem: "palavras", trecho: "Indica manutenção do <mark>poste</mark> &lt;script&gt; na Rua Alfa &amp; Beta." });
+    for (const extra of [{ tipo: "mocao" }, { ano: "2024" }, { legislatura: "2021-2024" }, { autor: "ana-souza" }]) {
+      expect((await buscarJson({ q: "poste", modo: "palavras", ...filtros, ...extra })).corpo.total).toBe(0);
+    }
+  });
+
+  it("ementas de todos os tipos entram nas palavras, sem depender de vetor ou trecho", async () => {
+    for (const [tipo, q, esperado] of [
+      ["pl", "institui", ["doc:101", "doc:104", "doc:105", "doc:106", "doc:107", "doc:108", "doc:109", "doc:110"]],
+      ["substitutivo", "institui", ["doc:201"]],
+      ["requerimento", "informacoes", ["doc:301", "doc:302", "doc:303", "doc:304", "doc:305", "doc:306"]],
+      ["indicacao", "poda", ["doc:401", "doc:402", "doc:403", "doc:404"]],
+      ["mocao", "aplauso", ["doc:501", "doc:502", "doc:503"]],
+      ["pdl", "concede", ["doc:601", "doc:602"]],
+      ["resolucao", "altera", ["doc:701"]],
+      ["ata", "ordinaria", ["sessao:9001", "sessao:9002"]],
+    ] as [string, string, string[]][]) {
+      const { corpo } = await buscarJson({ q, tipo, modo: "palavras" }, criarEnv({ AI: undefined, VETORES: undefined }));
+      expect(docs(corpo).sort(), tipo).toEqual(esperado);
+    }
+  });
+
+  it("conta uma vez quando ementa e trecho correspondem e escolhe o melhor rank", async () => {
+    const { corpo } = await buscarJson({ q: "licenca", tipo: "pl", modo: "palavras" });
+    expect(corpo.total).toBe(1);
+    expect(docs(corpo)).toEqual(["doc:102"]);
+    const ranks = await env.DB.prepare(
+      "SELECT rank FROM trechos_fts WHERE trechos_fts MATCH 'licenca' UNION ALL " +
+      "SELECT rank FROM ementas_fts WHERE ementas_fts MATCH 'licenca'",
+    ).all<{ rank: number }>();
+    expect(corpo.resultados[0].pontuacao).toBeCloseTo(-Math.min(...ranks.results.map((x) => x.rank)), 6);
+  });
+
+  it("candidato de ementa usa trecho nulo, inclusive sem vetor", async () => {
+    const p = lerParametros(new URL("https://api.teste/api/busca?q=informacoes&tipo=requerimento&modo=palavras"));
+    const { itens } = await porPalavras(criarEnv({ VETORES: undefined }), p);
+    expect(itens).toHaveLength(6);
+    expect(itens.every((c) => c.trecho === null)).toBe(true);
+  });
+
+  it("neutraliza operadores FTS também nas ementas", async () => {
+    for (const [q, total] of [['"poda"', 4], ["poda*", 4], ["pod*", 0], ["poda OR aplauso", 0],
+      ["poda NOT arvores", 0], ["NEAR(poda arvores)", 0], ["texto_norm:poda", 0],
+      ["poda'; DROP TABLE documentos; --", 0]] as [string, number][]) {
+      const { r, corpo } = await buscarJson({ q, modo: "palavras" });
+      expect(r.status, q).toBe(200);
+      expect(corpo.total, q).toBe(total);
+    }
   });
 
   it("operadores FTS5 do usuário viram texto", async () => {
@@ -142,8 +207,14 @@ describe("busca por palavras (FTS5)", () => {
       .bind("siscam:1002", sha(250), "Pedido do titular.", "2026-10-01").run();
     await env.DB.prepare("INSERT INTO remocoes (chave, sha256, motivo, data) VALUES (?, ?, ?, ?)")
       .bind("siscam:9999", sha(3), "Pedido do titular.", "2026-10-01").run();
-    expect((await buscarJson({ q: "licenca", modo: "palavras" })).corpo.total).toBe(0);
-    expect((await buscarJson({ q: "praca", modo: "palavras" })).corpo.total).toBe(0);
+    const licenca = (await buscarJson({ q: "licenca", modo: "palavras" })).corpo;
+    expect(docs(licenca).sort()).toEqual(["doc:102", "doc:202"]);
+    expect(licenca.resultados.every((r: { arquivo: string | null }) => r.arquivo === null)).toBe(true);
+    const praca = (await buscarJson({ q: "praca", modo: "palavras" })).corpo;
+    expect(docs(praca)).toEqual(["doc:103"]);
+    expect(praca.resultados[0]).toMatchObject({ arquivo: null, trecho: "Cria a <mark>Praça</mark> da Juventude." });
+    expect((await buscarJson({ q: "licenca secretaria", modo: "palavras" })).corpo.total).toBe(0);
+    expect((await buscarJson({ q: "praca quadra", modo: "palavras" })).corpo.total).toBe(0);
     const e = criarEnv({ VETORES: new VetoresFalsos([trechoDe("siscam:1002").id, trechoDe("siscam:1003").id, trechoDe("siscam:1001").id]) });
     expect(docs((await buscarJson({ q: "licenca", modo: "semantica" }, e)).corpo)).toEqual(["doc:101"]);
   });
@@ -217,6 +288,15 @@ describe("busca por significado (Workers AI + Vectorize simulados)", () => {
     expect(pont).toEqual([...pont].sort((a, b) => b - a));
   });
 
+  it("híbrida usa a lista de palavras com ementas no RRF", async () => {
+    const e = criarEnv({ VETORES: new VetoresFalsos(["ementa:doc:401"]) });
+    const { corpo } = await buscarJson({ q: "poda", modo: "hibrida", tipo: "indicacao" }, e);
+    expect(corpo.total).toBe(4);
+    expect(corpo.resultados[0]).toMatchObject({ documento: "doc:401", origem: "ambas", arquivo: null });
+    expect(corpo.resultados[0].pontuacao).toBeCloseTo(2 / 61, 6);
+    expect(corpo.resultados.slice(1).every((r: { origem: string }) => r.origem === "palavras")).toBe(true);
+  });
+
   it("Vectorize indisponível: híbrida cai para palavras com aviso (sem cache); semântica responde 503", async () => {
     let caso = 0;
     for (const extra of [{ VETORES: new VetoresFalsos([], true) }, { AI: new AiFalsa({ data: [[1, 2]] }) },
@@ -251,7 +331,7 @@ describe("regressões da revisão de busca", () => {
     for (const q of ["licenca\u00adambiental", "licenca\u200dambiental"]) {
       const { r, corpo } = await buscarJson({ q, modo: "palavras" });
       expect(r.status).toBe(200);
-      expect(docs(corpo)).toEqual(["doc:102"]);
+      expect(docs(corpo).sort()).toEqual(["doc:102", "doc:202"]);
     }
   });
 
@@ -273,15 +353,15 @@ describe("regressões da revisão de busca", () => {
   it("remoção sem novo estado invalida a busca guardada, inclusive híbrida e por hash somente", async () => {
     for (const modo of ["palavras", "semantica", "hibrida"]) {
       const e = criarEnv({ VETORES: new VetoresFalsos([trechoDe("siscam:1002").id]) });
-      const a = await buscarJson({ q: "licenca", modo }, e);
+      const a = await buscarJson({ q: "licenca secretaria", modo }, e);
       expect(docs(a.corpo)).toEqual(["doc:102"]);
-      expect((await buscarJson({ q: "licenca", modo }, e)).r.headers.get("X-Radar-Cache")).toBe("HIT");
+      expect((await buscarJson({ q: "licenca secretaria", modo }, e)).r.headers.get("X-Radar-Cache")).toBe("HIT");
     }
     await env.DB.prepare("INSERT INTO remocoes (chave, sha256, motivo, data) VALUES (?, ?, ?, ?)")
       .bind("siscam:9999", sha(2), "Pedido do titular.", "2026-10-01").run();
     for (const modo of ["palavras", "semantica", "hibrida"]) {
       const e = criarEnv({ VETORES: new VetoresFalsos([trechoDe("siscam:1002").id]) });
-      const b = await buscarJson({ q: "licenca", modo }, e);
+      const b = await buscarJson({ q: "licenca secretaria", modo }, e);
       expect(b.r.headers.get("X-Radar-Cache")).toBe("MISS");
       expect(docs(b.corpo)).toEqual([]);
       expect(b.corpo.total).toBe(0);

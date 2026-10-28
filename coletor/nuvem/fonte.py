@@ -315,6 +315,7 @@ def carregar_fonte(raiz: str | Path, textos: str | Path | None, liberados) -> Fo
 
     linhas = {
         "documentos": documentos,
+        "ementas_fts": {(ident,): (ident, normalizar_busca(texto)) for ident, texto in ementas.items()},
         "autoria": autoria,
         "pessoas": pessoas,
         "arquivos": arquivos,

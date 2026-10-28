@@ -13,7 +13,9 @@ c. `r2`: originais que faltam (verificação antes; bytes do cache `RADAR_CACHE/
 d. `d1`: diferença das tabelas-base contra o Git (gravar o que mudou, apagar o que saiu do
    Git ou entrou em `config/remocoes.json`). Cada bloco de trechos vai no mesmo lote atômico
    das suas linhas de `trechos_fts`; se os conjuntos de ids de `trechos` e `trechos_fts`
-   divergirem (duas consultas `LIMIT 1`), o FTS é refeito;
+   divergirem (duas consultas `LIMIT 1`), o FTS é refeito. `ementas_fts` compara as
+   ementas mascaradas normalizadas de todos os documentos e troca só as alteradas,
+   por documento completo, com DELETE + INSERT no mesmo lote atômico;
 e. `vetores`: confere o índice (1.024 dimensões e índices de metadados `tipo`, `ano`,
    `legislatura`); vetores só dos trechos vetorizáveis e das ementas de indicações e moções
    (`ementa:doc:<id>`) novos ou alterados (diferença contra `trechos_indexados`, cujo `sha256`
@@ -58,7 +60,7 @@ from coletor.nuvem.rede import ErroNuvem
 from coletor.trechos import VERSAO_TRECHOS
 
 LOTE_SINCRONIZACAO = 500  # vetores por rodada de embeddings + upsert + trechos_indexados
-TABELAS_GIT = tuple(t for t in TABELAS_BASE if t != "trechos_indexados")
+TABELAS_GIT = tuple(t for t in TABELAS_BASE if t != "trechos_indexados") + ("ementas_fts",)
 ETAPAS = ("r2", "d1", "vetores", "exportar")
 ETAPAS_PADRAO = ("r2", "d1", "vetores")
 ETAPAS_COMPLETAS = frozenset({"r2", "d1", "vetores"})  # necessárias para gravar estado_indice
@@ -162,7 +164,7 @@ def etapas_validas(etapas: Iterable[str] | str | None) -> tuple[str, ...]:
 def ler_atual(banco) -> dict[str, Any]:
     existentes = banco.tabelas()
     atual: dict[str, Any] = {}
-    for tabela in TABELAS_BASE:
+    for tabela in (*TABELAS_BASE, "ementas_fts"):
         colunas, chave = COLUNAS[tabela]
         atual[tabela] = ler_tabela(banco, tabela, COMPARAR.get(tabela, colunas), chave) if tabela in existentes else {}
     atual["estado_indice"] = None
@@ -180,7 +182,7 @@ def ler_atual(banco) -> dict[str, Any]:
 def linhas_dump(fonte: Fonte) -> Iterable[str]:
     """Dump determinístico das tabelas-base (ordem de tabela e de chave primária), sem o FTS."""
     yield "-- Radar dos Vereadores de Niterói: tabelas-base do D1 (docs/contratos/textos.md, seção 8.1).\n"
-    yield "-- trechos_fts é reconstruível (python -m coletor.nuvem --reconstruir) e fica fora.\n"
+    yield "-- trechos_fts e ementas_fts são reconstruíveis (python -m coletor.nuvem --reconstruir) e ficam fora.\n"
     for tabela in TABELAS_BASE:
         colunas = COLUNAS[tabela][0]
         cabeca = f"INSERT INTO {q(tabela)} ({', '.join(q(c) for c in colunas)}) VALUES ("
@@ -486,7 +488,7 @@ def sincronizar(raiz: str | Path, textos: str | Path | None, ambiente: Ambiente,
     estado = atual["estado_indice"]
     if reconstruir:
         indexados_antigos = atual["trechos_indexados"]
-        atual = {t: {} for t in TABELAS_BASE}
+        atual = {t: {} for t in (*TABELAS_BASE, "ementas_fts")}
         atual.update({"estado_indice": None, "fts_divergente": False, "trechos_indexados": indexados_antigos})
 
     # (c) R2: originais que faltam e originais removidos
@@ -522,6 +524,10 @@ def sincronizar(raiz: str | Path, textos: str | Path | None, ambiente: Ambiente,
         apagar = [chave for chave in sorted(corrente) if chave not in desejado]
         rel.plano[f"d1_{tabela}_gravar"] = len(gravar)
         rel.plano[f"d1_{tabela}_apagar"] = len(apagar)
+        if tabela == "ementas_fts":
+            # Compara o FTS real para retomar cargas interrompidas. Cada troca usa
+            # DELETE por documento + INSERT na mesma unidade atômica (sem depender de rowid).
+            rel.plano["d1_ementas_fts_apagar"] += sum((linha[0],) in corrente for linha in gravar)
         apagados[tabela] = apagar
         if tabela == "trechos":
             if not refazer_fts:  # cada bloco de trechos vai no mesmo lote atômico do seu FTS

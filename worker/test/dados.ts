@@ -2,6 +2,7 @@
 import { createExecutionContext, env, waitOnExecutionContext } from "cloudflare:test";
 import type { CorrespondenciaVetor, Env, OpcoesConsultaVetor } from "../src/ambiente";
 import worker from "../src/index";
+import { sha256Hex } from "../src/http";
 import { chaveR2 } from "../src/original";
 import { normalizar } from "../src/texto";
 
@@ -143,11 +144,13 @@ export const trechoDe = (arquivo: string, posicao = 0): TrechoFixture =>
 
 let sequencia = 0;
 
-/** Zera e recarrega o D1 local; cada carga tem `estado_indice.data` próprio (chaves de cache novas). */
+/** Zera e recarrega o D1 local, com chave de cache nova inclusive entre arquivos de teste.
+ * O contador do módulo reinicia entre arquivos, mas a Cache API é compartilhada no pool.
+ */
 export async function carregar(opcoes: { semEstado?: boolean } = {}): Promise<void> {
   const db = env.DB;
   const tabelas = ["documentos", "autoria", "pessoas", "arquivos", "arquivo_documento", "trechos", "trechos_fts",
-    "trechos_indexados", "remocoes", "estado_indice", "verificacoes"];
+    "ementas_fts", "trechos_indexados", "remocoes", "estado_indice", "verificacoes"];
   const inst = tabelas.map((t) => db.prepare(`DELETE FROM ${t}`));
   for (const [slug, nome, partido] of [["ana-souza", "Ana Souza", "PA"], ["bruno-lima", "Bruno Lima", "PB"],
     ["carla-dias", "Carla Dias", null], ["davi-rocha", "Davi Rocha", "PA"]] as const) {
@@ -159,6 +162,8 @@ export async function carregar(opcoes: { semEstado?: boolean } = {}): Promise<vo
     ).bind(d.id, d.tipo, d.numero, d.ano, `${d.ano}-03-01`, d.ementa,
       d.id.startsWith("doc:") ? URL_SISCAM + d.id.slice(4) : "https://consultaniteroi.siscam.com.br/DetalhesSessao.aspx?Id=1",
       d.legislatura, d.pl ?? null));
+    inst.push(db.prepare("INSERT INTO ementas_fts (documento, texto_norm) VALUES (?, ?)")
+      .bind(d.id, normalizar(d.ementa)));
     for (const [slug, papel] of d.autores) {
       inst.push(db.prepare("INSERT INTO autoria (documento, slug, papel) VALUES (?, ?, ?)").bind(d.id, slug, papel));
     }
@@ -183,7 +188,7 @@ export async function carregar(opcoes: { semEstado?: boolean } = {}): Promise<vo
     inst.push(db.prepare(
       'INSERT INTO estado_indice (id, versao, "commit", sha256_manifestos, total, sha256_conjunto, modelo, versao_trechos, data) ' +
         "VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?)",
-    ).bind("2026.10.27", "c0ffee1", "m".repeat(64), TRECHOS.length, "s".repeat(64), "@cf/baai/bge-m3", "2",
+    ).bind("2026.10.27", "c0ffee1", await sha256Hex(crypto.randomUUID()), TRECHOS.length, "s".repeat(64), "@cf/baai/bge-m3", "2",
       `2026-10-27T00:00:00.${String(sequencia).padStart(6, "0")}Z`));
   }
   await db.batch(inst);

@@ -112,16 +112,24 @@ describe("limites, cabeçalhos e erros", () => {
       expect(JSON.parse(texto).codigo).toBe("indisponivel");
     }
     const real = env.DB as unknown as D1Database;
+    let consultasFts = 0;
     const semFts: D1Database = {
       prepare(sql) {
-        if (sql.includes("MATCH")) throw new Error("segredo: fts5 syntax error");
+        if (sql.includes("MATCH")) {
+          consultasFts++;
+          throw new Error("segredo: fts5 syntax error");
+        }
         return real.prepare(sql);
       },
       batch: (i) => real.batch(i),
     };
-    const r = await pedir("/api/busca?q=calendario&modo=palavras", {}, criarEnv({ DB: semFts }));
-    expect(r.status).toBe(500);
-    expect(await r.json()).toEqual({ erro: "Erro interno.", codigo: "interno" });
+    for (const modo of ["palavras", "hibrida"]) {
+      const r = await pedir(`/api/busca?q=calendario&modo=${modo}`, {}, criarEnv({ DB: semFts }));
+      expect(r.status).toBe(500);
+      expect(r.headers.get("Cache-Control")).toBe("no-store");
+      expect(await r.json()).toEqual({ erro: "Erro interno.", codigo: "interno" });
+    }
+    expect(consultasFts).toBe(2);
   });
 
   it("HEAD devolve só os cabeçalhos", async () => {

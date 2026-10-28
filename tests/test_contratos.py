@@ -50,7 +50,7 @@ SUCESSO = {"ok", "ok_ocr", "vazio_legitimo"}
 ESVAZIADO = "esvaziado pela limpeza"
 REGRAS = ("cabecalho_rodape", "numeracao", "ruido_ocr", "cliche")
 TABELAS_D1 = ("documentos", "autoria", "pessoas", "arquivos", "arquivo_documento", "trechos",
-              "trechos_fts", "trechos_indexados", "remocoes", "estado_indice", "verificacoes")
+              "trechos_fts", "ementas_fts", "trechos_indexados", "remocoes", "estado_indice", "verificacoes")
 RE_CHAVE = re.compile(r"(?:siscam:[1-9][0-9]*|sessao:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})")
 RE_DOCUMENTO = re.compile(r"(?:doc|sessao):[1-9][0-9]*")
 RE_SHA = re.compile(r"[0-9a-f]{64}")

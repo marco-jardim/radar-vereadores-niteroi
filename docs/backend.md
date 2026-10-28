@@ -126,7 +126,7 @@ python -m coletor.nuvem --ambiente staging --etapas d1,vetores
 | `--sem-r2` | Não usa o R2: pula a etapa `r2` e o envio da exportação (os arquivos ficam só na pasta local); não grava `estado_indice`. |
 | `--ambiente local\|staging\|production` | `local`: SQLite (`--sqlite`, padrão `<cache>\local.sqlite`), R2 em `<pasta do SQLite>\r2\<bucket>\…`, Vectorize em `<pasta do SQLite>\vetores.jsonl` e embeddings falsos determinísticos (SHAKE-256, 1.024 dimensões), sem rede. `staging`/`production`: nomes e ids de `worker\wrangler.jsonc`. |
 | `--simular` | Só leituras: imprime o plano (contagens por operação) sem gravar nada, nem o SQLite local. |
-| `--exportar DIR` | Grava em `DIR\<versao>\` `d1-<versao>.sql` (tabelas-base, sem `trechos_fts`), `vetores-<versao>.jsonl.gz` (um vetor por linha, `values` em float32 little-endian base64, gzip com mtime 0 e sem nome) e `SHA256SUMS`, e envia ao bucket de exportações em `<versao>/…` (o `SHA256SUMS` por último). Se `<versao>/SHA256SUMS` já está no bucket, a versão inteira é pulada; se o conteúdo dele difere do gerado agora, sai um aviso. Os valores que faltam no cache de embeddings vêm de `get_by_ids` em lotes de 100 (20 se o índice recusar), dentro do ritmo global de 4 requisições por segundo. |
+| `--exportar DIR` | Grava em `DIR\<versao>\` `d1-<versao>.sql` (tabelas-base, sem `trechos_fts` nem `ementas_fts`), `vetores-<versao>.jsonl.gz` (um vetor por linha, `values` em float32 little-endian base64, gzip com mtime 0 e sem nome) e `SHA256SUMS`, e envia ao bucket de exportações em `<versao>/…` (o `SHA256SUMS` por último). Se `<versao>/SHA256SUMS` já está no bucket, a versão inteira é pulada; se o conteúdo dele difere do gerado agora, sai um aviso. Os valores que faltam no cache de embeddings vêm de `get_by_ids` em lotes de 100 (20 se o índice recusar), dentro do ritmo global de 4 requisições por segundo. |
 | `--reconstruir` | Limpa as tabelas-base, o FTS e `estado_indice` e regrava tudo a partir do Git; reenvia todos os vetores (reaproveitando o cache de embeddings) e apaga do índice todo vetor listado (`GET …/vectorize/v2/indexes/<índice>/list`, com cursor; sem a rota, `wrangler vectorize list-vectors --json`) que o Git não tem. |
 | `--textos DIR` | Worktree de `dados-textos` (padrão: `RADAR_TEXTOS` ou `..\radar-vereadores-niteroi-textos`). |
 | `--cache DIR` | Cache local (padrão: `RADAR_CACHE`). Originais em `arquivos\<sha256>`; embeddings em `embeddings\<modelo>\<aa>\<sha256>.f32`. |
@@ -150,15 +150,20 @@ Uma segunda execução sem mudanças no Git **e no mesmo commit** não faz nenhu
 
 **Segurança.** Mensagens de erro trazem só esquema, host e caminho das URLs; tokens, assinaturas SigV4 e segredos aparecem como `***`. 429 respeita `Retry-After`; 5xx e falhas de rede têm até 5 tentativas com espera progressiva.
 
-**Busca por palavras.** O D1 não confirmou `remove_diacritics`, por isso `trechos_fts` guarda `texto_norm` (NFD, sem marcas `Mn`, NFC e minúsculas, como `coletor.nuvem.fonte.normalizar_busca`). O Worker aplica à consulta exatamente
+**Busca por palavras.** `modo=palavras` consulta o inteiro teor em `trechos_fts` e as ementas mascaradas de **todos** os documentos em `ementas_fts` (inclusive indicações, moções, substitutivos e sessões). O D1 não confirmou `remove_diacritics`, por isso ambos guardam `texto_norm` (NFD, sem marcas `Mn`, NFC e minúsculas, como `coletor.nuvem.fonte.normalizar_busca`). O Worker aplica à consulta exatamente
 
 ```js
 s.normalize("NFD").replace(/\p{Mn}/gu, "").normalize("NFC").toLowerCase()
 ```
 
-e junta por `trechos_fts.id = trechos.id`. Os pares de `tests\fixtures\contratos\normalizacao.json` valem para as duas implementações (o teste Python já os confere; o do Worker entra com ele).
-O FTS5 ordena e limita os primeiros 5.000 trechos **antes** das junções e dos filtros no D1. Depois o SQL agrupa
-por documento (menor `rank`, melhor trecho) e limita a 500 documentos; `total` conta documentos, não trechos.
+e junta por `trechos_fts.id = trechos.id` ou `ementas_fts.documento = documentos.id`, sem depender do rowid da ementa. Os pares de `tests\fixtures\contratos\normalizacao.json` valem para as duas implementações.
+O FTS5 ordena e limita os primeiros 5.000 candidatos **de cada índice antes** das junções e dos filtros no D1.
+Os termos são escapados e colocados entre aspas nas duas consultas. Os filtros `tipo`, `ano`, `legislatura` e `autor` são aplicados no SQL.
+Depois o SQL funde as listas por documento (menor `rank`, melhor correspondência) e limita a 500 documentos; `total` conta documentos uma única vez, mesmo com ementa e trecho correspondentes.
+Se a melhor correspondência é a ementa, o destaque vem dela e os campos de arquivo são nulos.
+Remoções por chave ou SHA-256 excluem os trechos, não a ementa mascarada pública, mesmo quando todos os arquivos do documento foram removidos.
+`modo=hibrida` usa essa lista de palavras já fundida no RRF com a lista semântica.
+`ementas_fts` é sincronizada por diferença (inclusive alterações e exclusões), reconstruída com `--reconstruir` e não entra nas exportações, como `trechos_fts`.
 `limitado` avisa ao atingir qualquer teto; filtros seletivos podem deixar resultados além do teto de candidatos.
 Consultas só com termos menores que três caracteres ou só palavras vazias comuns do português recebem
 400 `consulta_muito_generica`. O destaque usa **`destacar` sobre o original acentuado**, escapando HTML,
