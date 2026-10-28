@@ -32,15 +32,32 @@ describe("termos e consultaFts", () => {
     expect([...palavrasAlvo(termos("29/2024 near(calendario"))]).toEqual(["29", "2024", "near", "calendario"]);
   });
 
-  it("remove palavras vazias mesmo com pontuação, sem gastar o limite de dez termos", () => {
-    const lista = termosBusca(termos('DE, "da" do/das dos a o as os e em no na nos nas para por com que um uma uns umas ao aos ou se LICENÇA ambiental'));
+  it("remove palavras vazias avulsas mesmo com pontuação externa, sem gastar o limite", () => {
+    const lista = termosBusca(termos('DE, "da" do das dos a o as os e em no na nos nas para por com que um uma uns umas ao aos ou se LICENÇA ambiental'));
     expect(lista).toEqual({ termos: ["licenca", "ambiental"], truncada: false });
     expect(consultaFts(lista.termos)).toBe('"licenca" "ambiental"');
   });
 
-  it("limita palavras reais, inclusive dentro de um termo com pontuação, e aceita só uma curta", () => {
+  it.each([
+    ["PL 29/2024", ["pl", "29 2024"], '"pl" "29 2024"'],
+    ["Lei 8.666/93", ["lei", "8 666 93"], '"lei" "8 666 93"'],
+    ["pé-de-moleque", ["pe de moleque"], '"pe de moleque"'],
+    ["de/para", ["de para"], '"de para"'],
+    ['a"b NEAR( c* col:x)', ["a b", "near", "c", "col x"], '"a b" "near" "c" "col x"'],
+  ] as const)("preserva a frase e seus números em %s, sem operadores FTS", (q, esperados, fts) => {
+    const lista = termosBusca(termos(q));
+    expect(lista).toEqual({ termos: esperados, truncada: false });
+    expect(consultaFts(lista.termos)).toBe(fts);
+  });
+
+  it("conta frases como um termo e aceita só uma palavra avulsa curta", () => {
     const dez = Array.from({ length: MAX_TERMOS }, (_, i) => `termo${i}`);
-    expect(termosBusca(termos(`${dez.join("-")}-extra`))).toEqual({ termos: dez, truncada: true });
+    const frase = `${dez.join("-")}-extra`;
+    expect(termosBusca(termos(frase))).toEqual({ termos: [[...dez, "extra"].join(" ")], truncada: false });
+    const consulta = `29/2024 ${dez.slice(0, 9).join(" ")}`;
+    const esperados = ["29 2024", ...dez.slice(0, 9)];
+    expect(termosBusca(termos(consulta))).toEqual({ termos: esperados, truncada: false });
+    expect(termosBusca(termos(`${consulta} extra`))).toEqual({ termos: esperados, truncada: true });
     expect(termosBusca(termos(`${dez.join(" ")} TERMO0`))).toEqual({ termos: dez, truncada: false });
     expect(termosBusca(termos("lei x ab 12 saúde y"))).toEqual({ termos: ["lei", "x", "saude"], truncada: true });
     expect(termosBusca(termos("lei 𐐀𐐁"))).toEqual({ termos: ["lei", "𐐨𐐩"], truncada: false });

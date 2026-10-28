@@ -320,8 +320,46 @@ describe("busca por significado (Workers AI + Vectorize simulados)", () => {
 });
 
 describe("regressões da revisão de busca", () => {
-  it("retira stopwords do MATCH de trechos e ementas, inclusive com pontuação", async () => {
-    for (const q of ['"de" licença para', "de-de LICENÇA com"]) {
+  it.each([
+    ["PL 29/2024", "PL 29/2024", "PL 29 e 2024"],
+    ["Lei 8.666/93", "Lei 8.666/93", "Lei 8 e 666 e 93"],
+    ["pé-de-moleque", "pé-de-moleque", "pé bonito de moleque"],
+  ])("preserva a frase e a adjacência no MATCH de %s", async (q, correta, separada) => {
+    await env.DB.batch([
+      env.DB.prepare("DELETE FROM ementas_fts WHERE documento IN ('doc:401', 'doc:402')"),
+      env.DB.prepare("INSERT INTO ementas_fts (documento, texto_norm) VALUES (?, ?)")
+        .bind("doc:401", normalizar(correta)),
+      env.DB.prepare("INSERT INTO ementas_fts (documento, texto_norm) VALUES (?, ?)")
+        .bind("doc:402", normalizar(separada)),
+    ]);
+    const { r, corpo } = await buscarJson({ q, modo: "palavras" });
+    expect(r.status).toBe(200);
+    expect(docs(corpo)).toEqual(["doc:401"]);
+    expect(corpo.consulta_truncada).toBe(false);
+  });
+
+  it("não compartilha cache entre frase e palavras avulsas equivalentes", async () => {
+    await env.DB.batch([
+      env.DB.prepare("DELETE FROM ementas_fts WHERE documento IN ('doc:401', 'doc:402')"),
+      env.DB.prepare("INSERT INTO ementas_fts (documento, texto_norm) VALUES (?, ?)")
+        .bind("doc:401", "adjacencia exclusiva"),
+      env.DB.prepare("INSERT INTO ementas_fts (documento, texto_norm) VALUES (?, ?)")
+        .bind("doc:402", "adjacencia para atividade exclusiva"),
+    ]);
+    expect(docs((await buscarJson({ q: "adjacência-exclusiva", modo: "palavras" })).corpo)).toEqual(["doc:401"]);
+    expect(docs((await buscarJson({ q: "adjacência exclusiva", modo: "palavras" })).corpo).sort())
+      .toEqual(["doc:401", "doc:402"]);
+    expect(docs((await buscarJson({ q: "adjacência-exclusiva", modo: "palavras" })).corpo)).toEqual(["doc:401"]);
+  });
+
+  it("consulta só com palavras vazias continua rejeitada", async () => {
+    const { r, corpo } = await buscarJson({ q: "de da do", modo: "palavras" });
+    expect(r.status).toBe(400);
+    expect(corpo.codigo).toBe("consulta_muito_generica");
+  });
+
+  it("retira stopwords avulsas do MATCH, inclusive com pontuação externa", async () => {
+    for (const q of ['"de" licença para', "de, LICENÇA com"]) {
       const { r, corpo } = await buscarJson({ q, modo: "palavras" });
       expect(r.status).toBe(200);
       expect(docs(corpo).sort()).toEqual(["doc:102", "doc:202"]);
@@ -410,7 +448,7 @@ describe("regressões da revisão de busca", () => {
   it("recusa consultas genéricas antes de FTS ou AI, sem mudar o escape dos demais termos", async () => {
     const ai = new AiFalsa();
     const vetores = new VetoresFalsos([]);
-    for (const q of ["de", "da do das dos", "a o e em no na", "para por com que um uma", '"para"', "ab xy 12", "para ab", "de-de", "de/para"]) {
+    for (const q of ["de", "da do das dos", "a o e em no na", "para por com que um uma", '"para"', "ab xy 12", "para ab"]) {
       const { r, corpo } = await buscarJson({ q }, criarEnv({ AI: ai, VETORES: vetores }));
       expect(r.status, q).toBe(400);
       expect(corpo.codigo).toBe("consulta_muito_generica");

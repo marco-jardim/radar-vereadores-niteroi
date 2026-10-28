@@ -417,9 +417,16 @@ def _exportacoes_pendentes(fonte: Fonte, atual: dict, pasta: Path, reconstruir: 
     for destino in sorted(pasta.iterdir()) if pasta.is_dir() else []:
         if destino.is_dir() and re.fullmatch(r"[0-9a-f]{16}", destino.name):
             sums = destino / "SHA256SUMS"
-            nomes = (_ler_somas_exportacao(destino.name, sums.read_bytes()) if sums.is_file()
-                     else [p.name for p in destino.iterdir() if p.is_file()])
-            sqls, _ = _nomes_exportacao(destino.name, nomes)
+            if sums.is_file():
+                nomes = _ler_somas_exportacao(destino.name, sums.read_bytes())
+                sqls, _ = _nomes_exportacao(destino.name, nomes)
+            else:
+                nomes = [p.name for p in destino.iterdir()
+                         if p.is_file() and not p.name.startswith(".") and not p.name.endswith(".tmp")]
+                try:
+                    sqls, _ = _nomes_exportacao(destino.name, nomes)
+                except ErroNuvem:
+                    continue  # publicação local incompleta, ainda sem manifesto
             dump = b"".join((destino / nome).read_bytes() for nome in sqls)
             if _arquivos_removidos(fonte, _ler_dump(dump)["arquivos"]):
                 return True

@@ -42,14 +42,17 @@ export function palavrasAlvo(lista: string[]): Set<string> {
   return alvos;
 }
 
-/** Mesma consulta para MATCH, embedding e cache: até dez palavras distintas, só uma curta. */
+/** Até dez termos distintos; pontuação interna preserva a frase, só uma palavra avulsa curta. */
 export function termosBusca(lista: string[]): { termos: string[]; truncada: boolean } {
   const saida: string[] = [];
   let curta = false;
   let truncada = false;
-  for (const palavra of palavrasAlvo(lista)) {
-    if (PALAVRAS_VAZIAS.has(palavra)) continue;
-    const pequena = [...palavra].length < 3;
+  for (const parte of lista) {
+    const palavras = parte.match(RE_PALAVRA) ?? [];
+    const palavra = palavras.join(" ");
+    const frase = palavras.length > 1;
+    if (palavra === "" || saida.includes(palavra) || (!frase && PALAVRAS_VAZIAS.has(palavra))) continue;
+    const pequena = !frase && [...palavra].length < 3;
     if (saida.length >= MAX_TERMOS || (pequena && curta)) {
       truncada = true;
       continue;

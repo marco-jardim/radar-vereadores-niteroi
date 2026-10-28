@@ -86,8 +86,8 @@ export function lerParametros(url: URL): Parametros {
 /** URL canônica da Cache API: parâmetros conhecidos, versão da consulta e versão do índice. */
 export function chaveBusca(origem: string, p: Parametros, indice: string, lista = false): string {
   const s = new URLSearchParams();
-  s.set("_consulta", "2");
-  s.set("q", p.termos.join(" "));
+  s.set("_consulta", "3");
+  s.set("q", JSON.stringify(p.termos));
   s.set("modo", p.modo);
   if (p.tipo !== null) s.set("tipo", p.tipo);
   if (p.ano !== null) s.set("ano", String(p.ano));

@@ -223,7 +223,9 @@ python -m coletor.nuvem --ambiente staging --etapas d1,vetores
 **Partes das exportações.** Cada objeto de dados tem até **90.000.000 bytes enviados**, abaixo do teto
 da API REST do R2, sem exigir chaves S3 ou multipart. `NNN` começa em `001` em cada conjunto (mínimo de
 três dígitos). As partes preservam linhas inteiras e ordem determinística; o orçamento também limita a
-entrada antes da compressão. Os vetores têm um registro por linha em ordem de `id`, com `values` em
+entrada antes da compressão. Quando o dump cabe em uma parte, mantém o nome legado `d1-<versao>.sql`,
+sem `-001`; os vetores usam `vetores-<versao>-001.jsonl.gz` mesmo com uma única parte. A
+exportação de vetores tem um registro por linha em ordem de `id`, com `values` em
 float32 little-endian base64; cada parte tem gzip independente, `mtime=0` e nenhum nome no cabeçalho.
 O dump contém tabelas-base, sem `trechos_fts` nem `ementas_fts`. Confira **todos** os arquivos listados em
 `SHA256SUMS`; concatene as partes SQL na ordem numérica antes de importar e, para os vetores, descomprima
@@ -263,6 +265,9 @@ s.normalize("NFD").replace(/\p{Mn}/gu, "").normalize("NFC").toLowerCase()
 e junta por `trechos_fts.id = trechos.id` ou `ementas_fts.documento = documentos.id`, sem depender do rowid da ementa. Os pares de `tests\fixtures\contratos\normalizacao.json` valem para as duas implementações.
 O FTS5 ordena e limita os primeiros 5.000 candidatos **de cada índice antes** das junções e dos filtros no D1.
 Os termos são escapados e colocados entre aspas nas duas consultas. Os filtros `tipo`, `ano`, `legislatura` e `autor` são aplicados no SQL.
+Cada termo separado por espaço com pontuação interna mantém suas palavras normalizadas em uma única
+frase FTS: `PL 29/2024` exige `"pl" "29 2024"`, `Lei 8.666/93` exige `"lei" "8 666 93"` e
+`pé-de-moleque` exige `"pe de moleque"`. Números e palavras vazias dentro dessas frases são preservados.
 Depois o SQL funde as listas por documento (menor `rank`, melhor correspondência) e limita a 500 documentos; `total` conta documentos uma única vez, mesmo com ementa e trecho correspondentes.
 Se a melhor correspondência é a ementa, o destaque vem dela e os campos de arquivo são nulos.
 Remoções por chave ou SHA-256 excluem os trechos, não a ementa mascarada pública, mesmo quando todos os arquivos do documento foram removidos.
@@ -305,12 +310,15 @@ Portanto ainda podem faltar resultados fora dos 100 primeiros; não há garantia
 por autor ou substitutivo. Consultas D1 de candidatos são divididas em lotes para respeitar os 100 parâmetros
 por instrução.
 
-**Consulta normalizada.** Após remover acentos e converter para minúsculas, a busca usa palavras
-alfanuméricas distintas, na ordem original, sem as palavras vazias (`PALAVRAS_VAZIAS` em `texto.ts`).
-Conserva até dez termos, dos quais no máximo um tem menos de três caracteres; os demais são ignorados.
+**Consulta normalizada.** Após remover acentos e converter para minúsculas, a busca conserva termos
+distintos na ordem original. Cada termo separado por espaço com pontuação interna vira uma frase de
+palavras alfanuméricas e conta como **um** dos dez termos, sem descartar números ou palavras dentro dela.
+Só as palavras avulsas perdem as palavras vazias (`PALAVRAS_VAZIAS` em `texto.ts`) e ficam limitadas a
+uma com menos de três caracteres. Termos além desses limites são ignorados.
 `consulta_truncada` na resposta informa esse descarte (não a simples remoção de palavras vazias/repetidas);
 `consulta` preserva a entrada. MATCH, embedding e suas chaves de cache usam os mesmos termos efetivos:
-acrescentar palavras vazias não exige novo embedding. Sem termo específico de ao menos três caracteres,
+acrescentar palavras vazias avulsas não exige novo embedding; o cache de busca distingue frases de
+palavras avulsas. Sem termo específico de ao menos três caracteres,
 retorna 400 `consulta_muito_generica`.
 
 `HEAD /api/busca` valida os mesmos parâmetros do GET: retorna 200 se válidos ou 400 se inválidos,
