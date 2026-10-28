@@ -1113,6 +1113,8 @@ class Pipeline:
         self.gravado = dict(self.prev)
         for chave, (e, ano) in self.prev.items():
             self._anotar_anterior(chave, e, ano)
+            if e.get("status") == "removido" and e.get("sha256_original"):
+                self.shas_remover.add(e["sha256_original"])
         for chave, outras in extras:
             for e, ano in outras:
                 self._anotar_anterior(chave, e, ano)
@@ -1216,6 +1218,8 @@ class Pipeline:
         alvo = self.fila.get(chave)
         p = self.prev.get(chave, (None, None))[0]
         if alvo is None:
+            if p and self.remocoes.contem(chave, p.get("sha256_original")):
+                return Basico("manter")  # conserva o tombstone mesmo sem citação na coleta atual
             return Basico("ausente")
         if chave in self.remocoes.chaves:  # pela chave: não baixa; guarda o hash anterior
             return Basico("removido", p.get("sha256_original") if p else None, p.get("bytes") if p else None)
@@ -1678,6 +1682,7 @@ class Pipeline:
             return self._executar_travado()
 
     def _executar_travado(self) -> dict:
+        remocoes.aplicar_remocoes(self.raiz, self.pasta_textos, hoje=self.hoje)
         self._carregar_estado()
         try:
             candidatos = []

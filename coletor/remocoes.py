@@ -12,7 +12,8 @@ Arquivo ausente equivale a nenhuma remoção; arquivo ilegível ou com estrutura
 inválida é ValueError, para nunca publicar por engano o que deveria sair. A leitura
 fica em cache por caminho, renovada quando o tamanho ou a data de modificação mudam.
 
-O expurgo (textos, D1, Vectorize, R2 e exportações) não é feito aqui.
+`aplicar_remocoes` expurga a árvore local; D1, Vectorize, R2 e exportações
+são projeções sincronizadas por `coletor.nuvem`.
 Somente biblioteca padrão do Python.
 """
 from __future__ import annotations
@@ -135,3 +136,61 @@ def esta_removido(raiz_ou_cache: Path | str | Indice | Iterable = RAIZ,
     se nem chave nem sha256 forem informados.
     """
     return indice(raiz_ou_cache).contem(chave, sha256)
+
+
+def aplicar_remocoes(raiz: Path | str, textos: Path | str, *, hoje: str | None = None) -> set[str]:
+    """Expurga todos os anos, independentemente dos filtros/limites da coleta.
+
+    O chamador deve manter a trava de `coletor.textos`. Preserva hash/tamanho e
+    os campos exatos do contrato (§4.2): motivo fica no config e no D1, não num
+    campo extra do manifesto. Repetir também limpa restos de uma interrupção.
+    """
+    from coletor import arquivos
+    from coletor.textos import entrada_vazia, hoje_brasilia, processado_em
+
+    raiz, textos = Path(raiz), Path(textos)
+    removidos = indice(raiz)
+    if not removidos.pares:
+        return set()
+    hoje = hoje or hoje_brasilia()
+    chaves = set(removidos.chaves)
+    manifestos = []
+    for caminho in sorted((raiz / "data" / "textos").glob("manifesto-*.json")):
+        mapa = json.loads(caminho.read_text(encoding="utf-8"))
+        novo = dict(mapa)
+        for chave, anterior in mapa.items():
+            if not removidos.contem(chave, anterior.get("sha256_original")):
+                continue
+            chaves.add(chave)
+            entrada = entrada_vazia(anterior["documentos"], anterior["documento"], anterior["tipo"],
+                                     anterior["url_origem"], "removido", hoje)
+            entrada["sha256_original"] = anterior.get("sha256_original")
+            entrada["bytes"] = anterior.get("bytes")
+            entrada["processado_em"] = processado_em(entrada, anterior, hoje)
+            novo[chave] = entrada
+        manifestos.append((caminho, mapa, novo))
+    # Apagar por chave também alcança caminhos antigos do mesmo arquivo.
+    nomes = {f"{chave.replace(':', '-', 1)}.txt" for chave in chaves}
+    for caminho in sorted((textos / "textos").rglob("*.txt")):
+        if caminho.name in nomes:
+            caminho.unlink()
+    for caminho in sorted((textos / "trechos").rglob("*.jsonl")):
+        linhas = caminho.read_text(encoding="utf-8").splitlines(keepends=True)
+        novas = []
+        for linha in linhas:
+            try:
+                trecho = json.loads(linha)
+            except ValueError:
+                trecho = None
+            # Mesmo tratamento da fila: restos desconhecidos não são apagados às cegas.
+            if not isinstance(trecho, dict) or trecho.get("arquivo") not in chaves:
+                novas.append(linha)
+        if novas != linhas:
+            if novas:
+                arquivos.gravar_atomico(caminho, "".join(novas))
+            else:
+                caminho.unlink()
+    for caminho, anterior, novo in manifestos:
+        if novo != anterior:
+            arquivos.salvar_mapa(caminho, novo)
+    return chaves

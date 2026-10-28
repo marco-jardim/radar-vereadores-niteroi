@@ -58,6 +58,90 @@ A nota pública de privacidade deve explicar essa distinção antes da ativaçã
 - `SHA256SUMS`;
 - atestação do GitHub (`actions/attest@v4`).
 
+### Remoção e expurgo (T4.2.4)
+
+Após aprovação do pedido, registre somente chave, hash do original, motivo público sem dados pessoais,
+fonte e data em `config/remocoes.json`, conforme o contrato congelado (§6.1). Execute a sequência normal
+`coletor.textos` → validação → `coletor.nuvem` no ambiente correto. Não remova a entrada da configuração:
+ela impede o retorno em coletas futuras, inclusive do mesmo original sob outra chave.
+
+- `textos` aplica as remoções em **todos os manifestos**, antes da fila e fora dos filtros de ano/tipo,
+  prazo e limite de arquivos. Apaga `.txt` (inclusive caminhos antigos) e linhas de trechos; mantém
+  `status: removido`, `sha256_original` e `bytes`. O manifesto não admite campos extras e exige `detalhe`
+  vazio nesse status: o motivo é preservado no config e na tabela D1 `remocoes`, não no manifesto.
+- A sincronização completa apaga `arquivos`, `arquivo_documento`, `trechos`, `trechos_fts`, os vetores dos
+  trechos e `trechos_indexados`, além dos originais no R2. **Documento, autoria e ementa pública permanecem**
+  (inclusive `ementas_fts` e vetores de ementas), pois a remoção do contrato é de arquivo, não de documento.
+- Com remoções pendentes, a etapa R2 também varre **todas as versões do bucket público de exportações**, mesmo sem
+  `--exportar`. Cada dump histórico afetado é regravado sem o arquivo e seus trechos/vetores, preservando os
+  demais dados daquele momento, em **outra versão determinística**, com novos nomes e `SHA256SUMS`.
+  Só após confirmar os bytes dos três objetos novos, apaga todos os objetos da versão antiga e sua cópia
+  na pasta local de exportações usada na execução. Não há sobrescrita silenciosa de versão publicada.
+  A varredura ocorre antes de confirmar as remoções no D1 e de gravar `estado_indice`: uma interrupção
+  deixa a diferença pendente para a próxima execução. Tombstones já aplicados, sem cópias locais afetadas,
+  não provocam consultas ao bucket em toda sincronização. A carga inicial sem histórico no D1 nem cópias
+  locais não pressupõe exportações antigas; se o D1 foi perdido/recriado ou houve execução parcial,
+  use `--reconstruir` para conferir também o histórico remoto, mesmo sem diferença de remoções no D1.
+  `SHA256SUMS` divergente numa versão afetada interrompe o expurgo sem apagá-la; numa versão não afetada,
+  gera somente aviso, sem sobrescrita.
+- Recibos `remocoes/<versao-antiga>.json` no bucket guardam somente a nova versão e o hash de `SHA256SUMS`:
+  permitem retomar exclusões interrompidas, inclusive em outra máquina. O resultado é registrado pela
+  sincronização em **Registro de expurgos de exportações**, ao fim deste documento. Revise e versione esse
+  registro, sem acrescentar dados pessoais; novas atestações devem se referir aos novos `SHA256SUMS`.
+  Remoções sucessivas mantêm os recibos anteriores e formam uma cadeia: a retomada confirma os dois
+  arquivos e `SHA256SUMS` do destino final antes de excluir as versões intermediárias.
+- `--simular` não expurga nem registra; etapas parciais e `--sem-r2` **não comprovam** remoção completa.
+  Guarde o relatório da execução, confira ausência dos objetos antigos no bucket público e o 410 do
+  original. Limpe também outras cópias locais de exportações e artefatos de CI que possam conter o item.
+  Não faça rollback de dados/configuração para uma versão anterior à remoção.
+
+#### Histórico de `dados-textos`: procedimento manual, com aprovação humana
+
+O expurgo automático remove a versão corrente, **não reescreve Git nem faz force-push**. Se dado pessoal
+vazou no histórico, um responsável deve aprovar expressamente escopo (chaves, hashes, caminhos em todas
+as versões), janela de manutenção e reescrita de `dados-textos`. Não ponha o dado vazado em issue, log,
+mensagem de commit ou neste documento. `git filter-repo` é ferramenta operacional externa, não dependência
+do coletor; instale-a separadamente e confira sua versão antes da intervenção.
+
+1. Suspenda coleta/publicação e impeça pushes concorrentes. Anote o SHA remoto de `dados-textos` para
+   `--force-with-lease`. Faça uma cópia restrita para contingência, com responsável e prazo de destruição;
+   ela contém o vazamento e não pode virar artefato público. Prepare fora do clone uma fotografia já
+   expurgada e validada do HEAD (somente a árvore limpa, sem `.git`, cache bruto ou arquivos desconhecidos).
+2. Use **clone fresco isolado**, não o worktree diário. Inventarie os caminhos históricos do `.txt` por
+   chave (tipo/ano/principal podem ter mudado) e todos os JSONL que contiveram seus trechos. Para evitar
+   registrar texto pessoal em regras de substituição, remova esses caminhos do histórico inteiro.
+   Exemplo **sintético**, a adaptar ao inventário aprovado:
+
+   ```text
+   git clone --single-branch --branch dados-textos <URL-DO-REPOSITORIO> dados-textos-expurgo
+   cd dados-textos-expurgo
+   git filter-repo --refs refs/heads/dados-textos --invert-paths --path-glob "textos/**/siscam-123.txt" --path trechos/pl/2024.jsonl
+   ```
+
+   A remoção do JSONL inteiro elimina também trechos históricos não afetados desse arquivo agregado;
+   isso deve constar da aprovação. Restaure **somente no novo HEAD** a fotografia limpa para conservar
+   os trechos atuais permitidos, faça commit e valide hashes, offsets e barreira de PII. Não restaure do
+   histórico antigo. Se for necessário conservar os trechos históricos alheios, aprove e teste um callback
+   `git filter-repo` que filtre JSONL por `arquivo`, em vez de eliminar o caminho agregado.
+3. Inspecione todos os commits/refs alcançáveis do clone reescrito e confirme ausência dos blobs/textos
+   removidos, não apenas do HEAD. Revise tags/refs adicionais que apontem para a branch antiga. Confira
+   que manifestos atuais de `main` continuam com tombstones e que `config/remocoes.json` segue vigente.
+   `blob_texto` dos textos preservados continua válido; não existe vínculo por commit no manifesto.
+4. **Só com nova confirmação humana**, publique exclusivamente a branch aprovada:
+
+   ```text
+   git push <URL-DO-REPOSITORIO> refs/heads/dados-textos:refs/heads/dados-textos --force-with-lease=refs/heads/dados-textos:<SHA-REMOTO-ANOTADO>
+   ```
+
+   Não use `--mirror` nem force-push de `main`. Se a lease falhar, pare e refaça a revisão.
+5. Invalide clones/worktrees antigos, elimine refs de contingência/reflogs e cópias locais após o prazo
+   aprovado, e peça aos colaboradores um clone novo (não merge/rebase da branch antiga). Solicite ao
+   suporte do GitHub a purga de caches, refs de PR e blobs ainda acessíveis; force-push sozinho não garante
+   eliminação no provedor ou em forks. Revogue artefatos/atestação antiga que exponham o conteúdo e confira
+   exportações, R2 e o acesso público. Registre só versões, hashes técnicos e aprovação, nunca o dado pessoal.
+6. Reative a automação apenas depois de uma execução normal de textos/validação/nuvem, conferindo que o
+   item não retorna. Não execute esse procedimento automaticamente no CI.
+
 **Cache das respostas.** O Worker usa a Cache API e não o produto Workers Cache. O Workers Cache responde antes de o código rodar, o que impediria a consulta à tabela de remoções antes de servir um original já em cache.
 No domínio próprio, rankings de busca são guardados por consulta normalizada/modo/filtros/estado/remoções, sem
 `pagina`, por 60 s; páginas só hidratam seu recorte. Embeddings são guardados por consulta normalizada/modelo
@@ -193,8 +277,34 @@ citam o mesmo arquivo). Portanto ainda podem faltar resultados de um autor cujos
 100 primeiros; não há garantia de recuperação exaustiva por autor. Consultas D1 de candidatos são divididas
 em lotes para respeitar os 100 parâmetros por instrução.
 
-`HEAD /api/busca` responde 200 só com cabeçalhos, sem executar a busca. O cron diário continua declarado;
-o handler `scheduled` atual só registra uma mensagem fixa e retorna. T4.2.3 implementará a auditoria por amostragem.
+`HEAD /api/busca` responde 200 só com cabeçalhos, sem executar a busca.
+
+### Cron diário de verificação
+
+`worker/src/cron.ts`, ligado ao `scheduled`, roda às **07:17 UTC** nos dois ambientes. Lê todos os manifestos
+de 2021 até o ano UTC do evento (`data/textos/manifesto-<ano>.json`); 404 de ano sem manifesto é normal.
+`CRON_RAW_BASE`, `CRON_MANIFESTOS_BRANCH` e `CRON_TEXTOS_BRANCH`, definidos nos dois ambientes do wrangler,
+apontam para `https://raw.githubusercontent.com/marco-jardim/radar-vereadores-niteroi`, `main` e `dados-textos`.
+Só aceita o host raw do GitHub, sem seguir redirecionamentos.
+
+A amostra tem até **50 arquivos**, por Fisher–Yates com semente da data UTC e ordenação inicial por chave;
+mesma data e mesmo conjunto elegível dão a mesma amostra. Exclui removidos, duplicatas, downloads pendentes,
+originais acima de 98.951.424 bytes e `r2_chave` NULL no manifesto ou D1. Cada original é lido diretamente do R2
+por `crypto.DigestStream` (SHA-256), sem bufferizar o corpo, e comparado com `sha256_original` do manifesto.
+Compara também o conjunto completo de ids/hashes em `trechos.sha256` do D1 com `trechos/<tipo>/<ano>.jsonl`
+da branch de textos e a contagem do manifesto; cada JSONL necessário é buscado uma única vez.
+
+A única escrita do Worker é a linha de `verificacoes`: `data` ISO UTC do evento, `amostra` examinada, `ok`
+(contagem de arquivos íntegros nos dois testes) e `falhas_json` com etapa/código fixos, chave válida e/ou ano.
+Não guarda texto, valores de dados pessoais, mensagens de exceção ou pilhas. Falhas de rede, formato, D1 e R2
+são registradas sem interromper o handler; se o próprio D1 não aceitar a gravação, não é possível persistir
+o diagnóstico. `/api/saude` mostra as contagens da última verificação; os detalhes estão em `falhas_json`.
+`ok = amostra` não dispensa examinar `falhas_json` (por exemplo, pode faltar a leitura de um manifesto).
+
+Há teto de **240 subrequisições** (incluindo a escrita), sem retentativas, prazo global de 240 s para as leituras
+e de até 10 s por operação, inclusive consumo dos corpos; a gravação tem mais 10 s reservados.
+Uma base vazia gera `amostra = ok = 0`. A verificação não repara nem publica dados: em divergência, confira
+o Git e execute a sincronização/reconstrução apropriada. Testes offline em `worker/test/cron.test.ts`.
 
 **Carga em staging com o login OAuth** (sem chaves S3; na raiz do repositório, com `RADAR_CACHE` e `RADAR_TEXTOS` definidos ou `--cache`/`--textos`):
 

@@ -26,7 +26,8 @@ e. `vetores`: confere o índice (1.024 dimensões e índices de metadados `tipo`
 f. `estado_indice`, gravado só no fim, só sem falhas e só com as etapas `r2`, `d1` e `vetores`;
 g. `exportar`: dump das tabelas-base, vetores em JSONL gzip (mtime 0) e `SHA256SUMS`, enviados a
    `<bucket de exportações>/<versao>/`; se o `SHA256SUMS` da versão já está no bucket, nada é
-   reenviado (e um conteúdo diferente vira aviso);
+   reenviado (e um conteúdo diferente vira aviso). Com remoções pendentes, inclusive sem
+   `exportar`, a etapa R2 expurga exportações antes de confirmar as remoções no D1;
 h. `--reconstruir`: limpa o D1, reenvia tudo (com o cache de embeddings) e apaga do índice
    todo vetor listado que o Git não tem;
 i. `--simular`: só leituras; o plano é o mesmo, sem nenhuma escrita.
@@ -36,25 +37,30 @@ novo regrava `estado_indice`, que guarda o commit).
 """
 from __future__ import annotations
 
+import contextlib
 import gzip
 import hashlib
 import io
 import json
+import re
+import shutil
+import sqlite3
 import sys
 from collections import Counter
 from collections.abc import Callable, Iterable, Sequence
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
+from coletor.arquivos import gravar_atomico
 from coletor.nuvem.banco import (COLUNAS, COMPARAR, FTS, PASTA_MIGRACOES, TABELAS_BASE, Alteracao, fts_divergente,
                                  ler_tabela, literal, q)
 from coletor.nuvem.cloudflare import DIMENSOES, INDICES_METADADOS
 from coletor.nuvem.fonte import (Fonte, Original, carregar_fonte, normalizar_busca, rowid_fts, sha256, sha_indexado,
                                  varrer_fonte)
-from coletor.nuvem.local import CacheEmbeddings, como_float32, empacotar
+from coletor.nuvem.local import CacheEmbeddings, _gravar_bytes, como_float32, empacotar
 from coletor.nuvem.r2 import LIMITE_ENVIO_R2_REST, R2Rest
 from coletor.nuvem.rede import ErroNuvem
 from coletor.trechos import VERSAO_TRECHOS
@@ -69,7 +75,7 @@ TRABALHADORES_R2 = 4
 PROGRESSO_R2 = 100  # um aviso de progresso a cada N originais
 FOLGA_RELOGIO = timedelta(seconds=60)  # diferença tolerada entre o relógio local e o do Vectorize
 ESCRITAS = ("migracoes", "r2_enviar", "r2_apagar", "d1_instrucoes", "vetores_upsert", "vetores_apagar",
-            "estado_indice", "exportacao_enviar")
+            "estado_indice", "exportacao_enviar", "exportacao_apagar", "exportacao_registro")
 TIPOS_CONTEUDO = {
     "pdf": "application/pdf",
     "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -251,19 +257,234 @@ def montar_exportacao(fonte: Fonte, ambiente: Ambiente, versao: str) -> dict[str
 TIPOS_EXPORTACAO = {".sql": "application/sql; charset=utf-8", ".gz": "application/gzip"}
 
 
+def _publicar_exportacao(arquivos: dict[str, bytes], ambiente: Ambiente, versao: str,
+                         pasta: Path, rel: Relatorio) -> None:
+    destino = pasta / versao
+    destino.mkdir(parents=True, exist_ok=True)
+    for nome, dados in sorted(arquivos.items()):
+        local = destino / nome
+        if not local.is_file() or local.read_bytes() != dados:
+            _gravar_bytes(local, dados)
+    if ambiente.r2 is None:
+        rel.avisos.append(f"exportação {versao}: gravada só em {destino} (sem R2)")
+        return
+    bucket = ambiente.bucket_exportacoes
+    condicional = getattr(ambiente.r2, "put_condicional", True)
+    for nome in sorted(arquivos, key=lambda n: (n == "SHA256SUMS", n)):
+        chave = f"{versao}/{nome}"
+        existente = ambiente.r2.obter(bucket, chave)
+        if existente is None:
+            tipo = TIPOS_EXPORTACAO.get(Path(nome).suffix, "text/plain; charset=utf-8")
+            if ambiente.r2.enviar(bucket, chave, arquivos[nome], tipo, se_ausente=condicional):
+                rel.feitas["exportacao_enviar"] += 1
+            existente = ambiente.r2.obter(bucket, chave)
+        if existente != arquivos[nome]:
+            raise ErroNuvem(f"exportação {versao}: objeto não confirmado; versão antiga preservada")
+        if chave not in rel.exportados:
+            rel.exportados.append(chave)
+
+
+def _ler_dump(dados: bytes) -> dict[str, dict[tuple, tuple]]:
+    """Lê dumps históricos sem executar comandos arbitrários vindos do bucket público.
+
+    SQLite interpreta os literais (inclusive apóstrofos e quebras em texto), mas
+    o autorizador só permite INSERT nas tabelas-base: sem SELECT, funções ou DDL.
+    """
+    with contextlib.closing(sqlite3.connect(":memory:")) as con:
+        for tabela in TABELAS_BASE:
+            con.execute(f"CREATE TABLE {q(tabela)} ({', '.join(q(c) for c in COLUNAS[tabela][0])})")
+        con.set_authorizer(lambda acao, tabela, _coluna, _db, _origem:
+                           sqlite3.SQLITE_OK if acao == sqlite3.SQLITE_INSERT and tabela in TABELAS_BASE
+                           else sqlite3.SQLITE_DENY)
+        try:
+            con.executescript(dados.decode("utf-8"))
+        except (sqlite3.DatabaseError, UnicodeError):
+            raise ErroNuvem("exportação histórica: dump inválido; expurgo não concluído") from None
+        finally:
+            con.set_authorizer(None)
+        linhas = {}
+        for tabela in TABELAS_BASE:
+            colunas, chave = COLUNAS[tabela]
+            posicoes = [colunas.index(c) for c in chave]
+            linhas[tabela] = {tuple(row[i] for i in posicoes): tuple(row)
+                              for row in con.execute(f"SELECT * FROM {q(tabela)}")}
+        return linhas
+
+
+def _arquivos_removidos(fonte: Fonte, arquivos: dict[tuple, tuple]) -> set[str]:
+    chaves = {k[0] for k in fonte.linhas["remocoes"]}
+    hashes = {c.rsplit("/", 1)[-1] for c in fonte.remover_r2}
+    return {k[0] for k, row in arquivos.items() if k[0] in chaves or row[1] in hashes}
+
+
+def _exportacoes_pendentes(fonte: Fonte, atual: dict, pasta: Path, reconstruir: bool) -> bool:
+    """Não consulta o bucket só porque há tombstones antigos no Git.
+
+    O expurgo antecede a escrita de `remocoes` no D1: em caso de interrupção,
+    inclusive após publicar recibos, a diferença continua pendente em outra máquina.
+    Cópias locais e reconstruções também precisam conferir o histórico.
+    """
+    if not fonte.remover_r2:
+        return False
+    if reconstruir or _arquivos_removidos(fonte, atual["arquivos"]):
+        return True
+    novas = fonte.linhas["remocoes"].keys() - atual["remocoes"].keys()
+    if novas and (atual["arquivos"] or atual["estado_indice"] is not None):
+        return True
+    for sql in sorted(pasta.glob("*/d1-*.sql")):
+        if re.fullmatch(r"[0-9a-f]{16}", sql.parent.name):
+            if _arquivos_removidos(fonte, _ler_dump(sql.read_bytes())["arquivos"]):
+                return True
+    return False
+
+
+def _filtrar_exportacao(fonte: Fonte, antiga: str, sql: bytes, vetores: bytes
+                        ) -> tuple[str, dict[str, bytes]] | None:
+    linhas = _ler_dump(sql)
+    chaves = {k[0] for k in fonte.linhas["remocoes"]}
+    removidas = _arquivos_removidos(fonte, linhas["arquivos"])
+    ids = {k[0] for k, row in linhas["trechos"].items() if row[2] in removidas or row[2] in chaves}
+    if not removidas and not ids:
+        return None
+    linhas["arquivos"] = {k: row for k, row in linhas["arquivos"].items() if k[0] not in removidas}
+    linhas["arquivo_documento"] = {k: row for k, row in linhas["arquivo_documento"].items()
+                                    if k[0] not in removidas and k[0] not in chaves}
+    linhas["trechos"] = {k: row for k, row in linhas["trechos"].items() if k[0] not in ids}
+    linhas["trechos_indexados"] = {k: row for k, row in linhas["trechos_indexados"].items() if k[0] not in ids}
+    linhas["remocoes"].update(fonte.linhas["remocoes"])
+    # Documentos, autoria e ementas públicas NÃO são removidos (§8.1).
+    dump = "".join(linhas_dump(replace(fonte, linhas=linhas))).encode("utf-8")
+    lista = [json.loads(linha) for linha in gzip.decompress(vetores).decode("utf-8").splitlines() if linha]
+    jsonl = "".join(json.dumps(v, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n"
+                    for v in sorted(lista, key=lambda v: v["id"]) if v["id"] not in ids)
+    gz = gzip_deterministico(jsonl.encode("utf-8"))
+    nova = sha256(b"radar-expurgo/1\n" + antiga.encode("ascii") + b"\n" + dump + gz)[:16]
+    arquivos = {f"d1-{nova}.sql": dump, f"vetores-{nova}.jsonl.gz": gz}
+    arquivos["SHA256SUMS"] = "".join(f"{sha256(dados)}  {nome}\n" for nome, dados in sorted(arquivos.items())).encode("ascii")
+    return nova, arquivos
+
+
+def _registrar_expurgo(raiz: Path, antiga: str, nova: str) -> None:
+    caminho = raiz / "docs" / "backend.md"
+    texto = caminho.read_text(encoding="utf-8") if caminho.is_file() else "# Backend\n"
+    linha = f"- Exportação `{antiga}` regravada como `{nova}` por remoção; versão antiga apagada.\n"
+    if linha not in texto:
+        if "## Registro de expurgos de exportações" not in texto:
+            texto += "\n## Registro de expurgos de exportações\n\n"
+        gravar_atomico(caminho, texto + linha)
+
+
+def _expurgar_exportacoes(fonte: Fonte, ambiente: Ambiente, raiz: Path, pasta: Path,
+                          rel: Relatorio, simular: bool) -> None:
+    """Varre também versões antigas do bucket público, mesmo sem --exportar.
+
+    O recibo sem conteúdo pessoal permite retomar DELETEs interrompidos em outra
+    máquina. Só se apaga a origem depois de confirmar todos os bytes do destino.
+    """
+    r2, bucket = ambiente.r2, ambiente.bucket_exportacoes
+    objetos = r2.listar(bucket) if r2 is not None else []
+    locais = {p.name for p in pasta.iterdir() if p.is_dir() and re.fullmatch(r"[0-9a-f]{16}", p.name)} if pasta.is_dir() else set()
+    versoes = locais | {c.split("/", 1)[0] for c in objetos if re.fullmatch(r"[0-9a-f]{16}/.+", c)}
+    recibos = {}
+    for chave in objetos:
+        if re.fullmatch(r"remocoes/[0-9a-f]{16}\.json", chave):
+            try:
+                recibo = json.loads(r2.obter(bucket, chave))
+                if (not isinstance(recibo, dict) or set(recibo) != {"nova", "sha256sums"}
+                        or not isinstance(recibo["nova"], str) or not re.fullmatch(r"[0-9a-f]{16}", recibo["nova"])
+                        or not isinstance(recibo["sha256sums"], str)
+                        or not re.fullmatch(r"[0-9a-f]{64}", recibo["sha256sums"])):
+                    raise ValueError
+            except (ValueError, TypeError):
+                raise ErroNuvem("recibo de expurgo inválido") from None
+            recibos[Path(chave).stem] = recibo
+    # Primeiro publica todos os destinos. Só depois resolve as cadeias e apaga:
+    # a ordem lexicográfica das versões não pode decidir qual recibo é válido.
+    for antiga in sorted(versoes - set(recibos)):
+        nomes = [f"d1-{antiga}.sql", f"vetores-{antiga}.jsonl.gz", "SHA256SUMS"]
+        arquivos = {}
+        for nome in nomes:
+            dados = r2.obter(bucket, f"{antiga}/{nome}") if r2 is not None else None
+            local = pasta / antiga / nome
+            if dados is None and local.is_file():
+                dados = local.read_bytes()
+            if dados is None:
+                if nome == "SHA256SUMS":
+                    continue  # publicação interrompida: os dados já podem estar completos
+                raise ErroNuvem(f"exportação {antiga}: incompleta; expurgo não concluído")
+            arquivos[nome] = dados
+        filtrada = _filtrar_exportacao(fonte, antiga, arquivos[nomes[0]], arquivos[nomes[1]])
+        esperado = "".join(f"{sha256(arquivos[nome])}  {nome}\n" for nome in sorted(nomes[:2])).encode("ascii")
+        if "SHA256SUMS" in arquivos and arquivos["SHA256SUMS"] != esperado:
+            if filtrada is not None:
+                raise ErroNuvem(f"exportação {antiga}: SHA256SUMS divergente; expurgo não concluído")
+            rel.avisos.append(f"exportação {antiga}: SHA256SUMS difere dos objetos; versão não afetada preservada")
+        if filtrada is None:
+            continue
+        nova, novos = filtrada
+        rel.plano["exportacao_regravar"] += 1
+        if simular:
+            continue
+        _publicar_exportacao(novos, ambiente, nova, pasta, rel)
+        recibo = {"nova": nova, "sha256sums": sha256(novos["SHA256SUMS"])}
+        if r2 is not None:
+            chave_recibo = f"remocoes/{antiga}.json"
+            dados_recibo = json.dumps(recibo, sort_keys=True).encode("ascii")
+            if r2.enviar(bucket, chave_recibo, dados_recibo, "application/json"):
+                rel.feitas["exportacao_registro"] += 1
+            if r2.obter(bucket, chave_recibo) != dados_recibo:
+                raise ErroNuvem(f"exportação {antiga}: recibo do expurgo não confirmado")
+        recibos[antiga] = recibo
+    if simular:
+        return
+    for antiga, recibo in sorted(recibos.items()):
+        nova = recibo["nova"]
+        visitadas = {antiga}
+        while True:  # remoções posteriores podem regravar também o destino de um recibo antigo
+            if not re.fullmatch(r"[0-9a-f]{16}", nova) or nova in visitadas:
+                raise ErroNuvem("recibo de expurgo inválido")
+            visitadas.add(nova)
+            if nova not in recibos:
+                break
+            recibo = recibos[nova]
+            nova = recibo["nova"]
+        if r2 is not None:
+            sums = r2.obter(bucket, f"{nova}/SHA256SUMS")
+            if sums is None or sha256(sums) != recibo["sha256sums"]:
+                raise ErroNuvem(f"exportação {nova}: destino do expurgo não confirmado")
+            try:
+                pares = [linha.split("  ") for linha in sums.decode("ascii").splitlines()]
+                nomes = {f"d1-{nova}.sql", f"vetores-{nova}.jsonl.gz"}
+                if (len(pares) != 2 or any(len(p) != 2 or not re.fullmatch(r"[0-9a-f]{64}", p[0]) for p in pares)
+                        or {p[1] for p in pares} != nomes):
+                    raise ValueError
+            except (ValueError, UnicodeError):
+                raise ErroNuvem("recibo de expurgo: SHA256SUMS inválido") from None
+            for soma, nome in pares:
+                dados = r2.obter(bucket, f"{nova}/{nome}")
+                if dados is None or sha256(dados) != soma:
+                    raise ErroNuvem(f"exportação {nova}: destino do expurgo incompleto")
+        if r2 is not None:
+            for chave in sorted(c for c in objetos if c.startswith(f"{antiga}/")):
+                r2.apagar(bucket, chave)
+                rel.feitas["exportacao_apagar"] += 1
+        if (pasta / antiga).is_dir():
+            shutil.rmtree(pasta / antiga)
+        _registrar_expurgo(raiz, antiga, nova)
+
+
 def _exportar(fonte: Fonte, ambiente: Ambiente, versao: str, pasta: Path, rel: Relatorio, simular: bool) -> None:
     rel.plano["exportacao_arquivos"] += 3
     if simular:
         return
     arquivos = montar_exportacao(fonte, ambiente, versao)
     destino = Path(pasta) / versao
-    destino.mkdir(parents=True, exist_ok=True)
-    for nome, dados in sorted(arquivos.items()):
+    for nome, dados in arquivos.items():
         local = destino / nome
         if not local.is_file() or local.read_bytes() != dados:
-            local.write_bytes(dados)
+            _gravar_bytes(local, dados)
     if ambiente.r2 is None:
-        rel.avisos.append(f"exportação {versao}: gravada só em {destino} (sem R2)")
+        _publicar_exportacao(arquivos, ambiente, versao, Path(pasta), rel)
         return
     rel.exportados.extend(f"{versao}/{nome}" for nome in sorted(arquivos, key=lambda n: (n == "SHA256SUMS", n)))
     no_bucket = ambiente.r2.obter(ambiente.bucket_exportacoes, f"{versao}/SHA256SUMS")
@@ -272,13 +493,7 @@ def _exportar(fonte: Fonte, ambiente: Ambiente, versao: str, pasta: Path, rel: R
             rel.avisos.append(f"exportação {versao}: o SHA256SUMS do bucket difere do gerado agora; "
                               "nada foi reenviado (confira o determinismo da exportação)")
         return
-    condicional = getattr(ambiente.r2, "put_condicional", True)
-    # SHA256SUMS por último: quem o encontra no bucket encontra também os arquivos que ele lista
-    for nome in sorted(arquivos, key=lambda n: (n == "SHA256SUMS", n)):
-        tipo = TIPOS_EXPORTACAO.get(Path(nome).suffix, "text/plain; charset=utf-8")
-        if ambiente.r2.enviar(ambiente.bucket_exportacoes, f"{versao}/{nome}", arquivos[nome], tipo,
-                              se_ausente=condicional):
-            rel.feitas["exportacao_enviar"] += 1
+    _publicar_exportacao(arquivos, ambiente, versao, Path(pasta), rel)
 
 
 # ---------------------------------------------------------------- embeddings
@@ -486,6 +701,9 @@ def sincronizar(raiz: str | Path, textos: str | Path | None, ambiente: Ambiente,
 
     atual = ler_atual(banco)
     estado = atual["estado_indice"]
+    pasta_exportacoes = Path(exportar) if exportar is not None else Path(cache) / "exportacoes"
+    expurgar = (("r2" in pedidas or "exportar" in pedidas)
+                and _exportacoes_pendentes(fonte, atual, pasta_exportacoes, reconstruir))
     if reconstruir:
         indexados_antigos = atual["trechos_indexados"]
         atual = {t: {} for t in (*TABELAS_BASE, "ementas_fts")}
@@ -550,6 +768,10 @@ def sincronizar(raiz: str | Path, textos: str | Path | None, ambiente: Ambiente,
             linhas_fts += [(rowid_fts(i), i, normalizar_busca(texto)) for i, texto in _textos_trechos(banco, mantidos)]
         alteracoes.append(Alteracao.de(FTS, gravar=linhas_fts))
         rel.plano["d1_trechos_fts_gravar"] = len(desejados_trechos) + len(mantidos)
+    # Não confirmar a remoção no D1/estado antes do histórico: a diferença é
+    # também o sinal durável para retomar recibos em outra máquina, sem cache local.
+    if expurgar:
+        _expurgar_exportacoes(fonte, ambiente, Path(raiz), pasta_exportacoes, rel, simular)
     if "d1" in pedidas and not simular and any(not a.vazia() for a in alteracoes):
         rel.feitas["d1_instrucoes"] += banco.aplicar(alteracoes)
 
@@ -583,8 +805,7 @@ def sincronizar(raiz: str | Path, textos: str | Path | None, ambiente: Ambiente,
 
     # (g) exportação
     if "exportar" in pedidas:
-        _exportar(fonte, ambiente, rel.versao, Path(exportar) if exportar is not None
-                  else Path(cache) / "exportacoes", rel, simular)
+        _exportar(fonte, ambiente, rel.versao, pasta_exportacoes, rel, simular)
     return rel
 
 
