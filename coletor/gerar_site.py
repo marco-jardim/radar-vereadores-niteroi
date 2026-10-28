@@ -17,7 +17,7 @@ from urllib.parse import urlsplit
 from coletor import novidades as N
 from coletor import regras_documentos as RD
 from coletor import regras_sessoes as RS
-from coletor.site import inicio, modelo_sessoes, pagina_memoria, pagina_sessoes
+from coletor.site import inicio, modelo_sessoes, pagina_busca, pagina_memoria, pagina_sessoes
 from coletor.site import paginas as P
 from coletor.site.modelo import (
     DESFECHO_GRUPO, NOME_ALERTA, NOME_CATEGORIA, NOME_CATEGORIA_DOC, NOME_DESFECHO, NOME_SINAL, NOME_SUBCATEGORIA_DOC,
@@ -628,7 +628,12 @@ def gerar_404(modelo: dict) -> str:
 
 
 def main() -> None:
+    from coletor.temas import carregar_cache
+
     modelo = montar_modelo()
+    cache_temas = carregar_cache(RAIZ / "data" / "temas_ia.json")
+    api_url = pagina_busca.carregar_api(RAIZ)
+    api_disponivel = bool(api_url)
     modelo["sessoes"] = modelo_sessoes.montar_sessoes(modelo) if (RAIZ / "data" / "sessoes").is_dir() else None
     modelo["geo_bairros"] = carregar_geo()
     modelo["memoria"] = inicio.carregar_memoria(RAIZ)
@@ -651,9 +656,9 @@ def main() -> None:
     exportar_documentos(modelo, SAIDA, manifesto)
     exportar_sessoes(modelo, SAIDA, manifesto)
     escrever("index.html", P.gerar_index(modelo))
-    escrever("leis.html", P.gerar_leis(cliente, manifesto))
-    escrever("projetos.html", P.gerar_projetos(cliente, manifesto))
-    escrever("atividades.html", P.gerar_atividades(modelo, manifesto))
+    escrever("leis.html", P.gerar_leis(cliente, manifesto, api_disponivel=api_disponivel))
+    escrever("projetos.html", P.gerar_projetos(cliente, manifesto, api_disponivel=api_disponivel))
+    escrever("atividades.html", P.gerar_atividades(modelo, manifesto, api_disponivel=api_disponivel))
     sessoes_html = pagina_sessoes.gerar_sessoes(modelo)
     # O renderizador recebe só o modelo; a carga de dados é ligada aqui, sem acoplar a apresentação à exportação.
     if 'id="manifesto-dados"' not in sessoes_html:
@@ -662,6 +667,7 @@ def main() -> None:
     escrever("ruido.html", P.gerar_ruido(modelo))
     escrever("analises.html", P.gerar_analises(modelo))
     escrever("metodologia.html", P.gerar_metodologia(modelo))
+    escrever("busca.html", pagina_busca.gerar_busca(modelo, api_url))
     # Eventos derivados das datas já coletadas; nada é gravado em data/.
     eventos = N.eventos_do_modelo(modelo)
     escrever(N.PAGINA, P.gerar_novidades(eventos))
@@ -669,7 +675,8 @@ def main() -> None:
     escrever("alertas.html", P.redirecionar("ruido.html"))
     escrever("404.html", gerar_404(modelo))
     for pessoa in modelo["pessoas"].values():
-        escrever(f"vereadores/{pessoa['slug']}.html", P.gerar_vereador(modelo, pessoa))
+        escrever(f"vereadores/{pessoa['slug']}.html", P.gerar_vereador(
+            modelo, pessoa, api_disponivel=api_disponivel, cache_temas=cache_temas))
     resumo = {
         leg["id"]: {
             p["nome"]: {"partido": p["mandatos"][leg["id"]]["partido"], "eleito": p["mandatos"][leg["id"]]["eleito"], **p["mandatos"][leg["id"]]["metricas"]}

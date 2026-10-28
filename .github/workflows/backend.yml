@@ -1,0 +1,154 @@
+name: Testar e publicar backend
+
+on:
+  pull_request:
+    paths:
+      - "worker/**"
+      - ".github/workflows/backend.yml"
+  push:
+    branches: [main]
+    paths:
+      - "worker/**"
+      - ".github/workflows/backend.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backend-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  testes:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: worker
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: worker/package-lock.json
+
+      - run: npm ci
+      - run: npm test
+      - run: npm run typecheck
+
+  staging:
+    needs: testes
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    environment: staging
+    outputs:
+      publicado: ${{ steps.deploy.outcome == 'success' }}
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: worker
+    steps:
+      - name: Verificar disponibilidade do deploy
+        id: credenciais
+        working-directory: .
+        env:
+          DEPLOY_DISPONIVEL: ${{ secrets.CLOUDFLARE_API_TOKEN_DEPLOY != '' }}
+        run: |
+          if [ "$DEPLOY_DISPONIVEL" != "true" ]; then
+            echo "::notice::deploy pulado: CLOUDFLARE_API_TOKEN_DEPLOY ausente; veja docs/backend.md"
+            exit 0
+          fi
+          echo "disponivel=true" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@v4
+        if: steps.credenciais.outputs.disponivel == 'true'
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        if: steps.credenciais.outputs.disponivel == 'true'
+        with:
+          node-version: "22"
+
+      - run: npm ci
+        if: steps.credenciais.outputs.disponivel == 'true'
+
+      - name: Migrar e publicar staging
+        id: deploy
+        if: steps.credenciais.outputs.disponivel == 'true'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN_DEPLOY }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npx wrangler d1 migrations apply radar-niteroi-staging --remote --env staging
+          npx wrangler deploy --env staging
+
+      - name: Verificar integração em staging
+        if: steps.credenciais.outputs.disponivel == 'true'
+        env:
+          STAGING_URL: https://radar-niteroi-api-staging.tormenta.workers.dev
+        run: |
+          if [ -f test/integracao.test.ts ]; then
+            npx vitest run test/integracao.test.ts
+          else
+            curl --fail-with-body --silent --show-error --retry 3 --retry-all-errors --max-time 30 "$STAGING_URL/api/saude" -o /tmp/saude.json
+            curl --fail-with-body --silent --show-error --retry 3 --retry-all-errors --max-time 30 "$STAGING_URL/api/busca?q=lei" -o /tmp/busca.json
+            node --input-type=module -e 'import fs from "node:fs"; for (const nome of ["saude", "busca"]) { const corpo = JSON.parse(fs.readFileSync(`/tmp/${nome}.json`, "utf8")); if (!corpo || typeof corpo !== "object" || corpo.erro) throw new Error(`Falha no smoke: ${nome}`); }'
+          fi
+
+  production:
+    needs: staging
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    environment: production
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: worker
+    steps:
+      - name: Verificar disponibilidade do deploy
+        id: credenciais
+        working-directory: .
+        env:
+          DEPLOY_DISPONIVEL: ${{ secrets.CLOUDFLARE_API_TOKEN_DEPLOY != '' }}
+          STAGING_PUBLICADO: ${{ needs.staging.outputs.publicado }}
+        run: |
+          if [ "$DEPLOY_DISPONIVEL" != "true" ]; then
+            echo "::notice::deploy pulado: CLOUDFLARE_API_TOKEN_DEPLOY ausente; veja docs/backend.md"
+            exit 0
+          fi
+          if [ "$STAGING_PUBLICADO" != "true" ]; then
+            echo "::notice::deploy de produção pulado: staging não foi publicado"
+            exit 0
+          fi
+          echo "disponivel=true" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@v4
+        if: steps.credenciais.outputs.disponivel == 'true'
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        if: steps.credenciais.outputs.disponivel == 'true'
+        with:
+          node-version: "22"
+
+      - run: npm ci
+        if: steps.credenciais.outputs.disponivel == 'true'
+
+      - name: Migrar e publicar produção após o smoke de staging
+        if: steps.credenciais.outputs.disponivel == 'true'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN_DEPLOY }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          COMMIT: ${{ github.sha }}
+        run: |
+          npx wrangler d1 migrations apply radar-niteroi --remote
+          npx wrangler deploy --var "COMMIT:$COMMIT"

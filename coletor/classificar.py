@@ -25,6 +25,7 @@ import uuid
 from pathlib import Path
 
 from coletor.arquivos import salvar_json, salvar_mapa
+from coletor import ia
 
 RAIZ = Path(__file__).resolve().parent.parent
 DIR_DADOS = RAIZ / "data" / "proposicoes"
@@ -151,39 +152,12 @@ def chamar_ia(itens: list[dict], chave: str, sessao: str) -> dict[int, dict]:
             {"role": "user", "content": "Classifique os projetos abaixo (um JSON por linha):\n" + conteudo},
         ],
     }
-    req = urllib.request.Request(
-        BASE_URL.rstrip("/") + "/chat/completions",
-        data=json.dumps(corpo).encode(),
-        headers={
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {chave}",
-            "User-Agent": USER_AGENT,
-            "x-opencode-session": sessao,
-        },
-        method="POST",
-    )
-    for tentativa in range(4):
-        try:
-            with urllib.request.urlopen(req, timeout=180) as r:
-                resposta = json.loads(r.read().decode())
-            texto = resposta["choices"][0]["message"]["content"]
-            texto = re.sub(r"^```(?:json)?|```$", "", texto.strip(), flags=re.M)
-            dados = json.loads(texto[texto.find("{"): texto.rfind("}") + 1])
-            return {int(i["id"]): i for i in dados.get("itens", []) if "id" in i}
-        except urllib.error.HTTPError as e:
-            corpo_erro = e.read().decode(errors="ignore")[:300]
-            if e.code in (401, 403):
-                raise PermissionError(f"OpenCode Go recusou a chave ({e.code}): {corpo_erro}")
-            if e.code == 429:
-                espera = int(e.headers.get("Retry-After") or 30 * (tentativa + 1))
-                print(f"  limite de uso; aguardando {espera}s", file=sys.stderr)
-                time.sleep(espera)
-                continue
-            print(f"  HTTP {e.code}: {corpo_erro}", file=sys.stderr)
-        except (json.JSONDecodeError, KeyError, ValueError, urllib.error.URLError, TimeoutError) as e:
-            print(f"  resposta inválida ({type(e).__name__}); tentando de novo", file=sys.stderr)
-        time.sleep(5 * (tentativa + 1))
-    return {}
+    def decodificar(texto: str) -> dict[int, dict]:
+        dados = ia.decodificar_json(texto)
+        return {int(i["id"]): i for i in dados.get("itens", []) if "id" in i}
+
+    return ia.chamar(corpo, chave, sessao, base_url=BASE_URL, decodificar=decodificar,
+                     user_agent=USER_AGENT, transporte=urllib.request.urlopen, esperar=time.sleep)
 
 
 def normalizar_ia(bruto: dict) -> dict:

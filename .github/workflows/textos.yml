@@ -1,0 +1,267 @@
+name: Extrair e sincronizar textos
+
+on:
+  workflow_run:
+    workflows: ["Coleta semanal"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["config/remocoes.json"]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.event_name == 'pull_request' && format('textos-pr-{0}', github.ref) || 'coleta' }}
+  cancel-in-progress: false
+
+jobs:
+  verificar:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    environment: pr-simulacao
+    permissions:
+      contents: read
+    env:
+      RADAR_TEXTOS: ${{ github.workspace }}/.dados-textos
+      RADAR_CACHE: ${{ github.workspace }}/.radar-cache
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Abrir worktree de textos publicados (somente leitura)
+        run: git worktree add --detach "$RADAR_TEXTOS" origin/dados-textos
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Instalar Wrangler fixado
+        working-directory: worker
+        run: npm ci
+
+      - name: Verificar sincronização sem escrita
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN_LEITURA }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          PR_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
+        run: |
+          if [ "$PR_REPOSITORY" != "$GITHUB_REPOSITORY" ] || [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "::notice::simulação staging ignorada: PR de fork ou token somente leitura indisponível"
+            exit 0
+          fi
+          python -m coletor.nuvem --ambiente staging --simular --textos "$RADAR_TEXTOS"
+
+  publicar:
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'workflow_dispatch' || github.event_name == 'push' ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+    environment: production
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    env:
+      RADAR_TEXTOS: ${{ github.workspace }}/.dados-textos
+      RADAR_CACHE: ${{ github.workspace }}/.radar-cache
+      EXPORTACOES: ${{ github.workspace }}/.exportacoes
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Preparar worktree e identidade dos commits
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git worktree add -b dados-textos "$RADAR_TEXTOS" origin/dados-textos
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Definir chave semanal dos originais públicos
+        id: chave-cache
+        run: echo "semana=$(date -u +%G-%V)" >> "$GITHUB_OUTPUT"
+
+      # Nunca restaurar o prefixo antigo ocr-v1: ele incluía texto sem mascaramento.
+      - uses: actions/cache/restore@v4
+        id: cache-originais
+        if: always() && steps.chave-cache.outputs.semana != ''
+        with:
+          path: |
+            ${{ env.RADAR_CACHE }}/arquivos/
+            ${{ env.RADAR_CACHE }}/textos_sha256.json
+            ${{ env.RADAR_CACHE }}/siscam_arquivos_sha256.json
+            ${{ env.RADAR_CACHE }}/atas_cache_sha256.json
+          key: textos-${{ runner.os }}-originais-publicos-v1-${{ steps.chave-cache.outputs.semana }}
+          restore-keys: |
+            textos-${{ runner.os }}-originais-publicos-v1-
+
+      - name: Instalar ferramentas de extração e registrar versões
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q poppler-utils tesseract-ocr tesseract-ocr-por
+          dpkg-query -W poppler-utils tesseract-ocr tesseract-ocr-por
+          pdftotext -v 2>&1 | head -1
+          pdftoppm -v 2>&1 | head -1
+          tesseract --version 2>&1 | head -1
+          tesseract --list-langs
+          dpkg-query -L tesseract-ocr-por | grep '/por.traineddata$' | xargs sha256sum
+
+      - name: Extrair textos e commitar após a barreira de PII
+        timeout-minutes: 130
+        run: python -m coletor.textos --ocr --max-arquivos 1500 --max-minutos 120 --commit-textos --textos "$RADAR_TEXTOS"
+
+      - name: Validar manifestos e textos e executar testes
+        env:
+          RADAR_COLETA: "1"
+        run: |
+          python -m coletor.validar --textos "$RADAR_TEXTOS"
+          python -m unittest discover -s tests -t .
+
+      # O manifesto só pode ser publicado depois que seus textos estiverem no remoto.
+      - name: Publicar dados-textos antes do manifesto
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          export GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=http.https://github.com/.extraheader
+          export GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          git -C "$RADAR_TEXTOS" push origin HEAD:dados-textos
+
+      - name: Commitar manifestos em main e publicar com até três tentativas
+        id: manifestos
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          export GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=http.https://github.com/.extraheader
+          export GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          git add data/textos
+          if ! git diff --cached --quiet; then
+            git commit -m "Atualiza manifestos de inteiro teor ($(date -u +%Y-%m-%d))"
+          fi
+          for tentativa in 1 2 3; do
+            if git pull --rebase origin main && git push origin HEAD:main; then
+              echo "publicado=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            git rebase --abort 2>/dev/null || true
+            echo "::warning::falha ao publicar manifesto (tentativa $tentativa de 3)"
+            sleep 5
+          done
+          exit 1
+
+      - name: Verificar disponibilidade da sincronização Cloudflare
+        id: credenciais-nuvem
+        env:
+          DADOS_DISPONIVEIS: ${{ secrets.CLOUDFLARE_API_TOKEN_DADOS != '' }}
+        run: |
+          if [ "$DADOS_DISPONIVEIS" != "true" ]; then
+            echo "::notice::sincronização/exportação e atestação de exportações puladas: CLOUDFLARE_API_TOKEN_DADOS ausente; veja docs/backend.md"
+            exit 0
+          fi
+          echo "disponivel=true" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-node@v4
+        if: steps.credenciais-nuvem.outputs.disponivel == 'true'
+        with:
+          node-version: "22"
+
+      - name: Instalar Wrangler fixado
+        if: steps.credenciais-nuvem.outputs.disponivel == 'true'
+        working-directory: worker
+        # Mantém os scripts dos binários do Wrangler; checkout não persiste token Git.
+        run: npm ci
+
+      - name: Sincronizar produção e exportar projeções
+        id: sincronizar
+        if: steps.credenciais-nuvem.outputs.disponivel == 'true'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN_DADOS }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: python -m coletor.nuvem --ambiente production --exportar "$EXPORTACOES" --textos "$RADAR_TEXTOS" --commit "$(git rev-parse HEAD)" --commit-dados-textos "$(git -C "$RADAR_TEXTOS" rev-parse HEAD)"
+
+      - name: Registrar expurgo de exportações em main
+        if: always() && (steps.sincronizar.outcome == 'success' || steps.sincronizar.outcome == 'failure')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff HEAD --quiet -- docs/backend.md; then
+            exit 0
+          fi
+          export GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=http.https://github.com/.extraheader
+          export GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          git add -- docs/backend.md
+          git commit --only -m "Registra expurgo de exportações" -- docs/backend.md
+          for tentativa in 1 2 3; do
+            if git pull --rebase origin main && git push origin HEAD:main; then
+              exit 0
+            fi
+            git rebase --abort 2>/dev/null || true
+            echo "::warning::falha ao publicar registro de expurgo (tentativa $tentativa de 3)"
+            sleep 5
+          done
+          exit 1
+
+      - name: Orientar retomada da sincronização após publicar manifestos
+        if: failure() && steps.manifestos.outputs.publicado == 'true' && steps.sincronizar.outcome == 'failure'
+        run: echo "::error::os manifestos já foram publicados, mas a sincronização de produção falhou; execute novamente textos.yml via workflow_dispatch para concluir a sincronização e a exportação."
+
+      - name: Atestar manifestos
+        if: hashFiles('data/textos/manifesto-*.json') != ''
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: data/textos/manifesto-*.json
+
+      - name: Atestar somas da exportação
+        if: steps.sincronizar.outcome == 'success' && hashFiles('.exportacoes/**/SHA256SUMS') != ''
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: .exportacoes/**/SHA256SUMS
+
+      - name: Salvar somente originais públicos mesmo em falha
+        if: always() && steps.chave-cache.outputs.semana != '' && steps.cache-originais.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            ${{ env.RADAR_CACHE }}/arquivos/
+            ${{ env.RADAR_CACHE }}/textos_sha256.json
+            ${{ env.RADAR_CACHE }}/siscam_arquivos_sha256.json
+            ${{ env.RADAR_CACHE }}/atas_cache_sha256.json
+          key: textos-${{ runner.os }}-originais-publicos-v1-${{ steps.chave-cache.outputs.semana }}
+
+      - name: Preservar manifestos não publicados e exportações em falha
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: textos-nao-publicados-${{ github.run_id }}
+          path: |
+            data/textos/
+            .exportacoes/
+          include-hidden-files: true
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Restaurar manifestos locais após preservar o artefato
+        if: failure() && steps.manifestos.outputs.publicado != 'true'
+        run: |
+          git restore --staged --worktree -- data/textos
+          git clean -fdq -- data/textos
+          echo "::warning::consulte o artefato textos-nao-publicados-$GITHUB_RUN_ID; a próxima execução refaz o trabalho de forma idempotente. Cache bruto e textos que falharam na barreira de PII não são publicados como artefato."

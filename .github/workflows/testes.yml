@@ -38,6 +38,13 @@ jobs:
         with:
           node-version: "22"
 
+      - name: Instalar ferramentas de extração (poppler e Tesseract com português)
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q poppler-utils tesseract-ocr tesseract-ocr-por
+          pdftotext -v 2>&1 | head -1
+          tesseract --version 2>&1 | head -1
+
       - name: Executar testes Python
         run: python -m unittest discover -s tests -t . -v
 

@@ -8,6 +8,8 @@ site_src/** text eol=lf
 config/*.json text eol=lf
 coletor/** text eol=lf
 tests/js/** text eol=lf
+worker/** text eol=lf
+scripts/** text eol=lf
 *.woff2 binary
 *.png binary
 *.py text eol=lf

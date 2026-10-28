@@ -19,12 +19,24 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | --- | --- |
 | `coletor/siscam.py` | HTTP compartilhado, parsing, autoria, tramitação, substitutivos e desfechos dos PLs. |
 | `coletor/documentos.py` | Listagem e detalhe seletivo dos cinco demais tipos de documento. |
+| `coletor/arquivos_siscam.py` | Tabela "[ Arquivos ]" do detalhe (`extrair_arquivos`), preservação da lista anterior e preenchimento offline por `--arquivos-do-cache`. |
+| `coletor/contatos.py` | Propõe contatos públicos do cache bruto com evidências; aplica somente arquivo revisado, validando perfis e backend, sem rede. |
 | `coletor/sessoes.py` | Coleta de sessões, documentos da sessão, pauta, frequência e votações. |
 | `coletor/regras_documentos.py` | Classificação, bairros, respostas, publicação e regras das métricas de documentos. |
 | `coletor/regras_sessoes.py` | Presença, votos, parecer, quórum, qualidade e auditoria offline das sessões. |
 | `coletor/classificar.py` | Taxonomia, regras, prompt, chamadas à IA, cache e curadoria dos PLs. |
+| `coletor/ia.py` | Cliente OpenCode Go compartilhado (`/chat/completions`, Bearer, `x-opencode-session`, tentativas). |
+| `coletor/temas.py` | Temas por IA por pessoa e legislatura, só com ementas mascaradas, validação, contagem pelo código e cache. |
+| `coletor/textos.py` | Pipeline incremental de inteiro teor: fila, download, extração, limpeza, máscara, trechos, manifestos e commit de `dados-textos` após barreira de PII. |
+| `coletor/nuvem/` | Sincronização e exportação: `__main__` (CLI), `sincronizar` (orquestração e expurgo), `fonte` (Git), `banco` (SQL), `cloudflare` (D1/Vectorize/embeddings), `r2` (originais e exportações), `credenciais` (tokens/OAuth), `wrangler` (subprocessos), `local` (adaptadores offline), `ambientes` (composição) e `rede` (HTTP). |
+| `coletor/mascara.py` | Mascaramento de dados pessoais, listas explícitas de contatos liberados e barreira de PII (`varrer`). |
+| `coletor/limpeza.py` | Limpeza determinística antes da máscara, com proteção do conteúdo legislativo e geração controlada de clichês. |
+| `coletor/trechos.py` | Normalização e divisão determinística do texto em trechos, com offsets Python/UTF-16 e ids estáveis. |
+| `coletor/extratores/` | Detecção e extração dos formatos de arquivo; PDF/OCR usam ferramentas externas, demais formatos têm extratores locais. |
+| `coletor/site/temas_html.py` | Bloco “Temas (agrupados por IA)” da ficha, separado do “Resumo em números”, que continua sem IA. |
 | `coletor/arquivos.py` | Serialização e gravação atômica dos JSONs versionados. |
 | `coletor/validar.py` | Validação de dados, configuração e temporários, sem alterar arquivos. |
+| `coletor/remocoes.py` | Leitura de `config/remocoes.json` com cache: `carregar`, `chaves_removidas` e `esta_removido` (chave **ou** SHA-256); o expurgo não fica aqui. |
 | `coletor/geo.py` | Conversão offline do Overpass em limites simplificados dos bairros, com fonte OSM/ODbL. |
 | `coletor/paisagem.py` | Marca e favicon (`--marca`), textura dos bairros (`--textura`), camadas da paisagem (`--camadas`) e imagem de compartilhamento (`--og`); geração offline em `site_src/`, comparada por bytes nos SVGs e por pixels no PNG. |
 | `coletor/novidades.py` | Eventos dos PLs pelas datas dos dados, semanas e feed RSS. |
@@ -32,6 +44,7 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `coletor/site/modelo.py` | Enriquecimento, pessoas, mandatos, métricas, repetidos e documentos por autor. |
 | `coletor/site/modelo_sessoes.py` | Agregação de sessões, cobertura e métricas da Câmara e das pessoas. |
 | `coletor/site/pagina_sessoes.py` | Página de sessões, seção individual e metodologia `#sessoes`. |
+| `coletor/site/pagina_busca.py` | Página `busca.html`, configuração `radar-api` e metodologia de inteiro teor, busca, privacidade e auditoria. |
 | `coletor/site/inicio.py` | Blocos da home: hero com camadas, “Quem é meu vereador?”, mapa de indicações da legislatura atual e linha do tempo de `config/memoria.json`. |
 | `coletor/site/pagina_memoria.py` | Página de memória `memoria.html`, gerada por `coletor.gerar_site` quando há `config/memoria.json`; link no rodapé e faixa na home só quando publicada. |
 | `coletor/site/glossario.py` | Glossário: links `a.glossario` para `metodologia.html#g-*` na prosa, definições num `<template>` por página e popover progressivo em `navegacao.js`. |
@@ -41,13 +54,19 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `config/curadoria.json` | Rótulos e correções editoriais com fontes públicas. |
 | `config/memoria.json` | Conteúdo editorial da memória: critérios, homenageados e linha do tempo; validado por `coletor.validar`. |
 | `config/perfis.json` | Perfil público por nome do SISCAM: partido, votos e situação por mandato, outras eleições (TSE), links oficiais, falecimento opcional e fontes; validado por `coletor.validar`. |
+| `config/backend.json` | URL opcional da API, origens CORS e contatos institucionais com fonte; validado por `coletor.validar`. |
+| `config/remocoes.json` | Remoções por chave de origem e SHA-256, com motivo, fonte e data; validado por `coletor.validar`. |
 | `data/proposicoes/`, `data/documentos/`, `data/sessoes/` | Registros coletados por ano (documentos também por tipo). |
 | `data/classificacao_ia.json`, `data/meta.json` | Cache da IA e metadados das execuções. |
+| `data/temas_ia.json` | Cache dos temas por IA (rótulos por pessoa e legislatura e classificação por documento). |
+| `data/textos/` | Manifestos anuais `manifesto-<ano>.json` do inteiro teor; os textos e trechos ficam na branch `dados-textos`, não aqui. |
+| `data/textos/cliches.json` | Clichês do corpus usados na limpeza, gerados por `coletor.limpeza`; recalcular exige subir `VERSAO_LIMPEZA`. |
 | `data/geo/bairros.json` | Geometria opcional gerada por `coletor.geo`. |
 | `site_src/app.js` | Listas de PLs/documentos, carregador compartilhado e diálogo SISCAM. |
 | `site_src/navegacao.js` | Menu móvel e tema, até 4 KiB gzip; um listener por tipo no documento em cada script, sem alterar `app.js` para essas funções. |
 | `site_src/dados.js` | Hidratação das colunas e planejamento das partes de PLs/documentos. |
 | `site_src/sessoes.js` | Filtros, mapa de votos, paginação e CSV de sessões. |
+| `site_src/busca.js` e `busca.css` | Só em `busca.html`: consulta ao Worker, filtros na URL, trechos escapados com destaque seguro, fontes e paginação acessível; JS até 6 KiB gzip. Sem `api_url` ou JavaScript, mantém aviso e links para listas/SISCAM. |
 | `site_src/inicio.js` | Só na home: céu vivo pelo fuso `America/Sao_Paulo` com fallback UTC−3, contagem dos números e combobox APG; até 6 KiB gzip. |
 | `site_src/inicio.css` | Só na home: fases do céu por `[data-ceu]`, com hexadecimais apenas nesses blocos; paralaxe sob `@supports (animation-timeline: scroll())` e sem movimento reduzido. |
 | `site_src/memoria.css` | Estilos da página de memória (só nela, com a Fraunces). |
@@ -61,6 +80,10 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `site_src/fontes/` | WOFF2 auto-hospedadas Barlow Condensed, Public Sans e Fraunces; licenças `OFL-*.txt`; `FONTES.md` não publicado. |
 | `tests/` | Testes Python, JS em `tests/js/` e HTML real em `tests/fixtures/siscam/`. |
 | `tests/js/fixtures/cartao_sessoes.html` | Paridade Python/JavaScript do cartão de votação. |
+| `worker/` | Worker de busca TypeScript (`src/`: `/api/busca`, `/api/documento`, `/api/original`, `/api/versao`, `/api/saude`; `cron.ts`: auditoria diária de até 50 originais em streaming e hashes dos trechos, única escrita em `verificacoes`; testes vitest no pool dos Workers em `test/`); `wrangler.jsonc` com produção no nível superior e staging em `env.staging`. |
+| `scripts/testes.ps1` | Executor paralelo local equivalente ao discover; o CI segue sequencial. |
+| `docs/backend.md` | Recursos Cloudflare, ferramentas, credenciais e rollback. |
+| `docs/contratos/textos.md` | Contrato congelado de chaves, documento principal, manifesto `data/textos/manifesto-<ano>.json`, remoções, duplicatas, `dados-textos`, D1 e Vectorize; fixtures em `tests/fixtures/contratos/` (raiz em miniatura gerada por `gerar_fixtures.py`). |
 | `.github/workflows/` | Testes, coleta semanal e publicação. |
 | `site/` | Saída gerada e ignorada pelo Git. |
 
@@ -92,8 +115,10 @@ versionada; o código também trata sua ausência conforme os contratos abaixo.
 
 ## Pipeline e comandos
 
-Ordem: **`siscam` → `documentos` → `sessoes` → `classificar` → `validar` → `gerar_site`**.
-Os três primeiros e a classificação rodam na coleta; a geração fica no workflow de publicação.
+Ordem: **`siscam` → `documentos` → `sessoes` → `classificar` → `temas` → `validar`** na coleta;
+depois **`textos` → `validar --textos` → `nuvem`** em `textos.yml`.
+`temas` roda após `classificar` em `coleta.yml`; `gerar_site` fica no workflow de publicação do site,
+após sua própria validação/testes, sem depender da sincronização de textos.
 
 1. `siscam` lista PLs por ano e baixa detalhes novos ou alterados, além da fila de revisão de substitutivos.
    Salva `data/proposicoes/<ano>.json` e a chave `coleta` de `data/meta.json`.
@@ -104,11 +129,14 @@ Os três primeiros e a classificação rodam na coleta; a geração fica no work
 4. `classificar` faz novas chamadas à IA para ementas sem cache válido, quando habilitadas. Grava
    `data/classificacao_ia.json` ao usar IA e a chave `classificacao` dos metadados; a combinação final das
    camadas acontece na geração, não num arquivo de projetos classificados.
-5. `validar` confere `data/` e `config/`, inclusive o formato byte a byte de documentos e sessões
+5. `temas` classifica e agrupa ementas mascaradas por pessoa e legislatura, com cache em `data/temas_ia.json`.
+6. `validar` confere `data/` e `config/`, inclusive o formato byte a byte de documentos e sessões
    (pastas opcionais), geometria e temporários. Não grava; retorna código 1 se houver problemas.
-6. `gerar_site` combina curadoria, regras e cache, calcula métricas e recria `site/`. As páginas principais
+7. `textos` gera textos mascarados e trechos em `dados-textos` e manifestos em `data/textos/`.
+   Após `validar --textos DIR`, `nuvem` sincroniza D1, Vectorize e R2 e pode exportar projeções.
+8. `gerar_site` combina curadoria, regras e cache, calcula métricas e recria `site/`. As páginas principais
    seguem `paginas.NAV`: início, novidades, leis, projetos, atividades, sessões, sem efeito e polêmicas
-   (`ruido.html`), análises e metodologia. Também gera `vereadores/*.html`, `feed.xml`, o redirect
+   (`ruido.html`), análises, busca e metodologia. Também gera `vereadores/*.html`, `feed.xml`, o redirect
    `alertas.html` → `ruido.html`, `404.html`, `dados/*`, estáticos e `.nojekyll`. A 404 usa o template comum,
    prefixo de caminho absoluto extraído de `URL_SITE`, `noindex`, sem canônica, e lista de vereadores da
    legislatura atual.
@@ -126,6 +154,7 @@ python -m http.server -d site 8000
 ```
 
 Para usar só os dados versionados, comece por `validar` e `gerar_site`, sem rede nem chave.
+`python -m coletor.validar --textos DIR` confere também hashes, trechos e a barreira de PII do worktree `dados-textos`; os manifestos são sempre validados.
 
 Para regenerar a marca e o favicon após mudar sua geometria, execute separadamente, offline:
 
@@ -158,7 +187,7 @@ fotografia pelo art. 44 da Lei 9.610/98, com `ano_divulgacao + 70 < ano atual`. 
 
 `coletor.validar` confere `config/perfis.json`; a ausência gera aviso (suplentes ficam sem partido e as fichas,
 sem perfil). Chaves de `vereadores` são o nome exato do SISCAM em maiúsculas; cada perfil tem só `mandatos`,
-`eleicoes`, `camara`, `site`, `redes` e, opcionalmente, `falecimento`. Por mandato: legislatura existente em
+`eleicoes`, `camara`, `site`, `redes` e, opcionalmente, `falecimento` e `contatos`. Por mandato: legislatura existente em
 `config/vereadores.json`, `partido` não vazio, `votos` inteiro positivo (opcional), `situacao` em
 `eleito`/`eleita`/`suplente` e `fontes` HTTPS.
 Quem está entre os eleitos da legislatura precisa do mesmo partido do config e não pode ser suplente; quem não
@@ -170,6 +199,16 @@ no TSE (`fonte` = `https://dadosabertos.tse.jus.br/dataset/candidatos-<ano>`, co
 Formato: JSON com `indent=1`, ordem das chaves preservada, UTF-8, LF e NFC.
 `falecimento` contém somente `data` (`AAAA-MM-DD` válida, não futura) e `fonte` (`{titulo, url}` HTTPS);
 quando presente, a ficha informa a data com link para a fonte, sem alterar as métricas históricas.
+`contatos` é lista de `{tipo: telefone|email, valor, fonte}` (HTTPS), com `descricao` opcional não vazia.
+E-mail exige endereço completo; telefone, ≥ 8 dígitos e só dígitos/espaços/`()+-`. Não repita `(tipo, valor)`
+no mesmo perfil nem entre perfis. O importador TSE preserva contatos e outras chaves não eleitorais.
+
+Contatos publicados pelo próprio mandato em timbre/assinatura são públicos, inclusive celulares e e-mails
+pessoais; a mesma regra vale para todos os vereadores. Confirme a fonte antes de incluí-los nas listas
+explícitas de perfis/backend. E-mails com domínio público `gov.br`, `jus.br`, `leg.br`, `mp.br`, `def.br` ou
+`mil.br` (e subdomínios) não são mascarados; telefones só são liberados pelas listas explícitas.
+`python -m coletor.contatos --candidatos --cache DIR [--min-docs 3] [--saida ARQ]` gera apenas proposta
+em `.qa/contatos_propostos.json` (ignorada pelo Git); revise/remova candidatos antes de `--aplicar ARQ`.
 
 ### Validação dos afastamentos
 
@@ -197,20 +236,45 @@ com anos consecutivos dentro da legislatura, `cargo` entre Presidente, 1º/2º V
 `apelidos`), `fonte` HTTPS (ata ou votação da sessão no SISCAM) e, por biênio, nenhum cargo repetido nem pessoa com
 dois cargos. Não invente nomes: quem ainda não está na configuração (como um suplente) entra primeiro em `apelidos`.
 
+### Validação do backend e das remoções
+
+`coletor.validar` confere `config/backend.json` e `config/remocoes.json`; a ausência de cada arquivo gera aviso,
+não erro. Ambos usam JSON com `indent=1`, ordem das chaves preservada, UTF-8, LF, quebra final e NFC.
+O backend aceita só `api_url` (URL HTTPS sem barra final, consulta nem fragmento ou `null`; caminho permitido),
+`origens_cors` (lista não vazia de origens HTTPS únicas em minúsculas, `https://host[:porta]`, sem ponto final
+no host, porta padrão `:443`, caminho, consulta, fragmento nem barra final) e `contatos_institucionais`. Cada contato tem
+somente `tipo` (`telefone` ou `email`), `valor`, `descricao` não vazia e `fonte` HTTPS; e-mail precisa ter formato
+de endereço e telefone admite só dígitos, espaços, parênteses, `+` e `-`, com pelo menos oito dígitos.
+Não repita o par `(tipo, valor)`.
+
+Remoções têm somente a lista `remocoes`, ordenada por `(data, chave, sha256)`, sem pares `(chave, sha256)` repetidos. Cada item
+contém exatamente `chave` (`siscam:<IdArquivo>`, inteiro positivo, ou `sessao:<guid>`, GUID em minúsculas,
+como em `docs/contratos/textos.md` §2.1), `sha256`
+(64 hexadecimais minúsculos), `motivo` não vazio, `fonte` HTTPS e `data` válida `AAAA-MM-DD`, não futura.
+O `motivo` é público no Git e não deve conter dados pessoais.
+
 ### Opções das CLIs
 
 - Nos três coletores, `--anos` aceita ano ou intervalo inclusivo (`2025-2026`). Padrão de PLs: 2021 até o
   ano atual; documentos/sessões: ano anterior e atual. `--workers` usa `COLETOR_WORKERS` ou 4; em sessões,
   controla só os detalhes, pois a paginação da listagem é sequencial.
 - **PLs:** `--forcar` rebaixa os detalhes de todos os PLs listados. `--max-detalhes` (padrão 400) limita
-  apenas detalhes pedidos **só pelos substitutivos**, do mais recente ao mais antigo, na execução inteira:
-  PL sem a chave `substitutivos` ou PL sem lei com substitutivo ainda sem lei. Mudanças normais da listagem
-  e `--forcar` não entram nesse limite. Extras adiados ficam para outra execução.
+  apenas detalhes pedidos **só pelos substitutivos ou pelos arquivos**, do mais recente ao mais antigo, na
+  execução inteira: PL sem a chave `substitutivos`, PL sem lei com substitutivo ainda sem lei ou PL sem a chave
+  `arquivos` (só a do próprio PL decide; substitutivo sem ela não recoloca o PL na fila). Mudanças normais da
+  listagem e `--forcar` não entram nesse limite. Extras adiados ficam para outra execução; `meta.json` separa
+  `por_substitutivos`/`substitutivos_adiados` de `por_arquivos`/`arquivos_adiados`.
+- **Arquivos do cache (PLs e documentos):** `--arquivos-do-cache DIR` só preenche `arquivos` a partir de
+  `DIR/<id>.html` (PL, cada substitutivo e documento), sem rede nem outros campos, e encerra; respeita `--anos`
+  (padrão: todos os anos existentes) e, em documentos, `--tipos`. Sem HTML, o registro fica intocado. Em
+  documentos, avisa que ignora `--so-detalhes`, `--sem-detalhe`, `--forcar` e `--max-minutos`. Idempotente.
 - **Documentos:** `--tipos requerimento,indicacao,mocao,pdl,resolucao` seleciona os tipos a **relistar**;
   `--max-detalhes` (1500) limita detalhes; `--sem-detalhe` só lista; `--so-detalhes` não relista e atende
   pendentes, sem combinar com `--sem-detalhe` ou `--forcar`. `--forcar` marca os elegíveis relistados para
   rebaixar, ainda dentro do limite. A fila de detalhes inclui **todos os arquivos existentes**, mesmo fora
   dos tipos/anos escolhidos. Portanto `--so-detalhes` não garante esvaziar toda a fila numa execução.
+  Requerimentos, PDLs e resoluções com `detalhe_em` e sem `arquivos` também entram nessa fila, por recência e
+  dentro do limite; indicações e moções com detalhe não (inteiro teor fora do escopo).
 - **Sessões:** `--forcar` marca as sessões listadas para rebaixar; `--max-detalhes` (400) limita a execução,
   mais recentes primeiro. A fila também inclui pendentes de todos os anos existentes.
 - **Documentos e sessões:** `--max-minutos N` é um prazo interno positivo, sem prazo por padrão. Para de
@@ -218,11 +282,35 @@ dois cargos. Não invente nomes: quem ainda não está na configuração (como u
   parcial e os metadados; não equivalem a interromper à força o processo durante uma gravação.
 - **Classificador:** `--sem-ia` impede novas chamadas, sem apagar o cache; `--limite N` limita os projetos
   pendentes enviados à IA (sem limite por padrão). O gerador continua lendo o cache mesmo sem chave.
+- **Temas:** carga manual integral com chave: `python -m coletor.temas --limite 0 --max-minutos 0`.
+  Zero (ou opção omitida) significa sem limite/sem prazo. A publicação anterior permanece até a conclusão
+  das novas classificações; respostas inválidas não são reenviadas enquanto o hash da amostra não mudar.
+- **Textos:** `python -m coletor.textos` é incremental; `--anos` filtra ano/intervalo inclusivo dos manifestos
+  (padrão: todos) e `--tipos` aceita `pl,requerimento,pdl,resolucao,ata` (padrão: todos).
+  `--max-arquivos` (500; 0 = sem limite) limita extrações; reconstruções do cache bruto ficam fora desse teto.
+  `--max-minutos` é prazo positivo, sem prazo por padrão; o restante fica pendente. `--ocr` habilita
+  pdftoppm/Tesseract para páginas escaneadas; `--sem-rede` usa só cache, marcando `pendente_download` sem ele.
+  `--reprocessar-versao` inclui entradas de versões antigas; alterações de configuração já são reprocessadas.
+  `--verificar` confere integridade, trechos e PII sem gravar; `--amostra` (20; 0 = todas) limita reextrações
+  nessa conferência. `--so-extrair` só baixa/extrai para o cache bruto, sem manifesto nem textos publicados,
+  e não combina com `--commit-textos`. Este último aplica a barreira de PII e commita em `dados-textos`,
+  sem push. `--textos DIR` escolhe o worktree, `--cache DIR` escolhe o cache e `--workers` usa
+  `COLETOR_WORKERS` ou 4. `--forcar-trava` substitui trava abandonada e religa a pasta dos textos à raiz atual;
+  não use para concorrer com uma execução ativa.
+- **Nuvem:** `python -m coletor.nuvem --ambiente local|staging|production` exige ambiente explícito;
+  `--simular` só lê e mostra o plano, sem escrita. `--exportar DIR` grava dump, vetores e `SHA256SUMS`
+  em `DIR/<versao>/` e envia ao bucket de exportações; `--reconstruir` recria D1 e Vectorize pelo Git.
+  `--textos DIR` e `--cache DIR` substituem os caminhos do ambiente; `--sqlite ARQ` só vale no ambiente local
+  (padrão: `<cache>/local.sqlite`). `--commit` identifica o commit dos manifestos (padrão: `GITHUB_SHA` ou
+  `git rev-parse HEAD`); `--commit-dados-textos` identifica o commit publicado da branch `dados-textos`,
+  separado do commit dos manifestos. `--etapas` seleciona `r2,d1,vetores,exportar` por vírgulas
+  (padrão: `r2,d1,vetores`; `--exportar` acrescenta `exportar`). `--sem-r2` pula R2 e o envio da exportação;
+  `estado_indice` só é gravado sem falhas e com `r2`, `d1` e `vetores`.
 - **Arquivos:** `python -m coletor.arquivos --reformatar` regrava apenas `data/proposicoes/*.json` e
   `data/classificacao_ia.json`, conferindo antes de qualquer gravação que o conteúdo não muda.
 - **Auditoria:** `python -m coletor.regras_sessoes --auditoria` imprime distribuições e problemas, sem gravar.
 - **Geometria:** `python -m coletor.geo --entrada bairros-overpass.json`; `--tolerancia` muda o valor inicial
-  de 25 m. Veja o contrato de mapas abaixo. Validador e gerador não têm opções próprias de CLI.
+  de 25 m. Veja o contrato de mapas abaixo. O validador aceita `--textos DIR`; o gerador não tem opções próprias de CLI.
 
 Para uma carga histórica de documentos, prefira execuções manuais ano a ano via `anos_documentos`; não
 presuma duração fixa. Os pendentes podem ser atendidos depois com `python -m coletor.documentos --so-detalhes`.
@@ -254,6 +342,15 @@ Não exponha chaves em commits, exemplos reais ou logs.
 | `CLASSIFICADOR_LOTE` | `15`; projetos por chamada à IA. |
 | `CLASSIFICADOR_CONFIANCA_MINIMA` | `0.75`; limiar de exibição dos alertas da IA. |
 | `RADAR_COLETA` | Com `1`, pula testes de comparação com a base versionada e algumas checagens dessa base. |
+| `RADAR_CACHE` | Cache local de originais/extrações/embeddings: padrão `D:\radar-niteroi-cache` no Windows e `~/.cache/radar-niteroi` nos demais sistemas; `--cache` prevalece. |
+| `RADAR_TEXTOS` | Worktree de `dados-textos`; padrão local `radar-vereadores-niteroi-textos` ao lado do repositório (em `D:\git` para `textos` no Windows); `--textos` prevalece. |
+| `CLOUDFLARE_API_TOKEN` | Token da API usado pela nuvem; prevalece sobre `CLOUDFLARE_API_TOKEN_DADOS`. Sem ambos, pode usar login OAuth do Wrangler. |
+| `CLOUDFLARE_API_TOKEN_DADOS` | Token de conteúdo do CI (D1, Vectorize e R2); alternativa ao token genérico na CLI. |
+| `CLOUDFLARE_API_TOKEN_DEPLOY` | Secret de migração/deploy em `backend.yml`, passado como `CLOUDFLARE_API_TOKEN`; não usado pelo job de textos. |
+| `CLOUDFLARE_API_TOKEN_LEITURA` | Secret somente leitura da simulação de PR em `textos.yml`, passado como `CLOUDFLARE_API_TOKEN`. |
+| `CLOUDFLARE_ACCOUNT_ID` | Conta Cloudflare; sem variável, a nuvem usa o `account_id` da configuração do Worker. |
+| `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` | Credenciais S3/SigV4 do R2; sem o par, a nuvem usa a API REST com a credencial Cloudflare. |
+| `WRANGLER_CONFIG` | Caminho da configuração de login OAuth do Wrangler para a descoberta de credenciais, não o `worker/wrangler.jsonc`. |
 | `GITHUB_ACTIONS` | Quando não vazia, o validador emite problemas como `::error::`. |
 | `GITHUB_RUN_ID` | Se presente, identifica a sessão da IA; fora do Actions, usa identificador aleatório. |
 
@@ -411,6 +508,7 @@ Não há carregamento automático de `.env`. A IA usa `POST /chat/completions`, 
 | `sessoes.js` | Até 12 KiB, testado offline. |
 | `navegacao.js` | Até 4 KiB. |
 | `inicio.js` | Até 6 KiB. |
+| `busca.js` | Até 6 KiB; carregado só em `busca.html`. |
 | CSS global (`estilo.css` publicado) | Até 16 KiB, testado em `tests/test_responsivo_css.py`. |
 | Script inline `paginas.SCRIPT_CABECA` | Até 400 bytes **brutos**. |
 | `favicon.svg` e `marca.svg` | Até 2 KiB **brutos** cada. |
@@ -528,6 +626,12 @@ Esta é a referência única para sessões; a CLI está em "Pipeline e comandos"
   tramitação e lei. Se a lei sai do substitutivo e não do PL, aplique-a ao PL com `desfecho: virou_lei`
   e `lei_substitutivo` apontando para ele. Preserve autoria principal do PL; autores adicionais do substitutivo
   que virou lei entram como coautores no modelo, sem duplicar nomes.
+- Chave `arquivos` (PL, cada substitutivo e documentos com detalhe): lista, na ordem da página, de
+  `{id, descricao, versao, data, icone}` da tabela "[ Arquivos ]" (`coletor/arquivos_siscam.py`); `id` é o
+  de `Download.aspx?id=`, `data` é `AAAA-MM-DD` ou `null` e `icone` vem da imagem (`doc`, `pdf`; vazio sem
+  imagem). Ausência da chave = ainda não coletado; `[]` = página sem arquivos ("Nenhum Registro" ou sem seção).
+  Lista nova vazia não apaga uma anterior não vazia (aviso); seção sem grade é layout alterado e mantém o
+  detalhe anterior como falha. Relistar documentos preserva a chave como os demais campos do detalhe.
 - Categoria combina curadoria → regra → IA. Curadoria pode corrigir campos; categoria simbólica zera impacto,
   autorizativa limita impacto avaliado a 1. IA avalia só ementa; não trate estimativa como efeito comprovado.
 - Novidades são derivadas na geração, sem estado entre coletas nem `data/novidades.json` ou JSON próprio no
@@ -608,19 +712,44 @@ Esta é a referência única para sessões; a CLI está em "Pipeline e comandos"
   1. `siscam`: passo de 90 min.
   2. `documentos`: `continue-on-error`, passo de 120 min, `timeout --kill-after=2m 110m`, `--max-minutos 100`.
   3. `sessoes`: `continue-on-error`, passo de 30 min, `timeout --kill-after=2m 25m`, `--max-minutos 20`.
-  4. `classificar`: passo de 90 min; secret `OPENCODE_API_KEY`, variável opcional `OPENCODE_MODEL`
+  4. `classificar`: passo de 75 min; secret `OPENCODE_API_KEY`, variável opcional `OPENCODE_MODEL`
      (se vazia, é removida do ambiente para usar o padrão).
-  5. Validação e testes Python com `RADAR_COLETA=1`.
+  5. `temas`: `continue-on-error`, passo de 15 min, `--limite 2000 --max-minutos 12`, mesmos secret e
+     tratamento de modelo da classificação. Temas formam bloco separado; o resumo continua sem IA.
+  6. Validação e testes Python com `RADAR_COLETA=1`.
   Se validação/testes falharem, restaura documentos/sessões versionados, remove novos arquivos dessas pastas
   e temporários e **repete validação e testes**. Falha na reserva impede commit; estatísticas dessas etapas
   em `meta.json` permanecem. Só com uma dessas barreiras aprovada faz `git add data`, commit como
   `github-actions[bot]`, `git pull --rebase` e push. Em falha (`failure()` ou reserva falha), preserva `data/`
   inteiro como artefato por 14 dias; uma execução sem mudanças não cria artefato só por não haver commit.
 - `site.yml`: pushes em `main` nos caminhos `coletor/**`, `config/**`, `data/**`, `site_src/**`, `tests/**`,
-  `.github/workflows/site.yml` ou `testes.yml`; também manual e após coleta bem-sucedida.
+  `.github/workflows/site.yml` ou `testes.yml`; também manual e após coleta bem-sucedida em `main`.
   Chama testes sobre `main`, gera no SHA retornado e confere o checkout antes de publicar no Pages.
   Pages deve usar a fonte GitHub Actions. Geração e publicação têm permissões separadas.
-- Coleta e publicação usam `cancel-in-progress: false`; não interrompa coleta em andamento sem necessidade.
+- `textos.yml`: após coleta bem-sucedida em `main`, manual em `main` ou push em `main` que altere
+  `config/remocoes.json` (propaga remoções sem esperar a coleta), Ubuntu 24.04, OCR com poppler e
+  Tesseract/português (versões no log), cache `RADAR_CACHE`, até 1500 arquivos/120 min. Valida textos e roda
+  testes com `RADAR_COLETA=1`; publica `dados-textos` **antes** de commitar os manifestos em `main` (sem campo
+  `commit_textos`), com até três tentativas de rebase/push. Node 22 e `npm ci` em `worker/` precedem a
+  sincronização/exportação de produção, com os commits dos manifestos e de `dados-textos` separados;
+  atesta manifestos e `SHA256SUMS`. Após a nuvem, só `docs/backend.md`, se alterado pelo log de expurgo,
+  é commitado como “Registra expurgo de exportações”, com até três tentativas de rebase/push.
+  Só esse job recebe escrita de conteúdo, OIDC e atestações, no Environment `production`.
+  Falhas preservam manifestos/exportações por
+  14 dias, nunca o cache bruto ou textos bloqueados por PII. Só restaura manifestos locais se o push deles
+  não foi concluído; falha na nuvem após esse push emite `::error::` orientando reexecução por `workflow_dispatch`.
+  PR usa staging com `--simular`, sem commit/push, com `CLOUDFLARE_API_TOKEN_LEITURA`; fork ou secret ausente
+  gera `::notice::` e pula a simulação. Produção usa `CLOUDFLARE_API_TOKEN_DADOS`; deploy usa
+  `CLOUDFLARE_API_TOKEN_DEPLOY` em `backend.yml`, conforme `docs/backend.md`.
+  Sem `CLOUDFLARE_API_TOKEN_DADOS`, emite `::notice::` e pula nuvem/exportação e sua atestação, mantendo extração, validação, testes, publicação Git e atestação dos manifestos existentes.
+- `backend.yml`: PRs de `worker/**` executam `npm ci`, testes e typecheck com Node 22; push em `main`
+  testa, migra/publica staging e executa integração (ou smoke de saúde/busca). Só depois migra/publica
+  produção com `COMMIT` igual ao SHA do evento, protegido pelo Environment `production`; Git só leitura.
+  Sem `CLOUDFLARE_API_TOKEN_DEPLOY` no ambiente, emite `::notice::` e pula deploy/smoke com sucesso, sem pular testes/typecheck nem promover produção sem staging publicado.
+- Coleta, textos e publicação usam `cancel-in-progress: false`; textos compartilha o grupo `coleta`,
+  exceto PRs (`textos-pr-${{ github.ref }}`). O GitHub mantém só uma execução pendente por grupo:
+  uma pendente mais nova substitui a anterior, mesmo com `cancel-in-progress: false` (a execução ativa continua).
+  Não interrompa coleta em andamento sem necessidade.
 
 ## Curadoria e neutralidade editorial
 

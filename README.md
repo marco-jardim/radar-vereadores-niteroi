@@ -117,6 +117,25 @@ python -m unittest discover -s tests -t .
 node --test "tests/js/**/*.test.js"
 ```
 
+## Inteiro teor, busca e privacidade
+
+`busca.html` reúne a consulta por palavras, por significado ou combinada, com trechos e links para as fontes,
+sem respostas geradas por IA. O escopo de inteiro teor inclui PLs, substitutivos, requerimentos, PDLs,
+resoluções e atas; indicações e moções entram só pela ementa. OCR pode conter erros: confira o original.
+Sem JavaScript ou sem API disponível, permanecem o aviso e os links para as listas e o SISCAM.
+
+Os manifestos e hashes ficam em `data/textos/`; os textos extraídos e os trechos ficam na branch
+`dados-textos`. O processamento aplica máscara de CPF e RG e, salvo contatos públicos liberados,
+de telefone e e-mail. A máscara automática pode falhar; veja `metodologia.html#privacidade` no site.
+Para solicitar remoção, [abra uma issue](https://github.com/marco-jardim/radar-vereadores-niteroi/issues/new)
+indicando o documento e o motivo, **sem reproduzir dados pessoais**.
+
+O backend de busca usa Cloudflare Workers, D1, Vectorize e R2 como projeções reconstruíveis do Git;
+o site estático não depende dele. Operação, configuração e remoções estão em [docs/backend.md](docs/backend.md).
+**Situação da implantação (28/10/2026):** a carga de produção foi interrompida após a revisão encontrar
+dados pessoais não mascarados. O Worker de produção não foi publicado e o de staging foi removido;
+a correção da máscara e a recriação limpa da branch `dados-textos` estão pendentes.
+
 ## Presença, votos e bairros
 
 Sessões têm tabelas e cartões disponíveis sem JavaScript. Com JavaScript, há filtros por ano, classe,

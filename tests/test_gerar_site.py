@@ -19,7 +19,8 @@ from xml.etree import ElementTree
 
 from coletor import gerar_site
 from coletor import novidades as N
-from coletor.site import inicio, resumo
+from coletor import temas as T
+from coletor.site import inicio, pagina_busca, resumo, temas_html
 from coletor.site import paginas as P
 from coletor.site.modelo import TIPOS_DOC
 from tests import test_tabelas_empilhaveis, test_tabelas_rolaveis
@@ -27,7 +28,7 @@ from tests.test_acessibilidade_html import analisar
 from tests.test_glossario import PaginaGlossario, TERMOS
 from tests.test_resumo import conferir_resumo
 
-PAGINAS = ("index.html", "novidades.html", "leis.html", "projetos.html", "atividades.html", "sessoes.html", "ruido.html", "analises.html",
+PAGINAS = ("index.html", "novidades.html", "leis.html", "projetos.html", "atividades.html", "sessoes.html", "ruido.html", "analises.html", "busca.html",
            "metodologia.html")
 if (inicio.carregar_memoria(gerar_site.RAIZ) or {}).get("homenageados"):
     PAGINAS += ("memoria.html",)
@@ -47,9 +48,11 @@ class TestGerarSite(unittest.TestCase):
         with (mock.patch.object(sys, "argv", ["coletor.gerar_site"]),
               mock.patch.object(gerar_site, "montar_modelo", side_effect=guardar_modelo),
               mock.patch.object(inicio, "carregar_memoria", wraps=inicio.carregar_memoria) as carregar,
+              mock.patch.object(T, "carregar_cache", wraps=T.carregar_cache) as carregar_temas,
               contextlib.redirect_stdout(saida)):
             gerar_site.main()
         cls.carregamentos_memoria = carregar.call_count
+        cls.carregamentos_temas = carregar_temas.call_args_list
         cls.mensagem = saida.getvalue()
         cls.saida = gerar_site.SAIDA
 
@@ -70,6 +73,45 @@ class TestGerarSite(unittest.TestCase):
         self.assertIn('estimativa pelas listas de frequência', texto)
         # O teto de 100 KiB gzip para esta página também é verificado no teste geral de orçamento.
 
+    def test_busca_integrada_configuracao_privacidade_e_links(self):
+        texto = (self.saida / "busca.html").read_text(encoding="utf-8")
+        api = pagina_busca.carregar_api(gerar_site.RAIZ)
+        self.assertIn(f'<meta name="radar-api" content="{P.esc(api or "")}">', texto)
+        self.assertIn('href="busca.html" aria-current="page">Busca</a>', texto)
+        self.assertIn('id="busca-campos" disabled', texto)
+        self.assertIn('id="busca-estado" role="status" aria-live="polite"', texto)
+        if api is None:
+            self.assertIn("ainda não está disponível", texto)
+        metodo = (self.saida / "metodologia.html").read_text(encoding="utf-8")
+        self.assertIn(pagina_busca.metodologia_busca(), metodo)
+        for secao in ("inteiro-teor", "busca", "privacidade", "auditoria"):
+            self.assertIn(f'href="#{secao}"', metodo)
+        for nome in ("leis.html", "projetos.html", "atividades.html"):
+            html = (self.saida / nome).read_text(encoding="utf-8")
+            self.assertIn('href="busca.html', html)
+            self.assertEqual("Pesquisar no inteiro teor" in html or "Pesquisar nos textos" in html, bool(api))
+            self.assertNotIn('src="busca.js', html)
+            self.assertNotIn('href="busca.css', html)
+        for s, pessoa in self.modelo["pessoas"].items():
+            html = (self.saida / "vereadores" / f"{s}.html").read_text(encoding="utf-8")
+            link = f'href="../busca.html?autor={P.esc(P.slug_autor_busca(self.modelo, pessoa))}"'
+            self.assertEqual(link in html, bool(api))
+            self.assertEqual(html.count("Pesquisar textos deste autor"), int(bool(api)))
+
+    def test_links_de_pesquisa_so_aparecem_com_api_disponivel(self):
+        pessoa = next(iter(self.modelo["pessoas"].values()))
+        for disponivel in (False, True):
+            for gerar in (P.gerar_leis, P.gerar_projetos):
+                html = gerar(api_disponivel=disponivel)
+                self.assertEqual('href="busca.html?tipo=pl"' in html, disponivel)
+                self.assertIn('href="busca.html">Busca</a>', html)
+            html = P.gerar_atividades(self.modelo, api_disponivel=disponivel)
+            self.assertEqual("Pesquisar nos textos e nas ementas" in html, disponivel)
+            html = P.gerar_vereador(self.modelo, pessoa, api_disponivel=disponivel)
+            self.assertEqual("Pesquisar textos deste autor" in html, disponivel)
+            link = f'href="../busca.html?autor={P.esc(P.slug_autor_busca(self.modelo, pessoa))}"'
+            self.assertEqual(link in html, disponivel)
+
     def test_resumo_neutro_e_numeros_de_todas_as_pessoas_reais(self):
         self.assertTrue(self.modelo["pessoas"])
         for s, pessoa in self.modelo["pessoas"].items():
@@ -87,6 +129,74 @@ class TestGerarSite(unittest.TestCase):
         self.assertIn('id="resumo"', metodologia)
         self.assertIn('href="#resumo"', metodologia)
         self.assertIn("Este resumo não usa IA", metodologia)
+
+    def test_gerador_carrega_cache_de_temas_uma_vez_e_repassa_as_fichas(self):
+        caminho = gerar_site.RAIZ / "data" / "temas_ia.json"
+        self.assertEqual(self.carregamentos_temas, [mock.call(caminho)])
+        cache = T.carregar_cache(caminho)
+        for s, pessoa in self.modelo["pessoas"].items():
+            with self.subTest(vereador=s):
+                ficha = (self.saida / "vereadores" / f"{s}.html").read_text(encoding="utf-8")
+                bloco = temas_html.bloco_temas(self.modelo, pessoa, cache)
+                self.assertEqual('class="temas-ia"' in ficha, bool(bloco))
+                self.assertIn(resumo.secao_resumo(self.modelo, pessoa) + "\n" + bloco, ficha)
+
+    def test_ficha_com_temas_validados_apos_resumo_acessivel_e_no_orcamento(self):
+        # Exercita a ficha mais pesada da base com até cinco temas em cada legislatura.
+        pessoa = max(self.modelo["pessoas"].values(), key=lambda p: gerar_site.tamanho_gzip(
+            (self.saida / "vereadores" / f"{p['slug']}.html").read_bytes()))
+        rotulos = ["Transporte coletivo", "Educação municipal", "Saúde municipal",
+                   "Serviços urbanos", "Cultura municipal"]
+        cache = {}
+        for leg in self.modelo["legislaturas"]:
+            docs = T.documentos_da_pessoa(self.modelo, pessoa, leg["id"], ())
+            cache[f"pessoa:{pessoa['slug']}:{leg['id']}"] = {
+                "rotulos": rotulos, "versao": T.VERSAO_TEMAS, "modelo": T.MODELO,
+                "total_base": len(docs)}
+            cache.update({"doc:" + T._hash(d["ementa"], rotulos): rotulos[i % len(rotulos)]
+                          for i, d in enumerate(docs)})
+        with mock.patch("coletor.mascara.liberados", return_value=()), \
+                mock.patch.object(T, "chamar_ia", side_effect=AssertionError("IA")), \
+                mock.patch("urllib.request.urlopen", side_effect=AssertionError("rede")):
+            bloco = temas_html.bloco_temas(self.modelo, pessoa, cache)
+            ficha = P.gerar_vereador(self.modelo, pessoa, cache_temas=cache)
+            self.assertTrue(bloco)
+            self.assertIn(resumo.secao_resumo(self.modelo, pessoa) + "\n" + bloco, ficha)
+            self.assertEqual(ficha.count('class="temas-ia"'), 1)
+            for vazio in (None, {}):
+                self.assertNotIn('class="temas-ia"', P.gerar_vereador(
+                    self.modelo, pessoa, cache_temas=vazio))
+            for reg in cache.values():
+                if isinstance(reg, dict):
+                    reg.update(rotulos=["Gestão produtiva"], validado=True)
+            self.assertNotIn('class="temas-ia"', P.gerar_vereador(
+                self.modelo, pessoa, cache_temas=cache))
+        self.assertIn('href="../metodologia.html#temas"', ficha)
+        metodo = (self.saida / "metodologia.html").read_text(encoding="utf-8")
+        self.assertIn("temas", PaginaGlossario(metodo).ids)
+        doc = PaginaGlossario(ficha)
+        self.assertFalse(doc.invalidos)
+        self.assertTrue(doc.usados <= doc.definidos)
+        self.assertEqual(analisar(ficha).problemas, [])
+        self.assertLessEqual(gerar_site.tamanho_gzip(ficha.encode("utf-8")), gerar_site.LIMITE_HTML_GZIP)
+
+    def test_metodologia_temas_publica_prompts_do_modulo_e_regras(self):
+        texto = (self.saida / "metodologia.html").read_text(encoding="utf-8")
+        secao = texto.split('<section id="temas"', 1)[1].split("</section>", 1)[0]
+        self.assertIn('href="#temas"', texto)
+        for prompt in (T.PROMPT_ROTULOS, T.PROMPT_CLASSIFICAR):
+            self.assertIn(f"<pre>{P.esc(prompt)}</pre>", secao)
+        for termo in (T.MODELO, T.VERSAO_TEMAS, "ementas mascaradas", "40 documentos",
+                      "cinco rótulos", "duas a quatro palavras", f"lotes de até {T.LOTE}",
+                      "pelo menos dois documentos", "calculados pelo código",
+                      "Agrupar não é avaliar", "mesmos critérios", "classificação completa"):
+            self.assertIn(termo, secao)
+        # Não basta coincidir com os valores atuais: a página deve usar as constantes importadas.
+        with mock.patch.object(T, "PROMPT_ROTULOS", "Rótulos <novos> & seguros"), \
+                mock.patch.object(T, "PROMPT_CLASSIFICAR", "Classificação <nova> & segura"):
+            atualizado = P.gerar_metodologia(self.modelo)
+            self.assertIn(P.esc(T.PROMPT_ROTULOS), atualizado)
+            self.assertIn(P.esc(T.PROMPT_CLASSIFICAR), atualizado)
 
     def test_todas_as_tabelas_em_todas_as_paginas(self):
         paginas = sorted(self.saida.rglob("*.html"))
@@ -121,7 +231,7 @@ class TestGerarSite(unittest.TestCase):
                 self.assertLessEqual(doc.templates, 1)
                 self.assertTrue(doc.usados <= doc.definidos, doc.usados - doc.definidos)
                 self.assertTrue(doc.usados <= TERMOS.keys())
-        for nome in ("leis.html", "projetos.html", "atividades.html", "ruido.html", "sessoes.html"):
+        for nome in ("leis.html", "projetos.html", "atividades.html", "ruido.html", "sessoes.html", "busca.html"):
             with self.subTest(pagina=nome):
                 self.assertIn(nome, documentos)
                 self.assertTrue(documentos[nome].usados)

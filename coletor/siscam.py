@@ -7,6 +7,7 @@ o detalhe de cada um é baixado junto com o do PL, e a lei que sair de um
 substitutivo é atribuída ao PL original. Grava um JSON por ano em data/proposicoes/.
 
 Uso: python -m coletor.siscam [--anos 2021-2026] [--forcar] [--workers 4] [--max-detalhes 400]
+     python -m coletor.siscam --arquivos-do-cache DIR [--anos 2021-2026]   (offline: só "arquivos")
 Somente biblioteca padrão do Python.
 """
 from __future__ import annotations
@@ -25,6 +26,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from coletor.arquivos import salvar_json, salvar_lista
+from coletor.arquivos_siscam import extrair_arquivos, preencher_arquivos_cache, preservar_arquivos
 
 BASE = "https://consultaniteroi.siscam.com.br"
 LISTAGEM = BASE + "/ResultadoPropositura.aspx?Tipo=4&Exibir=1,2,3,4,6,7,8&Ano={ano}&pagina={pagina}"
@@ -36,8 +38,8 @@ USER_AGENT = os.environ.get(
 RAIZ = Path(__file__).resolve().parent.parent
 DIR_DADOS = RAIZ / "data" / "proposicoes"
 ANO_INICIAL = 2021
-# Detalhes por execução pedidos só por causa dos substitutivos (registro ainda sem a chave
-# "substitutivos" ou com substitutivo ainda sem lei); as mudanças da listagem não entram no limite.
+# Detalhes extras por execução, pedidos pelos substitutivos ou pela chave "arquivos" ausente no PL;
+# as mudanças da listagem não entram no limite.
 MAX_DETALHES = 400
 
 
@@ -148,6 +150,7 @@ def parse_detalhe(pagina_html: str) -> dict:
         "data_protocolo": data_iso(campo(r"Data do Protocolo:\s*</strong>(.*?)</", texto_cab)),
         "autoria": [],
         "tramitacoes": [],
+        "arquivos": extrair_arquivos(pagina_html),
     }
     grade = re.search(r'id="autores_grdMembros"(.*?)</table>', pagina_html, re.S)
     if grade:
@@ -231,6 +234,7 @@ def coletar_substitutivos(refs: list[dict], anteriores: list[dict] | None = None
             print(f"  aviso: substitutivo {ref['id']} veio sem tramitação; mantido da coleta anterior", file=sys.stderr)
             saida.append(anterior)
             continue
+        preservar_arquivos(anterior, detalhe)
         saida.append({
             "id": ref["id"],
             "numero": ref["numero"],
@@ -238,6 +242,7 @@ def coletar_substitutivos(refs: list[dict], anteriores: list[dict] | None = None
             "situacao": detalhe["situacao"],
             "autoria": detalhe["autoria"],
             "tramitacoes": detalhe["tramitacoes"],
+            "arquivos": detalhe["arquivos"],
             "lei": derivar_lei(detalhe["tramitacoes"]),
         })
     vistos = {s["id"] for s in saida}
@@ -383,6 +388,31 @@ def precisa_substitutivos(anterior: dict | None) -> bool:
     return bool(substitutivos) and not anterior.get("lei") and not any(s.get("lei") for s in substitutivos)
 
 
+def precisa_arquivos(anterior: dict | None) -> bool:
+    """Detalhe pedido para obter a lista de arquivos, dentro do limite de --max-detalhes.
+
+    Só a chave "arquivos" do próprio PL decide (lista vazia já é conhecida). Substitutivos sem a
+    chave não recolocam o PL na fila: um substitutivo mantido da coleta anterior, por falha no seu
+    detalhe, ficaria sem ela e prenderia o PL na fila a cada execução. Ele ganha a chave quando
+    o PL voltar a ser baixado por outro motivo (ou por --arquivos-do-cache).
+    """
+    return anterior is not None and "arquivos" not in anterior
+
+
+def arquivos_do_cache(pasta: Path, anos: list[int] | None = None) -> None:
+    """Preenche arquivos dos PLs e substitutivos sem rede nem alteração dos demais campos."""
+    existentes = {int(p.stem) for p in DIR_DADOS.glob("*.json") if re.fullmatch(r"\d{4}", p.stem)}
+    for ano in sorted(existentes if anos is None else existentes.intersection(anos)):
+        registros = carregar_ano(ano)
+        for reg in registros.values():
+            for documento in [reg, *(reg.get("substitutivos") or [])]:
+                try:
+                    preencher_arquivos_cache(documento, pasta)
+                except ValueError as e:
+                    print(f"::warning::documento {documento['id']}: cache não aplicado ({e})", file=sys.stderr)
+        salvar_ano(ano, registros)
+
+
 def ordem_recente(resumo: dict) -> tuple[int, int]:
     """Chave para ordenar do mais recente ao mais antigo (com reverse=True)."""
     return resumo["ano"], int(resumo["numero"].split("/")[0])
@@ -419,7 +449,8 @@ def montar_registro(resumo: dict, detalhe: dict, substitutivos: list[dict] | Non
 
 
 def coletar(anos: list[int], forcar: bool, workers: int, max_detalhes: int = MAX_DETALHES) -> dict:
-    estat = {"anos": {}, "detalhes_baixados": 0, "falhas": 0, "por_substitutivos": 0, "substitutivos_adiados": 0}
+    estat = {"anos": {}, "detalhes_baixados": 0, "falhas": 0, "por_substitutivos": 0, "substitutivos_adiados": 0,
+             "por_arquivos": 0, "arquivos_adiados": 0}
     restante = max(0, max_detalhes)
     # do ano mais recente ao mais antigo: o limite de --max-detalhes vale para a execução inteira
     for ano in sorted(anos, reverse=True):
@@ -428,14 +459,23 @@ def coletar(anos: list[int], forcar: bool, workers: int, max_detalhes: int = MAX
         resumos = listar_ano(ano, workers)
         pendentes = [r for r in resumos if precisa_detalhe(anteriores.get(r["id"]), r, forcar)]
         ids_pendentes = {r["id"] for r in pendentes}
-        extras = sorted((r for r in resumos if r["id"] not in ids_pendentes and precisa_substitutivos(anteriores.get(r["id"]))),
+        extras = sorted((r for r in resumos if r["id"] not in ids_pendentes
+                         and (precisa_substitutivos(anteriores.get(r["id"])) or precisa_arquivos(anteriores.get(r["id"])))),
                         key=ordem_recente, reverse=True)
-        adiados = max(0, len(extras) - restante)
+        adiados_lista = extras[restante:]
+        adiados = len(adiados_lista)
         extras = extras[:restante]
         restante -= len(extras)
-        estat["por_substitutivos"] += len(extras)
-        estat["substitutivos_adiados"] += adiados
-        print(f"{ano}: {len(resumos)} projetos, {len(pendentes)} para atualizar, {len(extras)} pelos substitutivos"
+
+        def motivo(r: dict) -> str:  # cada extra conta uma vez; substitutivos têm precedência
+            return "substitutivos" if precisa_substitutivos(anteriores.get(r["id"])) else "arquivos"
+
+        por_motivo = {m: sum(1 for r in extras if motivo(r) == m) for m in ("substitutivos", "arquivos")}
+        for m in ("substitutivos", "arquivos"):
+            estat[f"por_{m}"] += por_motivo[m]
+            estat[f"{m}_adiados"] += sum(1 for r in adiados_lista if motivo(r) == m)
+        print(f"{ano}: {len(resumos)} projetos, {len(pendentes)} para atualizar, {por_motivo['substitutivos']} pelos "
+              f"substitutivos, {por_motivo['arquivos']} pelos arquivos"
               + (f" ({adiados} para a próxima execução)" if adiados else ""), flush=True)
         registros = dict(anteriores)
         # atualiza situação/contagem dos que não precisam de detalhe
@@ -455,6 +495,7 @@ def coletar(anos: list[int], forcar: bool, workers: int, max_detalhes: int = MAX
             for i, f in enumerate(as_completed(futuros), 1):
                 try:
                     resumo, detalhe, substitutivos = f.result()
+                    preservar_arquivos(anteriores.get(resumo["id"]), detalhe)
                     registros[resumo["id"]] = montar_registro(resumo, detalhe, substitutivos)
                     estat["detalhes_baixados"] += 1
                 except Exception as e:  # mantém o dado anterior se falhar
@@ -466,7 +507,8 @@ def coletar(anos: list[int], forcar: bool, workers: int, max_detalhes: int = MAX
         for reg in registros.values():  # regras de derivação podem mudar; recalcula sem rebaixar
             aplicar_substitutivos(reg)
         salvar_ano(ano, registros)
-        estat["anos"][ano] = {"total": len(resumos), "atualizados": len(pendentes), "por_substitutivos": len(extras),
+        estat["anos"][ano] = {"total": len(resumos), "atualizados": len(pendentes),
+                              "por_substitutivos": por_motivo["substitutivos"], "por_arquivos": por_motivo["arquivos"],
                               "segundos": round(time.time() - t0)}
     return estat
 
@@ -474,14 +516,21 @@ def coletar(anos: list[int], forcar: bool, workers: int, max_detalhes: int = MAX
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     hoje = dt.date.today().year
-    ap.add_argument("--anos", default=f"{ANO_INICIAL}-{hoje}")
+    ap.add_argument("--anos", default=None)
+    ap.add_argument("--arquivos-do-cache", type=Path, metavar="DIR", help="preenche arquivos do HTML local, sem rede")
     ap.add_argument("--forcar", action="store_true", help="rebaixa todos os detalhes")
     ap.add_argument("--workers", type=int, default=int(os.environ.get("COLETOR_WORKERS", 4)))
     ap.add_argument("--max-detalhes", type=int, default=MAX_DETALHES,
-                    help="limite, por execução, de detalhes pedidos só pelos substitutivos (mais recentes primeiro)")
+                    help="limite de detalhes pedidos só pelos substitutivos/arquivos (mais recentes primeiro)")
     args = ap.parse_args()
-    ini, _, fim = args.anos.partition("-")
+    if args.arquivos_do_cache and args.anos is None:
+        arquivos_do_cache(args.arquivos_do_cache)
+        return
+    ini, _, fim = (args.anos or f"{ANO_INICIAL}-{hoje}").partition("-")
     anos = list(range(int(ini), int(fim or ini) + 1))
+    if args.arquivos_do_cache:
+        arquivos_do_cache(args.arquivos_do_cache, anos)
+        return
     estat = coletar(anos, args.forcar, args.workers, args.max_detalhes)
     meta = RAIZ / "data" / "meta.json"
     dados_meta = json.loads(meta.read_text(encoding="utf-8")) if meta.exists() else {}

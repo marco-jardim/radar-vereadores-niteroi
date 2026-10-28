@@ -8,6 +8,7 @@ import json
 import os
 import tempfile
 import unittest
+from datetime import date, timedelta
 from pathlib import Path
 from unittest import mock
 
@@ -80,6 +81,9 @@ VEREADORES = {
     "afastamentos": [{"siscam": "ANA MARIA", "legislatura": "2025-2028", "cargo": "Secretária Municipal",
                       "natureza": "cargo", "fonte": "https://exemplo.org/ato"}],
 }
+BACKEND = {"api_url": None, "origens_cors": ["https://exemplo.org"], "contatos_institucionais": []}
+REMOCAO = {"chave": "siscam:123", "sha256": "ab" * 32, "motivo": "Remoção solicitada.",
+           "fonte": "https://exemplo.org/pedido", "data": "2024-02-29"}
 
 
 class Afirmacoes(unittest.TestCase):
@@ -644,6 +648,206 @@ class TestValidarMeta(Afirmacoes):
         self.assertProblema(V.validar_meta({"documentos": []}), "mapa 'tipos'")
 
 
+# ------------------------------------------------------------- backend e remoções
+class ConfigOpcional:
+    """Casos comuns do formato canônico e da leitura dos dois configs opcionais."""
+
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.raiz = Path(tmp.name)
+        (self.raiz / "config").mkdir()
+        self.caminho = self.raiz / "config" / f"{self.nome}.json"
+
+    def escrever(self, dados: object) -> bytes:
+        bruto = (json.dumps(dados, ensure_ascii=False, indent=1) + "\n").encode("utf-8")
+        self.caminho.write_bytes(bruto)
+        return bruto
+
+    def validar(self, dados: object) -> list[str]:
+        self.escrever(dados)
+        return getattr(V, f"validar_{self.nome}")(self.raiz)
+
+    def test_ausente_so_avisa(self):
+        for ambiente in ({}, {"GITHUB_ACTIONS": "true"}):
+            with self.subTest(ambiente=ambiente), mock.patch.dict(os.environ, ambiente, clear=True):
+                erro = io.StringIO()
+                with contextlib.redirect_stderr(erro):
+                    self.assertEqual(getattr(V, f"validar_{self.nome}")(self.raiz), [])
+                self.assertIn(f"config/{self.nome}.json: arquivo ausente", erro.getvalue())
+                self.assertTrue(erro.getvalue().startswith("::warning::" if ambiente else "aviso:"))
+                self.assertNotIn("::error::", erro.getvalue())
+
+    def test_formato_canonico_e_nfc(self):
+        bruto = self.escrever(self.valido)
+        self.assertEqual(getattr(V, f"validar_{self.nome}")(self.raiz), [])
+        variantes = [bruto.replace(b"\n", b"\r\n"), bruto.rstrip(b"\n"),
+                     (json.dumps(self.valido, ensure_ascii=False, indent=2) + "\n").encode(),
+                     (json.dumps(self.valido, ensure_ascii=True, indent=1) + "\n").encode(),
+                     b"\xef\xbb\xbf" + bruto]
+        for variante in variantes:
+            with self.subTest(variante=variante):
+                self.caminho.write_bytes(variante)
+                self.assertTrue(getattr(V, f"validar_{self.nome}")(self.raiz))
+        self.caminho.write_bytes(bruto.replace("ç".encode(), "c\u0327".encode()))
+        self.assertProblema(getattr(V, f"validar_{self.nome}")(self.raiz), "normalização NFC")
+
+    def test_json_ilegivel_ou_nao_objeto(self):
+        for bruto in (b"[{", b"\xff", b'"\\ud800"'):
+            with self.subTest(bruto=bruto):
+                self.caminho.write_bytes(bruto)
+                self.assertTrue(getattr(V, f"validar_{self.nome}")(self.raiz))
+        for dados in (None, [], "texto", 1):
+            with self.subTest(dados=dados):
+                self.assertProblema(self.validar(dados), "deveria conter um objeto")
+
+    def test_erro_de_leitura(self):
+        with mock.patch.object(Path, "read_bytes", side_effect=OSError("leitura indisponível")):
+            self.assertProblema(getattr(V, f"validar_{self.nome}")(self.raiz), "não foi possível ler o arquivo")
+
+
+class TestValidarBackend(ConfigOpcional, Afirmacoes):
+    nome = "backend"
+    contato = {"tipo": "telefone", "valor": "+55 (21) 1234-5678", "descricao": "Recepção",
+               "fonte": "https://exemplo.org/contatos"}
+    valido = {**BACKEND, "contatos_institucionais": [contato]}
+
+    def test_validos(self):
+        self.assertEqual(self.validar(BACKEND), [])
+        cfg = {**self.valido, "api_url": "https://api.exemplo.org:8443/api",
+               "origens_cors": ["https://exemplo.org", "https://outro.org:8443", "https://[::1]:8443"],
+               "contatos_institucionais": [self.contato, {**self.contato, "tipo": "email", "valor": "camara@exemplo.org"}]}
+        self.assertEqual(self.validar(cfg), [])
+
+    def test_campos_exatos(self):
+        self.assertProblema(self.validar({**BACKEND, "extra": 1}), "campos esperados")
+        for campo in BACKEND:
+            cfg = dict(BACKEND)
+            del cfg[campo]
+            with self.subTest(campo=campo):
+                self.assertProblema(self.validar(cfg), "campos esperados")
+
+    def test_api_url(self):
+        for valor in ("", "http://exemplo.org", "https://", "https://exemplo.org/", "https://exemplo.org/api/",
+                      "https://exemplo.org/api?a", "https://exemplo.org/api#f",
+                      "https://exemplo.org/api?", "https://exemplo.org/api#",
+                      "https://exemplo.org/a b", "https://exemplo.org:abc", "https://exemplo.org:70000", 1, [], {}):
+            with self.subTest(valor=valor):
+                self.assertProblema(self.validar({**BACKEND, "api_url": valor}), "'api_url'")
+
+    def test_origens_cors(self):
+        for valor in (None, "https://exemplo.org", [], [None], [[]], [1], ["http://exemplo.org"],
+                      ["https://"], ["https://exemplo.org/"], ["https://exemplo.org/api"],
+                      ["https://exemplo.org?q=1"], ["https://exemplo.org#x"], ["https://exemplo.org?"],
+                      ["https://exemplo.org#"], ["https://user@exemplo.org"], ["https://exemplo.org:abc"],
+                      ["https://exemplo.org:70000"], ["https://exemplo.org:"], ["https://exemplo.org\n"],
+                      ["https://exemplo.org\\caminho"], ["https://[invalido]"], ["https://..."],
+                      ["https://-host.org"], ["https://exemplo.org/\x00"], ["https://exemplo.org"] * 2):
+            with self.subTest(valor=valor):
+                self.assertTrue(self.validar({**BACKEND, "origens_cors": valor}))
+
+    def test_origens_cors_exigem_forma_canonica(self):
+        for origem in ("https://EXEMPLO.org", "HTTPS://exemplo.org", "https://exemplo.org.",
+                       "https://exemplo.org:443", "https://exemplo.org:0443"):
+            with self.subTest(origem=origem):
+                self.assertProblema(self.validar({**BACKEND, "origens_cors": [origem]}), "origem")
+
+    def test_contatos_estrutura(self):
+        for valor in (None, {}, "telefone"):
+            self.assertProblema(self.validar({**BACKEND, "contatos_institucionais": valor}), "deveria ser uma lista")
+        self.assertProblema(self.validar({**BACKEND, "contatos_institucionais": [None]}), "deveria ser um objeto")
+        for campo in self.contato:
+            contato = dict(self.contato)
+            del contato[campo]
+            with self.subTest(campo=campo):
+                self.assertProblema(self.validar({**BACKEND, "contatos_institucionais": [contato]}), "campos esperados")
+        self.assertProblema(self.validar({**BACKEND, "contatos_institucionais": [{**self.contato, "extra": 1}]}),
+                            "campos esperados")
+
+    def test_contatos_campos(self):
+        casos = [("tipo", valor) for valor in ("fax", None, [], {})]
+        casos += [(campo, valor) for campo in ("valor", "descricao") for valor in ("", " ", None, 123, [])]
+        casos += [("valor", valor) for valor in ("(21) ABCD-1234", "21.1234.5678", "21\t1234", "21\n1234",
+                                                "()", "-", "1234567")]
+        casos += [("fonte", valor) for valor in ("http://exemplo.org", "https://", None, "https://exemplo.org/a b")]
+        for campo, valor in casos:
+            with self.subTest(campo=campo, valor=valor):
+                contato = {**self.contato, campo: valor}
+                self.assertTrue(self.validar({**BACKEND, "contatos_institucionais": [contato]}))
+        for valor in ("camara", "a@", "@exemplo.org", "a@exemplo", "a@@exemplo.org", "a b@exemplo.org", "a@exemplo..org"):
+            with self.subTest(email=valor):
+                contato = {**self.contato, "tipo": "email", "valor": valor}
+                self.assertProblema(self.validar({**BACKEND, "contatos_institucionais": [contato]}), "inválido para email")
+
+    def test_contatos_repetidos(self):
+        contatos = [self.contato, {**self.contato, "descricao": "Outra descrição"}]
+        self.assertProblema(self.validar({**BACKEND, "contatos_institucionais": contatos}), "(tipo, valor) repetido")
+
+    def test_telefone_com_oito_digitos(self):
+        contato = {**self.contato, "valor": "1234-5678"}
+        self.assertEqual(self.validar({**BACKEND, "contatos_institucionais": [contato]}), [])
+
+
+class TestValidarRemocoes(ConfigOpcional, Afirmacoes):
+    nome = "remocoes"
+    valido = {"remocoes": [REMOCAO]}
+
+    def test_validas(self):
+        self.assertEqual(self.validar({"remocoes": []}), [])
+        itens = [REMOCAO, {**REMOCAO, "chave": "sessao:00000000-0000-4000-8000-0000000000a1",
+                           "data": date.today().isoformat()}]
+        self.assertEqual(self.validar({"remocoes": itens}), [])
+
+    def test_estrutura(self):
+        for cfg in ({}, {"remocoes": [], "extra": 1}):
+            self.assertProblema(self.validar(cfg), "somente o campo 'remocoes'")
+        for valor in (None, {}, "texto"):
+            self.assertProblema(self.validar({"remocoes": valor}), "deveria ser uma lista")
+        self.assertProblema(self.validar({"remocoes": [None]}), "deveria ser um objeto")
+        for campo in REMOCAO:
+            item = dict(REMOCAO)
+            del item[campo]
+            with self.subTest(campo=campo):
+                self.assertProblema(self.validar({"remocoes": [item]}), "campos esperados")
+        self.assertProblema(self.validar({"remocoes": [{**REMOCAO, "extra": 1}]}), "campos esperados")
+
+    def test_campos_invalidos(self):
+        casos = {
+            "chave": (None, [], 123, "", "outro:123", "siscam:", "sessao:1_2", "siscam:1/2", "siscam:á", "siscam:123\n",
+                      "siscam:0", "siscam:012", "siscam:abc", "siscam:-1", "sessao:1", "sessao:Ab-123",
+                      "sessao:00000000-0000-4000-8000-0000000000A1", "sessao:00000000-0000-4000-8000-0000000000a",
+                      "sessao:{00000000-0000-4000-8000-0000000000a1}", "SISCAM:123"),
+            "sha256": (None, [], 123, "a" * 63, "a" * 65, "A" * 64, "g" * 64, "a" * 64 + "\n"),
+            "motivo": (None, [], 123, "", " "),
+            "fonte": (None, [], "", "http://exemplo.org", "https://", "https://exemplo.org/a b"),
+            "data": (None, [], 20240229, "", "2024", "29/02/2024", "2024-2-29", "2023-02-29", "2024-02-30",
+                     "2024-02-29T00:00", "2024-02-29\n", (date.today() + timedelta(days=1)).isoformat()),
+        }
+        for campo, valores in casos.items():
+            for valor in valores:
+                with self.subTest(campo=campo, valor=valor):
+                    problemas = self.validar({"remocoes": [{**REMOCAO, campo: valor}]})
+                    self.assertProblema(problemas, f"'{campo}'")
+
+    def test_chave_repetida_com_hash_diferente_e_valida(self):
+        self.assertEqual(self.validar({"remocoes": [REMOCAO, {**REMOCAO, "sha256": "c" * 64}]}), [])
+
+    def test_par_chave_hash_repetido(self):
+        for outra in (REMOCAO, {**REMOCAO, "data": "2024-03-01", "motivo": "Outro motivo"}):
+            with self.subTest(outra=outra):
+                self.assertProblema(self.validar({"remocoes": [REMOCAO, outra]}), "(chave, sha256) repetida")
+
+    def test_ordem_por_data_depois_chave_e_hash(self):
+        itens = [REMOCAO, {**REMOCAO, "sha256": "c" * 64}, {**REMOCAO, "chave": "siscam:124"},
+                 {**REMOCAO, "chave": "sessao:00000000-0000-4000-8000-0000000000a1", "data": "2024-03-01"}]
+        self.assertEqual(self.validar({"remocoes": itens}), [])
+        for i in range(len(itens) - 1):
+            fora_de_ordem = itens.copy()
+            fora_de_ordem[i], fora_de_ordem[i + 1] = fora_de_ordem[i + 1], fora_de_ordem[i]
+            with self.subTest(troca=i):
+                self.assertProblema(self.validar({"remocoes": fora_de_ordem}), "fora de ordem por data, chave e sha256")
+
+
 # ------------------------------------------------------------------------ execução
 class TestExecucao(Afirmacoes):
     def montar_raiz(self, registros: object = None, cache: object = None, curadoria: object = None) -> Path:
@@ -665,6 +869,10 @@ class TestExecucao(Afirmacoes):
         (raiz / "config" / "perfis.json").write_bytes(
             (json.dumps({"vereadores": {}}, ensure_ascii=False, indent=1) + "\n").encode("utf-8")
         )
+        for nome, dados in (("backend", BACKEND), ("remocoes", {"remocoes": []})):
+            (raiz / "config" / f"{nome}.json").write_bytes(
+                (json.dumps(dados, ensure_ascii=False, indent=1) + "\n").encode("utf-8")
+            )
         return raiz
 
     def rodar_main(self, raiz: Path, ambiente: dict) -> tuple[int, str, str]:
@@ -739,6 +947,23 @@ class TestExecucao(Afirmacoes):
         self.assertEqual(erro, "")
         self.assertIn("OK", saida)
 
+    def test_main_configs_backend_e_remocoes_ausentes_so_avisam(self):
+        raiz = self.montar_raiz()
+        for nome in ("backend", "remocoes"):
+            (raiz / "config" / f"{nome}.json").unlink()
+        codigo, erro, _ = self.rodar_main(raiz, {})
+        self.assertEqual(codigo, 0)
+        self.assertIn("config/backend.json: arquivo ausente", erro)
+        self.assertIn("config/remocoes.json: arquivo ausente", erro)
+
+    def test_validar_tudo_inclui_backend_e_remocoes(self):
+        raiz = self.montar_raiz()
+        for nome in ("backend", "remocoes"):
+            (raiz / "config" / f"{nome}.json").write_bytes(b"{}\n")
+        problemas = V.validar_tudo(raiz)
+        self.assertProblema(problemas, "config/backend.json: campos esperados")
+        self.assertProblema(problemas, "config/remocoes.json: esperado somente")
+
     def test_main_com_problemas(self):
         raiz = self.montar_raiz(registros=[registro(desfecho="inventado")])
         codigo, erro, _ = self.rodar_main(raiz, {})
@@ -756,6 +981,46 @@ class TestExecucao(Afirmacoes):
 
     def test_anotacao_escapa_caracteres_especiais(self):
         self.assertEqual(V._anotacao("100% certo\nlinha"), "100%25 certo%0Alinha")
+
+    def test_validar_tudo_aceita_arquivos_sem_manifesto_de_textos(self):
+        item = {"id": 385956, "descricao": "", "versao": "Anexos", "data": "2025-02-10", "icone": "doc"}
+        raiz = self.montar_raiz(registros=[registro(arquivos=[item])])
+        self.assertFalse((raiz / "data" / "textos").exists())
+        self.assertEqual(V.validar_tudo(raiz), [])
+        pasta = raiz / "data" / "documentos" / "resolucao"
+        pasta.mkdir(parents=True)
+        (pasta / "2026.json").write_bytes(canonico([documento(arquivos=[{**item, "id": 403683, "icone": "pdf"}])]))
+        self.assertEqual(V.validar_tudo(raiz), [])
+
+
+class TestValidarArquivos(unittest.TestCase):
+    def setUp(self):
+        self.item = {"id": 404139, "descricao": "", "versao": "Anexos", "data": "2025-12-10", "icone": "doc"}
+
+    def problemas(self, arquivos):
+        return V.validar_arquivos({"arquivos": arquivos}, "r")
+
+    def test_ausente_e_lista_valida(self):
+        self.assertEqual(V.validar_arquivos({}, "r"), [])
+        self.assertEqual(self.problemas([]), [])
+        self.assertEqual(self.problemas([self.item, {**self.item, "id": 404140, "data": None, "icone": "pdf"}]), [])
+
+    def test_formas_invalidas(self):
+        casos = {
+            "nao lista": ("x", "deveria ser uma lista"),
+            "nao objeto": (["x"], "deveria ser um objeto"),
+            "campo extra": ([{**self.item, "url": "https://x"}], "diferem"),
+            "campo faltando": ([{k: v for k, v in self.item.items() if k != "icone"}], "diferem"),
+            "id texto": ([{**self.item, "id": "1"}], "inteiro positivo"),
+            "id zero": ([{**self.item, "id": 0}], "inteiro positivo"),
+            "id repetido": ([self.item, dict(self.item)], "repetido"),
+            "data invalida": ([{**self.item, "data": "10/12/2025"}], "'data'"),
+            "versao nao texto": ([{**self.item, "versao": None}], "'versao'"),
+        }
+        for nome, (arquivos, trecho) in casos.items():
+            with self.subTest(nome):
+                problemas = self.problemas(arquivos)
+                self.assertTrue(any(trecho in p for p in problemas), problemas)
 
 
 if __name__ == "__main__":

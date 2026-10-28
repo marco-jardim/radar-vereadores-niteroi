@@ -23,6 +23,7 @@ from urllib.parse import parse_qs, urlsplit
 
 from coletor import arquivos, documentos, validar
 from tests.apoio import SaidaQueSinaliza, ler_fixture
+from tests.test_arquivos_siscam import ESPERADOS
 
 TOTAIS = {"requerimento": 253, "indicacao": 400, "mocao": 400, "pdl": 315, "resolucao": 22}
 VAZIA = "<html><body><table><tr><td>Nenhum registro encontrado.</td></tr></table></body></html>"
@@ -131,7 +132,7 @@ def pagina_minima(reg: dict, rotulo: str = "Projeto de Resolução") -> str:
     return (
         f'<table><tr><td colspan="2" class="form-task">{rotulo} Nº {int(numero):05d}/{ano}</td></tr>'
         f"<tr><td><strong>Protocolo: </strong>{reg['id']}/{ano}</td></tr></table>"
-        f'<table id="autores_grdMembros">{autores}</table><tr id="trArquivos"></tr>'
+        f'<table id="autores_grdMembros">{autores}</table><tr id="trArquivos"><td>Nenhum Registro</td></tr>'
         f'<table id="tramitacoes_gvTramitacoes">{passos}</table>'
     )
 
@@ -734,7 +735,7 @@ class TestPrecisaDetalhe(unittest.TestCase):
 
     def test_quando_baixar(self) -> None:
         novo = {**registro(9, 1), "n_tramitacoes": 3}
-        baixado = {**novo, "detalhe_em": "2026-10-01", "tramitacoes": []}
+        baixado = {**novo, "detalhe_em": "2026-10-01", "tramitacoes": [], "arquivos": []}
         self.assertTrue(documentos.precisa_detalhe(novo, None))
         self.assertTrue(documentos.precisa_detalhe(novo, dict(novo)))  # anterior sem detalhe
         self.assertFalse(documentos.precisa_detalhe(novo, baixado))
@@ -749,7 +750,7 @@ class TestPrecisaDetalhe(unittest.TestCase):
         passo = {"seq": 3, "objetivo": "Despachar", "enviado": "2026-03-01", "resultado": "", "data_resposta": None,
                  "observacao": ""}
         novo = {**registro(9, 1), "n_tramitacoes": 3, "ultima_tramitacao": passo}
-        baixado = {**novo, "detalhe_em": "2026-10-01", "tramitacoes": []}
+        baixado = {**novo, "detalhe_em": "2026-10-01", "tramitacoes": [], "arquivos": []}
         self.assertFalse(documentos.precisa_detalhe(dict(novo), baixado))
         self.assertTrue(documentos.precisa_detalhe({**novo, "situacao": "ARQUIVADO"}, baixado))
         editado = {**passo, "resultado": "Respondido"}  # mesmo passo, mesma contagem, outro resultado
@@ -1166,6 +1167,179 @@ class TestIntervaloAnos(unittest.TestCase):
         self.assertEqual(documentos.intervalo_anos("2025"), [2025])
         with self.assertRaises(ValueError):
             documentos.intervalo_anos("2026-2025")
+
+
+class TestArquivos(unittest.TestCase):
+    def test_aplicar_e_relistar_preservam_arquivos(self):
+        anterior = com_detalhe("pdl", 290379, "pdl_290379")
+        self.assertEqual(anterior["arquivos"], ESPERADOS["pdl_290379"])
+        relistado = por_id(documentos.parse_listagem(fixture("pdl"), "pdl"), 290379)
+        documentos.herdar_detalhe(relistado, anterior)
+        self.assertEqual(relistado["arquivos"], anterior["arquivos"])
+        documentos.marcar_detalhes({290379: relistado}, {290379: anterior})
+        self.assertEqual(relistado["arquivos"], anterior["arquivos"])
+
+    def test_vazio_mantem_anterior_com_aviso(self):
+        reg = com_detalhe("resolucao", 289947, "resolucao_289947")
+        detalhe = documentos.ler_detalhe(detalhe_html("resolucao_289947"), reg)
+        detalhe["arquivos"] = []
+        with contextlib.redirect_stderr(io.StringIO()) as erros:
+            documentos.aplicar_detalhe(reg, detalhe, "2026-10-27")
+        self.assertEqual(reg["arquivos"], ESPERADOS["resolucao_289947"])
+        self.assertIn("::warning::", erros.getvalue())
+
+    def test_layout_alterado_preserva_detalhe_pendente(self):
+        with tempfile.TemporaryDirectory() as temp:
+            pasta = Path(temp)
+            caminho = documentos.caminho_ano("resolucao", 2025, pasta)
+            reg = com_detalhe("resolucao", 289947, "resolucao_289947")
+            reg["detalhe_pendente"] = True
+            documentos.salvar_ano(caminho, {reg["id"]: reg})
+            antes = caminho.read_bytes()
+            pagina = detalhe_html("resolucao_289947").replace('id="arquivos_gvListagem"', 'id="grade_alterada"')
+            with mock.patch.object(documentos, "baixar", return_value=pagina), \
+                    contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+                estat = documentos.coletar_detalhes([], [], 1, pasta)
+            self.assertEqual(estat[("resolucao", 2025)]["detalhes_falhas"], 1)
+            self.assertEqual(caminho.read_bytes(), antes)
+
+    def test_cli_cache_offline_e_idempotente(self):
+        with tempfile.TemporaryDirectory() as temp:
+            raiz = Path(temp)
+            dados, cache = raiz / "documentos", raiz / "cache"
+            cache.mkdir()
+            reg = registro(289947, 22)
+            ausente = {**registro(9, 1), "detalhe_em": "2026-10-01"}
+            conhecido = {**registro(10, 2), "arquivos": []}
+            simples = registro(11, 3, tipo="indicacao")
+            multiplo = {**registro(12, 4, tipo="mocao"), "detalhe_em": "2026-10-01",
+                        "autores": [{"id": 1, "nome": "A"}, {"id": 2, "nome": "B"}]}
+            nao_baixado = {**multiplo, "id": 13, "numero": "5/2025"}
+            nao_baixado.pop("detalhe_em")
+            for id_ in (289947, 11, 12, 13):
+                (cache / f"{id_}.html").write_text(detalhe_html("resolucao_289947"), encoding="utf-8")
+            with mock.patch.object(documentos, "DIR_DOCUMENTOS", dados), \
+                    mock.patch.object(documentos, "baixar") as baixar, \
+                    mock.patch.object(documentos, "atualizar_meta") as meta, \
+                    mock.patch.object(sys, "argv", ["documentos", "--arquivos-do-cache", str(cache)]):
+                for tipo, regs in [("resolucao", [reg, ausente, conhecido]), ("indicacao", [simples]),
+                                   ("mocao", [multiplo, nao_baixado])]:
+                    documentos.salvar_ano(documentos.caminho_ano(tipo, 2025), {r["id"]: r for r in regs})
+                documentos.main()
+                primeira = {p: p.read_bytes() for p in dados.rglob("*.json")}
+                documentos.main()
+                self.assertEqual({p: p.read_bytes() for p in dados.rglob("*.json")}, primeira)
+                lidos = documentos.carregar_ano(documentos.caminho_ano("resolucao", 2025))
+                mocoes = documentos.carregar_ano(documentos.caminho_ano("mocao", 2025))
+                self.assertEqual(documentos.carregar_ano(documentos.caminho_ano("indicacao", 2025))[11], simples)
+                baixar.assert_not_called()
+                meta.assert_not_called()
+            self.assertEqual(lidos[289947], {**reg, "arquivos": ESPERADOS["resolucao_289947"]})
+            # sem HTML no cache: intocados, sem chaves novas (nem "detalhe_pendente")
+            self.assertEqual(lidos[9], ausente)
+            self.assertEqual(lidos[10], conhecido)
+            self.assertEqual(mocoes[12], {**multiplo, "arquivos": ESPERADOS["resolucao_289947"]})
+            self.assertEqual(mocoes[13], nao_baixado)  # moção ainda sem detalhe: fica para a fila normal
+
+    def test_cli_cache_respeita_anos_e_tipos(self):
+        with mock.patch.object(sys, "argv", ["documentos", "--arquivos-do-cache", "cache", "--anos", "2024"]), \
+                mock.patch.object(documentos, "arquivos_do_cache") as preencher:
+            documentos.main()
+        preencher.assert_called_once_with(Path("cache"), [2024], list(documentos.TIPOS))
+        argv = ["documentos", "--arquivos-do-cache", "cache", "--tipos", "pdl,requerimento"]
+        with mock.patch.object(sys, "argv", argv), mock.patch.object(documentos, "arquivos_do_cache") as preencher:
+            documentos.main()
+        preencher.assert_called_once_with(Path("cache"), None, ["pdl", "requerimento"])
+
+    def test_cli_cache_so_preenche_os_tipos_pedidos(self):
+        with tempfile.TemporaryDirectory() as temp:
+            dados, cache = Path(temp) / "documentos", Path(temp) / "cache"
+            cache.mkdir()
+            (cache / "289947.html").write_text(detalhe_html("resolucao_289947"), encoding="utf-8")
+            (cache / "290379.html").write_text(detalhe_html("pdl_290379"), encoding="utf-8")
+            with mock.patch.object(documentos, "DIR_DOCUMENTOS", dados):
+                documentos.salvar_ano(documentos.caminho_ano("resolucao", 2025), {289947: registro(289947, 22)})
+                documentos.salvar_ano(documentos.caminho_ano("pdl", 2025), {290379: registro(290379, 309, tipo="pdl")})
+                documentos.arquivos_do_cache(cache, None, ["pdl"])
+                resolucoes = documentos.carregar_ano(documentos.caminho_ano("resolucao", 2025))
+                pdls = documentos.carregar_ano(documentos.caminho_ano("pdl", 2025))
+        self.assertNotIn("arquivos", resolucoes[289947])
+        self.assertEqual(pdls[290379]["arquivos"], ESPERADOS["pdl_290379"])
+
+    def test_cli_cache_avisa_opcoes_ignoradas(self):
+        argv = ["documentos", "--arquivos-do-cache", "cache", "--so-detalhes"]
+        with mock.patch.object(sys, "argv", argv), mock.patch.object(documentos, "arquivos_do_cache") as preencher, \
+                mock.patch.object(documentos, "coletar") as coletar, contextlib.redirect_stderr(io.StringIO()) as erros:
+            documentos.main()
+        preencher.assert_called_once()
+        coletar.assert_not_called()
+        self.assertIn("::warning::--arquivos-do-cache ignora --so-detalhes", erros.getvalue())
+
+
+class TestFilaDeArquivos(unittest.TestCase):
+    """Detalhe antigo, sem a chave "arquivos", volta à fila só em requerimentos, PDLs e resoluções."""
+
+    def test_falta_arquivos(self):
+        baixado = {**registro(9, 1), "detalhe_em": "2026-10-01"}
+        dois = [{"id": 1, "nome": "A"}, {"id": 2, "nome": "B"}]
+        casos = (
+            (baixado, True),
+            ({**baixado, "tipo": "requerimento"}, True),
+            ({**baixado, "tipo": "pdl"}, True),
+            ({**baixado, "arquivos": []}, False),
+            (registro(9, 1), False),  # sem detalhe: regra de sempre (precisa_detalhe), não esta
+            ({**baixado, "tipo": "indicacao", "autores": dois}, False),
+            ({**baixado, "tipo": "mocao", "autores": dois}, False),
+            (None, False),
+        )
+        for reg, esperado in casos:
+            with self.subTest(reg=reg):
+                self.assertEqual(documentos.falta_arquivos(reg), esperado)
+
+    def test_relistar_sem_mudanca_rebaixa_so_quem_nao_tem_arquivos(self):
+        dois = [{"id": 1, "nome": "A"}, {"id": 2, "nome": "B"}]
+        anterior = {**registro(9, 1, tipo="requerimento"), "detalhe_em": "2026-10-01"}
+        mocao = {**registro(10, 2, tipo="mocao"), "autores": dois, "detalhe_em": "2026-10-01"}
+        self.assertTrue(documentos.precisa_detalhe(registro(9, 1, tipo="requerimento"), anterior))
+        self.assertFalse(documentos.precisa_detalhe(registro(9, 1, tipo="requerimento"), {**anterior, "arquivos": []}))
+        self.assertFalse(documentos.precisa_detalhe({**registro(10, 2, tipo="mocao"), "autores": dois}, mocao))
+
+    def test_fila_respeita_o_limite_e_a_recencia(self):
+        dois = [{"id": 1, "nome": "A"}, {"id": 2, "nome": "B"}]
+
+        def req(id_doc: int, numero: int, data: str, **campos) -> dict:
+            return {**registro(id_doc, numero, 2025, "requerimento"), "data": data, "detalhe_em": "2026-10-01", **campos}
+
+        requerimentos = [req(1, 1, "2025-01-10"), req(2, 2, "2025-02-10"), req(3, 3, "2025-03-10"),
+                         req(4, 4, "2025-04-10", arquivos=[])]
+        mocao = {**registro(5, 1, 2025, "mocao"), "autores": dois, "detalhe_em": "2026-10-01", "data": "2025-12-01"}
+        paginas = {r["id"]: pagina_minima(r, "Requerimento") for r in requerimentos}
+        pedidos: list[int] = []
+
+        def baixar(url: str, tentativas: int = 5) -> str:
+            id_doc = int(parse_qs(urlsplit(url).query)["IdDocumento"][0])
+            pedidos.append(id_doc)
+            return paginas[id_doc]
+
+        with tempfile.TemporaryDirectory() as temp:
+            pasta = Path(temp)
+            documentos.salvar_ano(documentos.caminho_ano("requerimento", 2025, pasta), {r["id"]: r for r in requerimentos})
+            documentos.salvar_ano(documentos.caminho_ano("mocao", 2025, pasta), {5: mocao})
+            antes_mocao = documentos.caminho_ano("mocao", 2025, pasta).read_bytes()
+            with mock.patch.object(documentos, "baixar", side_effect=baixar), \
+                    contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+                documentos.coletar_detalhes([], [], 1, pasta, max_detalhes=2, hoje="2026-10-27")
+                self.assertEqual(sorted(pedidos), [2, 3])  # os mais recentes; o 4 já tem "arquivos"
+                lidos = documentos.carregar_ano(documentos.caminho_ano("requerimento", 2025, pasta))
+                self.assertEqual({i for i, r in lidos.items() if r.get("detalhe_pendente")}, {1})
+                self.assertEqual((lidos[2]["arquivos"], lidos[3]["detalhe_em"]), ([], "2026-10-27"))
+                self.assertEqual(lidos[4], requerimentos[3])
+                self.assertEqual(documentos.caminho_ano("mocao", 2025, pasta).read_bytes(), antes_mocao)
+                pedidos.clear()
+                documentos.coletar_detalhes([], [], 1, pasta, max_detalhes=0, hoje="2026-10-27")
+                self.assertEqual(pedidos, [])  # limite zero: nada baixado, o 1 continua pendente
+                lidos = documentos.carregar_ano(documentos.caminho_ano("requerimento", 2025, pasta))
+                self.assertTrue(lidos[1]["detalhe_pendente"])
 
 
 if __name__ == "__main__":

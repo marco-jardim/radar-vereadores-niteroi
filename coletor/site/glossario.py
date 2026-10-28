@@ -10,6 +10,11 @@ import unicodedata
 
 
 TERMOS: dict[str, tuple[str, str]] = {
+    "busca": (
+        "Busca",
+        "Consulta por palavras ou por significado nos textos extraídos; indicações e moções entram só pela ementa. "
+        "Mostra trechos dos documentos, sem gerar respostas. OCR e cobertura incompleta podem limitar os resultados.",
+    ),
     "autorizativa": (
         "Autorizativa",
         "Lei que só autoriza o Executivo a fazer algo que ele já pode fazer, sem obrigá-lo.",

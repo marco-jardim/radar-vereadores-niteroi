@@ -1,0 +1,17 @@
+.busca { max-width: 70rem; }
+.busca fieldset { min-width: 0; padding: var(--esp-4); border: 1px solid var(--linha); border-radius: var(--raio-2); }
+.busca-filtros { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: var(--esp-4); }
+.busca label { display: flex; flex-direction: column; gap: var(--esp-1); min-width: 0; }
+.busca input, .busca select, .busca button { min-height: 44px; max-width: 100%; font: inherit; }
+.busca button { padding: var(--esp-2) var(--esp-4); color: var(--fundo); background: var(--baia); border: 1px solid var(--borda-campo); border-radius: var(--raio-1); cursor: pointer; }
+.busca input, .busca select { width: 100%; min-width: 0; color: var(--tinta); background: var(--superficie); border: 1px solid var(--borda-campo); border-radius: var(--raio-1); padding: var(--esp-2); }
+.busca-resultados { padding: 0; list-style: none; }
+.busca-resultados li { margin-block: var(--esp-4); padding: var(--esp-4); border: 1px solid var(--linha); border-radius: var(--raio-2); overflow-wrap: anywhere; }
+.busca-resultados h3 { margin-top: 0; }
+.busca-resultados code { overflow-wrap: anywhere; white-space: normal; }
+.busca-resultados mark { color: var(--tinta); background: var(--sem-efeito-fundo); }
+.busca-resultados a { display: inline-block; min-height: 24px; }
+.busca-selo { font-size: var(--fs--1); line-height: 1.4; }
+.busca :focus-visible { outline: 2px solid var(--foco); outline-offset: 3px; }
+@media (forced-colors: active) { .busca :focus-visible { outline-color: Highlight; } }
+@media print { .busca form, #busca-mais { display: none; } }
