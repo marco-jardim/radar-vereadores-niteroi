@@ -130,15 +130,27 @@ describe("cron de verificação", () => {
     });
   });
 
-  it("fixa manifesto e JSONL no commit do índice, sem consultar as branches", async () => {
+  it("fixa manifesto em main e JSONL no commit distinto de dados-textos, sem consultar as branches", async () => {
+    await incluir(1);
+    const commit = "a".repeat(40);
+    const commitDados = "b".repeat(40);
+    await env.DB.prepare('UPDATE estado_indice SET "commit" = ?, commit_dados_textos = ?').bind(commit, commitDados).run();
+    respostas.set(`${BASE}/${commit}/data/textos/manifesto-2021.json`, JSON.stringify(manifestos.get(2021)));
+    respostas.set(`${BASE}/${commitDados}/trechos/pl/2021.jsonl`, trechos.get("trechos/pl/2021.jsonl")!.map((t) => JSON.stringify(t)).join("\n"));
+    expect(await verificar(criarEnv(), DATA)).toMatchObject({ amostra: 1, ok: 1, falhas: [] });
+    expect(pedidos).toHaveLength(7);
+    expect(pedidos.filter((url) => url.endsWith(".json")).every((url) => url.startsWith(`${BASE}/${commit}/`))).toBe(true);
+    expect(pedidos.filter((url) => url.endsWith(".jsonl"))).toEqual([`${BASE}/${commitDados}/trechos/pl/2021.jsonl`]);
+  });
+
+  it("mantém o commit de main quando a referência de dados-textos ainda é NULL", async () => {
     await incluir(1);
     const commit = "a".repeat(40);
     await env.DB.prepare('UPDATE estado_indice SET "commit" = ?').bind(commit).run();
     respostas.set(`${BASE}/${commit}/data/textos/manifesto-2021.json`, JSON.stringify(manifestos.get(2021)));
-    respostas.set(`${BASE}/${commit}/trechos/pl/2021.jsonl`, trechos.get("trechos/pl/2021.jsonl")!.map((t) => JSON.stringify(t)).join("\n"));
-    expect(await verificar(criarEnv(), DATA)).toMatchObject({ amostra: 1, ok: 1, falhas: [] });
-    expect(pedidos).toHaveLength(7);
-    expect(pedidos.every((url) => url.startsWith(`${BASE}/${commit}/`))).toBe(true);
+    expect(await verificar(criarEnv(), DATA)).toMatchObject({ ok: 1, falhas: [] });
+    expect(pedidos).toContain(`${BASE}/${commit}/data/textos/manifesto-2021.json`);
+    expect(pedidos).toContain(`${BASE}/dados-textos/trechos/pl/2021.jsonl`);
   });
 
   it.each(["nulo", "ausente"])("usa branches quando o commit está %s", async (caso) => {

@@ -217,7 +217,8 @@ python -m coletor.nuvem --ambiente staging --etapas d1,vetores
 | `--reconstruir` | Limpa as tabelas-base, o FTS e `estado_indice` e regrava tudo a partir do Git; reenvia todos os vetores (reaproveitando o cache de embeddings) e apaga do índice todo vetor listado (`GET …/vectorize/v2/indexes/<índice>/list`, com cursor; sem a rota, `wrangler vectorize list-vectors --json`) que o Git não tem. |
 | `--textos DIR` | Worktree de `dados-textos` (padrão: `RADAR_TEXTOS` ou `..\radar-vereadores-niteroi-textos`). |
 | `--cache DIR` | Cache local (padrão: `RADAR_CACHE`). Originais em `arquivos\<sha256>`; embeddings em `embeddings\<modelo>\<aa>\<sha256>.f32`. |
-| `--commit SHA` | Commit gravado em `estado_indice.commit` (padrão: `GITHUB_SHA` ou `git rev-parse HEAD`). |
+| `--commit SHA` | Commit de `main` dos manifestos, gravado em `estado_indice.commit` (padrão: `GITHUB_SHA` ou `git rev-parse HEAD`). |
+| `--commit-dados-textos SHA` | Commit independente dos JSONL, gravado em `estado_indice.commit_dados_textos` (padrão: `git -C <textos> rev-parse HEAD` do worktree, quando disponível; não usa `GITHUB_SHA`). |
 
 **Etapas, nesta ordem:**
 1. **Barreira de PII:** `mascara.varrer` (com `mascara.liberados`) em todo trecho, em toda ementa mascarada e em todo `motivo` de `config\remocoes.json` a enviar. Uma ocorrência forte aborta antes de qualquer escrita, listando origem, tipo e posição, nunca o valor.
@@ -225,11 +226,15 @@ python -m coletor.nuvem --ambiente staging --etapas d1,vetores
 3. **R2 (`r2`):** os originais que ainda não constam em `arquivos` do D1 são conferidos (S3: `HEAD`; REST: `GET` com `Range: bytes=0-0`) e, se faltarem, enviados do cache (bytes conferidos pelo SHA-256), em até 4 envios simultâneos, com aviso de progresso a cada 100. Na via S3, o PUT leva `If-None-Match: *`, `Content-Type` e `x-amz-meta-documentos` (ids inteiros, até 1.500 caracteres); na via REST, PUT sem condição depois da conferência (a chave é o SHA-256 do conteúdo) e sem metadados. Original ausente no cache é falha, tudo ou nada por arquivo: nesta execução ficam de fora a linha em `arquivos`, as de `arquivo_documento`, os trechos (com o FTS) e os vetores daquele arquivo, e `estado_indice` fica como estava. Os originais de `config\remocoes.json` são apagados (`DELETE`, só aqui).
 4. **D1 (`d1`):** diferença de `documentos`, `autoria`, `pessoas`, `arquivos`, `arquivo_documento`, `trechos` (texto = `conteudo[:-1][inicio:fim]`, conferido pelo `sha256`) e `remocoes` contra o Git: grava o que mudou e apaga o que saiu do Git ou entrou nas remoções. Cada bloco de trechos vai no **mesmo lote atômico** das suas linhas de `trechos_fts` (DELETE dos rowids, INSERT dos trechos, INSERT do FTS), então uma falha no meio nunca separa os dois. Se mesmo assim os conjuntos de ids divergirem (duas consultas `LIMIT 1`, nos dois sentidos, conferindo também o `rowid`), o FTS é refeito por inteiro. A leitura das tabelas pagina por chave (`WHERE chave > última … LIMIT 5000`), sem `OFFSET`. Até 5.000 instruções vão por lotes REST (100 parâmetros e 100 KB por instrução, sem `BEGIN`/`COMMIT`, cada lote atômico). Acima disso, por um arquivo `.sql` temporário e `wrangler d1 execute <db> --remote --yes --file=…`: essa importação **bloqueia o banco** enquanto roda (o Worker não responde), por isso fica só para cargas enormes, como a primeira.
 5. **Vectorize (`vetores`):** primeiro confere o índice (`info`: 1.024 dimensões; `metadata_index/list`: `tipo` string, `ano` number, `legislatura` string) e aborta antes de qualquer embedding se algo faltar. Vetores só para trechos vetorizáveis novos ou alterados e para as ementas mascaradas de indicações e moções (`ementa:doc:<id>`), pela diferença contra `trechos_indexados`, cujo `sha256` é o SHA-256 de (`sha256` do texto + metadados em JSON com chaves ordenadas): mudar só os metadados também reenvia o vetor. Metadados `{tipo, ano, legislatura, documento}`. Embeddings `@cf/baai/bge-m3` em lotes de 50 (dimensão conferida: 1.024), upsert em lotes de 1.000 (até 5.000 e 100 MB). Os ids ainda sem registro entram em `trechos_indexados` como `pendente` **antes** do upsert e recebem o hash real depois: nenhum vetor enviado fica sem registro. `delete_by_ids` apaga os ids registrados que saíram do Git, os trechos apagados nesta execução e as ementas dos documentos apagados. Toda mutação precisa devolver `mutationId`; ao fim, a execução espera (até 1.800 s) `processedUpToMutation` igual à última mutação e `processedUpToDatetime` ≥ início da execução (com 60 s de folga para o relógio). Trocar o modelo reenvia todos os vetores.
-6. **Estado:** `estado_indice` só no fim, sem falhas, com as etapas `r2`, `d1` e `vetores`, e só se algo além da data mudou. O `commit` faz parte da comparação.
+6. **Estado:** `estado_indice` só no fim, sem falhas, com as etapas `r2`, `d1` e `vetores`, e só se algo além da data mudou. Ambos os commits (`commit` e `commit_dados_textos`) fazem parte da comparação; a migração `0005_estado_commit_dados_textos.sql` acrescenta a referência dos JSONL sem alterar a dos manifestos.
 
 **Originais grandes via REST.** A API REST tem teto de corpo de 100 MB decimais; `LIMITE_ENVIO_R2_REST` reserva 1 MiB de margem (98.951.424 bytes). Acima dele, o original não é lido nem enviado: entra na contagem `originais_grandes_demais` e em `::warning::` com chave e tamanho, sem falha nem bloqueio de `estado_indice`. Texto, FTS e vetores continuam publicados; só `arquivos.r2_chave` no D1 fica NULL, sem mudar o manifesto. O Worker informa 404 `original_indisponivel` com link ao SISCAM quando disponível, e `/api/documento` traz `url_original: null`. Repetir a sincronização não tenta o PUT nem gera escritas por esses arquivos. Para enviá-los depois, disponibilize `R2_ACCESS_KEY_ID` e `R2_SECRET_ACCESS_KEY` e repita a sincronização completa (ou `--etapas r2,d1` para atualizar só os downloads); elevar o limite, se a API passar a aceitá-lo, também os recoloca na fila. O cliente S3/SigV4 não recebe esse teto REST; multipart ainda não está implementado e pode ser acrescentado nessa via. `wrangler r2 object put` limita a 315 MB, portanto não é alternativa para um original de 333,3 MB.
 
 Uma segunda execução sem mudanças no Git **e no mesmo commit** não faz nenhuma escrita; num commit novo, mesmo sem outra mudança, `estado_indice` é regravado (uma escrita), porque guarda o commit. Código de saída: 0 sem falhas, 1 com falhas.
+
+No GitHub Actions, falhas na sincronização real emitem `::error::` com a orientação
+“re-execute com workflow_dispatch”: a publicação de `dados-textos` já pode ter sido concluída,
+e a nova execução deve concluir a projeção na nuvem. A simulação não emite essa orientação.
 
 **Credenciais.** Token da API: `CLOUDFLARE_API_TOKEN` ou `CLOUDFLARE_API_TOKEN_DADOS`; sem eles, o login OAuth do wrangler (`npx wrangler login`), lido de `oauth_token` em `WRANGLER_CONFIG` ou, por padrão, `%USERPROFILE%\.wrangler\config\default.toml` (Windows) ou `~/.config/.wrangler/config/default.toml`. O token OAuth dura cerca de 1 hora: vencido (`expiration_time`) ou recusado com 401, é renovado executando `wrangler whoami` (o wrangler renova o próprio login) e relendo o arquivo, com uma única nova tentativa por 401. Com o login OAuth, os subprocessos do wrangler não recebem `CLOUDFLARE_API_TOKEN` e usam o próprio login. Conta: `CLOUDFLARE_ACCOUNT_ID` (padrão: `account_id` de `worker\wrangler.jsonc`). R2: com `R2_ACCESS_KEY_ID` e `R2_SECRET_ACCESS_KEY`, a via S3 (SigV4); sem elas, a API REST `…/accounts/<conta>/r2/buckets/<bucket>/objects/<chave>` com o token Bearer. Todas as chamadas à API de um ambiente remoto compartilham um ritmo de 4 requisições por segundo (limite global de 1.200 a cada 5 minutos).
 
@@ -249,7 +254,9 @@ Os termos são escapados e colocados entre aspas nas duas consultas. Os filtros 
 Depois o SQL funde as listas por documento (menor `rank`, melhor correspondência) e limita a 500 documentos; `total` conta documentos uma única vez, mesmo com ementa e trecho correspondentes.
 Se a melhor correspondência é a ementa, o destaque vem dela e os campos de arquivo são nulos.
 Remoções por chave ou SHA-256 excluem os trechos, não a ementa mascarada pública, mesmo quando todos os arquivos do documento foram removidos.
-`modo=hibrida` usa essa lista de palavras já fundida no RRF com a lista semântica.
+`modo=hibrida` usa a lista **inteira** de palavras (até 500 documentos) no RRF com a lista semântica,
+sem cortar as palavras aos primeiros 50. `total` é o tamanho da união por documento; `limitado` é verdadeiro
+se a lista de palavras atingiu um teto ou a lista semântica atingiu o `topK` da consulta.
 `ementas_fts` é sincronizada por diferença (inclusive alterações e exclusões), reconstruída com `--reconstruir` e não entra nas exportações, como `trechos_fts`.
 `limitado` avisa ao atingir qualquer teto; filtros seletivos podem deixar resultados além do teto de candidatos.
 Consultas só com termos menores que três caracteres ou só palavras vazias comuns do português recebem
@@ -274,11 +281,16 @@ CORS só para `ORIGENS_CORS` (igual a `config/backend.json` nos dois ambientes) 
 `localhost`; Rate Limiting de 60 por minuto com IPv4 ou prefixo IPv6 /64 resumido por SHA-256; `METRICAS` só com o modo e a contagem.
 A Cache API não opera em `*.workers.dev`. Testes: `npm test` e `npm run typecheck` em `worker\`.
 
-**Limitação semântica com autor.** Sem autor, Vectorize usa `topK = 50`; com autor, usa `topK = 100`, máximo
-permitido com `returnMetadata: "indexed"`. A autoria é filtrada depois no D1 (inclusive dos documentos que
-citam o mesmo arquivo). Portanto ainda podem faltar resultados de um autor cujos vetores estejam fora dos
-100 primeiros; não há garantia de recuperação exaustiva por autor. Consultas D1 de candidatos são divididas
-em lotes para respeitar os 100 parâmetros por instrução.
+**Filtros e limitação semântica.** Vectorize usa `topK = 50`; com autor ou `tipo=substitutivo`, usa
+`topK = 100`, máximo permitido com `returnMetadata: "indexed"`. A autoria é filtrada depois no D1
+(inclusive dos documentos que citam o mesmo arquivo). O tipo de um trecho é filtrado pelas associações
+`arquivo_documento` com `documentos`, além do tipo do documento principal do trecho: o arquivo de um substitutivo
+pode devolver o trecho no PL principal. Para `tipo=substitutivo`, o filtro de tipo não vai ao Vectorize
+(os metadados têm o tipo principal `pl`); é aplicado no D1 após o `topK`. Os demais tipos continuam usando
+o filtro de metadados, além da conferência no D1; ementas usam o próprio tipo do documento.
+Portanto ainda podem faltar resultados fora dos 100 primeiros; não há garantia de recuperação exaustiva
+por autor ou substitutivo. Consultas D1 de candidatos são divididas em lotes para respeitar os 100 parâmetros
+por instrução.
 
 `HEAD /api/busca` responde 200 só com cabeçalhos, sem executar a busca.
 
@@ -289,8 +301,10 @@ para não comparar seus recursos com os dados de produção. Lê todos os manife
 de 2021 até o ano UTC do evento (`data/textos/manifesto-<ano>.json`); 404 de ano sem manifesto é normal.
 `CRON_RAW_BASE`, `CRON_MANIFESTOS_BRANCH` e `CRON_TEXTOS_BRANCH`, definidos nos dois ambientes do wrangler,
 apontam para `https://raw.githubusercontent.com/marco-jardim/radar-vereadores-niteroi`, `main` e `dados-textos`.
-Manifestos e JSONL são buscados no `estado_indice.commit` do D1, não na ponta das branches, evitando
-divergências na janela entre publicação no Git e sincronização. Só sem commit usa as branches configuradas.
+Manifestos são buscados no `estado_indice.commit` (commit de `main`); JSONL em
+`estado_indice.commit_dados_textos` (commit da branch `dados-textos`), pois `main` não contém `trechos/`.
+As referências independentes evitam divergências na janela entre publicação no Git e sincronização.
+Cada referência NULL usa só a sua branch configurada (`main` ou `dados-textos`), inclusive nos índices antigos.
 Só aceita o host raw do GitHub, sem seguir redirecionamentos.
 
 A amostra tem até **50 arquivos** de no máximo **três grupos (tipo, ano)** por dia. Os grupos são ordenados

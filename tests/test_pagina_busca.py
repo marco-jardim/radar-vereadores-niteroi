@@ -116,7 +116,7 @@ class TestPaginaBusca(unittest.TestCase):
         texto = B.gerar_busca(MODELO, None)
         self.assertIn(f'href="{P.url_estatica("busca.css")}"', texto)
         scripts = [a for t, a in Estrutura(texto).tags if t == "script" and "src" in a]
-        self.assertEqual([a["src"].split("?")[0] for a in scripts], ["navegacao.js", "dados.js", "app.js", "busca.js"])
+        self.assertEqual([a["src"].split("?")[0] for a in scripts], ["navegacao.js", "busca.js"])
         self.assertTrue(all("defer" in a for a in scripts))
         self.assertEqual(scripts[-1]["src"], P.url_estatica("busca.js"))
         glossario = PaginaGlossario(texto)
@@ -125,6 +125,20 @@ class TestPaginaBusca(unittest.TestCase):
         self.assertEqual(glossario.invalidos, [])
         self.assertLessEqual(len(gzip.compress(texto.encode("utf-8"), mtime=0)), 100 * 1024)
         self.assertLessEqual(len(gzip.compress((P.FONTE_ESTATICA / "busca.js").read_bytes(), mtime=0)), 6 * 1024)
+
+    def test_outra_pagina_preserva_scripts_base_por_padrao(self):
+        args = ("Projetos", "<h1>Projetos</h1>", "projetos.html")
+        texto = P.pagina(*args, prefixo="../")
+        self.assertEqual(texto, P.pagina(*args, prefixo="../", scripts_base=True))
+        scripts = [a for t, a in Estrutura(texto).tags if t == "script" and "src" in a]
+        self.assertEqual([a["src"].split("?")[0] for a in scripts],
+                         ["../navegacao.js", "../dados.js", "../app.js"])
+        self.assertTrue(all("defer" in a for a in scripts))
+        self.assertIn(
+            f'<script src="../dados.js?v={P.versao_estatica("dados.js")}" defer></script>\n'
+            f'<script src="../app.js?v={P.versao_estatica("app.js")}" defer></script>\n',
+            texto,
+        )
 
     def test_css_so_tokens_existentes_e_grade_flexivel(self):
         css = (P.FONTE_ESTATICA / "busca.css").read_text(encoding="utf-8")
@@ -152,6 +166,22 @@ class TestPaginaBusca(unittest.TestCase):
     def test_dominios_publicados_sao_exatamente_os_liberados_pela_mascara(self):
         texto = B.metodologia_busca().split("além de e-mails dos domínios", 1)[1].split("e seus subdomínios", 1)[0]
         self.assertEqual(tuple(re.findall(r"<code>([^<]+)</code>", texto)), mascara.DOMINIOS_LIBERADOS)
+
+    def test_metodologia_explica_limites_e_fusao_dos_modos(self):
+        texto = " ".join(B.metodologia_busca().split())
+        self.assertIn("por palavras usa FTS5 e ordenação BM25, sem distinguir acentos, com até 500 candidatos", texto)
+        self.assertIn("por significado compara vetores de trechos com o modelo bge-m3, com até 50 candidatos", texto)
+        self.assertIn("O modo híbrido combina as duas listas e usa Reciprocal Rank Fusion (RRF), com k = 60", texto)
+
+    def test_remocao_explica_escopo_preservacao_e_proxima_sincronizacao(self):
+        texto = " ".join(B.metodologia_busca().split())
+        self.assertIn(
+            "A remoção abrange o texto extraído, os trechos, os vetores, o original e as exportações, "
+            "inclusive versões antigas, que são reescritas; a ementa mascarada e os metadados do documento "
+            "permanecem públicos nas listas e na busca, como no SISCAM; ela passa a valer na próxima "
+            "sincronização, acionada automaticamente quando <code>config/remocoes.json</code> muda na branch <code>main</code>.",
+            texto,
+        )
 
 
 if __name__ == "__main__":

@@ -58,7 +58,8 @@ Indicações e moções entram somente pela ementa. A {glossario.termo('busca')}
 <button id="busca-mais" type="button" hidden>Mostrar mais</button></section></div>
 """
     return P.pagina("Busca · Radar dos Vereadores de Niterói", corpo + glossario.definicoes(), "busca.html",
-                    caminho="busca.html", estilos=("busca.css",), scripts=("busca.js",), radar_api=api_url or "")
+                    caminho="busca.html", estilos=("busca.css",), scripts=("busca.js",), radar_api=api_url or "",
+                    scripts_base=False)
 
 
 def metodologia_busca() -> str:
@@ -75,12 +76,13 @@ indica confiança média inferior a 60. Essa medida não é garantia de exatidã
 podem conter erros. O selo Extração parcial indica que apenas parte do arquivo pôde ser extraída.
 Cabeçalhos, rodapés repetidos e ruído são removidos por regras. Confira o original.</p></section>
 <section id="busca"><h2>Como funciona a busca</h2>
-<p>A <a href="busca.html">busca</a> por palavras usa FTS5 e ordenação BM25, sem distinguir acentos.
-A busca por significado compara vetores de trechos com o modelo bge-m3. O modo combinado usa
+<p>A <a href="busca.html">busca</a> por palavras usa FTS5 e ordenação BM25, sem distinguir acentos,
+com até 500 candidatos. A busca por significado compara vetores de trechos com o modelo bge-m3,
+com até 50 candidatos. O modo híbrido combina as duas listas e usa
 Reciprocal Rank Fusion (RRF), com k = 60, somando posições nas duas listas e desempate pelo id.
 Não há resposta ou resumo gerado por IA: os resultados são trechos dos textos extraídos.</p>
-<p>A busca semântica considera até 50 candidatos, ou 100 antes do filtro por autor; não é exaustiva.
-A busca por palavras também limita candidatos e informa quando alcança o teto. Ausência de resultado
+<p>A busca semântica pode consultar até 100 candidatos antes do filtro por autor; não é exaustiva.
+A busca informa quando alcança o limite de candidatos. Ausência de resultado
 não prova ausência de documento. Se o modo combinado perder a busca semântica, mostra palavras e um aviso.</p></section>
 <section id="privacidade"><h2>Privacidade e remoção</h2>
 <p>Nos textos extraídos pesquisáveis, a mesma regra de mascaramento se aplica a todas as pessoas,
@@ -99,7 +101,11 @@ O mascaramento automático pode falhar; comunique ocorrências.</p>
 sem máscara, exatamente como publicados pelo SISCAM, como registro público. O texto pesquisável não substitui esse original.</p>
 <p>Para solicitar remoção, <a href="{P.REPO}/issues/new">abra uma issue</a> indicando o documento e o motivo,
 sem reproduzir dados pessoais. As remoções são registradas em <code>config/remocoes.json</code>,
-com chave de origem, hash, motivo, fonte e data, para impedir sua disponibilização.</p>
+com chave de origem, hash, motivo, fonte e data, para impedir sua disponibilização.
+A remoção abrange o texto extraído, os trechos, os vetores, o original e as exportações,
+inclusive versões antigas, que são reescritas; a ementa mascarada e os metadados do documento
+permanecem públicos nas listas e na busca, como no SISCAM; ela passa a valer na próxima
+sincronização, acionada automaticamente quando <code>config/remocoes.json</code> muda na branch <code>main</code>.</p>
 <p>A aplicação não registra a consulta nem o IP em logs. A borda do Cloudflare processa a URL da
 requisição, que contém a consulta e os filtros; o navegador também os mantém no endereço e no histórico.
 As métricas da aplicação registram apenas modo e contagem de resultados. A borda do Cloudflare mantém

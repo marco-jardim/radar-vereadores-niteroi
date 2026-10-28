@@ -14,8 +14,6 @@ export const MAX_PAGINA = 50;
 /** Documentos por palavras; a seleção de trechos anterior também tem teto próprio. */
 export const LIMITE_TRECHOS = 500;
 export const LIMITE_CANDIDATOS_FTS = 5000;
-/** Documentos de cada lista que entram na fusão híbrida. */
-export const CANDIDATOS_FUSAO = 50;
 export const TOPK = 50;
 /** Máximo do Vectorize com returnMetadata: indexed (sem returnValues). */
 export const TOPK_AUTOR = 100;
@@ -104,7 +102,12 @@ const SEM_REMOCAO = "NOT EXISTS (SELECT 1 FROM remocoes AS rm WHERE rm.chave = t
 
 function filtrar(p: Parametros, documento: string, arquivo: string | null, onde: string[], valores: unknown[]): void {
   if (p.tipo !== null) {
-    onde.push("d.tipo = ?");
+    if (arquivo === null) onde.push("d.tipo = ?");
+    else {
+      // Mantém o tipo principal (PL inclusive) e encontra também os documentos que citam o arquivo.
+      onde.push(`(d.tipo = ? OR EXISTS (SELECT 1 FROM arquivo_documento AS ad JOIN documentos AS d2 ON d2.id = ad.documento WHERE ad.arquivo = ${arquivo} AND d2.tipo = ?))`);
+      valores.push(p.tipo);
+    }
     valores.push(p.tipo);
   }
   if (p.ano !== null) {
@@ -190,6 +193,11 @@ function vetorDe(saida: unknown): number[] {
   return vetor as number[];
 }
 
+function topK(p: Parametros): number {
+  // Autor e substitutivo dependem das associações de arquivos no D1, depois do Vectorize.
+  return p.autor !== null || p.tipo === "substitutivo" ? TOPK_AUTOR : TOPK;
+}
+
 export async function porSignificado(env: Env, p: Parametros, ctx: ContextoExecucao, origem: string): Promise<Candidato[]> {
   if (!env.AI || !env.VETORES) throw new Error("bindings ausentes");
   const consulta = p.termos.join(" ");
@@ -198,10 +206,10 @@ export async function porSignificado(env: Env, p: Parametros, ctx: ContextoExecu
   const vetor = guardado ? vetorDe(await guardado.json()) : vetorDe(await env.AI.run(MODELO, { text: [consulta] }));
   if (!guardado) guardarCache(ctx, chave, json({ data: [vetor] }), CACHE_EMBEDDING);
   const filtro: Record<string, unknown> = {};
-  if (p.tipo !== null) filtro.tipo = { $eq: p.tipo };
+  if (p.tipo !== null && p.tipo !== "substitutivo") filtro.tipo = { $eq: p.tipo };
   if (p.ano !== null) filtro.ano = { $eq: p.ano };
   if (p.legislatura !== null) filtro.legislatura = { $eq: p.legislatura };
-  const opcoes: OpcoesConsultaVetor = { topK: p.autor === null ? TOPK : TOPK_AUTOR, returnMetadata: "indexed" };
+  const opcoes: OpcoesConsultaVetor = { topK: topK(p), returnMetadata: "indexed" };
   if (Object.keys(filtro).length > 0) opcoes.filter = filtro;
   const resposta = await env.VETORES.query(vetor, opcoes);
   const correspondencias = (Array.isArray(resposta?.matches) ? resposta.matches : [])
@@ -448,13 +456,15 @@ async function classificar(env: Env, p: Parametros, ctx: ContextoExecucao, orige
   }
   let lista: Fundido[];
   if (p.modo === "hibrida" && semantica !== null) {
-    lista = fundir(palavras.itens.slice(0, CANDIDATOS_FUSAO), semantica.slice(0, CANDIDATOS_FUSAO));
+    lista = fundir(palavras.itens, semantica);
   } else if (p.modo === "semantica") {
     lista = (semantica ?? []).map((c) => ({ ...c, origem: "semantica" as const }));
   } else {
     lista = palavras.itens.map((c) => ({ ...c, origem: "palavras" as const }));
   }
-  return { lista, modo, limitado: modo !== "semantica" && palavras.limitado, ...(aviso === undefined ? {} : { aviso }) };
+  const limitado = (modo !== "semantica" && palavras.limitado) ||
+    (modo !== "palavras" && semantica !== null && semantica.length >= topK(p));
+  return { lista, modo, limitado, ...(aviso === undefined ? {} : { aviso }) };
 }
 
 export async function buscar(env: Env, p: Parametros, ctx: ContextoExecucao, origem: string, indice: string): Promise<RespostaBusca> {

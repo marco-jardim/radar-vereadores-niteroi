@@ -207,9 +207,10 @@ export async function verificar(env: Env, agora = new Date(), opcoes: OpcoesVeri
     return resultado;
   }
   try {
-    const estado = await comPrazo(() => env.DB.prepare('SELECT "commit" FROM estado_indice WHERE id = 1')
-      .first<{ commit: string | null }>(), reservar());
+    const estado = await comPrazo(() => env.DB.prepare('SELECT "commit", commit_dados_textos FROM estado_indice WHERE id = 1')
+      .first<{ commit: string | null; commit_dados_textos: string | null }>(), reservar());
     const referencia = estado?.commit || null;
+    const referenciaTextos = estado?.commit_dados_textos || null;
     const arquivos: Arquivo[] = [];
     const vistos = new Set<string>();
     for (let ano = 2021; ano <= agora.getUTCFullYear(); ano++) {
@@ -264,7 +265,7 @@ export async function verificar(env: Env, agora = new Date(), opcoes: OpcoesVeri
       let esperados = new Map<string, HashTrecho[]>(grupo.map((a) => [a.chave, []]));
       let trechosLidos = true;
       try {
-        const lidos = await raw(caminho, referencia ?? env.CRON_TEXTOS_BRANCH ?? "dados-textos", async (r, sinal) => {
+        const lidos = await raw(caminho, referenciaTextos ?? env.CRON_TEXTOS_BRANCH ?? "dados-textos", async (r, sinal) => {
           if (!r.body) throw new Error("corpo");
           return lerHashesTrechos(r.body, new Set(grupo.map((a) => a.chave)), sinal);
         }, grupo.every((a) => a.trechos === 0));

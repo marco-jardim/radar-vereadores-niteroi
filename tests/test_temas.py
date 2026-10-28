@@ -504,11 +504,26 @@ class TestHtmlTemas(unittest.TestCase):
         self.assertNotIn("Resumo em números", html)
         self.assertIn('class="tag">IA</span>', html)
         self.assertIn(M.URL_DETALHE.format(id=4), html)
+        self.assertIn("Indicação 4/2025", html)
+        self.assertNotIn("INDICACAO", html)
         self.assertEqual(bloco_temas(m, p, {}), "")
         cache[f"pessoa:ana:{LEG}"].update(rotulos=["Gestão produtiva"], validado=True)
         self.assertEqual(bloco_temas(m, p, cache), "")
         cache[f"pessoa:ana:{LEG}"] = "corrompido"
         self.assertEqual(bloco_temas(m, p, cache), "")
+
+    def test_exemplos_usam_rotulos_humanos_dos_tipos(self):
+        m = modelo()
+        esperados = {"indicacao": "Indicação", "mocao": "Moção", "requerimento": "Requerimento",
+                     "pl": "PL", "pdl": "PDL", "resolucao": "Resolução", "substitutivo": "Substitutivo", "ata": "Ata"}
+        exemplos = [documento(i, tipo) for i, tipo in enumerate(esperados, 1)]
+        temas = [{"rotulo": ROTULOS[0], "total": len(exemplos), "exemplos": exemplos}]
+        with mock.patch("coletor.site.temas_html.temas_validados", return_value=(temas, [])):
+            html = bloco_temas(m, m["pessoas"]["ana"], {f"pessoa:ana:{LEG}": registro()})
+        for d in exemplos:
+            with self.subTest(tipo=d["tipo"]):
+                self.assertIn(f'{esperados[d["tipo"]]} {d["numero"]}', html)
+                self.assertIn(M.URL_DETALHE.format(id=d["id"]), html)
 
     def test_escape_numero_e_prefixo(self):
         m = modelo()

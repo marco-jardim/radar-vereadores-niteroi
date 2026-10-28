@@ -130,8 +130,8 @@
         aviso.textContent = (typeof dados.aviso === "string" ? dados.aviso : "") +
           (dados.limitado ? " O limite de candidatos foi atingido; refine a consulta ou os filtros." : "");
         estado.textContent = quantidade ? (adicionar ? incluidos + (incluidos === 1 ? " resultado adicionado. " : " resultados adicionados. ") : "") +
-          quantidade + (quantidade === 1 ? " resultado exibido de " : " resultados exibidos de ") + dados.total +
-          (dados.limitado ? " candidatos encontrados." : ".") : "Nenhum resultado encontrado. Tente outros termos ou filtros.";
+          (dados.limitado ? "Mostrando os primeiros " + quantidade + " de pelo menos " + dados.total + " resultados (limite de candidatos atingido)" :
+            dados.total + (dados.total === 1 ? " resultado" : " resultados")) : "Nenhum resultado encontrado. Tente outros termos ou filtros.";
         if (focar && lista.children[antes]) lista.children[antes].focus();
         else if (focar && adicionar && mais.hidden) estado.focus();
       } catch (_) {

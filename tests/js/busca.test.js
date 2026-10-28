@@ -5,6 +5,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const zlib = require("node:zlib");
+const vm = require("node:vm");
 const B = require("../../site_src/busca.js");
 const fixture = require("./fixtures/busca.json");
 const copiar = (x) => JSON.parse(JSON.stringify(x));
@@ -134,6 +135,21 @@ test("sem API, API inválida ou fetch não habilita o formulário nem busca", ()
   assert.equal(B.iniciar(a.doc, a.janela), null);
 });
 
+test("script inicializa e busca sozinho no navegador, sem app.js ou dados.js", async () => {
+  const a = ambiente();
+  a.janela.document = a.doc;
+  vm.runInNewContext(fs.readFileSync(path.join(__dirname, "../../site_src/busca.js"), "utf8"), {
+    window: a.janela, URL, URLSearchParams
+  });
+  assert.equal(a.nos["busca-campos"].disabled, false);
+  a.campos.q.value = "saúde";
+  a.acao("submit", "busca-form");
+  await assentar();
+  assert.equal(a.requisicoes.length, 1);
+  assert.equal(a.nos["busca-estado"].textContent, "2 resultados");
+  assert.equal(a.nos["busca-resultados"].children.length, 1);
+});
+
 test("submit sincroniza URL, paginação anuncia e foca primeiro item novo, inclusive último lote", async () => {
   const a = ambiente();
   B.iniciar(a.doc, a.janela);
@@ -154,7 +170,7 @@ test("submit sincroniza URL, paginação anuncia e foca primeiro item novo, incl
   assert.equal(a.nos["busca-resultados"].children.length, 2);
   assert.equal(a.nos["busca-mais"].hidden, true);
   assert.equal(a.foco(), 1);
-  assert.match(a.nos["busca-estado"].textContent, /1 resultado adicionado.*2 resultados exibidos/);
+  assert.equal(a.nos["busca-estado"].textContent, "1 resultado adicionado. 2 resultados");
   assert.equal(a.nos["busca-resultados"].attrs["aria-busy"], "false");
 });
 
@@ -179,19 +195,41 @@ test("Mostrar mais vazio esconde botão, anuncia contagem real e foca o estado",
   assert.equal(a.nos["busca-resultados"].children.length, 1);
   assert.equal(a.nos["busca-mais"].hidden, true);
   assert.equal(a.foco(), "busca-estado");
-  assert.equal(a.nos["busca-estado"].textContent, "0 resultados adicionados. 1 resultado exibido de 2.");
+  assert.equal(a.nos["busca-estado"].textContent, "0 resultados adicionados. 2 resultados");
 });
 
 test("páginas curtas contam itens renderizados, não tamanho teórico da página", async () => {
   const a = ambiente();
-  a.respostas.push({ dados: { ...fixture, por_pagina: 2, total: 3 } });
+  a.respostas.push({ dados: { ...fixture, por_pagina: 2, total: 3, limitado: true } });
   const c = B.iniciar(a.doc, a.janela);
   a.campos.q.value = "saúde";
   await c.buscar(false, false);
-  a.respostas.push({ dados: { ...fixture, por_pagina: 2, total: 3, pagina: 2 } });
+  a.respostas.push({ dados: { ...fixture, por_pagina: 2, total: 3, pagina: 2, limitado: true } });
   await c.buscar(true, true);
   assert.equal(a.nos["busca-mais"].hidden, false);
-  assert.match(a.nos["busca-estado"].textContent, /2 resultados exibidos de 3/);
+  assert.equal(a.nos["busca-estado"].textContent,
+    "1 resultado adicionado. Mostrando os primeiros 2 de pelo menos 3 resultados (limite de candidatos atingido)");
+});
+
+test("contagem distingue total de resultados e limite de candidatos nos três modos", async () => {
+  for (const modo of ["palavras", "semantica", "hibrida"]) {
+    for (const limitado of [false, true]) {
+      const a = ambiente();
+      a.respostas.push({ dados: { ...fixture, modo, total: 500, limitado } });
+      const c = B.iniciar(a.doc, a.janela);
+      a.campos.q.value = "saúde";
+      a.campos.modo.value = modo;
+      await c.buscar(false, false);
+      assert.equal(a.nos["busca-estado"].textContent, limitado ?
+        "Mostrando os primeiros 1 de pelo menos 500 resultados (limite de candidatos atingido)" : "500 resultados");
+      assert.doesNotMatch(a.nos["busca-estado"].textContent, /candidatos encontrados/);
+      assert.equal(a.nos["busca-aviso"].textContent.includes("limite"), limitado);
+      a.respostas.push({ dados: { ...fixture, modo, total: 500, limitado, pagina: 2 } });
+      await c.buscar(true, true);
+      assert.equal(a.nos["busca-estado"].textContent, "1 resultado adicionado. " + (limitado ?
+        "Mostrando os primeiros 2 de pelo menos 500 resultados (limite de candidatos atingido)" : "500 resultados"));
+    }
+  }
 });
 
 test("estados vazio, 400 genérico, 429, JSON inválido e rede sem apagar alternativas", async () => {

@@ -50,7 +50,7 @@ COLUNAS: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
     "remocoes": (("chave", "sha256", "motivo", "data"), ("chave", "sha256")),
     "trechos_indexados": (("id", "sha256"), ("id",)),
     "estado_indice": (("id", "versao", "commit", "sha256_manifestos", "total", "sha256_conjunto", "modelo",
-                       "versao_trechos", "data"), ("id",)),
+                       "versao_trechos", "data", "commit_dados_textos"), ("id",)),
     "verificacoes": (("data", "amostra", "ok", "falhas_json"), ("data",)),
 }
 FTS = "trechos_fts"

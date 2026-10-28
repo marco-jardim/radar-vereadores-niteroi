@@ -32,10 +32,12 @@ com palavras vazias comuns do português (`de`, `para`, `com`, etc.) recebem 400
   filtros aplicados após o teto de candidatos podem deixar de encontrar documentos além dele.
 - **Significado:** embedding da consulta (`@cf/baai/bge-m3`), `topK = 50` com `returnMetadata: "indexed"` e filtros
   `tipo`, `ano` e `legislatura` nos metadados; documento, autor e demais campos vêm do D1, e vetor sem linha no D1
-  é descartado. Com `autor`, `topK = 100` (máximo com esses metadados); o filtro posterior no D1 ainda pode
-  omitir documentos do autor que estejam além desses 100 vetores. As ementas de indicações e moções
+  é descartado. Com `autor` ou `tipo=substitutivo`, `topK = 100` (máximo com esses metadados); o filtro posterior no D1 ainda pode
+  omitir documentos que estejam além desses 100 vetores. Para substitutivo, não envia filtro de tipo ao Vectorize
+  (que guarda o tipo principal); confere o tipo pelas associações do arquivo no D1. As ementas de indicações e moções
   (`ementa:doc:<id>`) entram aqui.
-- **Híbrida:** RRF com k = 60 sobre os 50 primeiros documentos de cada lista, empate pelo id do documento. Se AI ou
+- **Híbrida:** RRF com k = 60 sobre toda a lista de palavras (até 500 documentos) e a lista semântica,
+  empate pelo id do documento. `total` conta a união; `limitado` indica teto nas palavras ou lista semântica ≥ `topK`. Se AI ou
   Vectorize falham, cai para palavras com `aviso` (`no-store`, sem cache); em `semantica`, 503.
 - **Resultado:** `documento, tipo, numero, ano, ementa, trecho, arquivo, status, ocr, confianca, url_siscam,
   url_original, sha256, pontuacao, origem`. Só `trecho` é HTML: texto original escapado, com `<mark>` nas palavras

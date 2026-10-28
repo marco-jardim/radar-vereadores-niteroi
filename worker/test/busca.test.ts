@@ -317,6 +317,50 @@ describe("busca por significado (Workers AI + Vectorize simulados)", () => {
 });
 
 describe("regressões da revisão de busca", () => {
+  it.each(["palavras", "semantica", "hibrida"])("filtra substitutivo pelo arquivo e devolve o trecho no PL em %s", async (modo) => {
+    const vetores = new VetoresFalsos([trechoDe("siscam:1001").id, trechoDe("siscam:1201").id,
+      trechoDe("siscam:1301").id]);
+    const { r, corpo } = await buscarJson({ q: "transporte intermunicipal", modo, tipo: "substitutivo",
+      ano: "2021", legislatura: "2021-2024" }, criarEnv({ VETORES: vetores }));
+    expect(r.status).toBe(200);
+    expect(docs(corpo)).toEqual(["doc:101"]);
+    expect(corpo.resultados[0]).toMatchObject({ tipo: "pl", arquivo: "siscam:1201" });
+    if (modo !== "palavras") {
+      expect(vetores.chamadas[0]!.opcoes).toEqual({ topK: TOPK_AUTOR, returnMetadata: "indexed",
+        filter: { ano: { $eq: 2021 }, legislatura: { $eq: "2021-2024" } } });
+    }
+    // O filtro PL continua encontrando o trecho principal, mesmo se só o substitutivo cita o arquivo.
+    const pl = await buscarJson({ q: "transporte intermunicipal", modo, tipo: "pl", ano: "2021" },
+      criarEnv({ VETORES: new VetoresFalsos([trechoDe("siscam:1201").id]) }));
+    expect(docs(pl.corpo)).toEqual(["doc:101"]);
+    expect(pl.corpo.resultados[0]).toMatchObject({ tipo: "pl", arquivo: "siscam:1201" });
+    // Um tipo sem relação com o arquivo não recupera o trecho do substitutivo.
+    expect((await buscarJson({ q: "transporte intermunicipal", modo, tipo: "requerimento", ano: "2021" },
+      criarEnv({ VETORES: vetores }))).corpo.total).toBe(0);
+  });
+
+  it.each([[89, 0, false], [89, 40, false], [89, 50, true], [510, 0, true]] as const)(
+    "híbrida mantém todos os candidatos por palavras (%i documentos, %i semânticos)", async (quantidade, semanticos, limitado) => {
+      const instrucoes = [];
+      for (let i = 0; i < quantidade; i++) {
+        const documento = `doc:${10000 + i}`;
+        instrucoes.push(env.DB.prepare("INSERT INTO documentos (id, tipo, ano, ementa) VALUES (?, 'indicacao', 2025, ?)")
+          .bind(documento, "Indica melhoria sintética."));
+        instrucoes.push(env.DB.prepare("INSERT INTO ementas_fts (documento, texto_norm) VALUES (?, ?)")
+          .bind(documento, "indica melhoria sintetica"));
+      }
+      await env.DB.batch(instrucoes);
+      const filtros = { q: "melhoria sintetica", tipo: "indicacao", ano: "2025" };
+      const e = criarEnv({ VETORES: { query: async (_vetor, opcoes) => ({ matches:
+        Array.from({ length: Math.min(semanticos, opcoes.topK) }, (_, i) => ({ id: `ementa:doc:${10000 + i}`, score: 0.9 - i / 100 })) }) } });
+      const palavras = (await buscarJson({ ...filtros, modo: "palavras" }, e)).corpo;
+      const hibrida = (await buscarJson({ ...filtros, modo: "hibrida" }, e)).corpo;
+      expect(palavras.total).toBe(Math.min(quantidade, 500));
+      expect(hibrida.total).toBeGreaterThanOrEqual(palavras.total);
+      expect(hibrida.limitado).toBe(limitado);
+    },
+  );
+
   it("recusa consultas genéricas antes de FTS ou AI, sem mudar o escape dos demais termos", async () => {
     const ai = new AiFalsa();
     const vetores = new VetoresFalsos([]);

@@ -52,6 +52,24 @@ def commit_atual(raiz: Path) -> str | None:
     return saida if r.returncode == 0 and saida else None
 
 
+def commit_dados_textos(textos: Path) -> str | None:
+    """HEAD do worktree de textos, independente de GITHUB_SHA e do checkout de main."""
+    try:
+        r = subprocess.run(["git", "-C", str(textos), "rev-parse", "HEAD"],
+                           capture_output=True, text=True, timeout=15)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    saida = r.stdout.strip()
+    return saida if r.returncode == 0 and saida else None
+
+
+def avisar_reexecucao(simular: bool) -> None:
+    """No Actions, a publicação de dados-textos já pode ter ocorrido antes da falha."""
+    if os.environ.get("GITHUB_ACTIONS") and not simular:
+        print("::error::Falha na sincronização; dados-textos já pode ter sido publicado; "
+              "re-execute com workflow_dispatch para concluir a sincronização.", file=sys.stderr)
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="python -m coletor.nuvem",
                                 description="Sincroniza D1, Vectorize e R2 com o Git (contrato de textos).")
@@ -66,6 +84,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--raiz", type=Path, default=RAIZ, help=argparse.SUPPRESS)
     p.add_argument("--cache", type=Path, help="cache local (padrão: RADAR_CACHE)")
     p.add_argument("--commit", help="commit dos manifestos (padrão: GITHUB_SHA ou git rev-parse HEAD)")
+    p.add_argument("--commit-dados-textos", metavar="SHA",
+                   help="commit dos JSONL (padrão: git -C <textos> rev-parse HEAD, quando disponível)")
     p.add_argument("--etapas", default=",".join(ETAPAS_PADRAO), metavar="LISTA",
                    help=f"etapas separadas por vírgula, entre {','.join(ETAPAS)} (padrão: {','.join(ETAPAS_PADRAO)}; "
                         "--exportar acrescenta exportar). estado_indice só é gravado com r2, d1 e vetores")
@@ -78,6 +98,7 @@ def main(argv: list[str] | None = None) -> int:
     except ValueError as e:
         p.error(str(e))
     cache = args.cache or cache_padrao()
+    textos = args.textos or textos_padrao()
     if args.ambiente != "local" and args.sqlite:
         p.error("--sqlite só vale para --ambiente local")
     try:
@@ -89,24 +110,34 @@ def main(argv: list[str] | None = None) -> int:
             ambiente = ambiente_remoto(args.ambiente, cache, sem_r2=args.sem_r2)
     except (ErroNuvem, OSError, KeyError, ValueError) as e:
         print(f"erro: {e}", file=sys.stderr)
+        avisar_reexecucao(args.simular)
         return 1
     try:
-        rel = sincronizar(args.raiz, args.textos or textos_padrao(), ambiente, liberados=mascara.liberados(args.raiz),
+        rel = sincronizar(args.raiz, textos, ambiente, liberados=mascara.liberados(args.raiz),
                           cache=cache, simular=args.simular, reconstruir=args.reconstruir, exportar=args.exportar,
                           commit=args.commit or commit_atual(args.raiz), etapas=etapas,
+                          commit_dados_textos=args.commit_dados_textos or commit_dados_textos(textos),
                           progresso=lambda texto: print(texto, file=sys.stderr, flush=True))
     except ErroBarreira as e:
         print(str(e), file=sys.stderr)
+        avisar_reexecucao(args.simular)
         return 1
-    except (ErroFonte, ErroNuvem) as e:
+    except (ErroFonte, ErroNuvem, OSError) as e:
         print(f"erro: {e}", file=sys.stderr)
         print("estado_indice não foi gravado.", file=sys.stderr)
+        avisar_reexecucao(args.simular)
         return 1
+    except Exception:
+        # Mantém a exceção inesperada, mas não perde a orientação de recuperação no CI.
+        avisar_reexecucao(args.simular)
+        raise
     finally:
         ambiente.banco.fechar()
     print(rel.texto())
     for falha in rel.falhas:
         print(f"::warning::{falha}" if os.environ.get("GITHUB_ACTIONS") else f"falha: {falha}", file=sys.stderr)
+    if rel.falhas:
+        avisar_reexecucao(args.simular)
     return 1 if rel.falhas else 0
 
 

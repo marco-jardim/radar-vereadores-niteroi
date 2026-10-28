@@ -167,7 +167,7 @@ def etapas_validas(etapas: Iterable[str] | str | None) -> tuple[str, ...]:
 
 
 # ---------------------------------------------------------------- estado atual
-def ler_atual(banco) -> dict[str, Any]:
+def ler_atual(banco, *, sem_commit_dados_textos: bool = False) -> dict[str, Any]:
     existentes = banco.tabelas()
     atual: dict[str, Any] = {}
     for tabela in (*TABELAS_BASE, "ementas_fts"):
@@ -176,7 +176,9 @@ def ler_atual(banco) -> dict[str, Any]:
     atual["estado_indice"] = None
     if "estado_indice" in existentes:
         colunas = COLUNAS["estado_indice"][0]
-        linhas = banco.consultar(f"SELECT {', '.join(q(c) for c in colunas)} FROM {q('estado_indice')} "
+        selecao = [f"NULL AS {q(c)}" if sem_commit_dados_textos and c == "commit_dados_textos" else q(c)
+                   for c in colunas]
+        linhas = banco.consultar(f"SELECT {', '.join(selecao)} FROM {q('estado_indice')} "
                                  f"WHERE {q('id')} = 1")
         if linhas:
             atual["estado_indice"] = tuple(linhas[0][c] for c in colunas)
@@ -664,6 +666,7 @@ def _textos_trechos(banco, ids: Sequence[str]) -> list[tuple]:
 def sincronizar(raiz: str | Path, textos: str | Path | None, ambiente: Ambiente, *, liberados,
                 cache: str | Path, simular: bool = False, reconstruir: bool = False,
                 exportar: str | Path | None = None, commit: str | None = None,
+                commit_dados_textos: str | None = None,
                 agora: Callable[[], datetime] | None = None, etapas: Iterable[str] | str | None = None,
                 progresso: Callable[[str], Any] | None = None) -> Relatorio:
     """Leva o estado do Git à nuvem do `ambiente`; devolve o plano e o que foi feito.
@@ -699,7 +702,9 @@ def sincronizar(raiz: str | Path, textos: str | Path | None, ambiente: Ambiente,
     if pendentes and not simular and pedidas & {"d1", "vetores"}:
         rel.feitas["migracoes"] += len(banco.migrar(ambiente.pasta_migracoes))
 
-    atual = ler_atual(banco)
+    # Simulação e etapa só R2 não aplicam a migração: projetar a nova coluna como NULL.
+    atual = ler_atual(banco, sem_commit_dados_textos=("0005_estado_commit_dados_textos.sql" in pendentes
+                                                    and (simular or not pedidas & {"d1", "vetores"})))
     estado = atual["estado_indice"]
     pasta_exportacoes = Path(exportar) if exportar is not None else Path(cache) / "exportacoes"
     expurgar = (("r2" in pedidas or "exportar" in pedidas)
@@ -792,9 +797,9 @@ def sincronizar(raiz: str | Path, textos: str | Path | None, ambiente: Ambiente,
                                   .encode("utf-8")).hexdigest()
         data = agora().astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
         novo = (1, rel.versao, commit, fonte.sha256_manifestos, len(fonte.trechos), conjunto, ambiente.modelo,
-                VERSAO_TRECHOS, data)
-        # o commit faz parte da comparação: um commit novo regrava a linha, mesmo sem outra mudança
-        if reconstruir or estado is None or tuple(estado[:8]) != novo[:8]:
+                VERSAO_TRECHOS, data, commit_dados_textos)
+        # Ambos os commits entram na comparação; só a data fica fora.
+        if reconstruir or estado is None or tuple(estado[:8]) + tuple(estado[9:]) != novo[:8] + novo[9:]:
             rel.plano["estado_indice"] = 1
             if not simular:
                 banco.aplicar([Alteracao.de("estado_indice", gravar=[novo])])

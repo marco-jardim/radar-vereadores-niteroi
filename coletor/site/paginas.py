@@ -341,7 +341,8 @@ def atribuicao_textura() -> str:
 
 def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: str = "", manifesto: dict | None = None,
            dialogo: bool = False, scripts: tuple[str, ...] = (), caminho: str | None = None,
-           indexavel: bool = True, estilos: tuple[str, ...] = (), radar_api: str | None = None) -> str:
+           indexavel: bool = True, estilos: tuple[str, ...] = (), radar_api: str | None = None,
+           scripts_base: bool = True) -> str:
     desc = esc(descricao or "Quais leis de Niterói mudam a cidade, quem as escreveu, e quanto da produção da Câmara é homenagem, "
                "lei sem efeito ou pauta polêmica. Dados do SISCAM atualizados toda semana.")
     nav = "".join(
@@ -378,6 +379,10 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
     # Menu móvel (melhoria progressiva): opcional, como os demais estáticos fora de dados.js/app.js.
     navegacao = (f'<script src="{esc(url_estatica("navegacao.js", prefixo))}" defer onerror="{ERRO_NAVEGACAO}"></script>\n'
                  if (FONTE_ESTATICA / "navegacao.js").is_file() else "")
+    # Páginas independentes das listas podem dispensar o carregador e o aplicativo.
+    base = (f'<script src="{esc(prefixo)}dados.js?v={versao_estatica("dados.js")}" defer></script>\n'
+            f'<script src="{esc(prefixo)}app.js?v={versao_estatica("app.js")}" defer></script>\n'
+            if scripts_base else "")
     memoria_atual = ' aria-current="page"' if caminho == "memoria.html" else ""
     link_memoria = (f'<p><a href="{esc(prefixo + "memoria.html")}"{memoria_atual}>Memória de Niterói</a></p>'
                     if MEMORIA_PUBLICADA else "")
@@ -418,9 +423,7 @@ def pagina(titulo: str, corpo: str, ativo: str, prefixo: str = "", descricao: st
 {link_memoria}
 {atribuicao_textura()}</footer>
 {(DIALOGO_SISCAM + chr(10)) if dialogo else ''}<div id="tip" role="tooltip" hidden></div>
-{navegacao}<script src="{esc(prefixo)}dados.js?v={versao_estatica('dados.js')}" defer></script>
-<script src="{esc(prefixo)}app.js?v={versao_estatica('app.js')}" defer></script>
-{extras}
+{navegacao}{base}{extras}
 </body>
 </html>
 """

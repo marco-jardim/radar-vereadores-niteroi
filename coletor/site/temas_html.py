@@ -4,8 +4,12 @@ from __future__ import annotations
 from html import escape
 
 from coletor import mascara
-from coletor.site.modelo import URL_DETALHE
+from coletor.site.modelo import NOME_TIPO_DOC, URL_DETALHE
 from coletor.temas import RAIZ, documentos_da_pessoa, temas_validados, termos_proibidos
+
+NOME_EXEMPLO = {tipo: nomes[2] for tipo, nomes in NOME_TIPO_DOC.items()} | {
+    "pl": "PL", "substitutivo": "Substitutivo", "ata": "Ata",
+}
 
 
 def bloco_temas(modelo: dict, pessoa: dict, cache: dict, prefixo: str = "../") -> str:
@@ -35,7 +39,7 @@ def bloco_temas(modelo: dict, pessoa: dict, cache: dict, prefixo: str = "../") -
         for t in temas:
             # URL construída do id local: nenhum href gerado pela IA é aceito.
             links = ", ".join(link_fonte(URL_DETALHE.format(id=d["id"]),
-                                        f'{str(d["tipo"]).upper()} {d["numero"]}')
+                                        f'{NOME_EXEMPLO.get(d["tipo"], "Documento")} {d["numero"]}')
                               for d in t["exemplos"])
             linhas.append(f'<li>{escape(t["rotulo"])}: {t["total"]} documentos (ex.: {links})</li>')
         blocos.append(f'<h3>Legislatura {escape(leg["id"])}</h3><ul>' + "".join(linhas) + '</ul>')

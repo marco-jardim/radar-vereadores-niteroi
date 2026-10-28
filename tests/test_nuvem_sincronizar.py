@@ -23,6 +23,7 @@ from coletor.nuvem.ambientes import BUCKET_ARQUIVOS_LOCAL, BUCKET_EXPORTACOES_LO
 from coletor.nuvem.fonte import ErroFonte, Fonte, Trecho, carregar_fonte, normalizar_busca, varrer_fonte
 from coletor.nuvem.local import MODELO_LOCAL, VetoresLocal, desempacotar
 from coletor.nuvem.r2 import chave_r2
+from coletor.nuvem.rede import ErroNuvem
 from coletor.nuvem.sincronizar import ErroBarreira, sincronizar
 from coletor.trechos import VERSAO_TRECHOS
 
@@ -192,6 +193,30 @@ class TestBarreiraContextual(unittest.TestCase):
 
 
 class TestSincronizacaoCompleta(Base):
+    def test_estado_guarda_commit_independente_de_dados_textos(self):
+        commit_dados = "b" * 40
+        primeira = self.sincronizar(commit_dados_textos=commit_dados)
+        self.assertTrue(primeira.estado_gravado)
+        self.assertEqual(self.consultar('SELECT "commit", commit_dados_textos FROM estado_indice'),
+                         [(COMMIT, commit_dados)])
+        self.assertEqual(self.sincronizar(commit_dados_textos=commit_dados).escritas, 0)
+        self.assertEqual(self.sincronizar(commit_dados_textos="d" * 40).feitas["estado_indice"], 1)
+
+    def test_migracao_commit_dados_textos_preserva_estado_e_simulacao(self):
+        self.sincronizar()
+        with sqlite3.connect(self.sqlite) as con:
+            con.execute("ALTER TABLE estado_indice DROP COLUMN commit_dados_textos")
+            con.execute("DELETE FROM d1_migrations WHERE name = '0005_estado_commit_dados_textos.sql'")
+        antes = self.sqlite.read_bytes()
+        self.assertEqual(self.sincronizar(simular=True, commit_dados_textos="b" * 40).plano["migracoes"], 1)
+        self.assertEqual(self.sqlite.read_bytes(), antes)
+        rel = self.sincronizar(commit_dados_textos="b" * 40)
+        self.assertEqual(rel.feitas["migracoes"], 1)
+        self.assertEqual(rel.plano["d1_trechos_gravar"], 0)
+        self.assertEqual(self.consultar('SELECT "commit", commit_dados_textos FROM estado_indice'),
+                         [(COMMIT, "b" * 40)])
+        self.assertEqual(self.sincronizar(commit_dados_textos="b" * 40).escritas, 0)
+
     def test_lotes_de_vetores_persistidos_uma_vez_no_fim_da_etapa(self):
         with mock.patch("coletor.nuvem.sincronizar.LOTE_SINCRONIZACAO", 2), \
                 mock.patch.object(VetoresLocal, "_gravar", autospec=True, side_effect=VetoresLocal._gravar) as gravar:
@@ -428,6 +453,59 @@ class TestEmentasFts(Base):
 
 
 class TestSegurancaEFalhas(Base):
+    def argumentos_cli(self):
+        return ["--ambiente", "local", "--sqlite", str(self.sqlite), "--raiz", str(self.raiz),
+                "--textos", str(self.textos), "--cache", str(self.cache), "--commit", COMMIT]
+
+    def test_cli_commit_dados_textos_padrao_vem_do_worktree_nao_do_actions(self):
+        commit_dados = "b" * 40
+        with mock.patch.dict("os.environ", {"GITHUB_SHA": "a" * 40}), \
+                mock.patch.object(cli.subprocess, "run", return_value=mock.Mock(returncode=0, stdout=commit_dados + "\n")) as git, \
+                mock.patch.object(cli.mascara, "liberados", return_value=G.LIBERADOS), \
+                contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+            self.assertEqual(cli.main(self.argumentos_cli()), 0)
+        git.assert_called_once_with(["git", "-C", str(self.textos), "rev-parse", "HEAD"],
+                                    capture_output=True, text=True, timeout=15)
+        self.assertEqual(self.consultar('SELECT "commit", commit_dados_textos FROM estado_indice'),
+                         [(COMMIT, commit_dados)])
+
+    def test_cli_commit_dados_textos_explicito_nao_consulta_git(self):
+        with mock.patch.object(cli.subprocess, "run") as git, \
+                mock.patch.object(cli.mascara, "liberados", return_value=G.LIBERADOS), \
+                contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+            self.assertEqual(cli.main(self.argumentos_cli() + ["--commit-dados-textos", "d" * 40]), 0)
+        git.assert_not_called()
+        self.assertEqual(self.consultar("SELECT commit_dados_textos FROM estado_indice"), [("d" * 40,)])
+
+    def test_cli_commit_dados_textos_indisponivel(self):
+        for resultado in (mock.Mock(returncode=128, stdout=""), OSError("git ausente")):
+            with self.subTest(resultado=resultado):
+                opcoes = {"side_effect": resultado} if isinstance(resultado, OSError) else {"return_value": resultado}
+                with mock.patch.object(cli.subprocess, "run", **opcoes):
+                    self.assertIsNone(cli.commit_dados_textos(self.textos))
+
+    def test_cli_falha_no_actions_orienta_reexecucao_sem_dados_pessoais(self):
+        for falha in (ErroFonte("fonte inválida"), ErroNuvem("nuvem indisponível"),
+                      ErroBarreira([{"origem": "trecho sintético", "tipo": "telefone", "inicio": 0, "fim": 8}])):
+            with self.subTest(falha=type(falha).__name__):
+                erro = io.StringIO()
+                with mock.patch.dict("os.environ", {"GITHUB_ACTIONS": "true"}), \
+                        mock.patch.object(cli, "sincronizar", side_effect=falha), \
+                        contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(erro):
+                    self.assertEqual(cli.main(self.argumentos_cli() + ["--commit-dados-textos", "b" * 40]), 1)
+                self.assertIn("::error::", erro.getvalue())
+                self.assertIn("re-execute com workflow_dispatch", erro.getvalue())
+
+    def test_cli_falhas_no_relatorio_orientam_reexecucao_so_no_actions(self):
+        (self.cache / "arquivos" / SHA_900005).unlink()
+        for actions in ("", "true"):
+            erro = io.StringIO()
+            with mock.patch.dict("os.environ", {"GITHUB_ACTIONS": actions}), \
+                    mock.patch.object(cli.mascara, "liberados", return_value=G.LIBERADOS), \
+                    contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(erro):
+                self.assertEqual(cli.main(self.argumentos_cli() + ["--commit-dados-textos", "b" * 40]), 1)
+            self.assertEqual("re-execute com workflow_dispatch" in erro.getvalue(), bool(actions))
+
     def test_fonte_conserva_texto_completo_e_intervalos(self):
         texto = "Introdução\nE-SIC Protocolo nº 001189202514, datada de hoje.\n"
         ident = self.reescrever("siscam:900003", texto)
