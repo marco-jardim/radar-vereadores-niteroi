@@ -25,6 +25,9 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `coletor/regras_documentos.py` | Classificação, bairros, respostas, publicação e regras das métricas de documentos. |
 | `coletor/regras_sessoes.py` | Presença, votos, parecer, quórum, qualidade e auditoria offline das sessões. |
 | `coletor/classificar.py` | Taxonomia, regras, prompt, chamadas à IA, cache e curadoria dos PLs. |
+| `coletor/ia.py` | Cliente OpenCode Go compartilhado (`/chat/completions`, Bearer, `x-opencode-session`, tentativas). |
+| `coletor/temas.py` | Temas por IA por pessoa e legislatura, só com ementas mascaradas, validação, contagem pelo código e cache. |
+| `coletor/site/temas_html.py` | Bloco “Temas (agrupados por IA)” da ficha, separado do “Resumo em números”, que continua sem IA. |
 | `coletor/arquivos.py` | Serialização e gravação atômica dos JSONs versionados. |
 | `coletor/validar.py` | Validação de dados, configuração e temporários, sem alterar arquivos. |
 | `coletor/remocoes.py` | Leitura de `config/remocoes.json` com cache: `carregar`, `chaves_removidas` e `esta_removido` (chave **ou** SHA-256); o expurgo não fica aqui. |
@@ -49,6 +52,7 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `config/remocoes.json` | Remoções por chave de origem e SHA-256, com motivo, fonte e data; validado por `coletor.validar`. |
 | `data/proposicoes/`, `data/documentos/`, `data/sessoes/` | Registros coletados por ano (documentos também por tipo). |
 | `data/classificacao_ia.json`, `data/meta.json` | Cache da IA e metadados das execuções. |
+| `data/temas_ia.json` | Cache dos temas por IA (rótulos por pessoa e legislatura e classificação por documento). |
 | `data/geo/bairros.json` | Geometria opcional gerada por `coletor.geo`. |
 | `site_src/app.js` | Listas de PLs/documentos, carregador compartilhado e diálogo SISCAM. |
 | `site_src/navegacao.js` | Menu móvel e tema, até 4 KiB gzip; um listener por tipo no documento em cada script, sem alterar `app.js` para essas funções. |
