@@ -1527,5 +1527,13 @@ class TestMascaraV10(unittest.TestCase):
                 self.assertEqual(resultado, (texto, dict.fromkeys(mascara.TIPOS, 0)) if detector is mascarar else [])
 
 
+class TestBarreiraListas(unittest.TestCase):
+    def test_listas_com_virgula_e_espacos_nao_sao_cpf_na_barreira(self) -> None:
+        for texto in ("arte; 3354, 3355, 3356, 3357, 3358, 3359, 330, 3361, 3362",
+                      "pelos Decretos nos\n8.464/2001, 8.619/2001,                    359 a 392"):
+            with self.subTest(texto=texto):
+                self.assertFalse([o for o in varrer(texto) if o["forte"]])
+        self.assertTrue([o for o in varrer("CPF 529,982,247,25") if o["forte"]])
+
 if __name__ == "__main__":
     unittest.main()

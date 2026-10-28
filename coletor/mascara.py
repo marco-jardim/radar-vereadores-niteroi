@@ -449,7 +449,8 @@ _RE_ROTULO_CEP = re.compile(r"\bCEP\b", re.I)
 _RE_PAGINA = re.compile(r"(?m)^\f\r?$")
 
 # ---------------------------------------------------------------- padrões de varrer
-_V_CPF = re.compile(r"\d(?<!\d\d)(?<!\d[ .,\-/]\d)(?:(?:[.,/-][ \t]*| )?\d){10}(?![ .,\-/]?\d)")
+# vírgula só colada (lista "3358, 3359" não é CPF); depois de . / - no máximo um espaço
+_V_CPF = re.compile(r"\d(?<!\d\d)(?<!\d[ .,\-/]\d)(?:(?:[./-][ \t]?|,| )?\d){10}(?![ .,\-/]?\d)")
 _V_CPF_FORMATADO = re.compile(r"\d{3}[.,][ \t]*\d{3}[.,][ \t]*\d{3} ?- ?\d{2}")
 _V_TELEFONE = re.compile(
     r"(?<!\d)(?P<pais>\+\s?55[ .-]?)?(?:(?P<parenteses>\(\s?0?\d{2}\s?\)?\s?)|(?P<zero>0)?\d{2}[ .-]?)?"
