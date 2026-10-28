@@ -121,7 +121,7 @@ def _por_formato(formato: str, dados: bytes, ocr: bool, ferramentas, profundidad
     if formato == "pdf":
         return _pdf.extrair_pdf(dados, ocr, ferramentas, cache_ocr)
     if formato in ("jpeg", "png", "tiff"):
-        return _ocr.extrair_imagem(dados, formato, ocr, ferramentas)
+        return _ocr.extrair_imagem(dados, formato, ocr, ferramentas, cache_ocr)
     if formato == "zip":
         def membro(d, o, f, p, orc):
             return _extrair(d, o, f, p, orc, cache_ocr)
@@ -151,7 +151,8 @@ def _extrair(dados: bytes, ocr: bool, ferramentas, profundidade: int,
 def extrair(dados: bytes, ocr: bool = False, ferramentas=None, cache_ocr=None) -> Resultado:
     """Extrai o texto de um arquivo; nunca levanta exceção por arquivo malformado.
 
-    `cache_ocr` (pasta ou None) guarda o OCR de cada página de PDF, para não repetir
+    `cache_ocr` (pasta ou None) guarda o OCR de cada página de PDF e de cada imagem
+    avulsa (página 1), para não repetir
     páginas já lidas e retomar as adiadas pelo orçamento em outra execução.
     """
     return _extrair(bytes(dados), ocr, ferramentas, 1, [base.LIMITE_DESCOMPACTADO], cache_ocr)

@@ -127,12 +127,28 @@ def _ler_cache(arquivo: Path) -> tuple[str, float | None, int] | None:
 
 
 def _gravar_cache(arquivo: Path, lido: tuple[str, float | None, int]) -> None:
+    """Gravação atômica da página no cache; o temporário tem nome único (mkstemp) na
+    mesma pasta, para que duas linhas de execução nunca disputem o mesmo arquivo."""
     arquivo.parent.mkdir(parents=True, exist_ok=True)
-    temporario = arquivo.with_name(f".{arquivo.name}.tmp")
     texto, conf, palavras = lido
-    temporario.write_text(json.dumps({"confianca": conf, "palavras": palavras, "texto": texto},
-                                     ensure_ascii=False, sort_keys=True), encoding="utf-8")
-    os.replace(temporario, arquivo)
+    conteudo = json.dumps({"confianca": conf, "palavras": palavras, "texto": texto},
+                          ensure_ascii=False, sort_keys=True).encode("utf-8")
+    fd, temporario = tempfile.mkstemp(dir=arquivo.parent, prefix=f".{arquivo.name}.", suffix=".tmp")
+    try:
+        with os.fdopen(fd, "wb") as f:
+            f.write(conteudo)
+        os.replace(temporario, arquivo)
+    except BaseException:
+        try:
+            os.unlink(temporario)
+        except FileNotFoundError:
+            pass
+        raise
+
+
+def arquivo_cache(cache_ocr: Path, sha256: str, pagina: int, versao: str) -> Path:
+    """`<cache_ocr>/<sha256>-<página>-<versão>.json` (PDFs e imagens avulsas, página 1)."""
+    return Path(cache_ocr) / f"{sha256}-{pagina}-{versao}.json"
 
 
 def ocr_paginas_pdf(caminho_pdf: Path, paginas: list[int], pasta: Path,
@@ -155,7 +171,7 @@ def ocr_paginas_pdf(caminho_pdf: Path, paginas: list[int], pasta: Path,
     if cache_ocr is not None and sha256 is None:
         sha256 = hashlib.sha256(Path(caminho_pdf).read_bytes()).hexdigest()
     for n in paginas:
-        arquivo = Path(cache_ocr) / f"{sha256}-{n}-{versao}.json" if cache_ocr is not None else None
+        arquivo = arquivo_cache(cache_ocr, sha256, n, versao) if cache_ocr is not None else None
         if arquivo is not None and arquivo.exists():
             guardado = _ler_cache(arquivo)
             if guardado is not None:
@@ -195,8 +211,13 @@ def status_ocr(confianca: float | None) -> str:
     return "ok_ocr" if confianca >= CONFIANCA_MINIMA else "ocr_baixa_confianca"
 
 
-def extrair_imagem(dados: bytes, formato: str, ocr: bool, ferramentas=None) -> Resultado:
-    """OCR de uma imagem; sem OCR pedido, `escaneado_sem_ocr`."""
+def extrair_imagem(dados: bytes, formato: str, ocr: bool, ferramentas=None,
+                   cache_ocr: Path | None = None) -> Resultado:
+    """OCR de uma imagem; sem OCR pedido, `escaneado_sem_ocr`.
+
+    Com `cache_ocr`, a leitura fica em `<cache_ocr>/<sha256 da imagem>-1-<versão>.json`,
+    o mesmo esquema das páginas de PDF (página 1): a imagem já lida não chama o tesseract.
+    """
     base = Resultado(formato=formato, paginas=1, paginas_escaneadas=[1])
     if not ocr:
         base.status = "escaneado_sem_ocr"
@@ -206,11 +227,21 @@ def extrair_imagem(dados: bytes, formato: str, ocr: bool, ferramentas=None) -> R
     except FerramentaAusente as exc:
         base.status, base.detalhe = "pendente_ferramenta", f"ferramenta ausente: {exc}"
         return base
-    with tempfile.TemporaryDirectory(prefix="radar-ocr-", ignore_cleanup_errors=True) as nome_pasta:
-        pasta = Path(nome_pasta)
-        caminho = pasta / ("entrada" + _EXTENSOES.get(formato, ".img"))
-        caminho.write_bytes(dados)
-        texto, conf, _palavras = ocr_imagem(caminho, pasta, ferramentas)
+    arquivo = None
+    lido = None
+    if cache_ocr is not None:
+        arquivo = arquivo_cache(cache_ocr, hashlib.sha256(dados).hexdigest(), 1, _versao_ocr(ferramentas))
+        if arquivo.exists():
+            lido = _ler_cache(arquivo)
+    if lido is None:
+        with tempfile.TemporaryDirectory(prefix="radar-ocr-", ignore_cleanup_errors=True) as nome_pasta:
+            pasta = Path(nome_pasta)
+            caminho = pasta / ("entrada" + _EXTENSOES.get(formato, ".img"))
+            caminho.write_bytes(dados)
+            lido = ocr_imagem(caminho, pasta, ferramentas)
+        if arquivo is not None:
+            _gravar_cache(arquivo, lido)
+    texto, conf, _palavras = lido
     base.texto = texto
     base.extrator = "tesseract"
     base.versao_extrator = _ferr.versao("tesseract", ferramentas) or ""
