@@ -49,6 +49,7 @@ MAX_IDS_APAGAR = 1000
 MAX_IDS_OBTER = 100  # get_by_ids: sem limite documentado claro; 100 por requisição, recuando para 20 num 400
 MIN_IDS_OBTER = 20
 LOTE_EMBEDDINGS = 50
+MAX_CARACTERES_EMBEDDINGS = 60_000  # o bge-m3 aceita 60 mil tokens somados por chamada
 # índices de metadados exigidos (contrato, seção 8.2): nome -> tipo do índice no Vectorize
 INDICES_METADADOS = {"tipo": "string", "ano": "number", "legislatura": "string"}
 
@@ -389,21 +390,41 @@ class WorkersAI:
         self.chamadas = 0
 
     def embeddings(self, textos: Sequence[str]) -> list[list[float]]:
-        """Um vetor por texto, em lotes; ErroNuvem se a quantidade ou a dimensão não baterem."""
+        """Um vetor por texto, em lotes de até `lote` textos e `MAX_CARACTERES_EMBEDDINGS` caracteres;
+        ErroNuvem se a quantidade ou a dimensão não baterem."""
         saida: list[list[float]] = []
-        for i in range(0, len(textos), self.lote):
-            bloco = list(textos[i:i + self.lote])
+        bloco: list[str] = []
+        tamanho = 0
+        for texto in textos:
+            if bloco and (len(bloco) >= self.lote or tamanho + len(texto) > MAX_CARACTERES_EMBEDDINGS):
+                saida.extend(self._bloco(bloco))
+                bloco, tamanho = [], 0
+            bloco.append(texto)
+            tamanho += len(texto)
+        if bloco:
+            saida.extend(self._bloco(bloco))
+        return saida
+
+    def _bloco(self, bloco: list[str]) -> list[list[float]]:
+        try:
             r = self.cf.chamar("POST", f"ai/run/{self.modelo}", json_={"text": bloco}) or {}
-            self.chamadas += 1
-            dados = r.get("data") if isinstance(r, dict) else None
-            if not isinstance(dados, list) or len(dados) != len(bloco):
-                raise ErroNuvem(f"Workers AI {self.modelo}: esperados {len(bloco)} vetores")
-            for vetor in dados:
-                if not isinstance(vetor, list) or len(vetor) != self.dimensoes:
-                    tamanho = len(vetor) if isinstance(vetor, list) else "?"
-                    raise ErroNuvem(f"Workers AI {self.modelo}: vetor com {tamanho} dimensões "
-                                    f"(esperadas {self.dimensoes})")
-                saida.append([float(v) for v in vetor])
+        except ErroNuvem as e:
+            # o modelo limita o contexto somado do lote (em tokens, que o OCR ruidoso infla): divide e repete
+            if len(bloco) > 1 and e.status == 400 and "context" in str(e).lower():
+                meio = len(bloco) // 2
+                return self._bloco(bloco[:meio]) + self._bloco(bloco[meio:])
+            raise
+        self.chamadas += 1
+        dados = r.get("data") if isinstance(r, dict) else None
+        if not isinstance(dados, list) or len(dados) != len(bloco):
+            raise ErroNuvem(f"Workers AI {self.modelo}: esperados {len(bloco)} vetores")
+        saida: list[list[float]] = []
+        for vetor in dados:
+            if not isinstance(vetor, list) or len(vetor) != self.dimensoes:
+                tamanho = len(vetor) if isinstance(vetor, list) else "?"
+                raise ErroNuvem(f"Workers AI {self.modelo}: vetor com {tamanho} dimensões "
+                                f"(esperadas {self.dimensoes})")
+            saida.append([float(v) for v in vetor])
         return saida
 
     __call__ = embeddings

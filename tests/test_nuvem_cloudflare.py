@@ -269,6 +269,25 @@ class TestWorkersAI(Base):
         self.assertEqual([len(json.loads(p["corpo"])["text"]) for p in srv.pedidos], [50, 50, 20])
         self.assertEqual(srv.pedidos[0]["caminho"], "/accounts/conta/ai/run/@cf/baai/bge-m3")
 
+    def test_lote_limitado_por_caracteres_e_dividido_no_limite_de_contexto(self):
+        def responder(p):
+            textos = json.loads(p["corpo"])["text"]
+            if len(textos) > 2:
+                return 400, {"Content-Type": "application/json"}, json.dumps({
+                    "success": False, "errors": [{"code": 3030, "message": "AiError: Max context reached "
+                                                  "62350 tokens but model supports only 60000"}]}).encode()
+            return ok({"data": [[0.01] * 1024 for _ in textos]})
+
+        srv = self.iniciar(responder)
+        textos = ["x" * 25_000] * 3 + ["curto"] * 5
+        self.assertEqual(len(WorkersAI(self.cf).embeddings(textos)), 8)
+        tamanhos = [len(json.loads(p["corpo"])["text"]) for p in srv.pedidos]
+        # 2 longos (50 mil caracteres) por chamada; o terceiro abre o lote seguinte com os curtos,
+        # que excede o contexto simulado e é dividido ao meio até caber
+        self.assertEqual(tamanhos[0], 2)
+        self.assertEqual(tamanhos[1], 6)
+        self.assertEqual(tamanhos, [2, 6, 3, 1, 2, 3, 1, 2])  # recusados (>2) e as metades aceitas
+
     def test_dimensao_errada_falha(self):
         self.iniciar(lambda p: ok({"shape": [1, 1023], "data": [[0.0] * 1023]}))
         with self.assertRaises(ErroNuvem) as ctx:
