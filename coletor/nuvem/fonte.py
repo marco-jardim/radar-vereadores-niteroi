@@ -22,6 +22,7 @@ from pathlib import Path
 from typing import Any
 
 from coletor import mascara, remocoes
+from coletor.trechos import VERSAO_TRECHOS
 from coletor.nuvem.r2 import chave_r2
 from coletor.site.modelo import (URL_DETALHE, carregar_perfis, e_autor_vereador_doc, indice_pessoas,
                                  legislatura_de, nome_curto, partido_perfil, perfis_por_slug, slug)
@@ -377,6 +378,8 @@ def _trechos(textos: Path | None, com_texto: dict[str, tuple[int, dict]], removi
             if t["id"] in ids_vistos:
                 raise ErroFonte(f"trecho {t['id']} repetido")
             ids_vistos.add(t["id"])
+            if e.get("versao_trechos") == VERSAO_TRECHOS and "baixa_confianca" not in t:
+                raise ErroFonte(f"{chave}: baixa_confianca ausente no trecho da versão atual")
             if "baixa_confianca" in t and type(t["baixa_confianca"]) is not bool:
                 raise ErroFonte(f"{chave}: baixa_confianca deve ser booleano")
             if t.get("baixa_confianca") is True:

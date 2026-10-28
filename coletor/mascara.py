@@ -12,9 +12,11 @@ Regras de `mascarar`:
   "CPF/MF", "CPF nº", "CPF:") até `JANELA_ROTULO_CPF` caracteres antes, o número é
   mascarado mesmo com DV inválido (erros de OCR), e as proteções gerais não valem.
 - **RG** é mascarado depois de RG/R.G., identidade, C.I./CI ou registro geral, com
-  até 25 caracteres de marcadores de número e órgão emissor antes do número. Admite
+  marcadores de número e órgão emissor antes do número. Uma janela de até 40
+  caracteres também cobre redações não previstas, para números com forma de RG. Admite
   grupos separados por ponto, vírgula ou espaço e prefixo de até duas maiúsculas.
-  Palavras como "visual" ou "de gênero" não são preenchimento de rótulo. A regra
+  Identidade visual/cultural sem número, datas e números/ano não são RG. CI não é
+  RG após ofício, memorando ou comunicação interna nos 40 caracteres anteriores. A regra
   legada também admite texto livre até 20 caracteres depois de RG/R.G.; variantes
   de OCR ("Identdede", "Idenlidade") exigem marca de número ou carteira/cédula.
   Número de 11 dígitos com DV de CPF válido depois desses rótulos é mascarado como
@@ -71,7 +73,9 @@ dentro dessas proteções.
 
 `mascarar` é idempotente e devolve a contagem por tipo. Uma string-sombra normaliza
 travessões e espaços especiais e remove invisíveis e quebras depois de hífen entre
-dígitos, preservando os offsets originais. `<<…>>` não é marcação protegida.
+dígitos, preservando os offsets originais. Quebras depois de ponto, vírgula, barra
+ou espaço só são unidas dentro de CPF/RG rotulado ou CPF formatado com DV válido.
+`<<…>>` não é marcação protegida.
 Com `ocr_paginas` (base 1; linha só com \\f separa páginas), aplica depois das regras
 normais uma máscara de números de 8+ dígitos, inclusive com separadores e uma letra
 de ruído entre grupos. Preserva datas, moeda, CEP rotulado, atos com número/ano,
@@ -116,7 +120,7 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parent.parent
 
 # Mudar qualquer regra de `mascarar` muda os textos gravados: suba esta versão.
-VERSAO_MASCARA = "9"
+VERSAO_MASCARA = "10"
 TIPOS = ("cpf", "rg", "telefone", "email", "documento", "numero")
 SUBSTITUICOES = {
     "cpf": "[CPF omitido]",
@@ -222,7 +226,7 @@ _RE_TAG_EMAIL = re.compile(
     r"|<!--[^<>]*-->|<!(?i:DOCTYPE)\s+[^<>]+>)")
 # Um separador por intervalo entre os grupos 3-3-3-2: ".", ",", " ", "/", "-" (com espaço
 # opcional de cada lado) ou nenhum.
-_SEP_CPF = r"(?: ?- ?|[., /])?"
+_SEP_CPF = r"(?: ?- ?|[.,/][ \t]*| )?"
 _RE_CPF = re.compile(
     rf"(?P<a>\d)(?<!\d\d)(?<!\d[.,/-]\d)(?P<b>\d\d)(?P<s1>{_SEP_CPF})(?P<c>\d{{3}})"
     rf"(?P<s2>{_SEP_CPF})(?P<d>\d{{3}})(?P<s3>{_SEP_CPF})(?P<e>\d{{2}})(?!\d)(?![.,/-]\d)"
@@ -248,19 +252,36 @@ _ROTULO_RG_DIRETO = (
     r"(?<=[Rr])(?:\.[ \t]?[Gg]\.?|[Gg]|(?i:egistro[ \t]+geral))|"
     r"(?<=[Ii])(?i:dentidade)|(?<=[Cc])(?:\.[Ii]\.?|[Ii]))(?![\w])")
 _MEIO_RG_DIRETO = (
-    r"(?=[^\d\n\[\]]{0,25}(?:[A-Z]{1,2}-?)?\d)"
-    r"(?:(?![A-Z]{1,2}-?\d)(?>\([Rr][Gg]\)|(?i:ssp/[a-z]{2}|ifp|detran/[a-z]{2}|oab/[a-z]{2}|de)|"
+    r"(?=[^\d\n\[\]]{0,40}(?:[A-Z]{1,2}-?)?\d)"
+    r"(?:(?![A-Z]{1,2}-?\d)(?>\([Rr][Gg]\)|[A-Z]{2,8}(?:[/-][A-Z]{2})?|"
+    r"(?i:ssp/[a-z]{2}|ifp|detran/[a-z]{2}|oab/[a-z]{2}|n[úu]mero|sob[ \t]+o|expedid[ao][ \t]+pel[ao]|de)|"
     r"[Nn](?:\.[º°Oo]|[º°Oo])?\.?|[ \t.:º°-])){0,25}+"
 )
 _NUMERO_RG_DIRETO = (
     r"(?:[A-Z]{1,2}-?)?"
     # Data e número/ano não viram RG, nem por retrocesso para um prefixo menor.
-    r"(?!\d{1,2}\.\d{1,2}\.\d{2,4}(?!\d|-[\dXx]))"
-    r"\d(?:[ .,]{0,2}\d){4,9}(?:-[\dXx]|[Xx])?"
+    r"(?!\d{1,2}[./]\d{1,2}[./]\d{2,4}(?!\d|-[\dXx]))"
+    r"(?!\d[\d., ]*/\d{4}(?!\d))"
+    r"\d(?:(?>[.,/][ \t]*\d|[ .,]{0,2}\d)){4,9}(?:-[\dXx]|[Xx])?"
     r"(?!\d|[.,/\-]\d|[ .,]{1,2}\d)"
 )
 _RE_RG_ROTULADO = re.compile(
     _ROTULO_RG_DIRETO + _MEIO_RG_DIRETO + rf"(?P<numero>{_NUMERO_RG_DIRETO})")
+# Janela deliberadamente mais ampla para emissores e prosa não previstos. Não
+# atravessa linhas nem marcas de uma máscara anterior; bordas impedem sufixos de
+# datas, números/ano ou de outro número de virarem um RG novo.
+_RE_RG_JANELA = re.compile(
+    _ROTULO_RG_DIRETO + r"[^\n\[\]]{0,40}?"
+    r"(?P<numero>\d(?<!\d\d)(?<!\d[.,/\-]\d)"
+    r"(?:\d?(?:[.,][ \t]*)?\d{3}(?:[.,][ \t]*)?\d{3}-?[\dXx]|\d{6,8}))"
+    r"(?!\w|[.,/\-]\d)")
+# CI também significa Comunicação Interna. Localize o contexto uma vez, a partir
+# da palavra, sem buscas para trás por candidato.
+_RE_CI_ADMIN = re.compile(
+    r"[OoMmCc](?<!\w[OoMmCc])(?:"
+    r"(?<=[Oo])(?i:f[ií]cio)|(?<=[Mm])(?i:emorando)|"
+    r"(?<=[Cc])(?i:omunica[cç][aã]o[ \t]+interna))(?!\w)[^\f]{0,40}?"
+    r"(?P<rotulo>[Cc](?<![\w.][Cc])(?:\.[Ii]\.?|[Ii]))(?!\w)")
 # Repara textos de versões anteriores que já perderam o começo do RG. Só a cauda
 # numérica é substituída; a marca anterior não vira rótulo para outros números.
 _RE_RG_CAUDA = re.compile(
@@ -428,7 +449,8 @@ _RE_ROTULO_CEP = re.compile(r"\bCEP\b", re.I)
 _RE_PAGINA = re.compile(r"(?m)^\f\r?$")
 
 # ---------------------------------------------------------------- padrões de varrer
-_V_CPF = re.compile(r"\d(?<!\d\d)(?<!\d[ .\-/]\d)(?:[ .\-/]?\d){10}(?![ .\-/]?\d)")
+_V_CPF = re.compile(r"\d(?<!\d\d)(?<!\d[ .,\-/]\d)(?:(?:[.,/-][ \t]*| )?\d){10}(?![ .,\-/]?\d)")
+_V_CPF_FORMATADO = re.compile(r"\d{3}[.,][ \t]*\d{3}[.,][ \t]*\d{3} ?- ?\d{2}")
 _V_TELEFONE = re.compile(
     r"(?<!\d)(?P<pais>\+\s?55[ .-]?)?(?:(?P<parenteses>\(\s?0?\d{2}\s?\)?\s?)|(?P<zero>0)?\d{2}[ .-]?)?"
     r"(?P<assinante>9[ .]?\d{4}|\d{4,5})(?P<sep>[ .-]?)\d{4}(?!\d)"
@@ -436,6 +458,7 @@ _V_TELEFONE = re.compile(
 _V_EMAIL = re.compile(r"[^\s@<>()\[\]{},;:\"']+@[^\s@<>()\[\]{},;:\"']+\.\w{2,}")
 _V_RG = re.compile(
     r"[Rr](?<![\w.][Rr])(?:\.\s?[Gg]\.?|[Gg])(?![\w])[^\d\n\[\]]{0,20}?(\d[\d.\-]{3,15}[\dXx])"
+    r"(?!\d|/\d)"
 )
 _V_PROTECOES = [re.compile(p) for p in (_DATA, _DATA_ISO, _ANOS, _CEP, _CNJ, _REAIS,
                                         _DECIMAL_VIRGULA, _DECIMAL_PONTO)] + [
@@ -986,7 +1009,7 @@ def _detectar(texto: str, liberados_: Iterable[str]) -> list[tuple[int, int, str
                 continue
             if " " in (m.group("s1"), m.group("s2"), m.group("s3")) and _dentro_de_sequencia(texto, m):
                 continue  # fatia 3-3-3-2 de uma sequência maior de números separados por espaço
-        formatado = (m.group("s1") in (".", ",") and m.group("s2") in (".", ",")
+        formatado = (m.group("s1").strip() in (".", ",") and m.group("s2").strip() in (".", ",")
                      and m.group("s3").strip() == "-")
         if not (formatado or rotulado) and marcacao.sobrepoe(m.start(), m.end()):
             continue  # metadado ou marcação; CPF formatado é mascarado sempre
@@ -994,8 +1017,11 @@ def _detectar(texto: str, liberados_: Iterable[str]) -> list[tuple[int, int, str
             continue
         aceitos.incluir(m.start(), m.end(), "cpf")
 
-    for padrao in (_RE_RG_ROTULADO, _RE_RG_CAUDA):
+    ci_admin = _Intervalos(m.span("rotulo") for m in _RE_CI_ADMIN.finditer(texto))
+    for padrao in (_RE_RG_ROTULADO, _RE_RG_JANELA, _RE_RG_CAUDA):
         for m in padrao.finditer(texto):
+            if ci_admin.sobrepoe(m.start(), m.start() + 1):
+                continue
             aceitos.incluir(*m.span("numero"), "rg")
 
     pos = 0
@@ -1064,12 +1090,12 @@ def _detectar(texto: str, liberados_: Iterable[str]) -> list[tuple[int, int, str
 
 
 # ---------------------------------------------------------------- string-sombra
-_TRACOS = "\u2010\u2011\u2012\u2013\u2014\u2015\u2212\ufe58\ufe63\uff0d"
+_TRACOS = "\u2010\u2011\u2012\u2013\u2014\u2015\u2212\ufe58\ufe63\uff0d\u2043\u02d7\u2796\ufe31\ufe32"
 _ESPACOS = "\u00a0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u202f\u205f\u3000"
 _INVISIVEIS = "\u00ad\u061c\u180e\u200b\u200c\u200d\u200e\u200f\u202a\u202b\u202c\u202d\u202e\u2060\u2061\u2062\u2063\u2064\ufeff"
 _TRADUCAO_SOMBRA = {**dict.fromkeys(map(ord, _TRACOS), "-"), **dict.fromkeys(map(ord, _ESPACOS), " ")}
 _RE_ESPECIAIS_SOMBRA = re.compile("[" + re.escape(_TRACOS + _ESPACOS + _INVISIVEIS) + "]")
-_RE_HIFEN_QUEBRA = re.compile(r"-[ \t]*(?:\r\n?|\n)")
+_RE_HIFEN_QUEBRA = re.compile(r"-[ \t]*(?:\r\n?|\n)|(?<=\d[.,/ ])[ \t]*\r?\n[ \t]*(?=\d)")
 _RE_TRADUZ_SOMBRA = re.compile("[" + re.escape(_TRACOS + _ESPACOS) + "]")
 
 
@@ -1078,7 +1104,8 @@ def _traduzir_sombra(m: re.Match) -> str:
     return _TRADUCAO_SOMBRA[ord(m.group())]
 
 
-_RE_CORTE_SOMBRA = re.compile("[" + re.escape(_INVISIVEIS) + r"]+|-[ \t]*(?:\r\n?|\n)[ \t]*(?=\d)")
+_RE_CORTE_SOMBRA = re.compile("[" + re.escape(_INVISIVEIS)
+    + r"]+|-[ \t]*(?:\r\n?|\n)[ \t]*(?=\d)|(?<=\d[.,/ ])[ \t]*\r?\n[ \t]*(?=\d)")
 
 
 class _Sombra:
@@ -1092,20 +1119,50 @@ class _Sombra:
             self.texto = original
             return
         t = _RE_TRADUZ_SOMBRA.sub(_traduzir_sombra, original) if not original.isascii() else original
-        partes, ultimo, removidos = [], 0, 0
+        cortes: list[tuple[int, int, bool]] = []
         for m in _RE_CORTE_SOMBRA.finditer(t):
             a, b = m.span()
+            novo = t[a] not in _INVISIVEIS + "-"
             if t[a] == "-":
                 if a == 0 or not t[a - 1].isdigit():
                     continue
                 a += 1  # o hífen fica
-            partes.append(t[ultimo:a])
-            ultimo = b
-            removidos += b - a
-            self._cortes.append(b - removidos)
-            self._acumulado.append(removidos)
-        partes.append(t[ultimo:])
-        self.texto = "".join(partes)
+            cortes.append((a, b, novo))
+
+        def montar(itens: list[tuple[int, int, bool]]) -> None:
+            partes, ultimo, removidos = [], 0, 0
+            self._cortes, self._acumulado = [], []
+            for a, b, _ in itens:
+                partes.append(t[ultimo:a])
+                ultimo = b
+                removidos += b - a
+                self._cortes.append(b - removidos)
+                self._acumulado.append(removidos)
+            partes.append(t[ultimo:])
+            self.texto = "".join(partes)
+
+        montar(cortes)
+        if any(novo for _, _, novo in cortes):
+            # Não transforme listas como 4406,\n4407 em números OCR/telefones.
+            # Só aceite a nova junção dentro de CPF/RG rotulado ou CPF formatado
+            # com DV válido. Os demais cortes (invisíveis/hífen) são inalterados.
+            ci_admin = _Intervalos(m.span("rotulo") for m in _RE_CI_ADMIN.finditer(self.texto))
+            permitidos = [m.span("numero") for p in (_RE_RG_ROTULADO, _RE_RG_JANELA)
+                          for m in p.finditer(self.texto)
+                          if not ci_admin.sobrepoe(m.start(), m.start() + 1)]
+            permitidos += [m.span("numero") for m in _RE_CPF_ESPACOS_ROTULADO.finditer(self.texto)
+                           if not any(" " in m.group(g) for g in ("g1", "g2", "g3", "g4"))
+                           or cpf_valido(re.sub(r"\D", "", m.group("numero")))]
+            for m in _RE_CPF.finditer(self.texto):
+                if (m.group("s1").strip() in (".", ",") and m.group("s2").strip() in (".", ",")
+                        and m.group("s3").strip() == "-"
+                        and cpf_valido("".join(m.group(g) for g in "abcde"))):
+                    permitidos.append(m.span())
+            intervalos = _Intervalos(permitidos)
+            manter = [c for c, pos in zip(cortes, self._cortes)
+                      if not c[2] or intervalos.contem(pos - 1, pos + 1)]
+            if len(manter) != len(cortes):
+                montar(manter)
 
     def original(self, i: int) -> int:
         k = bisect.bisect_right(self._cortes, i)
@@ -1219,14 +1276,23 @@ def _varrer(texto: str, liberados: Iterable[str] = frozenset(),
     for m in _V_RG.finditer(texto):
         if sum(c.isdigit() for c in m.group(1)) >= 5 and not ignorar.sobrepoe(*m.span(1)):
             achados.append((m.start(1), m.end(1), "rg"))
-    cpfs_rotulados = _cpfs_rotulados(texto)
+    rg_vistos = set(achados)
+    for ini, fim in _rgs_estritos(texto):
+        candidato = (ini, fim, "rg")
+        if candidato not in rg_vistos:
+            achados.append(candidato)
+            rg_vistos.add(candidato)
+    cpfs_rotulados = sorted(set(_cpfs_rotulados(texto)) | {
+        m.span("n") for m in _E_CPF_ROTULADO.finditer(texto)
+        if cpf_valido(re.sub(r"\D", "", m.group("n")))})
     achados.extend((a, b, "cpf") for a, b in cpfs_rotulados)
     rotulados = _Intervalos(cpfs_rotulados)
     for ini, fim in _documentos(texto):
         if not ignorar.sobrepoe(ini, fim) and not marcacao.sobrepoe(ini, fim):
             achados.append((ini, fim, "documento"))
     for m in _V_CPF.finditer(texto):
-        if (cpf_valido(re.sub(r"\D", "", m.group())) and not ignorar.sobrepoe(*m.span())
+        if (cpf_valido(re.sub(r"\D", "", m.group()))
+                and (not ignorar.sobrepoe(*m.span()) or _V_CPF_FORMATADO.fullmatch(m.group()))
                 and not rotulados.sobrepoe(*m.span()) and not marcacao.sobrepoe(*m.span())
                 and not _fracionario(texto, m.start())):
             achados.append((m.start(), m.end(), "cpf"))
@@ -1269,13 +1335,15 @@ def varrer(texto: str, liberados: Iterable[str] = frozenset(),
 
 # ---------------------------------------------------------------- barreira estrita
 _E_TRADUCAO = {
-    **dict.fromkeys(map(ord, "\u2010\u2011\u2012\u2013\u2014\u2015\u2212\ufe58\ufe63\uff0d"), "-"),
+    **dict.fromkeys(map(ord, "\u2010\u2011\u2012\u2013\u2014\u2015\u2212\ufe58\ufe63\uff0d\u2043\u02d7\u2796\ufe31\ufe32"), "-"),
     **dict.fromkeys(map(ord, "\u00a0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u202f\u205f\u3000"), " "),
 }
 _E_RE_TRADUZ = re.compile("[" + re.escape("".join(chr(c) for c in _E_TRADUCAO)) + "]")
 _E_HIFEN = r"-(?:[ \t]*(?:\r\n?|\n)[ \t]*)?"
-_E_SEP = r"(?: ?" + _E_HIFEN + r" ?|[., /])?"
-_E_CPF_FORMATADO = re.compile(r"\d(?<!\d\d)(?<!\d[.,/-]\d)\d\d[.,]\d{3}[.,]\d{3} ?" + _E_HIFEN + r" ?\d{2}(?!\d)(?![.,/-]\d)")
+_E_PONTUACAO = r"[.,/](?>[ \t]*\r?\n?[ \t]*)"
+_E_SEP = r"(?: ?" + _E_HIFEN + r" ?|" + _E_PONTUACAO + r"| (?:[ \t]*\r?\n[ \t]*)?)?"
+_E_CPF_FORMATADO = re.compile(r"\d(?<!\d\d)(?<!\d[.,/-]\d)\d\d[.,](?>[ \t]*\r?\n?[ \t]*)\d{3}"
+    r"[.,](?>[ \t]*\r?\n?[ \t]*)\d{3} ?" + _E_HIFEN + r" ?\d{2}(?!\d)(?![.,/-]\d)")
 _E_CPF_ROTULADO = re.compile(r"[Cc](?<![\w\[][Cc])\.? ?[Pp]\.? ?[Ff](?![^\W\d_])[^\d]{0,12}?"
     r"(?P<n>\d{3}" + _E_SEP + r"\d{3}" + _E_SEP + r"\d{3}" + _E_SEP + r"\d{2})(?!\d)(?![.,/-]\d)")
 _E_CPF_ESPACOS_ROTULADO = re.compile(
@@ -1289,12 +1357,26 @@ _E_RG_ROTULADO = re.compile(
     r"[RrIiCc](?<![\w.][RrIiCc])(?:"
     r"(?<=[Rr])(?:\.[ \t]?[Gg]\.?|[Gg]|(?i:egistro[ \t]+geral))|"
     r"(?<=[Ii])(?i:dentidade)|(?<=[Cc])(?:\.[Ii]\.?|[Ii]))(?!\w)"
-    r"(?=[^\d\n\[\]]{0,25}(?:[A-Z]{1,2}-?)?\d)"
-    r"(?:(?![A-Z]{1,2}-?\d)(?>\([Rr][Gg]\)|(?i:ssp/[a-z]{2}|ifp|detran/[a-z]{2}|oab/[a-z]{2}|de)|"
+    r"(?=[^\d\n\[\]]{0,40}(?:[A-Z]{1,2}-?)?\d)"
+    r"(?:(?![A-Z]{1,2}-?\d)(?>\([Rr][Gg]\)|[A-Z]{2,8}(?:[/-][A-Z]{2})?|"
+    r"(?i:ssp/[a-z]{2}|ifp|detran/[a-z]{2}|oab/[a-z]{2}|n[úu]mero|sob[ \t]+o|expedid[ao][ \t]+pel[ao]|de)|"
     r"[Nn](?:\.[º°Oo]|[º°Oo])?\.?|[ \t.:º°-])){0,25}+"
-    r"(?P<n>(?:[A-Z]{1,2}-?)?(?!\d{1,2}\.\d{1,2}\.\d{2,4}(?!\d|-[\dXx]))"
-    r"\d(?:[ .,]{0,2}\d){4,9}(?:" + _E_HIFEN + r"[\dXx]|[Xx])?)"
+    r"(?P<n>(?:[A-Z]{1,2}-?)?(?!\d{1,2}[./]\d{1,2}[./]\d{2,4}(?!\d|-[\dXx]))"
+    r"(?!\d[\d., ]*/\d{4}(?!\d))"
+    r"\d(?:(?>(?:" + _E_PONTUACAO + r"|[ .,]{0,2}| [ \t]*\r?\n[ \t]*)\d)){4,9}(?:" + _E_HIFEN + r"[\dXx]|[Xx])?)"
     r"(?!\d|[.,/\-]\d|[ .,]{1,2}\d)")
+_E_RG_JANELA = re.compile(
+    r"[RrIiCc](?<![\w.][RrIiCc])(?:"
+    r"(?<=[Rr])(?:\.[ \t]?[Gg]\.?|[Gg]|(?i:egistro[ \t]+geral))|"
+    r"(?<=[Ii])(?i:dentidade)|(?<=[Cc])(?:\.[Ii]\.?|[Ii]))(?!\w)"
+    r"[^\n\[\]]{0,40}?(?P<n>\d(?<!\d\d)(?<!\d[.,/\-]\d)"
+    r"(?:\d?(?:[.,](?>[ \t]*\r?\n?[ \t]*))?\d{3}(?:[.,](?>[ \t]*\r?\n?[ \t]*))?"
+    r"\d{3}(?:" + _E_HIFEN + r")?[\dXx]|\d{6,8}))(?!\w|[.,/\-]\d)")
+_E_CI_ADMIN = re.compile(
+    r"[OoMmCc](?<!\w[OoMmCc])(?:"
+    r"(?<=[Oo])(?i:f[ií]cio)|(?<=[Mm])(?i:emorando)|"
+    r"(?<=[Cc])(?i:omunica[cç][aã]o[ \t]+interna))(?!\w)[^\f]{0,40}?"
+    r"(?P<rotulo>[Cc](?<![\w.][Cc])(?:\.[Ii]\.?|[Ii]))(?!\w)")
 _E_RG_CAUDA = re.compile(
     r"[\[]RG omitido\][^\d\n\[\]]{0,3}(?P<n>\d{3}-[\dXx])(?!\d)")
 _E_RG_ID = re.compile(r"[Ii](?<![\w.][Ii])[Dd](?![\w])"
@@ -1305,6 +1387,20 @@ _E_TELEFONE = re.compile(r"[TtFfCcWw](?<![\w\[][TtFfCcWw])"
     r"(?P<n>(?:\+ ?55[ .-]?)?(?:\( ?0?\d{2} ?\) ?|0?\d{2}[ .-])?(?:9[ .]?\d{4}|[2-9]\d{3})" + _E_HIFEN + r"\d{4})(?![\w@])(?!-\d)")
 _E_EMAIL = re.compile(r"[A-Za-z0-9](?<![\w.%+-][A-Za-z0-9])[A-Za-z0-9._%+-]*@"
     r"(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z]{2,}(?![\w-])")
+
+
+def _rgs_estritos(texto: str) -> list[tuple[int, int]]:
+    """Detectores próprios de RG, compartilhados apenas entre as duas barreiras."""
+    ci_admin = _Intervalos(m.span("rotulo") for m in _E_CI_ADMIN.finditer(texto))
+    achados = {m.span("n") for p in (_E_RG_ROTULADO, _E_RG_CAUDA, _E_RG_ID, _E_RG_JANELA)
+               for m in p.finditer(texto) if not ci_admin.sobrepoe(m.start(), m.start() + 1)}
+    # A janela pode reencontrar a cauda numérica de um RG com prefixo alfabético.
+    unicos, fim_anterior = [], -1
+    for ini, fim in sorted(achados, key=lambda o: (o[0], -o[1])):
+        if fim > fim_anterior:
+            unicos.append((ini, fim))
+            fim_anterior = fim
+    return unicos
 
 
 def varrer_estrito(texto: str, liberados: Iterable[str] = frozenset()) -> list[dict]:
@@ -1323,9 +1419,7 @@ def varrer_estrito(texto: str, liberados: Iterable[str] = frozenset()) -> list[d
         if (1 <= sum(m.group(g).count(" ") for g in "abcd") <= 2
                 and cpf_valido(re.sub(r"\D", "", m.group("n")))):
             achados.add((*m.span("n"), "cpf"))
-    for p in (_E_RG_ROTULADO, _E_RG_CAUDA, _E_RG_ID):
-        for m in p.finditer(s):
-            achados.add((*m.span("n"), "rg"))
+    achados.update((ini, fim, "rg") for ini, fim in _rgs_estritos(s))
     for m in _E_TELEFONE.finditer(s):
         n = m.group("n")
         anos = re.search(r"(\d{4})-(?:[ \t]*(?:\r\n?|\n)[ \t]*)?(\d{4})$", n)

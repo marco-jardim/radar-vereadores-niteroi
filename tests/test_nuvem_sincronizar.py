@@ -117,7 +117,7 @@ class Base(unittest.TestCase):
         ident = hashlib.sha1(f"{doc}|{chave}|0|{sha}".encode()).hexdigest()[:16]
         u16 = len(texto.encode("utf-16-le")) // 2
         trecho = {"arquivo": chave, "documento": doc, "fim": len(texto), "fim_utf16": u16, "id": ident, "inicio": 0,
-                  "inicio_utf16": 0, "posicao": 0, "sha256": sha, "vetorizavel": True}
+                  "inicio_utf16": 0, "posicao": 0, "sha256": sha, "vetorizavel": True, "baixa_confianca": False}
         arq = self.textos / "trechos" / e["tipo"] / "2024.jsonl"
         lista = [json.loads(linha) for linha in arq.read_text(encoding="utf-8").splitlines() if linha]
         lista = sorted([t for t in lista if t["arquivo"] != chave] + [trecho],
@@ -344,6 +344,34 @@ class TestSincronizacaoCompleta(Base):
 
 
 class TestDiferenca(Base):
+    def test_zip_parcial_nao_promove_trechos_de_ocr_baixo(self):
+        manifesto = self.raiz / "data" / "textos" / "manifesto-2024.json"
+        mapa = json.loads(manifesto.read_bytes())
+        mapa["siscam:900002"].update(formato="zip", extrator="zip", status="ok_parcial")
+        salvar_mapa(manifesto, mapa)
+        lista = [json.loads(linha) for linha in (self.textos / "trechos" / "pl" / "2024.jsonl").read_bytes().splitlines()]
+        baixos = {t["id"] for t in lista if t["arquivo"] == "siscam:900002" and t["baixa_confianca"]}
+        self.assertTrue(baixos)
+        fonte = carregar_fonte(self.raiz, self.textos, G.LIBERADOS)
+        self.assertFalse(baixos & fonte.trechos.keys())
+        self.assertFalse(baixos & fonte.vetores.keys())
+
+    def test_baixa_confianca_ausente_na_versao_atual_bloqueia_fonte(self):
+        caminho = self.textos / "trechos" / "pl" / "2024.jsonl"
+        lista = [json.loads(linha) for linha in caminho.read_bytes().splitlines()]
+        t = lista[0]
+        manifesto = self.raiz / "data" / "textos" / "manifesto-2024.json"
+        mapa = json.loads(manifesto.read_bytes())
+        mapa[t["arquivo"]]["versao_trechos"] = VERSAO_TRECHOS
+        salvar_mapa(manifesto, mapa)
+        del t["baixa_confianca"]
+        caminho.write_text("".join(json.dumps(item) + "\n" for item in lista), encoding="utf-8")
+        with self.assertRaisesRegex(ErroFonte, "baixa_confianca ausente"):
+            carregar_fonte(self.raiz, self.textos, G.LIBERADOS)
+        mapa[t["arquivo"]]["versao_trechos"] = "2"
+        salvar_mapa(manifesto, mapa)
+        self.assertIn(t["id"], carregar_fonte(self.raiz, self.textos, G.LIBERADOS).trechos)
+
     def test_baixa_confianca_excluida_e_retirada_incrementalmente(self):
         caminho = self.textos / "trechos" / "pl" / "2024.jsonl"
         publicado = caminho.read_bytes()

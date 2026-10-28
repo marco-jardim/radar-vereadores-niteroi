@@ -181,6 +181,51 @@ class _Base(unittest.TestCase):
 
 
 class TestContrato(_Base):
+    def test_zip_parcial_preserva_paginas_de_baixa_confianca(self) -> None:
+        chave = "siscam:900002"
+        original = G.ORIGINAIS[chave]
+        self.extracoes[original] = {**self.extracoes[original], "formato": "zip", "extrator": "zip",
+                                    "versao_extrator": textos.VERSAO_EXTRATOR_ZIP, "status": "ok_parcial",
+                                    "confianca_paginas": {2: 90.0, 3: 40.0}}
+        self.rodar()
+        lista = [t for t in self.trechos_de("trechos/pl/2024.jsonl") if t["arquivo"] == chave]
+        self.assertEqual([t["baixa_confianca"] for t in lista], [False, True])
+        self.assertEqual(self.manifesto()[chave]["status"], "ok_parcial")
+        self.assertEqual(self.verificar()["falhas"], [])
+
+    def test_versao_propria_do_zip_invalida_cache_e_reextrai(self) -> None:
+        chave = "siscam:900002"
+        original = G.ORIGINAIS[chave]
+        self.extracoes[original] = {**self.extracoes[original], "formato": "zip", "extrator": "zip",
+                                    "versao_extrator": textos.VERSAO_EXTRATOR_ZIP}
+        self.rodar()
+        sha = textos.sha256(original)
+        caminho = self.cache / "texto_bruto" / f"{sha}.json"
+        meta = json.loads(caminho.read_bytes())
+        meta["versao_extrator"] = VERSAO_EXTRATORES
+        arquivos.salvar_json(caminho, meta)
+        mapa = self.manifesto()
+        mapa[chave]["versao_extrator"] = VERSAO_EXTRATORES
+        self.salvar_manifesto(mapa)
+        self.extraidos.clear()
+        self.rodar(reprocessar_versao=True)
+        self.assertEqual(self.extraidos.count(sha), 1)
+        self.assertEqual(self.manifesto()[chave]["versao_extrator"], textos.VERSAO_EXTRATOR_ZIP)
+
+    def test_verificar_exige_baixa_confianca_na_versao_atual(self) -> None:
+        self.rodar()
+        caminho = self.dir_textos / "trechos" / "pl" / "2024.jsonl"
+        lista = self.trechos_de("trechos/pl/2024.jsonl")
+        t = lista[0]
+        del t["baixa_confianca"]
+        caminho.write_bytes("".join(textos.linha_trecho(item) + "\n" for item in lista).encode("utf-8"))
+        falhas = self.verificar()["falhas"]
+        self.assertTrue(any(f["chave"] == t["arquivo"] and "baixa_confianca" in f["motivo"] for f in falhas))
+        mapa = self.manifesto()
+        mapa[t["arquivo"]]["versao_trechos"] = "2"
+        self.salvar_manifesto(mapa)
+        self.assertEqual(self.verificar()["falhas"], [])
+
     def test_baixa_confianca_preservada_no_cache_bruto_e_reprocessamento(self) -> None:
         self.rodar()
         chave = "siscam:900002"

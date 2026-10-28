@@ -1715,9 +1715,11 @@ def validar_textos(raiz: Path | None = None, pasta_textos: Path | None = None) -
     return problemas
 
 
-def _validar_trecho_texto(t: object, texto: str, documento: str, chave: str, posicao: int) -> bool:
+def _validar_trecho_texto(t: object, texto: str, documento: str, chave: str, posicao: int,
+                          versao_trechos: str | None = None) -> bool:
     """Offsets, hash, id e vetor: independe da versão do algoritmo de divisão."""
     if (not isinstance(t, dict) or set(t) not in (CAMPOS_TRECHO, CAMPOS_TRECHO - {"baixa_confianca"})
+            or (versao_trechos == trechos.VERSAO_TRECHOS and "baixa_confianca" not in t)
             or ("baixa_confianca" in t and type(t["baixa_confianca"]) is not bool)):
         return False
     for campo in ("posicao", "inicio", "fim", "inicio_utf16", "fim_utf16"):
@@ -1837,7 +1839,8 @@ def _validar_arquivos_textos(raiz: Path, pasta: Path, entradas: dict[str, tuple[
                 problemas.append(f"{chave}: contagem de trechos não confere")
             if texto is None:
                 continue
-            if any(not _validar_trecho_texto(t, texto, e["documento"], chave, i) for i, t in enumerate(itens)):
+            if any(not _validar_trecho_texto(t, texto, e["documento"], chave, i, e.get("versao_trechos"))
+                   for i, t in enumerate(itens)):
                 problemas.append(f"{chave}: campos, offsets, id ou hash dos trechos não conferem com o texto")
             elif trechos.normalizar(texto) == texto and e.get("versao_trechos") == trechos.VERSAO_TRECHOS:
                 # Confiança por página só existe no cache bruto, não no manifesto.

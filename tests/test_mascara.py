@@ -141,7 +141,10 @@ class TestRg(unittest.TestCase):
 
     def test_rg_sem_rotulo_ou_longe_fica(self) -> None:
         _sem_mudanca(self, "Código 12.345.678-9 do item.")
-        _sem_mudanca(self, "RG emitido pelo órgão estadual competente 12.345.678-9")
+        # Desde a máscara 10, número com forma de RG até 40 caracteres depois do rótulo é mascarado
+        # (decisão conservadora após o vazamento de RGs com emissor e redação variados).
+        self.assertEqual(mascarar("RG emitido pelo órgão estadual competente 12.345.678-9")[0],
+                         "RG emitido pelo órgão estadual competente [RG omitido]")
         _sem_mudanca(self, "Organização 12.345.678-9 e ORG 1234567")
 
     def test_identidade_sem_marca_nao_e_rotulo(self) -> None:
@@ -314,7 +317,7 @@ class TestEmail(unittest.TestCase):
 
 class TestEmailAuditoriaV5(unittest.TestCase):
     def test_versao(self) -> None:
-        self.assertEqual(mascara.VERSAO_MASCARA, "9")
+        self.assertEqual(mascara.VERSAO_MASCARA, "10")
 
     def _email_mascarado(self, texto: str, esperado: str) -> None:
         for paginas in (None, {1}, {2}):
@@ -1351,9 +1354,9 @@ class TestMascaraV9(unittest.TestCase):
     def test_negativos_e_limites(self) -> None:
         for texto in (
             "Identidade de gênero, Lei 13.709/2018", "identidade visual", "identidade cultural",
-            "identidade visual 12345678", "identidade cultural 12345678",
+            "identidade visual sem número", "identidade cultural sem número",
             "RG: 13.709/2018", "RG 12.03.2024", "ID do processo 123", "ID: 12345 MF/RJ",
-            "identidade 2024 do evento 12345", "CI " + " " * 25 + "1234567",
+            "identidade 2024 do evento 12345", "CI " + " " * 40 + "1234567",
             "[RG omitido]    678-9", "[RG omitido] 6789-0", "[RG omitido] 678-90",
         ):
             with self.subTest(texto=texto):
@@ -1417,6 +1420,111 @@ class TestMascaraV9(unittest.TestCase):
                 mascara, "_cpfs_rotulados", side_effect=AssertionError):
             self.assertEqual([o["tipo"] for o in mascara.varrer_estrito(
                 "CPF sob q nº 529.98 2,247-25")], ["cpf"])
+
+
+class TestMascaraV10(unittest.TestCase):
+    """Formas sintéticas da revisão: emissores, quebras e CI administrativo."""
+
+    _limpo = TestMascaraV8._limpo
+    _rg_inteiro = TestMascaraV9._rg_inteiro
+
+    def test_emissores_e_redacoes_de_identidade(self) -> None:
+        for antes, numero in (
+            ("identidade IFP/RJ nº ", "12.345.678-9"),
+            ("identidade DETRAN-RJ nº ", "1.234.567"),
+            ("identidade SSP-SP ", "1.234.567"),
+            ("identidade DIC/RJ ", "12.345.678-9"),
+            ("identidade número ", "1.234.567"),
+            ("identidade numero ", "1.234.567"),
+            ("identidade sob o nº ", "1234567"),
+            ("identidade expedida pelo IFP sob o nº ", "12.345.678-9"),
+            ("identidade expedido pela DIC/RJ nº ", "12.345.678-9"),
+            ("C.I. IFP/RJ nº ", "12345"),
+            ("identidade ABCDEFGH-SP nº ", "1234567"),
+            ("CI" + " " * 40, "1234567"),
+        ):
+            with self.subTest(antes=antes, numero=numero):
+                self._rg_inteiro(antes, numero, "; fim.")
+                self.assertTrue(any(o["tipo"] == "rg" and o["forte"] for o in varrer(antes + numero)))
+
+    def test_janela_livre_e_barreira_independente(self) -> None:
+        for rotulo in ("identidade", "RG", "R.G.", "C.I."):
+            for numero in ("12.345.678-9", "1234567", "123456789", "1,234,567X"):
+                with self.subTest(rotulo=rotulo, numero=numero):
+                    self._rg_inteiro(rotulo + " emitida por órgão não previsto: ", numero)
+        texto = "identidade emitida por órgão não previsto: 12.345.678-9"
+        direto = mock.Mock()
+        direto.finditer.return_value = ()
+        with mock.patch.multiple(mascara, _RE_RG_ROTULADO=None, _RE_RG_JANELA=None,
+                                 _E_RG_ROTULADO=direto,
+                                 _detectar=mock.Mock(side_effect=AssertionError),
+                                 _Sombra=mock.Mock(side_effect=AssertionError)):
+            self.assertEqual(mascara.varrer_estrito(texto), [
+                {"tipo": "rg", "inicio": texto.index("12."), "fim": len(texto)}])
+
+    def test_quebras_de_cpf_e_rg_preservam_offsets(self) -> None:
+        self.assertTrue(set("\u2043\u02d7\u2796\ufe31\ufe32").issubset(mascara._TRACOS))
+        for quebra in ("\n", "\r\n", " \r\n\t "):
+            for antes, numero, tipo in (
+                ("CPF ", "529.982." + quebra + "247-25", "cpf"),
+                ("CPF ", "529,982," + quebra + "247-25", "cpf"),
+                ("CPF ", "529/982/" + quebra + "247-25", "cpf"),
+                ("CPF ", "529 982 " + quebra + "247 25", "cpf"),
+                ("", "529.982." + quebra + "247-25", "cpf"),
+                ("RG ", "12.345." + quebra + "678-9", "rg"),
+                ("RG ", "12,345," + quebra + "678-9", "rg"),
+                ("RG ", "12/345/" + quebra + "678-9", "rg"),
+                ("RG ", "12 345 " + quebra + "678-9", "rg"),
+            ):
+                with self.subTest(quebra=quebra, tipo=tipo, numero=numero):
+                    prefixo = "Art. 1º; " + antes
+                    texto = prefixo + numero + "; fim."
+                    self.assertEqual(self._limpo(texto, tipo), prefixo + mascara.SUBSTITUICOES[tipo] + "; fim.")
+                    for detector in (varrer, mascara.varrer_estrito):
+                        achados = [o for o in detector(texto) if o["tipo"] == tipo]
+                        self.assertTrue(achados)
+                        self.assertTrue(all(texto[o["inicio"]:o["fim"]] == numero for o in achados))
+
+    def test_estrita_com_quebras_nao_depende_da_sombra(self) -> None:
+        texto = "CPF 529.982.\n247-25; RG 12.345.\r\n678-9"
+        with mock.patch.multiple(mascara, _RE_RG_ROTULADO=None, _RE_RG_JANELA=None, _RE_CPF=None,
+                                 _detectar=mock.Mock(side_effect=AssertionError),
+                                 _Sombra=mock.Mock(side_effect=AssertionError)):
+            achados = mascara.varrer_estrito(texto)
+        self.assertEqual([(o["tipo"], texto[o["inicio"]:o["fim"]]) for o in achados], [
+            ("cpf", "529.982.\n247-25"), ("rg", "12.345.\r\n678-9")])
+
+    def test_negativos_listas_ci_e_limites_da_janela(self) -> None:
+        casos = (
+            "Identidade de gênero, Lei 13.709/2018", "identidade visual/cultural",
+            "RG: 13.709/2018", "RG 12.03.2024", "ID do processo 123", "ID: 12345 MF/RJ",
+            "4406, 4407", "4406,\n4407", "4406,\r\n 4407", "4406,\n4407,\n4408",
+            "4406,\n4407; Comunicação Interna: CI nº 1234 \n5678",
+            "CI nº 123/2024", "C.I. nº 123456/2024", "CI nº 1234567/2024",
+            "Ofício: CI nº 123456", "memorando referente à C.I. nº 123456",
+            "Comunicação Interna: CI nº 123456", "OFÍCIO anterior, CI nº 123456",
+            "Memorando\nC.I. nº 123456",
+            "identidade" + " " * 41 + "1234567", "identidade emitida\npelo órgão 1234567",
+        )
+        for texto in casos:
+            for paginas in ((None, {1}) if texto.startswith("4406,") else (None,)):
+                with self.subTest(texto=texto, paginas=paginas):
+                    self.assertEqual(mascarar(texto, ocr_paginas=paginas), (texto, dict.fromkeys(mascara.TIPOS, 0)))
+                    self.assertEqual(mascara.varrer_estrito(texto), [])
+                    self.assertFalse([o for o in varrer(texto, ocr_paginas=paginas) if o["forte"]])
+        self._rg_inteiro("C.I. nº ", "12345")
+        self._rg_inteiro("CI nº ", "123456")
+        self._rg_inteiro("Ofício" + " " * 41 + "C.I. nº ", "12345")
+
+    def test_desempenho_da_janela_rg_sem_numero(self) -> None:
+        linha = "identidade emitida por órgão " + " " * 80 + "sem número\n"
+        texto = linha * (5_000_000 // len(linha))
+        for detector in (mascarar, varrer, mascara.varrer_estrito):
+            with self.subTest(detector=detector.__name__):
+                inicio = time.perf_counter()
+                resultado = detector(texto)
+                self.assertLess(time.perf_counter() - inicio, 3.0)
+                self.assertEqual(resultado, (texto, dict.fromkeys(mascara.TIPOS, 0)) if detector is mascarar else [])
 
 
 if __name__ == "__main__":

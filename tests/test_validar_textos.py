@@ -72,6 +72,24 @@ class TestValidarTextos(unittest.TestCase):
         caminho.write_bytes("".join(textos.linha_trecho(t) + "\n" for t in lista).encode("utf-8"))
         self.assertProblema("campos, offsets")
 
+    def test_baixa_confianca_obrigatoria_na_versao_atual(self):
+        caminho = self.pasta / "trechos" / "pl" / "2024.jsonl"
+        lista = [json.loads(linha) for linha in caminho.read_bytes().splitlines()]
+        t = lista[0]
+        e = self.mapa[t["arquivo"]]
+        e["versao_trechos"] = trechos.VERSAO_TRECHOS
+        del t["baixa_confianca"]
+        caminho.write_bytes("".join(textos.linha_trecho(item) + "\n" for item in lista).encode("utf-8"))
+        self.gravar()
+        self.assertFalse(V._validar_trecho_texto(t, self.caminho(t["arquivo"]).read_text(encoding="utf-8")[:-1],
+                                               e["documento"], t["arquivo"], t["posicao"], trechos.VERSAO_TRECHOS))
+        self.assertProblema("campos, offsets")
+        # Formatos antigos continuam legíveis, mas um sinalizador presente precisa
+        # ser booleano independentemente da versão.
+        e["versao_trechos"] = "2"
+        self.gravar()
+        self.assertEqual(self.validar(), [])
+
     def test_pasta_opcional_ausente(self):
         shutil.rmtree(self.raiz / "data" / "textos")
         self.assertEqual(self.validar(False), [])

@@ -496,7 +496,7 @@ class TestOpenDocument(unittest.TestCase):
             r = extratores.extrair(dados, ocr=True, ferramentas={"tesseract": None})
         self.assertEqual(extratores.detectar(dados), "zip")
         self.assertEqual((r.formato, r.extrator, r.status, r.versao_extrator),
-                         ("zip", "zip", "ok", base.VERSAO_EXTRATORES))
+                         ("zip", "zip", "ok", extratores._zip.VERSAO_EXTRATOR))
         self.assertEqual(r.texto, "Título sintético\nAntes do span depois   espaços\ttab\n"
                          "outra linha & fim.\nCélula A\tCélula B\nFinal.")
         self.assertEqual((r.paginas_ocr, r.confianca, r.detalhe), (0, None, ""))
@@ -553,6 +553,49 @@ class TestOpenDocument(unittest.TestCase):
 
 # ------------------------------------------------------------------- zip
 class TestZip(ComFerramentasFalsas):
+    def test_confianca_por_pagina_com_offset_e_status_parcial(self) -> None:
+        membros = [
+            base.Resultado(formato="pdf", texto="Nativa A\n\f\nNativa B", paginas=2),
+            base.Resultado(formato="pdf", texto="OCR baixo\n\f\nOCR alto", paginas=2, paginas_ocr=2,
+                           confianca_paginas={1: 40.0, 2: 90.0}, status="ocr_baixa_confianca"),
+            base.Resultado(formato="pdf", texto="Texto parcial", paginas=2, status="ok_parcial"),
+        ]
+        dados = fx.zip_bytes({f"{n}.pdf": b"conteudo" for n in range(len(membros))})
+        r = extratores._zip.extrair_zip(dados, True, None, 1, [base.LIMITE_DESCOMPACTADO],
+                                        mock.Mock(side_effect=membros))
+        self.assertEqual(r.status, "ok_parcial")
+        self.assertEqual(r.versao_extrator, extratores._zip.VERSAO_EXTRATOR)
+        self.assertNotEqual(r.versao_extrator, base.VERSAO_EXTRATORES)
+        self.assertEqual(r.confianca_paginas, {2: 40.0, 3: 90.0})
+        self.assertEqual(r.texto.count("\f"), 2)
+        self.assertEqual((r.paginas, r.paginas_ocr), (6, 2))
+
+    def test_paginas_compartilhadas_usam_menor_confianca_e_fallback(self) -> None:
+        for confianca in ({1: 40.0}, {}):
+            with self.subTest(confianca=confianca):
+                membros = [
+                    base.Resultado(formato="png", texto="OCR alto", paginas_ocr=1,
+                                   confianca_paginas={1: 90.0}, status="ok_ocr"),
+                    base.Resultado(formato="png", texto="OCR baixo", paginas_ocr=1,
+                                   confianca_paginas=confianca, status="ocr_baixa_confianca"),
+                    base.Resultado(formato="pdf", texto="Parcial", status="ok_parcial"),
+                ]
+                dados = fx.zip_bytes({str(n): b"conteudo" for n in range(3)})
+                r = extratores._zip.extrair_zip(dados, True, None, 1, [base.LIMITE_DESCOMPACTADO],
+                                                mock.Mock(side_effect=membros))
+                self.assertEqual(r.status, "ok_parcial")
+                self.assertEqual(r.confianca_paginas, {1: 40.0 if confianca else 0.0})
+
+    def test_zip_aninhado_preserva_confianca_por_pagina(self) -> None:
+        interno = fx.zip_bytes({"baixo.pdf": fx.pdf_texto()})
+        externo = fx.zip_bytes({"nativo.txt": b"Primeira\n\f\nSegunda", "interno.zip": interno})
+        membro = base.Resultado(formato="pdf", texto="OCR baixo\n\f\nOCR alto", paginas_ocr=2,
+                                confianca_paginas={1: 35.0, 2: 85.0}, status="ocr_baixa_confianca")
+        with mock.patch.object(extratores._pdf, "extrair_pdf", return_value=membro):
+            r = extratores.extrair(externo, ocr=True)
+        self.assertEqual(r.confianca_paginas, {2: 35.0, 3: 85.0})
+        self.assertEqual(r.texto.count("\f"), 2)
+
     def test_metadados_de_empacotamento_ficam_fora(self) -> None:
         dados = fx.zip_bytes({
             "mimetype": b"application/x-outro-pacote",

@@ -23,6 +23,8 @@ from . import odt
 from .base import VERSAO_EXTRATORES, ErroFormato, ErroLimite, Resultado, ler_membro_zip
 
 PROFUNDIDADE_MAXIMA = 2
+# Versão própria: a confiança por página altera a publicação mesmo sem mudar texto.
+VERSAO_EXTRATOR = VERSAO_EXTRATORES + ".1"
 
 # Ordem de gravidade usada para o status agregado do zip.
 _PRIORIDADE = ("pendente_ferramenta", "escaneado_sem_ocr", "ok_parcial", "ocr_baixa_confianca", "ok_ocr", "ok")
@@ -50,7 +52,7 @@ def extrair_zip(dados: bytes, ocr: bool, ferramentas, profundidade: int, orcamen
         zf = zipfile.ZipFile(io.BytesIO(dados))
     except (zipfile.BadZipFile, OSError, ValueError, EOFError) as exc:
         raise ErroFormato(f"zip inválido: {exc}") from exc
-    resultado = Resultado(formato="zip", extrator="zip", versao_extrator=VERSAO_EXTRATORES)
+    resultado = Resultado(formato="zip", extrator="zip", versao_extrator=VERSAO_EXTRATOR)
     with zf:
         infos = [i for i in zf.infolist() if not i.is_dir()]
         if sum(i.file_size for i in infos) > orcamento[0]:
@@ -67,6 +69,7 @@ def extrair_zip(dados: bytes, ocr: bool, ferramentas, profundidade: int, orcamen
         status_membros: list[str] = []
         detalhes: list[str] = []
         confiancas: list[float] = []
+        quebras = 0
         for info in infos:
             if _metadado(info.filename):
                 continue
@@ -89,7 +92,19 @@ def extrair_zip(dados: bytes, ocr: bool, ferramentas, profundidade: int, orcamen
             if membro.confianca is not None:
                 confiancas.append(membro.confianca)
             if membro.texto:
+                confianca_paginas = membro.confianca_paginas
+                if membro.status == "ocr_baixa_confianca" and not confianca_paginas:
+                    # Resultado antigo sem detalhe por página: não promover texto
+                    # de OCR baixo só porque outro membro deixa o ZIP ok_parcial.
+                    confianca_paginas = {n: 0.0 for n in range(1, membro.texto.count("\f") + 2)}
+                for pagina, confianca in confianca_paginas.items():
+                    n = quebras + pagina
+                    # Membros sem quebra de página compartilham a página final;
+                    # prevalece a confiança menor, inclusive em ZIPs aninhados.
+                    resultado.confianca_paginas[n] = min(
+                        resultado.confianca_paginas.get(n, confianca), confianca)
                 secoes.append(f"=== {nome} ===\n{membro.texto}")
+                quebras += membro.texto.count("\f")
     resultado.texto = "\n\n".join(secoes)
     resultado.detalhe = "; ".join(detalhes)
     if confiancas:

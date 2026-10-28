@@ -115,6 +115,7 @@ from pathlib import Path
 
 from . import arquivos, extratores, limpeza, mascara, remocoes, trechos
 from .extratores import CONFIANCA_MINIMA, VERSAO_EXTRATORES, Resultado
+from .extratores.zip import VERSAO_EXTRATOR as VERSAO_EXTRATOR_ZIP
 
 RAIZ = Path(__file__).resolve().parent.parent
 ROTULOS_ATA = frozenset({"Ata"})
@@ -973,6 +974,8 @@ class Pipeline:
         """`versao_extrator` que a extração local produziria com esse extrator (None se desconhecido)."""
         if not extrator:
             return ""
+        if extrator == "zip":
+            return VERSAO_EXTRATOR_ZIP
         if extrator in EXTRATORES_PYTHON:
             return VERSAO_EXTRATORES
         if extrator not in ("pdftotext", "pdftotext+tesseract", "tesseract"):
@@ -1158,7 +1161,9 @@ class Pipeline:
         if p.get("sha256_config") is not None and p["sha256_config"] != self.sha_config:
             self.config_mudou = True
             motivo = motivo or "config"
-        if motivo is None and self.op.reprocessar_versao and any(p.get(c) != v for c, v in self.versoes.items()):
+        if motivo is None and self.op.reprocessar_versao and (
+                any(p.get(c) != v for c, v in self.versoes.items())
+                or (p.get("extrator") == "zip" and p.get("versao_extrator") != VERSAO_EXTRATOR_ZIP)):
             motivo = "versao"
         return motivo
 
@@ -1873,14 +1878,16 @@ def verificar(raiz: Path = RAIZ, pasta_textos: Path | None = None, cache: Path |
         if len(texto) != e.get("chars"):
             falha(k, "chars não confere")
         lista.sort(key=lambda t: t.get("posicao", 0))
+        if (e.get("versao_trechos") == trechos.VERSAO_TRECHOS
+                and any(type(t.get("baixa_confianca")) is not bool for t in lista)):
+            falha(k, "baixa_confianca ausente ou não booleano nos trechos da versão atual")
         if len(lista) != e.get("trechos") or sum(bool(t.get("vetorizavel")) for t in lista) != e.get(
                 "trechos_vetorizaveis"):
             falha(k, "contagem de trechos não confere com o manifesto")
         elif e.get("versao_trechos") == trechos.VERSAO_TRECHOS:
             # A confiança vem do cache bruto, não do manifesto público. Aqui se
             # conferem tipo do sinalizador e divisão; reprocessar recalcula a confiança.
-            if (any(type(t.get("baixa_confianca")) is not bool for t in lista)
-                    or [dict(t, baixa_confianca=False) for t in lista] != trechos.dividir(texto, e["documento"], k)):
+            if [dict(t, baixa_confianca=False) for t in lista] != trechos.dividir(texto, e["documento"], k):
                 falha(k, "trechos não conferem com o texto")
         else:
             for t in lista:
