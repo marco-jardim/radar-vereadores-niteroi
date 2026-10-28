@@ -1,6 +1,7 @@
 // GET /api/original/:sha256: o original do bucket R2 privado, como download, salvo se removido.
 import type { ContextoExecucao, Env } from "./ambiente";
-import { ErroHttp, guardarCache, lerCache } from "./http";
+import { urlSiscam } from "./busca";
+import { ErroHttp, guardarCache, json, lerCache } from "./http";
 
 export const CACHE_ORIGINAL = 86400;
 /** Clonar streams maiores pode acumular o corpo inteiro na memória do isolate. */
@@ -58,18 +59,31 @@ export async function rotaOriginal(segmento: string, url: URL, metodo: string, e
   ).bind(sha256, sha256).first();
   if (marca) throw removido(env);
 
-  // 2. Cache API (só GET; HEAD consulta o R2 para informar o tamanho).
+  // 2. Disponibilidade no D1, inclusive antes de reutilizar um download em cache.
+  const arquivo = await env.DB.prepare(
+    "SELECT a.id, a.formato, a.r2_chave, (SELECT d.url FROM arquivo_documento AS ad " +
+      "JOIN documentos AS d ON d.id = ad.documento WHERE ad.arquivo = a.id AND d.url IS NOT NULL " +
+      "ORDER BY d.id LIMIT 1) AS url_siscam FROM arquivos AS a WHERE a.sha256 = ? " +
+      "ORDER BY a.r2_chave IS NULL, a.id LIMIT 1",
+  ).bind(sha256).first<{ id: string; formato: string | null; r2_chave: string | null; url_siscam: string | null }>();
+  if (arquivo && arquivo.r2_chave === null) {
+    const urlSiscamArquivo = urlSiscam(arquivo.url_siscam);
+    return json({
+      erro: `Original indisponível neste serviço; consulte o documento no SISCAM${urlSiscamArquivo ? `: ${urlSiscamArquivo}` : "."}`,
+      codigo: "original_indisponivel",
+      ...(urlSiscamArquivo ? { url_siscam: urlSiscamArquivo } : {}),
+    }, 404, { "Cache-Control": "no-store" });
+  }
+  if (!arquivo || !arquivo.r2_chave || arquivo.r2_chave !== chaveR2(sha256)) {
+    throw new ErroHttp(404, "original_inexistente", "Original não encontrado.");
+  }
+
+  // 3. Cache API (só GET; HEAD consulta o R2 para informar o tamanho).
   const chave = `${url.origin}/api/original/${sha256}?_indice=${encodeURIComponent(indice)}`;
   const guardada = metodo === "GET" ? await lerCache(chave) : null;
   if (guardada) return paraCliente(guardada);
 
-  // 3. D1 (arquivo publicado) e R2 privado.
-  const arquivo = await env.DB.prepare(
-    "SELECT id, formato, r2_chave FROM arquivos WHERE sha256 = ? AND r2_chave IS NOT NULL ORDER BY id LIMIT 1",
-  ).bind(sha256).first<{ id: string; formato: string | null; r2_chave: string }>();
-  if (!arquivo || arquivo.r2_chave !== chaveR2(sha256)) {
-    throw new ErroHttp(404, "original_inexistente", "Original não encontrado.");
-  }
+  // 4. R2 privado.
   const h = new Headers(CABECALHOS_ORIGINAL);
   h.set("Content-Type", FORMATOS[arquivo.formato ?? ""]?.[0] ?? "application/octet-stream");
   h.set("Content-Disposition", `attachment; filename="${nomeArquivo(arquivo.id, arquivo.formato)}"`);

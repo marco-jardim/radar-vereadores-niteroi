@@ -30,6 +30,9 @@ HASH_VAZIO = hashlib.sha256(b"").hexdigest()
 REGIAO = "auto"
 SERVICO = "s3"
 SEGUROS = "-_.~"
+# A API REST aceita corpos de até 100 MB decimais; reservamos 1 MiB de margem.
+# Só para originais via REST: S3/SigV4 não herda esse teto (pode ganhar multipart).
+LIMITE_ENVIO_R2_REST = 100 * 1000 * 1000 - 1024 * 1024
 
 
 # ---------------------------------------------------------------- SigV4

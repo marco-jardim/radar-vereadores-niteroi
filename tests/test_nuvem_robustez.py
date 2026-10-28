@@ -28,7 +28,7 @@ from coletor.nuvem.cloudflare import Cloudflare, Vectorize
 from coletor.nuvem.credenciais import ORIGEM_OAUTH, Credencial, credencial_do_ambiente
 from coletor.nuvem.fonte import normalizar_busca, rowid_fts, sha_indexado
 from coletor.nuvem.local import MODELO_LOCAL, R2Local, VetoresLocal, embeddings_falsos
-from coletor.nuvem.r2 import R2, R2Rest
+from coletor.nuvem.r2 import LIMITE_ENVIO_R2_REST, R2, R2Rest, chave_r2
 from coletor.nuvem.rede import ErroNuvem, Ritmo
 from coletor.nuvem.sincronizar import (FOLGA_RELOGIO, PENDENTE, TRABALHADORES_R2, Ambiente, ErroBarreira,
                                        documentos_meta, etapas_validas, sincronizar)
@@ -305,6 +305,113 @@ class TestVetores(BaseSincronizacao):
 
 # ---------------------------------------------------------------- originais, etapas e barreira
 class TestOriginaisEEtapas(BaseSincronizacao):
+    def r2_rest_local(self, ambiente):
+        """Mantém o cliente REST, mas troca todo acesso à rede por objetos locais."""
+        local = ambiente.r2
+        ambiente.r2 = R2Rest(mock.Mock())
+        for nome in ("existe", "enviar", "apagar", "obter"):
+            setattr(ambiente.r2, nome, mock.Mock(wraps=getattr(local, nome)))
+        self.cliente_rest = ambiente.r2
+
+    @contextlib.contextmanager
+    def original_grande(self, tamanho=LIMITE_ENVIO_R2_REST + 1):
+        """Simula só o tamanho: não aloca um original de 100 MB no teste."""
+        stat = Path.stat
+        alvo = self.cache / "arquivos" / SHA_900005
+
+        def tamanho_simulado(caminho, *args, **kw):
+            info = stat(caminho, *args, **kw)
+            if caminho == alvo:
+                valores = list(info)
+                valores[6] = tamanho
+                return os.stat_result(valores)
+            return info
+
+        with mock.patch.object(Path, "stat", tamanho_simulado):
+            yield
+
+    def test_original_grande_rest_avisa_publica_texto_e_estado_sem_repetir_envio(self):
+        ler = Path.read_bytes
+        alvo = self.cache / "arquivos" / SHA_900005
+
+        def ler_sem_original_grande(caminho):
+            self.assertNotEqual(caminho, alvo, "original grande não deve ser lido na memória")
+            return ler(caminho)
+
+        erro = io.StringIO()
+        with self.original_grande(), contextlib.redirect_stderr(erro), \
+                mock.patch.object(Path, "read_bytes", ler_sem_original_grande):
+            primeira = self.sincronizar(ajustar=self.r2_rest_local, exportar=self.tmp / "exp")
+            segunda = self.sincronizar(ajustar=self.r2_rest_local)
+        self.assertEqual(primeira.falhas, [])
+        self.assertTrue(primeira.estado_gravado)
+        self.assertEqual(primeira.plano["originais_grandes_demais"], 1)
+        self.assertEqual(primeira.feitas["r2_enviar"], 5)
+        self.assertIn("originais_grandes_demais: 1", primeira.texto())
+        self.assertIn("::warning::", erro.getvalue())
+        self.assertIn(chave_r2(SHA_900005), erro.getvalue())
+        self.assertIn("siscam:900005", erro.getvalue())
+        self.assertIn(f"{LIMITE_ENVIO_R2_REST + 1} bytes", erro.getvalue())
+        self.assertEqual(self.consultar("SELECT r2_chave FROM arquivos WHERE id = 'siscam:900005'"), [(None,)])
+        self.assertFalse(self.objeto_r2(SHA_900005).exists())
+        self.assertEqual((self.contar("arquivos"), self.contar("trechos"), self.contar("trechos_fts"),
+                          len(self.vetores())), (7, 6, 6, 7))
+        self.assertEqual(segunda.falhas, [])
+        self.assertEqual(segunda.plano["originais_grandes_demais"], 1)
+        self.assertEqual(segunda.escritas, 0, segunda.texto())
+        self.assertEqual(segunda.versao, primeira.versao)
+        self.cliente_rest.enviar.assert_not_called()
+        self.assertFalse(any(c.args[1] == chave_r2(SHA_900005)
+                             for c in self.cliente_rest.existe.call_args_list))
+        dump = (self.tmp / "exp" / primeira.versao / f"d1-{primeira.versao}.sql").read_text(encoding="utf-8")
+        linha = next(l for l in dump.splitlines() if l.startswith('INSERT INTO "arquivos"') and "siscam:900005" in l)
+        self.assertTrue(linha.endswith("NULL);"), linha)
+
+        # Via sem o teto REST disponível depois: a fonte volta a publicar o download.
+        with self.original_grande():
+            posterior = self.sincronizar()
+        self.assertEqual(posterior.feitas["r2_enviar"], 1)
+        self.assertTrue(posterior.estado_gravado)
+        self.assertEqual(self.consultar("SELECT r2_chave FROM arquivos WHERE id = 'siscam:900005'"),
+                          [(chave_r2(SHA_900005),)])
+        self.assertEqual(self.sincronizar().escritas, 0)
+
+    def test_limite_rest_inclusivo_e_aumento_posterior(self):
+        with self.original_grande(), contextlib.redirect_stderr(io.StringIO()):
+            self.sincronizar(ajustar=self.r2_rest_local)
+        with self.original_grande(), \
+                mock.patch("coletor.nuvem.sincronizar.LIMITE_ENVIO_R2_REST", LIMITE_ENVIO_R2_REST + 1):
+            rel = self.sincronizar(ajustar=self.r2_rest_local)
+        self.assertEqual(rel.plano["originais_grandes_demais"], 0)
+        self.assertEqual(rel.feitas["r2_enviar"], 1)
+        self.assertTrue(self.objeto_r2(SHA_900005).exists())
+        self.assertEqual(self.consultar("SELECT r2_chave FROM arquivos WHERE id = 'siscam:900005'"),
+                          [(chave_r2(SHA_900005),)])
+
+    def test_simulacao_conta_original_grande_sem_escritas(self):
+        with self.original_grande(), contextlib.redirect_stderr(io.StringIO()):
+            rel = self.sincronizar(ajustar=self.r2_rest_local, simular=True)
+        self.assertEqual(rel.plano["originais_grandes_demais"], 1)
+        self.assertEqual(rel.plano["r2_enviar"], 5)
+        self.assertEqual(rel.plano["estado_indice"], 1)
+        self.assertEqual(rel.falhas, [])
+        self.assertEqual(rel.escritas, 0)
+        self.assertFalse(self.sqlite.exists())
+        self.cliente_rest.enviar.assert_not_called()
+
+    def test_cliente_sigv4_nao_herda_limite_rest(self):
+        def s3_local(ambiente):
+            local = ambiente.r2
+            ambiente.r2 = R2("acesso", "segredo", conta="teste")
+            for nome in ("existe", "enviar", "apagar"):
+                setattr(ambiente.r2, nome, getattr(local, nome))
+
+        with self.original_grande():
+            rel = self.sincronizar(ajustar=s3_local)
+        self.assertEqual(rel.plano["originais_grandes_demais"], 0)
+        self.assertEqual(rel.feitas["r2_enviar"], 6)
+        self.assertTrue(self.objeto_r2(SHA_900005).exists())
+
     def test_original_em_falha_segura_o_arquivo_inteiro(self):
         (self.cache / "arquivos" / SHA_900005).unlink()
         rel = self.sincronizar()

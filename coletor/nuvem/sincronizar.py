@@ -38,6 +38,7 @@ import gzip
 import hashlib
 import io
 import json
+import sys
 from collections import Counter
 from collections.abc import Callable, Iterable, Sequence
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -52,6 +53,7 @@ from coletor.nuvem.cloudflare import DIMENSOES, INDICES_METADADOS
 from coletor.nuvem.fonte import (Fonte, Original, carregar_fonte, normalizar_busca, rowid_fts, sha256, sha_indexado,
                                  varrer_fonte)
 from coletor.nuvem.local import CacheEmbeddings, como_float32, empacotar
+from coletor.nuvem.r2 import LIMITE_ENVIO_R2_REST, R2Rest
 from coletor.nuvem.rede import ErroNuvem
 from coletor.trechos import VERSAO_TRECHOS
 
@@ -340,7 +342,7 @@ def conferir_indice(ambiente: Ambiente) -> None:
 # ---------------------------------------------------------------- R2
 def _r2_originais(ambiente: Ambiente, fonte: Fonte, atual: dict, cache: Path, simular: bool, rel: Relatorio,
                   avisar: Callable[[str], Any]) -> set[str]:
-    """Envia os originais que faltam (4 em paralelo); devolve as chaves de arquivo cujo original falhou."""
+    """Envia originais em paralelo e devolve os arquivos em falha; grandes via REST só perdem o download."""
     conhecidos = {(linha[1], linha[6]) for linha in atual["arquivos"].values()}
     candidatos = [o for _, o in sorted(fonte.originais.items()) if (o.sha256, o.chave_r2) not in conhecidos]
     rel.plano["r2_verificar"] = len(candidatos)
@@ -348,9 +350,11 @@ def _r2_originais(ambiente: Ambiente, fonte: Fonte, atual: dict, cache: Path, si
     condicional = getattr(ambiente.r2, "put_condicional", True)
 
     def tratar(original: Original) -> tuple[Original, str]:
+        caminho = Path(cache) / "arquivos" / original.sha256
+        if isinstance(ambiente.r2, R2Rest) and caminho.is_file() and caminho.stat().st_size > LIMITE_ENVIO_R2_REST:
+            return original, "grande_demais"
         if ambiente.r2.existe(ambiente.bucket_arquivos, original.chave_r2):
             return original, "existe"
-        caminho = Path(cache) / "arquivos" / original.sha256
         dados = caminho.read_bytes() if caminho.is_file() else None
         if dados is None or sha256(dados) != original.sha256:
             return original, "falha"
@@ -363,13 +367,16 @@ def _r2_originais(ambiente: Ambiente, fonte: Fonte, atual: dict, cache: Path, si
 
     falhou: set[str] = set()
     falhas: list[tuple[str, str]] = []
+    grandes: list[Original] = []
     if candidatos:
         with ThreadPoolExecutor(max_workers=TRABALHADORES_R2, thread_name_prefix="radar-r2") as pool:
             futuros = [pool.submit(tratar, o) for o in candidatos]
             try:
                 for n, futuro in enumerate(as_completed(futuros), 1):
                     original, estado = futuro.result()
-                    if estado == "falha":
+                    if estado == "grande_demais":
+                        grandes.append(original)
+                    elif estado == "falha":
                         falhas.append((original.sha256, f"original {original.sha256} ausente ou diferente no cache "
                                                         f"({', '.join(sorted(original.arquivos))})"))
                         falhou.update(original.arquivos)
@@ -384,6 +391,20 @@ def _r2_originais(ambiente: Ambiente, fonte: Fonte, atual: dict, cache: Path, si
                     futuro.cancel()
                 raise
     rel.falhas.extend(m for _, m in sorted(falhas))
+    rel.plano["originais_grandes_demais"] = len(grandes)
+    if grandes:
+        indisponiveis = set()
+        for original in sorted(grandes, key=lambda o: o.sha256):
+            tamanho = (Path(cache) / "arquivos" / original.sha256).stat().st_size
+            aviso = (f"original {original.chave_r2} ({', '.join(sorted(original.arquivos))}): {tamanho} bytes "
+                     f"excedem o limite REST de {LIMITE_ENVIO_R2_REST} bytes; não enviado, r2_chave NULL no D1")
+            rel.avisos.append(aviso)
+            print(f"::warning::{aviso}", file=sys.stderr)
+            indisponiveis.update(original.arquivos)
+        # Só a disponibilidade do download muda: texto, FTS e vetores continuam publicados.
+        # A versão/exportação também refletem o r2_chave efetivamente publicado.
+        fonte.linhas["arquivos"] = {k: v[:6] + (None,) if k[0] in indisponiveis else v
+                                    for k, v in fonte.linhas["arquivos"].items()}
 
     rel.plano["r2_apagar"] += 0
     for chave in sorted(fonte.remover_r2):

@@ -159,6 +159,13 @@ describe("limites, cabeçalhos e erros", () => {
 });
 
 describe("/api/documento/:id", () => {
+  it("mantém os metadados, mas não oferece download quando r2_chave é NULL", async () => {
+    await env.DB.prepare("UPDATE arquivos SET r2_chave = NULL WHERE id = ?").bind("siscam:1001").run();
+    const corpo = await (await pedir("/api/documento/doc:101")).json() as Record<string, any>;
+    expect(corpo.arquivos[0]).toMatchObject({ arquivo: "siscam:1001", sha256: sha(1), status: "ok", url_original: null });
+    expect(corpo.documento.url_siscam).toBe("https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=101");
+  });
+
   it("devolve metadados, autoria, arquivos (inclusive do substitutivo) e substitutivos", async () => {
     for (const caminho of ["/api/documento/doc:101", "/api/documento/doc%3A101"]) {
       const r = await pedir(caminho);
@@ -218,6 +225,30 @@ describe("/api/documento/:id", () => {
 
 describe("/api/original/:sha256", () => {
   const caminho = `/api/original/${sha(1)}`;
+
+  it("404 original_indisponivel com link ao SISCAM para r2_chave NULL, mesmo após cache", async () => {
+    await (await pedir(caminho)).arrayBuffer();
+    await env.DB.prepare("UPDATE arquivos SET r2_chave = NULL WHERE id = ?").bind("siscam:1001").run();
+    const r = await pedir(caminho);
+    const urlSiscam = "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=101";
+    expect(r.status).toBe(404);
+    expect(r.headers.get("Cache-Control")).toBe("no-store");
+    expect(await r.json()).toEqual({ codigo: "original_indisponivel", erro: expect.stringContaining(urlSiscam), url_siscam: urlSiscam });
+    const h = await pedir(caminho, { method: "HEAD" });
+    expect(h.status).toBe(404);
+    expect(await h.text()).toBe("");
+    await env.DB.prepare("INSERT INTO remocoes (chave, sha256, motivo, data) VALUES (?, ?, ?, ?)")
+      .bind("siscam:1001", sha(1), "Pedido do titular.", "2026-10-01").run();
+    expect((await pedir(caminho)).status).toBe(410);
+  });
+
+  it("original_indisponivel sem inventar URL quando o D1 não tem link", async () => {
+    await env.DB.prepare("UPDATE arquivos SET r2_chave = NULL WHERE id = ?").bind("siscam:1001").run();
+    await env.DB.prepare("UPDATE documentos SET url = NULL WHERE id = ?").bind("doc:101").run();
+    const r = await pedir(caminho);
+    expect(r.status).toBe(404);
+    expect(await r.json()).toEqual({ codigo: "original_indisponivel", erro: expect.stringContaining("SISCAM") });
+  });
 
   it("serve o original do R2 com os cabeçalhos de segurança", async () => {
     const r = await pedir(caminho);

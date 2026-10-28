@@ -296,6 +296,7 @@ D1, Vectorize e R2 são reconstruíveis a partir do Git (`python -m coletor.nuve
 
 ### 8.3 R2
 
+- Originais acima de `LIMITE_ENVIO_R2_REST` (100.000.000 bytes menos 1 MiB) são pulados só na via REST, com aviso e contagem `originais_grandes_demais`, sem falha: `arquivos.r2_chave` no D1 fica NULL (sem alterar o manifesto), `/api/documento` traz `url_original: null` e `/api/original/:sha256` responde 404 `original_indisponivel`, indicando o SISCAM; limite maior ou via S3 permite envio posterior.
 - Originais no bucket privado `radar-niteroi-arquivos`, na chave `r2_chave`; servidos pelo Worker em
   `GET /api/original/:sha256` com `Content-Disposition: attachment`, `X-Robots-Tag: noindex`,
   `X-Content-Type-Options: nosniff` e `Content-Security-Policy: sandbox`, depois de consultar `remocoes`.
