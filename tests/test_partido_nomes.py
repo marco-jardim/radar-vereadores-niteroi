@@ -335,7 +335,7 @@ class TestPerfisVersionados(unittest.TestCase):
         dados = json.loads((RAIZ / "config/perfis.json").read_text(encoding="utf-8"))
         for nome, perfil in dados["vereadores"].items():
             with self.subTest(vereador=nome):
-                self.assertEqual([c for c in perfil if c != "falecimento"], ["mandatos", "eleicoes", "camara", "site", "redes"])
+                self.assertEqual([c for c in perfil if c not in ("falecimento", "contatos")], ["mandatos", "eleicoes", "camara", "site", "redes"])
                 self.assertLessEqual(set(perfil), V.CAMPOS_PERFIL)
                 self.assertTrue(re.fullmatch(r"[A-ZÀ-Ý0-9 .\-]+", nome), nome)
 
