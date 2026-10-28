@@ -152,8 +152,9 @@ GET e HEAD de originais informam o tamanho do R2, e ambos usam `no-store` para o
 
 O princípio é o menor privilégio: tokens separados por função, chaves R2 separadas por ambiente e secrets de produção restritos à branch `main`.
 
-1. **GitHub Environments.** Em "Settings → Environments", criar `staging` e `production`. Em `production`, a regra de branch é **só `main`**. Os secrets abaixo são gravados no Environment correspondente, não como secrets do repositório.
-2. **Token de dados** em `CLOUDFLARE_API_TOKEN_DADOS`, nos dois Environments. Tipo "Custom token", com escopo **Account: Marco Jardim** e as permissões:
+1. **GitHub Environments.** Em "Settings → Environments", criar `pr-simulacao`, `staging` e `production`. Em `staging` e `production`, a regra de branch é **só `main`**; `production` exige também um revisor. Os secrets abaixo são gravados no Environment correspondente, não como secrets do repositório.
+   - `pr-simulacao` recebe **somente** `CLOUDFLARE_API_TOKEN_LEITURA` (D1: Read, Vectorize: Read, Workers AI: Read; sem R2 nem escrita). O job de PR do `textos.yml` roda código do PR e por isso nunca recebe tokens de escrita; sem esse secret, ou em PR de fork, a simulação é pulada com aviso.
+2. **Token de dados** em `CLOUDFLARE_API_TOKEN_DADOS`, nos Environments `staging` e `production`. Tipo "Custom token", com escopo **Account: Marco Jardim** e as permissões:
    - Account → D1: Edit;
    - Account → Vectorize: Edit;
    - Account → Workers AI: Read.
@@ -170,6 +171,8 @@ O princípio é o menor privilégio: tokens separados por função, chaves R2 se
 5. **`CLOUDFLARE_ACCOUNT_ID`** = `7b60055a9f153a4a8441ff519e1a208f`. Não é segredo; pode ser uma variável do repositório.
 6. **Alerta de cobrança.** Em "Notifications → Billing → Usage Based Billing", criar um aviso por e-mail para quando o uso passar de US$ 10 acima da assinatura.
 7. **Métricas.** `Account Analytics: Read` não entra nos tokens do CI. Só quem consulta as métricas no painel precisa dela.
+
+**Cache do `textos.yml`.** O cache do Actions guarda só os originais baixados do SISCAM (documentos públicos) e os mapas id→SHA-256, nunca texto extraído, cache de OCR ou texto bruto anterior à máscara: caches da branch base podem ser restaurados por workflows de PR. O job de PR não restaura cache. A chave é semanal e o salvamento roda mesmo em falha (`actions/cache/save` com `if: always()`). Sem o cache de OCR, cada execução refaz o OCR apenas dos arquivos novos ou alterados, que são os únicos processados no modo incremental. Depois do merge, **apague manualmente** em "Actions → Caches" os caches antigos `textos-*-ocr-v1-*`, criados antes dessa restrição. O `npm ci` em `worker/` mantém os scripts de instalação (o wrangler precisa do binário `workerd`); por isso o checkout não persiste credenciais e o token de push do Git só entra nos passos de push.
 
 Para a carga a partir da máquina local, as mesmas credenciais entram como variáveis de ambiente da sessão. Nunca são gravadas em arquivo; o `.gitignore` cobre `.env*` e `/worker/.dev.vars*` por precaução.
 
