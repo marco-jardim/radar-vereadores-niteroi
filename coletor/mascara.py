@@ -22,7 +22,7 @@ Regras de `mascarar`:
   mascarados, exceto os liberados: contatos oficiais de vereadores e suplentes
   (`contatos` em `config/perfis.json`), contatos institucionais
   (`contatos_institucionais` em `config/backend.json`) e os domínios
-  `@camaraniteroi.rj.gov.br` e `@niteroi.rj.gov.br`, com qualquer subdomínio.
+   públicos `gov.br`, `jus.br`, `leg.br`, `mp.br`, `def.br` e `mil.br`, com subdomínios.
   Números de 8 dígitos começando por 6–9 (celulares antigos) exigem hífen, DDD ou
   rótulo; separados por ponto (9999.9999, como códigos de programa orçamentário) e
   dígitos corridos (mesmo com um "DDD" colado, como em números de tabela) só com rótulo
@@ -77,7 +77,7 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parent.parent
 
 # Mudar qualquer regra de `mascarar` muda os textos gravados: suba esta versão.
-VERSAO_MASCARA = "1"
+VERSAO_MASCARA = "2"
 TIPOS = ("cpf", "rg", "telefone", "email", "documento")
 SUBSTITUICOES = {
     "cpf": "[CPF omitido]",
@@ -92,7 +92,7 @@ ROTULOS_DOCUMENTO = (
     "pis/pasep", "pis", "pasep", "nis", "nit", "passaporte", "ctps", "carteira de trabalho",
     "cartão do sus", "cartao do sus", "cartão sus", "cartao sus", "cns",
 )
-DOMINIOS_LIBERADOS = ("camaraniteroi.rj.gov.br", "niteroi.rj.gov.br")
+DOMINIOS_LIBERADOS = ("gov.br", "jus.br", "leg.br", "mp.br", "def.br", "mil.br")
 
 DDDS = frozenset(
     [11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 24, 27, 28, 31, 32, 33, 34, 35, 37, 38,
@@ -353,7 +353,7 @@ def liberados(config_raiz: Path) -> set[str]:
 
     Reúne os `contatos` (com fonte HTTPS) de cada perfil em `config/perfis.json`, os
     `contatos_institucionais` de `config/backend.json` e os domínios institucionais
-    (como "@camaraniteroi.rj.gov.br"). E-mails ficam em minúsculas e precisam ser
+    públicos (como "@gov.br" e "@jus.br"). E-mails ficam em minúsculas e precisam ser
     endereços completos; telefones, na forma de `telefone_canonico`. Aceita a raiz do
     repositório ou a pasta `config/`; arquivos ou campos ausentes não liberam nada.
     """

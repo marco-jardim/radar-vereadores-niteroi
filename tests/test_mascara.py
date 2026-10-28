@@ -222,7 +222,7 @@ class TestTelefone(unittest.TestCase):
 class TestEmail(unittest.TestCase):
     def test_email_pessoal_mascarado(self) -> None:
         for email in ("fulano.tal@exemplo.com.br", "a+b@x.io", "c@camaraniteroi.rj.gov.br.exemplo.com",
-                      "d@fakeniteroi.rj.gov.br"):
+                      "fulano@gmail.com", "x@gov.br.exemplo.com", "x@naogov.br"):
             with self.subTest(email=email):
                 saida, contagens = mascarar(f"Escreva para {email}.")
                 self.assertEqual(saida, "Escreva para [e-mail omitido].")
@@ -230,9 +230,12 @@ class TestEmail(unittest.TestCase):
 
     def test_email_institucional_liberado(self) -> None:
         for email in ("gabinete@camaraniteroi.rj.gov.br", "Ouvidoria@NITEROI.RJ.GOV.BR",
-                      "protocolo@sub.niteroi.rj.gov.br"):
+                      "protocolo@sub.niteroi.rj.gov.br", "servidor@tjrj.jus.br",
+                      "x@sub.orgao.leg.br", "x@orgao.mp.br", "x@orgao.def.br", "x@orgao.mil.br",
+                      "d@fakeniteroi.rj.gov.br"):
             with self.subTest(email=email):
                 _sem_mudanca(self, f"Escreva para {email}.")
+                self.assertEqual(varrer(f"Escreva para {email}."), [])
 
     def test_telefone_dentro_de_email_nao_vaza(self) -> None:
         saida, _ = mascarar("contato 2126201234@exemplo.com")
@@ -304,7 +307,7 @@ class TestLiberados(unittest.TestCase):
             self.assertEqual(liberados(pasta / "config"), lib)
         self.assertEqual(lib, {
             "2133334444", "fulano.gabinete@exemplo.com", "2126201234",
-            "@camaraniteroi.rj.gov.br", "@niteroi.rj.gov.br",
+            *("@" + d for d in mascara.DOMINIOS_LIBERADOS),
         })
         texto = ("Gabinete: 3333-4444, (21) 3333-4444 ou +55 21 3333-4444; fulano.gabinete@exemplo.com; "
                  "Câmara (21) 2620-1234; pessoal (21) 5555-6666 e (21) 98888-7777.")
@@ -321,7 +324,7 @@ class TestLiberados(unittest.TestCase):
             pasta = Path(nome)
             self._config(pasta, backend={"contatos_institucionais": contatos})
             lib = liberados(pasta)
-        self.assertEqual(lib - {"@camaraniteroi.rj.gov.br", "@niteroi.rj.gov.br"}, {"ok@exemplo.com"})
+        self.assertEqual(lib - {"@" + d for d in mascara.DOMINIOS_LIBERADOS}, {"ok@exemplo.com"})
         saida, _ = mascarar("x@exemplo.com e ok@exemplo.com", lib)
         self.assertEqual(saida, "[e-mail omitido] e ok@exemplo.com")
 
@@ -329,11 +332,11 @@ class TestLiberados(unittest.TestCase):
         with tempfile.TemporaryDirectory() as nome:
             pasta = Path(nome)
             self._config(pasta)
-            self.assertEqual(liberados(pasta), {"@camaraniteroi.rj.gov.br", "@niteroi.rj.gov.br"})
+            self.assertEqual(liberados(pasta), {"@" + d for d in mascara.DOMINIOS_LIBERADOS})
 
     def test_config_do_repositorio(self) -> None:
         lib = liberados(RAIZ)
-        self.assertIn("@camaraniteroi.rj.gov.br", lib)
+        self.assertIn("@gov.br", lib)
 
 
 class TestIdempotenciaVarrer(unittest.TestCase):

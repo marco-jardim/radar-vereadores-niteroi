@@ -249,6 +249,21 @@ class TestValidarPerfis(unittest.TestCase):
         texto = json.dumps({"vereadores": {"ANA MARIA TESTE": self.perfil()}}, ensure_ascii=False) + "\n"
         self.assertTrue(any("fora do formato" in p for p in self.validar({}, texto)))
 
+    def test_contatos(self):
+        bom = {"tipo": "email", "valor": "gabinete@gmail.com", "fonte": "https://exemplo.org/timbre"}
+        telefone = {"tipo": "telefone", "valor": "+55 (21) 99999-8888", "fonte": bom["fonte"], "descricao": "Gabinete"}
+        self.assertEqual(self.validar({"ANA MARIA TESTE": self.perfil(contatos=[bom, telefone])}), [])
+        casos = [None, {}, [None], [{}], [{**bom, "tipo": "fax"}], [{**bom, "valor": "@gmail.com"}],
+                 [{**bom, "valor": "a@b@c.org"}], [{**bom, "fonte": "http://exemplo.org"}],
+                 [{**bom, "descricao": " "}], [{**bom, "extra": 1}],
+                 [{**telefone, "valor": "1234567"}], [{**telefone, "valor": "21/99999-8888"}], [bom, bom]]
+        for contatos in casos:
+            with self.subTest(contatos=contatos):
+                self.assertTrue(self.validar({"ANA MARIA TESTE": self.perfil(contatos=contatos)}))
+        erros = self.validar({"ANA MARIA TESTE": self.perfil(contatos=[bom]),
+                              "BIA TESTE": self.perfil(mandatos={}, contatos=[bom])})
+        self.assertTrue(any("repetido" in p for p in erros), erros)
+
     def test_erros(self):
         casos = {
             "maiúsculas": ({"Ana Maria Teste": self.perfil()}, "maiúsculas"),

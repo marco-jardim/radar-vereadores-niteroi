@@ -876,7 +876,7 @@ def preencher_votos_mandatos(perfil: dict, nome: str, cfg: dict, resultados: dic
 
 
 def atualizar_perfis(perfis: dict, cfg: dict, resultados: dict[int, dict]) -> dict:
-    """Atualiza perfis["vereadores"] no lugar e devolve o relatório da execução."""
+    """Atualiza só campos do TSE no lugar; preserva contatos e demais chaves editoriais."""
     vereadores = perfis.setdefault("vereadores", {})
     adicionados = []
     pessoas = pessoas_de_interesse(cfg, perfis)

@@ -1152,7 +1152,7 @@ def validar_memoria(caminho: Path | None = None, hoje: date | None = None) -> li
 # ---- perfis
 REDES_PERFIL = ("instagram", "facebook", "x", "youtube", "tiktok", "threads", "linkedin")
 SITUACOES_PERFIL = ("eleito", "eleita", "suplente")
-CAMPOS_PERFIL = {"mandatos", "eleicoes", "camara", "site", "redes", "falecimento"}
+CAMPOS_PERFIL = {"mandatos", "eleicoes", "camara", "site", "redes", "falecimento", "contatos"}
 URL_HTTPS = r"https://[^\s/]+\.[^\s/]+(/\S*)?"
 
 
@@ -1228,6 +1228,7 @@ def validar_perfis(caminho: Path | None = None, cfg: object = None) -> list[str]
             if isinstance(leg, dict) and isinstance(leg.get("id"), str):
                 legs[leg["id"]] = {str(e.get("siscam", "")).upper(): str(e.get("partido", ""))
                                    for e in leg.get("eleitos") or [] if isinstance(e, dict)}
+    contatos_vistos: dict[tuple[str, str], str] = {}
     for nome, perfil in vereadores.items():
         r = f"{arquivo}: {nome}"
         if not nome or nome != nome.upper() or nome != " ".join(nome.split()):
@@ -1238,6 +1239,35 @@ def validar_perfis(caminho: Path | None = None, cfg: object = None) -> list[str]
         extras = set(perfil) - CAMPOS_PERFIL
         if extras:
             problemas.append(f"{r}: campos desconhecidos: {', '.join(sorted(extras))}")
+        contatos = perfil.get("contatos", [])
+        if not isinstance(contatos, list):
+            problemas.append(f"{r}: 'contatos' deveria ser uma lista")
+            contatos = []
+        for i, contato in enumerate(contatos, 1):
+            rc = f"{r}: contato {i}"
+            if not isinstance(contato, dict):
+                problemas.append(f"{rc} deveria ser um objeto")
+                continue
+            if (set(contato) - {"tipo", "valor", "fonte", "descricao"}
+                    or not {"tipo", "valor", "fonte"} <= set(contato)):
+                problemas.append(f"{rc}: campos esperados: tipo, valor, fonte e descricao opcional, sem extras")
+            problemas += _memoria_textos(contato, ("valor",), rc)
+            if "descricao" in contato:
+                problemas += _memoria_textos(contato, ("descricao",), rc)
+            tipo, valor = contato.get("tipo"), contato.get("valor")
+            if tipo not in ("telefone", "email"):
+                problemas.append(f"{rc}: 'tipo' deveria ser telefone ou email")
+            elif isinstance(valor, str):
+                padrao = r"[^\s@]+@[^\s@.]+(?:\.[^\s@.]+)+" if tipo == "email" else r"[0-9 ()+\-]+"
+                if not re.fullmatch(padrao, valor) or (tipo == "telefone" and len(re.findall(r"[0-9]", valor)) < 8):
+                    problemas.append(f"{rc}: 'valor' inválido para {tipo}")
+                chave = (tipo, valor)
+                if chave in contatos_vistos:
+                    problemas.append(f"{rc}: contato (tipo, valor) repetido no perfil de {contatos_vistos[chave]}")
+                else:
+                    contatos_vistos[chave] = nome
+            if not _https_backend(contato.get("fonte")):
+                problemas.append(f"{rc}: 'fonte' deveria ser URL HTTPS com host")
         if "falecimento" in perfil:
             falecimento = perfil["falecimento"]
             rf = f"{r}: falecimento"

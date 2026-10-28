@@ -20,6 +20,7 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `coletor/siscam.py` | HTTP compartilhado, parsing, autoria, tramitação, substitutivos e desfechos dos PLs. |
 | `coletor/documentos.py` | Listagem e detalhe seletivo dos cinco demais tipos de documento. |
 | `coletor/arquivos_siscam.py` | Tabela "[ Arquivos ]" do detalhe (`extrair_arquivos`), preservação da lista anterior e preenchimento offline por `--arquivos-do-cache`. |
+| `coletor/contatos.py` | Propõe contatos públicos do cache bruto com evidências; aplica somente arquivo revisado, validando perfis e backend, sem rede. |
 | `coletor/sessoes.py` | Coleta de sessões, documentos da sessão, pauta, frequência e votações. |
 | `coletor/regras_documentos.py` | Classificação, bairros, respostas, publicação e regras das métricas de documentos. |
 | `coletor/regras_sessoes.py` | Presença, votos, parecer, quórum, qualidade e auditoria offline das sessões. |
@@ -166,7 +167,7 @@ fotografia pelo art. 44 da Lei 9.610/98, com `ano_divulgacao + 70 < ano atual`. 
 
 `coletor.validar` confere `config/perfis.json`; a ausência gera aviso (suplentes ficam sem partido e as fichas,
 sem perfil). Chaves de `vereadores` são o nome exato do SISCAM em maiúsculas; cada perfil tem só `mandatos`,
-`eleicoes`, `camara`, `site`, `redes` e, opcionalmente, `falecimento`. Por mandato: legislatura existente em
+`eleicoes`, `camara`, `site`, `redes` e, opcionalmente, `falecimento` e `contatos`. Por mandato: legislatura existente em
 `config/vereadores.json`, `partido` não vazio, `votos` inteiro positivo (opcional), `situacao` em
 `eleito`/`eleita`/`suplente` e `fontes` HTTPS.
 Quem está entre os eleitos da legislatura precisa do mesmo partido do config e não pode ser suplente; quem não
@@ -178,6 +179,16 @@ no TSE (`fonte` = `https://dadosabertos.tse.jus.br/dataset/candidatos-<ano>`, co
 Formato: JSON com `indent=1`, ordem das chaves preservada, UTF-8, LF e NFC.
 `falecimento` contém somente `data` (`AAAA-MM-DD` válida, não futura) e `fonte` (`{titulo, url}` HTTPS);
 quando presente, a ficha informa a data com link para a fonte, sem alterar as métricas históricas.
+`contatos` é lista de `{tipo: telefone|email, valor, fonte}` (HTTPS), com `descricao` opcional não vazia.
+E-mail exige endereço completo; telefone, ≥ 8 dígitos e só dígitos/espaços/`()+-`. Não repita `(tipo, valor)`
+no mesmo perfil nem entre perfis. O importador TSE preserva contatos e outras chaves não eleitorais.
+
+Contatos publicados pelo próprio mandato em timbre/assinatura são públicos, inclusive celulares e e-mails
+pessoais; a mesma regra vale para todos os vereadores. Confirme a fonte antes de incluí-los nas listas
+explícitas de perfis/backend. E-mails com domínio público `gov.br`, `jus.br`, `leg.br`, `mp.br`, `def.br` ou
+`mil.br` (e subdomínios) não são mascarados; telefones só são liberados pelas listas explícitas.
+`python -m coletor.contatos --candidatos --cache DIR [--min-docs 3] [--saida ARQ]` gera apenas proposta
+em `.qa/contatos_propostos.json` (ignorada pelo Git); revise/remova candidatos antes de `--aplicar ARQ`.
 
 ### Validação dos afastamentos
 

@@ -487,6 +487,21 @@ class TestCasamentoAlternativo(unittest.TestCase):
 
 # ---- execução completa --------------------------------------------------------------
 class TestExecucao(Base):
+    def test_preserva_contatos_e_chaves_nao_tse(self):
+        perfis = copy.deepcopy(PERFIS)
+        extras = {"contatos": [{"tipo": "email", "valor": "gabinete@exemplo.com",
+                                 "fonte": "https://exemplo.org/documento"}],
+                  "falecimento": {"data": "2020-01-01", "fonte": FONTE_WIKI},
+                  "chave_futura": {"conteudo": ["editorial"]}}
+        perfis["vereadores"]["ANA MARIA TESTE"].update(copy.deepcopy(extras))
+        self.perfis.write_text(tse.texto_perfis(perfis), encoding="utf-8", newline="\n")
+        codigo, _, erros = self.rodar()
+        self.assertEqual(codigo, 0, erros)
+        ana = self.resultado()["vereadores"]["ANA MARIA TESTE"]
+        for chave, valor in extras.items():
+            self.assertEqual(ana[chave], valor)
+        self.assertEqual(list(ana)[-3:], list(extras))
+
     def test_sq_fixado_no_importador_sem_nome_civil_no_relatorio_ou_log(self):
         civil = "NOME CIVIL SINTETICO RESERVADO"
         _zip(self.cache / "consulta_cand_2024.zip", {"consulta_cand_2024_RJ.csv": [
