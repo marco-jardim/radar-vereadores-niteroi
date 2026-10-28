@@ -12,7 +12,9 @@ para arquivos do PL ou de seus substitutivos), ano pelo `ano` do registro, remo�
 por chave (sem download) ou por SHA-256 (baixado e descartado), duplicatas pelo
 SHA-256 do original e o pipeline real: `trechos.normalizar` → `limpeza.limpar` →
 `mascara.mascarar` → `trechos.normalizar` → `trechos.dividir`, com a barreira
-`mascara.varrer`.
+`mascara.varrer`. As regras puras (chaves, caminhos, fila, principal, entrada e
+pipeline de cada arquivo) são as de `coletor.textos`; `tests/test_textos.py` roda o
+`coletor.textos` completo sobre estes registros e confere os mesmos bytes.
 
 Os textos são sintéticos: nomes, números e endereços não correspondem a pessoas
 reais; `LIBERADOS` e `PESSOAS` substituem a configuração do repositório. Mesma
@@ -36,16 +38,29 @@ RAIZ = AQUI.parent.parent.parent
 if str(RAIZ) not in sys.path:
     sys.path.insert(0, str(RAIZ))
 
-from coletor import arquivos, limpeza, mascara, trechos  # noqa: E402
-from coletor.extratores import VERSAO_EXTRATORES  # noqa: E402
+from coletor import arquivos, limpeza  # noqa: E402
+from coletor import textos as pipeline  # noqa: E402
+from coletor.extratores import VERSAO_EXTRATORES, Resultado  # noqa: E402
+# Regras puras compartilhadas com coletor.textos (mesmo código, mesmos bytes).
+from coletor.textos import (  # noqa: E402,F401
+    PRIORIDADE_TIPO,
+    ROTULOS_ATA,
+    STATUS_COM_TEXTO,
+    TIPOS_COM_TEXTO,
+    URL_DOWNLOAD,
+    blob_git,
+    caminho_texto,
+    caminho_trechos,
+    citacoes,
+    linha_trecho,
+    ordem_chave,
+    principal,
+    r2_chave,
+    sha256,
+)
 
 ANO = 2024
 PROCESSADO_EM = "2026-10-27"
-ROTULOS_ATA = frozenset({"Ata"})
-TIPOS_COM_TEXTO = ("requerimento", "pdl", "resolucao")  # além de PLs, substitutivos e atas
-PRIORIDADE_TIPO = {"pl": 0, "requerimento": 1, "pdl": 2, "resolucao": 3, "ata": 4}
-STATUS_COM_TEXTO = ("ok", "ok_ocr", "ok_parcial", "ocr_baixa_confianca")
-URL_DOWNLOAD = "https://consultaniteroi.siscam.com.br/Download.aspx?id={id}"
 URL_SESSOES = "https://consultaniteroi.siscam.com.br/Arquivos/Sessoes/{nome}"
 URL_DETALHE = "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento={id}"
 GUID_ATA = "00000000-0000-4000-8000-0000000000a1"
@@ -270,140 +285,20 @@ REMOCOES = {"remocoes": [{
 
 
 # ---- regras do contrato
-def sha256(dados: bytes) -> str:
-    return hashlib.sha256(dados).hexdigest()
-
-
-def blob_git(dados: bytes) -> str:
-    """SHA-1 do blob do Git (`git hash-object`) dos bytes."""
-    return hashlib.sha1(b"blob %d\0" % len(dados) + dados).hexdigest()
-
-
-def r2_chave(sha: str) -> str:
-    """Chave do original no R2: sha256/<aa>/<bb>/<sha256>."""
-    return f"sha256/{sha[:2]}/{sha[2:4]}/{sha}"
-
-
-def ordem_chave(chave: str) -> tuple:
-    """Ordem das chaves de arquivo: siscam antes de sessao; ids numéricos crescentes."""
-    origem, ident = chave.split(":", 1)
-    return (0, int(ident), "") if origem == "siscam" else (1, 0, ident)
-
-
-def caminho_texto(tipo: str, ano: int, documento: str, chave: str) -> str:
-    """textos/<tipo>/<ano>/<documento sem prefixo>/<origem>-<id>.txt"""
-    return f"textos/{tipo}/{ano}/{documento.split(':', 1)[1]}/{chave.replace(':', '-', 1)}.txt"
-
-
-def caminho_trechos(tipo: str, ano: int) -> str:
-    return f"trechos/{tipo}/{ano}.jsonl"
-
-
-def linha_trecho(trecho: dict) -> str:
-    return json.dumps(trecho, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-
-
-def citacoes(proposicoes, documentos, sessoes) -> dict[str, dict]:
-    """Fila: para cada chave de arquivo, a URL e as citações
-    (documento, tipo, principal, tipo do principal, ano do principal, ementa do principal)."""
-    fila: dict[str, dict] = {}
-
-    def citar(chave: str, url: str, documento: str, tipo: str, principal: str, tipo_principal: str,
-              ano: int, ementa: str) -> None:
-        item = fila.setdefault(chave, {"url": url, "citacoes": []})
-        item["citacoes"].append((documento, tipo, principal, tipo_principal, ano, ementa))
-
-    for pl in proposicoes:
-        chave_pl = f"doc:{pl['id']}"
-        for a in pl.get("arquivos") or []:
-            citar(f"siscam:{a['id']}", URL_DOWNLOAD.format(id=a["id"]), chave_pl, "pl", chave_pl, "pl",
-                  pl["ano"], pl["ementa"])
-        for sub in pl.get("substitutivos") or []:
-            for a in sub.get("arquivos") or []:
-                # o PL é o principal de qualquer arquivo dos seus substitutivos
-                citar(f"siscam:{a['id']}", URL_DOWNLOAD.format(id=a["id"]), f"doc:{sub['id']}",
-                      "substitutivo", chave_pl, "pl", pl["ano"], pl["ementa"])
-    for tipo in TIPOS_COM_TEXTO:  # indicações e moções: fora
-        for d in documentos.get(tipo, []):
-            chave_doc = f"doc:{d['id']}"
-            for a in d.get("arquivos") or []:
-                citar(f"siscam:{a['id']}", URL_DOWNLOAD.format(id=a["id"]), chave_doc, tipo, chave_doc, tipo,
-                      d["ano"], d["ementa"])
-    for sessao in sessoes:
-        chave_sessao = f"sessao:{sessao['id']}"
-        for item in sessao.get("documentos_sessao") or []:
-            url = item.get("url")
-            if item.get("rotulo") not in ROTULOS_ATA or not url:
-                continue
-            guid = url.rsplit("/", 1)[1].rsplit(".", 1)[0].lower()
-            citar(f"sessao:{guid}", url, chave_sessao, "ata", chave_sessao, "ata", sessao["ano"], "")
-    return fila
-
-
-def principal(lista: list[tuple]) -> tuple[str, str, int, str]:
-    """(documento, tipo, ano, ementa) do principal: maior prioridade de tipo, menor id."""
-    melhor = min(lista, key=lambda c: (PRIORIDADE_TIPO[c[3]], int(c[2].split(":", 1)[1])))
-    return melhor[2], melhor[3], melhor[4], melhor[5]
-
-
+# sha256, blob_git, r2_chave, ordem_chave, caminhos, citacoes e principal vêm de
+# coletor.textos; entrada_vazia e processar usam a mesma implementação com a
+# configuração sintética desta fixture (PROCESSADO_EM e LIBERADOS).
 def entrada_vazia(documentos: list[str], documento: str, tipo: str, url: str, status: str) -> dict:
-    return {
-        "documentos": sorted(set(documentos)), "documento": documento, "tipo": tipo, "url_origem": url,
-        "sha256_original": None, "bytes": None, "formato": None, "extrator": None, "versao_extrator": None,
-        "versao_extratores": None, "versao_limpeza": None, "versao_mascara": None, "versao_trechos": None,
-        "sha256_config": None, "paginas": 0, "paginas_ocr": 0, "confianca": None, "cabecalhos_omitidos": 0,
-        "detalhe": "", "status": status, "duplicata_de": None, "limpeza": None, "mascarados": None,
-        "sha256_bruto": None, "sha256_texto": None, "blob_texto": None, "chars": 0, "trechos": 0,
-        "trechos_vetorizaveis": 0, "r2_chave": None, "processado_em": PROCESSADO_EM,
-    }
+    return pipeline.entrada_vazia(documentos, documento, tipo, url, status, PROCESSADO_EM)
 
 
 def processar(entrada: dict, chave: str, extracao: dict, ementa: str, cliches: dict, protecao,
               versao_limpeza: str, sha_config: str) -> tuple[str | None, list[dict]]:
-    """Preenche a entrada com o pipeline; devolve o conteúdo do .txt (ou None) e os trechos."""
-    entrada.update({
-        "formato": extracao["formato"], "extrator": extracao["extrator"] or None,
-        "versao_extrator": extracao["versao_extrator"] or None, "versao_extratores": VERSAO_EXTRATORES,
-        "versao_limpeza": versao_limpeza, "versao_mascara": mascara.VERSAO_MASCARA,
-        "versao_trechos": trechos.VERSAO_TRECHOS, "sha256_config": sha_config,
-        "paginas": extracao["paginas"], "paginas_ocr": extracao["paginas_ocr"],
-        "confianca": None if extracao["confianca"] is None else round(float(extracao["confianca"]), 1),
-        "cabecalhos_omitidos": extracao["cabecalhos_omitidos"],
-        "status": extracao["status"],
-        "r2_chave": r2_chave(entrada["sha256_original"]),
-    })
-    detalhe, _ = mascara.mascarar(extracao["detalhe"], LIBERADOS)
-    entrada["detalhe"] = detalhe[:300]
-    if extracao["status"] not in STATUS_COM_TEXTO:
-        return None, []
-    bruto = trechos.normalizar(extracao["texto"])
-    # páginas que vieram do OCR: as de confianca_paginas (zip: None)
-    ocr_paginas = None if extracao["formato"] == "zip" else set(extracao["confianca_paginas"])
-    limpo, contagens = limpeza.limpar(bruto, cliches, protecao, ementa=ementa, ocr_paginas=ocr_paginas)
-    mascarado, mascarados = mascara.mascarar(limpo, LIBERADOS)
-    texto = trechos.normalizar(mascarado)
-    fortes = [o for o in mascara.varrer(texto, LIBERADOS) if o["forte"]]
-    if fortes:  # barreira de PII, como em coletor.textos --commit-textos
-        raise RuntimeError(f"{chave}: {len(fortes)} ocorrência(s) forte(s) depois da máscara")
-    if not texto:
-        entrada["status"], entrada["detalhe"] = "vazio_legitimo", "esvaziado pela limpeza"
-    lista = trechos.dividir(texto, entrada["documento"], chave)
-    conteudo = (texto + "\n").encode("utf-8")
-    entrada.update({
-        "limpeza": {
-            "linhas_removidas": contagens["linhas_removidas"],
-            "por_regra": {regra: contagens[regra]
-                          for regra in ("cabecalho_rodape", "numeracao", "ruido_ocr", "cliche")},
-        },
-        "mascarados": {tipo: mascarados[tipo] for tipo in mascara.TIPOS},
-        "sha256_bruto": sha256(bruto.encode("utf-8")),
-        "sha256_texto": sha256(conteudo),
-        "blob_texto": blob_git(conteudo),
-        "chars": len(texto),
-        "trechos": len(lista),
-        "trechos_vetorizaveis": sum(t["vetorizavel"] for t in lista),
-    })
-    return conteudo.decode("utf-8"), lista
+    """Preenche a entrada com o pipeline (`coletor.textos.processar`); devolve o conteúdo
+    do .txt (ou None) e os trechos. A barreira de PII levanta `pipeline.BarreiraPII`."""
+    conteudo, lista, _ = pipeline.processar(entrada, chave, Resultado(**extracao), ementa, cliches, protecao,
+                                          LIBERADOS, versao_limpeza, sha_config)
+    return conteudo, lista
 
 
 def montar(cliches: dict, versao_limpeza: str) -> tuple[dict[int, dict], dict[str, str], dict[str, list]]:
