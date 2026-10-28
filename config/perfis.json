@@ -95,7 +95,29 @@
    ],
    "camara": null,
    "site": null,
-   "redes": []
+   "redes": [],
+   "contatos": [
+    {
+     "tipo": "email",
+     "valor": "gabinetevereadoradrianoboinha@gmail.com",
+     "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=299517"
+    },
+    {
+     "tipo": "email",
+     "valor": "vereadoradrianoboinha@gmail.com",
+     "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=297366"
+    },
+    {
+     "tipo": "telefone",
+     "valor": "21992696068",
+     "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=274833"
+    },
+    {
+     "tipo": "telefone",
+     "valor": "21996855905",
+     "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=273388"
+    }
+   ]
   },
   "ALLAN PINHO LYRA": {
    "mandatos": {
@@ -143,7 +165,19 @@
    ],
    "camara": null,
    "site": null,
-   "redes": []
+   "redes": [],
+   "contatos": [
+    {
+     "tipo": "email",
+     "valor": "vereador.allanlyra@camaraniteroi.rj.gov.br",
+     "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=290803"
+    },
+    {
+     "tipo": "telefone",
+     "valor": "2126204729",
+     "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=300782"
+    }
+   ]
   },
   "ANDERSON JOSÉ RODRIGUES - PIPICO": {
    "mandatos": {
@@ -291,7 +325,19 @@
    ],
    "camara": null,
    "site": null,
-   "redes": []
+   "redes": [],
+   "contatos": [
+    {
+     "tipo": "email",
+     "valor": "mandatabenny@gmail.com",
+     "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=269445"
+    },
+    {
+     "tipo": "telefone",
+     "valor": "2126205074",
+     "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=126905"
+    }
+   ]
   },
   "CARLOS OTÁVIO DIAS VAZ - CASOTA": {
    "mandatos": {
@@ -528,7 +574,14 @@
    ],
    "camara": null,
    "site": null,
-   "redes": []
+   "redes": [],
+   "contatos": [
+    {
+     "tipo": "email",
+     "valor": "vereadordanielmarques@gmail.com",
+     "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=298389"
+    }
+   ]
   },
   "DOUGLAS DE SOUZA GOMES": {
    "mandatos": {
@@ -810,7 +863,14 @@
    ],
    "camara": null,
    "site": null,
-   "redes": []
+   "redes": [],
+   "contatos": [
+    {
+     "tipo": "telefone",
+     "valor": "2126130480",
+     "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=296096"
+    }
+   ]
   },
   "FERNANDA ANCHIETA LOUBACK": {
    "mandatos": {
@@ -858,7 +918,14 @@
    ],
    "camara": null,
    "site": null,
-   "redes": []
+   "redes": [],
+   "contatos": [
+    {
+     "tipo": "email",
+     "valor": "vereadora.fernanda@camaraniteroi.rj.gov.br",
+     "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=295602"
+    }
+   ]
   },
   "GABRIEL AMOÊDO GUIMARÃES VELASCO": {
    "mandatos": {
@@ -965,7 +1032,14 @@
    ],
    "camara": null,
    "site": null,
-   "redes": []
+   "redes": [],
+   "contatos": [
+    {
+     "tipo": "email",
+     "valor": "jhonatananjos.niteroi@gmail.com",
+     "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=278114"
+    }
+   ]
   },
   "JORGE ANDRIGO DIAS DE CARVALHO": {
    "mandatos": {
@@ -1349,6 +1423,13 @@
      "url": "https://www.instagram.com/leandroportugalrj",
      "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
     }
+   ],
+   "contatos": [
+    {
+     "tipo": "telefone",
+     "valor": "2126200196",
+     "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=290601"
+    }
    ]
   },
   "LEONARDO SOARES GIORDANO": {
@@ -1456,7 +1537,14 @@
    ],
    "camara": null,
    "site": "https://www.leonardogiordano.com.br",
-   "redes": []
+   "redes": [],
+   "contatos": [
+    {
+     "tipo": "email",
+     "valor": "vereador@leonardogiordano.com.br",
+     "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=294926"
+    }
+   ]
   },
   "LUIS ROBERTO NOGUEIRA SAAD": {
    "mandatos": {
@@ -1713,6 +1801,13 @@
      "rede": "facebook",
      "url": "https://www.facebook.com/michelsaadneto",
      "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    }
+   ],
+   "contatos": [
+    {
+     "tipo": "email",
+     "valor": "gabinetemichelsaad@gmail.com",
+     "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=296907"
     }
    ]
   },
@@ -1972,7 +2067,19 @@
      "titulo": "G1 — Morre Paulo Eduardo Gomes",
      "url": "https://g1.globo.com/rj/rio-de-janeiro/noticia/2026/09/06/morre-paulo-eduardo-gomes.ghtml"
     }
-   }
+   },
+   "contatos": [
+    {
+     "tipo": "email",
+     "valor": "mandato@pauloeduardo.org",
+     "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=274416"
+    },
+    {
+     "tipo": "telefone",
+     "valor": "2126229760",
+     "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=273235"
+    }
+   ]
   },
   "PAULO FERNANDO GONÇALVES VELASCO": {
    "mandatos": {
@@ -2076,7 +2183,14 @@
    ],
    "camara": null,
    "site": null,
-   "redes": []
+   "redes": [],
+   "contatos": [
+    {
+     "tipo": "telefone",
+     "valor": "2126136782",
+     "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=273491"
+    }
+   ]
   },
   "RENATO FERREIRA DE OLIVEIRA CARIELLO": {
    "mandatos": {
@@ -2313,6 +2427,13 @@
      "url": "https://www.facebook.com/betodapipa",
      "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
     }
+   ],
+   "contatos": [
+    {
+     "tipo": "telefone",
+     "valor": "2126203179",
+     "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=299102"
+    }
    ]
   },
   "ROBSON GUIMARÃES JOSÉ FILHO": {
@@ -2384,7 +2505,14 @@
    ],
    "camara": null,
    "site": null,
-   "redes": []
+   "redes": [],
+   "contatos": [
+    {
+     "tipo": "telefone",
+     "valor": "2126222911",
+     "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=292008"
+    }
+   ]
   },
   "RODRIGO FLACH FARAH": {
    "mandatos": {
@@ -2501,6 +2629,33 @@
      "rede": "facebook",
      "url": "https://www.facebook.com/share/Pch5unHAwzNFer6X",
      "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024"
+    }
+   ],
+   "contatos": [
+    {
+     "tipo": "email",
+     "valor": "burocraticorodrigofarah@gmail.com",
+     "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=283526"
+    },
+    {
+     "tipo": "email",
+     "valor": "contato@rodrigofarah.com",
+     "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=291831"
+    },
+    {
+     "tipo": "email",
+     "valor": "vereadorrodrigofarah@gmail.com",
+     "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=293166"
+    },
+    {
+     "tipo": "telefone",
+     "valor": "2126136832",
+     "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=297260"
+    },
+    {
+     "tipo": "telefone",
+     "valor": "2126224600",
+     "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=297260"
     }
    ]
   },

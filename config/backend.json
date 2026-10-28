@@ -3,5 +3,30 @@
  "origens_cors": [
   "https://marco-jardim.github.io"
  ],
- "contatos_institucionais": []
+ "contatos_institucionais": [
+  {
+   "tipo": "telefone",
+   "valor": "2126200403",
+   "descricao": "Prefeitura Municipal de Niterói (telefone publicado em documentos da Prefeitura)",
+   "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=300212"
+  },
+  {
+   "tipo": "telefone",
+   "valor": "2126136568",
+   "descricao": "Prefeitura Municipal de Niterói (telefone publicado em documentos da Prefeitura)",
+   "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=294344"
+  },
+  {
+   "tipo": "telefone",
+   "valor": "2127177223",
+   "descricao": "Prefeitura Municipal de Niterói (fax publicado em documentos da Prefeitura)",
+   "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=294344"
+  },
+  {
+   "tipo": "telefone",
+   "valor": "6120218400",
+   "descricao": "Serviço de Informação ao Cidadão do Serpro (SIC/Serpro)",
+   "fonte": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=141402"
+  }
+ ]
 }
