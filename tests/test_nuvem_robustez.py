@@ -16,7 +16,7 @@ import tempfile
 import threading
 import time
 import unittest
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from unittest import mock
 
@@ -778,6 +778,23 @@ class TestWrangler(unittest.TestCase):
         self.assertEqual(comandos[0][3:], ["vectorize", "list-vectors", "idx", "--count", "1000", "--json"])
         self.assertEqual(comandos[1][-2:], ["--cursor", "c1"])
 
+
+class TestRenovacaoOauthAntesDoVencimento(unittest.TestCase):
+    def test_espera_o_vencimento_quando_o_wrangler_ainda_nao_renovou(self):
+        agora = [datetime(2026, 10, 28, 6, 7, 0, tzinfo=timezone.utc)]
+        expira = agora[0] + timedelta(seconds=30)
+        respostas = [("tok-VELHO-0000000000", expira), ("tok-NOVO-00000000000", expira + timedelta(hours=1))]
+        esperas = []
+
+        def dormir(segundos):
+            esperas.append(segundos)
+            agora[0] += timedelta(seconds=segundos)
+
+        credencial = Credencial("tok-VELHO-0000000000", ORIGEM_OAUTH, expira=expira,
+                                renovador=lambda: respostas.pop(0), relogio=lambda: agora[0], dormir=dormir)
+        self.assertEqual(credencial.token(), "tok-NOVO-00000000000")
+        self.assertEqual(esperas, [32.0])
+        self.assertFalse(credencial.vencida())
 
 if __name__ == "__main__":
     unittest.main()

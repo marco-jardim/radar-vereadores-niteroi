@@ -12,6 +12,7 @@ from __future__ import annotations
 import os
 import re
 import threading
+import time
 from collections.abc import Callable, Mapping
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -68,7 +69,8 @@ class Credencial:
 
     def __init__(self, token: str, origem: str = ORIGEM_AMBIENTE, *, expira: datetime | None = None,
                  renovador: Callable[[], tuple[str, datetime | None]] | None = None,
-                 relogio: Callable[[], datetime] | None = None) -> None:
+                 relogio: Callable[[], datetime] | None = None,
+                 dormir: Callable[[float], Any] = time.sleep) -> None:
         if not token:
             raise ValueError("token vazio")
         self._token = token
@@ -76,6 +78,7 @@ class Credencial:
         self.expira = expira
         self._renovador = renovador
         self._relogio = relogio or (lambda: datetime.now(timezone.utc))
+        self._dormir = dormir
         self._antigos: list[str] = []
         self._trava = threading.Lock()
         self.renovacoes = 0
@@ -103,6 +106,11 @@ class Credencial:
             if usado is not None and usado != self._token:
                 return True  # outra thread já renovou
             token, expira = self._renovador()
+            agora = self._relogio()
+            if token == self._token and expira is not None and agora < expira <= agora + FOLGA:
+                # O wrangler só renova depois que o token vence: espera o vencimento e tenta de novo.
+                self._dormir((expira - agora).total_seconds() + 2)
+                token, expira = self._renovador()
             if token != self._token:
                 self._antigos.append(self._token)
             self._token, self.expira = token, expira
