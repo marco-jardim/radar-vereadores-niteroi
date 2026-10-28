@@ -773,7 +773,7 @@ class TestInterrupcao(_Base):
 
 class TestBarreira(_Base):
     def test_texto_com_ocorrencia_forte_nao_e_gravado(self) -> None:
-        def sem_mascara(texto, liberados=frozenset()):
+        def sem_mascara(texto, liberados=frozenset(), ocr_paginas=None):
             return texto, {tipo: 0 for tipo in mascara.TIPOS}
 
         with mock.patch.object(mascara, "mascarar", sem_mascara):

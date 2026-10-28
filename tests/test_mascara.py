@@ -56,7 +56,7 @@ class TestCpf(unittest.TestCase):
         texto = f"Vereador Fulano, CPF {CPF_B}, telefone (21) 3333-4444, fulano@exemplo.com"
         saida, contagens = mascarar(texto, lib)
         self.assertEqual(saida, "Vereador Fulano, CPF [CPF omitido], telefone (21) 3333-4444, fulano@exemplo.com")
-        self.assertEqual(contagens, {"cpf": 1, "rg": 0, "telefone": 0, "email": 0, "documento": 0})
+        self.assertEqual(contagens, {"cpf": 1, "rg": 0, "telefone": 0, "email": 0, "documento": 0, "numero": 0})
 
 
 class TestCpfSeparadoresMistos(unittest.TestCase):
@@ -345,7 +345,7 @@ class TestIdempotenciaVarrer(unittest.TestCase):
 
     def test_contagens(self) -> None:
         _, contagens = mascarar(self.TEXTO)
-        self.assertEqual(contagens, {"cpf": 2, "rg": 1, "telefone": 3, "email": 2, "documento": 0})
+        self.assertEqual(contagens, {"cpf": 2, "rg": 1, "telefone": 3, "email": 2, "documento": 0, "numero": 0})
 
     def test_idempotente(self) -> None:
         uma, _ = mascarar(self.TEXTO)
@@ -375,7 +375,7 @@ class TestIdempotenciaVarrer(unittest.TestCase):
         self.assertEqual([a["tipo"] for a in varrer(mascarado + " Novo: (21) 98888-7777")], ["telefone"])
 
     def test_texto_vazio(self) -> None:
-        self.assertEqual(mascarar(""), ("", {"cpf": 0, "rg": 0, "telefone": 0, "email": 0, "documento": 0}))
+        self.assertEqual(mascarar(""), ("", {tipo: 0 for tipo in mascara.TIPOS}))
         self.assertEqual(varrer(""), [])
 
     def test_varrer_e_mais_amplo_que_mascarar(self) -> None:
@@ -383,7 +383,7 @@ class TestIdempotenciaVarrer(unittest.TestCase):
         saida, contagens = mascarar(texto)
         # o protocolo e os dígitos corridos ficam (protegidos ou ambíguos); o CPF com
         # espaços é mascarado
-        self.assertEqual(contagens, {"cpf": 1, "rg": 0, "telefone": 0, "email": 0, "documento": 0})
+        self.assertEqual(contagens, {"cpf": 1, "rg": 0, "telefone": 0, "email": 0, "documento": 0, "numero": 0})
         self.assertEqual(saida, "Protocolo nº 2026-1234, código 26201234 e CPF [CPF omitido]")
         achados = varrer(texto)
         self.assertEqual([a["tipo"] for a in achados], ["telefone", "telefone", "cpf"])
@@ -416,7 +416,7 @@ class TestIdempotenciaVarrer(unittest.TestCase):
             resultado = mascara.medir(pasta)
         self.assertEqual(resultado, {
             "documentos": 3,
-            "mascarados": {"cpf": 1, "rg": 0, "telefone": 1, "email": 0, "documento": 0},
+            "mascarados": {"cpf": 1, "rg": 0, "telefone": 1, "email": 0, "documento": 0, "numero": 0},
             "restantes": {"telefone_forte": 1, "telefone_fraco": 2},
             "documentos_com_forte": 1,
             "documentos_com_fraco": 2,
@@ -598,7 +598,7 @@ class TestSegundaMedicao(unittest.TestCase):
 
     def test_documento_sem_rotulo_ou_curto_fica(self) -> None:
         for texto in ("CNH válida até 10/10/2025", "PIS 2024", "nitrato 12345678",
-                      "Unidade de piso 12345678", "CNH emitida pelo órgão estadual 12345678901"):
+                      "Unidade de piso 12345678", "CNH " + "distante " * 5 + "12345678901"):
             with self.subTest(texto=texto):
                 _sem_mudanca(self, texto)
 
@@ -676,7 +676,7 @@ class TestFormasDoCorpusReal(unittest.TestCase):
             "      (21) 98765432",
         ])
         mascarado, contagens = mascarar(documento)
-        self.assertEqual(contagens, {"cpf": 0, "rg": 0, "telefone": 6, "email": 0, "documento": 0})
+        self.assertEqual(contagens, {"cpf": 0, "rg": 0, "telefone": 6, "email": 0, "documento": 0, "numero": 0})
         for intacto in ("Programa 2045.1234", "Ação 2046.5678", "Lei Ordinária 3456 7890",
                         "decreto-n-98765-4321", "www.exemplo.gov.br/lei/2620-1234", "nº: 212620-1234",
                         "10/05 202112345", "2021-05-10T14:32:52.998224725", 'width="26.20123456"'):
@@ -685,6 +685,167 @@ class TestFormasDoCorpusReal(unittest.TestCase):
         self.assertEqual([a for a in achados if a["forte"]], [])
         self.assertTrue(achados)  # os números ambíguos continuam contados como fracos
         self.assertTrue(all(a["tipo"] == "telefone" for a in achados))
+
+
+class TestRotulosDoOcr(unittest.TestCase):
+    """Regressões das páginas digitalizadas, também cobertas sem ativar modo OCR."""
+
+    def test_rg_com_sufixo_colado(self) -> None:
+        for texto, esperado in (
+            ("RG:12345SSP/AM", "RG:[RG omitido]SSP/AM"),
+            ("RG 12345E OAB - RJ", "RG [RG omitido]E OAB - RJ"),
+        ):
+            with self.subTest(texto=texto):
+                saida, contagens = mascarar(texto)
+                self.assertEqual(saida, esperado)
+                self.assertEqual(contagens["rg"], 1)
+                self.assertFalse([a for a in varrer(saida) if a["forte"]])
+
+    def test_habilitacao_rotulada(self) -> None:
+        for texto in (
+            "VALIDADE 12 HABILITAÇÃO\nDq moda 12345678901 12/03/2026",
+            "Nº REGI: VALIDADE 12 HABILITAÇÃO — O ml 12345678901",
+            "cédula de habilitação nº12345678901",
+            "CNH emitida pelo órgão estadual 12345678901",
+            "registro " + "x" * 28 + " 12345678901",
+        ):
+            with self.subTest(texto=texto):
+                saida, contagens = mascarar(texto)
+                self.assertEqual(saida, texto.replace("12345678901", "[documento omitido]"))
+                self.assertEqual(contagens["documento"], 1)
+                self.assertTrue(any(a["tipo"] == "documento" and a["forte"] for a in varrer(texto)))
+                self.assertFalse([a for a in varrer(saida) if a["forte"]])
+
+    def test_cpf_com_primeiro_digito_separado(self) -> None:
+        for texto, numero in (
+            ("CPF 1 23.456.789-09", "1 23.456.789-09"),
+            ("CPF sob 1 nº2 34.567.890-12", "2 34.567.890-12"),
+        ):
+            with self.subTest(texto=texto):
+                saida, contagens = mascarar(texto)
+                self.assertEqual(saida, texto.replace(numero, "[CPF omitido]"))
+                self.assertEqual(contagens["cpf"], 1)
+                self.assertEqual([(a["tipo"], a["forte"]) for a in varrer(texto)], [("cpf", True)])
+                self.assertEqual(varrer(saida), [])
+
+    def test_cpf_no_certificado_digital(self) -> None:
+        for texto, numero in (
+            ("NOMEFICTICIO SILVA:1234567 8901\nAssinado de forma digital", "1234567 8901"),
+            ("SILVA:12345678901", "12345678901"),
+            ("SILVA:\n12345678901", "12345678901"),
+            ("Assinado de forma digital por Silva:12345678901", "12345678901"),
+            ("Silva:12345678901\nassinado digitalmente", "12345678901"),
+        ):
+            with self.subTest(texto=texto):
+                saida, contagens = mascarar(texto)
+                self.assertEqual(saida, texto.replace(numero, "[CPF omitido]"))
+                self.assertEqual(contagens["cpf"], 1)
+                self.assertEqual([(a["tipo"], a["forte"]) for a in varrer(texto)], [("cpf", True)])
+                self.assertFalse([a for a in varrer(saida) if a["forte"]])
+        _sem_mudanca(self, "Silva:12345678901 sem carimbo de assinatura")
+        # O contexto digital vale só na janela, e marcas de tipos de documentos não
+        # viram nomes de titulares (CNS/PIS/CNH continuam sendo documentos).
+        _sem_mudanca(self, "digitalmente " + "x" * 61 + " Silva:12345678901")
+
+    def test_telefones_com_ddd_rotulo_e_barra(self) -> None:
+        casos = {
+            "Fone: 21 2620-1234": "Fone: [telefone omitido]",
+            "Fone: 20 2620-1234": "Fone: [telefone omitido]",  # DDD com erro de OCR
+            "Tel.: 21 2620-1234 / 9876-5432": "Tel.: [telefone omitido] / [telefone omitido]",
+            "Tel/Fax: (21 2620-1234": "Tel/Fax: [telefone omitido]",
+            "[telefone omitido] / 20 9876-5432": "[telefone omitido] / [telefone omitido]",
+        }
+        for texto, esperado in casos.items():
+            with self.subTest(texto=texto):
+                saida, contagens = mascarar(texto)
+                self.assertEqual(saida, esperado)
+                self.assertGreater(contagens["telefone"], 0)
+                self.assertEqual(mascarar(saida), (saida, dict.fromkeys(mascara.TIPOS, 0)))
+                self.assertFalse([a for a in varrer(saida) if a["forte"]])
+
+
+class TestNumerosOcr(unittest.TestCase):
+    def test_somente_paginas_selecionadas_e_offsets(self) -> None:
+        texto = "Tabela 12345678\n\f\nAssinatura 12345678\n\f\nTotal 12345678"
+        esperado = texto.replace("Assinatura 12345678", "Assinatura [número omitido]")
+        saida, contagens = mascarar(texto, ocr_paginas={2})
+        self.assertEqual(saida, esperado)
+        self.assertEqual(contagens, {**dict.fromkeys(mascara.TIPOS, 0), "numero": 1})
+        self.assertEqual(mascarar(saida, ocr_paginas={2}), (saida, dict.fromkeys(mascara.TIPOS, 0)))
+        self.assertFalse([a for a in varrer(saida, ocr_paginas={2}) if a["forte"]])
+        fortes = [a for a in varrer(texto, ocr_paginas={2}) if a["forte"]]
+        self.assertEqual(len(fortes), 1)
+        self.assertEqual(fortes[0]["tipo"], "numero")
+        self.assertEqual(texto[fortes[0]["inicio"]:fortes[0]["fim"]], "12345678")
+        self.assertEqual(fortes[0]["inicio"], texto.index("12345678", texto.index("\f")))
+        _sem_mudanca(self, texto)
+        self.assertEqual(mascarar(texto, ocr_paginas=set())[0], texto)
+
+    def test_numeros_separados_e_ruido_de_uma_letra(self) -> None:
+        for numero in ("12345678", "123.456.78", "1234 5678", "1-234-5678", "1/23456E/ 78",
+                       "12345678E9", "1234567-8901"):
+            with self.subTest(numero=numero):
+                texto = "Assinatura\n" + numero
+                saida, contagens = mascarar(texto, ocr_paginas={1})
+                self.assertEqual(saida, "Assinatura\n[número omitido]")
+                self.assertEqual(contagens["numero"], 1)
+                self.assertTrue(any(a["tipo"] == "numero" and a["forte"]
+                                    for a in varrer(texto, ocr_paginas={1})))
+                self.assertFalse([a for a in varrer(saida, ocr_paginas={1}) if a["forte"]])
+                self.assertEqual(mascarar(saida, ocr_paginas={1}), (saida, dict.fromkeys(mascara.TIPOS, 0)))
+        self.assertEqual(mascarar("1234567\n1234567", ocr_paginas={1})[0], "1234567\n1234567")
+
+    def test_protecoes_explicitas(self) -> None:
+        protegidos = (
+            "em 12/03/2024", "data 2024-03-12", "R$ 12345678", "R$ 2.620.123,45",
+            "valor 1,123456789", "valor 12345678,90", "CEP 24020-000", "CEP 24.020-000",
+            "Lei nº 3.456/2020", "Decreto 12345/2024", "Processo nº 12345678/2024",
+            "nº 1234/2020", "mandato 2021-2024", "período 1865-1950", "biênio 2025/2026",
+        )
+        for texto in protegidos:
+            with self.subTest(texto=texto):
+                saida, contagens = mascarar(texto, ocr_paginas={1})
+                self.assertEqual(saida, texto)
+                self.assertEqual(sum(contagens.values()), 0)
+                self.assertFalse([a for a in varrer(saida, ocr_paginas={1}) if a["forte"]])
+
+    def test_protecao_nao_libera_numero_vizinho(self) -> None:
+        for protegido in ("12/03/2024", "2024-03-12", "Lei nº 3.456/2020", "CEP 24.020-000",
+                          "R$ 12345678,90", "2021-2024"):
+            for texto in (protegido + " 12345678", "12345678 " + protegido):
+                with self.subTest(texto=texto):
+                    saida, contagens = mascarar(texto, ocr_paginas={1})
+                    self.assertIn(protegido, saida)
+                    self.assertIn("[número omitido]", saida)
+                    self.assertEqual(contagens["numero"], 1)
+                    self.assertFalse([a for a in varrer(saida, ocr_paginas={1}) if a["forte"]])
+        # CEP sem rótulo próximo não é proteção da regra agressiva.
+        self.assertEqual(mascarar("24020-000", ocr_paginas={1})[0], "[número omitido]")
+        self.assertEqual(mascarar("CEP " + "x" * 21 + " 24020-000", ocr_paginas={1})[1]["numero"], 1)
+
+    def test_liberados_inclusive_email_numerico(self) -> None:
+        lib = {"2126201234", "12345678@exemplo.org"}
+        texto = ("Fone: (21 2620-1234\nFONE:2126201234\n2126201234\n"
+                 "12345678@exemplo.org\n12345678@orgao.gov.br")
+        saida, contagens = mascarar(texto, lib, ocr_paginas={1})
+        self.assertEqual(saida, texto)
+        self.assertEqual(sum(contagens.values()), 0)
+        self.assertEqual(varrer(saida, lib, ocr_paginas={1}), [])
+
+    def test_residuos_e_falsos_positivos_do_lote(self) -> None:
+        for texto in ("SILVA:1/23456E/ 78", "João de Tal\n1234567-8901", "SQL:1234-5678-9012",
+                      "Salas 1234-5678", "Ruído 123456789012345678"):
+            with self.subTest(texto=texto):
+                saida, _ = mascarar(texto, ocr_paginas={1})
+                self.assertNotEqual(saida, texto)
+                self.assertFalse([a for a in varrer(saida, ocr_paginas={1}) if a["forte"]])
+        self.assertEqual(mascarar("DOI quebrado 10.1 234/s", ocr_paginas={1})[0], "DOI quebrado 10.1 234/s")
+
+    def test_tabelas_nativas_permanecem(self) -> None:
+        texto = "Tabela orçamentária\n12345678 12345678901\n1,123456789 2045.1234\nTotal 2126201234"
+        _sem_mudanca(self, texto)
+        self.assertEqual(mascarar(texto, ocr_paginas={2})[0], texto)
+        self.assertNotIn("numero", [a["tipo"] for a in varrer(texto)])
 
 
 if __name__ == "__main__":

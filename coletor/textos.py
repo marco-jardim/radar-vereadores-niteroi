@@ -340,9 +340,9 @@ def processar(entrada: dict, chave: str, resultado: Resultado, ementa: str, clic
     # páginas que vieram do OCR: as de confianca_paginas (zip: None)
     ocr_paginas = None if resultado.formato == "zip" else set(resultado.confianca_paginas)
     limpo, contagens = limpeza.limpar(bruto, cliches, protecao, ementa=ementa, ocr_paginas=ocr_paginas)
-    mascarado, mascarados = mascara.mascarar(limpo, liberados)
+    mascarado, mascarados = mascara.mascarar(limpo, liberados, ocr_paginas=ocr_paginas)
     texto = trechos.normalizar(mascarado)
-    fortes = sorted({o["tipo"] for o in mascara.varrer(texto, liberados) if o["forte"]})
+    fortes = sorted({o["tipo"] for o in mascara.varrer(texto, liberados, ocr_paginas=ocr_paginas) if o["forte"]})
     if fortes:  # barreira de PII: nada é gravado com ocorrência forte
         raise BarreiraPII(chave, fortes)
     if not texto:
@@ -1963,7 +1963,11 @@ def chave_do_caminho(caminho: str) -> str:
 
 
 def barreira(pasta: Path, caminhos: Iterable[str], liberados: Iterable[str]) -> list[dict]:
-    """Chaves e tipos (nunca os valores) com ocorrência forte de `mascara.varrer`."""
+    """Chaves e tipos (nunca os valores) com ocorrência forte de `mascara.varrer`.
+
+    Sem metadados de páginas, aplica só as regras normais. Os textos produzidos por
+    `processar` já passaram pela máscara e pela barreira numérica das páginas OCR.
+    """
     liberados = frozenset(liberados)
     bloqueios = []
     for rel in sorted(caminhos):

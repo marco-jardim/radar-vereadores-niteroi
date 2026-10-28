@@ -45,6 +45,11 @@ válido não é CPF. CPF formatado (000.000.000-00) com DV válido é mascarado 
 dentro dessas proteções.
 
 `mascarar` é idempotente e devolve a contagem por tipo.
+Com `ocr_paginas` (base 1; linha só com \\f separa páginas), aplica depois das regras
+normais uma máscara de números de 8+ dígitos, inclusive com separadores e uma letra
+de ruído entre grupos. Preserva datas, moeda, CEP rotulado, atos com número/ano,
+intervalos de anos e contatos liberados. A barreira recebe as mesmas páginas e
+aponta resíduos numéricos como `numero` forte.
 
 `varrer` é a barreira antes de gravar ou carregar textos: um detector independente e
 mais amplo, que não usa as regras de `mascarar`. Procura qualquer sequência de 11
@@ -71,20 +76,21 @@ import json
 import re
 import sys
 import unicodedata
-from collections.abc import Iterable
+from collections.abc import Iterable, Iterator
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 
 # Mudar qualquer regra de `mascarar` muda os textos gravados: suba esta versão.
-VERSAO_MASCARA = "2"
-TIPOS = ("cpf", "rg", "telefone", "email", "documento")
+VERSAO_MASCARA = "3"
+TIPOS = ("cpf", "rg", "telefone", "email", "documento", "numero")
 SUBSTITUICOES = {
     "cpf": "[CPF omitido]",
     "rg": "[RG omitido]",
     "telefone": "[telefone omitido]",
     "email": "[e-mail omitido]",
     "documento": "[documento omitido]",
+    "numero": "[número omitido]",
 }
 # Documentos pessoais mascarados quando o rótulo aparece até 20 caracteres antes do número.
 ROTULOS_DOCUMENTO = (
@@ -129,12 +135,16 @@ _RE_CPF = re.compile(
 # Rótulo de CPF ("cpf", "c.p.f.", "cpf/mf", "cpf nº", "cpf:") no texto dobrado.
 JANELA_ROTULO_CPF = 15
 _RE_ROTULO_CPF = re.compile(r"(?<![a-z0-9])c\.? ?p\.? ?f(?![a-z])")
+_RE_CPF_PARTIDO = re.compile(r"\d(?<!\d\d) \d{2}\.\d{3}\.\d{3}-\d{2}(?!\d)")
+_RE_CPF_ASSINATURA = re.compile(
+    r"\b(?P<nome>[^\W\d_]{3,}):[ \t\r\n]*(?P<numero>\d{6,}(?: \d{1,5}(?![\d/]))?)")
+_RE_ASSINATURA_DIGITAL = re.compile(r"assinado\s+de\s+forma\s+digital|digitalmente", re.I)
 _RE_RG = re.compile(
     r"(?P<rotulo>[RrIi](?<![\w.][RrIi])"
     # "identidade" e erros comuns de OCR ("Identdede", "Idenlidade"): iden…d…
     r"(?:(?<=[Rr])(?:\.\s?[Gg]\.?|[Gg])|(?<=[Ii])[Dd][Ee][Nn][^\W\d_]{1,4}[Dd][^\W\d_]{0,3}))(?![\w])"
     r"(?P<meio>[^\d\n\[\]]{0,20}?)"
-    r"(?P<numero>\d[\d.\-]{3,15}[\dXx])(?![\d\w])"
+    r"(?P<numero>\d[\d.\-]{3,15}[\dXx])(?!\d)"
 )
 _RE_MARCA_IDENTIDADE = re.compile(r"\s*(?:n[º°o]?\.|nº|n°|:)", re.I)
 
@@ -168,10 +178,12 @@ def _padrao_documento() -> str:
 # Números de documentos pessoais (CNH, título de eleitor, PIS, passaporte, CTPS, cartão
 # SUS…) com o rótulo até 20 caracteres antes; o número tem ao menos 5 dígitos.
 _RE_DOCUMENTO = re.compile(_padrao_documento())
+_RE_ONZE_DIGITOS = re.compile(r"\d(?<!\d\d)\d{10}(?!\d)")
+_RE_ROTULO_CNH = re.compile(r"\b(?:habilita[cç][aã]o|cnh|registro)\b", re.I)
 _RE_TELEFONE = re.compile(
     r"(?<![\w@+])(?<!\d-)"
     r"(?:(?P<pais>\+ ?55|55)[ .-]?)?"
-    r"(?:\( ?(?P<zero1>0)?(?P<ddd1>\d{2}) ?\) ?|(?P<zero2>0)?(?P<ddd2>\d{2})[ .-]?)?"
+    r"(?:\( ?(?P<zero1>0)?(?P<ddd1>\d{2}) ?\)? ?|(?P<zero2>0)?(?P<ddd2>\d{2})[ .-]?)?"
     r"(?P<assinante>9[ .]?\d{4}|[2-9]\d{3})"
     r"(?P<sep>[ .-]?)"
     r"\d{4}"
@@ -183,6 +195,7 @@ JANELA_CONTEXTO = 25
 _RE_ROTULO_TELEFONE = re.compile(
     r"\b(?:tel|fones?|telefones?|cel|celular(?:es)?|whatsapp|contatos?|fax)\b|wa\.me/"
 )
+_RE_SEGUNDO_TELEFONE = re.compile(r"\[telefone omitido\][ \t]*/[ \t]*\Z")
 _RE_SEPARADOR_TELEFONE = re.compile(r"[ .\-()+]")
 _RE_CONTEXTO_ATO = re.compile(
     r"\b(?:protocolo|processo|decreto|lei|sei|e-sic|esic|sic|ouvidoria|matricula|inscricao|cnpj|cep)\b"
@@ -246,6 +259,9 @@ _PALAVRAS_ATO = (
     r"art(?:igo)?s?\.?|incisos?|par[aá]grafos?|preg[aã]o|licita[cç](?:[aã]o|[oõ]es)|empenhos?|"
     r"notas? fiscal|notas? fiscais|inscri[cç](?:[aã]o|[oõ]es)|matr[ií]culas?|e-?sic|sic|ouvidorias?"
 )
+_RE_NOME_NAO_PESSOAL = re.compile(
+    rf"(?:{_PALAVRAS_ATO}|cpf|cnpj|cep|rg|identidade|registro|"
+    + "|".join(re.escape(r.split()[-1]) for r in ROTULOS_DOCUMENTO) + r")", re.I)
 _QUALIFICADORES = (
     r"municipal|complementar|estadual|federal|ordin[aá]ria|legislativo|administrativo|"
     r"eletr[oô]nico|de lei|de decreto legislativo|de resolu[cç][aã]o|sei"
@@ -257,10 +273,25 @@ _RE_ATO_ANTES = re.compile(
 )
 _JANELA_ATO = 160
 
+# A regra de OCR é deliberadamente mais abrangente que as regras normais. Não cruza
+# linhas e admite uma letra de ruído entre grupos (inclusive "1/23456E/ 78").
+_RE_NUMERO_OCR = re.compile(
+    r"\d(?<!\d\d)(?:\d|(?:[ ./-]| ?[./-] ?|[ ./-]?[^\W\d_][ ./-]{0,2})\d)*")
+_RE_OCR_ATO = re.compile(
+    rf"\b(?:{_PALAVRAS_ATO})(?:[ \t]{{1,3}}(?:{_QUALIFICADORES}))*"
+    + _NUMERO_CURTO + r"\d[\d.]*[/-]\d{4}(?!\d)|\bn[º°][ \t]*\d[\d.]*[/\-]\d{4}(?!\d)", re.I)
+_OCR_PROTECOES = [re.compile(p) for p in (
+    r"\d(?<!\d\d)\d/\d{2}/\d{4}(?!\d)", _DATA_ISO, _REAIS, _ANOS,
+    r"\d(?<!\d\d)[\d.]*,\d+",
+)] + [_RE_OCR_ATO]
+_RE_CEP = re.compile(_CEP)
+_RE_ROTULO_CEP = re.compile(r"\bCEP\b", re.I)
+_RE_PAGINA = re.compile(r"(?m)^\f\r?$")
+
 # ---------------------------------------------------------------- padrões de varrer
 _V_CPF = re.compile(r"\d(?<!\d\d)(?<!\d[ .\-/]\d)(?:[ .\-/]?\d){10}(?![ .\-/]?\d)")
 _V_TELEFONE = re.compile(
-    r"(?<!\d)(?P<pais>\+\s?55[ .-]?)?(?:(?P<parenteses>\(\s?0?\d{2}\s?\)\s?)|(?P<zero>0)?\d{2}[ .-]?)?"
+    r"(?<!\d)(?P<pais>\+\s?55[ .-]?)?(?:(?P<parenteses>\(\s?0?\d{2}\s?\)?\s?)|(?P<zero>0)?\d{2}[ .-]?)?"
     r"\d{4,5}(?P<sep>[ .-]?)\d{4}(?!\d)"
 )
 _V_EMAIL = re.compile(r"[^\s@<>()\[\]{},;:\"']+@[^\s@<>()\[\]{},;:\"']+\.\w{2,}")
@@ -408,8 +439,25 @@ class _Aceitos:
 
 def _documentos(texto: str) -> list[tuple[int, int]]:
     """Trechos dos números de documentos pessoais rotulados (ao menos 5 dígitos)."""
-    return [m.span("numero") for m in _RE_DOCUMENTO.finditer(texto)
-            if sum(c.isdigit() for c in m.group("numero")) >= 5]
+    trechos = {m.span("numero") for m in _RE_DOCUMENTO.finditer(texto)
+               if sum(c.isdigit() for c in m.group("numero")) >= 5}
+    trechos.update(m.span() for m in _RE_ONZE_DIGITOS.finditer(texto)
+                   if any(m.start() - r.end() <= 30 for r in _RE_ROTULO_CNH.finditer(
+                       texto, max(0, m.start() - 45), m.start())))
+    return sorted(trechos)
+
+
+def _cpfs_rotulados(texto: str) -> list[tuple[int, int]]:
+    """CPF partido pelo OCR ou inscrito no carimbo de um certificado digital."""
+    trechos = [m.span() for m in _RE_CPF_PARTIDO.finditer(texto) if _rotulo_cpf(texto, m.start())]
+    for m in _RE_CPF_ASSINATURA.finditer(texto):
+        if (_RE_NOME_NAO_PESSOAL.fullmatch(m.group("nome"))
+                or _RE_ROTULO_TELEFONE.fullmatch(_dobrar(m.group("nome")))):
+            continue  # CNH:…, PIS:… e Lei:… não são nomes de titulares de certificado
+        if (m.group("nome").isupper() or _RE_ASSINATURA_DIGITAL.search(
+                texto[max(0, m.start() - 60):min(len(texto), m.end() + 60)])):
+            trechos.append(m.span("numero"))
+    return trechos
 
 
 def _intervalos_de_anos(texto: str) -> list[tuple[int, int]]:
@@ -553,6 +601,52 @@ def _email_liberado(email: str, conjunto: set[str], dominios: tuple[str, ...]) -
     return any(dominio == d or dominio.endswith("." + d) for d in dominios)
 
 
+def _numeros_ocr(texto: str, liberados_: Iterable[str],
+                 ocr_paginas: set[int] | None) -> Iterator[tuple[int, int, str]]:
+    """Números residuais de 8+ dígitos nas páginas OCR (numeração começa em 1).
+
+    As proteções são recortadas *antes* da busca: uma data ao lado de um identificador
+    não libera também o identificador. Não se aplicam as proteções amplas de links,
+    CNPJ ou metadados, inadequadas para documentos digitalizados com ruído.
+    """
+    if not ocr_paginas:
+        return
+    conjunto, dominios = _preparar(liberados_)
+    inicio = 0
+    for numero, separador in enumerate([*_RE_PAGINA.finditer(texto), None], 1):
+        fim = separador.start() if separador else len(texto)
+        if numero in ocr_paginas:
+            pagina = texto[inicio:fim]
+            protegidos = [m.span() for p in _OCR_PROTECOES for m in p.finditer(pagina)]
+            protegidos += _intervalos_de_anos(pagina)
+            protegidos += [m.span() for m in _RE_CEP.finditer(pagina)
+                           if _RE_ROTULO_CEP.search(pagina[max(0, m.start() - 20):m.start()])
+                           or _RE_ROTULO_CEP.search(pagina[m.end():m.end() + 20])]
+            protegidos += [m.span() for m in _RE_EMAIL.finditer(pagina)
+                           if _email_liberado(m.group(), conjunto, dominios)]
+            protegidos += [m.span() for m in _a_partir(_RE_CANDIDATO_TELEFONE, _RE_TELEFONE, pagina)
+                           if telefone_canonico(m.group()) in conjunto]
+            # Um caractere não numérico e não separador impede juntar grupos através
+            # de uma proteção e conserva os offsets do texto original.
+            partes = []
+            pos = 0
+            for a, b in sorted(protegidos):
+                if b <= pos:
+                    continue
+                partes.extend((pagina[pos:max(pos, a)], ";" * (b - max(pos, a))))
+                pos = b
+            partes.append(pagina[pos:])
+            for m in _RE_NUMERO_OCR.finditer("".join(partes)):
+                if sum(c.isdigit() for c in m.group()) >= 8:
+                    yield inicio + m.start(), inicio + m.end(), "numero"
+        inicio = separador.end() if separador else fim
+
+
+def _telefone_em_serie(texto: str, inicio: int) -> bool:
+    """Segundo telefone após uma marca já mascarada, separado por barra."""
+    return _RE_SEGUNDO_TELEFONE.search(texto[max(0, inicio - 80):inicio]) is not None
+
+
 def _detectar(texto: str, liberados_: Iterable[str]) -> list[tuple[int, int, str]]:
     """Ocorrências (início, fim, tipo) de `mascarar`, sem sobreposição, em ordem de posição."""
     conjunto, dominios = _preparar(liberados_)
@@ -568,6 +662,8 @@ def _detectar(texto: str, liberados_: Iterable[str]) -> list[tuple[int, int, str
 
     # CPF antes do RG: um rótulo de RG até 20 caracteres antes não pode reivindicar só
     # o começo de um CPF com espaço ("RG nº, CPF 123.456 789-09").
+    for ini, fim in _cpfs_rotulados(texto):
+        aceitos.incluir(ini, fim, "cpf")
     for m in _RE_CPF.finditer(texto):
         digitos = "".join(m.group(g) for g in "abcde")
         rotulado = _rotulo_cpf(texto, m.start())
@@ -606,12 +702,17 @@ def _detectar(texto: str, liberados_: Iterable[str]) -> list[tuple[int, int, str
         ini, fim = m.span()
         if marcacao.sobrepoe(ini, fim) or web.sobrepoe(ini, fim):
             continue  # número de link, metadado ou marcação: mascarar corromperia o link
+        rotulado = bool(_RE_ROTULO_TELEFONE.search(_antes(texto, ini))) or _telefone_em_serie(texto, ini)
+        anterior = bisect.bisect_left(aceitos.lista, (ini, -1, "")) - 1
+        if anterior >= 0:
+            _, b, tipo = aceitos.lista[anterior]
+            rotulado |= (b <= ini and tipo in ("telefone", "_liberado")
+                         and texto[b:ini].strip(" \t") == "/")
         ddd = m.group("ddd1") or m.group("ddd2")
-        if ddd is not None and int(ddd) not in DDDS:
+        if ddd is not None and int(ddd) not in DDDS and not rotulado:
             continue
         sep = m.group("sep")
         tem_ddd = ddd is not None or m.group("pais") is not None
-        rotulado = bool(_RE_ROTULO_TELEFONE.search(_antes(texto, ini)))
         assinante = m.group("assinante")
         if not rotulado and not _RE_SEPARADOR_TELEFONE.search(m.group()):
             # dígitos corridos (8 a 13), sem separador, parênteses, + nem rótulo: valores e
@@ -633,18 +734,30 @@ def _detectar(texto: str, liberados_: Iterable[str]) -> list[tuple[int, int, str
 
 
 # ---------------------------------------------------------------- API
-def mascarar(texto: str, liberados: Iterable[str] = frozenset()) -> tuple[str, dict[str, int]]:
-    """Texto com os dados pessoais substituídos e a contagem por tipo; idempotente."""
-    contagens = {tipo: 0 for tipo in TIPOS}
+def _substituir(texto: str, ocorrencias: Iterable[tuple[int, int, str]], contagens: dict[str, int]) -> str:
+    """Aplica ocorrências ordenadas e disjuntas e acumula as contagens."""
     partes: list[str] = []
     pos = 0
-    for ini, fim, tipo in _detectar(texto, liberados):
+    for ini, fim, tipo in ocorrencias:
         partes.append(texto[pos:ini])
         partes.append(SUBSTITUICOES[tipo])
         contagens[tipo] += 1
         pos = fim
     partes.append(texto[pos:])
-    return "".join(partes), contagens
+    return "".join(partes)
+
+
+def mascarar(texto: str, liberados: Iterable[str] = frozenset(),
+             ocr_paginas: set[int] | None = None) -> tuple[str, dict[str, int]]:
+    """Texto mascarado e contagens; idempotente. Páginas OCR (base 1) têm regra extra
+    de números de 8+ dígitos, depois das regras normais, preservando só as proteções
+    explícitas de datas, moeda, CEP rotulado, atos, intervalos de anos e contatos.
+    """
+    liberados = frozenset(liberados)
+    contagens = {tipo: 0 for tipo in TIPOS}
+    texto = _substituir(texto, _detectar(texto, liberados), contagens)
+    texto = _substituir(texto, _numeros_ocr(texto, liberados, ocr_paginas), contagens)
+    return texto, contagens
 
 
 def _fracionario(texto: str, inicio: int) -> bool:
@@ -655,14 +768,15 @@ def _fracionario(texto: str, inicio: int) -> bool:
 def _telefone_forte(texto: str, m: re.Match) -> bool:
     """Força de um número com forma de telefone achado por `varrer` (veja o docstring)."""
     antes = _antes(texto, m.start())
-    if _RE_ROTULO_TELEFONE.search(antes):
+    if _RE_ROTULO_TELEFONE.search(antes) or _telefone_em_serie(texto, m.start()):
         return True
     if _RE_CONTEXTO_ATO.search(antes):
         return False
     return bool(m.group("pais") or m.group("parenteses") or m.group("zero") or m.group("sep") == "-")
 
 
-def varrer(texto: str, liberados: Iterable[str] = frozenset()) -> list[dict]:
+def varrer(texto: str, liberados: Iterable[str] = frozenset(),
+           ocr_paginas: set[int] | None = None) -> list[dict]:
     """Barreira independente: ocorrências `{tipo, inicio, fim, forte}` suspeitas, sem o valor.
 
     Mais ampla que `mascarar` (veja o docstring do módulo); use o mesmo `liberados`.
@@ -676,7 +790,10 @@ def varrer(texto: str, liberados: Iterable[str] = frozenset()) -> list[dict]:
     Números dentro de endereços web (exceto WhatsApp), marcação XML/HTML, GUIDs e
     carimbos ISO de data e hora são ignorados (CPF: só os três últimos). A barreira
     bloqueia só nas ocorrências fortes; as fracas são contadas para revisão.
+    Nas `ocr_paginas` (base 1), a mesma regra numérica extra da máscara detecta
+    resíduos como `numero` forte. Use o mesmo conjunto de páginas do mascaramento.
     """
+    liberados = frozenset(liberados)
     conjunto, dominios = _preparar(liberados)
     ignorar = _Intervalos(
         [m.span() for p in _V_PROTECOES for m in p.finditer(texto)]
@@ -686,25 +803,39 @@ def varrer(texto: str, liberados: Iterable[str] = frozenset()) -> list[dict]:
     marcacao = _zonas(texto, urls=False)
     web = _Intervalos(_zonas_url(texto))
     achados: list[tuple[int, int, str]] = []
+    emails_liberados: list[tuple[int, int]] = []
     for m in (_V_EMAIL.finditer(texto) if "@" in texto else ()):
         email = m.group().strip(".")
-        if "@" in email and not _email_liberado(email, conjunto, dominios):
+        if "@" not in email:
+            continue
+        if _email_liberado(email, conjunto, dominios):
+            emails_liberados.append(m.span())
+        else:
             achados.append((m.start(), m.end(), "email"))
+    ignorar_email = _Intervalos(emails_liberados)
     for m in _V_RG.finditer(texto):
         if sum(c.isdigit() for c in m.group(1)) >= 5 and not ignorar.sobrepoe(*m.span(1)):
             achados.append((m.start(1), m.end(1), "rg"))
+    cpfs_rotulados = _cpfs_rotulados(texto)
+    achados.extend((a, b, "cpf") for a, b in cpfs_rotulados)
+    rotulados = _Intervalos(cpfs_rotulados)
     for ini, fim in _documentos(texto):
         if not ignorar.sobrepoe(ini, fim) and not marcacao.sobrepoe(ini, fim):
             achados.append((ini, fim, "documento"))
     for m in _V_CPF.finditer(texto):
         if (cpf_valido(re.sub(r"\D", "", m.group())) and not ignorar.sobrepoe(*m.span())
-                and not marcacao.sobrepoe(*m.span()) and not _fracionario(texto, m.start())):
+                and not rotulados.sobrepoe(*m.span()) and not marcacao.sobrepoe(*m.span())
+                and not _fracionario(texto, m.start())):
             achados.append((m.start(), m.end(), "cpf"))
+    fortes = _Intervalos((a, b) for a, b, _ in achados)
+    achados.extend((a, b, tipo) for a, b, tipo in _numeros_ocr(texto, liberados, ocr_paginas)
+                   if not fortes.sobrepoe(a, b))
     fortes = _Intervalos((a, b) for a, b, _ in achados)
     for m in _a_partir(_RE_CANDIDATO_TELEFONE, _V_TELEFONE, texto):
         ini, fim = m.span()
         if (ignorar.sobrepoe(ini, fim) or fortes.sobrepoe(ini, fim) or _fracionario(texto, ini)
-                or marcacao.sobrepoe(ini, fim) or web.sobrepoe(ini, fim)):
+                or marcacao.sobrepoe(ini, fim) or web.sobrepoe(ini, fim)
+                or ignorar_email.sobrepoe(ini, fim)):
             continue
         digitos = re.sub(r"\D", "", m.group())
         candidatos = {telefone_canonico(m.group()), telefone_canonico(digitos[-9:]),
