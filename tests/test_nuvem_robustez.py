@@ -197,6 +197,7 @@ class TestVetores(BaseSincronizacao):
 
             def upsert(vetores):
                 original(vetores)
+                ambiente.vetores.flush()  # simula queda depois de persistir o lote
                 raise RuntimeError("queda logo depois do upsert")
             ambiente.vetores.upsert = upsert
 
@@ -240,7 +241,9 @@ class TestVetores(BaseSincronizacao):
 
     def test_reconstruir_apaga_vetor_orfao_do_indice(self):
         self.sincronizar()
-        VetoresLocal(self.pasta / "vetores.jsonl").upsert([{"id": "orfao", "values": [0.0] * 1024, "metadata": {}}])
+        indice = VetoresLocal(self.pasta / "vetores.jsonl")
+        indice.upsert([{"id": "orfao", "values": [0.0] * 1024, "metadata": {}}])
+        indice.flush()
         self.assertIn("orfao", self.vetores())
         rel = self.sincronizar(reconstruir=True)
         self.assertEqual(rel.falhas, [])

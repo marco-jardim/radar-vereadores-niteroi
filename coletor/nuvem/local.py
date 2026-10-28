@@ -1,10 +1,14 @@
 """Simulações locais do R2 e do Vectorize, embeddings falsos e cache de embeddings.
 
 No ambiente `local`, o R2 é a pasta `<dir>/r2/<bucket>/<chave>`, o Vectorize é o
-arquivo `<dir>/vetores.jsonl` (um vetor por linha, valores em float32 little-endian
-codificados em base64) e os embeddings vêm de `embeddings_falsos`: determinísticos,
-derivados do SHAKE-256 do texto, com 1.024 dimensões e norma 1. Nada disso acessa a
-rede.
+arquivo `<dir>/vetores.jsonl` (UTF-8, LF, objetos `id`, `metadata`, `values`, ordenados
+por id e com chaves JSON ordenadas; valores em float32 little-endian codificados em
+base64). A leitura também aceita `values` como lista de números e percorre o arquivo
+linha a linha. Upserts e exclusões ficam em memória até `flush()` ou `esperar()`
+(chamado no fim da etapa de sincronização); a gravação percorre as linhas num
+temporário, substituindo o destino atomicamente. Os embeddings vêm de
+`embeddings_falsos`: determinísticos, derivados do SHAKE-256 do texto, com 1.024
+dimensões e norma 1. Nada disso acessa a rede.
 """
 from __future__ import annotations
 
@@ -21,7 +25,6 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from coletor.arquivos import gravar_atomico
 from coletor.nuvem.cloudflare import DIMENSOES, INDICES_METADADOS
 
 MODELO_LOCAL = "local:shake256-1024"
@@ -108,43 +111,66 @@ class R2Local:
 
 
 class VetoresLocal:
-    """Índice de vetores num JSONL ordenado por id; mutações síncronas."""
+    """Índice compacto em memória; `flush`/`esperar` persistem as mutações em JSONL."""
 
     def __init__(self, caminho: str | os.PathLike) -> None:
         self.caminho = Path(caminho)
         self._dados: dict[str, dict] | None = None
         self._mutacoes = 0
+        self._processadas = 0
+        self._sujo = False
 
     def _carregar(self) -> dict[str, dict]:
         if self._dados is None:
             self._dados = {}
             if self.caminho.exists():
-                for linha in self.caminho.read_text(encoding="utf-8").splitlines():
-                    if linha.strip():
-                        obj = json.loads(linha)
-                        self._dados[obj["id"]] = obj
+                with self.caminho.open(encoding="utf-8") as f:
+                    for linha in f:
+                        if linha.strip():
+                            obj = json.loads(linha)
+                            if isinstance(obj["values"], list):
+                                obj["values"] = empacotar(obj["values"])
+                            self._dados[obj["id"]] = obj
         return self._dados
 
-    def _gravar(self) -> str:
+    def _gravar(self) -> None:
         dados = self._carregar()
-        texto = "".join(json.dumps(dados[i], ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n"
-                        for i in sorted(dados))
-        gravar_atomico(self.caminho, texto)
+        self.caminho.parent.mkdir(parents=True, exist_ok=True)
+        fd, temporario = tempfile.mkstemp(dir=self.caminho.parent, prefix=f".{self.caminho.name}.", suffix=".tmp")
+        try:
+            with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as f:
+                for i in sorted(dados):
+                    f.write(json.dumps(dados[i], ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n")
+            os.replace(temporario, self.caminho)
+        except BaseException:
+            with contextlib.suppress(FileNotFoundError):
+                os.unlink(temporario)
+            raise
+
+    def flush(self) -> None:
+        """Persiste uma única vez os lotes pendentes; sem mutações, não escreve."""
+        if self._sujo:
+            self._gravar()
+            self._sujo = False
+            self._processadas = self._mutacoes
+
+    def _mutacao(self) -> list[str]:
         self._mutacoes += 1
-        return f"local-{self._mutacoes}"
+        self._sujo = True
+        return [f"local-{self._mutacoes}"]
 
     def upsert(self, vetores: Iterable[Mapping[str, Any]]) -> list[str]:
         dados = self._carregar()
         for v in vetores:
             dados[v["id"]] = {"id": v["id"], "metadata": dict(v.get("metadata") or {}),
                               "values": empacotar(v["values"])}
-        return [self._gravar()]
+        return self._mutacao()
 
     def apagar(self, ids: Sequence[str]) -> list[str]:
         dados = self._carregar()
         for i in ids:
             dados.pop(i, None)
-        return [self._gravar()]
+        return self._mutacao()
 
     def obter(self, ids: Sequence[str]) -> list[dict]:
         dados = self._carregar()
@@ -152,15 +178,16 @@ class VetoresLocal:
                 for i in ids if i in dados]
 
     def info(self) -> dict:
-        """Como o `info` do Vectorize: dimensões, contagem e a última mutação (síncrona, já processada)."""
+        """Dimensões, contagem em memória e última mutação persistida."""
         return {"dimensions": DIMENSOES, "vectorCount": len(self._carregar()),
-                "processedUpToMutation": f"local-{self._mutacoes}" if self._mutacoes else None,
+                "processedUpToMutation": f"local-{self._processadas}" if self._processadas else None,
                 "processedUpToDatetime": datetime.now(timezone.utc).isoformat()}
 
     def indices_metadados(self) -> dict[str, str]:
         return dict(INDICES_METADADOS)
 
     def esperar(self, mutacao: str | None, desde: datetime | None = None, **_: Any) -> dict:
+        self.flush()
         return {**self.info(), "processedUpToMutation": mutacao}
 
     def ids(self) -> list[str]:

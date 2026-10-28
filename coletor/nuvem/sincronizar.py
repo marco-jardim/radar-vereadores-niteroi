@@ -587,6 +587,7 @@ def _vetores(ambiente: Ambiente, fonte: Fonte, atual: dict, estado, falhou: set[
     if simular:
         return
     ultima = None
+    enviados: list[str] = []
     if removidos:
         mutacoes = ambiente.vetores.apagar(removidos)
         ultima = mutacoes[-1] if mutacoes else ultima
@@ -604,7 +605,11 @@ def _vetores(ambiente: Ambiente, fonte: Fonte, atual: dict, estado, falhou: set[
             [{"id": i, "values": v, "metadata": desejados[i][1]} for i, v in zip(bloco, valores)])
         ultima = mutacoes[-1] if mutacoes else ultima
         rel.feitas["vetores_upsert"] += len(bloco)
-        rel.feitas["d1_instrucoes"] += banco.aplicar(
-            [Alteracao.de("trechos_indexados", gravar=[(i, alvo[i]) for i in bloco])])
+        enviados.extend(bloco)
     # sempre: confere que as mutações desta execução foram processadas antes de gravar o estado
     ambiente.vetores.esperar(ultima, desde=inicio - FOLGA_RELOGIO if ultima is not None else None)
+    # hashes finais só depois de o índice confirmar (e, no local, persistir) os vetores: uma
+    # interrupção antes disso deixa PENDENTE ou o hash antigo, e a próxima execução reenvia
+    for bloco in _blocos(enviados, LOTE_SINCRONIZACAO):
+        rel.feitas["d1_instrucoes"] += banco.aplicar(
+            [Alteracao.de("trechos_indexados", gravar=[(i, alvo[i]) for i in bloco])])

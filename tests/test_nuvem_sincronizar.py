@@ -21,7 +21,7 @@ from coletor.nuvem import __main__ as cli
 from coletor.nuvem import banco
 from coletor.nuvem.ambientes import BUCKET_ARQUIVOS_LOCAL, BUCKET_EXPORTACOES_LOCAL, ambiente_local
 from coletor.nuvem.fonte import ErroFonte, Fonte, Trecho, carregar_fonte, normalizar_busca, varrer_fonte
-from coletor.nuvem.local import MODELO_LOCAL, desempacotar
+from coletor.nuvem.local import MODELO_LOCAL, VetoresLocal, desempacotar
 from coletor.nuvem.r2 import chave_r2
 from coletor.nuvem.sincronizar import ErroBarreira, sincronizar
 from coletor.trechos import VERSAO_TRECHOS
@@ -192,6 +192,15 @@ class TestBarreiraContextual(unittest.TestCase):
 
 
 class TestSincronizacaoCompleta(Base):
+    def test_lotes_de_vetores_persistidos_uma_vez_no_fim_da_etapa(self):
+        with mock.patch("coletor.nuvem.sincronizar.LOTE_SINCRONIZACAO", 2), \
+                mock.patch.object(VetoresLocal, "_gravar", autospec=True, side_effect=VetoresLocal._gravar) as gravar:
+            rel = self.sincronizar()
+        self.assertEqual(rel.falhas, [])
+        self.assertEqual(rel.feitas["vetores_upsert"], 7)
+        self.assertEqual(len(self.vetores()), 7)
+        gravar.assert_called_once()
+
     def test_carga_completa(self):
         rel = self.sincronizar()
         self.assertEqual(rel.falhas, [])
