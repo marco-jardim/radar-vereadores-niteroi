@@ -52,6 +52,7 @@ VERSAO_LIMPEZA. Somente biblioteca padrão do Python.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import re
@@ -178,37 +179,8 @@ class ProtecaoLimpeza:
 
     @classmethod
     def de_config(cls, raiz: Path = RAIZ) -> ProtecaoLimpeza:
-        """Pessoas de `config/vereadores.json` (eleitos com nome de exibição, apelidos,
-        afastamentos, Mesa), as chaves de `config/perfis.json` e `PREFEITOS`; arquivos
-        ausentes não acrescentam nada."""
-        raiz = Path(raiz)
-        pasta = raiz / "config" if (raiz / "config").is_dir() else raiz
-        pessoas: dict[str, list[str]] = {}
-
-        def incluir(chave, *variantes) -> None:
-            if isinstance(chave, str) and chave:
-                pessoas.setdefault(chave.upper(), [chave]).extend(
-                    v for v in variantes if isinstance(v, str) and v)
-
-        vereadores = _ler_json(pasta / "vereadores.json") or {}
-        for legislatura in vereadores.get("legislaturas") or []:
-            for eleito in legislatura.get("eleitos") or []:
-                incluir(eleito.get("siscam"), eleito.get("nome"))
-        for chave, valor in (vereadores.get("apelidos") or {}).items():
-            if not str(chave).startswith("_"):
-                incluir(chave, valor)
-        for afastamento in vereadores.get("afastamentos") or []:
-            incluir(afastamento.get("siscam"))
-            for suplente in afastamento.get("suplentes") or []:
-                incluir(suplente)
-        for cargo in vereadores.get("mesa") or []:
-            incluir(cargo.get("siscam"))
-        perfis = _ler_json(pasta / "perfis.json") or {}
-        for chave in (perfis.get("vereadores") or {}):
-            incluir(chave)
-        lista: list[Sequence[str]] = [pessoas[k] for k in sorted(pessoas)]
-        lista += [(p,) for p in PREFEITOS]
-        return cls(lista)
+        """Proteção com as pessoas de `pessoas_de_config(raiz)`."""
+        return cls(pessoas_de_config(raiz))
 
     def _nome_em(self, tokens: list[str]) -> bool:
         return any(par in self._pares for par in zip(tokens, tokens[1:]))
@@ -247,6 +219,75 @@ def _ler_json(caminho: Path):
         return json.loads(caminho.read_text(encoding="utf-8"))
     except FileNotFoundError:
         return None
+
+
+def pessoas_de_config(raiz: Path = RAIZ) -> list[Sequence[str]]:
+    """Pessoas protegidas: as de `config/vereadores.json` (eleitos com nome de exibição,
+    apelidos, afastamentos, Mesa) e as chaves de `config/perfis.json`, em ordem do nome
+    em maiúsculas, seguidas de `PREFEITOS`; cada item lista as variantes do nome.
+    Arquivos ausentes não acrescentam nada. Aceita a raiz ou a pasta `config/`."""
+    raiz = Path(raiz)
+    pasta = raiz / "config" if (raiz / "config").is_dir() else raiz
+    pessoas: dict[str, list[str]] = {}
+
+    def incluir(chave, *variantes) -> None:
+        if isinstance(chave, str) and chave:
+            pessoas.setdefault(chave.upper(), [chave]).extend(
+                v for v in variantes if isinstance(v, str) and v)
+
+    vereadores = _ler_json(pasta / "vereadores.json") or {}
+    for legislatura in vereadores.get("legislaturas") or []:
+        for eleito in legislatura.get("eleitos") or []:
+            incluir(eleito.get("siscam"), eleito.get("nome"))
+    for chave, valor in (vereadores.get("apelidos") or {}).items():
+        if not str(chave).startswith("_"):
+            incluir(chave, valor)
+    for afastamento in vereadores.get("afastamentos") or []:
+        incluir(afastamento.get("siscam"))
+        for suplente in afastamento.get("suplentes") or []:
+            incluir(suplente)
+    for cargo in vereadores.get("mesa") or []:
+        incluir(cargo.get("siscam"))
+    perfis = _ler_json(pasta / "perfis.json") or {}
+    for chave in (perfis.get("vereadores") or {}):
+        incluir(chave)
+    lista: list[Sequence[str]] = [pessoas[k] for k in sorted(pessoas)]
+    lista += [(p,) for p in PREFEITOS]
+    return lista
+
+
+# ---------------------------------------------------------------- versões e configuração
+def versao_efetiva(raiz: Path = RAIZ, cliches: Path | None = None) -> str:
+    """Versão da limpeza gravada no manifesto: `VERSAO_LIMPEZA` + "+" + os 8 primeiros
+    hexadecimais do SHA-256 dos bytes de `data/textos/cliches.json` (ou de `cliches`).
+    Sem o arquivo, usa o SHA-256 de zero bytes (nenhum clichê)."""
+    caminho = Path(cliches) if cliches is not None else Path(raiz) / "data" / "textos" / "cliches.json"
+    try:
+        dados = caminho.read_bytes()
+    except FileNotFoundError:
+        dados = b""
+    return f"{VERSAO_LIMPEZA}+{hashlib.sha256(dados).hexdigest()[:8]}"
+
+
+def hash_config_de(liberados: Iterable[str], pessoas: Iterable[str | Sequence[str]]) -> str:
+    """SHA-256 do JSON canônico da configuração que muda os textos: `liberados` da
+    máscara (ordenados), as pessoas protegidas (variantes ordenadas e sem repetição,
+    lista ordenada) e `PREFEITOS`. JSON com chaves ordenadas, sem espaços, UTF-8."""
+    nomes = sorted({tuple(sorted({p} if isinstance(p, str) else set(p))) for p in pessoas})
+    canonico = {
+        "liberados": sorted(set(liberados)),
+        "pessoas": [list(n) for n in nomes],
+        "prefeitos": list(PREFEITOS),
+    }
+    texto = json.dumps(canonico, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(texto.encode("utf-8")).hexdigest()
+
+
+def hash_config(raiz: Path = RAIZ) -> str:
+    """`sha256_config` do manifesto: `hash_config_de(mascara.liberados(raiz),
+    pessoas_de_config(raiz))`. Mudou, todos os textos são reprocessados e a barreira
+    `mascara.varrer` roda em todos (docs/contratos/textos.md)."""
+    return hash_config_de(mascara.liberados(raiz), pessoas_de_config(raiz))
 
 
 # ---------------------------------------------------------------- regras

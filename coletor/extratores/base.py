@@ -22,6 +22,7 @@ CONFIANCA_MINIMA = 60.0
 STATUS = (
     "ok",
     "ok_ocr",
+    "ok_parcial",
     "ocr_baixa_confianca",
     "escaneado_sem_ocr",
     "pendente_ferramenta",
@@ -45,7 +46,11 @@ class Resultado:
       texto do PDF, candidatas ao OCR;
     - `confianca`: confiança média do OCR (0–100, ponderada pelas palavras) ou None;
     - `confianca_paginas`: confiança por página com OCR;
-    - `status`: um de `STATUS`; `detalhe`: motivo legível de erro, pendência ou aviso;
+    - `status`: um de `STATUS`; `detalhe`: motivo legível de erro, pendência ou aviso.
+      `ok_parcial`: há páginas com texto (do PDF ou do OCR) e páginas escaneadas que
+      ficaram sem OCR (desligado, adiado ou com falha); o texto disponível é mantido e
+      o arquivo volta à fila com `--ocr`. `escaneado_sem_ocr` só quando nenhuma página
+      tem texto;
     - `cabecalhos_omitidos`: partes de cabeçalho/rodapé (docx) ou histórias de
       cabeçalho (doc) que existiam no arquivo e ficaram fora do texto.
 

@@ -1,11 +1,24 @@
 """Gera as fixtures do contrato de textos (`docs/contratos/textos.md`).
 
-Os textos são sintéticos; nomes, números e endereços não correspondem a pessoas
-reais. O pipeline é o real: `trechos.normalizar` → `limpeza.limpar` →
-`mascara.mascarar` → `trechos.normalizar` → `trechos.dividir`, com o manifesto
-gravado por `arquivos.salvar_mapa`. Mesma entrada, mesmos bytes;
-`tests/test_contratos.py` gera de novo numa pasta temporária e compara com os
-arquivos versionados.
+A pasta `tests/fixtures/contratos/` funciona como uma raiz de repositório em
+miniatura: registros sintéticos no formato real de `data/proposicoes/`,
+`data/documentos/` e `data/sessoes/` (substitutivos aninhados no PL), o manifesto
+`data/textos/manifesto-2024.json`, a lista de clichês `data/textos/cliches.json`,
+`config/remocoes.json` e a árvore `dados-textos/` (textos e trechos).
+
+Este gerador é uma implementação de referência das regras do contrato: fila (sem
+indicações e moções), documentos que citam cada arquivo, documento principal (o PL
+para arquivos do PL ou de seus substitutivos), ano pelo `ano` do registro, remoção
+por chave (sem download) ou por SHA-256 (baixado e descartado), duplicatas pelo
+SHA-256 do original e o pipeline real: `trechos.normalizar` → `limpeza.limpar` →
+`mascara.mascarar` → `trechos.normalizar` → `trechos.dividir`, com a barreira
+`mascara.varrer`.
+
+Os textos são sintéticos: nomes, números e endereços não correspondem a pessoas
+reais; `LIBERADOS` e `PESSOAS` substituem a configuração do repositório. Mesma
+entrada, mesmos bytes. `tests/test_contratos.py` gera de novo numa pasta temporária
+e compara com os arquivos versionados. A pasta de destino é esvaziada antes (exceto
+os `.py`), para não deixar arquivos de versões anteriores.
 
 Uso (na raiz do repositório):
   python tests/fixtures/contratos/gerar_fixtures.py
@@ -28,15 +41,89 @@ from coletor.extratores import VERSAO_EXTRATORES  # noqa: E402
 
 ANO = 2024
 PROCESSADO_EM = "2026-10-27"
-STATUS_COM_TEXTO = ("ok", "ok_ocr", "ocr_baixa_confianca")
-CLICHES = frozenset({limpeza.normalizar_linha("CÂMARA MUNICIPAL DE NITERÓI")})
+ROTULOS_ATA = frozenset({"Ata"})
+TIPOS_COM_TEXTO = ("requerimento", "pdl", "resolucao")  # além de PLs, substitutivos e atas
+PRIORIDADE_TIPO = {"pl": 0, "requerimento": 1, "pdl": 2, "resolucao": 3, "ata": 4}
+STATUS_COM_TEXTO = ("ok", "ok_ocr", "ok_parcial", "ocr_baixa_confianca")
 URL_DOWNLOAD = "https://consultaniteroi.siscam.com.br/Download.aspx?id={id}"
-URL_SESSOES = "https://consultaniteroi.siscam.com.br/Arquivos/Sessoes/{guid}.docx"
+URL_SESSOES = "https://consultaniteroi.siscam.com.br/Arquivos/Sessoes/{nome}"
+URL_DETALHE = "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento={id}"
 GUID_ATA = "00000000-0000-4000-8000-0000000000a1"
+GUID_ATA_PENDENTE = "0000000A-0000-4000-8000-0000000000B2"  # maiúsculas na URL; a chave usa minúsculas
+GUID_EXPEDIENTE = "00000000-0000-4000-8000-0000000000c3"
+
+# Configuração sintética (no lugar de config/perfis.json, config/backend.json e config/vereadores.json)
+LIBERADOS = frozenset({"@camaraniteroi.rj.gov.br", "@niteroi.rj.gov.br", "2126201234"})
+PESSOAS = [("FULANO SINTETICO DE TAL", "Fulano Sintético")]
+CLICHES = {limpeza.normalizar_linha("CÂMARA MUNICIPAL DE NITERÓI"): 40}
 
 EMENTA_PL = "Institui o Programa Municipal Sintético de Leitura nas Praças de Niterói."
 EMENTA_REQ = "Requer informações sintéticas sobre a manutenção das praças do município."
+EMENTA_REQ_2 = "Requer cópia sintética do mesmo levantamento sobre as praças do município."
+EMENTA_PDL = "Concede título sintético de cidadania a pessoa fictícia."
+EMENTA_RES = "Altera o regimento sintético da Casa."
+EMENTA_PDL_2 = "Aprova as contas sintéticas do exercício."
+EMENTA_IND = "Indica a poda sintética de árvores na praça do bairro."
 
+
+def _arquivo(ident: int, data: str, icone: str = "doc") -> dict:
+    return {"data": data, "descricao": "", "icone": icone, "id": ident, "versao": "Anexos"}
+
+
+# ---- registros sintéticos no formato real de data/
+PROPOSICOES = [{
+    "ano": 2024, "arquivos": [_arquivo(900001, "2024-03-10"), _arquivo(900002, "2024-03-10", "pdf")],
+    "data": "2024-03-10", "ementa": EMENTA_PL, "id": 127858, "lei": None, "numero": "900/2024",
+    "situacao": "Em tramitação",
+    "substitutivos": [{
+        # substitutivo real: só estes campos, sem ano nem ementa; cita um arquivo do PL e um próprio
+        "arquivos": [_arquivo(900001, "2024-06-20"), _arquivo(900005, "2024-06-20", "pdf")],
+        "autoria": [{"id": 1, "nome": "FULANO SINTETICO DE TAL", "origem": "Vereador", "papel": "Autor"}],
+        "data": "2024-06-20", "id": 266596, "lei": None, "numero": "1", "situacao": "RECEBIDO PELA SMD",
+        "tramitacoes": [],
+    }],
+}]
+
+DOCUMENTOS = {
+    "requerimento": [
+        # protocolado em 2024, com data do documento em 2025: o manifesto é o de 2024
+        {"ano": 2024, "arquivos": [_arquivo(900003, "2025-01-03")], "data": "2025-01-03", "ementa": EMENTA_REQ,
+         "id": 290001, "numero": "901/2024", "tipo": "requerimento"},
+        # mesmo arquivo publicado de novo sob outro id: duplicata
+        {"ano": 2024, "arquivos": [_arquivo(900008, "2024-11-02")], "data": "2024-11-02", "ementa": EMENTA_REQ_2,
+         "id": 290004, "numero": "950/2024", "tipo": "requerimento"},
+    ],
+    "pdl": [
+        # removido pela chave: nunca baixado
+        {"ano": 2024, "arquivos": [_arquivo(900004, "2024-08-01", "pdf")], "data": "2024-08-01",
+         "ementa": EMENTA_PDL, "id": 290002, "numero": "12/2024", "tipo": "pdl"},
+        # texto que a limpeza esvazia
+        {"ano": 2024, "arquivos": [_arquivo(900006, "2024-09-01")], "data": "2024-09-01",
+         "ementa": EMENTA_PDL_2, "id": 290005, "numero": "13/2024", "tipo": "pdl"},
+    ],
+    "resolucao": [
+        # o original removido, publicado de novo sob outra chave: removido pelo SHA-256
+        {"ano": 2024, "arquivos": [_arquivo(900007, "2024-10-01", "pdf")], "data": "2024-10-01",
+         "ementa": EMENTA_RES, "id": 290003, "numero": "3/2024", "tipo": "resolucao"},
+    ],
+    "indicacao": [
+        # indicações e moções ficam fora do manifesto mesmo com `arquivos`
+        {"ano": 2024, "arquivos": [_arquivo(900009, "2024-05-05")], "data": "2024-05-05", "ementa": EMENTA_IND,
+         "id": 290006, "numero": "77/2024", "tipo": "indicacao"},
+    ],
+}
+
+SESSOES = [{
+    "ano": 2024, "data": "2024-02-15", "id": 5001,
+    "documentos_sessao": [
+        {"rotulo": "Expediente em pdf", "url": URL_SESSOES.format(nome=f"{GUID_EXPEDIENTE}.pdf")},
+        {"rotulo": "Ata", "url": URL_SESSOES.format(nome=f"{GUID_ATA}.docx")},
+        {"rotulo": "Ata", "url": URL_SESSOES.format(nome=f"{GUID_ATA_PENDENTE}.pdf")},
+        {"rotulo": "Ata", "url": None},
+    ],
+}]
+
+# ---- textos brutos (como sairiam de coletor.extratores) e originais
 TEXTO_PL = "\n".join([
     "CÂMARA MUNICIPAL DE NITERÓI",
     "PROJETO DE LEI Nº 900/2024",
@@ -64,8 +151,9 @@ TEXTO_PL = "\n".join([
     "informal e dá a elas regras claras de funcionamento, transparência e prestação de contas à população, "
     "com relatório anual publicado no portal oficial do município.",
     "",
-    "Contato do gabinete para dúvidas: (21) 98888-7777.",
+    "Telefone do gabinete: (21) 2620-1234. Contato pessoal do assessor: (21) 98888-7777.",
     "Sala das Sessões, 10 de março de 2024.",
+    "Vereador Fulano Sintético",
 ])
 
 TEXTO_ANEXO = "\f".join([
@@ -85,6 +173,16 @@ TEXTO_ANEXO = "\f".join([
         "~ ,; .",
         "Página 2 de 2",
     ]),
+])
+
+TEXTO_SUBSTITUTIVO = "\f".join([
+    "\n".join([
+        "SUBSTITUTIVO Nº 1 AO PROJETO DE LEI Nº 900/2024",
+        "",
+        "Art. 1º Fica instituído o Programa Municipal Sintético de Leitura nas Praças e nas bibliotecas "
+        "escolares, com estantes comunitárias e rodas de leitura abertas ao público em geral.",
+    ]),
+    "",  # página escaneada que ficou sem OCR
 ])
 
 TEXTO_REQ = "\n".join([
@@ -120,58 +218,76 @@ TEXTO_ATA = "\n".join([
     "presente ata, que, lida e aprovada, será assinada por quem de direito, na forma regimental.",
 ])
 
-# Registros sintéticos dos documentos (como em data/): o ano do manifesto vem de `ano`.
-REGISTROS = {
-    "doc:127858": {"tipo": "pl", "numero": 900, "ano": 2024, "data": "2024-03-10"},
-    "doc:266596": {"tipo": "substitutivo", "numero": 1, "ano": 2024, "data": "2024-06-20", "pl": "doc:127858"},
-    # protocolado em 2024, com data do documento em 2025: o manifesto é o de 2024
-    "doc:290001": {"tipo": "requerimento", "numero": 901, "ano": 2024, "data": "2025-01-03"},
-    "doc:290002": {"tipo": "pdl", "numero": 902, "ano": 2024, "data": "2024-08-01"},
-    "sessao:5001": {"tipo": "ata", "numero": 10, "ano": 2024, "data": "2024-02-15"},
+TEXTO_SO_RUIDO = "-----\n=====\n* * * *"
+
+ORIGINAL_REMOVIDO = b"%PDF-1.7 pdl sintetico removido a pedido"
+ORIGINAL_REQ = b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1 doc sintetico do requerimento"
+
+# O que o servidor devolveria em cada chave (None: download ainda não feito).
+ORIGINAIS: dict[str, bytes | None] = {
+    "siscam:900001": b"PK\x03\x04 docx sintetico do PL 900/2024 e do substitutivo",
+    "siscam:900002": b"%PDF-1.7 anexo sintetico com pagina escaneada",
+    "siscam:900003": ORIGINAL_REQ,
+    "siscam:900004": ORIGINAL_REMOVIDO,
+    "siscam:900005": b"%PDF-1.7 substitutivo sintetico com pagina sem OCR",
+    "siscam:900006": b"PK\x03\x04 docx sintetico so com separadores",
+    "siscam:900007": ORIGINAL_REMOVIDO,
+    "siscam:900008": ORIGINAL_REQ,
+    f"sessao:{GUID_ATA}": b"PK\x03\x04 docx sintetico da ata da sessao 5001",
+    f"sessao:{GUID_ATA_PENDENTE.lower()}": None,
 }
 
-ARQUIVOS = [
-    {"chave": "siscam:900001", "documentos": ["doc:266596", "doc:127858"], "documento": "doc:127858",
-     "tipo": "pl", "original": b"PK\x03\x04 docx sintetico do PL 900/2024 e do substitutivo",
-     "formato": "docx", "extrator": "docx", "versao_extrator": VERSAO_EXTRATORES, "paginas": 0,
-     "paginas_ocr": 0, "confianca": None, "status": "ok", "cabecalhos_omitidos": 2,
-     "ocr_paginas": None, "ementa": EMENTA_PL, "bruto": TEXTO_PL},
-    {"chave": "siscam:900002", "documentos": ["doc:127858"], "documento": "doc:127858",
-     "tipo": "pl", "original": b"%PDF-1.7 anexo sintetico com pagina escaneada",
-     "formato": "pdf", "extrator": "pdftotext+tesseract", "versao_extrator": "25.07.0+5.5.3", "paginas": 2,
-     "paginas_ocr": 1, "confianca": 87.43, "status": "ok_ocr", "cabecalhos_omitidos": 0,
-     "ocr_paginas": {2}, "ementa": EMENTA_PL, "bruto": TEXTO_ANEXO},
-    {"chave": "siscam:900003", "documentos": ["doc:290001"], "documento": "doc:290001",
-     "tipo": "requerimento", "original": b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1 doc sintetico do requerimento",
-     "formato": "doc", "extrator": "doc", "versao_extrator": VERSAO_EXTRATORES, "paginas": 0,
-     "paginas_ocr": 0, "confianca": None, "status": "ok", "cabecalhos_omitidos": 0,
-     "ocr_paginas": None, "ementa": EMENTA_REQ, "bruto": TEXTO_REQ},
-    {"chave": f"sessao:{GUID_ATA}", "documentos": ["sessao:5001"], "documento": "sessao:5001",
-     "tipo": "ata", "url_origem": URL_SESSOES.format(guid=GUID_ATA),
-     "original": b"PK\x03\x04 docx sintetico da ata da sessao 5001",
-     "formato": "docx", "extrator": "docx", "versao_extrator": VERSAO_EXTRATORES, "paginas": 0,
-     "paginas_ocr": 0, "confianca": None, "status": "ok", "cabecalhos_omitidos": 0,
-     "ocr_paginas": None, "ementa": "", "bruto": TEXTO_ATA},
-    {"chave": "siscam:900004", "documentos": ["doc:290002"], "documento": "doc:290002",
-     "tipo": "pdl", "original": b"%PDF-1.7 pdl sintetico removido a pedido", "status": "removido"},
-]
+# Resultado de coletor.extratores.extrair para cada original processado.
+EXTRACOES = {
+    "siscam:900001": {"formato": "docx", "extrator": "docx", "versao_extrator": VERSAO_EXTRATORES,
+                      "paginas": 0, "paginas_ocr": 0, "confianca": None, "confianca_paginas": {},
+                      "status": "ok", "detalhe": "", "cabecalhos_omitidos": 2, "texto": TEXTO_PL},
+    "siscam:900002": {"formato": "pdf", "extrator": "pdftotext+tesseract", "versao_extrator": "25.07.0+5.5.3",
+                      "paginas": 2, "paginas_ocr": 1, "confianca": 87.43, "confianca_paginas": {2: 87.43},
+                      "status": "ok_ocr", "detalhe": "", "cabecalhos_omitidos": 0, "texto": TEXTO_ANEXO},
+    "siscam:900003": {"formato": "doc", "extrator": "doc", "versao_extrator": VERSAO_EXTRATORES,
+                      "paginas": 0, "paginas_ocr": 0, "confianca": None, "confianca_paginas": {},
+                      "status": "ok", "detalhe": "", "cabecalhos_omitidos": 0, "texto": TEXTO_REQ},
+    "siscam:900005": {"formato": "pdf", "extrator": "pdftotext", "versao_extrator": "25.07.0",
+                      "paginas": 2, "paginas_ocr": 0, "confianca": None, "confianca_paginas": {},
+                      "status": "ok_parcial", "detalhe": "páginas escaneadas sem OCR: 2",
+                      "cabecalhos_omitidos": 0, "texto": TEXTO_SUBSTITUTIVO},
+    "siscam:900006": {"formato": "docx", "extrator": "docx", "versao_extrator": VERSAO_EXTRATORES,
+                      "paginas": 0, "paginas_ocr": 0, "confianca": None, "confianca_paginas": {},
+                      "status": "ok", "detalhe": "", "cabecalhos_omitidos": 0, "texto": TEXTO_SO_RUIDO},
+    f"sessao:{GUID_ATA}": {"formato": "docx", "extrator": "docx", "versao_extrator": VERSAO_EXTRATORES,
+                           "paginas": 0, "paginas_ocr": 0, "confianca": None, "confianca_paginas": {},
+                           "status": "ok", "detalhe": "", "cabecalhos_omitidos": 0, "texto": TEXTO_ATA},
+}
 
 REMOCOES = {"remocoes": [{
     "chave": "siscam:900004",
-    "sha256": hashlib.sha256(ARQUIVOS[-1]["original"]).hexdigest(),
+    "sha256": hashlib.sha256(ORIGINAL_REMOVIDO).hexdigest(),
     "motivo": "Exemplo sintético de pedido de titular (art. 18 da LGPD).",
     "fonte": "https://github.com/marco-jardim/radar-vereadores-niteroi/issues",
     "data": "2026-01-15",
 }]}
 
 
+# ---- regras do contrato
 def sha256(dados: bytes) -> str:
     return hashlib.sha256(dados).hexdigest()
+
+
+def blob_git(dados: bytes) -> str:
+    """SHA-1 do blob do Git (`git hash-object`) dos bytes."""
+    return hashlib.sha1(b"blob %d\0" % len(dados) + dados).hexdigest()
 
 
 def r2_chave(sha: str) -> str:
     """Chave do original no R2: sha256/<aa>/<bb>/<sha256>."""
     return f"sha256/{sha[:2]}/{sha[2:4]}/{sha}"
+
+
+def ordem_chave(chave: str) -> tuple:
+    """Ordem das chaves de arquivo: siscam antes de sessao; ids numéricos crescentes."""
+    origem, ident = chave.split(":", 1)
+    return (0, int(ident), "") if origem == "siscam" else (1, 0, ident)
 
 
 def caminho_texto(tipo: str, ano: int, documento: str, chave: str) -> str:
@@ -187,60 +303,93 @@ def linha_trecho(trecho: dict) -> str:
     return json.dumps(trecho, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
 
 
-def _sem_texto(base: dict) -> dict:
-    base.update({
-        "formato": None, "extrator": None, "versao_extrator": None, "versao_extratores": None,
-        "versao_limpeza": None, "versao_mascara": None, "versao_trechos": None, "paginas": 0,
-        "paginas_ocr": 0, "confianca": None, "cabecalhos_omitidos": 0, "detalhe": "",
-        "limpeza": None, "mascarados": None, "sha256_bruto": None, "sha256_texto": None,
-        "chars": 0, "trechos": 0, "trechos_vetorizaveis": 0, "r2_chave": None,
-    })
-    return base
+def citacoes(proposicoes, documentos, sessoes) -> dict[str, dict]:
+    """Fila: para cada chave de arquivo, a URL e as citações
+    (documento, tipo, principal, tipo do principal, ano do principal, ementa do principal)."""
+    fila: dict[str, dict] = {}
+
+    def citar(chave: str, url: str, documento: str, tipo: str, principal: str, tipo_principal: str,
+              ano: int, ementa: str) -> None:
+        item = fila.setdefault(chave, {"url": url, "citacoes": []})
+        item["citacoes"].append((documento, tipo, principal, tipo_principal, ano, ementa))
+
+    for pl in proposicoes:
+        chave_pl = f"doc:{pl['id']}"
+        for a in pl.get("arquivos") or []:
+            citar(f"siscam:{a['id']}", URL_DOWNLOAD.format(id=a["id"]), chave_pl, "pl", chave_pl, "pl",
+                  pl["ano"], pl["ementa"])
+        for sub in pl.get("substitutivos") or []:
+            for a in sub.get("arquivos") or []:
+                # o PL é o principal de qualquer arquivo dos seus substitutivos
+                citar(f"siscam:{a['id']}", URL_DOWNLOAD.format(id=a["id"]), f"doc:{sub['id']}",
+                      "substitutivo", chave_pl, "pl", pl["ano"], pl["ementa"])
+    for tipo in TIPOS_COM_TEXTO:  # indicações e moções: fora
+        for d in documentos.get(tipo, []):
+            chave_doc = f"doc:{d['id']}"
+            for a in d.get("arquivos") or []:
+                citar(f"siscam:{a['id']}", URL_DOWNLOAD.format(id=a["id"]), chave_doc, tipo, chave_doc, tipo,
+                      d["ano"], d["ementa"])
+    for sessao in sessoes:
+        chave_sessao = f"sessao:{sessao['id']}"
+        for item in sessao.get("documentos_sessao") or []:
+            url = item.get("url")
+            if item.get("rotulo") not in ROTULOS_ATA or not url:
+                continue
+            guid = url.rsplit("/", 1)[1].rsplit(".", 1)[0].lower()
+            citar(f"sessao:{guid}", url, chave_sessao, "ata", chave_sessao, "ata", sessao["ano"], "")
+    return fila
 
 
-def processar(spec: dict) -> tuple[dict, tuple[str, str] | None, list[dict]]:
-    """Entrada do manifesto, (caminho, conteúdo) do .txt e os trechos de um arquivo."""
-    chave = spec["chave"]
-    original = spec["original"]
-    sha_original = sha256(original)
-    id_origem = chave.split(":", 1)[1]
-    base = {
-        "documentos": sorted(spec["documentos"]),
-        "documento": spec["documento"],
-        "tipo": spec["tipo"],
-        "url_origem": spec.get("url_origem") or URL_DOWNLOAD.format(id=id_origem),
-        "sha256_original": sha_original,
-        "bytes": len(original),
-        "status": spec["status"],
-        "commit_textos": None,
-        "processado_em": PROCESSADO_EM,
+def principal(lista: list[tuple]) -> tuple[str, str, int, str]:
+    """(documento, tipo, ano, ementa) do principal: maior prioridade de tipo, menor id."""
+    melhor = min(lista, key=lambda c: (PRIORIDADE_TIPO[c[3]], int(c[2].split(":", 1)[1])))
+    return melhor[2], melhor[3], melhor[4], melhor[5]
+
+
+def entrada_vazia(documentos: list[str], documento: str, tipo: str, url: str, status: str) -> dict:
+    return {
+        "documentos": sorted(set(documentos)), "documento": documento, "tipo": tipo, "url_origem": url,
+        "sha256_original": None, "bytes": None, "formato": None, "extrator": None, "versao_extrator": None,
+        "versao_extratores": None, "versao_limpeza": None, "versao_mascara": None, "versao_trechos": None,
+        "sha256_config": None, "paginas": 0, "paginas_ocr": 0, "confianca": None, "cabecalhos_omitidos": 0,
+        "detalhe": "", "status": status, "duplicata_de": None, "limpeza": None, "mascarados": None,
+        "sha256_bruto": None, "sha256_texto": None, "blob_texto": None, "chars": 0, "trechos": 0,
+        "trechos_vetorizaveis": 0, "r2_chave": None, "processado_em": PROCESSADO_EM,
     }
-    if spec["status"] not in STATUS_COM_TEXTO:
-        return _sem_texto(base), None, []
-    bruto = trechos.normalizar(spec["bruto"])
-    limpo, contagens = limpeza.limpar(bruto, CLICHES, ementa=spec["ementa"],
-                                      ocr_paginas=spec["ocr_paginas"])
-    mascarado, mascarados = mascara.mascarar(limpo)
+
+
+def processar(entrada: dict, chave: str, extracao: dict, ementa: str, cliches: dict, protecao,
+              versao_limpeza: str, sha_config: str) -> tuple[str | None, list[dict]]:
+    """Preenche a entrada com o pipeline; devolve o conteúdo do .txt (ou None) e os trechos."""
+    entrada.update({
+        "formato": extracao["formato"], "extrator": extracao["extrator"] or None,
+        "versao_extrator": extracao["versao_extrator"] or None, "versao_extratores": VERSAO_EXTRATORES,
+        "versao_limpeza": versao_limpeza, "versao_mascara": mascara.VERSAO_MASCARA,
+        "versao_trechos": trechos.VERSAO_TRECHOS, "sha256_config": sha_config,
+        "paginas": extracao["paginas"], "paginas_ocr": extracao["paginas_ocr"],
+        "confianca": None if extracao["confianca"] is None else round(float(extracao["confianca"]), 1),
+        "cabecalhos_omitidos": extracao["cabecalhos_omitidos"],
+        "status": extracao["status"],
+        "r2_chave": r2_chave(entrada["sha256_original"]),
+    })
+    detalhe, _ = mascara.mascarar(extracao["detalhe"], LIBERADOS)
+    entrada["detalhe"] = detalhe[:300]
+    if extracao["status"] not in STATUS_COM_TEXTO:
+        return None, []
+    bruto = trechos.normalizar(extracao["texto"])
+    # páginas que vieram do OCR: as de confianca_paginas (zip: None)
+    ocr_paginas = None if extracao["formato"] == "zip" else set(extracao["confianca_paginas"])
+    limpo, contagens = limpeza.limpar(bruto, cliches, protecao, ementa=ementa, ocr_paginas=ocr_paginas)
+    mascarado, mascarados = mascara.mascarar(limpo, LIBERADOS)
     texto = trechos.normalizar(mascarado)
-    fortes = [o for o in mascara.varrer(texto) if o["forte"]]
+    fortes = [o for o in mascara.varrer(texto, LIBERADOS) if o["forte"]]
     if fortes:  # barreira de PII, como em coletor.textos --commit-textos
         raise RuntimeError(f"{chave}: {len(fortes)} ocorrência(s) forte(s) depois da máscara")
-    lista = trechos.dividir(texto, spec["documento"], chave)
-    conteudo = texto + "\n"
-    confianca = spec["confianca"]
-    base.update({
-        "formato": spec["formato"],
-        "extrator": spec["extrator"] or None,
-        "versao_extrator": spec["versao_extrator"] or None,
-        "versao_extratores": VERSAO_EXTRATORES,
-        "versao_limpeza": limpeza.VERSAO_LIMPEZA,
-        "versao_mascara": mascara.VERSAO_MASCARA,
-        "versao_trechos": trechos.VERSAO_TRECHOS,
-        "paginas": spec["paginas"],
-        "paginas_ocr": spec["paginas_ocr"],
-        "confianca": None if confianca is None else round(float(confianca), 1),
-        "cabecalhos_omitidos": spec["cabecalhos_omitidos"],
-        "detalhe": "",
+    if not texto:
+        entrada["status"], entrada["detalhe"] = "vazio_legitimo", "esvaziado pela limpeza"
+    lista = trechos.dividir(texto, entrada["documento"], chave)
+    conteudo = (texto + "\n").encode("utf-8")
+    entrada.update({
         "limpeza": {
             "linhas_removidas": contagens["linhas_removidas"],
             "por_regra": {regra: contagens[regra]
@@ -248,14 +397,80 @@ def processar(spec: dict) -> tuple[dict, tuple[str, str] | None, list[dict]]:
         },
         "mascarados": {tipo: mascarados[tipo] for tipo in mascara.TIPOS},
         "sha256_bruto": sha256(bruto.encode("utf-8")),
-        "sha256_texto": sha256(conteudo.encode("utf-8")),
+        "sha256_texto": sha256(conteudo),
+        "blob_texto": blob_git(conteudo),
         "chars": len(texto),
         "trechos": len(lista),
         "trechos_vetorizaveis": sum(t["vetorizavel"] for t in lista),
-        "r2_chave": r2_chave(sha_original),
     })
-    caminho = caminho_texto(spec["tipo"], ANO, spec["documento"], chave)
-    return base, (caminho, conteudo), lista
+    return conteudo.decode("utf-8"), lista
+
+
+def montar(cliches: dict, versao_limpeza: str) -> tuple[dict[int, dict], dict[str, str], dict[str, list]]:
+    """Manifestos por ano, textos (caminho → conteúdo) e trechos (caminho → lista)."""
+    protecao = limpeza.ProtecaoLimpeza(PESSOAS)
+    sha_config = limpeza.hash_config_de(LIBERADOS, PESSOAS)
+    removidas = {(r["chave"], r["sha256"]) for r in REMOCOES["remocoes"]}
+    chaves_removidas = {c for c, _ in removidas}
+    shas_removidos = {s for _, s in removidas}
+    fila = citacoes(PROPOSICOES, DOCUMENTOS, SESSOES)
+
+    entradas: dict[str, dict] = {}
+    anos: dict[str, int] = {}
+    ementas: dict[str, str] = {}
+    for chave in sorted(fila, key=ordem_chave):
+        item = fila[chave]
+        documento, tipo, ano, ementa = principal(item["citacoes"])
+        docs = [c[0] for c in item["citacoes"]]
+        anos[chave], ementas[chave] = ano, ementa
+        if chave in chaves_removidas:  # removido pela chave: não baixa
+            entradas[chave] = entrada_vazia(docs, documento, tipo, item["url"], "removido")
+            continue
+        original = ORIGINAIS[chave]
+        if original is None:
+            entradas[chave] = entrada_vazia(docs, documento, tipo, item["url"], "pendente_download")
+            continue
+        entrada = entrada_vazia(docs, documento, tipo, item["url"], "ok")
+        entrada["sha256_original"], entrada["bytes"] = sha256(original), len(original)
+        if entrada["sha256_original"] in shas_removidos:  # removido pelo SHA-256: baixado e descartado
+            entrada["status"] = "removido"
+        entradas[chave] = entrada
+
+    # duplicatas: o mesmo original sob várias chaves; a menor chave é a canônica
+    grupos: dict[str, list[str]] = {}
+    for chave in sorted(entradas, key=ordem_chave):
+        e = entradas[chave]
+        if e["status"] != "removido" and e["sha256_original"]:
+            grupos.setdefault(e["sha256_original"], []).append(chave)
+    for chaves in grupos.values():
+        canonica, outras = chaves[0], chaves[1:]
+        if not outras:
+            continue
+        todas = [c for k in chaves for c in fila[k]["citacoes"]]
+        documento, tipo, ano, ementa = principal(todas)
+        e = entradas[canonica]
+        e.update({"documentos": sorted({c[0] for c in todas}), "documento": documento, "tipo": tipo})
+        anos[canonica], ementas[canonica] = ano, ementa
+        for outra in outras:
+            entradas[outra]["status"] = "duplicata"
+            entradas[outra]["duplicata_de"] = canonica
+
+    manifestos: dict[int, dict] = {}
+    textos: dict[str, str] = {}
+    lista_trechos: dict[str, list] = {}
+    for chave in sorted(entradas, key=ordem_chave):
+        e = entradas[chave]
+        if e["status"] == "ok":
+            conteudo, lista = processar(e, chave, EXTRACOES[chave], ementas[chave], cliches, protecao,
+                                        versao_limpeza, sha_config)
+            if conteudo is not None:
+                textos[caminho_texto(e["tipo"], anos[chave], e["documento"], chave)] = conteudo
+            if lista:
+                lista_trechos.setdefault(caminho_trechos(e["tipo"], anos[chave]), []).extend(lista)
+        manifestos.setdefault(anos[chave], {})[chave] = e
+    for lista in lista_trechos.values():
+        lista.sort(key=lambda t: (t["documento"], t["arquivo"], t["posicao"]))
+    return manifestos, textos, lista_trechos
 
 
 def _json_config(obj: dict) -> str:
@@ -263,33 +478,47 @@ def _json_config(obj: dict) -> str:
     return json.dumps(obj, ensure_ascii=False, indent=1) + "\n"
 
 
+def _esvaziar(destino: Path) -> None:
+    """Apaga tudo em `destino`, exceto os .py e __pycache__."""
+    if (destino / ".git").exists() or destino.resolve() == RAIZ:
+        raise RuntimeError(f"destino suspeito: {destino}")
+    for item in destino.iterdir():
+        if item.name == "__pycache__" or item.suffix == ".py":
+            continue
+        if item.is_dir():
+            shutil.rmtree(item)
+        else:
+            item.unlink()
+
+
+def gravar_bytes(caminho: Path, conteudo: str) -> None:
+    caminho.parent.mkdir(parents=True, exist_ok=True)
+    caminho.write_bytes(conteudo.encode("utf-8"))
+
+
 def gerar(destino: Path) -> None:
-    """Grava manifesto, registros, remoções e a árvore dados-textos em `destino`."""
+    """Grava a raiz em miniatura (data/, config/ e dados-textos/) em `destino`."""
     destino = Path(destino)
+    destino.mkdir(parents=True, exist_ok=True)
+    _esvaziar(destino)
+    arquivos.salvar_lista(destino / "data" / "proposicoes" / f"{ANO}.json", PROPOSICOES)
+    for tipo, registros in sorted(DOCUMENTOS.items()):
+        arquivos.salvar_lista(destino / "data" / "documentos" / tipo / f"{ANO}.json", registros)
+    arquivos.salvar_lista(destino / "data" / "sessoes" / f"{ANO}.json", SESSOES)
+    caminho_cliches = destino / "data" / "textos" / "cliches.json"
+    arquivos.salvar_mapa(caminho_cliches, CLICHES)
+    cliches = limpeza.carregar_cliches(caminho_cliches)
+    versao_limpeza = limpeza.versao_efetiva(destino)
+    gravar_bytes(destino / "config" / "remocoes.json", _json_config(REMOCOES))
+
+    manifestos, textos, lista_trechos = montar(cliches, versao_limpeza)
+    for ano, manifesto in sorted(manifestos.items()):
+        arquivos.salvar_mapa(destino / "data" / "textos" / f"manifesto-{ano}.json", manifesto)
     dados_textos = destino / "dados-textos"
-    if dados_textos.exists():
-        shutil.rmtree(dados_textos)
-    manifesto: dict[str, dict] = {}
-    por_arquivo_trechos: dict[str, list[dict]] = {}
-    for spec in ARQUIVOS:
-        entrada, texto, lista = processar(spec)
-        manifesto[spec["chave"]] = entrada
-        if texto is not None:
-            caminho, conteudo = texto
-            alvo = dados_textos / caminho
-            alvo.parent.mkdir(parents=True, exist_ok=True)
-            alvo.write_bytes(conteudo.encode("utf-8"))
-        if lista:
-            por_arquivo_trechos.setdefault(caminho_trechos(spec["tipo"], ANO), []).extend(lista)
-    for caminho, lista in sorted(por_arquivo_trechos.items()):
-        lista.sort(key=lambda t: (t["documento"], t["arquivo"], t["posicao"]))
-        alvo = dados_textos / caminho
-        alvo.parent.mkdir(parents=True, exist_ok=True)
-        alvo.write_bytes(("".join(linha_trecho(t) + "\n" for t in lista)).encode("utf-8"))
-    arquivos.salvar_mapa(destino / f"manifesto-{ANO}.json", manifesto)
-    arquivos.salvar_mapa(destino / "registros.json", REGISTROS)
-    (destino / "config").mkdir(parents=True, exist_ok=True)
-    (destino / "config" / "remocoes.json").write_bytes(_json_config(REMOCOES).encode("utf-8"))
+    for caminho, conteudo in sorted(textos.items()):
+        gravar_bytes(dados_textos / caminho, conteudo)
+    for caminho, lista in sorted(lista_trechos.items()):
+        gravar_bytes(dados_textos / caminho, "".join(linha_trecho(t) + "\n" for t in lista))
 
 
 if __name__ == "__main__":

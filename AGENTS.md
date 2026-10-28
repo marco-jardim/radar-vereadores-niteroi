@@ -68,7 +68,7 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `worker/` | Worker de busca TypeScript; `wrangler.jsonc` com produção no nível superior e staging em `env.staging`. |
 | `scripts/testes.ps1` | Executor paralelo local equivalente ao discover; o CI segue sequencial. |
 | `docs/backend.md` | Recursos Cloudflare, ferramentas, credenciais e rollback. |
-| `docs/contratos/textos.md` | Contrato congelado de chaves, manifesto `data/textos/manifesto-<ano>.json`, `dados-textos`, D1, Vectorize e remoções; fixtures em `tests/fixtures/contratos/` (geradas por `gerar_fixtures.py`). |
+| `docs/contratos/textos.md` | Contrato congelado de chaves, documento principal, manifesto `data/textos/manifesto-<ano>.json`, remoções, duplicatas, `dados-textos`, D1 e Vectorize; fixtures em `tests/fixtures/contratos/` (raiz em miniatura gerada por `gerar_fixtures.py`). |
 | `.github/workflows/` | Testes, coleta semanal e publicação. |
 | `site/` | Saída gerada e ignorada pelo Git. |
 
@@ -217,7 +217,8 @@ de endereço e telefone admite só dígitos, espaços, parênteses, `+` e `-`, c
 Não repita o par `(tipo, valor)`.
 
 Remoções têm somente a lista `remocoes`, ordenada por `(data, chave, sha256)`, sem pares `(chave, sha256)` repetidos. Cada item
-contém exatamente `chave` (`siscam:<id>` ou `sessao:<id>`, id com letras ASCII, números e hífen), `sha256`
+contém exatamente `chave` (`siscam:<IdArquivo>`, inteiro positivo, ou `sessao:<guid>`, GUID em minúsculas,
+como em `docs/contratos/textos.md` §2.1), `sha256`
 (64 hexadecimais minúsculos), `motivo` não vazio, `fonte` HTTPS e `data` válida `AAAA-MM-DD`, não futura.
 O `motivo` é público no Git e não deve conter dados pessoais.
 

@@ -23,7 +23,8 @@ from .base import CONFIANCA_MINIMA, ErroFerramenta, FerramentaAusente, Resultado
 
 IDIOMA = "por"
 RESOLUCAO = "300"
-# Orçamento por documento: o que passar fica `escaneado_sem_ocr`, para outra execução.
+# Orçamento por documento: o que passar fica pendente (`ok_parcial` ou
+# `escaneado_sem_ocr`), para outra execução.
 MAX_PAGINAS_OCR = 300
 OCR_SEGUNDOS_DOCUMENTO = 1800
 _EXTENSOES = {"jpeg": ".jpg", "png": ".png", "tiff": ".tif"}

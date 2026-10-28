@@ -19,7 +19,9 @@ from .base import VERSAO_EXTRATORES, ErroFormato, ErroLimite, Resultado, ler_mem
 PROFUNDIDADE_MAXIMA = 2
 
 # Ordem de gravidade usada para o status agregado do zip.
-_PRIORIDADE = ("pendente_ferramenta", "escaneado_sem_ocr", "ocr_baixa_confianca", "ok_ocr", "ok")
+_PRIORIDADE = ("pendente_ferramenta", "escaneado_sem_ocr", "ok_parcial", "ocr_baixa_confianca", "ok_ocr", "ok")
+# Membros com texto: com algum deles, um membro escaneado sem OCR deixa o zip `ok_parcial`.
+_COM_TEXTO = ("ok_parcial", "ocr_baixa_confianca", "ok_ocr", "ok")
 
 
 def _nome_seguro(nome: str) -> str:
@@ -78,4 +80,6 @@ def extrair_zip(dados: bytes, ocr: bool, ferramentas, profundidade: int, orcamen
             resultado.status = "erro_formato"
         else:
             resultado.status = "vazio_legitimo"
+    if resultado.status == "escaneado_sem_ocr" and any(s in _COM_TEXTO for s in status_membros):
+        resultado.status = "ok_parcial"
     return resultado

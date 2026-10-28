@@ -794,7 +794,8 @@ class TestValidarRemocoes(ConfigOpcional, Afirmacoes):
 
     def test_validas(self):
         self.assertEqual(self.validar({"remocoes": []}), [])
-        itens = [REMOCAO, {**REMOCAO, "chave": "sessao:Ab-123", "data": date.today().isoformat()}]
+        itens = [REMOCAO, {**REMOCAO, "chave": "sessao:00000000-0000-4000-8000-0000000000a1",
+                           "data": date.today().isoformat()}]
         self.assertEqual(self.validar({"remocoes": itens}), [])
 
     def test_estrutura(self):
@@ -812,7 +813,10 @@ class TestValidarRemocoes(ConfigOpcional, Afirmacoes):
 
     def test_campos_invalidos(self):
         casos = {
-            "chave": (None, [], 123, "", "outro:123", "siscam:", "sessao:1_2", "siscam:1/2", "siscam:á", "siscam:123\n"),
+            "chave": (None, [], 123, "", "outro:123", "siscam:", "sessao:1_2", "siscam:1/2", "siscam:á", "siscam:123\n",
+                      "siscam:0", "siscam:012", "siscam:abc", "siscam:-1", "sessao:1", "sessao:Ab-123",
+                      "sessao:00000000-0000-4000-8000-0000000000A1", "sessao:00000000-0000-4000-8000-0000000000a",
+                      "sessao:{00000000-0000-4000-8000-0000000000a1}", "SISCAM:123"),
             "sha256": (None, [], 123, "a" * 63, "a" * 65, "A" * 64, "g" * 64, "a" * 64 + "\n"),
             "motivo": (None, [], 123, "", " "),
             "fonte": (None, [], "", "http://exemplo.org", "https://", "https://exemplo.org/a b"),
@@ -835,7 +839,7 @@ class TestValidarRemocoes(ConfigOpcional, Afirmacoes):
 
     def test_ordem_por_data_depois_chave_e_hash(self):
         itens = [REMOCAO, {**REMOCAO, "sha256": "c" * 64}, {**REMOCAO, "chave": "siscam:124"},
-                 {**REMOCAO, "chave": "sessao:1", "data": "2024-03-01"}]
+                 {**REMOCAO, "chave": "sessao:00000000-0000-4000-8000-0000000000a1", "data": "2024-03-01"}]
         self.assertEqual(self.validar({"remocoes": itens}), [])
         for i in range(len(itens) - 1):
             fora_de_ordem = itens.copy()

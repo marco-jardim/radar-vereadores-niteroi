@@ -1393,6 +1393,11 @@ def validar_backend(raiz: Path | None = None) -> list[str]:
     return problemas
 
 
+RE_CHAVE_ARQUIVO = re.compile(
+    r"siscam:[1-9][0-9]*|sessao:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+)
+
+
 def validar_remocoes(raiz: Path | None = None) -> list[str]:
     """Confere chaves, hashes, justificativas e ordem das remoções, sem rede."""
     arquivo = "config/remocoes.json"
@@ -1414,9 +1419,11 @@ def validar_remocoes(raiz: Path | None = None) -> list[str]:
             problemas.append(f"{r}: campos esperados: chave, sha256, motivo, fonte, data, sem extras")
         problemas += _memoria_textos(item, ("motivo",), r)
         chave, sha256, data = item.get("chave"), item.get("sha256"), item.get("data")
-        chave_valida = isinstance(chave, str) and re.fullmatch(r"(siscam|sessao):[A-Za-z0-9-]+", chave)
+        # docs/contratos/textos.md §2.1: siscam:<IdArquivo> ou sessao:<guid> em minúsculas
+        chave_valida = isinstance(chave, str) and re.fullmatch(RE_CHAVE_ARQUIVO, chave)
         if not chave_valida:
-            problemas.append(f"{r}: 'chave' deveria ser siscam:<id> ou sessao:<id> (letras, números e hífen)")
+            problemas.append(f"{r}: 'chave' deveria ser siscam:<IdArquivo> (inteiro positivo) ou "
+                             "sessao:<guid> (GUID em minúsculas)")
         sha256_valido = isinstance(sha256, str) and re.fullmatch(r"[0-9a-f]{64}", sha256)
         if not sha256_valido:
             problemas.append(f"{r}: 'sha256' deveria ter 64 caracteres hexadecimais minúsculos")

@@ -4,8 +4,9 @@ Cada item tem `chave` (`siscam:<IdArquivo>` ou `sessao:<guid>`, a mesma chave do
 manifesto de textos), `sha256` (do original), `motivo`, `fonte` e `data`; o formato é
 conferido por `coletor.validar.validar_remocoes`. Um arquivo está removido quando a
 chave **ou** o SHA-256 do original coincide com algum item: outra versão do mesmo id
-e o mesmo original publicado sob outro id também ficam fora (veja
-`docs/contratos/textos.md`, seção "Remoções").
+e o mesmo original publicado sob outro id também ficam fora. Pela chave, o arquivo
+nem é baixado; pelo SHA-256 (chave nova), é baixado só para calcular o hash e
+descartado, sem cache nem R2 (veja `docs/contratos/textos.md`, seção "Remoções").
 
 Arquivo ausente equivale a nenhuma remoção; arquivo ilegível ou com estrutura
 inválida é ValueError, para nunca publicar por engano o que deveria sair. A leitura

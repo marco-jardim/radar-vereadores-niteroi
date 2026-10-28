@@ -104,6 +104,19 @@ class TestCpfSeparadoresMistos(unittest.TestCase):
         _sem_mudanca(self, "[CPF omitido] e 123.456.789-00")
         _sem_mudanca(self, "CPFs 123.456.789-00")
 
+    def test_espaco_dentro_de_sequencia_maior_nao_e_cpf(self) -> None:
+        for texto in ("Tabela 111 529 982 247 25", "Colunas 529 982 247 25 333", "valores 7 529 982 247 25 8"):
+            with self.subTest(texto=texto):
+                _sem_mudanca(self, texto)
+        # sem espaço como separador, a vizinhança não importa
+        self._mascarado_limpo("item 1 529.982.247-25", "item 1 [CPF omitido]")
+        self._mascarado_limpo("Número 529 982 247 25.", "Número [CPF omitido].")
+        # o rótulo vence a proteção da sequência
+        saida, contagens = mascarar("CPF: 529 982 247 25 7")
+        self.assertEqual((saida, contagens["cpf"]), ("CPF: [CPF omitido] 7", 1))
+        saida, contagens = mascarar("CPF 1 529 982 247 25")
+        self.assertEqual((saida, contagens["cpf"]), ("CPF 1 [CPF omitido]", 1))
+
     def test_rotulo_de_rg_nao_corta_cpf(self) -> None:
         self._mascarado_limpo("RG nº, CPF 123.456 789-09", "RG nº, CPF [CPF omitido]")
 

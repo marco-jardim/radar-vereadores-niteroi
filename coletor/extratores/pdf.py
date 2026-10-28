@@ -5,11 +5,12 @@ pdftotext grava ao fim de cada uma. Página com menos de `LIMIAR_UTEIS` caracter
 úteis (letras e dígitos) é considerada escaneada. Com `ocr=True`, só essas páginas
 passam pelo OCR (`coletor.extratores.ocr`); as demais mantêm o texto do PDF.
 
-Status: `ok` (todas as páginas com texto), `escaneado_sem_ocr` (há páginas
-escaneadas e o OCR não foi pedido, falhou em alguma página ou passou do orçamento
-por documento; o texto parcial é mantido e `detalhe` lista as páginas), `ok_ocr` ou
-`ocr_baixa_confianca` (conforme a confiança média), `pendente_ferramenta`
-(pdftotext, pdftoppm, tesseract ou o idioma `por` ausente).
+Status: `ok` (todas as páginas com texto); quando há páginas escaneadas que ficaram
+sem OCR (não pedido, falha numa página ou orçamento por documento esgotado),
+`ok_parcial` se alguma página tem texto (do PDF ou do OCR), mantido, ou
+`escaneado_sem_ocr` se nenhuma tem; `detalhe` lista as páginas pendentes. Com todas
+as escaneadas lidas, `ok_ocr` ou `ocr_baixa_confianca` (conforme a confiança média);
+`pendente_ferramenta` (pdftotext, pdftoppm, tesseract ou o idioma `por` ausente).
 
 Somente biblioteca padrão do Python; as ferramentas rodam por subprocess, sem shell.
 """
@@ -68,7 +69,10 @@ def extrair_pdf(dados: bytes, ocr: bool, ferramentas=None, cache_ocr: Path | Non
             return resultado
         if not ocr:
             resultado.texto = SEPARADOR.join(paginas)
-            resultado.status = "escaneado_sem_ocr"
+            com_texto = len(escaneadas) < len(paginas)
+            resultado.status = "ok_parcial" if com_texto else "escaneado_sem_ocr"
+            if com_texto:
+                resultado.detalhe = "páginas escaneadas sem OCR: " + ", ".join(map(str, escaneadas))
             return resultado
         try:
             _ocr.verificar(ferramentas, pdf=True)
@@ -83,10 +87,12 @@ def extrair_pdf(dados: bytes, ocr: bool, ferramentas=None, cache_ocr: Path | Non
     # trouxe mais caracteres úteis que o texto embutido no PDF.
     soma = 0.0
     palavras_total = 0
+    usadas = 0
     for n, (texto, conf, palavras) in sorted(lido.lidas.items()):
         if caracteres_uteis(texto) <= caracteres_uteis(paginas[n - 1]):
             continue
         paginas[n - 1] = texto
+        usadas += 1
         if conf is not None and palavras:
             resultado.confianca_paginas[n] = round(conf, 2)
             soma += conf * palavras
@@ -99,7 +105,10 @@ def extrair_pdf(dados: bytes, ocr: bool, ferramentas=None, cache_ocr: Path | Non
         resultado.confianca = round(soma / palavras_total, 2)
     pendencias = _ocr.descrever_pendencias(lido)
     if pendencias:
-        resultado.status, resultado.detalhe = "escaneado_sem_ocr", pendencias
+        # páginas com texto: as não escaneadas e as que o OCR preencheu
+        com_texto = len(escaneadas) < len(paginas) or usadas > 0
+        resultado.status = "ok_parcial" if com_texto else "escaneado_sem_ocr"
+        resultado.detalhe = pendencias
     else:
         resultado.status = _ocr.status_ocr(resultado.confianca)
     return resultado

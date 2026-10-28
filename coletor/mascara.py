@@ -4,7 +4,9 @@ Regras de `mascarar`:
 - **CPF** é mascarado sempre, de qualquer pessoa, com ou sem pontuação, mas só
   quando os dígitos verificadores são válidos. Entre os grupos 3-3-3-2 vale um
   separador por intervalo: ".", " ", "/", "-" (com espaço opcional de cada lado) ou
-  nenhum, como em "123.456 789-09" (OCR). Com o rótulo "CPF" ("cpf", "c.p.f.",
+  nenhum, como em "123.456 789-09" (OCR). Com espaço como separador, uma fatia
+  3-3-3-2 colada a outros números por espaço ("1 529 982 247 25 7", colunas de
+  tabela) não é CPF, salvo com rótulo. Com o rótulo "CPF" ("cpf", "c.p.f.",
   "CPF/MF", "CPF nº", "CPF:") até `JANELA_ROTULO_CPF` caracteres antes, o número é
   mascarado mesmo com DV inválido (erros de OCR), e as proteções gerais não valem.
 - **RG** é mascarado quando o rótulo "RG" ou "R.G." aparece até 20 caracteres antes
@@ -509,6 +511,14 @@ def _antes(texto: str, inicio: int) -> str:
     return _dobrar(trecho)
 
 
+def _dentro_de_sequencia(texto: str, m: re.Match) -> bool:
+    """Se o candidato tem "dígito espaço" logo antes ou "espaço dígito" logo depois."""
+    antes = texto[max(0, m.start() - 2):m.start()]
+    depois = texto[m.end():m.end() + 2]
+    return ((len(antes) == 2 and antes[0].isdigit() and antes[1] == " ")
+            or (len(depois) == 2 and depois[0] == " " and depois[1].isdigit()))
+
+
 def _rotulo_cpf(texto: str, inicio: int) -> bool:
     """Se há rótulo de CPF até JANELA_ROTULO_CPF caracteres antes da posição; as marcas
     de substituição ("[CPF omitido]") não contam como rótulo."""
@@ -561,8 +571,11 @@ def _detectar(texto: str, liberados_: Iterable[str]) -> list[tuple[int, int, str
     for m in _RE_CPF.finditer(texto):
         digitos = "".join(m.group(g) for g in "abcde")
         rotulado = _rotulo_cpf(texto, m.start())
-        if not rotulado and not cpf_valido(digitos):
-            continue
+        if not rotulado:
+            if not cpf_valido(digitos):
+                continue
+            if " " in (m.group("s1"), m.group("s2"), m.group("s3")) and _dentro_de_sequencia(texto, m):
+                continue  # fatia 3-3-3-2 de uma sequência maior de números separados por espaço
         formatado = m.group("s1") == "." and m.group("s2") == "." and m.group("s3").strip() == "-"
         if not formatado and marcacao.sobrepoe(m.start(), m.end()):
             continue  # metadado ou marcação; CPF formatado é mascarado sempre

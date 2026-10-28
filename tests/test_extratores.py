@@ -527,10 +527,26 @@ class TestPdfFalso(ComFerramentasFalsas):
     def test_misto_sem_ocr(self) -> None:
         self.configurar(paginas=[PAGINA_LONGA, "  12  ", PAGINA_LONGA])
         r = extratores.extrair(fx.pdf_misto(), ferramentas=self.ferr)
-        self.assertEqual(r.status, "escaneado_sem_ocr")
+        self.assertEqual(r.status, "ok_parcial")  # há páginas com texto: o disponível é mantido
         self.assertEqual((r.paginas, r.paginas_escaneadas, r.paginas_ocr), (3, [2], 0))
         self.assertIn("Página com texto suficiente", r.texto)
+        self.assertIn("páginas escaneadas sem OCR: 2", r.detalhe)
         self.assertEqual(self.registro(), [])
+
+    def test_todo_escaneado_sem_ocr(self) -> None:
+        self.configurar(paginas=["  12  ", ""])
+        r = extratores.extrair(fx.pdf_escaneado(), ferramentas=self.ferr)
+        self.assertEqual((r.status, r.paginas_escaneadas), ("escaneado_sem_ocr", [1, 2]))
+        self.assertIn("ok_parcial", base.STATUS)
+
+    def test_zip_com_membro_escaneado_e_membro_com_texto(self) -> None:
+        self.configurar(paginas=[""])
+        dados = fx.zip_bytes({"leia.txt": "Texto do anexo".encode(), "escaneado.pdf": fx.pdf_escaneado()})
+        r = extratores.extrair(dados, ferramentas=self.ferr)
+        self.assertEqual((r.formato, r.status), ("zip", "ok_parcial"))
+        self.assertIn("Texto do anexo", r.texto)
+        r = extratores.extrair(fx.zip_bytes({"escaneado.pdf": fx.pdf_escaneado()}), ferramentas=self.ferr)
+        self.assertEqual((r.formato, r.status), ("zip", "escaneado_sem_ocr"))
 
     def test_misto_ocr_so_na_pagina_escaneada(self) -> None:
         self.configurar(paginas=[PAGINA_LONGA, "", PAGINA_LONGA], ocr_texto="Texto escaneado da segunda",
@@ -551,7 +567,7 @@ class TestPdfFalso(ComFerramentasFalsas):
         self.configurar(paginas=[PAGINA_LONGA, "", "", PAGINA_LONGA], ocr_texto="Texto lido da página",
                         falhar_paginas=[3])
         r = extratores.extrair(fx.pdf_misto(), ocr=True, ferramentas=self.ferr)
-        self.assertEqual(r.status, "escaneado_sem_ocr")
+        self.assertEqual(r.status, "ok_parcial")
         self.assertIn("OCR falhou nas páginas 3", r.detalhe)
         self.assertEqual((r.paginas_escaneadas, r.paginas_ocr, list(r.confianca_paginas)), ([2, 3], 1, [2]))
         partes = r.texto.split("\n\f\n")
@@ -563,7 +579,7 @@ class TestPdfFalso(ComFerramentasFalsas):
         self.configurar(paginas=["", "", ""], ocr_texto="Texto lido")
         with mock.patch.object(ocr, "MAX_PAGINAS_OCR", 1):
             r = extratores.extrair(fx.pdf_escaneado(), ocr=True, ferramentas=self.ferr)
-        self.assertEqual(r.status, "escaneado_sem_ocr")
+        self.assertEqual(r.status, "ok_parcial")  # a página 1 foi lida; 2 e 3 ficam para depois
         self.assertIn("OCR adiado", r.detalhe)
         self.assertIn("páginas 2, 3", r.detalhe)
         self.assertEqual((r.paginas_ocr, r.texto.split("\n\f\n")), (1, ["Texto lido", "", ""]))
@@ -578,8 +594,8 @@ class TestPdfFalso(ComFerramentasFalsas):
             self.assertEqual(self.registro(), ["pdftoppm 1", "tesseract pagina-1.png"])
             segunda = extratores.extrair(fx.pdf_escaneado(), ocr=True, ferramentas=self.ferr, cache_ocr=cache)
             self.assertEqual(self.registro()[2:], ["pdftoppm 2", "tesseract pagina-2.png"])
-        self.assertEqual((primeira.status, primeira.paginas_ocr), ("escaneado_sem_ocr", 1))
-        self.assertEqual((segunda.status, segunda.paginas_ocr), ("escaneado_sem_ocr", 2))
+        self.assertEqual((primeira.status, primeira.paginas_ocr), ("ok_parcial", 1))
+        self.assertEqual((segunda.status, segunda.paginas_ocr), ("ok_parcial", 2))
         self.assertIn("páginas 3", segunda.detalhe)
         terceira = extratores.extrair(fx.pdf_escaneado(), ocr=True, ferramentas=self.ferr, cache_ocr=cache)
         self.assertEqual(self.registro()[4:], ["pdftoppm 3", "tesseract pagina-3.png"])
@@ -754,7 +770,7 @@ class TestPdfReal(unittest.TestCase):
         r = extratores.extrair(fx.pdf_escaneado())
         self.assertEqual((r.status, r.paginas, r.paginas_escaneadas), ("escaneado_sem_ocr", 1, [1]))
         r = extratores.extrair(fx.pdf_misto())
-        self.assertEqual((r.status, r.paginas, r.paginas_escaneadas), ("escaneado_sem_ocr", 2, [2]))
+        self.assertEqual((r.status, r.paginas, r.paginas_escaneadas), ("ok_parcial", 2, [2]))
         self.assertIn("Câmara Municipal de Niterói", r.texto)
 
 
