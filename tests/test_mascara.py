@@ -312,7 +312,7 @@ class TestEmail(unittest.TestCase):
 
 class TestEmailAuditoriaV5(unittest.TestCase):
     def test_versao(self) -> None:
-        self.assertEqual(mascara.VERSAO_MASCARA, "5")
+        self.assertEqual(mascara.VERSAO_MASCARA, "6")
 
     def _email_mascarado(self, texto: str, esperado: str) -> None:
         for paginas in (None, {1}, {2}):
@@ -343,6 +343,42 @@ class TestEmailAuditoriaV5(unittest.TestCase):
         self._email_mascarado("No institutoQtresromas.org", "No [e-mail omitido]")
         self._email_mascarado("e-mail: secretariaofnp.org.br", "e-mail: [e-mail omitido]")
         self._email_mascarado("contato projetoavante.com", "contato [e-mail omitido]")
+
+    def test_cabecalhos_com_emails_entre_angulos(self) -> None:
+        texto = ("Frederico Andrade dos Santos <frederico.andradeQoutlook.com> "
+                 "3 de fevereiro de 2026 às 12:16")
+        self._email_mascarado(texto, "Frederico Andrade dos Santos <[e-mail omitido]> "
+                             "3 de fevereiro de 2026 às 12:16")
+        self._email_mascarado('Para: "[e-mail omitido]" <guilherme.giesta)gmail.com>',
+                             'Para: "[e-mail omitido]" <[e-mail omitido]>')
+        for email in ("fulano@gmail.com", "fulano@exemplo.org", "uesben(Ogmail.com",
+                      "institutoQtresromas.org", "instituto(altresromas.org", "gmail.com"):
+            self._email_mascarado(f"<{email}>", "<[e-mail omitido]>")
+            achado = varrer(f"<{email}>")[0]
+            self.assertEqual((achado["inicio"], achado["fim"]), (1, len(email) + 1))
+
+    def test_emails_entre_angulos_liberados(self) -> None:
+        for email, lib in (("gabinetemichelsaad@gmail.com", {"gabinetemichelsaad@gmail.com"}),
+                           ("frederico.andradeQoutlook.com", {"frederico.andrade@outlook.com"}),
+                           ("servidor(Dtjrj.jus.br", set()),
+                           ("12345678Ogmail.com", {"12345678@gmail.com"})):
+            texto = f"Para: <{email}>"
+            with self.subTest(email=email):
+                _sem_mudanca(self, texto, lib)
+                self.assertEqual(varrer(texto, lib), [])
+                self.assertEqual(mascarar(texto, lib, ocr_paginas={1})[0], texto)
+                self.assertEqual(varrer(texto, lib, ocr_paginas={1}), [])
+
+    def test_tags_reais_nao_sao_enderecos_entre_angulos(self) -> None:
+        for texto in ("<p>", "</p>", "<foo.bar>", "<pessoaQtresromas.org/>",
+                      "</pessoaQtresromas.org>", '<a href="https://outlook.com">',
+                      '<a href="frederico.andradeQoutlook.com">',
+                      '<manifest:file-entry manifest:full-path="guilherme.giesta)gmail.com"/>',
+                      '<?xml version="1.0" encoding="UTF-8"?>',
+                      '<campo valor="uesben(Ogmail.com"/>'):
+            with self.subTest(texto=texto):
+                _sem_mudanca(self, texto)
+                self.assertEqual(varrer(texto), [])
 
     def test_provedores_variantes_e_espaco_interno(self) -> None:
         for provedor in ("gmail", "gmai", "grnail", "hotmail", "hotmall", "hotmai", "yahoo",

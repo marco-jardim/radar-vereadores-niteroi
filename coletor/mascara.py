@@ -30,7 +30,9 @@ Regras de `mascarar`:
    entre minúsculas colados a um domínio, e domínios sem @ até 25 caracteres depois
    de e-mail/email/e mail/correio eletrônico ou contato. Provedor separado por um
    espaço inclui o token local anterior, nunca um rótulo. Essas regras adicionais
-   preservam URLs, www e atributos XML. A liberação tenta endereços reconstruídos
+   preservam URLs, www e atributos XML. Um endereço entre <…>, como nos cabeçalhos
+   de e-mail impressos, não é uma tag: o conteúdo deve ser um token com ponto e
+   forma de e-mail, sem espaços, aspas, = ou /. A liberação tenta endereços reconstruídos
    com @ e provedores corrigidos, sem alterar o texto visível.
    Celulares admitem ponto ou espaço depois do 9 (`21-9.8115-0243`). Listas de três
    ou mais números de quatro dígitos separados por vírgula/`e` não são telefones,
@@ -97,7 +99,7 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parent.parent
 
 # Mudar qualquer regra de `mascarar` muda os textos gravados: suba esta versão.
-VERSAO_MASCARA = "5"
+VERSAO_MASCARA = "6"
 TIPOS = ("cpf", "rg", "telefone", "email", "documento", "numero")
 SUBSTITUICOES = {
     "cpf": "[CPF omitido]",
@@ -192,6 +194,7 @@ _RE_TOKEN_EMAIL = re.compile(r"[^\s<>\"';,\[\]{}]+")
 _RE_WEB_EMAIL = re.compile(r"(?:https?://|www\.)[^\s<>\"']+", re.I)
 _RE_LOCAL_EMAIL = re.compile(r"[A-Za-z0-9][A-Za-z0-9._%+-]*")
 _RE_RUIDO_EMAIL = re.compile(r"[()&|?©@\s]|(?<=[a-z])[A-Z](?=[a-z])")
+_RE_EMAIL_ANGULOS = re.compile(r'''<[^\s<>="'/]+>''')
 # Um separador por intervalo entre os grupos 3-3-3-2: ".", " ", "/", "-" (com espaço
 # opcional de cada lado) ou nenhum.
 _SEP_CPF = r"(?: ?- ?|[. /])?"
@@ -623,10 +626,24 @@ def _continuacao_de_url(texto: str, ini: int, fim: int) -> int:
     return fim
 
 
-def _zonas(texto: str, urls: bool) -> _Intervalos:
-    """Marcação XML/HTML, GUIDs, carimbos ISO de data e hora e, com `urls`, endereços web."""
+def _tag_com_email(trecho: str) -> bool:
+    """Distingue <endereço> de tags reais sem liberar atributos ou tags de fechamento."""
+    if not _RE_EMAIL_ANGULOS.fullmatch(trecho) or "." not in trecho:
+        return False
+    return ("@" in trecho or _RE_EMAIL_OCR.search(trecho) is not None
+            or _RE_EMAIL_COLADO.search(trecho) is not None
+            or _RE_PROVEDOR_OCR.search(trecho) is not None)
+
+
+def _zonas(texto: str, urls: bool, emails: bool = False) -> _Intervalos:
+    """XML/HTML e metadados; com `emails`, <endereço> não é marcação protegida.
+
+    `urls` também protege endereços web. A exceção de <endereço> é exclusiva das
+    regras de e-mail: as proteções dos demais tipos de dados ficam inalteradas.
+    """
     trechos = [m.span() for p in (_RE_TAG, _RE_VALOR_XML, _RE_GUID, _RE_CARIMBO, _RE_DOI)
-               for m in p.finditer(texto)]
+               for m in p.finditer(texto)
+               if not (emails and p is _RE_TAG and _tag_com_email(m.group()))]
     if urls:
         trechos += _zonas_url(texto)
     return _Intervalos(trechos)
@@ -723,7 +740,7 @@ def _emails_ocr(texto: str, conjunto: set[str], dominios: tuple[str, ...]) -> li
     def incluir(ini: int, fim: int, enderecos: set[str]) -> None:
         nonlocal zonas, web
         if zonas is None:
-            zonas = _zonas(texto, urls=False)
+            zonas = _zonas(texto, urls=False, emails=True)
             # Não usar a proteção ampla de '.gov' dos telefones: o sufixo
             # gov.br.exemplo.com de um e-mail não é um domínio público liberado.
             web = _Intervalos(m.span() for m in _RE_WEB_EMAIL.finditer(texto))
