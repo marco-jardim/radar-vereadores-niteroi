@@ -1,7 +1,8 @@
 """Testes da máscara LGPD (coletor/mascara.py).
 
-Todos os números e endereços são sintéticos: os CPFs usados são exemplos de
-dígitos verificadores válidos, sem relação com pessoas reais.
+Os números são sintéticos: os CPFs usados são exemplos de dígitos verificadores
+válidos, sem relação com pessoas reais. As regressões de e-mails incluem as formas
+de OCR fornecidas na auditoria do corpus, além dos endereços sintéticos.
 
 Uso: python -m unittest tests.test_mascara
 """
@@ -280,9 +281,9 @@ class TestEmail(unittest.TestCase):
                 self.assertEqual(varrer(email, lib, ocr_paginas={1}), [])
         self.assertEqual(mascarar("pessoa(Dorgao.gov.br.exemplo.com")[0], "[e-mail omitido]")
 
-    def test_ocr_exige_dominio_e_o_so_antes_de_provedor(self) -> None:
+    def test_ocr_exige_dominio_com_tld(self) -> None:
         for texto in ("contato(Dgmail", "contato(Qexemplo.invalido", "pessoaOgmail",
-                      "pessoaOexemplo.com", "documento(D artigo", "pessoaOgmail.composto"):
+                      "documento(D artigo", "pessoaOgmail.composto"):
             with self.subTest(texto=texto):
                 _sem_mudanca(self, texto)
                 self.assertEqual(varrer(texto), [])
@@ -307,6 +308,124 @@ class TestEmail(unittest.TestCase):
     def test_telefone_dentro_de_email_nao_vaza(self) -> None:
         saida, _ = mascarar("contato 2126201234@exemplo.com")
         self.assertEqual(saida, "contato [e-mail omitido]")
+
+
+class TestEmailAuditoriaV5(unittest.TestCase):
+    def test_versao(self) -> None:
+        self.assertEqual(mascara.VERSAO_MASCARA, "5")
+
+    def _email_mascarado(self, texto: str, esperado: str) -> None:
+        for paginas in (None, {1}, {2}):
+            with self.subTest(texto=texto, paginas=paginas):
+                achados = varrer(texto, ocr_paginas=paginas)
+                self.assertEqual([(a["tipo"], a["forte"]) for a in achados], [("email", True)])
+                saida, contagens = mascarar(texto, ocr_paginas=paginas)
+                self.assertEqual(saida, esperado)
+                self.assertEqual(contagens, {**dict.fromkeys(mascara.TIPOS, 0), "email": 1})
+                self.assertEqual(varrer(saida, ocr_paginas=paginas), [])
+                self.assertEqual(mascarar(saida, ocr_paginas=paginas),
+                                 (saida, dict.fromkeys(mascara.TIPOS, 0)))
+
+    def test_exemplos_da_auditoria(self) -> None:
+        for texto in (
+            "uesben(Ogmail.com", "abrazrj(Ogmail.com", "abrazriO gmail.com",
+            "jhontatananjos.niteroi(Pgmail.com", "jhonatananjos.niteroi gmail.com",
+            "iteroiQgmai .com", "vereadordanielmarguesGgmail.com", "imprensa.crndgmail.com",
+            "ferjji.contatoQgmail.com", "frederico.andradeQoutlook.com",
+            "guilherme.giesta)gmail.com", "sheilafaulhaber? 1GDgmail.com",
+            "instituto(altresromas.org", "instituio(atresromas.org",
+            "Iwerj&hotmail.com", "IwerjDhotmail.com", "Iwerj&Photmail.com",
+            "Iwer|Mhotmall.com", "mestrezezeu(Dyahõo.com.br", "DY AHOO.COM.BR",
+            "riodejaneiroDabraz.org.br", "pessoaOexemplo.com",
+            "instituto? xexemplo.org",
+        ):
+            self._email_mascarado(texto, "[e-mail omitido]")
+        self._email_mascarado("No institutoQtresromas.org", "No [e-mail omitido]")
+        self._email_mascarado("e-mail: secretariaofnp.org.br", "e-mail: [e-mail omitido]")
+        self._email_mascarado("contato projetoavante.com", "contato [e-mail omitido]")
+
+    def test_provedores_variantes_e_espaco_interno(self) -> None:
+        for provedor in ("gmail", "gmai", "grnail", "hotmail", "hotmall", "hotmai", "yahoo",
+                         "yahõo", "outlook", "live", "msn", "uol", "bol", "terra", "icloud", "globo", "ig"):
+            formas = [provedor, provedor[:1] + " " + provedor[1:]]
+            for forma in formas:
+                for sufixo in (".com", " .com.br"):
+                    self._email_mascarado("pessoaQ" + forma.upper() + sufixo.upper(), "[e-mail omitido]")
+
+    def test_rotulos_e_pontuacao_nao_sao_engolidos(self) -> None:
+        for rotulo in ("E-mail:", "e-mail", "email:", "e mail", "correio eletrônico", "Contato:", "Outro:"):
+            self._email_mascarado(rotulo + " pessoa(Ogmail.com", rotulo + " [e-mail omitido]")
+            self._email_mascarado(rotulo + " gmail.com", rotulo + " [e-mail omitido]")
+        self._email_mascarado("(pessoaOgmail.com).", "([e-mail omitido]).")
+        self._email_mascarado("uesben(Ogmail.com; fim", "[e-mail omitido]; fim")
+        # Dois espaços não juntam o token anterior ao provedor.
+        self._email_mascarado("anterior  gmail.com", "anterior  [e-mail omitido]")
+        self._email_mascarado("contato@exemplo.org", "[e-mail omitido]")
+        self._email_mascarado("e-mail@exemplo.org", "[e-mail omitido]")
+
+    def test_rotulo_sem_arroba_e_janela(self) -> None:
+        for rotulo in ("e-mail", "email", "e mail", "correio eletrônico", "CORREIO ELETRÔNICO"):
+            self._email_mascarado(rotulo + ": secretariaofnp.org.br", rotulo + ": [e-mail omitido]")
+        self._email_mascarado("e-mail: envio para secretaria.exemplo.org", "e-mail: envio para [e-mail omitido]")
+        self._email_mascarado("email " + " " * 23 + "secretaria.exemplo.org",
+                             "email " + " " * 23 + "[e-mail omitido]")
+        texto = "email " + " " * 25 + "secretaria.exemplo.org"
+        _sem_mudanca(self, texto)
+        self.assertEqual(varrer(texto), [])
+        # Só o primeiro domínio pertence ao rótulo; a segunda passagem não pode
+        # reinterpretar a marca [e-mail omitido] nem avançar para outro domínio.
+        self._email_mascarado("email: pessoa.exemplo.org outra.exemplo.org",
+                             "email: [e-mail omitido] outra.exemplo.org")
+
+    def test_urls_metadados_e_dominios_publicos_intactos(self) -> None:
+        for token in (
+            "verificador.iti.gov.br", ".planalto.gov.br", "alerjln1.alerj.rj.gov.br",
+            "consumidor.gov", "camaraniteroi.siscam.com.br", "web: abrazrj.com.br",
+            "www.gmail.com", "www.institutoQtresromas.org", "https://gmail.com",
+            "WWW.gmail.com", "HTTPS://institutoQtresromas.org",
+            "https://institutoQtresromas.org", '//institutoQtresromas.org',
+            'name="microsoft.com', 'name="pessoaOgmail.com',
+            '<item name="institutoQtresromas.org"/>', "www.exemplo.org", "https://exemplo.org",
+        ):
+            # Um domínio privado solto é legítimo; depois de um rótulo de e-mail,
+            # porém, a regra C o trata como contato. URLs/atributos continuam
+            # protegidos mesmo nesse contexto.
+            contextos = (token, "email: " + token) if any(
+                marca in token for marca in ("www", "http", "=", "//", "web:")) else (token,)
+            for texto in contextos:
+                with self.subTest(texto=texto):
+                    _sem_mudanca(self, texto)
+                    self.assertEqual(varrer(texto), [])
+        for texto in ("email servidororgao.gov.br", "email servidororgao.jus.br",
+                      "servidorQorgao.leg.br", "servidorDorgao.gov.br",
+                      "email: 12345678orgao.gov.br"):
+            with self.subTest(texto=texto):
+                _sem_mudanca(self, texto)
+                self.assertEqual(mascarar(texto, ocr_paginas={1})[0], texto)
+                self.assertEqual(varrer(texto, ocr_paginas={1}), [])
+
+    def test_liberacao_por_reconstrucoes(self) -> None:
+        for texto, endereco in (
+            ("jhonatananjos.niteroi gmail.com", "jhonatananjos.niteroi@gmail.com"),
+            ("abrazriO gmail.com", "abrazri@gmail.com"),
+            ("pessoa(Dgrnail .com", "pessoa@gmail.com"),
+            ("pessoa&Photmall.com", "pessoa@hotmail.com"),
+            ("mestrezezeu(Dyahõo.com.br", "mestrezezeu@yahoo.com.br"),
+            ("imprensa.crndgmail.com", "imprensa.crn@gmail.com"),
+            ("instituto(altresromas.org", "instituto@tresromas.org"),
+            ("instituio(atresromas.org", "instituio@tresromas.org"),
+            ("riodejaneiroDabraz.org.br", "riodejaneiro@abraz.org.br"),
+            ("email: secretariaofnp.org.br", "secretaria@fnp.org.br"),
+            ("email: secretaria.exemplo.org", "secretaria@exemplo.org"),
+            ("email: 12345678exemplo.org", "12345678@exemplo.org"),
+        ):
+            with self.subTest(texto=texto):
+                lib = {endereco}
+                _sem_mudanca(self, texto, lib)
+                self.assertEqual(mascarar(texto, lib, ocr_paginas={1})[0], texto)
+                self.assertEqual(varrer(texto, lib, ocr_paginas={1}), [])
+                self.assertEqual(len(varrer(texto)), 1)
+        self._email_mascarado("servidorDorgao.gov.br.exemplo.com", "[e-mail omitido]")
 
 
 class TestFalsosPositivos(unittest.TestCase):

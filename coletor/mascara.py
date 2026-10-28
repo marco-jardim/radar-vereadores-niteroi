@@ -25,7 +25,13 @@ Regras de `mascarar`:
    públicos `gov.br`, `jus.br`, `leg.br`, `mp.br`, `def.br` e `mil.br`, com subdomínios.
    E-mails com separador corrompido pelo OCR (`(D`, `(OD`, `(Q`, `(0D`, `(@`, `©`,
    `@ ` e `O` antes de provedor conhecido) também são mascarados em qualquer página;
-   a liberação compara o endereço reconstruído com `@`, sem alterar o texto visível.
+   Também entram tokens terminados em provedores de webmail (incluindo erros como
+   gmai/grnail, hotmall/hotmai e yahõo/y ahoo), separadores gráficos ou maiúscula
+   entre minúsculas colados a um domínio, e domínios sem @ até 25 caracteres depois
+   de e-mail/email/e mail/correio eletrônico ou contato. Provedor separado por um
+   espaço inclui o token local anterior, nunca um rótulo. Essas regras adicionais
+   preservam URLs, www e atributos XML. A liberação tenta endereços reconstruídos
+   com @ e provedores corrigidos, sem alterar o texto visível.
    Celulares admitem ponto ou espaço depois do 9 (`21-9.8115-0243`). Listas de três
    ou mais números de quatro dígitos separados por vírgula/`e` não são telefones,
    inclusive quando falta uma vírgula entre dois itens. Dois itens com vírgula
@@ -91,7 +97,7 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parent.parent
 
 # Mudar qualquer regra de `mascarar` muda os textos gravados: suba esta versão.
-VERSAO_MASCARA = "4"
+VERSAO_MASCARA = "5"
 TIPOS = ("cpf", "rg", "telefone", "email", "documento", "numero")
 SUBSTITUICOES = {
     "cpf": "[CPF omitido]",
@@ -144,6 +150,48 @@ _RE_EMAIL_OCR = re.compile(
     r"(?i:com|org|net|edu|gov|mil|int|info|biz|name|pro|coop|aero|museum|"
     r"app|dev|tech|online|site|xyz|[a-z]{2}))(?![\w-]|\.[A-Za-z0-9])"
 )
+# Regras adicionais do corpus OCR: a busca por provedor começa no domínio, para
+# aceitar separadores arbitrários sem retrocesso sobre todo o endereço.
+_PROVEDORES_OCR = (
+    ("gmail", ("gmail", "gmai", "grnail")),
+    ("hotmail", ("hotmail", "hotmall", "hotmai")),
+    ("yahoo", ("yahoo", "yahõo")),
+    *((p, (p,)) for p in ("outlook", "live", "msn", "uol", "bol", "terra", "icloud", "globo", "ig")),
+)
+
+
+def _padrao_provedores_ocr() -> str:
+    """Admite um único espaço em qualquer posição interna do nome do provedor."""
+    ramos = []
+    for canonico, variantes in _PROVEDORES_OCR:
+        formas = []
+        for variante in variantes:
+            formas.append(re.escape(variante))
+            formas.extend(re.escape(variante[:i]) + " " + re.escape(variante[i:])
+                          for i in range(1, len(variante)))
+        inicial = variantes[0][0]
+        # O primeiro caractere é consumido fora de re.I, para o motor pular
+        # rapidamente texto sem provedores (inclusive linhas -layout extensas).
+        restos = [forma[1:] for forma in formas]
+        ramos.append(rf"(?P<{canonico}>(?<=[{inicial.upper()}{inicial.lower()}])(?i:{'|'.join(restos)}))")
+    return "|".join(ramos)
+
+
+_RE_PROVEDOR_OCR = re.compile(
+    rf"[GgHhYyOoLlMmUuBbTtIi](?:{_padrao_provedores_ocr()}) ?"
+    r"(?P<sufixo>(?i:\.com(?:\.br)?))(?![\w-]|\.[A-Za-z0-9])")
+_DOMINIO_OCR = r"(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+(?i:com|org|net|br)"
+_RE_DOMINIO_OCR = re.compile(_DOMINIO_OCR + r"(?![\w-]|\.[A-Za-z0-9])")
+_RE_EMAIL_COLADO = re.compile(
+    r"(?<![\w._-])(?P<local>[A-Za-z0-9._-]{3,320}?)"
+    r"(?:[()&|?©]|(?<=[a-z])[A-Z](?=[a-z]))"
+    r"(?P<resto>[A-Za-z0-9()&|?© \t]{0,2}" + _DOMINIO_OCR + r")(?![\w-]|\.[A-Za-z0-9])")
+_RE_ROTULO_EMAIL = re.compile(
+    r"(?<![\w@._%+-])(?:e[- ]?mail|correio eletr[oô]nico|contato)(?![\w@._%+-])", re.I)
+_RE_TOKEN_EMAIL = re.compile(r"[^\s<>\"';,\[\]{}]+")
+_RE_WEB_EMAIL = re.compile(r"(?:https?://|www\.)[^\s<>\"']+", re.I)
+_RE_LOCAL_EMAIL = re.compile(r"[A-Za-z0-9][A-Za-z0-9._%+-]*")
+_RE_RUIDO_EMAIL = re.compile(r"[()&|?©@\s]|(?<=[a-z])[A-Z](?=[a-z])")
 # Um separador por intervalo entre os grupos 3-3-3-2: ".", " ", "/", "-" (com espaço
 # opcional de cada lado) ou nenhum.
 _SEP_CPF = r"(?: ?- ?|[. /])?"
@@ -636,6 +684,129 @@ def _email_liberado(email: str, conjunto: set[str], dominios: tuple[str, ...]) -
     return any(dominio == d or dominio.endswith("." + d) for d in dominios)
 
 
+def _locais_email_ocr(prefixo: str) -> set[str]:
+    """Possíveis partes locais antes de separadores e lixo do OCR, sem expô-las."""
+    candidatos = {prefixo, re.sub(r"[()&|?©@A-Z0-9 \t]+$", "", prefixo),
+                  re.sub(r"[dD]$", "", prefixo)}
+    candidatos.update(prefixo[:m.start()] for m in _RE_RUIDO_EMAIL.finditer(prefixo))
+    return {p for p in candidatos if _RE_LOCAL_EMAIL.fullmatch(p)}
+
+
+def _enderecos_email_rotulado(valor: str) -> set[str]:
+    """Tenta inserir @ antes dos rótulos de domínio, inclusive dentro do token colado.
+
+    Até dois caracteres entre local e domínio podem ser lixo. O tamanho limitado
+    do token impede uma busca quadrática sobre uma linha inteira de OCR.
+    """
+    enderecos = {valor} if _RE_EMAIL_COMPLETO.fullmatch(valor) else set()
+    for i in range(1, len(valor)):
+        local = valor[:i]
+        if not _RE_LOCAL_EMAIL.fullmatch(local):
+            continue
+        for ruido in range(3):
+            dominio = valor[i + ruido:]
+            if _RE_DOMINIO_OCR.fullmatch(dominio):
+                enderecos.add(local + "@" + dominio)
+    return enderecos
+
+
+def _emails_ocr(texto: str, conjunto: set[str], dominios: tuple[str, ...]) -> list[tuple[int, int, bool]]:
+    """Candidatos OCR das três regras; une sobreposições e suas reconstruções.
+
+    A máscara e a barreira compartilham só os candidatos de e-mail, não os demais
+    detectores. O booleano informa se alguma reconstrução é um contato liberado.
+    """
+    candidatos: list[tuple[int, int, set[str]]] = []
+    zonas: _Intervalos | None = None
+    web: _Intervalos | None = None
+
+    def incluir(ini: int, fim: int, enderecos: set[str]) -> None:
+        nonlocal zonas, web
+        if zonas is None:
+            zonas = _zonas(texto, urls=False)
+            # Não usar a proteção ampla de '.gov' dos telefones: o sufixo
+            # gov.br.exemplo.com de um e-mail não é um domínio público liberado.
+            web = _Intervalos(m.span() for m in _RE_WEB_EMAIL.finditer(texto))
+        assert web is not None
+        if (zonas.sobrepoe(ini, fim) or web.sobrepoe(ini, fim)
+                or texto[ini:fim].lower().startswith(("www.", "http://", "https://", "//"))
+                or texto[max(0, ini - 2):ini] in ('="', "='", "//")):
+            if not any(_email_liberado(e, conjunto, dominios) for e in enderecos):
+                return
+        candidatos.append((ini, fim, enderecos))
+
+    for m in _RE_EMAIL_OCR.finditer(texto):
+        incluir(m.start(), m.end(), {m.group("local") + "@" + m.group("dominio")})
+
+    for m in _RE_PROVEDOR_OCR.finditer(texto):
+        ini = m.start()
+        while ini > 0 and texto[ini - 1] not in " \t\r\n\f<>\"',;:[]{}":
+            ini -= 1
+        while ini < m.start() and texto[ini] in "(":
+            ini += 1  # parêntese externo não faz parte da parte local
+        prefixo = texto[ini:m.start()]
+        # Provedor em token próprio (ou só lixo antes dele): inclui exatamente um
+        # token anterior, com uma letra e sem rótulos/pontuação de introdução.
+        if not re.search(r"[a-z]", prefixo) and ini > 0 and texto[ini - 1] == " ":
+            anterior = re.search(r"[^\s]+$", texto[max(0, ini - 321):ini - 1])
+            if anterior:
+                token = anterior.group()
+                rotulo_antes = any(r.end() == ini - 1 for r in _RE_ROTULO_EMAIL.finditer(
+                    texto, max(0, ini - 40), ini - 1))
+                if (not token.endswith((":", ".")) and not _RE_ROTULO_EMAIL.fullmatch(token)
+                        and not rotulo_antes
+                        and re.search(r"[A-Za-z]", token)
+                        and re.fullmatch(r"[A-Za-z0-9._%+()&|?©@-]+", token)):
+                    ini -= len(token) + 1
+                    prefixo = texto[ini:m.start()]
+        if m.end() - ini > 320:
+            continue
+        provedor = next(p for p, _ in _PROVEDORES_OCR if m.group(p) is not None)
+        dominio = provedor + m.group("sufixo").lower()
+        enderecos = {local + "@" + dominio for local in _locais_email_ocr(prefixo)}
+        incluir(ini, m.end(), enderecos or {"_@" + dominio})
+
+    for m in _RE_EMAIL_COLADO.finditer(texto):
+        if m.end() - m.start() > 320:
+            continue
+        local, resto = m.group("local"), m.group("resto")
+        enderecos = {local + "@" + resto[i:] for i in range(3)
+                     if _RE_DOMINIO_OCR.fullmatch(resto[i:])}
+        incluir(m.start(), m.end(), enderecos)
+
+    for rotulo in _RE_ROTULO_EMAIL.finditer(texto):
+        if (rotulo.start() > 0 and texto[rotulo.start() - 1] == "["
+                and texto.startswith(" omitido]", rotulo.end())):
+            continue  # a marca da própria máscara não é um novo rótulo
+        for token in _RE_TOKEN_EMAIL.finditer(texto, rotulo.end(), min(len(texto), rotulo.end() + 346)):
+            ini, fim = token.span()
+            if ini - rotulo.end() > 25:
+                break
+            if ini > 0 and texto.startswith(SUBSTITUICOES["email"], ini - 1):
+                break  # o primeiro contato já foi mascarado; não avançar na segunda passagem
+            valor = token.group().strip("().:")
+            ini += len(token.group()) - len(token.group().lstrip("().:"))
+            fim = ini + len(valor)
+            if token.group().lower() in ("web:", "site:"):
+                break
+            if not valor or len(valor) > 320 or not _RE_DOMINIO_OCR.search(valor):
+                continue
+            if "www" in valor.lower() or "http" in valor.lower() or valor.startswith("//"):
+                break
+            incluir(ini, fim, _enderecos_email_rotulado(valor))
+            break  # só o primeiro token com domínio depois do rótulo
+
+    unidos: list[tuple[int, int, set[str]]] = []
+    for ini, fim, enderecos in sorted(candidatos, key=lambda c: (c[0], -c[1])):
+        if unidos and ini < unidos[-1][1]:
+            a, b, anteriores = unidos[-1]
+            unidos[-1] = (a, max(b, fim), anteriores | enderecos)
+        else:
+            unidos.append((ini, fim, enderecos))
+    return [(ini, fim, any(_email_liberado(e, conjunto, dominios) for e in enderecos))
+            for ini, fim, enderecos in unidos]
+
+
 def _numeros_ocr(texto: str, liberados_: Iterable[str],
                  ocr_paginas: set[int] | None) -> Iterator[tuple[int, int, str]]:
     """Números residuais de 8+ dígitos nas páginas OCR (numeração começa em 1).
@@ -660,8 +831,7 @@ def _numeros_ocr(texto: str, liberados_: Iterable[str],
                            or _RE_ROTULO_CEP.search(pagina[m.end():m.end() + 20])]
             protegidos += [m.span() for m in _RE_EMAIL.finditer(pagina)
                            if _email_liberado(m.group(), conjunto, dominios)]
-            protegidos += [m.span() for m in _RE_EMAIL_OCR.finditer(pagina)
-                           if _email_liberado(m.group("local") + "@" + m.group("dominio"), conjunto, dominios)]
+            protegidos += [(a, b) for a, b, livre in _emails_ocr(pagina, conjunto, dominios) if livre]
             protegidos += [m.span() for m in _a_partir(_RE_CANDIDATO_TELEFONE, _RE_TELEFONE, pagina)
                            if telefone_canonico(m.group()) in conjunto]
             # Um caractere não numérico e não separador impede juntar grupos através
@@ -694,10 +864,8 @@ def _detectar(texto: str, liberados_: Iterable[str]) -> list[tuple[int, int, str
     web = _Intervalos(_zonas_url(texto))
     listas = _Intervalos(_listas_de_numeros(texto))
 
-    for m in _RE_EMAIL_OCR.finditer(texto):
-        email = m.group("local") + "@" + m.group("dominio")
-        tipo = "_liberado" if _email_liberado(email, conjunto, dominios) else "email"
-        aceitos.incluir(m.start(), m.end(), tipo)
+    for ini, fim, livre in _emails_ocr(texto, conjunto, dominios):
+        aceitos.incluir(ini, fim, "_liberado" if livre else "email")
     if "@" in texto:
         for m in _RE_EMAIL.finditer(texto):
             tipo = "_liberado" if _email_liberado(m.group(), conjunto, dominios) else "email"
@@ -850,14 +1018,13 @@ def varrer(texto: str, liberados: Iterable[str] = frozenset(),
     listas = _Intervalos(_listas_de_numeros(texto))
     achados: list[tuple[int, int, str]] = []
     emails_liberados: list[tuple[int, int]] = []
-    emails_ocr = list(_RE_EMAIL_OCR.finditer(texto))
-    zonas_email_ocr = _Intervalos(m.span() for m in emails_ocr)
-    for m in emails_ocr:
-        email = m.group("local") + "@" + m.group("dominio")
-        if _email_liberado(email, conjunto, dominios):
-            emails_liberados.append(m.span())
+    emails_ocr = _emails_ocr(texto, conjunto, dominios)
+    zonas_email_ocr = _Intervalos((a, b) for a, b, _ in emails_ocr)
+    for ini, fim, livre in emails_ocr:
+        if livre:
+            emails_liberados.append((ini, fim))
         else:
-            achados.append((m.start(), m.end(), "email"))
+            achados.append((ini, fim, "email"))
     for m in (_V_EMAIL.finditer(texto) if "@" in texto else ()):
         if zonas_email_ocr.sobrepoe(*m.span()):
             continue
