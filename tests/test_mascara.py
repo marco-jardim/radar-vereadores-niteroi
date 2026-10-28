@@ -314,7 +314,7 @@ class TestEmail(unittest.TestCase):
 
 class TestEmailAuditoriaV5(unittest.TestCase):
     def test_versao(self) -> None:
-        self.assertEqual(mascara.VERSAO_MASCARA, "8")
+        self.assertEqual(mascara.VERSAO_MASCARA, "9")
 
     def _email_mascarado(self, texto: str, esperado: str) -> None:
         for paginas in (None, {1}, {2}):
@@ -1293,6 +1293,130 @@ class TestMascaraV8(unittest.TestCase):
         self.assertLess(time.perf_counter() - inicio, 3.0)
         self.assertEqual(saida, texto)
         self.assertEqual(sum(contagens.values()), 0)
+
+
+class TestMascaraV9(unittest.TestCase):
+    """RGs rotulados da auditoria, sempre com números sintéticos."""
+
+    def _rg_inteiro(self, antes: str, numero: str, depois: str = "") -> None:
+        texto = antes + numero + depois
+        esperado = antes + "[RG omitido]" + depois
+        self.assertEqual(mascara.varrer_estrito(texto), [
+            {"tipo": "rg", "inicio": len(antes), "fim": len(antes) + len(numero)}])
+        saida, contagens = mascarar(texto)
+        self.assertEqual(saida, esperado)
+        self.assertEqual(contagens, {tipo: int(tipo == "rg") for tipo in mascara.TIPOS})
+        self.assertEqual(mascara.varrer_estrito(saida), [])
+        self.assertFalse([o for o in varrer(saida) if o["forte"]])
+        self.assertEqual(mascarar(saida), (saida, dict.fromkeys(mascara.TIPOS, 0)))
+
+    def test_rg_com_grupos_partidos(self) -> None:
+        for antes, numero, depois in (
+            ("RG. ", "12.345 678-9", " IFP"),
+            ("identidade nº ", "12.345. 678-9", " DETRAN/RJ"),
+            ("identidade de n.º ", "12.345. 678-9", ","),
+            ("RG ", "12,345, 678-X", ", residente"),
+            ("RG ", "12345 6789", " IFP"),
+            ("RG ", "12345678-9", " IFP"),
+            ("RG ", "1,234  567x", " IFP"),
+        ):
+            with self.subTest(antes=antes, numero=numero):
+                self._rg_inteiro(antes, numero, depois)
+
+    def test_rg_com_marcadores_emissores_e_ruido(self) -> None:
+        for antes, numero, depois in (
+            ("identidade ", "1.234.567", " IFP, residente"),
+            ("carteira de identidade n.º ", "12.34.56-7", " IFP,"),
+            ("Identidade NO: ", "12345678", ""),
+            ("C.I. nº ", "12345", ""),
+            ("identidade ", "1234567", "ol lFP/Rj"),
+            ("identidade SSP/MG nº ", "M-1234567", ""),
+            ("identidade (RG) nº ", "12.345.678-9", ""),
+            ("Identidade OAB/RJ nº ", "123456", ""),
+            ("registro geral n.o ", "AB1234567890-X", ""),
+            ("ci IFP nº ", "1234567", ""),
+            ("r.g. DETRAN/RJ no: ", "12 345 678", ""),
+            ("CI ", "N-1234567", ""),
+            ("CI" + " " * 25, "AB-1234567", ""),
+        ):
+            with self.subTest(antes=antes, numero=numero):
+                self._rg_inteiro(antes, numero, depois)
+
+    def test_repara_cauda_de_mascara_anterior(self) -> None:
+        for separador in (" ", ". ", ", ", ".  "):
+            for dv in "9Xx":
+                with self.subTest(separador=separador, dv=dv):
+                    self._rg_inteiro("RG. [RG omitido]" + separador, "678-" + dv, " IFP")
+
+    def test_negativos_e_limites(self) -> None:
+        for texto in (
+            "Identidade de gênero, Lei 13.709/2018", "identidade visual", "identidade cultural",
+            "identidade visual 12345678", "identidade cultural 12345678",
+            "RG: 13.709/2018", "RG 12.03.2024", "ID do processo 123", "ID: 12345 MF/RJ",
+            "identidade 2024 do evento 12345", "CI " + " " * 25 + "1234567",
+            "[RG omitido]    678-9", "[RG omitido] 6789-0", "[RG omitido] 678-90",
+        ):
+            with self.subTest(texto=texto):
+                _sem_mudanca(self, texto)
+                self.assertEqual(mascara.varrer_estrito(texto), [])
+
+    def test_barreira_rg_independente_da_mascara(self) -> None:
+        with mock.patch.object(mascara, "_RE_RG_ROTULADO", None), mock.patch.object(
+                mascara, "_RE_RG_CAUDA", None), mock.patch.object(
+                mascara, "_detectar", side_effect=AssertionError):
+            self.assertEqual([o["tipo"] for o in mascara.varrer_estrito(
+                "Identidade SSP/MG nº M-1234567; [RG omitido]. 678-9")], ["rg", "rg"])
+
+    def test_rg_com_dv_nao_e_data(self) -> None:
+        for numero in ("12.34.56-7", "12.03.24-X"):
+            with self.subTest(numero=numero):
+                self._rg_inteiro("carteira de identidade n.º ", numero, " IFP,")
+        for texto in ("carteira de identidade n.º 12.03.2024", "RG 12.03.24"):
+            with self.subTest(texto=texto):
+                _sem_mudanca(self, texto)
+                self.assertEqual(mascara.varrer_estrito(texto), [])
+
+    def test_cpf_rotulado_com_espacos_internos(self) -> None:
+        for antes, numero in (
+            ("inscrito no CPF sob o nº ", "529,982,2 47-25"),
+            ("CPF sob q nº ", "529.98 2,247-25"),
+            ("C.P.F./MF nº ", "5 29.982.24 7-25"),
+            ("CPF nº ", "529.982.247-2 5"),
+            ("CPF" + " " * 15, "529.98 2,247-25"),
+        ):
+            with self.subTest(antes=antes, numero=numero):
+                texto = antes + numero + ", residente."
+                esperado = antes + "[CPF omitido], residente."
+                self.assertEqual(mascara.varrer_estrito(texto), [
+                    {"tipo": "cpf", "inicio": len(antes), "fim": len(antes) + len(numero)}])
+                saida, contagens = mascarar(texto)
+                self.assertEqual(saida, esperado)
+                self.assertEqual(contagens, {tipo: int(tipo == "cpf") for tipo in mascara.TIPOS})
+                self.assertEqual(mascara.varrer_estrito(saida), [])
+                self.assertFalse([o for o in varrer(saida) if o["forte"]])
+                self.assertEqual(mascarar(saida), (saida, dict.fromkeys(mascara.TIPOS, 0)))
+
+    def test_cpf_com_espacos_exige_rotulo_proximo_e_dv(self) -> None:
+        for texto in (
+            "529,982,2 47-25", "529.98 2,247-25", "4406, 4407", "R$ 529.982,24",
+            "Processo nº 529,982,2 47-25", "Processo 0001234-56.2024.8.19.0002",
+            "CPF" + " " * 16 + "529,982,2 47-25", "CPF sob q nº 529.98 2,247-26",
+            "CPF 5 2 9.98 2.247-25",
+        ):
+            with self.subTest(texto=texto):
+                self.assertNotIn("cpf", {o["tipo"] for o in mascara.varrer_estrito(texto)})
+                saida, contagens = mascarar(texto)
+                self.assertEqual(contagens["cpf"], 0)
+                # Números sem rótulo podem acionar regras de telefone; estas duas
+                # proteções não devem sofrer nenhuma alteração, de qualquer tipo.
+                if texto.startswith(("R$", "Processo")) or texto == "4406, 4407":
+                    self.assertEqual(saida, texto)
+
+    def test_barreira_cpf_com_espacos_independente(self) -> None:
+        with mock.patch.object(mascara, "_RE_CPF_ESPACOS_ROTULADO", None), mock.patch.object(
+                mascara, "_cpfs_rotulados", side_effect=AssertionError):
+            self.assertEqual([o["tipo"] for o in mascara.varrer_estrito(
+                "CPF sob q nº 529.98 2,247-25")], ["cpf"])
 
 
 if __name__ == "__main__":

@@ -4,17 +4,21 @@ Regras de `mascarar`:
 - **CPF** é mascarado sempre, de qualquer pessoa, com ou sem pontuação, mas só
   quando os dígitos verificadores são válidos. Entre os grupos 3-3-3-2 vale um
   separador por intervalo: ".", ",", " ", "/", "-" (com espaço opcional de cada lado) ou
-  nenhum, como em "123.456 789-09" (OCR). Com espaço como separador, uma fatia
+  nenhum, como em "123.456 789-09" (OCR). Só com rótulo CPF até 15 caracteres antes,
+  também admite até dois espaços simples dentro dos grupos, exigindo DV válido.
+  Com espaço como separador, uma fatia
   3-3-3-2 colada a outros números por espaço ("1 529 982 247 25 7", colunas de
   tabela) não é CPF, salvo com rótulo. Com o rótulo "CPF" ("cpf", "c.p.f.",
   "CPF/MF", "CPF nº", "CPF:") até `JANELA_ROTULO_CPF` caracteres antes, o número é
   mascarado mesmo com DV inválido (erros de OCR), e as proteções gerais não valem.
-- **RG** é mascarado quando o rótulo "RG" ou "R.G." aparece até 20 caracteres antes
-  do número; "identidade" só vale como rótulo seguido de "nº"/"n."/":" ou precedido
-  de "carteira"/"cédula" (evita "identidade de gênero, Lei 13.709/2018"); variantes de
-  OCR ("Identdede", "Idenlidade") valem como "identidade". Número de 11 dígitos com DV
-  de CPF válido depois desses rótulos é mascarado como CPF. O rótulo ID exige
-  forma de RG com hífen e dígito verificador.
+- **RG** é mascarado depois de RG/R.G., identidade, C.I./CI ou registro geral, com
+  até 25 caracteres de marcadores de número e órgão emissor antes do número. Admite
+  grupos separados por ponto, vírgula ou espaço e prefixo de até duas maiúsculas.
+  Palavras como "visual" ou "de gênero" não são preenchimento de rótulo. A regra
+  legada também admite texto livre até 20 caracteres depois de RG/R.G.; variantes
+  de OCR ("Identdede", "Idenlidade") exigem marca de número ou carteira/cédula.
+  Número de 11 dígitos com DV de CPF válido depois desses rótulos é mascarado como
+  CPF. O rótulo ID exige forma de RG com hífen e dígito verificador.
 - **Documentos pessoais** (CNH, RENACH, título de eleitor, PIS/PASEP, NIS, NIT,
   passaporte, CTPS/carteira de trabalho, cartão SUS/CNS) são mascarados como
   `[documento omitido]` quando o rótulo aparece até 20 caracteres antes do número.
@@ -112,7 +116,7 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parent.parent
 
 # Mudar qualquer regra de `mascarar` muda os textos gravados: suba esta versão.
-VERSAO_MASCARA = "8"
+VERSAO_MASCARA = "9"
 TIPOS = ("cpf", "rg", "telefone", "email", "documento", "numero")
 SUBSTITUICOES = {
     "cpf": "[CPF omitido]",
@@ -227,9 +231,40 @@ _RE_CPF = re.compile(
 JANELA_ROTULO_CPF = 15
 _RE_ROTULO_CPF = re.compile(r"(?<![a-z0-9])c\.? ?p\.? ?f(?![a-z])")
 _RE_CPF_PARTIDO = re.compile(r"\d(?<!\d\d) \d{2}\.\d{3}\.\d{3}-\d{2}(?!\d)")
+# Espaços OCR dentro dos grupos só com rótulo próximo e DV válido. Os grupos
+# separados permitem limitar a dois os espaços internos, sem contar delimitadores.
+_RE_CPF_ESPACOS_ROTULADO = re.compile(
+    r"[Cc](?<![\w\[][Cc])\.? ?[Pp]\.? ?[Ff](?![^\W\d_])[^\d\n\[\]]{0,15}?"
+    rf"(?P<numero>(?P<g1>\d ?\d ?\d){_SEP_CPF}(?P<g2>\d ?\d ?\d){_SEP_CPF}"
+    rf"(?P<g3>\d ?\d ?\d){_SEP_CPF}(?P<g4>\d ?\d))(?!\d)(?![.,/-]\d)")
 _RE_CPF_ASSINATURA = re.compile(
     r"\b(?P<nome>[^\W\d_]{3,}):[ \t\r\n]*(?P<numero>\d{6,}(?: \d{1,5}(?![\d/]))?)")
 _RE_ASSINATURA_DIGITAL = re.compile(r"assinado\s+de\s+forma\s+digital|digitalmente", re.I)
+# Regra direta, sem procurar contexto para trás de cada número. O preenchimento é
+# limitado em caracteres e seus tokens são atômicos: sequências de "n." não geram
+# combinações exponenciais quando não há número. Não atravessa prosa nem marcas.
+_ROTULO_RG_DIRETO = (
+    r"[RrIiCc](?<![\w.][RrIiCc])(?:"
+    r"(?<=[Rr])(?:\.[ \t]?[Gg]\.?|[Gg]|(?i:egistro[ \t]+geral))|"
+    r"(?<=[Ii])(?i:dentidade)|(?<=[Cc])(?:\.[Ii]\.?|[Ii]))(?![\w])")
+_MEIO_RG_DIRETO = (
+    r"(?=[^\d\n\[\]]{0,25}(?:[A-Z]{1,2}-?)?\d)"
+    r"(?:(?![A-Z]{1,2}-?\d)(?>\([Rr][Gg]\)|(?i:ssp/[a-z]{2}|ifp|detran/[a-z]{2}|oab/[a-z]{2}|de)|"
+    r"[Nn](?:\.[º°Oo]|[º°Oo])?\.?|[ \t.:º°-])){0,25}+"
+)
+_NUMERO_RG_DIRETO = (
+    r"(?:[A-Z]{1,2}-?)?"
+    # Data e número/ano não viram RG, nem por retrocesso para um prefixo menor.
+    r"(?!\d{1,2}\.\d{1,2}\.\d{2,4}(?!\d|-[\dXx]))"
+    r"\d(?:[ .,]{0,2}\d){4,9}(?:-[\dXx]|[Xx])?"
+    r"(?!\d|[.,/\-]\d|[ .,]{1,2}\d)"
+)
+_RE_RG_ROTULADO = re.compile(
+    _ROTULO_RG_DIRETO + _MEIO_RG_DIRETO + rf"(?P<numero>{_NUMERO_RG_DIRETO})")
+# Repara textos de versões anteriores que já perderam o começo do RG. Só a cauda
+# numérica é substituída; a marca anterior não vira rótulo para outros números.
+_RE_RG_CAUDA = re.compile(
+    r"[\[]RG omitido\][^\d\n\[\]]{0,3}(?P<numero>\d{3}-[\dXx])(?!\d)")
 _RE_RG = re.compile(
     r"(?P<rotulo>[RrIi](?<![\w.][RrIi])"
     # "identidade" e erros comuns de OCR ("Identdede", "Idenlidade"): iden…d…
@@ -558,15 +593,19 @@ def _documentos(texto: str) -> list[tuple[int, int]]:
 
 def _cpfs_rotulados(texto: str) -> list[tuple[int, int]]:
     """CPF partido pelo OCR ou inscrito no carimbo de um certificado digital."""
-    trechos = [m.span() for m in _RE_CPF_PARTIDO.finditer(texto) if _rotulo_cpf(texto, m.start())]
+    trechos = {m.span() for m in _RE_CPF_PARTIDO.finditer(texto) if _rotulo_cpf(texto, m.start())}
+    for m in _RE_CPF_ESPACOS_ROTULADO.finditer(texto):
+        if (1 <= sum(m.group(g).count(" ") for g in ("g1", "g2", "g3", "g4")) <= 2
+                and cpf_valido(re.sub(r"\D", "", m.group("numero")))):
+            trechos.add(m.span("numero"))
     for m in _RE_CPF_ASSINATURA.finditer(texto):
         if (_RE_NOME_NAO_PESSOAL.fullmatch(m.group("nome"))
                 or _RE_ROTULO_TELEFONE.fullmatch(_dobrar(m.group("nome")))):
             continue  # CNH:…, PIS:… e Lei:… não são nomes de titulares de certificado
         if (m.group("nome").isupper() or _RE_ASSINATURA_DIGITAL.search(
                 texto[max(0, m.start() - 60):min(len(texto), m.end() + 60)])):
-            trechos.append(m.span("numero"))
-    return trechos
+            trechos.add(m.span("numero"))
+    return sorted(trechos)
 
 
 def _intervalos_de_anos(texto: str) -> list[tuple[int, int]]:
@@ -955,6 +994,10 @@ def _detectar(texto: str, liberados_: Iterable[str]) -> list[tuple[int, int, str
             continue
         aceitos.incluir(m.start(), m.end(), "cpf")
 
+    for padrao in (_RE_RG_ROTULADO, _RE_RG_CAUDA):
+        for m in padrao.finditer(texto):
+            aceitos.incluir(*m.span("numero"), "rg")
+
     pos = 0
     while (m := _RE_RG.search(texto, pos)) is not None:
         pos = m.end()
@@ -1235,11 +1278,25 @@ _E_SEP = r"(?: ?" + _E_HIFEN + r" ?|[., /])?"
 _E_CPF_FORMATADO = re.compile(r"\d(?<!\d\d)(?<!\d[.,/-]\d)\d\d[.,]\d{3}[.,]\d{3} ?" + _E_HIFEN + r" ?\d{2}(?!\d)(?![.,/-]\d)")
 _E_CPF_ROTULADO = re.compile(r"[Cc](?<![\w\[][Cc])\.? ?[Pp]\.? ?[Ff](?![^\W\d_])[^\d]{0,12}?"
     r"(?P<n>\d{3}" + _E_SEP + r"\d{3}" + _E_SEP + r"\d{3}" + _E_SEP + r"\d{2})(?!\d)(?![.,/-]\d)")
+_E_CPF_ESPACOS_ROTULADO = re.compile(
+    r"[Cc](?<![\w\[][Cc])\.? ?[Pp]\.? ?[Ff](?![^\W\d_])[^\d\n\[\]]{0,15}?"
+    r"(?P<n>(?P<a>\d ?\d ?\d)" + _E_SEP + r"(?P<b>\d ?\d ?\d)" + _E_SEP
+    + r"(?P<c>\d ?\d ?\d)" + _E_SEP + r"(?P<d>\d ?\d))(?!\d)(?![.,/-]\d)")
 _E_FORMA_RG = r"(?P<n>(?:\d{1,2}[.,]\d{3}[.,]\d{3}|\d{7,9})" + _E_HIFEN + r"[\dXx])(?![\w])(?![.,/-]\d)"
-_E_RG_SIGLA = re.compile(r"[Rr](?<![\w.][Rr])(?:\.[ \t]?[Gg]|[Gg])\.?(?![\w])"
-    r"[ \t]{0,3}(?:[Nn][º°Oo]?\.?[ \t]{0,3})?(?:[:.\-][ \t]{0,3})?" + _E_FORMA_RG)
-_E_RG_IDENTIDADE = re.compile(r"[Ii](?<![\w.][Ii])[Dd][Ee][Nn][Tt][Ii][Dd][Aa][Dd][Ee](?![\w])"
-    r"[ \t]{0,3}(?:[Nn][º°Oo]?\.|[Nn][º°]|:)[ \t]{0,3}(?:[:.\-][ \t]{0,3})?" + _E_FORMA_RG)
+# Detector próprio: não chama a máscara nem usa seus padrões de RG. A gramática
+# restrita do preenchimento e os limites numéricos mantêm estas formas na máscara.
+_E_RG_ROTULADO = re.compile(
+    r"[RrIiCc](?<![\w.][RrIiCc])(?:"
+    r"(?<=[Rr])(?:\.[ \t]?[Gg]\.?|[Gg]|(?i:egistro[ \t]+geral))|"
+    r"(?<=[Ii])(?i:dentidade)|(?<=[Cc])(?:\.[Ii]\.?|[Ii]))(?!\w)"
+    r"(?=[^\d\n\[\]]{0,25}(?:[A-Z]{1,2}-?)?\d)"
+    r"(?:(?![A-Z]{1,2}-?\d)(?>\([Rr][Gg]\)|(?i:ssp/[a-z]{2}|ifp|detran/[a-z]{2}|oab/[a-z]{2}|de)|"
+    r"[Nn](?:\.[º°Oo]|[º°Oo])?\.?|[ \t.:º°-])){0,25}+"
+    r"(?P<n>(?:[A-Z]{1,2}-?)?(?!\d{1,2}\.\d{1,2}\.\d{2,4}(?!\d|-[\dXx]))"
+    r"\d(?:[ .,]{0,2}\d){4,9}(?:" + _E_HIFEN + r"[\dXx]|[Xx])?)"
+    r"(?!\d|[.,/\-]\d|[ .,]{1,2}\d)")
+_E_RG_CAUDA = re.compile(
+    r"[\[]RG omitido\][^\d\n\[\]]{0,3}(?P<n>\d{3}-[\dXx])(?!\d)")
 _E_RG_ID = re.compile(r"[Ii](?<![\w.][Ii])[Dd](?![\w])"
     r"[ \t]{0,3}(?:(?:[Nn][º°Oo]?\.?|[Nn][ÚúUu]mero)[ \t]{0,3})?(?:[:.\-][ \t]{0,3})?" + _E_FORMA_RG)
 _E_TELEFONE = re.compile(r"[TtFfCcWw](?<![\w\[][TtFfCcWw])"
@@ -1262,7 +1319,11 @@ def varrer_estrito(texto: str, liberados: Iterable[str] = frozenset()) -> list[d
     for m in _E_CPF_ROTULADO.finditer(s):
         if m.start("n") - m.start() <= 15 and cpf_valido(re.sub(r"\D", "", m.group("n"))):
             achados.add((*m.span("n"), "cpf"))
-    for p in (_E_RG_SIGLA, _E_RG_IDENTIDADE, _E_RG_ID):
+    for m in _E_CPF_ESPACOS_ROTULADO.finditer(s):
+        if (1 <= sum(m.group(g).count(" ") for g in "abcd") <= 2
+                and cpf_valido(re.sub(r"\D", "", m.group("n")))):
+            achados.add((*m.span("n"), "cpf"))
+    for p in (_E_RG_ROTULADO, _E_RG_CAUDA, _E_RG_ID):
         for m in p.finditer(s):
             achados.add((*m.span("n"), "rg"))
     for m in _E_TELEFONE.finditer(s):
