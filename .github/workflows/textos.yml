@@ -166,17 +166,31 @@ jobs:
           done
           exit 1
 
+      - name: Verificar disponibilidade da sincronização Cloudflare
+        id: credenciais-nuvem
+        env:
+          DADOS_DISPONIVEIS: ${{ secrets.CLOUDFLARE_API_TOKEN_DADOS != '' }}
+        run: |
+          if [ "$DADOS_DISPONIVEIS" != "true" ]; then
+            echo "::notice::sincronização/exportação e atestação de exportações puladas: CLOUDFLARE_API_TOKEN_DADOS ausente; veja docs/backend.md"
+            exit 0
+          fi
+          echo "disponivel=true" >> "$GITHUB_OUTPUT"
+
       - uses: actions/setup-node@v4
+        if: steps.credenciais-nuvem.outputs.disponivel == 'true'
         with:
           node-version: "22"
 
       - name: Instalar Wrangler fixado
+        if: steps.credenciais-nuvem.outputs.disponivel == 'true'
         working-directory: worker
         # Mantém os scripts dos binários do Wrangler; checkout não persiste token Git.
         run: npm ci
 
       - name: Sincronizar produção e exportar projeções
         id: sincronizar
+        if: steps.credenciais-nuvem.outputs.disponivel == 'true'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN_DADOS }}
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
@@ -210,12 +224,17 @@ jobs:
         if: failure() && steps.manifestos.outputs.publicado == 'true' && steps.sincronizar.outcome == 'failure'
         run: echo "::error::os manifestos já foram publicados, mas a sincronização de produção falhou; execute novamente textos.yml via workflow_dispatch para concluir a sincronização e a exportação."
 
-      - name: Atestar manifestos e somas da exportação
+      - name: Atestar manifestos
+        if: hashFiles('data/textos/manifesto-*.json') != ''
         uses: actions/attest-build-provenance@v2
         with:
-          subject-path: |
-            data/textos/manifesto-*.json
-            .exportacoes/**/SHA256SUMS
+          subject-path: data/textos/manifesto-*.json
+
+      - name: Atestar somas da exportação
+        if: steps.sincronizar.outcome == 'success' && hashFiles('.exportacoes/**/SHA256SUMS') != ''
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: .exportacoes/**/SHA256SUMS
 
       - name: Salvar somente originais públicos mesmo em falha
         if: always() && steps.chave-cache.outputs.semana != '' && steps.cache-originais.outputs.cache-hit != 'true'

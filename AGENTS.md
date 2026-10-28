@@ -741,9 +741,11 @@ Esta é a referência única para sessões; a CLI está em "Pipeline e comandos"
   PR usa staging com `--simular`, sem commit/push, com `CLOUDFLARE_API_TOKEN_LEITURA`; fork ou secret ausente
   gera `::notice::` e pula a simulação. Produção usa `CLOUDFLARE_API_TOKEN_DADOS`; deploy usa
   `CLOUDFLARE_API_TOKEN_DEPLOY` em `backend.yml`, conforme `docs/backend.md`.
+  Sem `CLOUDFLARE_API_TOKEN_DADOS`, emite `::notice::` e pula nuvem/exportação e sua atestação, mantendo extração, validação, testes, publicação Git e atestação dos manifestos existentes.
 - `backend.yml`: PRs de `worker/**` executam `npm ci`, testes e typecheck com Node 22; push em `main`
   testa, migra/publica staging e executa integração (ou smoke de saúde/busca). Só depois migra/publica
   produção com `COMMIT` igual ao SHA do evento, protegido pelo Environment `production`; Git só leitura.
+  Sem `CLOUDFLARE_API_TOKEN_DEPLOY` no ambiente, emite `::notice::` e pula deploy/smoke com sucesso, sem pular testes/typecheck nem promover produção sem staging publicado.
 - Coleta, textos e publicação usam `cancel-in-progress: false`; textos compartilha o grupo `coleta`,
   exceto PRs (`textos-pr-${{ github.ref }}`). O GitHub mantém só uma execução pendente por grupo:
   uma pendente mais nova substitui a anterior, mesmo com `cancel-in-progress: false` (a execução ativa continua).

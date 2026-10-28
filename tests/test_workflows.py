@@ -105,12 +105,43 @@ class TestWorkflows(unittest.TestCase):
         self.assertEqual(valor(push, "branches", 4), "[main]")
         self.assertEqual(valor(push, "paths", 4), '["config/remocoes.json"]')
         job = self.job(self.textos, "publicar")
-        for comando in ("python -m coletor.textos", "python -m coletor.validar", "python -m coletor.nuvem"):
+        for comando in ("python -m coletor.textos", "python -m coletor.validar"):
             with self.subTest(comando=comando):
                 passo = passo_contendo(job, comando)
                 self.assertNotRegex(passo, r"(?m)^        if:")
         sincronizar = passo_contendo(job, "python -m coletor.nuvem")
         self.assertIn('--ambiente production --exportar "$EXPORTACOES"', sincronizar)
+
+    def test_textos_sem_token_publica_git_mas_pula_nuvem_e_atestacao_de_exportacoes(self):
+        job = self.job(self.textos, "publicar")
+        self.assertNotIn("secrets.", valor(job, "if", 4))
+        credenciais = passo_contendo(job, "id: credenciais-nuvem")
+        self.assertEqual(valor(credenciais, "DADOS_DISPONIVEIS", 10),
+                         "${{ secrets.CLOUDFLARE_API_TOKEN_DADOS != '' }}")
+        self.assertIn('if [ "$DADOS_DISPONIVEIS" != "true" ]; then', credenciais)
+        self.assertIn("::notice::", credenciais)
+        self.assertIn("CLOUDFLARE_API_TOKEN_DADOS ausente; veja docs/backend.md", credenciais)
+        self.assertLess(credenciais.index("::notice::"), credenciais.index("exit 0"))
+        self.assertLess(credenciais.index("exit 0"), credenciais.index('echo "disponivel=true"'))
+        self.assertIn('echo "disponivel=true" >> "$GITHUB_OUTPUT"', credenciais)
+        for trecho in ("python -m coletor.textos", "python -m coletor.validar",
+                       'git -C "$RADAR_TEXTOS" push origin HEAD:dados-textos', "id: manifestos"):
+            with self.subTest(trecho=trecho):
+                passo = passo_contendo(job, trecho)
+                self.assertNotRegex(passo, r"(?m)^        if:")
+                self.assertNotIn("secrets.CLOUDFLARE", passo)
+                self.assertLess(job.index(passo), job.index(credenciais))
+        for trecho in ("actions/setup-node@", "run: npm ci", "python -m coletor.nuvem"):
+            with self.subTest(trecho=trecho):
+                passo = passo_contendo(job, trecho)
+                self.assertEqual(valor(passo, "if", 8),
+                                 "steps.credenciais-nuvem.outputs.disponivel == 'true'")
+                self.assertLess(job.index(credenciais), job.index(passo))
+                self.assertNotIn("continue-on-error:", passo)
+        atestar = passo_contendo(job, "subject-path: .exportacoes/**/SHA256SUMS")
+        self.assertEqual(valor(atestar, "if", 8),
+                         "steps.sincronizar.outcome == 'success' && "
+                         "hashFiles('.exportacoes/**/SHA256SUMS') != ''")
 
     def test_site_workflow_run_somente_coleta_em_main(self):
         anterior = secao(secao(self.site, "on"), "workflow_run", 2)
@@ -311,9 +342,13 @@ class TestWorkflows(unittest.TestCase):
         self.assertIn("secrets.CLOUDFLARE_API_TOKEN_DADOS", sincronizar)
         self.assertIn("vars.CLOUDFLARE_ACCOUNT_ID", sincronizar)
         self.assertIn('--commit "$(git rev-parse HEAD)"', sincronizar)
-        atestar = passo_contendo(job, "actions/attest-build-provenance@")
-        self.assertIn("data/textos/manifesto-*.json", atestar)
-        self.assertIn(".exportacoes/**/SHA256SUMS", atestar)
+        atestar = passo_contendo(job, "subject-path: data/textos/manifesto-*.json")
+        self.assertIn("uses: actions/attest-build-provenance@v2", atestar)
+        self.assertEqual(valor(atestar, "if", 8), "hashFiles('data/textos/manifesto-*.json') != ''")
+        self.assertNotIn(".exportacoes/", atestar)
+        exportacoes = passo_contendo(job, "subject-path: .exportacoes/**/SHA256SUMS")
+        self.assertIn("uses: actions/attest-build-provenance@v2", exportacoes)
+        self.assertLess(job.index(sincronizar), job.index(exportacoes))
         artefato = passo_contendo(job, "actions/upload-artifact@")
         self.assertEqual(valor(artefato, "if", 8), "failure()")
         self.assertEqual(valor(artefato, "retention-days", 10), "14")
@@ -359,6 +394,45 @@ class TestWorkflows(unittest.TestCase):
         self.assertIn("npx wrangler d1 migrations apply radar-niteroi --remote", producao)
         self.assertIn("COMMIT: ${{ github.sha }}", producao)
         self.assertIn('npx wrangler deploy --var "COMMIT:$COMMIT"', producao)
+
+    def test_backend_sem_token_pula_deploy_sem_pular_testes_ou_promover_sem_staging(self):
+        testes = self.job(self.backend, "testes")
+        self.assertNotRegex(testes, r"(?m)^    if:")
+        self.assertNotIn("secrets.", testes)
+        for passo in passos(testes):
+            self.assertNotRegex(passo, r"(?m)^        if:")
+        for nome in ("staging", "production"):
+            with self.subTest(ambiente=nome):
+                job = self.job(self.backend, nome)
+                self.assertNotIn("secrets.", valor(job, "if", 4))
+                credenciais, *dependentes = passos(job)
+                self.assertEqual(valor(credenciais, "id", 8), "credenciais")
+                # O checkout ainda não ocorreu; não pode herdar worker como diretório.
+                self.assertEqual(valor(credenciais, "working-directory", 8), ".")
+                self.assertEqual(valor(credenciais, "DEPLOY_DISPONIVEL", 10),
+                                 "${{ secrets.CLOUDFLARE_API_TOKEN_DEPLOY != '' }}")
+                self.assertIn('if [ "$DEPLOY_DISPONIVEL" != "true" ]; then', credenciais)
+                self.assertIn("::notice::deploy pulado: CLOUDFLARE_API_TOKEN_DEPLOY ausente; "
+                              "veja docs/backend.md", credenciais)
+                self.assertLess(credenciais.index("::notice::"), credenciais.index("exit 0"))
+                self.assertLess(credenciais.index("exit 0"), credenciais.index('echo "disponivel=true"'))
+                self.assertIn('echo "disponivel=true" >> "$GITHUB_OUTPUT"', credenciais)
+                for passo in dependentes:
+                    self.assertEqual(valor(passo, "if", 8),
+                                     "steps.credenciais.outputs.disponivel == 'true'")
+                    self.assertNotIn("continue-on-error:", passo)
+        staging = self.job(self.backend, "staging")
+        self.assertEqual(valor(secao(staging, "outputs", 4), "publicado", 6),
+                         "${{ steps.deploy.outcome == 'success' }}")
+        self.assertEqual(valor(passo_contendo(staging, "npx wrangler deploy"), "id", 8), "deploy")
+        producao = self.job(self.backend, "production")
+        credenciais = passo_contendo(producao, "id: credenciais")
+        self.assertEqual(valor(credenciais, "STAGING_PUBLICADO", 10), "${{ needs.staging.outputs.publicado }}")
+        self.assertIn('if [ "$STAGING_PUBLICADO" != "true" ]; then\n'
+                      '            echo "::notice::deploy de produção pulado: staging não foi publicado"\n'
+                      '            exit 0\n'
+                      '          fi\n'
+                      '          echo "disponivel=true"', credenciais)
 
     def test_coleta_temas_depois_de_classificar_e_antes_de_validar(self):
         job = self.job(self.coleta, "coletar")
