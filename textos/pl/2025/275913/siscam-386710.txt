@@ -1,0 +1,731 @@
+                                                                Niterói, 24 de fevereiro de 2025
+Ofício N. JM-001/25
+
+De: Prof. Jorge A. Martins, Pesquisador-líder de Mobile-LAB/UFRJ
+
+Para: Vereadores Allan Lyra, Daniel Marques, Eduardo Paiva e Fernanda Louback (em ordem
+alfabética)
+
+Data: 24/02/2025
+
+Assunto: Parecer Técnico sobre Mensagem Executiva N. 12/2025
+
+Referência: Ofício/GVDM no 105/2025
+
+Exmos. Srs. Vereadores,
+
+Venho, em resposta ao ofício em epígrafe, apresentar parecer solicitado sobre a Mensagem
+Executiva N. 12/2025 e os quesitos técnicos à autoridade que responde pela matéria para os
+esclarecimentos necessários à V. Sa. e seus pares.
+
+A título de colaborar com a Municipalidade, e considerando que a prefeitura não considerou
+alternativa à forma como idealizou o apoio financeiro ao estado e à operadora aquaviária, estou
+sugerindo, com fulcro na Lei Municipal n. 3887/2024, e em atendimento de seu pedido, proposta
+que permite ao usuário do sistema de barca + ônibus uma poupança anual no valor de R$
+1.760,88, a ser avaliada por seus gabinetes e bancada para que, na hipótese de considerarem que,
+de fato, enriquece o debate, possa ser aproveitada pela Câmara Municipal para iniciar um debate
+com os sujeitos sociais envolvidos (os Municípios de Niterói e Rio e o Estado).
+
+Aproveito para manifestar protestos de distinta consideração.
+
+                                       Respeitosamente
+
+                                       Jorge A. Martins
+                                       Professor da UFRJ
+                             Pesquisador-Líder de Mobile-LAB/UFRJ
+
+                        Parecer à Mensagem Executiva No 12/2025
+
+                                                                                       Jorge A. Martins
+                                                                                    Professor da UFRJ
+                                                               Pesquisador-Líder de Mobile-LAB/UFRJ
+
+                          Parecer técnico solicitado por Vereador de Niterói. Tema: Política de subsídio
+                          ao Estado na operação de linha aquaviária intermunicipal. Objeto: Mensagem
+                          Executiva N. 12/2025. Prefeito de Niterói encaminha à Câmara Municipal
+                          projeto de lei para autorizar a abertura de crédito especial no valor total de R$
+                          20.000.000,00 (vinte milhões) para a ação 6600 - Subsídio para integração
+                          tarifária do transporte público. Não há na proposta evidência de efetiva
+                          integração tarifária, mas mero aporte de recursos ao estado a título de subsídio
+                          de linha aquaviária intermunicipal. Questão preliminar: Federalismo de
+                          cooperação. Transporte intermunicipal é de competência exclusiva dos
+                          Estados. A autorização da Câmara para que o município subsidie uma linha de
+                          transporte intermunicipal não deveria, em tese, prescindir de constituição de
+                          pessoa jurídica de natureza autárquica – o consórcio público. Na análise de
+                          mérito, verifica-se que a fundamentação da Mensagem Executiva carece de
+                          tecnicidade. O prefeito, por ser leigo, pode afirmar “não é possível precisar,
+                          em especial a curto prazo, qual será efetivamente o aumento da demanda”, mas
+                          a autoridade técnica em Planejamento de Transporte jamais poderia fazê-lo,
+                          pois há metodologias diversas e não há que se decidir sem os estudos de
+                          viabilidade econômico-financeira, que, evidentemente, começam pela
+                          estimativa da demanda. Sem conhecer a demanda, não há que se projetar
+                          receitas e despesas com mínimo grau de certeza. De sorte que, por não ter sido
+                          orientado tecnicamente, o prefeito acabou divagando sem nenhum
+                          compromisso com a realidade ao fazer o anúncio de benefícios e resultados
+                          sem dimensioná-los, alguns até ilógicos e contraditórios. Recomenda-se
+                          indagar o responsável técnico pela matéria para esclarecer à Câmara os
+                          principais pontos controversos da Mensagem Executiva. Para isso, formulam-
+                          se quesitos. Por fim, com o intuito de fomentar os debates públicos, a partir do
+                          levantamento de parâmetros de elasticidades-preços de curto e longo prazos
+                          (respectivamente: 1º ano e a partir do 3º ano), formula-se sugestão de
+                          alternativa, visando aplicar os mesmos R$ 20 milhões da proposta do prefeito
+                          em três cenários para redução da tarifa dos ônibus municipais alimentadores
+                          para até novos 11.341 usuários/dia (1/3 da demanda atual), reduzindo-se em
+                          27,5%, respectivamente, o custo para o usuário com perspectiva de capturar
+                          demanda da ordem de 29% com geração de receita adicional máxima no
+                          período de 5 anos de contrato de R$ 92 milhões. Em contrapartida, a
+                          concessionária ou o Estado aplicaria 1/3 do adicional de receita em novas
+                          embarcações e serviços.
+
+1.      QUESTÃO PRELIMINAR
+        Antes de adentar-se às questões de mérito técnico, entende este assistente técnico no dever
+de levantar questão preliminar de natureza jurídico-administrativa para melhor apreciação dos
+Srs. Vereadores, vez que até o momento não foi tratada nem na imprensa, nem na Câmara.
+Explico!
+
+        É que o prefeito de Niterói encaminhou à Câmara Municipal projeto de lei para autorizar
+a abertura de crédito especial no valor total de R$ 20.000.000,00 (vinte milhões) por dez meses
+para a ação 6600 - Subsídio para integração tarifária do transporte público.
+
+         De imediato, há que se parabenizar a iniciativa do prefeito e do secretário estadual de
+transporte pela tempestiva iniciativa de melhorar para o usuário o acesso à modalidade aquaviária.
+Contudo, há que se detalhar a proposta a ponto de torná-la robusta o suficiente para eliminar
+críticas e seus pontos fracos. Por exemplo: não há na proposta evidência alguma – sequer indício
+– de efetiva integração tarifária, mas mero aporte de recursos ao Estado a título de subsídio de
+uma linha aquaviária intermunicipal.
+
+         Trata-se, pois, do ponto de vista jurídico-político-administrativo de matéria de
+Federalismo de cooperação que precisaria ser apreciada com o fito de melhorar a proposta e
+maximizar o interesse do contribuinte niteroiense. Afinal, por ser o transporte intermunicipal de
+competência exclusiva dos Estados, a autorização da Câmara para que o município subsidiasse
+especificamente a linha de transporte aquaviário intermunicipal, salvo melhor opinião, não
+deveria prescindir de constituição de pessoa jurídica de natureza autárquica – o consórcio público
+–, que pudesse integrar a administração indireta dos entes consorciados (Lei 11.107/2005, art. 6º,
+§1º, com amparo na CF, art. 241), para permitir ao Município, subsidiariamente ao Estado, efetiva
+ingerência na política de transporte que visa maior participação do modo aquaviário na matriz de
+transportes. Afinal, apesar da mensagem do prefeito não estar em desacordo com a Lei, visto que
+se limita a transferir verba para o Estado, sem entrar no mérito ou dividir competência em política
+de transporte municipal, porém, exatamente por isso perde o Município efetiva influência na
+política, apesar de sustenta-la financeiramente.
+
+        A Lei 12.587/2012, art. 8º VIII, art. 16, § 2º, e art. 17, parágrafo único, também estimula
+a gestão associada em razão das evidentes vantagens de cunho econômico e operacionais para os
+entes federativos que precisam associar-se para melhor viabilizar um serviço ou uma obra.
+
+         Não há, pois, que se começar a implantação da proposta pelo fim: a autorização de crédito
+para endividamento do município deveria ser a última etapa de um processo legislativo que se
+inicia por um protocolo de intenções assinados pelos Chefes do Executivos Estadual e Municipal
+(Lei 11.107/2005, art. 3º) e ratificado por Lei (Lei 11.107/2005, art. 5º), tanto pela Assembleia
+Legislativa quanto pela Câmara de Vereadores, como determina a CF, art. 37, XIX.
+
+        Entretanto, dado o envolvimento direto do município do Rio de Janeiro com a referida
+linha aquaviária, empresas e cidadãos cariocas beneficiar-se-iam dos subsídios custeados
+exclusivamente pelo contribuinte niteroiense, tal como pensa fazer o prefeito de Niterói.
+
+        Por outro lado, do ponto de vista da justiça e da isonomia, Estado e Município de Niterói
+deveriam motivar a adesão da municipalidade do Rio de Janeiro no consórcio a ser firmado com
+o propósito específico de maximização da demanda do transporte aquaviário através de efetivas
+integrações física, operacional e tarifária, minimizando-se, assim, o gasto total para o usuário
+(considerando o porta-à-porta, isto é, com alimentação por ônibus municipais na origem e no
+destino) e o ônus do subsídio exclusivamente para o contribuinte niteroiense.
+
+        Afinal, não há motivos para que o prefeito de Niterói e o secretário de estado de transporte
+não convidem o prefeito do Rio de Janeiro, Eduardo Paes, a integrar a iniciativa, até porque os
+dois prefeitos já têm anunciado a candidatura conjunta de Niterói e do Rio de Janeiro para
+
+sediarem os próximos Jogos Panamericanos. E as duas cidades e toda a população flutuante
+seriam muito beneficiadas se o município do Rio de Janeiro passasse a integrar a iniciativa: a
+proposta do prefeito de Niterói e do secretário de estado de transporte ficaria muito mais coerente,
+justa e robusta, tratando-se o caso com a complexidade e a responsabilidade que merece.
+
+         Por fim, há que se destacar que a mensagem do prefeito parece entrar em conflito com o
+§ 4º, art. 4º. da Lei Municipal n. 3887/2024, que estabelece como condição para fruição do
+benefício da tarifa de integração aquaviária ao cidadão, com desconto de até 100% da tarifa dos
+ônibus urbanos, estar cadastrado no sistema de bilhetagem eletrônica municipal, portando seu
+cartão eletrônico devidamente habilitado, não sendo possível franquear a fruição a qualquer
+usuário, como entende-se que passaria a ocorrer com a proposta do prefeito, visto limitar-se a
+transferir para o Estado R$ 2.000.000,00 por mês.
+
+1.2.     JUSTIFICATIVAS PARA SER CONSIDERADA A QUESTÃO PRELIMINAR
+        SUSCITADA
+
+         Ao ser incorporada a Capital do Estado à iniciativa do prefeito de Niterói e do secretário
+de estado de transporte, amplia-se a oportunidade de captação de investimentos para a oferta de
+novos serviços, principalmente os serviços especiais, visto que podem cumprir, em tese, dois
+importantes papéis: i) efetiva redução de viagens em automóveis; e ii) importante atributo para
+satisfazer as linhas de desejo de turistas que buscam a cidade do Rio como destino, aumentando
+a oportunidade para que Niterói passe a ser efetiva alternativa de hospedagem, explorando um
+atributo que todos nós conhecemos muito bem: é de Niterói que se tem a melhor vista do Rio que
+justifica o título de Cidade Maravilhosa!
+
+        Ressalte-se, ainda, que Niterói e Rio de Janeiro já tiveram há 50 anos ligações aquaviárias
+operadas pela empresa TransTur que faziam a travessia entre Praça Arariboia e Praça XV em
+apenas 7 minutos com saídas a cada 5 minutos em pequenas embarcações (aerobarcos italianos
+com hidrofólio)! É inacreditável como em 50 anos pioramos consideravelmente os indicadores
+do serviços especiais aquaviários, a ponto de viajarmos hoje em quase três vezes mais tempo do
+que fazíamos (ou fazermos a travessia em velocidade três vezes menor). Esses novos serviços
+especiais, juntamente com ligações de interesse social, cumpririam também importante papel para
+melhorar os indicadores de qualidade de vida e de acessibilidade para os municípios envolvidos.
+
+         Entretanto, apesar de toda essa perspectiva que se descortina para o observador crítico
+atento, não se pode deixar de apontar um ponto negativo e contraditório na proposta do prefeito:
+seu pressuposto é extinguir a linha seletiva, tendendo a expulsar do sistema aqueles usuários com
+alto poder aquisitivo e cativos do automóvel que pagam R$ 21,00 pela travessia e que já foram
+da ordem de três vezes mais há nove anos (10.000 passageiros/dia) e que podem chegar a 20.000
+passageiros/dia, como Mobile-LAB/UFRJ estudou para o BNDES. E o que é pior: ao mesmo
+tempo em que extingue a linha seletiva, mantém a tarifa seletiva para o contribuinte niteroiense
+subsidiar, sem dar-lhe garantia alguma de viabilidade econômico-financeira, visto que sequer
+estudou o impacto na captura de demanda, como demostraremos adiante.
+
+        Vê-se, portanto, que o prefeito de Niterói parece agir politicamente bem-intencionado,
+porém percebe-se que não está assistido tecnicamente como deveria e como o contribuinte espera,
+vez que sua mensagem para a Câmara carece da mínima fundamentação técnica.
+
+        E é por não estar sendo tecnicamente orientado que o prefeito oferece um subsídio da
+ordem de R$ 2 milhões por mês sem exigir contrapartida alguma do estado e da operadora de
+transporte aquaviário. Se o prefeito fosse devidamente orientado sobre o quanto sua iniciativa
+conseguiria aumentar a demanda para a empresa operadora, certamente agiria diferente, definindo
+a contrapartida do estado e/ou da operadora para garantir o retorno econômico-financeiro-social-
+ambiental ao contribuinte e à população niteroiense.
+
+         Por isso, este assistente técnico toma a liberdade de, ao final, formular uma alternativa a
+ser considerada por V. Sa. para que, na hipótese de considera-la pertinente, trata-la com os sujeitos
+sociais envolvidos, isto é: o Estado, os municípios do Rio de Janeiro e de Niterói, as duas Câmaras
+Municipais e a Alerj.
+
+        Ressalte-se, por fim, que o próprio grupo Mobile-LAB/UFRJ já estudou para o BNDES
+serviços de transporte aquaviário que além de minimizarem o número de automóveis para
+Charitas, reduziriam o tempo total de viagens entre a Região Oceânica de Niterói e a Zona Sul do
+Rio em até 50%, integrando as redes cicloviárias dos dois municípios, com perspectiva de
+aumentar a demanda de passageiros do modo aquaviário para o patamar de 130.000
+passageiros/dia nos dois terminais1, 2.
+
+       Desde já, Mobile-LAB/UFRJ coloca-se à disposição para apresentar à Câmara Municipal,
+a proposta para o transporte aquaviário que desenvolveu para o BNDES e seus resultados.
+
+        Formulada a questão preliminar da competência dos Senhores Vereadores, qual seja:
+analisar a oportunidade e conveniência de constituição de consórcio público com a participação
+também da Capital do Estado, passo à análise de mérito da mensagem do prefeito.
+
+2.         ANÁLISE DE MÉRITO DA MENSAGEM EXECUTIVA N. 12/2025
+           O prefeito inicia sua mensagem à Câmara anunciando seu desiderato maior:
+                       “O presente projeto tem como objetivo tornar o transporte aquaviário mais acessível,
+                       sustentável e eficiente. Esta medida não apenas facilita a mobilidade urbana, mas
+                       também promove a inclusão social, aliviando a carga financeira dos cidadãos que
+                       dependem deste meio de transporte para suas atividades diárias”.
+
+         Na verdade, o prefeito não define nenhum compromisso com a inclusão social, aliviando
+a carga financeira dos cidadãos que dependem do transporte aquaviário. Como será demonstrado
+adiante, não haverá redução de custo para quem já faz ou quiser fazer uso das linhas sociais: a
+tarifa continuará a R$ 7,70. Por outro lado, o prefeito está impondo ao contribuinte arcar com o
+subsídio ao Estado de até R$ 20 milhões por 10 meses, ao custo de R$ 13,30 por cada usuário do
+terminal de Charitas, sem contrapartida alguma do Estado e/ou da empresa operadora. E esse
+subsídio não tem sequer uma explicação lógica; é contraditório em si mesmo. Afinal, como será
+
+1
+    O erro estatístico dos modelos econométricos desenvolvidos por Mobile-LAB para o BNDES para simular
+    a demanda e a divisão modal é de apenas 2,7% na Região Metropolitana do Rio (no Brasil, o erro
+    estatístico mínimo é para Santos, com 1,7%; e o erro máximo é para Salvador, com 4,9%).
+2
+    Atualmente a demanda diária do terminal da Praça Arariboia é em torno de 34.000 passageiros/dia e o
+    pico desde a virada do século foi de 80.973 passageiros/dia em 2011; enquanto que no terminal de
+    Charitas, a demanda atual é em torno de 3.325 passageiros/dia e o pico desde o ano 2.000 foi de quase
+    10.000 passageiros/dia em 2014.
+
+demonstrado adiante, a iniciativa do prefeito é extinguir a linha seletiva, mas mantendo a tarifa
+de R$ 21,00, sendo que ao usuário seria cobrado o mesmo valor da tarifa social (R$ 7,70) e o
+contribuinte arcaria com R$ 13,30 para completar a tarifa seletiva integralmente.
+
+        Ora, convenhamos, o compromisso dessa proposta não é com o cidadão, muito menos
+com o contribuinte, mas tão somente garantir receita ao Estado. Analisemos, um a um, os
+benefícios e resultados alegados pelo prefeito sem nenhuma demonstração.
+2.2.    OS ALEGAD OS BENEF ÍCIOS NÃ O DEM ONSTRADOS TECNICAM ENTE
+
+                                                                    “A seguir, apresento os benefícios e os resultados esperados com a realização deste
+                                                                    projeto, abordando suas implicações em diferentes aspectos de nossa sociedade e
+                                                                    cidade:
+
+                                                                    Aspectos Sociais:
+
+                                                                    • Mais acessibilidade: A medida proporcionará maior acessibilidade ao transporte
+                                                                      público para a população de baixa renda, promovendo maior inclusão social.
+                                                                      Pessoas que antes não conseguiam utilizar o transporte aquaviário devido aos
+                                                                      custos, agora poderão acessar com mais facilidade as opções de deslocamento.
+                                                                    • Melhoria na qualidade de vida: A redução no custo do transporte permitirá que
+                                                                      mais cidadãos possam utilizar as barcas para o trabalho, estudo e lazer, sem que
+                                                                      isso represente um comprometimento excessivo do seu orçamento pessoal.
+                                                                    • Redução da desigualdade urbana: Este projeto ajudará na redução da
+                                                                      disparidade entre as regiões, proporcionando aos moradores das áreas
+                                                                      periféricas, que geralmente gastam mais com transporte, uma solução mais
+                                                                      acessível e justa”.
+
+        As palavras do prefeito não convencem o observador atento pelos seguintes motivos:
+
+         O pressuposto lógico do prefeito para justificar os três impactos sociais positivos de sua
+iniciativa é que haveria redução de gasto para o usuário de ligação social. Mas não é verdade!
+Haveria, isto sim, redução de custos para o usuário do serviço seletivo que até aqui se dispunha a
+pagar R$ 21,00 para viajar com elevado nível de serviço e conforto (leia-se: baixa ocupação da
+embarcação). Este tenderia a deixar o modo aquaviário, até porque seria extinta a linha seletiva e
+passaria a completar sua linha de desejo, prolongando o deslocamento rodoviário até seu destino
+final (Centro do Rio), aumentando, pois, o fluxo de automóveis no corredor Charitas-São
+Francisco-Icaraí-Centro-Ponte, ao contrário do que promete o prefeito.
+
+        Portanto, se “há pessoas que não conseguem utilizar o transporte aquaviário devido aos
+custos”, como afirma o prefeito, então continuariam sem poder acessá-lo, pois a tarifa social de
+R$ 7,70 continuará a mesma e a tarifa do ônibus alimentador também em R$ 4,45.
+
+        Única exceção seria com a população da comunidade do Morro do Preventório, maior
+favela da cidade, e do bairro de Jurujuba, por não precisarem de modo alimentador motorizado
+por estarem na área de influência imediata do terminal. Mantendo-se a proporção atual de 8% de
+viagens no modo aquaviário em relação ao total de viagens, tem-se a estimativa de que o público-
+alvo no Morro do Preventório e em Jurujuba seria de apenas 1.634 passageiros/dia, sendo 10%
+(164) na hora-pico. Público que representa 1/3 da capacidade horária do salão de acumulação de
+passageiros do terminal.
+
+         Há de se destacar, contudo, que somente de 2.000 a 2024, o Morro do Preventório passou
+de 1.353 habitantes para 5.408. O terminal aquaviário em Charitas, operando com tarifa social
+subsidiada, tornar-se-ia importante atributo de localização para as classes sociais de menor poder
+aquisitivo, induzindo maior especulação no mercado informal de habitação na área de influência
+imediata do terminal, forçando a médio prazo expansão e adensamento ainda maiores no Morro
+do Preventório e em Jurujuba o que demandaria maiores esforços da prefeitura para urbanizar
+aquela comunidade, oferecer moradia popular e conter a crescente favelização que se verifica na
+cidade, como demonstrado pelo IBGE no último censo.
+
+        À exceção dessa parcela da população, todas as outras, residentes fora da área de
+influência imediata do terminal, precisariam acessá-lo por automóvel (40%) ou ônibus (60%),
+sendo que para estes últimos, continuariam a gastar diariamente R$ 12,15 (R$ 4,45 com o ônibus
+municipal e R$ 7,70 com o catamarã com tarifa seletiva subsidiada).
+
+        Passemos a analisar os supostos benefícios econômicos anunciados pelo prefeito:
+                   “Aspectos Econômicos:
+
+                   •     Aumento da produtividade: A diminuição do tempo e do custo com
+                   deslocamentos permitirá que os trabalhadores possam se dedicar mais às suas
+                   atividades, aumentando sua produtividade e, consequentemente, a eficiência
+                   econômica de nossa cidade.
+                   •     Impulso ao comércio local: Com a maior disponibilidade financeira das pessoas
+                   devido à redução de gastos com transporte, haverá um incremento no consumo de
+                   bens e serviços na cidade, beneficiando diretamente o comércio local e impulsionando
+                   a economia”.
+
+      Mais uma vez o prefeito emite uma opinião equivocada para argumentar sobre impactos
+econômicos de sua iniciativa.
+
+        Primeiro porque novamente partiu do mesmo pressuposto equivocado de que haveria
+redução dos gastos com transporte para o usuário e, com isso, aumento do consumo de bens e
+serviços em Niterói. Já argumentamos no item anterior sobre não haver na iniciativa perspectiva
+de redução de custo para os usuários da linha social! O próprio prefeito afirma adiante que se
+fosse reduzir a tarifa aquém do valor atual (R$ 7,70), geraria uma queda da receita ao estado da
+ordem de quase R$ 3 milhões, que precisaria ser ressarcida pelo Município (adiante voltaremos a
+esse ponto).
+
+        Segundo, porque ao prometer que a redução do tempo de viagem induziria um aumento
+da produtividade individual do usuário “e, consequentemente, a eficiência econômica de nossa
+cidade”, o prefeito esqueceu que cada cidadão niteroiense que se desloca para trabalhar no Rio,
+é a eficiência econômica daquela cidade que aumenta, não a de Niterói. Aumentar a oferta de
+empregos para moradores de Niterói trabalharem na própria cidade e que moradores de outros
+municípios também passarem a vir trabalhar aqui, aí, sim, poder-se-ia falar de “aumento da
+eficiência econômica de nossa cidade”.
+
+        Mas, ao argumentar sobre as externalidades do trânsito excessivo, sem se dar conta, o
+prefeito confessou que tem consciência de que o tempo que o cidadão perde em engarrafamentos
+impacta negativamente sua produtividade e, pior ainda, sua saúde. Ressalte-se, pois, que o cidadão
+espera dele é exatamente diminuir o tempo que se perde nos congestionamentos crescentes e a
+
+ineficiência do sistema, gravemente aumentada com a inauguração do ocioso corredor
+Transoceânico e recentemente piorada com a decisão de se proibir no edital de compra de ônibus
+elétricos veículos com portas dos dois lados, impedindo-se que os novos ônibus possam ser
+utilizados no referido corredor ocioso com a finalidade de correção dos erros de planejamento
+daquela via.
+
+         Essa prática reiterada de decisões técnicas marcadas por imperícia na área de mobilidade
+é a principal causa da crescente ineficiência do sistema de transporte municipal que perdeu nos
+últimos 12 anos 20 milhões de passageiros por ano, sendo a metade disso ates da covid. E o
+principal motivo já havia sido denunciado na perícia que o grupo Mobile-LAB/UFRJ prestou à
+CPI dos Ônibus de 2013: a gestão municipal que começava naquele ano abandonou o Plano
+Lerner, que havia sido o projeto básico da licitação do sistema de transporte coletivo do ano
+anterior, fazendo com que o sistema perdesse o norte e passasse a ficar desorientado, a ponto da
+FGV, em estudo sobre o equilíbrio econômico-financeiro que elaborou por encomenda do
+município em 2017, apontou um percurso médio mensal do Consórcio Transnit da ordem da
+metade do que o protocolo técnico (Geipot) define e somente esse fato era responsável por um
+impacto na tarifa da ordem de 26%. Até hoje o município não apresentou as medidas que tomou
+para atender o alerta da FGV.
+
+        Quanto aos impactos ambientais da iniciativa, o prefeito argumentou:
+                   “Aspectos Ambientais:
+
+                   • Menos congestionamento: Com a adesão de mais pessoas ao transporte público
+                     devido à tarifa mais acessível, a quantidade de veículos particulares nas ruas será
+                     reduzida, contribuindo para a diminuição dos congestionamentos urbanos.
+
+                   • Menos poluição: A diminuição do uso de carros particulares contribuirá para a
+                     redução das emissões de CO₂ e de outros poluentes, colaborando para um
+                     ambiente mais saudável e sustentável.
+
+                   • Uso mais eficiente do espaço urbano: A redução da necessidade de
+                     estacionamento e ampliação de vias para automóveis poderá liberar espaços
+                     urbanos para pedestres, ciclistas e áreas de lazer, proporcionando um ambiente
+                     urbano mais equilibrado”.
+
+        Por não ter demonstrado seu argumento com estudos técnicos, sua opinião sobre a
+redução do número de automóveis por suposta transferência modal de viagens e passageiros para
+a linha social de catamarãs precisa ser rebatida a partir dos próprios números de sua iniciativa.
+Senão vejamos!
+
+       Na mensagem do prefeito, mesmo sem demonstrar, ficou definida que a demanda máxima
+considerada nos cenários estudados seria de 8.096 passageiros (vide tabela abaixo).
+
+       Passemos, pois, a demonstrar, qual seria o impacto no tráfego do corredor Charitas-Icaraí-
+Centro-Ponte considerando essa demanda projetada de 8.096 passageiros por dia no terminal
+aquaviário de Charitas.
+
+        Atualmente, em torno de 30% dos passageiros do serviço aquaviário acessam os terminais
+de Charitas e da Praça Arariboia por automóvel. Mas, a favor do prefeito, consideremos 40%!
+Na hora-pico, segundo o plano de mobilidade da própria prefeitura, 9,9% de toda a movimentação
+diária ocorre no hora-pico da manhã.
+
+        Portanto, na hora-pico matinal, teríamos:
+
+                                   FD = D x %HP x %MA
+
+                                             Onde:
+
+                            FD - Fluxo de veículos desviado;
+              D – demanda diária projetada pelo prefeito (8.096 passageiros);
+             %HP – percentual de viagens diárias na hora-pico adotado (9,9%);
+            %MA – percentual de automóveis no acesso ao terminal adotado (40%)
+
+                                             Logo:
+
+                                  FD = 8.096 x 9,9% x 40%
+
+                                    FD = 321 automóveis.
+
+       Portanto, na hora-pico matinal, a iniciativa do prefeito, segundo os próprios indicadores
+de sua mensagem, somente daria conta de diminuir 321 automóveis. Mas, afinal, que impacto
+esse número daria no gargalo da infraestrutura viária do corredor Charitas-Icaraí-Centro-Ponte?
+
+         Atualmente, a capacidade horária de automóveis da Av. Roberto Silveira é de
+aproximadamente 4.500 unidades. Mas a demanda reprimida chega a 56% e isso consta de estudos
+oficiais da PMN. Significa que nas vias perpendiculares pelo menos outros 2.520 veículos chegam
+a permanecer três fases de vermelho para alcançarem a Av. Roberto Silveira. Portanto, a demanda
+total de automóveis no corredor Icaraí-Centro-Ponte chega a ultrapassar 7.020 automóveis na
+hora-pico matinal. Os 321 automóveis que seriam retirados da circulação representam apenas
+4,6% da demanda total no corredor no pico da manhã e de 7% em relação à capacidade da Av.
+Roberto Silveira.
+
+        Atualmente, a via encontra-se no Nível de Serviço F (a via opera com capacidade inferior
+à demanda). O Nível de Serviço E corresponde à capacidade teórica da via. Já o Nível de Serviço
+D corresponde, a aproximadamente, entre 75% e 95% da capacidade teórica da via. Ao retirar do
+corredor apenas 321 automóveis (4,6% da demanda total e 7% da capacidade da via principal), o
+subsídio à linha social em Charitas não muda o nível de serviço na via principal, pois o residual
+ganho de capacidade (7%) é imediatamente ocupado pela atual demanda reprimida. Não será
+sequer percebida a retirada de meros 321 automóveis na hora-pico. Afinal, das três faixas de
+tráfego da Av. Roberto Silveira, cada uma deixaria de ter na hora-pico 107 automóveis, que
+divididos em 12 blocos de 5 minutos resultariam em 9 carros a cada 5 minutos, menos de 2 carros
+por minuto...
+
+        Seria esse (menos de 2 carros por minuto por faixa) o pífio impacto ambiental
+positivo do subsídio alardeado pelo prefeito...
+
+        Quanto aos impactos na Mobilidade, o prefeito argumenta:
+                    “Aspectos de Mobilidade:
+
+                    • Aumento da demanda: A redução tarifária proporcionará o aumento da demanda
+                      pela linha Charitas – Praça XV, o que tornará o sistema aquaviário mais
+                      sustentável economicamente.
+                    • Deslocamento entre pontos: Espera-se que a medida incentive a migração de
+                      passageiros da linha Araribóia – Praça XV para a linha Charitas – Praça XV,
+                      contribuindo para uma provável redução de automóveis no trecho entre Charitas
+                      e Araribóia, especialmente nas vias da orla de Charitas e São Francisco, Avenida
+                      Roberto Silveira e Avenida Marques do Paraná.
+                    • Possibilidade de novos investimentos: Com o aumento da adesão ao transporte
+                      público, o município poderá justificar novos investimentos em infraestrutura,
+                      melhorando a qualidade geral do transporte urbano”.
+
+        Mesmo sem ter estudado os impactos do subsídio proposto na demanda de transporte,
+mesmo sem sequer abordar a elasticidade-preço da demanda, o prefeito afirma que o sistema
+aquaviário ficará mais sustentável economicamente e que “PROVAVELMENTE” haverá
+transferência de automóveis que hoje dirigem-se ao terminal da Praça Arariboia para o terminal
+de Charitas.
+
+        E é esse o ponto falho da iniciativa que o próprio prefeito tem consciência: a transferência
+de parte da demanda atual do terminal central para o terminal de Charitas não pode ser considerada
+aumento efetivo da demanda, mas o que é mais grave: hoje esses passageiros que já pagam a tarifa
+das barcas e vão de automóvel para o terminal central, continuariam indo de automóvel para
+Charitas e ainda passariam a onerar o contribuinte em R$ 13,30 per capita, sem nenhum impacto
+positivo visível, seja social, seja econômico, seja ambiental, conforme já demonstrado até aqui.
+
+         Ora, e por que o contribuinte mais pobre dos bairros periféricos e menos servidos de
+infraestrutura passariam a subsidiar o cidadão que quer deslocar-se de automóvel, impactando a
+qualidade de vida na cidade? Simplesmente porque o prefeito não foi orientado minimamente
+sobre a demanda e os impactos sociais, econômicos e ambientais de sua iniciativa?
+
+        Verifica-se, portanto, absoluta imperícia na propositura à Câmara. A matéria está em um
+nível de profundidade e detalhamento ainda muitíssimo preliminar. Infelizmente, não pode o
+
+prefeito ter a pretensão de ver aprovado um projeto que não é capaz de oferecer nenhum indicador
+positivo que tenha sido estudado com rigor e que poderia sustentar tecnicamente a pretensão. Por
+isso a necessidade premente do responsável técnico pela matéria vir a público responder todas as
+dúvidas dos vereadores e da sociedade.
+
+2.3.    SOBRE OS CENÁRIOS QUE TERIAM SIDO ANALISADOS (SIC)
+       O prefeito afirma:
+                   “Por fim, o valor final da tarifa, estabelecido em R$ 7,70, foi decorrente de análise
+                   que levou em consideração a viabilidade econômica do subsídio, a análise da demanda
+                   e a sustentabilidade financeira do sistema de transporte aquaviário”.
+
+        Ora, e por que o prefeito não juntou à sua mensagem essas análises de demanda, e os
+estudos de viabilidade econômica da tarifa? Recomendo aos ilustres Vereadores a motivarem o
+prefeito a apresentar os estudos onde foram feitas essas análises, outrossim, recomendo-lhes
+solicitar também ao prefeito cópia integral do processo administrativo que subsidiou a
+tomada de decisões que culminou com o envio à Câmara da Mensagem Executiva N.
+12/2025.
+
+        Mas o prefeito avançou em sua explanação acerca de outros cenários (sic) considerados:
+                   “Estudou-se um segundo cenário, por meio do qual a tarifa hipoteticamente fosse
+                   reduzida para R$ 4,70 (quatro reais e setenta centavos), gerando uma diferença para
+                   R$ 16,30 (dezesseis reais e trinta centavos).
+
+                   Estima-se aumento na demanda motivada pela redução da tarifa. No entanto, como
+                   consequência, a arrecadação seria reduzida, o que implicaria na necessidade de
+                   subsídio do administrador público.
+
+                   A Tabela abaixo mostra características da linha seletiva (demanda, tarifa e receita),
+                   da linha social com a tarifa a R$ 7,70 (sete reais e setenta centavos) e da linha social
+                   com a tarifa a R$ 4,70 (quatro reais e setenta centavos).
+
+                   No cenário 1, considera-se a demanda atual com redução da tarifa de R$ 21,00 (vinte
+                   e um reais) para R$ 7,70 (sete reais e setenta centavos) e é gerada uma redução na
+                   arrecadação em R$ 1.076.768,00. O cenário 2 assume um aumento na demanda
+                   motivado pela redução da tarifa e mantêm a presume a tarifa da linha social no valor
+                   de R$ 7,70 (sete reais e setenta centavos), resultando em uma redução da arrecadação
+                   em cerca de R$ 2.368.890,00. Assumindo a mesma demanda do cenário 2 e reduzindo
+                   a tarifa de R$ 7,70 (sete reais e setenta centavos) para R$ 4,70 (quatro reais e setenta
+                   centavos), o cenário 3 mostra uma redução na arrecadação da linha Charitas – Praça
+                   XV no valor de R$ 2.903.226,00.
+
+                    Conforme mostrado na Tabela 1, é estimado que a Receita Tarifária mensal da linha
+                    seletiva Charitas – Praça XV seja de aproximadamente R$ 1.700.160,00, e esse valor,
+                    seria hipoteticamente, o limite máximo de uma possível perda da receita tarifária da
+                    linha, pois estaria sendo considerada demanda zero ou uma tarifa zero.
+
+                    Por outro lado, não é possível precisar, em especial a curto prazo, qual será
+                    efetivamente o aumento da demanda.
+
+                    Com essas considerações, tendo por base um cenário médio e reconhecendo a
+                    importância para a mobilidade local, a Prefeitura de Niterói propõe subsidiar parte
+                    do transporte aquaviário, mais especificamente a linha Charitas – Praça XV,
+                    contribuindo com o valor de R$ 2 milhões ao mês, buscando suprir, ao menos
+                    substancialmente, a perda da receita tarifária que seria recebida pelo Estado do Rio
+                    de Janeiro”.
+
+         Portanto, que fique claro: por não ter estimado o aumento da demanda que o subsídio, em
+tese, geraria ao estado e à sua operadora, o prefeito decidiu investir R$ 2 milhões por mês para
+ressarci-los por extinguir a linha seletiva que atualmente gera uma receita mensal de R$
+1.700.160,00 e anual de R$ 20.401.920,00 para transportar em torno de 3.680 passageiros por dia
+e 971.520 por ano. Como se pode verificar, foi descartada a hipótese de diminuir a tarifa social
+para R$ 4,70, porque nesse caso, haveria um prejuízo do Estado e de sua operadora da ordem de
+quase R$ 3 milhões/ano.
+
+        Em nenhum dos cenários apresentados pelo prefeito se consegue observar coerência entre
+os números da iniciativa, isto é: R$ 2.000.000,00 por mês para uma demanda diária de 8.096
+passageiros/dia. Afinal, no Cenário 1 o gasto mensal ao contribuinte niteroiense sairia a R$
+1.076.068,00 e no Cenário 2 a R$ 2.368.890,00. Se a tabela considerasse o que de fato está sendo
+proposto, isto é: um subsídio mensal de R$ 2.000.000,00, o cenário 2 deveria ser corrigido para o
+seguinte:
+                                                      Tarifa     Receita     Tarifa
+                                                                                       Receita
+                      Pax                             atual     atual mês   proposta
+ Cenário   Tarifa              Pax mês   Pax ano                                       proposta
+                    dia útil                          linha       linha       linha
+                                                                                         mês
+                                                     seletiva    seletiva    social
+    2      Social   6.835      150.370   1.804.440    21,00     3.157.770     7,70     1.157.849   1.999.921
+
+       Verifica-se, portanto, que quando se investiga os próprios termos da proposta do prefeito,
+a demanda projetada de 8.096 passageiros/dia não corresponde ao valor de R$
+2.000.000,00/mês nos próximos 10 meses, mas tão somente 6.835 passageiros/dia (menor
+
+15,6%). Considerando que a hora-pico concentra aproximadamente 10% das viagens diárias, ter-
+se-ia a perspectiva de carregamento do terminal de Charitas com apenas 684 passageiros no pico
+matutino, o equivalente a 3 saídas por hora com 70% de ocupação e ociosidade de 29%,
+considerando que atualmente a operadora conta com 2 embarcações para 235 passageiros e uma
+para 500 passageiros.
+
+        Definitivamente trata-se de uma proposta insustentável econômico-financeiramente,
+visto não gerar para o usuário da linha social nenhum desconto e ainda onerar o contribuinte
+niteroiense em R$ 2.000.000,00 por mês para transportar apenas 6.835 pessoas por dia e 684
+pessoas na hora-pico...
+
+      Um serviço subdimensionado com apenas três saídas na hora-pico não é atraente para a
+demanda.
+
+3.     QUESITOS AO RESPONSÁVEL TÉCNICO PELA MATÉRIA
+
+       1)  O Sr. poderia informar a capacidade de passageiros do terminal aquaviário de
+           Charitas, quantos catamarãs operam na linha para Praça XV e qual a capacidade de
+           cada um?
+       2) Quantos catamarãs partem do terminal na hora-pico e qual a capacidade da linha
+           seletiva em passageiros/dia, considerando essa quantidade de catamarãs informada
+           na resposta anterior?
+       3) Em algum momento o Sr. e sua equipe analisaram o custo quilométrico em detalhe
+           das linhas social e seletiva e o cálculo das respectivas tarifas? Em caso positivo, qual
+           a opinião formada?
+       4) A título de comparação, o grupo Mobile-LAB/UFRJ projetou duas ligações
+           aquaviárias entre Porto Alegre-Guaíba, que tem hoje custo quilométrico de R$ 1,16,
+           enquanto a linha seletiva de Charitas-Praça XV tem R$ 2,63. O Sr. saberia explicar
+           o que poderia justificar uma diferença tão grande (127%)?
+       5) O que o Sr. tem a dizer da hipótese da tarifa de R$ 21,00 retratar alto grau de
+           ineficiência do serviço?
+       6) O Sr. saberia informar qual a elasticidade-preço das linhas seletiva e social do serviço
+           aquaviário?
+       7) Mas a elasticidade-preço do serviço de transporte coletivo municipal certamente o
+           Sr. sabe. Poderia nos informar, então, se é elástica ou inelástica?
+       8) O Sr. sabe qual é a limitação de calado (em metros) para embarcações no píer do
+           terminal aquaviário de Charitas? Quantos metros?
+       9) O Sr. e sua equipe estimaram a demanda de passageiros que a iniciativa do subsídio
+           induziria? Em caso afirmativo, qual o método adotado e quais as demandas
+           estimadas para quais cenários? (Em caso negativo, fazer as perguntas seguintes)
+       10) Por que perdeu a oportunidade de estudar a demanda para melhor convencimento da
+           Câmara e da opinião pública?
+       11) Se o Senhor não estimou a demanda, não analisou a tarifa atual, não sabe a
+           elasticidade-preço nem do serviço aquaviário, nem rodoviário, e não tem opinião
+           formada acerca de eventual alto grau de ineficiência da linha seletiva, como o Sr.
+           pode, diante do contribuinte e da Câmara, justificar racionalmente a decisão de
+           subsidiar a empresa em até R$ 20 milhões em 10 meses?
+
+        12) Se não estimou a demanda, como pode definir impactos (positivos e negativos) e as
+            medidas mitigadoras dos impactos negativos?
+        13) O Sr. estudou outras alternativas para facilitar o acesso à linha social e aumentar o
+            uso das embarcações da linha social, com capacidades para 1300 a 2000
+            passageiros)?
+
+4.      FORMULAÇÃO DE PROPOSTA ALTERNATIVA A SER TRATADA POR
+        CONSÓRCIO PÚBLICO ENTRE O ESTADO E OS MUNICÍPIOS DE NITERÓI E
+        RIO DE JANEIRO
+
+        A proposta do governo municipal é extinguir a linha seletiva, que hoje tem 3.680
+passageiro/dia e pagam R$ 21,00, gerando receita anual de R$ 20 milhões. Essa receita equivale
+a 10.036 passageiros pagantes/dia das linhas sociais, mas com a iniciativa do prefeito, apenas
+6.835 passageiros estariam cobertos com o subsídio. Portanto, não é inteligente uma proposta que
+atende pelo mesmo custo 47% a menos de usuários. Seria premiar a ineficiência!
+
+        10.036 passageiros/dia é também a capacidade diária do terminal aquaviário de Charitas,
+considerando as embarcações disponíveis com capacidades de 235 e 500 passageiros. Assim, os
+6.835 passageiros/dia que seriam subsidiados pela prefeitura equivalem a tão somente 68% da
+capacidade do terminal, o que retroalimenta a noção de ineficiência do sistema e que tende a
+impactar também o terminal da Praça Arariboia, visto que a própria prefeitura sabe que parte
+significativa dessa demanda apenas mudaria de terminal, esvaziando-se também o terminal
+central que foi significativamente ampliado e modernizado para os Jogos Olímpicos e da Copa
+do Mundo.
+
+        Para aqueles passageiros que pagam ou que venham a pagar a tarifa social (R$ 7,70) e
+dirigem-se ao terminal por ônibus municipal (R$ 4,45) seu custo total diário (ida e volta) é de R$
+24,30 e no mês, R$ 534,60. Se, com fundamento na Lei Municipal n. 3887/2024, a municipalidade
+destinasse os mesmos R$ 20.000.000,00 que pretende repassar ao Estado para subsidiar o
+transporte de ônibus alimentador, que é efetivamente da sua competência, conseguiria promover
+redução significativa de custo para o usuário. Três cenários devem ser analisados:
+    • 1º. Cenário – Meia-tarifa (desconto de 50% da tarifa dos ônibus municipais) – nesse
+        caso o custo diário para o usuário baixaria para R$ 19,85 e o mensal para R$ 436,70
+        (redução de 18,3%) com alcance de 17.024 usuários beneficiados (equivalente a 50% da
+        demanda atual do terminal da Praça Arariboia) e
+    • 2º. Cenário – Tarifa zero (desconto de 100% da tarifa dos ônibus municipais) – nesse
+        caso o custo diário para o usuário baixaria para R$ 15,40 e o mensal para R$ 338,80
+        (redução de 36,6%) com alcance de 8.512 usuários beneficiados (equivalente a 25% da
+        demanda atual do terminal da Praça Arariboia);
+    • 3º. Cenário – Tarifa com desconto de 75% da tarifa dos ônibus municipais – nesse
+        caso o custo diário para o usuário baixaria para R$ 17,63 e o mensal para R$ 387,86
+        (redução de 27,5% com alcance de 11.341 usuários beneficiados (equivalente a 33,3% da
+        demanda atual da Praça Arariboia).
+
+       Considerando a elasticidade-preço de curto prazo (1º ano do contrato) do sistema de
+ônibus urbano (-0,86) e de longo prazo (-1,05) (a partir do 3º ano do contrato), o impacto na
+demanda da linha seletiva seria de:
+    • 1º. Cenário – Tarifa zero – Curto prazo: 44.702 passageiros (aumento de 31,5%: 10.702
+       passageiros) e aumento de receita anual: R$ 21.755.025,60; Longo prazo: 47.066
+       passageiros (aumento de 38,4%: 13.066 passageiros) aumento de receita anual: R$
+       26.560.564,80;
+    • 2º. Cenário – Meia-tarifa – Curto prazo: 39.351 passageiros (aumento de 15,7%: 5.338
+       passageiros) e aumento de receita anual: R$ 10.851.086,40; Longo prazo: 40.533
+       passageiros (aumento de 19,2%: 6.533 passageiros) e aumento de receita anual: R$
+       13.280.281,40;
+    • 3º. Cenário – Tarifa com desconto de 75% da tarifa dos ônibus municipais) – Curto
+       prazo: 41.948 passageiros (aumento de 23,4%: 7.948 passageiros) e aumento de receita
+       anual: R$ 16.156.694,40; Longo prazo: 43.818 passageiros (aumento de 28,9%: 9.818
+       passageiros); aumento de receita anual: R$ 19.958.030,40.
+
+        Conclui-se que o 3º. Cenário é sustentável financeiramente, dado que com o desconto de
+75% da tarifa dos ônibus municipais, a verba anual de R$ 20.000.000,00 que o prefeito de Niterói
+está disposto a investir para aumentar a participação do modo aquaviário, seria capaz de suportar
+uma demanda diária de até 11.341 passageiros. Tal volume de passageiros é 43% maior do que o
+acréscimo estimado da demanda em curto prazo (no primeiro ano de operação) e 16% ainda maior
+do que o acréscimo estimado da demanda no longo prazo, isto é, até o fim do 3º. ano de operação,
+quando para cada R$ 1,00 investido pela prefeitura, gerar-se-ia uma receita de R$ 1,00 para o
+estado.
+
+        Nesse 3º. Cenário, a despesa diária do passageiro reduziria de R$ 24,30 para R$ 17,63
+(R$ 8,82 por trecho de ida e volta), permitindo-lhe uma economia anual de R$ 1.760,88.
+Mantidos a qualidade do serviço, o número de viagens e o PIB, sustentar-se-ia a demanda
+estimada por todo o período de 5 anos de contrato, com folga de capacidade financeira de 16%
+para manutenção do subsídio, portanto, com margem para capturar ainda maior demanda
+potencial. No total, os novos 8.000 passageiros/dia nos dois primeiros anos de operação e os
+10.000 passageiros/dia do 3º ao 5º ano de operação que tenderiam a migrar das alternativas
+rodoviárias para o sistema aquaviário, agregariam ao estado, no período contratual, R$
+92.187.480,00. Tal valor equivale a 26,7% de aumento de receita esperada para o período de
+contrato a partir da receita atual considerando a média diária de 34.000 passageiros pagantes.
+
+         De posse dessa informação, o prefeito pode tratar com o estado e a operadora reinvestirem
+1/3 (R$ 30.729,160,00) dessa receita agregada no sistema a partir do 3º. Ano em novas
+embarcações e serviços especiais com o fito de minimizar o uso do automóvel no corredor Rio-
+Niterói.
+
+      A participação do município do Rio de Janeiro permitirá ainda melhor desempenho
+econômico-financeiro da proposta ora formulada.
+
+       Além disso, as Prefeituras dos dois municípios teriam efetivo controle de acesso de
+passageiros a cada terminal, desde que planejasse/dimensionasse suas linhas alimentadoras.
+
+5.      CONCLUSÕES
+
+        Não há na proposta do prefeito indício de integração tarifária, mas mero aporte de
+recursos ao estado a título de subsídio de linha aquaviária intermunicipal. O caso remete à
+apreciação da questão preliminar suscitada de “Federalismo de cooperação”, por ser o transporte
+intermunicipal da competência exclusiva dos Estados, e a autorização da Câmara para que o
+município subsidiasse uma linha de transporte intermunicipal não deveria, em tese, prescindir de
+constituição de consórcio público no qual também deveria estar sendo convidado a participar o
+Município do Rio de Janeiro por uma questão de justiça e isonomia para com o contribuinte
+niteroiense.
+        Na análise de mérito, verifica-se que a fundamentação da Mensagem Executiva carece de
+tecnicidade. Sem conhecer a demanda, não há que se projetar receitas e despesas com mínimo
+grau de certeza. De sorte que, por não ter sido orientado tecnicamente, o prefeito acabou
+divagando sem nenhum compromisso com a realidade ao fazer o anúncio de benefícios e
+resultados sem dimensioná-los.
+
+        Formulados 13 quesitos técnicos a serem feitos ao responsável técnico na matéria.
+
+         Por fim, com o intuito de fomentar os debates públicos, a partir do levantamento de
+parâmetros de elasticidades-preços de curto e longo prazos (respectivamente: 1º ano e a partir do
+3º ano), formulou-se, com fundamento na Lei Municipal 3.887/2024, sugestão de alternativa
+política, analisando-se a aplicação dos mesmos R$ 20.000.000,00 da proposta do prefeito em três
+cenários de redução da tarifa dos ônibus municipais alimentadores. Destacou-se como o cenário
+de maior viabilidade econômico-financeira o que propõe 75% de desconto na tarifa dos ônibus
+municipais alimentadores, capaz de atender até novos 11.341 usuários/dia (1/3 da demanda atual),
+reduzindo-se em 27,5% o custo mensal para o usuário, que passaria de R$ 534,60 para R$ 387,86,
+permitindo-lhe uma poupança anual no valor de R$ 1.760,88. Por esse cenário, vislumbra-se
+a perspectiva de aumento da demanda da ordem de 29% com geração de receita adicional máxima
+no período de 5 anos de contrato de R$ 92 milhões. Em contrapartida, a concessionária e/ou o
+Estado aplicariam 1/3 do adicional de receita em novas embarcações e serviços.
+
+         O prefeito, por não ter sido devidamente orientado a fundamentar tecnicamente sua
+proposta, isto é, por não ter noção do impacto que sua proposta teria na demanda da operadora,
+perdeu a oportunidade de demonstrar o ganho significativo de receita para o Estado, justificando-
+se pedir em contrapartida pela vantagem econômico-financeira proporcionada ser reinvestido pelo
+Estado e/ou operadora parte do aumento da receita em novos serviços e embarcações, ficando
+consignada a sugestão de ser da ordem de, no mínimo, 1/3.
+
+                                Niterói, 24 de fevereiro de 2025.
+
+                                        Jorge A. Martins
+                                       Professor da UFRJ
+                             Pesquisador Líder de Mobile-LAB/UFRJ

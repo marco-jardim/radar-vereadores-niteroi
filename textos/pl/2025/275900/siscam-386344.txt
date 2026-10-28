@@ -1,0 +1,76 @@
+                                                    ANEXO
+
+                 Estimativa do Impacto Orçamentário-Financeiro
+
+       Estimativa de impacto orçamentário-financeiro elaborada em cumprimento ao art. 113
+       do Ato das Disposições Constitucionais Transitórias da Constituição Federal de 1988 e
+       do art. 14 da Lei Complementar n° 101/2000.
+
+            Estimativa do impacto orçamentário-financeiro por exercício (R$)
+                     2025                            2026                              2027
+                 4.318.047,02                    4.318.047,02                      4.318.047,02
+
+       Metodologia e Memorial de Cálculo:
+
+Item Descrição                                                                                     Valor
+
+A    Quantidade de guardas municipais ativos (exercício 2024)                                                      713
+
+B    Quantidade de guardas municipais ativos com RAS (Regime Adicional de Serviço)                                 512
+C    Percentual de guardas municipais ativos com RAS [C = B/A]                                                   71,8%
+     Número de vagas previsto no concurso público para provimento de cargos de guarda civil
+D    municipal (Edital n° 001/2024, com resultado final previsto para 01/07/2025)                                  209
+     Estimativa de guardas municipais ativos com RAS nos exercícios de 2025 a 2027
+E    [E = (A + D) * C]                                                                                             662
+F    Valor referente ao pagamento do RAS na folha de dezembro de 2024                                  R$ 1.113.075,75
+G    Estimativa do valor anual de pagamentos do RAS (exercício 2024) [G = F * 12]                     R$ 13.356.909,00
+     Estimativa do valor médio anual de pagamentos do RAS por guarda municipal (exercício 2024)
+H    [H = G/B]                                                                                             R$ 26.087,71
+I    Estimativa do valor anual de pagamentos do RAS nos exercícios de 2025 a 2027 [I = H*E]           R$ 17.272.188,08
+     Estimativa de alíquota média do imposto de renda que incide sobre a parcela remuneratória
+J    oriunda do RAS                                                                                              25,0%
+     Estimativa da renúncia de receita anual decorrente da não incidência do imposto de renda
+K    sobre os rendimentos oriundos do RAS [K = I * J]                                                  R$ 4.318.047,02
+
+       Notas:
+       1 - A fonte dos dados indicados nos itens A, B, C, D, F e G é o documento apresentado na peça n° 22 dos
+       autos do processo administrativo n° 9900008326/2025;
+       2 - A estimativa da renúncia de receita para o exercício de 2025 foi calculada de modo simplificado, e
+       considerou que todos os guardas municipais aprovados dentro do número de vagas do concurso público
+       (Edital n° 001/2024) estariam em exercício desde janeiro de 2025, o que certamente não ocorrerá, dado
+       que o resultado final do certame está previsto para 01/07/2025. A estimativa também considerou que a
+       não incidência do IR sobre os rendimentos oriundos do RAS se daria a partir de janeiro de 2025, o que
+       também não ocorrerá, visto que isso só deve acontecer a partir da vigência da lei a que este anexo se
+       refere. A estimativa da renúncia de receita para o exercício de 2025, portanto, está superestimada;
+
+3 - A estimativa não considerou eventuais reajustes na verba indenizatória do RAS ao longo dos exercícios
+de 2025 a 2027, bem como também não considerou eventuais reajustes na "tabela do imposto de renda"
+no período;
+4 - A estimativa de alíquota média do imposto de renda que incide sobre a parcela remuneratória oriunda
+do RAS foi realizada de modo a considerar que a remuneração dos guardas municipais está sujeita a uma
+das duas maiores faixas de tributação do imposto de renda (isto é, estaria sujeita à alíquota de 22,5% ou
+de 27,5%).
+
+Da estimativa de receita da lei orçamentária e das metas de resultados fiscais previstas
+no anexo próprio da lei de diretrizes orçamentárias:
+
+       Em atendimento ao art. 14, inciso I, da Lei Complementar n° 101/2000, a
+renúncia de receita oriunda do Projeto de Lei a que este Anexo se refere deverá ser
+considerada na estimativa de receita da lei orçamentária, bem como no cumprimento
+das metas de resultados fiscais previstas no anexo próprio da lei de diretrizes
+orçamentárias.
+
+Dos Resultados Esperados:
+
+       Em cumprimento ao art. 2º, parágrafo segundo, do Decreto Municipal n°
+14.577/2022, apresenta-se a seguir o resultado pretendido com a instituição do
+benefício fiscal e o respectivo método de aferição.
+
+Resultado pretendido com a instituição do benefício fiscal: buscar isonomia na
+tributação da remuneração do RAS dos guardas municipais de Niterói em relação à
+remuneração equivalente de cargos com atribuições semelhantes em outros entes
+federativos.
+
+Meta proposta: não há.
+
+Indicador: não há.

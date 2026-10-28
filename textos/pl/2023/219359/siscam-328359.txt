@@ -1,0 +1,96 @@
+                                                                                      PROGRAMA ESCOLA PARCEIRA
+                                                          QUANTITATIVO DE VAGAS OFERTADAS PELAS INSTITUIÇÕES PRIVADAS DE EDUCAÇÃO CONTRATADAS
+
+                                                                                                                                                                                            TOTAL DA
+                         VAGAS ESCOLA PARCEIRA                                             GREI 0        GREI 1         GREI 2           GREI 3           GREI 4          GREI 5
+                                                                                                                                                                                          INSTITUIÇÃO
+                                                                                                                                                                                                          ALIMENTAÇÃO ALIMENTAÇÃO
+                                                                                                                                                                                                          CUSTO DIÁRIO CUSTO EM 2023*
+Nº                             NOME                                      BAIRRO          Manhã Tarde Manhã Tarde Manhã Tarde Manhã Tarde Manhã Tarde Manhã                        Tarde Manhã Tarde Total
+ 1 CRECHE ESCOLA CASA DA MINHA INFÂNCIA                                  FONSECA           0        0   8         4    26          9    12          0     0         14    0        0    46     27    73          330,96 R$ 33.096,00
+ 2 CENTRO EDUCACIONAL MONTEIRO - RECREARTE                               FONSECA           0        0   0         0    32         25    38         10     5         0     0        0    75     35   110          482,45 R$ 48.245,00
+ 3 JARDIM ESCOLA PIRATININGA                                           PIRATININGA         0        0   0         0     0         15    0          23     0         22    0        0     0     60    60          282,62 R$ 28.262,00
+ 4 CENTRO DE ENSINO MARAVISTA                                             ITAIPU           0        0   0         0     0          0    0          25     0         20    0        0     0     45    45           215,5 R$ 21.550,00
+ 5 CENTRO EDUCACIONAL REIS - PEDACINHO DO SABER                        BALDEADOR           0        0   0         0     0          0    11         12    10         3     0        0    21     15    36          169,37 R$ 16.937,00
+ 6 FLORESTINHA EDUCAÇÃO INFANTIL E ENSINO FUNDAMENTAL                  SANTA ROSA          0        0   0         0    18         18    12          7     8         9     0        0    38     34    72          329,65 R$ 32.965,00
+ 7 ESCOLA ASPEN                                                       SERRA GRANDE         0        0   0         5    54          8    0           0     0         0     0        0    54     13    67          290,78 R$ 29.078,00
+ 8 GRUPO COSTA BAHIA - COLÉGIO CASTELO DO SABER                           ICARAI           0        0   16        0    16          8    16         10    17         0     0        0    65     18    83          377,39 R$ 37.739,00
+ 9 INSTITUTO SÃO BENTO DE NITERÓI                                      SANTA ROSA          0        0   0         0    34         17    31         10     0         6     0        0    65     33    98          431,38 R$ 43.138,00
+10 CENTRO EDUCACIONAL ADS                                                CENTRO            0        0   0         0     0          4    19         16    21         9     0        0    40     29    69          329,76 R$ 32.976,00
+11 ESPAÇO EDUCATIVO PEQUENOS PASSOS                                        BADU            0        0   0         0     0          0    0           0     0         20    0        0     0     20    20             107 R$ 10.700,00
+12 CENTRO EDUCACIONAL SANTA HELENA                                     SANTA ROSA          0        0   0         0     7          5    0           5     0         5     0        0     7     15    22          100,53 R$ 10.053,00
+13 CENTRO EDUCACIONAL DURVALINA KNUPP                              ILHA DA CONCEIÇÃO       0        0   0         0    20         18    20         18    15         20    0        0    55     56   111          517,09 R$ 51.709,00
+14 JARDIM ESCOLA PRIMEIROS PASSOS                                       CARAMUJO           0        0   0         0    14         27    14          9     0         17    0        0    28     53    81          368,71 R$ 36.871,00
+15 SOCIEDADE EDUCADORA CURSO SARAMAGO                                    FONSECA           0        0   0         0    40          0    40         10     0         20    0        0    80     30   110           497,6 R$ 49.760,00
+16 ENSINO INFANTIL RECRIANÇA                                               SAPÊ            0        0   0         0    16          0    28          0    20         0     0        0    64      0    64          297,96 R$ 29.796,00
+17 INSTITUTO NOGUEIRA BARROS                                         SANTA BARBÁRA        13        0   24        0    20         10    20         15    10         10    0        0    87     35   122          548,77 R$ 54.877,00
+18 CRECHE ESCOLA ÂNCORA                                                   ITAIPU           0        0   0         7    33          5    15          0     0         0     0        0    48     12    60           260,4 R$ 26.040,00
+19 SOCIEDADE EDUCACIONAL CANTINHO DA ALEGRIA                           PIRATININGA         0        0   0         0    10          8    8           2     6         2     0        0    24     12    36          164,32 R$ 16.432,00
+20 CRECHE ESCOLA NOSSA INFÂNCIA                                        VITAL BRAZIL        0        0   0         0    14          0    0           0    12         0     0        0    26      0    26          124,96 R$ 12.496,00
+21 COLÉGIO CENECISTA ATHAYDE PARREIRAS                                    ITAIPU           0        0   0         0     0          0    40         40    25         25    0        0    65     65   130           614,7 R$ 61.470,00
+22 CRECHE LE PETIT 292                                                    ICARAI           0        0   15        0    15          0    15          0     0         4     0        0    45      4    49           216,7 R$ 21.670,00
+23 CRECHE LE PETIT                                                        ICARAI           0        0   15        0    15          0    12          0     0         0     0        0    42      0    42          182,28 R$ 18.228,00
+24 COP REDE DE ENSINO - COLÉGIO OPÇÃO                                    FONSECA           0        0   0         0     0          0    0           0     0         10    0        0     0     10    10            53,5 R$   5.350,00
+                                                                                          13        0   78        16   384        177   351        212   149        216   0        0    975   621         R$   7.294,38 R$ 729.438,00
+                                                                                               13            94             561              563              365             0           1.596
+
+                          VALOR UNITÁRIO - ALIMENTAÇÃO**
+                           FAIXA ETÁRIA                              CUSTO DIÁRIO
+     0 a 11 meses                                                  R$          4,27
+     1 a 3 anos                                                    R$          4,34
+     4 e 5 anos                                                    R$          5,35
+
+* Considerando premissa 2 do impacto orçamentário anexado à peça 23 do presente processo, foram considerados 100 dias letivos para o ano de 2023.
+** Valores referentes a cada faixa etária, conforme informações constantes no Projeto de Lei de nº 9900014757/2023
+
+                                                                                                                               PROGRAMA ESCOLA PARCEIRA
+                                                                                                                 IMPACTO ORÇAMENTÁRIO - VIGÊNCIA A PARTIR DE JUNHO DE 2023*
+                                                                                                                                             VALOR TOTAL         VALOR                                                    VALOR A SER          DESPESAS COM              VALOR          VALOR GLOBAL DO
+                        VALORES ESCOLA PARCEIRA                                             VAGAS VALOR BOLSA
+                                                                                                              VALOR MENSAL                    (JUN/2023 A       MATERIAL
+                                                                                                                                                                         TOTAL MATERIAL               VALOR DO
+                                                                                                                                                                                                                         EMPENHADO EM         VALE TRANSPORTE         ALIMENTAÇÃO       PROGRAMA PARA
+                                                                                             DISP. DE ESTUDOS                                                             (COTA ÚNICA)              CONTRATO (2)**
+ Nº                              NOME                                       BAIRRO                                                           JAN/2024)**         (IND.)                                                      2023**               2023***               2023****              2023
+ 1    CRECHE ESCOLA CASA DA MINHA INFÂNCIA                                 FONSECA             73     R$       750,00   R$      54.750,00   R$     438.000,00   R$   750,00   R$       54.750,00 R$    492.750,00        R$ 438.000,00        R$     165.023,80       R$ 33.096,00      R$     636.119,80
+ 2    CENTRO EDUCACIONAL MONTEIRO - RECREARTE                              FONSECA            110     R$       750,00   R$      82.500,00   R$     660.000,00   R$   750,00   R$       82.500,00 R$    742.500,00        R$ 660.000,00        R$     248.666,00       R$ 48.245,00      R$     956.911,00
+ 3    JARDIM ESCOLA PIRATININGA                                          PIRATININGA           60     R$       750,00   R$      45.000,00   R$     360.000,00   R$   750,00   R$       45.000,00 R$    405.000,00        R$ 360.000,00        R$     135.636,00       R$ 28.262,00      R$     523.898,00
+ 4    CENTRO DE ENSINO MARAVISTA                                            ITAIPU             45     R$       750,00   R$      33.750,00   R$     270.000,00   R$   750,00   R$       33.750,00 R$    303.750,00        R$ 270.000,00        R$     101.727,00       R$ 21.550,00      R$     393.277,00
+ 5    CENTRO EDUCACIONAL REIS - PEDACINHO DO SABER                       BALDEADOR             36     R$       680,00   R$      24.480,00   R$     195.840,00   R$   750,00   R$       27.000,00 R$    222.840,00        R$ 198.360,00        R$      81.381,60       R$ 16.937,00      R$     296.678,60
+ 6    FLORESTINHA EDUCAÇÃO INFANTIL E ENSINO FUNDAMENTAL                 SANTA ROSA            72     R$       750,00   R$      54.000,00   R$     432.000,00   R$   750,00   R$       54.000,00 R$    486.000,00        R$ 432.000,00        R$     162.763,20       R$ 32.965,00      R$     627.728,20
+ 7    ESCOLA ASPEN                                                      SERRA GRANDE           67     R$       750,00   R$      50.250,00   R$     402.000,00   R$   750,00   R$       50.250,00 R$    452.250,00        R$ 402.000,00        R$     151.460,20       R$ 29.078,00      R$     582.538,20
+ 8    GRUPO COSTA BAHIA - COLÉGIO CASTELO DO SABER                          ICARAI             83     R$       750,00   R$      62.250,00   R$     498.000,00   R$   750,00   R$       62.250,00 R$    560.250,00        R$ 498.000,00        R$     187.629,80       R$ 37.739,00      R$     723.368,80
+ 9    INSTITUTO SÃO BENTO DE NITERÓI                                     SANTA ROSA            98     R$       750,00   R$      73.500,00   R$     588.000,00   R$   750,00   R$       73.500,00 R$    661.500,00        R$ 588.000,00        R$     221.538,80       R$ 43.138,00      R$     852.676,80
+ 10   CENTRO EDUCACIONAL ADS                                               CENTRO              69     R$       750,00   R$      51.750,00   R$     414.000,00   R$   750,00   R$       51.750,00 R$    465.750,00        R$ 414.000,00        R$     155.981,40       R$ 32.976,00      R$     602.957,40
+ 11   ESPAÇO EDUCATIVO PEQUENOS PASSOS                                       BADU              20     R$       730,00   R$      14.600,00   R$     116.800,00   R$   750,00   R$       15.000,00 R$    131.800,00        R$ 117.200,00        R$      45.212,00       R$ 10.700,00      R$     173.112,00
+ 12   CENTRO EDUCACIONAL SANTA HELENA                                    SANTA ROSA            22     R$       750,00   R$      16.500,00   R$     132.000,00   R$   750,00   R$       16.500,00 R$    148.500,00        R$ 132.000,00        R$      49.733,20       R$ 10.053,00      R$     191.786,20
+ 13   CENTRO EDUCACIONAL DURVALINA KNUPP                             ILHA DA CONCEIÇÃO        111     R$       750,00   R$      83.250,00   R$     666.000,00   R$   750,00   R$       83.250,00 R$    749.250,00        R$ 666.000,00        R$     250.926,60       R$ 51.709,00      R$     968.635,60
+ 14   JARDIM ESCOLA PRIMEIROS PASSOS                                      CARAMUJO             81     R$       660,00   R$      53.460,00   R$     427.680,00   R$   750,00   R$       60.750,00 R$    488.430,00        R$ 434.970,00        R$     183.108,60       R$ 36.871,00      R$     654.949,60
+ 15   SOCIEDADE EDUCADORA CURSO SARAMAGO                                   FONSECA            110     R$       750,00   R$      82.500,00   R$     660.000,00   R$   750,00   R$       82.500,00 R$    742.500,00        R$ 660.000,00        R$     248.666,00       R$ 49.760,00      R$     958.426,00
+ 16   ENSINO INFANTIL RECRIANÇA                                              SAPÊ              64     R$       730,00   R$      46.720,00   R$     373.760,00   R$   750,00   R$       48.000,00 R$    421.760,00        R$ 375.040,00        R$     144.678,40       R$ 29.796,00      R$     549.514,40
+ 17   INSTITUTO NOGUEIRA BARROS                                        SANTA BARBÁRA          122     R$       750,00   R$      91.500,00   R$     732.000,00   R$   750,00   R$       91.500,00 R$    823.500,00        R$ 732.000,00        R$     275.793,20       R$ 54.877,00      R$ 1.062.670,20
+ 18   CRECHE ESCOLA ÂNCORA                                                  ITAIPU             60     R$       750,00   R$      45.000,00   R$     360.000,00   R$   750,00   R$       45.000,00 R$    405.000,00        R$ 360.000,00        R$     135.636,00       R$ 26.040,00      R$     521.676,00
+ 19   SOCIEDADE EDUCACIONAL CANTINHO DA ALEGRIA                          PIRATININGA           36     R$       650,00   R$      23.400,00   R$     187.200,00   R$   750,00   R$       27.000,00 R$    214.200,00        R$ 190.800,00        R$      81.381,60       R$ 16.432,00      R$     288.613,60
+ 20   CRECHE ESCOLA NOSSA INFÂNCIA                                       VITAL BRAZIL          26     R$       750,00   R$      19.500,00   R$     156.000,00   R$   750,00   R$       19.500,00 R$    175.500,00        R$ 156.000,00        R$      58.775,60       R$ 12.496,00      R$     227.271,60
+ 21   COLÉGIO CENECISTA ATHAYDE PARREIRAS                                   ITAIPU            130     R$       750,00   R$      97.500,00   R$     780.000,00   R$   750,00   R$       97.500,00 R$    877.500,00        R$ 780.000,00        R$     293.878,00       R$ 61.470,00      R$ 1.135.348,00
+ 22   CRECHE LE PETIT 292                                                   ICARAI             49     R$       750,00   R$      36.750,00   R$     294.000,00   R$   750,00   R$       36.750,00 R$    330.750,00        R$ 294.000,00        R$     110.769,40       R$ 21.670,00      R$     426.439,40
+ 23   CRECHE LE PETIT                                                       ICARAI             42     R$       750,00   R$      31.500,00   R$     252.000,00   R$   750,00   R$       31.500,00 R$    283.500,00        R$ 252.000,00        R$      94.945,20       R$ 18.228,00      R$     365.173,20
+ 24   COP REDE DE ENSINO - COLÉGIO OPÇÃO                                   FONSECA             10     R$       575,99   R$       5.759,90   R$      46.079,20   R$   680,00   R$        6.800,00 R$     52.879,20        R$    47.119,30      R$      22.606,00       R$ 5.350,00       R$      75.075,30
+                                                                             TOTAL            1596                        R$ 1.180.169,90 R$ 9.441.359,20                      R$   1.196.300,00 R$ 10.637.659,20        R$ 9.457.489,30      R$ 3.607.917,60         R$ 729.438,00     R$ 13.794.844,90
+   * A Instituição Privada de Educação Katia Silva de Souza, Nome Fantasia Colégio Nossa Senhora da Penha, habilitada para celebrar Contrato Por meio do Programa Escola Parceira entrou em contato com a Comissão do Edital desistindo da parceria, alegando dificuldades para fornecer alimento às crianças
+     enviadas pela FME. Com isso, o quantitativo de vagas ofertadas reduziu de 1643 para 1596
+  ** Valor previsto para o contrato, considerando seu início em Junho de 2023, de acordo com o quantitativo de vagas disponibilizadas no quadro de reformulação de vagas encaminhado pelos representantes legais das Instituições Privadas de Educação e anexados aos processos individuais de
+     credenciamento, em conformidade com a demanda apresentada na relação de não contemplados na segunda etapa do processo de pré-matrícula de 2023 da Rede Municipal de Educação de Niterói, por idade e região.
+ *** O valor dispendido com vale transporte foi calculado baseado em 4 passagens diárias por aluno no valor de R$ 4,45, a partir de junho de 2023, considerando, deste modo, um total de 127 dias letivos em conformidade com o calendário oficial da Rede Pública Municipal de Educação de Niterói.
+
+**** Considerando premissa 2 do impacto orçamentário anexado à peça 23 do presente processo, foram considerados 100 dias letivos para o ano de 2023.
+
+                                                                                                                                                   GUILHERME LUIZ MOURÃO ORNELLAS
+                                                                                                                                                 GESTOR DO PROGRAMA ESCOLA PARCEIRA
+
+Guilherme Luiz
+Mourao Ornellas
+Ci see 023.157-e
+E Ciga Data: 06/07/2023
+10:19
+( Ciga

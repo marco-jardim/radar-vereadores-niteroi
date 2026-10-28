@@ -1,0 +1,180 @@
+ANEXO V – METODOLOGIA DE CÁLCULO
+
+PROJETO DE LEI DE DIRETRIZES ORÇAMENTÁRIAS
+PLDO – 2022
+ANEXO DE METAS FISCAIS E ANEXO DE RISCOS FISCAIS
+
+Niterói
+2022
+
+PROJETO DE LEI DE DIRETRIZES ORÇAMENTÁRIAS PARA 2022
+INTRODUÇÃO
+A LDO é o elo entre o Plano Plurianual (PPA), que funciona como um plano de Governo, e a Lei Orçamentária Anual (LOA), instrumento de viabilização da execução dos programas governamentais. A Constituição Federal estabelece que compete à Lei de Diretrizes Orçamentárias:
+Compreender as metas e prioridades da administração pública federal, incluindo as despesas de capital para o exercício financeiro subsequente;
+Orientar a elaboração da lei orçamentária anual;
+Dispor sobre as alterações na legislação tributária; e
+Estabelecer a política de aplicação das agências financeiras oficiais de fomento.
+Com a publicação da Lei de Responsabilidade Fiscal (LRF – Lei Complementar 101/2000), além do disposto na Constituição, a LDO deve dispor sobre:
+Equilíbrio entre receitas e despesas;
+Critérios e forma de limitação de empenho, a ser efetivada nas seguintes hipóteses:
+Se verificado, ao final de um bimestre, que a realização da receita poderá não comportar o cumprimento das metas de resultado primário ou nominal estabelecidas no Anexo de Metas Fiscais; ou
+Enquanto perdurar o excesso de dívida consolidada de ente da Federação que tenha ultrapassado o respectivo limite ao final de um quadrimestre.
+Normas relativas ao controle de custos e à avaliação dos resultados dos programas financiados com recursos dos orçamentos; e
+Demais condições e exigências para a transferência de recursos a entidade públicas e privadas.
+
+A Lei de Responsabilidade Fiscal estabeleceu ainda que integrará o projeto de LDO o Anexo de Metas Fiscais (AMF), em que serão estabelecidas metas anuais, em valores correntes e constantes, relativas a receitas, despesas, resultados nominal e primário e montante da dívida pública, para o exercício a que se referirem e para os dois seguintes.
+O Anexo de Metas Fiscais conterá ainda:
+Avaliação do cumprimento das metas relativas ao ano anterior;
+Demonstrativo das metas anuais, instruído com memória e metodologia de cálculo que justifiquem os resultados pretendidos, comparando- as com as fixadas nos três exercícios anteriores, e evidenciando a consistência delas com as premissas e os objetivos da política econômica nacional;
+Evolução do patrimônio líquido, também nos últimos três exercícios, destacando a origem e a aplicação dos recursos obtidos com a alienação de ativos;
+Avaliação da situação financeira e atuarial dos regimes geral de previdência social e próprio dos servidores públicos e do Fundo de Amparo ao Trabalhador, bem como dos demais fundos públicos e programas estatais de natureza atuarial; e
+Demonstrativo da estimativa e compensação da renúncia de receita e da margem de expansão das despesas obrigatórias de caráter continuado.
+Além do Anexo de Metas Fiscais, a Lei de Diretrizes Orçamentárias conterá Anexo de Riscos Fiscais (ARF), onde serão avaliados os passivos contingentes e outros riscos capazes de afetar as contas públicas, informando as providências a serem tomadas, caso se concretizem.
+
+CENÁRIO MACROECONÔMICO
+Os principais parâmetros macroeconômicos projetados para a construção do cenário base são os seguintes: (i) de atividade econômica, envolvendo o PIB; (ii) da inflação; (iii) do setor externo, incluindo taxa de câmbio; (iv) dos agregados monetários e taxa de juros básica da economia; e (v) do preço do petróleo. Todas as demais variáveis incorporadas na construção do cenário base ou que podem vir a afetá-lo são consideradas de cunho não macroeconômico. O cenário base é a referência para a projeção das receitas do governo e para o estabelecimento do nível de despesas compatível com a meta de superávit primário estabelecida no corpo da LDO, assim como para as projeções de dívida pública. Todavia, é importante salientar que o próprio lapso temporal entre a elaboração da LDO e o início do ano a que ela se aplica resulta na majoração dos riscos em torno da consecução do cenário base originalmente projetado.
+O atual cenário é de incerteza, tanto internamente quanto externamente. Os principais pontos de destaque são:
+A irrupção da pandemia relacionada ao novo Coronavírus (Covid-19), decretada em março de 2020 pela OMS, afetou drasticamente o Brasil – e o mundo, causando efeitos sanitários e econômicos significativos. No cenário interno, em razão das medidas de distanciamento social adotadas para conter a proliferação do vírus e evitar um colapso no sistema de saúde, houve forte redução da atividade econômica, com elevado número de desempregados e  queda da produção industrial e do comércio.  No entanto, em que pese o resultado do PIB apurado no ano de 2020, há uma projeção de retomada do crescimento econômico em nível moderado a partir de 2021. Segundo o Banco Central, o crescimento do Produto Interno Bruto (PIB) está estimado em 3,2% para o ano de 2021.
+
+Em que pese o cenário macroeconômico do Brasil, estima-se uma inflação relativamente controlada, com previsões variando entre 4,5% e 5,4%. Esse panorama é impulsionado pela depreciação da taxa de câmbio, retomada da demanda e o aumento de preços anteriormente cancelados ou adiados. O Índice Nacional de Preços ao Consumidor Amplo – IPCA, que tem por objetivo medir a inflação, tem projeção de 4,71% acumulado para o ano corrente.
+
+No cenário externo, merece destaque a vacinação contra o coronavírus em boa parte da população mundial no final de 2020 e início de 2021. Na América Latina, o Chile apresenta uma taxa de 32,09 doses aplicadas para 100 habitantes. Israel, o país com a maior taxa de vacinação do mundo, a taxa é de 106,5. Os Estados Unidos já aplicaram cerca de 98,2 milhões de doses. No Brasil, estima-se que 10 milhões de doses foram aplicadas, o que corresponde a uma taxa de 5,05 doses para 100 habitantes. Em que pese o grande número de pessoas vacinadas em escala mundial, a demora na aplicação de vacinas e a descoberta de variantes do vírus levaram a novas medidas de isolamento social e decretação de lockdown em diversas regiões, o que dificulta a retomada total da economia. Por outro lado, devido à flexibilização do distanciamento social na China, Europa e Estados Unidos, os fluxos de comércio indicaram rápida recuperação, demonstrando um ambiente favorável à economia brasileira. A conjuntura ainda é de incerteza, não sendo possível prever a sustentabilidade dessa recuperação diante da volatilidade do mercado.
+
+No que concerne à taxa de juros básica da economia,  conhecida como Taxa SELIC, verifica-se um aumento em relação ao ano anterior, chegando a 2,75% ao ano. Esse aumento está associado à oscilação da inflação decorrente do preço dos alimentos, dos combustíveis e alta do dólar. Estima-se que a Selic chegue a 5% no final de 2021, podendo chegar a 6% ao ano em 2022. Quanto à variação do dólar, a projeção do Banco Central para o dólar é de R$ 5,30 até o final de 2021.
+
+Por derradeiro, a retomada gradual da economia pós-primeira onda da pandemia e os avanços relacionados às vacinas contribuem diretamente para um aumento do preço do petróleo, podendo o barril variar entre US$ 50 a US$ 55. A expectativa da ANP para esse ano é que o município arrecade R$ 1,348 bilhão em receita decorrente de royalties e participações especiais. Todavia, apesar de um cenário otimista, a cidade sofreu uma queda, em relação à previsão inicial da ANP, na arrecadação de R$ 308 milhões em 2020, em razão da drástica queda de demanda mundial por petróleo devido à pandemia da COVID-19.
+
+É inegável que a pandemia do novo coronavírus provocou desdobramentos na economia doméstica e global, resultando em um elevado grau de incerteza. No entanto, apesar dos desafios de enfrentamento da COVID-19, os indicadores apontam para uma recuperação da atividade econômica a partir de 2021. Ao garantir a vacinação em massa da população, as medidas restritivas de combate à pandemia serão reduzidas e, consequentemente, teremos um retorno ao mercado de trabalho. Paralelamente, a consolidação fiscal vai permitir um ambiente propício ao investimento privado, à estabilidade da inflação e ao risco-país menor, contribuindo para um aquecimento econômico de longo prazo.
+Dentro dessa ótica, o município vem envidando esforços no sentido de mitigar os impactos sociais e econômicos surgidos com a eclosão da pandemia, garantido suporte à população por meio da concessão de auxílios emergenciais, investimentos em hospitais.Entretanto, é possível que ações praticadas no enfrentamento da pandemia reflitam nos próximos anos, como por exemplo: (1) a redução das atividades diminuirá duas de suas principais fontes de receitas: o ISS e as transferências de ICMS; (2) a utilização do Fundo de Equalização de Receitas - FER no pagamento de programas emergenciais e (3) os serviços de saúde fortemente demandados pela população.
+
+3. INTRODUÇÃO AO ANEXO DE METAS FISCAIS
+O objetivo primordial da política fiscal do governo é promover a gestão equilibrada dos recursos públicos de forma a assegurar o crescimento sustentado, a distribuição da renda, o fortalecimento dos programas sociais, o adequado acesso aos serviços públicos, o financiamento de investimentos em infraestrutura, sem perder de vista  uma gestão fiscal responsável, que é condição necessária para a continuidade das políticas públicas e, para isso, deve-se garantir, ainda, a sustentabilidade intertemporal da dívida pública.
+Também fortalece a política fiscal o alinhamento às melhores práticas internacionais de ações de aperfeiçoamento da governança pública como, por exemplo, o aprimoramento da eficiência da alocação dos recursos com medidas de racionalização dos gastos públicos, melhoria nas técnicas de gestão e controle, ampliação dos mecanismos de transparência.
+A Lei de Responsabilidade Fiscal (Lei Complementar nº 101, de 4 de maio de 2000) faz a correlação entre gestão fiscal responsável e a definição de metas de receitas e despesas:
+Art. 1º. [...]
+§ 1°A responsabilidade na gestão fiscal pressupõe a ação planejada e transparente, em que se previnem riscos e corrigem desvios capazes de afetar o equilíbrio das contas públicas, mediante o cumprimento de metas de resultados entre receitas e despesas e a obediência a limites e condições no que tange a renúncia de receita, geração de despesas com pessoal, da seguridade social e outras, dívidas consolidada e mobiliária, operações de crédito, inclusive por antecipação de receita, concessão de garantia e inscrição em Restos a Pagar.
+De acordo com o § 1º do art. 4º da Lei de Responsabilidade Fiscal (LRF), integrará o Projeto de Lei de Diretrizes Orçamentárias o Anexo de Metas Fiscais (AMF) em que serão estabelecidas metas anuais, em valores correntes e constantes, relativas a receitas, despesas, resultado nominal e primário e montante da dívida pública, para o exercício a que se referirem e para os dois seguintes. Também comporá o Anexo de Metas Fiscais o Demonstrativo da Avaliação do Cumprimento das Metas Fiscais do Exercício Anterior.
+As metas fiscais representam os resultados a serem alcançados para variáveis fiscais (Resultados Primário e Nominal), visando atingir os objetivos desejados quanto à trajetória de endividamento público no médio prazo. Pelo princípio da gestão fiscal responsável, as metas representam a conexão entre o planejamento, a elaboração e a execução do orçamento. Esses parâmetros indicam os rumos da condução da política fiscal para os próximos exercícios e servem de indicadores para a promoção da limitação de empenho e de movimentação financeira.
+
+De maneira geral o resultado primário é apurado com base em:
+a) Receitas não financeiras ou primárias – Correspondem ao total da receita arrecadada, deduzidas as seguintes:
+a)  ganhos obtidos em aplicações financeiras;
+b)  ingressos decorrentes de operações de crédito;
+c)  recebimentos decorrentes de empréstimos concedidos pelo governo;
+d)  receitas decorrentes de alienações de bens, como as relativas à privatização de empresas estatais.
+Os recursos arrecadados em exercício anterior e que tenham gerado superávit financeiro, quando utilizados como fonte para abertura de créditos orçamentários adicionais são classificados como fonte financeira.
+b) Despesas não financeiras ou primárias – Despesa total, deduzidas aquelas com:
+a)  amortização, juros e outros encargos da dívida interna e externa;
+b)  aquisição de títulos de capital já integralizado;
+c)  concessão de empréstimos com retorno garantido.
+O Manual de Demonstrativos Fiscais (MDF), publicado pela Secretaria do Tesouro Nacional (STN), estabelece orientações emanadas a todos os entes federados, para, entre outros aspectos, padronizar os demonstrativos fiscais nos três níveis de governo. Assim, a estrutura dos demonstrativos segue o modelo e regras estabelecido pela STN no referido Manual. A fim de dar cumprimento ao preceito da LRF, o Anexo de Metas Fiscais deve ser composto pelos seguintes demonstrativos:
+a)  Demonstrativo 1 – Metas Anuais;
+b)  Demonstrativo 2 – Avaliação do Cumprimento das Metas Fiscais do Exercício Anterior;
+c)  Demonstrativo 3 – Metas Fiscais Atuais Comparadas com as Metas Fiscais Fixadas nos Três Exercícios Anteriores;
+d)  Demonstrativo 4 – Evolução do Patrimônio Líquido;
+e)  Demonstrativo 5 – Origem e Aplicação dos Recursos Obtidos com a Alienação de Ativos;
+f)   Demonstrativo 6 – Avaliação da Situação Financeira e Atuarial do RPPS;
+g)  Demonstrativo 7 – Estimativa e Compensação da Renúncia de Receita;
+h)  Demonstrativo 8 – Margem de Expansão das Despesas Obrigatórias de Caráter Continuado.
+O cumprimento das metas deve ser acompanhado com base nas informações divulgadas no Relatório Resumido da Execução Orçamentária e no Relatório de Gestão Fiscal. A seguir são apresentados, em cumprimento às exigências da LRF, os principais parâmetros e a metodologia de cálculo utilizada para as projeções dos fluxos de receitas e despesas, bem como a projeção do estoque de dívida e disponibilidades.
+
+4. PROJEÇÕES DE RECEITAS E DESPESAS (CRITÉRIO ACIMA DA LINHA)
+As receitas e despesas estimadas para o triênio 2021 a 2023 levaram em consideração a grade de parâmetros macroeconômicos e os fluxos projetados pela Secretaria Municipal de Fazenda (SMF), pela Secretaria do Tesouro Nacional (STN) e Secretaria de Fazenda do Estado do Rio de Janeiro (Sefaz/RJ).Também foram considerados os esforços que estão sendo realizados pela administração fazendária na modernização da cobrança dos tributos, as diversas ações de combate à inadimplência, além da possibilidade de captação de recursos voluntários vindos da União e do Estado, acrescentando-se, também, nos cálculos, as receitas provenientes dos convênios e das operações de crédito. Vale ressaltar, ainda, o esforço da SMF em criar e consolidar mecanismos para o controle e a gestão da divida pública municipal, pois sem as informações projetadas dos elementos que influenciam sua dinâmica seria inviável estabelecer metas fiscais consistentes.
+4.1 Receitas que impactam os resultados fiscais
+O resultado primário é impactado do lado das receitas pela apuração e projeção das receitas primárias. A seguir, apresentam-se os critérios utilizados para projeção das principais receitas primárias:
+a)  Imposto Predial e Territorial Urbano (IPTU) – Representou, em média, considerando o período de 2018 a 2020, cerca de 13% do total das receitas primárias. Ao analisar a variação realizada nos últimos anos, constata-se uma queda no ano passado (possivelmente em virtude da pandemia): -3,85%. Já o ano anterior (2019) observara um aumento de +8,4%. Para o ano de 2021, as receitas foram projetadas com base no desempenho do imposto até o momento: um aumento de 3,98% em relação a 2020. Vale dizer que o IPTU no município tem a maior parte da arrecadação no primeiro mês do ano, devido ao alto pagamento da cota única.
+b)  Imposto de Transmissão de Bens Imóveis (ITBI) – Representando em média cerca de 2% do total das receitas primárias no período de 2018 a 2020. As variações realizadas de 2020/2019 (-0,7%) e 2019/2018 (-6,0%).  Para 2020, a projeção inicial de queda de 11% foi revisada para uma aumento de 16%, em função do aquecimento do setor imobiliário. A arrecadação dos dois primeiros meses do ano foi de +60%. Para 2022 a 2024, a projeção foi de aumento apenas inflacionário, considerando que os baixos resultados de 2019 e 2020 serão recuperados em 2021.
+
+c)  Imposto sobre Serviços de Qualquer Natureza (ISS) - No período de 2018 a 2020, representou, em média, cerca de 9% do total das receitas primárias. A variação realizada de 2020/2019 (-9,1%) e 2019/2018 (+5,13%) mostram o impacto da pandemia no ano passado. Para esse ano, a estimativa, com base no desempenho atual do imposto é de +15,23%. Para os próximos anos, a projeção de crescimento é PIB+Inflação.
+d)  Taxas – Representou, em média, no período de 2018 a 2019, cerca de 2% do total das receitas primárias. Considerando a variação realizada de 2020/2019 (+0,6%) e 2019/2018 (+15,7%), para 2021, a projeção foi baseada no desempenho atual de -6,2%. Para os próximos anos, a previsão é apenas de aumento inflacionário.
+
+e) Receitas de Contribuições Previdenciárias - De 2018 a 2020, representou cerca de 4,5% do total das receitas primárias sendo a principal receita dessa rubrica, representando no ano de 2019 cerca de 68% das receitas de contribuições. Para 2021, a previsão é a mesma da LOA e para os próximos, uma evolução junto com a despesa de pessoal, uma vez que a previdência é um percentual do vencimento dos servidores.
+
+f)  Imposto sobre a Renda Retido na Fonte (IRRF) – De 2018 a 2020, representou, em média, cerca de 3% do total das receitas primárias. Esta receita guarda correlação com a despesa com pessoal, pois a maior parte dos valores retidos são decorrentes da incidência sobre a folha de pagamento. A variação realizada de 2020/2019 (+28,14%) e 2019/2018 (+14,9%) é explicada em parte pelo reflexo direto da elevação da folha de pagamento do período, não obstante nem todos os salários estarem acima da faixa de isenção. Além disso, houve melhoria nos processos operacionais de retenção e aumento da incidência sobre outras despesas com fornecedores. Considerando as projeções das despesas com pessoal e o bom resultado no início do ano, as receitas de 2021 foram previstas com um aumento de 11,1%.  Para o triênio 2022 a 2024, optou-se por projeção conservadora no sentido de seguir os mesmos percentuais de incremento da despesa com pessoal.
+g)  Receita patrimonial (exceto aplicação financeira) – As receitas patrimoniais, exceto aplicação financeira, representam 1% do total das receitas primárias. Para 2021, mantém-se a previsão orçamentária de queda de 19,6%. Para o triênio 2022 a 2024 foi considerado o efeito da inflação projetada. Vale ressaltar que na previsão das receitas patrimoniais são excluídas as receitas decorrentes de remuneração de depósitos bancários, pois de acordo com a metodologia de apuração de resultados fiscais são receitas financeiras que não impactam o resultado primário, porém afetam o resultado nominal.
+h)   Cota-Parte FPM – A transferência do Fundo de Participação dos Municípios (FPM) representou, em média (2018 a 2020), 2% do total das receitas primárias, já deduzida a contribuição para o Fundeb (20%). Da variação realizada dos últimos anos, não se pode estabelecer uma tendência, mas, considerando que a base de cálculo das transferências são o Imposto de Renda e o Imposto sobre Produtos Industrializados (IPI), projeta-se um cenário futuro de aumento dessa receita em função do aumento da atividade econômica nacional. Para os próximos anos, de 2020 a 2023, projetou-se um aumento considerando a soma do crescimento do PIB + inflação.
+i) Cota-Parte ICMS – A transferência do Imposto sobre Circulação de Mercadorias e Serviços (ICMS) representa, em média (2018 a 2020), 11,8% do total das receitas primárias, já deduzida a contribuição para o Fundeb (20%). A variação realizada em 2019/2018 (+7,2%) e 2020/2019 (+18,6%) pode refletir o reflexo do auxílio emergencial. Para esse ano, a projeção é de aumento de 8,4% segundo informação da SEFAZ/RJ (consultada em 26/03). Para 2022 a 2024, o aumento previsto é de PIB + Inflação.
+	j) Cota-Parte IPVA – No período de 2018 a 2020 a transferência do Imposto sobre Veículos Automotores (IPVA) representou, em média, cerca de 2,1% do total das receitas primárias, já deduzida a contribuição para o Fundeb (20%). Ao observar a variação realizada de 2020/2019 (-4,3%) e 2019/2018 (+1,3%), constata-se uma estabilidade dos valores. A previsão para 2020 é uma queda de -0,2%, conforme o desempenho até agora. Para os próximos, reposição inflacionária.
+	k) Compensações Financeiras (Royalties Petróleo) – Nos últimos anos, a receita de royalties petróleo, incluindo parcela da participação especial definida na forma da legislação, tem se consolidada como a principal fonte de financiamento das receitas do município. A transferência das receitas de royalties petróleo representou, em 2020, cerca de 37% do total das receitas primárias. A instabilidade dessa receita, no entanto, é fator de preocupação, a exemplo do ano passado em que uma queda no preço do barril derrubou as receitas e,se não houvesse uma recuperação a partir do 2º semestre, poderia haver frustração de receita. Apesar disso, o ano começou com o valores elevados do barril e do dólar e uma estimativa de continuidade na produção. Esse cenário atual leva a uma estimativa de um excesso de arrecadação de R$ 170 milhões, levando a um aumento de 4% em relação a receita de 2020. Para o triênio 2022-2024, a estimativa é feita com base nos valores passados pela ANP, ponderados com uma expectativa de pequena queda do preço do barril nos próximos meses.
+
+Despesas primárias
+No caso das principais despesas primárias os critérios foram os seguintes:
+
+Pessoal – A despesa com pessoal é, em geral, impactada por novas contratações, crescimento vegetativo da folha, reposição de servidores aposentados e correções salariais. A variação realizada de 2020/2019 (+8,3%) e 2019/2018 (+5,1%), bem como a projeção para 2021 (+11%) mostram uma tendência de aumento. Com o lançamento do Pacto de Gestão Fiscal, espera-se uma redução de gastos com despesa de pessoal. Para o ano de 2022, foi projetado aumento de 7,12%, e em 2023 e 2024 aumento de 6,86% em cada ano.
+
+Outras Despesas Correntes – Representa, em média (2018 a 2020), 36% do total das despesas primárias. A variações realizadas de 2019/2018 (+2,9%), 2020/2019 (+21,9%) mostram o efeito dos gastos para o combate ao novo coronavírus. Para 2021, o valor foi ajustado tendo por base o executado em 2019 acrescido de uma expectativa de gasto adicional de R$ 240 milhões para atenuação dos efeitos da covid no município. No triênio 2022 a 2024, é estimado um aumento inflacionário com a retirada com os gasto de covid.
+
+Investimentos – No que tange aos investimentos, previu-se inicialmente quase R$ 300 milhões para 2021. No entanto, com a persistência da pandemia e as dificuldades impostas à realização de investimentos, no atual momento,  foi prevista uma redução de 40%. Para 2022, está previsto o valor de R$ 198 milhões como parte do plano de retomada econômica.
+
+Demonstrativo 1 – Metas Anuais
+
+De acordo com a Lei de Responsabilidade Fiscal devem ser estabelecidas metas anuais, em valores correntes e constantes, relativas a receitas, despesas, resultados nominal e primário e montante da dívida pública, para o exercício a que se referirem (2022) e para os dois seguintes (2023 e 2024). Para elaboração das projeções foram considerados:
+
+receitas e despesas primárias sob a ótica de caixa (vide tópico 3);
+juros ativos (receitas de aplicações financeiras) e juros passivos (incidentes sobre a DCL) por competência;
+estoque da dívida consolidada;
+haveres financeiros (disponibilidades de caixa, aplicações financeiras e demais haveres financeiros).
+O demonstrativo a seguir apresenta as metas fiscais para o triênio 2022 a 2024, sendo as metas dos dois últimos anos apenas indicativas da política fiscal do Município. Para obtenção dos valores constantes foi utilizado o IPCA. O Quadro demonstra a consolidação da capacidade de geração de superávits primários pelo município, gerando um estoque de dívida líquida negativa, o que indica que os haveres financeiros continuarão maiores do que o valor projetado para a dívida consolidada. A expectativa é de que a receita primária diminua gradualmente, principalmente, em função das quedas de transferências de receitas da União originárias da compensação financeira da exploração do petróleo (vide tópico que trata das projeções das receitas primárias). Outro fator de risco é o desdobramento da crise do covid-19: os desdobramentos futuros ainda não têm bases suficientes para projeções acuradas.
+
+Valores constantes calculados considerando o IPCA. Resultados fiscais calculados acima da linha sob o critério de caixa para as receitas e despesas e de competência para os juros nominais. Por se tratar de informações sob a ótica de caixa os valores da receita total e da despesa total. As projeções consideraram os conceitos estabelecidos no Manual dos Demonstrativos Fiscais da STN.
+
+Demonstrativo 2
+Avaliação do Cumprimento das Metas Fiscais do Exercício Anterior
+Inciso I, do § 2º, do artigo 4º, da Lei de Responsabilidade Fiscal (LRF)
+
+O Demonstrativo informa as metas (em valores e em percentual da RCL) para receita (total e primária), despesa (total e primária), resultados primário e nominal, dívida pública consolidada e dívida consolidada líquida, para o segundo ano anterior ao ano de referência da LDO (por exemplo, para a LDO feita em 2020 e se referindo ao exercício de 2021, será avaliado o cumprimento das metas relativas ao exercício de 2019, que é o exercício anterior ao da elaboração da LDO). Segundo o Manual dos Demonstrativos Fiscais alguns fatores como, por exemplo, o cenário macroeconômico, o desempenho das empresas estatais, as taxas de câmbio e de inflação, devem ser motivo de explanação a respeito dos resultados obtidos.
+
+Assim, a principal finalidade é estabelecer uma comparação entre as metas fixadas e o resultado obtido no exercício financeiro de 2020, incluindo análise dos fatores determinantes para o alcance ou não dos valores estabelecidos como metas. Para o cálculo do Resultado Primário, utiliza-se a metodologia acima da linha, isto é, o confronto das Receitas Primárias (I) menos as Despesas Primárias (II) e indica se os níveis de gastos orçamentários são compatíveis com sua arrecadação, ou seja, se as Receitas Primárias são capazes de suportar as Despesas Primárias.
+
+No caso do resultado nominal, vale ressaltar que, até o exercício de 2017, esse era calculado pela diferença entre o saldo da dívida fiscal líquida em 31 de dezembro de determinado ano em relação ao apurado em 31 de dezembro do ano anterior. A partir do exercício de 2018 (com possibilidade de adiamento para 2019, conforme regra do MDF), a meta do resultado nominal passou a ser definida e acompanhada pela metodologia acima da linha. Pela metodologia acima da linha, o resultado nominal é obtido a partir do resultado primário por meio da soma da conta de juros (juros ativos menos juros passivos), que não são apresentados no quadro exigido pela STN, mas está implícito na diferença entre o resultado nominal e o primário.
+
+O valor da Dívida Pública Consolidada corresponde ao total apurado:
+
+das obrigações financeiras do ente da Federação, inclusive as decorrentes de emissão de títulos, assumidas em virtude de leis, contratos, convênios ou tratados;
+
+das obrigações financeiras do ente da Federação, assumidas em virtude da realização de operações de crédito para amortização em prazo superior a doze meses, ou que, embora de prazo inferior a doze meses, tenham constado como receitas no orçamento;
+dos precatórios judiciais emitidos a partir de 5 de maio de 2000 e não pagos durante a execução do orçamento em que houverem sido incluídos.
+
+Já a Dívida Consolidada Líquida (DCL), segundo a LRF, corresponde à dívida pública consolidada, deduzidos os valores que compreendem o ativo disponível e os haveres financeiros, líquidos dos Restos a Pagar Processados.
+
+Demonstrativo 3
+Metas Fiscais Atuais Comparadas com as Metas Fiscais Fixadas nos Três Exercícios Anteriores
+§ 2º, inciso II, do art. 4º ,da Lei de Responsabilidade Fiscal (LRF)
+
+O objetivo do Demonstrativo é dar transparência às informações sobre as metas fiscais dos três exercícios anteriores e dos três exercícios seguintes, para uma melhor avaliação da política fiscal do ente federativo, de forma a permitir a análise da política fiscal em uma linha do tempo, combinando execução passada e perspectivas futuras, validando a consistência dessas últimas. A fim de gerar maior consistência e subsídio às análises, os valores devem ser demonstrados a preços correntes e constantes. Vale ressaltar que, para avaliação de consistência, deve-se levar em consideração que, a partir de 2018, a metodologia de projeção considerou os valores sob a ótica de caixa. Nosos anos anteriores, o critério era o de despesa liquidada.
+Os critérios utilizados para as projeções do triênio 2022 a 2024 estão apresentados e detalhados no tópico “Metodologia de Cálculo”, em cumprimento à Lei de Responsabilidade Fiscal, que obriga os demonstrativos de metas serem instruídos com a memória e metodologia de cálculo, objetivando demonstrar como esses valores foram obtidos.
+
+Demonstrativo 4
+Evolução do Patrimônio Líquido
+§ 2º, inciso III, do art. 4º, da Lei de Responsabilidade Fiscal (LRF)
+
+O Patrimônio Líquido (PL) reflete, em termos monetários, a situação patrimonial líquida do Município, ou seja, representa a diferença entre o “Ativo Real” e o “Passivo Real”. Integram o patrimônio líquido: patrimônio/capital social, reservas, resultados acumulados e outros desdobramentos do saldo patrimonial. Conforme o Manual de Contabilidade Aplicado ao Setor Público (MCASP), as contas que compõem o PL são as seguintes:
+a) Patrimônio/Capital Social: Compreende o patrimônio social das autarquias, fundações e fundos e o capital social das demais entidades da administração indireta.
+b) Reservas: Compreende os valores acrescidos ao patrimônio que não transitaram pelo resultado, as reservas constituídas com parcelas do lucro líquido das entidades para finalidades específicas e as demais reservas, inclusive aquelas que terão seus saldos realizados por terem sido extintas pela legislação.
+c) Resultados Acumulados: Compreende o saldo remanescente dos lucros ou prejuízos líquidos das empresas e os superávits ou déficits acumulados da administração direta, autarquias, fundações e fundos. A conta Ajustes de Exercícios Anteriores, que registra os efeitos da mudança de critério contábil ou da retificação de erro imputável a exercício anterior que não possam ser atribuídos a fatos subsequentes, integra a conta Resultados Acumulados.
+
+Demonstrativo 7
+ESTIMATIVA E COMPENSAÇÃO DA RENÚNCIA DE RECEITA
+§ 2º, inciso V, do art. 4º, da Lei de Responsabilidade Fiscal (LRF)
+O Demonstrativo tem por objetivo dar transparência às renúncias de receita previstas no  PLDO, para uma melhor avaliação do seu impacto nas metas fiscais fixadas, além de orientar a elaboração da LOA, considerando o montante das renúncias fiscais concedidas. Apesar de esse demonstrativo ter por base legal o art. 4°, § 2°, inciso V, da Lei de Responsabilidade Fiscal – LRF, ele visa dar transparência também ao cumprimento dos requisitos exigidos para a concessão ou ampliação de benefícios de natureza tributária dispostos no art. 14 da LRF, que estabelece:
+A concessão ou ampliação de incentivo ou benefício de natureza tributária da qual decorra renúncia de receita deve estar acompanhada de estimativa do impacto orçamentário-financeiro no exercício em que deva iniciar sua vigência e nos dois seguintes, atender ao disposto na LDO e a pelo menos uma das seguintes condições:
+I – demonstração pelo proponente de que a renúncia foi considerada na estimativa de receita da lei orçamentária, na forma do art. 12, e de que não afetará as metas fiscais previstas no anexo próprio da LDO;
+II – estar acompanhada de medidas de compensação, no período mencionado no caput, por meio do aumento de receita, proveniente da elevação de alíquotas, ampliação da base de cálculo, majoração ou criação de tributo ou contribuição.
+Para realização das estimativas de renúncia foram realizadas pesquisas no sistema de controle do crédito tributário (E-cidade) relativas ao ano base de 2021 e projetado os valores para o triênio 2022 a 2024. Utilizou-se como índice de atualização o IPCA conforme tabela de parâmetros macroeconômicos.
+
+Demonstrativo 8
+Margem de Expansão das Despesas Obrigatórias de Caráter Continuado
+§ 2º, inciso V, do art. 4º, da Lei de Responsabilidade Fiscal (LRF)
+A estimativa da margem de expansão das despesas obrigatórias de caráter continuado é um requisito introduzido pela Lei Complementar nº 101, de 4 de maio de 2000, Lei de Responsabilidade Fiscal (LRF).
+O aumento permanente de receita é definido como aquele proveniente da elevação de alíquotas, ampliação da base de cálculo ou majoração ou criação de tributo ou contribuição (§ 3º, do art. 17, da LRF). Além de medidas específicas descritas a seguir, considera-se como ampliação da base de cálculo nesta estimativa a expectativa de crescimento real da atividade econômica, mensurada pela expansão marginal da arrecadação a ser provocada isoladamente pelo efeito quantidade sobre a arrecadação ajustada e devidamente atualizada pelos efeitos legislação.
+
+Anexo de Riscos Fiscais
+(Art. 4º, § 3º, da Lei Complementar no 101, de 4 de maio de 2000)
+
+O § 3º, do art. 4º da LRF, transcrito a seguir, determina o que a LDO deverá conter no Anexo de Riscos Fiscais (ARF).
+“§ 3º A lei de diretrizes orçamentárias conterá Anexo de Riscos Fiscais, onde serão avaliados os passivos contingentes e outros riscos capazes de afetar as contas públicas, informando as providências a serem tomadas, caso se concretizem.”
+O ARF seguiu as regras, estrutura, conceitos e premissas estabelecidas no Manual dos Demonstrativos Fiscais (MDF), publicado pela Secretaria do Tesouro Nacional (STN), que assim define riscos fiscais:
+Riscos Fiscais podem ser conceituados como a possibilidade da ocorrência de eventos que venham a impactar negativamente as contas públicas, eventos estes resultantes da realização das ações previstas no programa de trabalho para o exercício ou decorrentes das metas de resultados, correspondendo, assim, aos riscos provenientes das obrigações financeiras do governo.
+É importante ressaltar que riscos repetitivos deixam de ser riscos, devendo ser tratadas no âmbito do planejamento, ou seja, devem ser incluídas como ações na Lei de Diretrizes Orçamentárias e na Lei Orçamentária Anual do ente federativo.
+Existe um passivo judicializado relacionado com a Carteira Habitacional da Niterói Prev – ex-IBASM e a utilização de recursos do FGTS para realizar empreendimentos habitacionais tendo o Niterói Prev na condição de Agente Promotor e Financeiro, com risco assumido pela Prefeitura. O valor original da dívida corrigido pelo IGP-M foi lançado no demonstrativo.
+Acerca dos efeitos do julgamento da Ação Direta de Inconstitucionalidade (ADI) nº 4917, referente à Lei nº 12.734/2012, sobre os repasses de royalties e participação especial ao Município de Niterói, é extremamente difícil antecipar o teor da decisão do STF sobre a matéria. Em um cenário em que ocorra o reconhecimento da constitucionalidade dessa lei, pairam dúvidas sobre a modulação dos efeitos da decisão, mormente quanto ao início do escalonamento das alíquotas.

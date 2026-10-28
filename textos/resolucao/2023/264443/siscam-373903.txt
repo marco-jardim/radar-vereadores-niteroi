@@ -1,0 +1,467 @@
+Câmara Municipal de Niterói
+Secretaria da Mesa Diretora e das Comissões Permanentes
+
+PROJETO DE RESOLUÇÃO N°      /2023
+
+Dispõe sobre os procedimentos administrativos para a realização de licitação nas modalidades de Pregão e Concorrência, no âmbito da Câmara Municipal de Niterói.
+
+O PRESIDENTE DA CÂMARA MUNICIPAL DE NITERÓI, no uso de suas atribuições legais;
+CONSIDERANDO que a Lei n° 14.133/2021 estabelece normas gerais de licitações, contratações diretas e contratos administrativos para todos os entes da federação;
+CONSIDERANDO o disposto no art. 28, incs. I e II, no art. 29 da Lei n° 14.133, de 1° de abril de 2021;
+
+CAPÍTULO I
+DAS DISPOSIÇÕES PRELIMINARES
+
+Art. 1º Esta Resolução regulamenta o rito procedimental da licitação de que trata o art. 17 da Lei nº 14.133, de 1º de abril de 2021, nas modalidades pregão e concorrência, no âmbito da Câmara Municipal de Niterói/RJ.
+§ 1º Para a aquisição de bens e a contratação de serviços com a utilização de recursos da União decorrentes de transferências voluntárias, tais como convênios e contratos de repasse, deverá ser observado o procedimento previsto em regramento federal.
+§ 2º Nos casos de contratação de obras e de serviços não comuns de engenharia, poderá ser editado regulamento próprio.
+Art. 2º A modalidade pregão é obrigatória para aquisição de bens e serviços comuns, incluídos os serviços comuns de engenharia, cujo critério de julgamento poderá ser o de menor preço ou o de maior desconto, observado o disposto no art. 29 da Lei nº 14.133, de 2021.
+Art. 3º Para os fins do disposto nesta Resolução, são adotadas as seguintes definições, além daquelas já descritas no art. 6º da Lei nº 14.133, de 2021:
+I – setor demandante: setor responsável pelo Documento de Formalização de Demanda (DFD), bem como pela elaboração, individualmente ou em conjunto com o setor promotor, do Estudo Técnico Preliminar (ETP) e do Termo de Referência ou, se for o caso, Projetos Básico e/ou Executivo;
+II – setor promotor: Setor de Licitações (ou quem lhe faça as vezes), responsável pela elaboração da pesquisa de preço e da minuta de edital;
+III – Cadastro Central de Fornecedores (CCF): ferramenta informatizada que credencia os fornecedores a participar de licitações na forma eletrônica;
+IV – responsável pela fase externa do procedimento licitatório: o agente de contratação ou pregoeiro da fase externa ou a comissão de contratação, quando for o caso.
+
+CAPÍTULO II
+DOS PROCEDIMENTOS
+SEÇÃO I
+DA FORMA DE REALIZAÇÃO
+
+Art. 4º O procedimento licitatório de que trata esta Resolução deverá ser realizado, preferencialmente, sob a forma eletrônica.
+§ 1º O sistema de que trata o caput deste artigo será dotado de recursos de criptografia e de autenticação que garantam as condições de segurança nas etapas do certame.
+§ 2º Nos procedimentos realizados sob a forma eletrônica, como condição de validade e eficácia, os licitantes deverão praticar seus atos em formato eletrônico.
+§ 3º Será admitida, excepcionalmente, mediante prévia justificativa da autoridade máxima da Câmara Municipal ou a quem esta tenha delegado tal poder, a utilização da forma presencial nas licitações de que trata esta Resolução, desde que fique comprovada a inviabilidade técnica ou a desvantagem para a Administração Municipal na realização da forma eletrônica.
+§ 4º A competência de que trata o § 3º deste artigo poderá ser objeto de delegação para agente público hierarquicamente subordinado, quando for conveniente, em razão de circunstâncias de ordem técnica, mediante ato formal devidamente publicado no Diário Oficial do Município.
+§ 5º Na hipótese excepcional sob a forma presencial a que refere o § 3º deste artigo, a sessão pública deverá observar o disposto nos §§ 2º e 5º do art. 17 da Lei nº 14.133, de 2021, e o procedimento previsto nesta Resolução, no que couber.
+
+SEÇÃO II
+DO CREDENCIAMENTO EM LICITAÇÃO ELETRÔNICA
+
+Art. 5º A autoridade competente do setor promotor da licitação, o responsável pela fase externa do procedimento licitatório e seu suplente, a equipe de apoio e os licitantes que participarem de licitação, na forma eletrônica, serão previamente credenciados perante o provedor do sistema eletrônico.
+§ 1º O credenciamento para acesso ao sistema ocorrerá pela atribuição de chave de identificação e de senha pessoal e intransferível.
+§ 2º Caberá à autoridade competente do setor promotor da licitação solicitar ao provedor do sistema o seu credenciamento e dos agentes públicos mencionados no caput deste artigo.
+Art. 6º Caberá ao licitante interessado em participar da licitação, na forma eletrônica:
+I – credenciar-se previamente no sistema eletrônico utilizado no certame;
+II – remeter, no prazo estabelecido, exclusivamente via sistema eletrônico, os documentos de habilitação e a proposta comercial, bem como, quando necessário, os documentos complementares;
+III – responsabilizar-se formalmente pelas transações efetuadas em seu nome, assumir como firmes e verdadeiras suas propostas e seus lances, inclusive os atos praticados diretamente ou por seu representante, excluída a responsabilidade do provedor do sistema ou do setor promotor da licitação por eventuais danos decorrentes de uso indevido da senha, ainda que por terceiros;
+IV – acompanhar as operações no sistema eletrônico durante o processo licitatório e responsabilizar-se pelo ônus decorrente da perda de negócios diante da inobservância de mensagens emitidas pelo sistema ou de sua desconexão;
+V – comunicar imediatamente, por escrito, ao provedor do sistema qualquer acontecimento que possa comprometer o sigilo ou a inviabilidade do uso da senha, para imediato bloqueio de acesso;
+VI – utilizar a chave de identificação e a senha de acesso para participar da licitação na forma eletrônica;
+VII – solicitar o cancelamento da chave de identificação ou da senha de acesso por interesse próprio.
+Parágrafo único. O credenciamento do interessado e de seu representante no sistema de licitações eletrônicas implica a sua responsabilidade legal pelos atos praticados e presunção de capacidade para a realização das transações inerentes à licitação.
+Art. 7º O credenciamento do licitante e a sua manutenção dependerão de registro prévio e atualizado em sistema eletrônico próprio.
+§ 1º O credenciamento a que se refere o caput deste artigo será inativado ou excluído por solicitação do credenciado ou por determinação legal.
+§ 2º O fornecedor descredenciado terá sua chave de identificação e senha suspensas automaticamente.
+SEÇÃO III
+DO CREDENCIAMENTO EM LICITAÇÃO PRESENCIAL
+
+Art. 8º O credenciamento nos procedimentos presenciais ocorrerá na sessão pública, quando a Administração Municipal outorgar ao licitante ou a seu representante legal, após a verificação do estrito atendimento aos requisitos previstos no edital, os poderes necessários para a formulação de propostas e lances, quando for o caso, a negociação de preço, a manifestação de sua intenção recursal, bem como para a prática de todos os demais atos inerentes ao certame.
+§ 1º O credenciamento é o momento de identificação dos interessados que desejam participar com poderes da sessão pública, devendo o edital estabelecer os documentos que deverão ser apresentados pelos interessados e que demonstrem, quando necessário, que possuem poderem suficientes para participarem das respectivas etapas da licitação presencial.
+§ 2º Na forma presencial, os envelopes de proposta comercial e documentação habilitatória dos licitantes que não tiveram seus representantes credenciados, na sessão pública presencial, deverão ser recebidos pelo responsável pela fase externa do procedimento licitatório, desde que os respectivos licitantes tenham cumprido com todas as demais solicitações do edital, no tocante a eventuais documentos ou declarações exigidos como requisitos de participação.
+
+SEÇÃO IV
+DA LICITAÇÃO RESTRITA AOS FORNECEDORES CADASTRADOS NO SISTEMA DE REGISTRO CADASTRAL UNIFICADO
+
+Art. 9º O cadastramento no Cadastro Central de Fornecedores (CCF) permite a participação dos interessados em qualquer licitação do respectivo sistema, exceto quando o procedimento for restrito a fornecedores cadastrados no sistema de registro cadastral unificado disponível no Portal Nacional de Contratações Públicas (PNCP), observado o disposto nos §§ 3º e 4º do art. 87 da Lei nº 14.133, de 2021.
+Parágrafo único. A realização de licitação restrita a fornecedores cadastrados no sistema de registro cadastral unificado de que trata o caput será admitida, desde que motivada, nas hipóteses de inversão de fase de que trata o § 1º do art. 10 desta Resolução e quando o instrumento convocatório se limitar a exigir na fase de habilitação apenas os documentos existentes no sistema de registro cadastral unificado.
+
+SEÇÃO V
+DAS FASES DA LICITAÇÃO
+
+Art. 10. O processo de licitação de que trata esta Resolução observará as seguintes fases, em sequência:
+I – preparatória;
+II – divulgação do edital de licitação;
+III – apresentação de propostas e lances, quando for o caso;
+IV – julgamento;
+V – habilitação;
+VI – recursal;
+VII – adjudicação e homologação.
+§ 1º A fase de que trata o inciso V do caput deste artigo poderá anteceder as fases referidas nos incisos III e IV do caput deste artigo, desde que observado o disposto no § 1º do art. 17 da Lei nº 14.133, de 2021.
+§ 2º Compete ao setor demandante da licitação realizar as etapas previstas no art. 18 da Lei nº 14.133/2021.
+§ 3º No exercício das atribuições descritas neste artigo, o setor promotor ficará adstrito às informações e às soluções escolhidas pelo setor demandante, não competindo adentrar a análise de sua conveniência, oportunidade e o mérito da escolha, nem ser responsabilizado por eventuais irregularidades detectadas em sede de controle externo.
+
+SEÇÃO VI
+DA DOCUMENTAÇÃO
+
+Art. 11. O processo de licitação presencial ou eletrônica de que trata esta Resolução será instruído com os seguintes documentos, no mínimo:
+I – designação do Agente da Contratação ou, quando for o caso, Pregoeiro, respectivos suplentes, bem como dos integrantes das equipes de apoio, observado o disposto em regulamento específico;
+II – Documento de Formalização de Demanda (DFD), designação da equipe de planejamento, estudo técnico preliminar, se for o caso, termo de referência ou projeto básico, dependendo do caso, e minuta de edital e respectivos anexos, tudo na forma de regulamento específico;
+III – pesquisa de preços, na forma de regulamento específico;
+IV – previsão dos recursos orçamentários necessários, com a indicação das rubricas, exceto na hipótese de pregão ou concorrência para registro de preços;
+V – parecer jurídico;
+VI – documentação a ser exigida nas fases de proposta e habilitação;
+VII – ata da sessão pública, que conterá os seguintes registros, entre outros:
+a) os licitantes participantes;
+b) as propostas apresentadas;
+c) os avisos, os esclarecimentos e as impugnações;
+d) os lances ofertados, na ordem de classificação;
+e) a suspensão e o reinício da sessão, se for o caso;
+f) a negociação realizada;
+g) a aceitabilidade da proposta de preço;
+h) a habilitação;
+i) a decisão sobre o saneamento de erros ou falhas na proposta ou na documentação;
+j) os recursos interpostos, as respectivas análises e as decisões;
+l) o resultado da licitação;
+VIII – comprovantes das publicações:
+a) do extrato do edital;
+b) do extrato do contrato;
+c) dos demais atos cuja publicidade seja exigida;
+IX – atos de adjudicação e homologação.
+§ 1º Independentemente de se tratar de licitação presencial ou eletrônica, a instrução do processo licitatório poderá ser realizada por meio de sistema eletrônico.
+§ 2º A ata da sessão pública presencial ou eletrônica será disponibilizada na internet, no sítio eletrônico oficial da Administração municipal, imediatamente após o seu encerramento, para acesso livre a qualquer interessado.
+Art. 12. O edital poderá prever a possibilidade excepcional de envio de documentos em meio físico, desde que observados os requisitos de prova de autenticidade do inciso IV do art. 12 da Lei nº 14.133, de 2021, em envelopes lacrados, para o endereço constante em edital, devendo ser protocolados até o horário-limite para recebimento, independente da data e horário de postagem.
+Parágrafo único. Caso a instrução do processo licitatório seja realizada por meio de sistema eletrônico e os documentos sejam apresentados na forma do caput deste artigo, deverá ser realizada a digitalização e o armazenamento dos documentos em meio eletrônico, em observância ao inciso VI do art. 12 da Lei nº 14.133, de 2021.
+CAPÍTULO III
+DA FASE PREPARATÓRIA
+
+Art. 13. A fase preparatória de que trata o inciso I do art. 10 desta Resolução deverá observar o disposto em regulamento específico.
+
+CAPÍTULO IV
+DA FASE DE DIVULGAÇÃO DO EDITAL DE LICITAÇÃO
+
+SEÇÃO I
+DA PUBLICAÇÃO
+
+Art. 14. A publicidade do instrumento convocatório será realizada mediante:
+I – a divulgação e a manutenção do inteiro teor do ato convocatório e de seus anexos no Portal Nacional de Contratações Públicas (PNCP), nos termos do art. 54 da Lei nº 14.133, de 2021;
+II – a publicação de extrato do edital no Diário Oficial do Município ou, no caso de consórcio público, do ente de maior nível entre eles, e em jornal diário de grande circulação, nos termos do § 1º art. 54 da Lei nº 14.133, de 2021.
+§ 1º É facultada a divulgação adicional e a manutenção do inteiro teor do edital e de seus anexos em sítio eletrônico oficial da Câmara Municipal e a divulgação direta a interessados devidamente cadastrados para esse fim, nos termos do § 2º art. 54 da Lei nº 14.133, de 2021.
+§ 2º O extrato do instrumento convocatório de que trata o inciso II do caput deste artigo conterá a definição precisa, suficiente e clara do objeto, a indicação dos locais, dias e horários em que poderá ser consultada ou obtida a íntegra do instrumento convocatório, o endereço onde ocorrerá a sessão pública, a data e hora de sua realização e a indicação de que a licitação, na forma eletrônica, será realizada por meio da internet.
+§ 3º Para os fins do disposto no inciso II do caput deste artigo, considera-se jornal diário de grande circulação os periódicos físicos ou eletrônicos, desde que disponibilizados diariamente ao público em geral, com alcance superior ao do Município.
+
+Art. 15. A publicidade do valor previamente estimado da contratação poderá ser postergada, observado o disposto no art. 24 da Lei nº 14.133, de 2021.
+§ 1º Para os fins do disposto no caput, o valor estimado da contratação será tornado público imediatamente após o encerramento da análise da conformidade das propostas e dos lances de que trata o art. 53 desta Resolução.
+§ 2º Na hipótese em que proposta do licitante provisoriamente classificado em primeiro lugar esteja acima do valor estimado da contratação, o valor sigiloso será tornado público na negociação de que trata o art. 54 desta Resolução, observado o regramento previsto naquele dispositivo.
+
+SEÇÃO II
+DO EDITAL E DE SUA MODIFICAÇÃO
+
+Art. 16. Eventuais modificações no edital implicarão necessariamente nova divulgação pela mesma forma de sua divulgação inicial, sendo certo que os prazos dos atos e procedimentos originais apenas deverão ser repetidos se a alteração verdadeiramente comprometer a formulação das propostas comerciais ou a documentação solicitada.
+
+SEÇÃO III
+DOS PEDIDOS DE ESCLARECIMENTOS E DA IMPUGNAÇÃO
+
+Art. 17. Qualquer pessoa é parte legítima para impugnar edital de licitação ou para solicitar esclarecimentos sobre os seus termos, observado o disposto no art. 164 da Lei nº 14.133, de 2021.
+§ 1º Em se tratando de licitação eletrônica ou presencial, os pedidos de esclarecimento e as impugnações de que trata o caput poderão ser enviadas por meio eletrônico, na forma prevista no edital, independentemente de cadastro no Sistema Gestor de Compras (SGC) (ou quem lhe faça as vezes).
+§ 2º Compete ao responsável pela fase externa do procedimento licitatório receber, examinar e responder os pedidos de esclarecimentos e decidir as impugnações, com o auxílio, sempre que necessário, daquele que elaborou o instrumento convocatório.
+§ 3º A sessão pública da licitação apenas poderá ser iniciada após as respostas a todas as impugnações e a todos os pedidos de esclarecimentos.
+§ 4º As respostas aos pedidos de esclarecimento e impugnações vincularão os participantes e a Administração Municipal.
+§ 5º Na hipótese de alteração do instrumento convocatório, em decorrência do acolhimento de impugnação ou esclarecimento feito, aplica-se o disposto no art. 16 desta Resolução.
+
+CAPÍTULO V
+DA FASE DE APRESENTAÇÃO DE PROPOSTAS E LANCES
+SEÇÃO I
+DO PRAZO MÍNIMO PARA APRESENTAÇÃO DE PROPOSTAS
+
+Art. 18. Após a publicação do instrumento convocatório, inicia-se a fase de apresentação de propostas comerciais.
+§ 1º O prazo fixado para apresentação de propostas comerciais deverá observar o disposto no art. 55 da Lei nº 14.133, de 2021.
+§ 2º O prazo de que trata o § 1º será contado a partir da data do último ato de divulgação do edital entre os meios previstos no art. 14 desta Resolução, na forma do disposto no art. 183 da Lei nº 14.133, de 2021.
+
+SEÇÃO II
+DA APRESENTAÇÃO DAS PROPOSTAS EM LICITAÇÃO ELETRÔNICA
+
+Art. 19. Após a divulgação do edital de licitação eletrônica e necessariamente antes da data e horário estabelecidos para abertura da sessão pública virtual, os licitantes encaminharão, exclusivamente por meio do sistema eletrônico, as propostas comerciais, os documentos relativos às propostas eventualmente solicitados e toda a documentação habilitatória prevista no instrumento convocatório ou, se for o caso, o competente Certificado de Registro Cadastral (CRC).
+§ 1º O licitante deverá declarar, em campo próprio do sistema eletrônico, o cumprimento dos requisitos para a habilitação, sem prejuízo da exigência de outras declarações previstas no edital com base em legislação específica.
+§ 2º Quaisquer declarações efetivamente prestadas pelos licitantes em campo próprio do sistema eletrônico terão o condão de suprir sua eventual ausência dentre a documentação habilitatória ou classificatória solicitada.
+§ 3º Será exigida, nessa etapa do procedimento, declaração dos licitantes de que suas propostas econômicas compreendem a integralidade dos custos para atendimento aos direitos trabalhistas assegurados na Constituição Federal, nas leis trabalhistas, nas normas infralegais, nas convenções coletivas de trabalho e nos termos de ajustamento de conduta vigentes na data de entrega das propostas, sob pena de desclassificação, na forma do § 1º do art. 63 da Lei nº 14.133, de 2021.
+§ 4º A falsidade das declarações de que tratam os §§ 1º, 2º e 3º deste artigo sujeitará o licitante às sanções previstas na Lei nº 14.133, de 2021.
+§ 5º O envio da proposta comercial, acompanhada dos documentos exigidos no edital, ocorrerá por meio de chave de acesso e senha.
+§ 6º Os licitantes poderão retirar ou substituir a proposta e os respectivos documentos anteriormente inseridos no sistema, desde que antes da data e do horário estabelecidos para a abertura da sessão pública, observado o disposto nos arts. 22 e 23 desta Resolução.
+§ 7º O responsável pela fase externa do procedimento licitatório, após o credenciamento, analisará todas as propostas comerciais e eventuais documentos pertinentes ao objeto encaminhados pelos licitantes apenas no tocante à sua compatibilidade com relação ao objeto da licitação.
+§ 8º Serão selecionadas para a fase de lances todas as propostas cujo objeto esteja em conformidade com o edital, independentemente do valor ofertado.
+§ 9º A análise da aceitabilidade do preço, em face dos critérios estabelecidos no edital, compete ao responsável pela fase externa do procedimento licitatório e ocorrerá apenas depois da negociação com o vencedor da disputa, por meio de campo próprio no sistema eletrônico.
+
+SEÇÃO III
+DA APRESENTAÇÃO DAS PROPOSTAS EM LICITAÇÃO PRESENCIAL
+
+Art. 20. Após a divulgação do edital de licitação presencial e aberta a sessão pública, os licitantes entregarão ao responsável pela fase externa do procedimento licitatório, conjuntamente, as propostas e os respectivos documentos solicitados no instrumento convocatório, em envelopes lacrados e que inviabilizem a visualização interna, da seguinte forma:
+
+a) ENVELOPE 1 – PROPOSTA COMERCIAL, que conterá a proposta do licitante e os documentos relacionados ao objeto eventualmente exigidos no edital; e
+b) ENVELOPE 2 – DOCUMENTAÇÃO HABILITATÓRIA, que conterá o Certificado de Registro Cadastral (CRC) dos licitantes cadastrados, juntamente com eventuais documentos complementares não constantes do CRC, e/ou toda a documentação de habilitação exigida no edital.
+§ 2º Na hipótese do parágrafo anterior, o responsável pela fase externa do procedimento licitatório não poderá aceitar novos envelopes de proposta comercial e de documentação habilitatória após a abertura do primeiro envelope na sessão presencial.
+§ 3º Será permitido o encaminhamento dos envelopes, na forma do § 1º deste artigo, por meio dos correios ou ao portador, devendo o edital estabelecer o endereço completo para envio e o local adequado para protocolo.
+§ 4º Todos os envelopes entregues ou encaminhados ficarão sob a tutela do responsável pela fase externa do procedimento licitatório, respondendo este integralmente por sua guarda e inviolabilidade.
+§ 5º A declaração prevista no § 1º do art. 19 desta Resolução deverá integrar o ENVELOPE 2 – DOCUMENTAÇÃO HABILITATÓRIA, conforme estabelece o art. 63, inc. I, da Lei n° 14.133, de 2021.
+§ 6º A declaração prevista no § 3º do art. 19 desta Resolução deverá integrar o ENVELOPE 1 – PROPOSTA COMERCIAL.
+§ 7º A falsidade de quaisquer declarações exigidas no edital sujeitará o licitante às sanções previstas na Lei nº 14.133, de 2021.
+§ 8º Após a abertura da sessão pública presencial, bem como entregues dos envelopes de proposta comercial e documentação habilitatória, os licitantes não mais poderão retirar ou substituir a proposta e os respectivos documentos, ressalvada a disciplina do § 2º deste artigo apenas no tocante a novos licitantes retardatários.
+§ 9º Após o credenciamento presencial, o responsável pela fase externa do procedimento licitatório deverá analisar todas as propostas comerciais e eventuais documentos pertinentes ao objeto encaminhados pelos licitantes apenas no tocante à sua compatibilidade com relação ao objeto da licitação.
+§ 10. Feita a adequada análise nos termos do § 9º desta Resolução, o responsável pela fase externa do procedimento licitatório selecionará para a fase de lances verbais todas as propostas cujo objeto esteja em conformidade com o edital, independentemente do valor ofertado.
+§ 11. Também na licitação presencial, a análise da aceitabilidade do preço, em face dos critérios estabelecidos no edital, compete ao responsável pela fase externa do procedimento licitatório e ocorrerá apenas depois da negociação com o vencedor da disputa.
+
+SEÇÃO IV
+DA GARANTIA DA PROPOSTA
+
+Art. 21. Poderá ser exigida, no momento da apresentação da proposta, a comprovação do recolhimento de quantia a título de garantia de proposta, observado o disposto no art. 58 da Lei nº 14.133, de 2021.
+Parágrafo único. A opção pela exigência de garantia de proposta de que trata o caput será definida em decisão fundamentada na fase preparatória.
+
+SEÇÃO V
+DA ABERTURA DA SESSÃO PÚBLICA VIRTUAL
+
+Art. 22. No dia e horário estabelecidos no edital, dar-se-á início à sessão pública virtual na internet pelo responsável pela fase externa do procedimento licitatório, com a utilização de sua chave de acesso e senha.
+§ 1º Os licitantes poderão participar da sessão pública virtual na internet, mediante a utilização de sua chave de acesso e senha, obtidas por meio do credenciamento no sistema eletrônico utilizado no certame, observado o disposto no art. 5º desta Resolução.
+§ 2º O sistema disponibilizará campo próprio para troca de mensagens entre o responsável pela fase externa do procedimento licitatório e os licitantes.
+§ 3º A sessão pública virtual deverá observar o disposto nos arts. 5º e 6º desta Resolução.
+Art. 23. O responsável pela fase externa do procedimento licitatório verificará as propostas apresentadas e desclassificará sumariamente aquelas que não estejam em conformidade com os requisitos estabelecidos no edital no tocante ao objeto, observado o disposto nos arts. 27 e 28 desta Resolução.
+§ 1º A apresentação de proposta acima do valor estimado da contratação ou do preço máximo eventualmente definido no edital não resultará na desclassificação sumária de que trata o caput deste artigo, devendo tal análise ocorrer apenas no momento da aceitabilidade da oferta vencedora, após a negociação pelo sistema de que trata o art. 54 desta Resolução.
+§ 2º A desclassificação da proposta será fundamentada, registrada no sistema e disponibilizada em tempo real para todos os participantes.
+Art. 24. Somente as propostas classificadas quanto ao objeto pelo responsável pela fase externa do procedimento licitatório participarão da etapa de lances, se houver.
+Art. 25. Na forma eletrônica, classificadas as propostas quanto ao objeto, o responsável pela fase externa do procedimento licitatório dará início à fase de lances virtuais, oportunidade em que os licitantes poderão encaminhar lances exclusivamente por meio do sistema eletrônico.
+§ 1º O licitante será imediatamente informado do recebimento do lance e do valor consignado no registro.
+§ 2º Os licitantes poderão oferecer lances sucessivos, observados o horário fixado para abertura da sessão pública e as regras estabelecidas no edital.
+§ 3º O licitante somente poderá oferecer valor inferior ou de maior percentual de desconto ao último lance por ele ofertado e registrado pelo sistema, observado, quando houver, o intervalo mínimo de diferença de valores ou de percentuais entre os lances, que incidirá tanto em relação aos lances intermediários quanto em relação ao lance que cobrir a melhor oferta.
+§ 4º Para o fim do disposto no § 3º deste artigo, entende-se como lance intermediário aquele descrito no § 3º do art. 56 da Lei nº 14.133, de 2021.
+§ 5º Não serão aceitos dois ou mais lances iguais e prevalecerá aquele que for recebido e registrado primeiro.
+§ 6º Durante a sessão pública, os licitantes serão informados, em tempo real, do valor do menor lance registrado, vedada a identificação do licitante.
+
+Art. 26. Após a abertura da sessão pública virtual, o procedimento de licitação deverá observar o modo de disputa definido no instrumento convocatório.
+
+SEÇÃO VI
+DA ABERTURA DA SESSÃO PÚBLICA PRESENCIAL
+
+Art. 27. A partir do horário previsto no edital, a sessão pública será aberta pelo responsável pela fase externa do procedimento licitatório.
+§ 1º A sessão pública presencial deverá observar o disposto no art. 8º desta Resolução.
+§ 2º Aplica-se o mesmo procedimento previsto nos arts. 23, caput e § 1º, e 24 desta Resolução, observado o disposto nos arts. 45 e 46.
+§ 3º A desclassificação da proposta será devidamente fundamentada, sendo registrada em ata a respectiva motivação.
+Art. 28. Na forma presencial, classificadas as propostas quanto ao objeto, o responsável pela fase externa do procedimento licitatório dará início à fase de lances verbais.
+§ 1º O responsável pela fase externa do procedimento licitatório, com o auxílio de sua equipe de apoio, ordenará todas as propostas em ordem sequencial e convidará individualmente os licitantes classificados quanto ao objeto, de forma sequencial, a apresentar lances verbais, a partir do autor da proposta classificada de maior preço e os demais, em ordem decrescente de valor.
+§ 2º O licitante somente poderá oferecer valor inferior ou de maior percentual de desconto ao último lance verbal por ele ofertado e registrado, observado, quando houver, o intervalo mínimo de diferença de valores ou de percentuais entre os lances verbais, que incidirá tanto em relação aos lances intermediários quanto em relação ao lance que cobrir a melhor oferta.
+§ 3º Para o fim do disposto no § 2º deste artigo, entende-se também como lance intermediário aquele descrito no § 3º do art. 56 da Lei nº 14.133, de 2021.
+§ 4º Enquanto houver disputa, ainda que apenas no tocante aos lances intermediários, os licitantes poderão oferecer lances sucessivos, em valores distintos e decrescentes com relação à sua última oferta, não se admitindo lances idênticos, observados o horário fixado para abertura da sessão pública e as regras estabelecidas no edital.
+§ 5º A desistência em apresentar lance verbal, quando convocado pelo responsável pela fase externa do procedimento licitatório, implicará a exclusão do licitante da etapa de lances verbais e na manutenção do último preço apresentado pelo licitante, para efeito de ordenação das propostas.
+§ 6º Caso não se realizem lances verbais, será considerada a ordenação das propostas comerciais apresentadas, para fins de ordenação do rol classificatório.
+
+Art. 29. O procedimento de licitação presencial deverá observar o modo de disputa definido no instrumento convocatório.
+
+SEÇÃO VII
+DO MODO DE DISPUTA EM LICITAÇÕES ELETRÔNICAS E PRESENCIAIS
+
+Art. 30. O instrumento convocatório definirá o modo de disputa aberto, fechado ou com combinação, nos termos do art. 56 da Lei nº 14.133, de 2021.
+§ 1º Além das vedações descritas nos §§ 1º e 2º do art. 56, fica impossibilitada a utilização do modo de disputa aberto, isolado ou combinado, quando adotado o critério de julgamento de técnica e preço ou melhor técnica ou conteúdo artístico.
+§ 2º A opção do modo de disputa aberto, fechado ou com combinação será definida em decisão fundamentada na fase preparatória, considerando a adequação e a eficiência, para os fins de seleção da proposta apta a gerar o resultado de contratação mais vantajoso para a Administração.
+
+SUBSEÇÃO I
+DO MODO DE DISPUTA ABERTO EM LICITAÇÃO ELETRÔNICA
+
+Art. 31. No modo de disputa aberto, a etapa de envio de lances virtuais na sessão pública durará 10 (dez) minutos e, após isso, será prorrogada automaticamente pelo sistema, quando houver lance ofertado nos últimos 2 (dois) minutos do período de duração da sessão pública.
+§ 1º A prorrogação automática da etapa de envio de lances, de que trata o caput deste artigo, será de 2 (dois) minutos e ocorrerá sucessivamente, sempre que houver lances enviados nesse período de prorrogação, inclusive quando se tratar de lances intermediários.
+§ 2º Na hipótese de não haver novos lances na forma estabelecida no caput e no § 1º deste artigo, a sessão pública será encerrada automaticamente.
+§ 3º Encerrada a fase de lances virtuais sem prorrogação automática pelo sistema, nos termos do disposto no caput e § 1º, o responsável pela fase externa do procedimento licitatório poderá, assessorado pela equipe de apoio, admitir o reinício da etapa de envio de lances, em prol da consecução do melhor preço, mediante justificativa.
+
+SUBSEÇÃO II
+DO MODO DE DISPUTA FECHADO EM LICITAÇÃO ELETRÔNICA
+
+Art. 32. No modo de disputa fechado, as propostas apresentadas pelos licitantes serão sigilosas até a data e a hora designadas para sua divulgação.
+
+SUBSEÇÃO III
+DO MODO DE DISPUTA COMBINADO EM LICITAÇÃO ELETRÔNICA
+
+Art. 33. Em licitação eletrônica, o modo de disputa apenas poderá ser combinado na forma Aberto e Fechado.
+Art. 34. No modo de disputa Aberto e Fechado, de que trata o art. 33 desta Resolução, a etapa de envio de lances virtuais da sessão pública, na forma eletrônica, terá duração de 15 (quinze) minutos.
+§ 1º Encerrado o prazo previsto no caput deste artigo, o sistema encaminhará o aviso de fechamento iminente dos lances e, transcorrido o período de até 10 (dez) minutos, aleatoriamente determinado, a recepção de lances será automaticamente encerrada.
+§ 2º Encerrado o prazo de que trata o § 1º deste artigo, o sistema abrirá a oportunidade para que todos os licitantes que participaram da fase de lances possam ofertar um lance final e fechado em até 5 (cinco) minutos, que será sigiloso até o encerramento deste prazo.
+§ 3º Encerrado o prazo estabelecido no § 2º deste artigo, o sistema ordenará os lances em ordem crescente de vantajosidade.
+§ 4º Na hipótese de não haver licitante classificado na etapa de lance fechado que atenda às exigências para habilitação, o responsável pela fase externa do procedimento licitatório, auxiliado pela equipe de apoio, mediante justificativa, admitir o reinício da etapa fechada, nos termos do disposto no § 2º deste artigo.
+Art. 35. O modo de disputa Fechado e Aberto apenas poderá ser utilizado em licitações presenciais.
+
+SUBSEÇÃO IV
+DO MODO DE DISPUTA ABERTO EM LICITAÇÃO PRESENCIAL
+
+Art. 36. No modo de disputa aberto, a etapa de envio de lances verbais na sessão pública durará todo o período em que ainda existir disputa, inclusive no tocante aos lances intermediários, e houver licitantes oferecendo seus lances verbais, não podendo ser delimitada esta fase.
+§ 1º Após todos os licitantes declinarem de ofertar novo lance, o responsável pela fase externa do procedimento licitatório declarará encerrada a fase de lances.
+§ 2º Encerrada a fase de lances verbais, nos termos do disposto no caput e § 1º deste artigo, o responsável pela fase externa do procedimento licitatório poderá, assessorado pela equipe de apoio, admitir o reinício da etapa de lances verbais, em prol da consecução do melhor preço, mediante justificativa.
+Art. 37. Caso a licitação de modo de disputa aberto seja realizada sob a forma presencial, caberá ao instrumento convocatório regrar a forma de apresentação dos lances, observados os seguintes procedimentos:
+I – serão abertos os envelopes contendo as propostas comerciais e os documentos de propostas eventualmente solicitados;
+II – as propostas iniciais serão classificadas e ordenadas, de acordo com o critério de julgamento adotado no tocante ao objeto ofertado, com o objetivo de selecionar os licitantes que participarão da fase de lances verbais.
+.
+SUBSEÇÃO V
+DO MODO DE DISPUTA FECHADO EM LICITAÇÃO PRESENCIAL
+
+Art. 38. No modo de disputa fechado em licitação presencial, as propostas apresentadas pelos licitantes serão sigilosas até a data e a hora designadas para sua divulgação.
+Parágrafo único. No caso de licitação presencial, as propostas deverão ser apresentadas em envelopes lacrados, abertos em sessão pública e ordenadas conforme critério de vantajosidade.
+
+SUBSEÇÃO VI
+DO MODO DE DISPUTA COMBINADO EM LICITAÇÃO PRESENCIAL
+
+Art. 39. Em licitação presencial, os modos de disputa poderão ser combinados da seguinte forma:
+I – Aberto e Fechado;
+II – Fechado e Aberto.
+Art. 40. No modo de disputa Aberto e Fechado, de que trata o inciso I do caput do art. 39 desta Resolução, a etapa de envio de lances verbais na sessão pública durará todo o período em que ainda existir disputa, inclusive no tocante aos lances intermediários, e houver licitantes oferecendo seus lances verbais, não podendo ser delimitada esta fase.
+§ 1º Após todos os licitantes declinarem de ofertar novo lance verbal, o responsável pela fase externa do procedimento licitatório poderá, assessorado pela equipe de apoio, admitir o reinício de nova etapa de lances verbais, em prol da consecução do melhor preço, mediante justificativa.
+§ 2º Encerrada a fase de lances verbais, nos termos do disposto no caput e § 1º deste artigo, o responsável pela fase externa do procedimento licitatório abrirá um prazo de até 24 (vinte e quatro) horas, para que todos os licitantes apresentem nova proposta comercial em envelope fechado, cujo único conteúdo passível de alteração pelo proponente será o valor.
+§ 3º No caso de licitação na forma presencial, caberá ao instrumento convocatório regrar a forma de apresentação dos lances verbais, observado o disposto no art. 28 desta Resolução.
+Art. 41. No modo de disputa Fechado e Aberto, de que trata o inciso II do caput do art. 39 desta Resolução, somente serão classificados para a etapa subsequente:
+I – o autor da oferta mais vantajosa classificada em face do objeto, conforme o critério de julgamento; e
+II – os autores das ofertas classificadas em face do objeto, num intervalo de até 10% (dez por cento) em relação à oferta mais vantajosa, conforme critério de julgamento.
+§ 1º Quando não forem verificadas, no mínimo, 3 (três) ofertas nas condições definidas nos incisos I e II do caput deste artigo, deverão ser selecionadas as melhores ofertas de valores, em ordem de vantajosidade, até o máximo de 3 (três) ofertas de valores distintos, quaisquer que sejam os preços oferecidos, considerando-se inclusive aquelas que já estejam intervalo de até 10% (dez por cento) em relação à oferta mais vantajosa, para que o número máximo de 3 (três) ofertas participem da fase aberta.
+§ 2º A fase aberta observará as regras dispostas nos arts. 28, 36 e 37 desta Resolução.
+
+SEÇÃO VII
+DA DESCONEXÃO DO SISTEMA NA ETAPA DE LANCES VIRTUAIS
+
+Art. 42. Na hipótese de o sistema eletrônico desconectar para o responsável pela fase externa do procedimento licitatório, no decorrer da etapa de envio de lances da sessão pública, e permanecer acessível aos licitantes, os lances continuarão sendo recebidos, sem prejuízo dos atos realizados.
+Art. 43. Quando a desconexão do sistema eletrônico para o responsável pela fase externa do procedimento licitatório persistir por tempo superior a 10 (dez) minutos, a sessão pública será automaticamente suspensa e reiniciada somente decorridas 24 (vinte e quatro) horas após a comunicação do fato aos participantes, no sítio eletrônico oficial da Administração municipal.
+
+CAPÍTULO VI
+DA FASE DE JULGAMENTO
+SEÇÃO I
+DO CRITÉRIO DE JULGAMENTO
+
+Art. 44. O julgamento das propostas nos procedimentos licitatórios de que trata esta Resolução será realizado de acordo com os critérios de julgamentos descritos no art. 33 da Lei nº 14.133, de 2021, observados os regramentos contidos nos arts. 34 a 39 da mesma Lei.
+§ 1º Na modalidade pregão, a escolha do critério de julgamento deve observar o disposto no inciso XLI do art. 6º da Lei nº 14.133, de 2021.
+§ 2º Na modalidade concorrência, a escolha do critério de julgamento deve observar o disposto no inciso XXXVIII do art. 6º da Lei nº 14.133, de 2021.
+Art. 45. É facultado ao setor demandante estabelecer no instrumento convocatório os critérios de aferição dos custos indiretos vinculados ao objeto licitado, para a definição do menor dispêndio de que trata o § 1º do art. 34 da Lei nº 14.133, de 2021.
+§ 1º Os custos indiretos a que se refere o caput deste artigo, relacionados às despesas de manutenção, utilização, reposição, depreciação e de impacto ambiental, entre outros fatores, poderão ser considerados para a definição do menor dispêndio, sempre que objetivamente mensuráveis, conforme parâmetros definidos no instrumento convocatório.
+§ 2º Parâmetros adicionais de mensuração de custos indiretos poderão ser estabelecidos em ato próprio da autoridade responsável pelo procedimento licitatório.
+Art. 46. O critério de julgamento técnica e preço de que trata o inciso IV do art. 33 da Lei nº 14.133, de 2021, será escolhido em decisão fundamentada na fase preparatória, observadas as diretrizes fixadas no § 1º do art. 36 da mesma Lei.
+
+SEÇÃO II
+DOS CRITÉRIOS DE DESEMPATE
+
+Art. 47. No caso de empate ficto, serão aplicados os critérios previstos nos arts. 44 e 45 da Lei Complementar nº 123, de 2006, observado o disposto no art. 4º da Lei nº 14.133, de 2021.
+Parágrafo único. Para fins de utilização do critério de desempate de que trata o caput, aplicar-se-ão os percentuais previstos nos §§ 1º e 2º do art. 44 da Lei Complementar nº 123, de 14 de dezembro de 2006.
+Art. 48. Se não houver licitante que atenda à hipótese de que dispõe o art. 47 desta Resolução, e ainda existir eventual empate real entre ofertas, serão utilizados os critérios de desempate descritos no art. 60 da Lei nº 14.133, de 2021, naquela ordem estabelecida.
+Art. 49. Para os fins de utilização do critério de desempate previsto no inciso II do art. 60 da Lei nº 14.133, de 2021, deverá ser utilizado o sistema de registro cadastral unificado disponível no Portal Nacional de Contratações Públicas (PNCP), desde que haja sistema de avaliação objetiva do desempenho contratual prévio dos licitantes instituído na forma dos §§ 3º e 4º do art. 88 da mesma Lei.
+Parágrafo único. Para fins do disposto no caput deste artigo, considerar-se-á vencedor o licitante que apresentar a maior nota por desempenho em contratações anteriores aferida nos documentos comprobatórios no registro cadastral unificado disponível no Portal Nacional de Contratações Públicas (PNCP).
+Art. 50. O desenvolvimento de ações de equidade entre homens e mulheres no ambiente de trabalho, desenvolvidos pelo licitante como critério de desempate de que trata o inciso III do art. 60 da Lei nº 14.133, de 2021, deverá observar o disposto nesta Resolução.
+§ 1º Consideram-se ações de equidade:
+I – ações afirmativas de gênero:
+a) nas etapas de seleção e recrutamento;
+b) em programas de capacitação;
+c) em programas de ascensão profissional;
+II – medidas de participação igualitária, com a presença de homens e mulheres em todos os âmbitos de tomada de decisão;
+III – política de benefícios voltados à proteção da maternidade, da paternidade e da adoção, buscando equilibrar vida profissional e pessoal;
+IV – práticas na cultura organizacional:
+a) programas de disseminação de direitos das mulheres;
+b) práticas de prevenção e repressão ao assédio moral ou sexual;
+c) práticas de enfrentamento à violência doméstica e familiar;
+d) programas de educação voltada à equidade de gênero;
+V – estrutura física adequada para trabalhadoras gestantes e lactantes;
+VI – medidas de medicina e segurança do trabalho que considerem as diferenças entre os gêneros.
+§ 2º Para fins do disposto no caput deste artigo, considerar-se-á vencedor o licitante que apresentar o maior número de ações de equidade em desenvolvimento no momento da apresentação da proposta.
+§ 3º Persistindo o empate, dar-se preferência ao licitante que demonstrar, sucessivamente:
+I – melhores resultados nos últimos 5 (cinco) anos, considerados os percentuais de participação resultantes das ações desenvolvidas;
+II – maior tempo de desenvolvimento de tais ações no período anterior aos 5 (cinco) anos a que se refere o inciso I deste parágrafo.
+§ 4º A comprovação do desenvolvimento de ações de equidade deverá ser feita de forma documental, nos termos do edital.
+Art. 51. Para os fins de utilização do critério de desempate previsto no inciso IV do art. 60 da Lei nº 14.133, de 2021, o desenvolvimento pelo licitante de programa de integridade deverá estar em acordo com as orientações da Controladoria-Geral do Município (CGM).
+Art. 52. Caso a regra prevista no art. 60 da Lei nº 14.133, de 2021, e as previstas nesta Seção não solucionem o empate, será realizado o sorteio pelo responsável pela fase externa do procedimento licitatório ou pelo próprio sistema eletrônico, dependendo da forma de licitação utilizada, presencial ou eletrônica.
+
+SEÇÃO III
+DA ANÁLISE E DA CLASSIFICAÇÃO DE PROPOSTA E DE LANCES
+
+Art. 53. O julgamento das propostas observará os parâmetros definidos no instrumento convocatório.
+§ 1º A análise das propostas quanto ao valor poderá ser feita exclusivamente em relação à proposta do licitante provisoriamente vencedor, quando adotado o critério de julgamento de menor preço ou o de maior desconto.
+§ 2º O julgamento das propostas deverá observar a margem de preferência prevista no art. 26 da Lei nº 14.133, de 2021, quando houver.
+§ 3º Serão desclassificadas as propostas que incidirem em uma das hipóteses descritas nos incisos do caput do art. 59 da Lei nº 14.133, de 2021.
+§ 4º Para os fins do inciso I do art. 59 da Lei nº 14.133, de 2021, considera-se vício sanável, entre outras, as seguintes medidas:
+I – a complementação de informações acerca dos documentos já apresentados pelos licitantes;
+II – o desatendimento de exigências meramente formais e que não comprometam a compreensão do conteúdo da proposta;
+III – aquele cujo defeito não altera a substância da proposta;
+IV – a atualização de documentos vencidos após a data de recebimento das propostas;
+V – a juntada extemporânea de declarações firmadas pelo próprio licitante;
+VI – a juntada extemporânea de documento não entregue, porém preexistente e passível de comprovar o atendimento de condição pelo licitante, mas que, por equívoco ou falha, não foi apresentado em momento oportuno.
+§ 5º O responsável pela fase externa do procedimento licitatório poderá realizar diligências para aferir a exequibilidade das propostas ou exigir dos licitantes que ela seja demonstrada, bem como para sanar os vícios de que trata o § 4º deste artigo, mediante despacho fundamentado registrado e acessível a todos.
+§ 6º Na hipótese de necessidade de suspensão da sessão pública para a realização de diligências, com vistas ao saneamento de que dispõe o § 5º deste artigo, somente poderá ser reiniciada mediante aviso prévio a todos os licitantes, com, no mínimo, 24 (vinte e quatro) horas de antecedência, sendo a ocorrência registrada em ata.
+Art. 54. No tocante à proposta ou lance do licitante provisoriamente classificado em primeiro lugar que esteja acima do valor estimado da contratação ou do valor máximo eventualmente definido no edital, o responsável pela fase externa do procedimento licitatório poderá negociar condições mais vantajosas no tocante ao preço.
+§ 1º Ainda que o valor ofertado pelo licitante provisoriamente classificado em primeiro lugar esteja dentro dos critérios objetivos de aceitabilidade previstos no edital, o responsável pela fase externa do procedimento licitatório poderá negociar condições mais vantajosas no tocante ao preço.
+§ 2º A negociação será realizada na sessão pública, presencial ou eletrônica, sendo que, na hipótese de licitação eletrônica, o sistema eletrônico deverá permitir o seu acompanhamento pelos demais licitantes.
+§ 3º Quando o licitante provisoriamente classificado em primeiro lugar, mesmo após a negociação, for desclassificado, em razão de sua proposta permanecer acima do valor estimado da contratação ou do valor máximo eventualmente definido no edital, assim como por preço inexequível, a negociação poderá ser feita com os demais licitantes classificados, na ordem de classificação, observado o disposto no § 2º deste artigo.
+§ 3º Concluída a negociação, o resultado será registrado na ata da sessão pública, devendo esta ser anexada aos autos do processo de contratação.
+Art. 55. Na hipótese em que a licitação adote o modo de disputa aberto ou o modo de disputa combinado, o licitante provisoriamente vencedor será convocado para apresentar proposta adequada ao último lance ofertado, contendo os preços unitários e o novo valor total para a contratação, na forma prevista no instrumento convocatório, sob pena de desclassificação.
+§ 1º A sessão poderá ser suspensa para aguardo da proposta de preços readequada, cabendo ao responsável pela fase externa do procedimento licitatório informar, diretamente ou por meio do sistema eletrônico, a data e o horário para retomada da licitação e a divulgação da aceitabilidade da proposta, sempre após a respectiva negociação.
+§ 2º Nas licitações cujo critério de julgamento seja o menor preço ou de maior desconto e a formulação da proposta não exija a apresentação dos custos unitários, considerar-se-á o último lance ofertado pelo licitante provisoriamente vencedor como proposta final, ficando dispensado o cumprimento da obrigação descrita no caput deste artigo.
+Art. 56. Após o encerramento da análise da conformidade das propostas e dos lances, o responsável pela fase externa do procedimento licitatório disponibilizará, na forma prevista no edital, os documentos da proposta apresentados pelo licitante classificado em primeiro lugar.
+Art. 57. Qualquer licitante poderá, de forma imediata, na sessão pública virtual ou presencial, após o término do julgamento das propostas, manifestar sua intenção de recorrer, sob pena de preclusão, observado o disposto no art. 69 desta Resolução.
+
+SEÇÃO IV
+DA AMOSTRA E DA PROVA DE CONCEITO
+
+Art. 58. Desde que previsto no edital, poderá ser exigido do licitante provisoriamente vencedor a apresentação de amostra, prova de conceito, exame de conformidade, entre outros testes de interesse da Administração, observado o disposto no § 3º do art. 17, o inciso II do art. 41 e os §§ 2º e 3º do art. 42 da Lei nº 14.133, de 2021.
+§ 1º A Administração poderá optar pela exigência de amostra após a homologação do certame licitatório, como condição para celebrar o contrato ou instrumento equivalente, na hipótese de que trata o § 2º do art. 42 da Lei nº 14.133, de 2021.
+§ 2º A escolha pela apresentação dos instrumentos a que se refere o caput deste artigo, bem como a opção pelo momento de apresentação de que dispõe o § 1º deste artigo, será definida em decisão fundamentada na fase preparatória.
+
+CAPÍTULO VII
+DA FASE DE HABILITAÇÃO
+
+Art. 59. A habilitação dos licitantes será exigida, de acordo com o Capítulo VI do Título II da Lei nº 14.133, de 2021, e o disposto neste Capítulo.
+Art. 60. Definido o resultado do julgamento final, após a verificação de conformidade da proposta quanto ao objeto e ao valor, o responsável pela fase externa do procedimento licitatório verificará a documentação de habilitação do licitante vencedor da disputa.
+§ 1º Poderá haver substituição parcial ou total dos documentos de que trata o art. 62 da Lei nº 14.133, de 2021, por certificado emitido do sistema de registro cadastral unificado disponível no Portal Nacional de Contratações Públicas (PNCP), nos documentos por ele abrangidos, desde que observado o disposto no instrumento convocatório.
+§ 2º Na hipótese de o licitante não atender às exigências para habilitação, o responsável pela fase externa do procedimento licitatório examinará a proposta subsequente e assim sucessivamente, na ordem de classificação, até a apuração de uma proposta que atenda ao edital de licitação.
+Art. 61. O edital de licitação definirá o prazo e a forma para a apresentação dos documentos de habilitação.
+§ 1º Os documentos relativos à regularidade fiscal serão exigidos somente em momento posterior ao julgamento das propostas e apenas do licitante provisoriamente vencedor, conforme o disposto no inciso III do art. 63 da Lei nº 14.133, de 2021.
+§ 2º A comprovação de regularidade fiscal e trabalhista das pequenas empresas será exigida nos termos do disposto na Lei Complementar nº 123, de 2006.
+§ 3º Os documentos de habilitação poderão ser apresentados em original, por cópia ou por qualquer outro meio expressamente admitido no edital.
+§ 4º A verificação pelo setor promotor do certame nos sítios eletrônicos oficiais de órgãos e de entidades emissores de certidões constitui meio legal de prova, para fins de habilitação.
+§ 5º Quando permitida a participação de empresas estrangeiras na licitação, as exigências de habilitação serão atendidas mediante documentos equivalentes, inicialmente apresentados com tradução livre.
+§ 6º Na hipótese de o licitante vencedor ser estrangeiro, para fins de assinatura do contrato ou da ata de registro de preços, os documentos de que trata o caput serão traduzidos por tradutor juramentado no País e apostilados nos termos do dispostos no Decreto nº 8.660, de 29 de janeiro de 2016, ou de outro que venha a substituí-lo, ou consularizados pelos respectivos consulados ou embaixadas.
+Art. 62. Após a entrega dos documentos para habilitação, não será permitida a substituição ou a apresentação de novos documentos, salvo em sede de diligência de que trata o art. 64 da Lei nº 14.133, de 2021.
+§ 1º Para os fins previstos no caput deste artigo, não caracteriza como substituição ou a apresentação de novo documento a diligência realizada para:
+I – sanar o desatendimento de exigências meramente formais que não comprometam a aferição da qualificação do licitante;
+II – a juntada extemporânea de documento não entregue, porém preexistente e passível de comprovar o atendimento de condição pelo licitante, mas que, por equívoco ou falha, não foi apresentado em momento oportuno.
+§ 2º Na hipótese de necessidade de suspensão da sessão pública para a realização de diligências, para o saneamento de que dispõe este artigo, somente poderá ser reiniciada mediante aviso prévio a todos os licitantes, com, no mínimo, 24 (vinte e quatro) horas de antecedência, sendo a ocorrência registrada em ata.
+Art. 63. A documentação de habilitação poderá ser dispensada, total ou parcialmente, desde que motivada, nas hipóteses mencionadas no inciso III do art. 70 da Lei nº 14.133, ressalvado o inciso XXXIII do caput do art. 7º e o § 3º do art. 195 da Constituição Federal.
+Art. 64. Compete ao responsável pela fase externa do procedimento licitatório verificar e julgar as condições de habilitação.
+§ 1º A ação descrita no caput deste artigo abrange também:
+I – a conferência de documentos cuja autenticidade das informações possa ser verificada eletronicamente, por meio de consulta ao site do órgão emissor;
+II – a emissão na sessão pública de certidão atualizada nos sítios eletrônicos oficiais de órgãos e entidades, que comprove a manutenção da regularidade fiscal e trabalhista, no momento da avaliação dessas condições de habilitação, independentemente da apresentação de certidão ainda válida pelo licitante.
+§ 2º A emissão de que trata o inciso II do § 1º fica dispensada, na hipótese de inversão de fase disposta no § 1º do art. 10 desta Resolução, de indisponibilidade temporária dos sítios eletrônicos emissores no momento da sessão pública, impossibilidade de emissão de documento por meio eletrônico ou quando a sua emissão depender do pagamento de taxa pela Administração.
+§ 3º Salvo na hipótese de inversão de fase, na ocorrência de algumas das circunstâncias descritas no § 2º deste artigo, compete ao responsável pela fase externa do procedimento licitatório registrar o ocorrido na ata de sessão pública e juntar os documentos que lhe dão suporte.
+§ 4º Caso a emissão de novo documento de que trata o inciso II do § 1º indique a irregularidade fiscal e/ou trabalhista do licitante na data da realização da sessão pública, será declarada a sua inabilitação, salvo na hipótese disposta no § 2º do art. 61 desta Resolução.
+Art. 65. Constatado o atendimento a todas exigências classificatórias e habilitatórias estabelecidas no edital, o licitante será declarado vencedor da disputa.
+Art. 66. Após o encerramento da fase de habilitação, o responsável pela fase externa do procedimento licitatório disponibilizará, na forma prevista no edital, os documentos da habilitação apresentados pelo licitante e aqueles oriundos das diligências promovidas em cumprimento ao art. 64 desta Resolução.
+Art. 67. Qualquer licitante poderá, de forma imediata, após o término do julgamento da habilitação, manifestar sua intenção de recorrer, sob pena de preclusão, observado o disposto no art. 69 desta Resolução.
+Art. 68. Nas hipóteses de inversão de fase de que trata o § 1º do art. 10 desta Resolução:
+I – os licitantes apresentarão simultaneamente os documentos de habilitação e as propostas, salvo os documentos relativos à regularidade fiscal, observado o disposto nos §§ 1º e 2º do art. 61 desta Resolução;
+II – serão verificados os documentos de habilitação de todos os licitantes;
+III – serão julgadas apenas as propostas dos licitantes habilitados, observado o disposto no Capítulo VI desta Resolução, no que couber.
+
+Capítulo VIII
+DA FASE RECURSAL
+
+Art. 69. Qualquer licitante poderá, de forma imediata, na sessão pública virtual ou presencial, após o término do julgamento das propostas e do ato de habilitação ou inabilitação, manifestar sua intenção de recorrer, sob pena de preclusão, da seguinte forma:
+I – licitação eletrônica: durante o prazo de até 30 minutos e em campo próprio do sistema;
+II – licitação presencial: de forma verbal e registrada em ata ou em meio físico apensado à ata.
+§ 1º As razões do recurso deverão ser apresentadas em momento único, na forma prevista no edital, observado o prazo 3 (três) dias úteis previsto no inciso I do § 1º do art. 165 da Lei nº 14.133, de 2021.
+§ 2º Os demais licitantes ficarão intimados para, se desejarem, apresentarem suas contrarrazões recursais, no prazo 3 (três) dias úteis, observado o disposto no § 4º do art. 165 da Lei nº 14.133, de 2021.
+§ 3º Para fins do disposto no § 2º do art. 165 da Lei nº 14.133, de 2021, considera-se como autoridade superior a autoridade máxima da Câmara Municipal ou a quem esta tenham delegado tal atribuição, por ato formal.
+Capítulo IX
+DO ENCERRAMENTO DA LICITAÇÃO
+
+Art. 70. Encerradas as fases de julgamento e de habilitação, bem como exauridos os recursos administrativos, o responsável pela fase externa do procedimento licitatório deverá elaborar um breve relatório contendo os fatos ocorridos no procedimento e a proposta de adoção de uma das condutas do art. 71 da Lei nº 14.133, de 2021.
+Art. 71. O processo licitatório, acompanhado do relatório de que trata o art. 70 desta Resolução, será encaminhado à autoridade máxima da Câmara Municipal, a qual deverá adotar uma das condutas descritas no art. 71 da Lei nº 14.133, de 2021.
+§ 1º A competência de que trata o caput deste artigo poderá ser objeto de delegação para agente público hierarquicamente subordinado, quando for conveniente em razão de circunstâncias de ordem técnica, mediante ato formal devidamente publicado na imprensa oficial.
+§ 2º Na hipótese de processamento por meio de sistema de registro de preços, a competência de que trata o caput deste artigo será definida em regulamento próprio.
+
+CAPÍTULO X
+DA CONTRATAÇÃO
+SEÇÃO ÚNICA
+DA ASSINATURA DO CONTRATO OU INSTRUMENTO EQUIVALENTE
+
+Art. 72. Após a adjudicação do objeto e a homologação do certame, o licitante vencedor será convocado para assinar o termo de contrato ou aceitar ou retirar o instrumento equivalente, no prazo estabelecido no edital, sob pena de decair o direito à contratação, observado o disposto no art. 90 da Lei nº 14.133, de 2021.
+§ 1º Será admitida a forma eletrônica na celebração de contratos, observado o disposto no § 2º do art. 12 da Lei nº 14.133, de 2021.
+§ 2º Na assinatura do contrato, será exigida a comprovação das condições de habilitação consignadas no edital de licitação, que deverão ser mantidas pelo licitante durante a vigência do contrato ou instrumento equivalente, observado o disposto nos arts. 59 a 68 desta Resolução.
+§ 3º Na hipótese de o vencedor da licitação não comprovar as condições de habilitação consignadas no edital de licitação, se recusar a assinar o contrato ou não aceitar, ou não retirar o instrumento equivalente, deverá ser observado o procedimento descrito nos §§ 2º e 4º do art. 90 da Lei nº 14.133, de 2021.
+§ 4º A negociação de que trata o inciso I do § 4º do art. 90 da Lei nº 14.133, de 2021, será conduzida pelo responsável pela fase externa do procedimento licitatório e, depois de concluída, terá seu resultado divulgado a todos os licitantes e anexado aos autos do processo licitatório.
+§ 5º A recusa injustificada do licitante vencedor em assinar o termo de contrato ou aceitar ou retirar o instrumento equivalente, dentro do prazo estabelecido, ensejará a aplicação das penalidades estabelecidas na Lei nº 14.133, de 2021.
+
+CAPÍTULO XI
+DISPOSIÇÕES GERAIS E FINAIS
+
+Art. 73. O responsável por infrações dispostas no art. 155 da Lei nº 14.133, de 2021, sujeitar-se-á à aplicação de sanções dispostas no art. 156 da mesma Lei.
+Art. 74. As normas disciplinadoras da licitação serão interpretadas em favor da ampliação da disputa entre os interessados, resguardados o interesse da Administração, o princípio da isonomia, a finalidade e a segurança da contratação.
+Art. 75. Os horários estabelecidos no edital, no aviso e durante a sessão pública observarão o horário de Brasília, inclusive para contagem de tempo e registro no sistema eletrônico e na documentação relativa ao certame, quando a licitação for proveniente de convênio ou transferência voluntária.
+Parágrafo único. Na aplicação desta Resolução, a contagem de prazos observará o disposto no art. 183 da Lei nº 14.133, de 2021.
+Art. 76. Os arquivos e os registros digitais relativos ao processo licitatório permanecerão à disposição dos órgãos de controle interno e externo.
+Art. 77. Enquanto não implementado o Sistema de Registro Cadastral Unificado disponível no Portal Nacional de Contratações Públicas (PNCP), a substituição dos documentos de que dispõe o § 1º do art. 60 desta Resolução poderá ser realizada por meio de sistema cadastral mantido pelo Município.
+Art. 78. Esta Resolução entra em vigor na data de sua publicação.
+
+Plenário Brígido Tinoco, 07 de dezembro  de 2023.
+C. EX.
+
+Milton Carlos Lopes – CAL
+
+Renato Cariello                                                                                  Paulo Velasco
+1º Vice- Presidente                                                                            2º Vice- Presidente
+
+Emanuel Rocha                                                                   Adriano dos Santos Oliveira – Boinha
+  1º Secretário                                                                                            2º Secretário

@@ -1,0 +1,97 @@
+                 696000,000000                                                            697000,000000                      698000,000000                                   699000,000000                700000,000000
+
+                                                                                                                                                                                                                                LEI URBANÍSTICA DE NITERÓI
+                                                                                                                                                                                                                                MAPA 1B - ZONEAMENTO
+
+                                                                                                                                                                                                                                                                SÃO GONÇALO
+
+                                                                                                                                                                                                                                             1A     1B
+                                                                                                                                                                                                                                                                1C
+7470400,000000
+
+                                                                                                                                                                                                                                             1D     1E          1F         1G
+                                                                 Rua
+                                                                     Dou
+                                                                        tor M
+                                                                                ar ch
+                                                                                                                                                                                                                                             1H    1I        1J       1K    MARICÁ
+
+                                                                                                                                                                                                                                                           1L
+
+                                                                                                                                                                                                                                LEGENDA
+                                                                                                                                                                                                                                Nome da zona
+7469600,000000
+
+                                                                                                                                                                                                                                       ZCM                           ZEPAC
+                                                                                                                                                                                                                                       ZEU                           ZRU
+
+                                                                                                                                                                                                                                       ZC                            ZRM
+
+                                                                                                                                                                                                                                       ZDE                           ZRA
+
+                                                                                                                                                                                                                          oto          ZCL                           AEIT
+                                                                                                                                                                                                                   e ix
+                                                                                                                                                                                                                 lP
+                                                                                                                                                                                                          ar a
+                                                                                                                                                                                                        Am                             ZUM < 6*                      Parque
+                                                                                                                                                                                                 v ia
+                                                                                                                                                                                               do
+                                                                                                                                                                                             Ro
+                                                                                                                                                                                                                                                                     Parque Urbano
+                                                                                                                                                                                                                                       ZUM >= 6*
+                                                                                                                                                                                                                                       ZC-ZEIS                       ZDS
+7468800,000000
+
+                                                                                                                                                                                                                                       ZEIS                          ZCA
+
+                                                                                                                                                                                                                                       ZEPAC - APAP                  ZPA
+                                                                                                  a
+                                                                                                lv
+                                                                                                Si
+                                                                                              o
+                                                                                              si
+                                                                                          lái
+                                                                                         Ev
+                                                                                         ua
+                                                                                        R
+
+                                       Alam eda São Boaven
+                                                                 tura
+
+                                                                                                                                                                       oto
+                                                                                                                                                           r al   Peix
+                                                                                                                                                       Ama
+                                                                                                                                                ovia
+                                                                                                                                             Rod
+7468000,000000
+
+                                                                                                                        sé
+                                                                                                                   Jo
+                                                                                                               o
+                                                                                                            Sã
+                                                                                                        a
+                                                                                                      Ru
+                      Ru
+                        a
+                            Pre
+                                                                                                                                                                                                                                                    1
+                                fei
+                                    to
+                                       Viç
+                                                                                                                                                                                                                                                                                Km
+7467200,000000
+
+                                           os
+                                              o
+                                                                                                                                                                                                                                Referências Cartográficas
+                                                  Ja
+                                                       rdi
+
+                                                                                                                                                                                                                                                                              ¯
+                                                             m
+
+                                                                                                                                                                                                                                Sistema de Coordenadas: UTM Fuso 23K
+                                                                                                                                                                                                                                Sistema Geodésico: SIRGAS 2000
+                                                                                                                                                                                                                                Datum Vertical: Marégrafo de Imbituba
+
+                                                                                                                                                                                                                                Escala: 1:15.000        14 de Setembro de 2023

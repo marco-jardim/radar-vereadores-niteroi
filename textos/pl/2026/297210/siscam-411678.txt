@@ -1,0 +1,46 @@
+                                                                     ESTIMATIVA DO IMPACTO ORÇAMENTÁRIO
+                                                             (Arts. 16 e 17 da Lei Complementar Federal nº 101, de 4 de maio de 2000)
+
+                Processo 9900070793/2026 - Reestruturação dos cargos em comissão da Administração Indireta Fundacional
+                   de direito público. Criação da Gratificação por Desempenho de Função (GDF) no âmbito das Fundações
+                municipais de direito público. Criação da Gratificação por Exercício de Função Extraordinária (GEFE) no âmbito
+Objeto:
+                  da Administração Direta e Indireta Autárquica e Fundacional de direito público. Extinção do Adicional de
+                Tempo Integral. Disciplina o Regime Adicional de Serviço (RAS) da Guarda Municipal. Regulamenta o Adicional
+                     de Difícil Acesso e a Gratificação de Emergência no âmbito da Fundação Municipal de Saúde (FMS).
+
+                                                                                                                                                                  Jan 2027 a          Jan 2028 a
+                                                                                                                                            Jan 2026 a
+                                                                                                                                                                 Dez/2027 c/         Dez/2028 c/
+                                                                                                                                        Dez/2026 c/ Acrésc.
+                                                                                                                                                                    Acrésc.             Acrésc.
+DESPESA LÍQUIDA COM PESSOAL ( I )                                                                                                            2.825.632.647,21    3.080.412.834,32    3.173.948.660,67
+               Pessoal Ativo (i + ii + iii)                                                                                                  2.329.635.351,90    2.569.535.620,16    2.647.745.130,08
+                   (i) Pessoal Ativo (RGF) *                                                                                                 1.974.510.612,74    2.033.745.931,12    2.094.758.309,06
+                   (ii) Potenciais aumentos**                                                                                                  339.185.546,40      516.213.104,22      532.769.779,76
+                   (iii) Aumento relativo à proposta em questão                                                                                  3.789.681,47        7.062.588,19        7.327.624,73
+               Pessoal Inativo e Pensionista                                                                                                   495.997.295,31      510.877.214,17      526.203.530,59
+               OUTRAS DESP. PESSOAL DECORRENTES CONTRATOS TERCEIRIZAÇÃO (art. 18, § 1º da LRF)                                                            -                   -                   -
+               Despesa com Pessoal não Executada Orçamentariamente                                                                              12.149.511,29       12.513.996,63       12.889.416,53
+Despesas não Computadas (art. 19, § 1º da LRF) (II)                                                                                            262.000.766,92      269.860.789,93      277.956.613,63
+               ( - ) Decorrentes de Decisão Judicial de Período Anterior ao da Apuração                                                        126.609.055,07      130.407.326,72      134.319.546,52
+               ( - ) Inativos e Pensionistas com Recursos Vinculados                                                                           109.661.121,96      112.950.955,62      116.339.484,29
+               ( - ) Indenizações por Demissão e Incentivos à Demissão Voluntária                                                                3.145.409,28        3.239.771,56        3.336.964,71
+               ( - ) Despesas de Exercícios Anteriores                                                                                             843.306,51          868.605,71          894.663,88
+               ( - ) Parcela dedutível referente ao piso salarial do Enfermeiro, Técnico de Enfermagem, Auxiliar de Enfermagem
+                                                                                                                                                15.178.914,10       15.634.281,52       16.103.309,97
+               e Parteira (ADCT, art. 38, §2º)
+               ( - ) Agentes Comunitários deSaúde e deCombate àsEndemias comRecursosVinculados (CF, art.198, §11)                                6.562.960,00        6.759.848,80        6.962.644,26
+
+               ( - ) Convocação Extraordinária (inciso II, § 6º, art. 57 da CF)                                                                           -                   -                   -
+REPASSES PREVIDENCIÁRIOS AO RPPS ( III )
+
+TOTAL DA DESPESA COM PESSOAL PARA FINS DE APURAÇÃO DO LIMITE - TDP (IV) = (I - II + III)                                                      2.563.631.880,29    2.810.552.044,40    2.895.992.047,04
+RECEITA CORRENTE LÍQUIDA - RCL                                                                                                               6.307.949.157,83     6.560.267.124,14    6.809.557.274,86
+% do TOTAL DA DESPESA LÍQUIDA COM PESSOAL P/FINS APUR. DO LIMITE - TDP SOBRE A RCL (VI) = (IV/V)*100                                                   40,64%              42,84%              42,53%
+LIMITE LEGAL (inciso III, art. 20 da LRF) - <54,00%>                                                                                          3.406.292.545,23    3.542.544.247,04    3.677.160.928,42
+LIMITE PRUDENCIAL 95% (§ único, art. 22 da LRF) - <51,30%>                                                                                    3.235.977.917,97    3.365.417.034,69    3.493.302.882,00
+LIMITE DE ALERTA 90% (Inciso II do § 1º do art.59 da LRF) <48,60%>                                                                            3.065.663.290,71    3.188.289.822,33    3.309.444.835,58
+Fonte: RGF 3º quadrimestre de 2025
+*Foi considerado um aumento vegetativo de 3%
+**Valores que potencialmente aumentarão o Pessoal Ativo (RGF)

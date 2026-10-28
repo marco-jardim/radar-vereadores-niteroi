@@ -1,0 +1,21 @@
+Projeto de Lei N°    /2021
+Dispõe sobre a solicitação e emissão eletrônica do Cartão de Estacionamento para Vaga Especial - CEVE e Cartão de Estacionamento para Idoso - CEI.
+
+Art - 1º A emissão do Cartão de Estacionamento para Vaga Especial - CEVE ou do Cartão de Estacionamento para Idoso - CEI poderá ser feita de forma eletrônica, o solicitante deverá acessar o endereço eletrônico do poder executivo, cadastrar seus dados pessoais e encaminhar cópia dos documentos solicitados pelo órgão competente.
+
+Art - 2º O Executivo disciplinará o cadastramento dos interessados e a emissão do CEVE e CEI pela rede mundial de computadores, com o objetivo de garantir o acesso à credencial de forma rápida e eletrônica.
+
+Art. 3º Uma vez aprovado, o Cartão de Estacionamento para Vaga Especial - CEVE ou Cartão de Estacionamento para Idoso - CEI poderá ser impresso pelo portador que seguirá as normas de uso conforme regras de utilização determinadas pela NITTRANS. Para fins de fiscalização, os cartões serão impressos com QR Codes (Códigos de Resposta Rápida).
+
+Art 4º O poder executivo terá 90 dias para adequação após publicação desta lei.
+
+Art 5º Esta lei entra em vigor na data de sua publicação.
+
+Niterói, 20 de janeiro de 2021
+
+Walkíria Nictheroy
+
+Justificativa:
+	A Prefeitura de Niterói, através dos Decretos 10635/2009 e N°10.636/2009, regulamenta a reserva de 5% das vagas da cidade para idosos e 2% para pessoas com deficiência respectivamente de forma gratuita, a fiscalização para o uso correto da gratuidade se dá através do Cartão de Estacionamento para Vaga Especial - CEVE e Cartão de Estacionamento para Idoso - CEI que ficam dispostos de forma visível no veículo. Atualmente o processo de solicitação e resgate dos cartões são feitos de forma presencial, uma dificuldade a mais, especialmente para pessoas com mobilidade reduzida.
+Para fins de fiscalização, os cartões possuem algumas informações do portador como o nome, registro e validade escritos, a alternativa que possibilita que os cartões sejam impressos pelo próprio beneficiário em casa ou outro local com maior comodidade sem a possibilidade de fraude é a tecnologia QR Code, abreviação de Quick Response Code (Código de Resposta Rápida), um código de conversão de alta armazenagem, facilmente escaneado e de ampla utilização, cada vez mais popular pela simplicidade e pelo acesso, já que quase todos os aparelhos de celular atualmente possuem suporte para sua leitura sem precisar de aplicativos específicos.
+Desde já, contamos com o apoio dessa egrégia Casa Legislativa.

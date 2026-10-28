@@ -1,0 +1,58 @@
+| Câmara Municipal de Niterói Gabinete Vereador Professor Tulio Partido Socialismo e Liberdade (PSOL)
+
+PROJETO DE LEI Nº        /2025
+
+Institui o Plano de Manejo Individual de exemplares e conjuntos arbóreos no Município de Niterói, define hipóteses de obrigatoriedade, conteúdo mínimo, rito de aprovação e fiscalização, e dá outras providências.
+
+Art. 1º Fica instituído, no âmbito do Município de Niterói, o Plano de Manejo Individual – PMI – como instrumento técnico obrigatório para proteção, manejo e intervenções em exemplares arbóreos e conjuntos arbóreos localizados em logradouros públicos ou imóveis privados, nos termos desta Lei.
+Art. 2º Para os fins desta Lei, considera-se:
+I – Exemplar arbóreo: indivíduo vivo de espécie arbórea, nativa ou exótica, enraizado em solo público ou privado no território municipal;
+II – Conjunto arbóreo: agrupamento de dois ou mais exemplares cuja funcionalidade integrada (sombreamento, conectividade ecológica, infiltração/drenagem, estabilidade de taludes, paisagem e memória social) recomenda tratamento como unidade ambiental;
+III – Área de Proteção Radicular (APR): projeção vertical da copa (goteira) acrescida de faixa mínima de 1,5 m, destinada à proteção do sistema radicular, vedadas a impermeabilização e escavações não autorizadas;
+IV – Poda técnica: manejo de copa com fundamento fitossanitário e de segurança, vedada a poda drástica;
+V – PMI: documento técnico específico por exemplar (ou conjunto, com anexos por indivíduo) que estabelece diagnóstico e prescrições de manejo, condicionantes a obras no entorno, procedimentos de monitoramento e responsáveis técnicos.
+Art. 3º Será obrigatória a elaboração e aprovação de PMI:
+I – para toda árvore imune ao corte ou árvore notável/monumental declarada por ato do Executivo;
+II – para conjuntos arbóreos declarados protegidos;
+III – sempre que houver obra, serviço ou manutenção em logradouro, lote ou infraestrutura no raio de até 20 (vinte) metros do tronco do exemplar protegido, ou no polígono do conjunto;
+IV – em podas que ultrapassem 20% da copa viva ou intervenções com potencial de afetar a APR;
+V – quando determinado pelo órgão ambiental municipal em razão de risco, fitossanidade ou interesse público.
+Art. 4º O PMI conterá, no mínimo:
+I – Identificação do exemplar/conjunto: espécie, DAP - Diâmetro à Altura do Peito, altura, copa (m²), georreferenciamento e fotos;
+II – Diagnóstico: fitossanidade, estabilidade estrutural, pragas/doenças, histórico de podas e danos;
+III – Delimitação da APR e percentual de área permeável existente e meta pós-obra;
+IV – Avaliação de serviços ecossistêmicos: regulação térmica (ilhas de calor), sombreamento, infiltração/retardo de escoamento, qualidade do ar, suporte à biodiversidade;
+V – Prescrições de manejo: tipos e limites de poda (vedada poda drástica), calendário biológico, tratamentos fitossanitários, proteção do colo e do solo (anel permeável ≥0,8 m), tutorias/cabos quando necessários;
+VI – Obras/infraestruturas: métodos de não escavação na zona radicular (perfuração direcional/HDD, túneis técnicos), proteção de tronco e raízes, rotas de máquinas, tapumes e horários;
+VII – Soluções Baseadas na Natureza (SbN) e permeabilidade: jardins de chuva, biorretenção, piso drenante, solo estruturado, com dimensionamento e posições;
+VIII – Monitoramento: indicadores (≥70% de copa viva, rebrota, sanidade), periodicidade de vistorias e responsáveis técnicos com ART/RRT;
+IX – Condicionantes e vedações: lista do que não pode (ex.: corte de raízes estruturais, compactação, cimentação do colo) e gatilhos de revisão (tempestade, sinistro, nova obra);
+X – Plano de comunicação e sinalização da área em obra (proteções, placas, QR code quando houver cadastro).
+Art. 5º O Plano de Manejo Individual (PMI) deverá ser submetido à aprovação do órgão ambiental municipal, constituindo condição prévia para o início de qualquer intervenção, obra, serviço ou licenciamento correlato, observados os procedimentos técnico-administrativos a serem definidos pelo Executivo:
+I – O PMI será elaborado por profissional habilitado (engenharia florestal, biologia ou correlatas) com ART/RRT e protocolado ao órgão ambiental municipal antes do início de qualquer intervenção;
+II – O órgão ambiental analisará o PMI no prazo a ser estabelecido em regulamento, podendo solicitar complementações (suspende-se o prazo até a entrega);
+III – Em se tratando de árvore imune ou conjunto protegido, haverá consulta ao Conselho Municipal de Meio Ambiente de Niterói - COMAN (parecer não vinculante), nos prazos definidos em regulamento;
+IV – A aprovação do PMI ocorrerá por Despacho Técnico e integrará as condições do licenciamento urbanístico/ambiental correspondente, quando houver.
+Art. 6º Em quaisquer intervenções e aprovações urbanísticas disciplinadas pela Lei Municipal nº 3.905/2024, o PMI aprovado constitui condicionante urbanística vinculante, devendo os projetos:
+I – preservar integralmente a APR;
+II – evitar rebaixos de meio-fio, sarjetas, rampas ou quaisquer dispositivos que direcionem o escoamento superficial para a APR;
+III – quando tais elementos forem tecnicamente imprescindíveis, adotar microdrenagem verde e desvio de fluxo que impeçam a concentração de enxurradas na APR;
+IV – comprovar permeabilidade mínima na APR e entorno conforme o PMI.
+Art. 7º Em risco iminente ao patrimônio ou às pessoas, a Defesa Civil/órgão ambiental poderá autorizar medidas emergenciais, com registro fotográfico e laudo subsequente em até 5 (cinco) dias úteis, devendo o PMI ser apresentado ou atualizado em até 15 (quinze) dias.
+Art. 8º Como diretriz de transparência e gestão, o Município manterá o Cadastro Municipal de PMIs, integrado ao cadastro arbóreo municipal, com mapa público e disponibilização, para cada registro, de APR, índice de permeabilidade garantido, área de copa (m²), medidas SbN adotadas e responsável técnico (nome e número de registro).
+Art. 9º Os custos de elaboração, execução e monitoramento do PMI são de responsabilidade do interessado/proponente da obra/serviço, quando a intervenção for de seu interesse; em exemplares protegidos em logradouro, o Município poderá celebrar termos de cooperação e convênios para manutenção qualificada.
+Art. 10 O descumprimento do PMI aprovado ou a intervenção sem PMI, quando exigível, sujeita o infrator às sanções administrativas previstas em legislação municipal e federal, em especial a Lei nº 9.605/1998 e o Decreto nº 6.514/2008, sem prejuízo da reparação integral do dano e das responsabilidades civil e penal.
+Art. 11 O Poder Executivo regulamentará esta Lei, no que couberm, fixando modelos de PMI, checklists de obra, especificações técnicas de SbN e procedimentos de fiscalização.
+Art. 12 Esta Lei entra em vigor na data de sua publicação.
+
+JUSTIFICATIVA
+
+O presente Projeto de Lei institui o Plano de Manejo Individual (PMI) como instrumento técnico-operacional para garantir que toda intervenção potencialmente impactante sobre árvores e conjuntos arbóreos no Município de Niterói seja precedida de diagnóstico qualificado, prescrições de manejo, soluções de engenharia não supressivas e monitoramento. A proposta responde a quatro desafios urbanos interligados: segurança (queda de galhos/árvores em eventos extremos), drenagem (alagamentos e sobrecarga da microdrenagem), clima (ilhas de calor e conforto térmico) e biodiversidade (perda de serviços ecossistêmicos no tecido urbano).
+Do ponto de vista jurídico, o projeto se ancora na Constituição Federal (arts. 23, VI e VII; 30, I e VIII; e 225), que atribui competência comum e local para proteção ambiental e ordenamento do território; na Política Nacional do Meio Ambiente (Lei nº 6.938/1981); no Estatuto da Cidade (Lei nº 10.257/2001); e na legislação de responsabilização por danos ambientais (Lei nº 9.605/1998 e Decreto nº 6.514/2008). No plano municipal, o PMI integra-se ao licenciamento urbanístico e às regras da Lei Municipal nº 3.905/2024 (LUOS), como condicionante vinculante, garantindo que projetos e obras internalizem os custos e medidas de proteção às árvores e às Áreas de Proteção Radicular (APR).
+Sob a perspectiva técnica, o PMI padroniza critérios mínimos: identificação (DAP, altura, copa), diagnóstico (fitossanidade/estabilidade), APR e permeabilidade (metas e soluções baseadas na natureza), obras sem dano (HDD, túneis técnicos, proteção de raízes e tronco), manejo (poda técnica sem poda drástica), e monitoramento (indicadores e vistorias). Tal padronização reduz riscos e custos: prevenir dano é mais barato e eficaz do que repor árvores adultas e ampliar obras cinzas de drenagem; manter APR permeável e SbN melhora infiltração, retarda picos de cheias e ameniza temperaturas.
+O instrumento também reforça transparência e controle social ao criar o Cadastro Municipal de PMIs, com mapa público e dados essenciais (APR, permeabilidade assegurada, área de copa, SbN e responsável técnico). Ao mesmo tempo, permite respostas ágeis em emergências (autorização com laudo posterior e atualização do PMI), sem abrir mão de rastreabilidade e responsabilidade técnica (ART/RRT).
+Em resumo, o PMI qualifica a relação entre infraestrutura verde e desenvolvimento urbano, conciliando segurança, resiliência climática, biodiversidade e direito à cidade. É medida juridicamente consistente, tecnicamente sólida e economicamente inteligente, alinhada a boas práticas nacionais e internacionais de arborização urbana, razão pela qual se requer o apoio dos(as) Nobres Pares para sua aprovação.
+
+Plenário Brígido Tinoco, 03 de novembro de 2025.
+
+Professor Tulio

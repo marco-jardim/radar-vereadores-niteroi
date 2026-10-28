@@ -1,0 +1,35 @@
+                                                    Quadro II.a - Parâmetros de Arruamento
+                                                               Novos Loteamentos
+
+                     Vias locais                                                   IIustrações:
+                 Novos Loteamentos
+                                 Total                 12 m
+  Simples                 Caixa de rolamento            6m
+                               Passeios                 3m
+                                 Total                13,5 m
+
+Com Ciclovia
+                          Caixa de rolamento          7,5 m
+Unidirecional
+
+                               Passeios                3m
+                                 Total                15 m
+Com Ciclovia
+                          Caixa de rolamento           9m
+Bidirecional
+                               Passeios                3m
+
+             Raio Mínimo de concordância
+
+   α < 75°                             Raio = 9 m
+   α = 90°
+                                       Raio = 6 m
+   α > 75°
+
+                Condições de retorno
+
+     A                           Caixa de rolamento
+     B                                   7,5
+     C                                   12
+     R1                                  2,5
+     R2                                   6

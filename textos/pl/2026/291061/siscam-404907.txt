@@ -1,0 +1,194 @@
+                                                        ANEXO
+
+                  Estimativa do Impacto Orçamentário-Financeiro
+
+         Estimativa de impacto orçamentário-financeiro elaborada em cumprimento ao art. 113
+         do Ato das Disposições Constitucionais Transitórias da Constituição Federal de 1988 e
+         do art. 14 da Lei Complementar n° 101/2000.
+
+              Estimativa do impacto orçamentário-financeiro por exercício (R$)
+                        2026                              2027                               2028
+                        0,00                            947.644,70                         983.655,20
+
+         Metodologia e Memorial de Cálculo:
+
+Item Descrição                                                                                             Valor (R$)
+     Somatório do valor do IPTU devido no exercício de 2026, relativo aos imóveis sujeitos ao
+A    benefício fiscal previsto no art. 8° do Projeto de Lei                                                         1.822.043,27
+     Valor total do benefício fiscal previsto no art. 8° do Projeto de Lei (redução de 50% do IPTU),
+     tendo como referência o exercício 2026
+B    [B = A * 0,5]                                                                                                      911.021,64
+     Estimativa do valor total do benefício fiscal previsto no art. 8° do Projeto de Lei (redução de 50%
+     do IPTU) no exercício 2027
+C    [C = B * (1 + Atualização Monetária)]                                                                              947.644,70
+     Estimativa do valor total do benefício fiscal previsto no art. 8° do Projeto de Lei (redução de 50%
+     do IPTU) no exercício 2028
+D    [D = C * (1 + Atualização Monetária)]                                                                              983.655,20
+
+         Notas:
+         1 - O somatório do valor do IPTU devido no exercício de 2026, relativo aos imóveis potencialmente
+         alcançados pelo benefício fiscal, foi apurado por meio de consulta ao sistema e-Cidade. Foram
+         identificados 31 imóveis, passíveis de classificação como "hotel" ou "resort", nos termos do artigo 1°, §
+         3º, inciso I, alíneas "a" e "b", do Projeto de Lei;
+         2 - O impacto orçamentário no exercício de 2026 é nulo, uma vez que o lançamento do IPTU referente a
+         esse exercício ocorreu em 1º de janeiro, portanto, em momento anterior à vigência do benefício fiscal;
+         3 - A estimativa do valor do benefício fiscal desconsiderou eventuais lançamentos de novos
+         empreendimentos hoteleiros, bem como a conversão de imóveis existentes em estabelecimentos
+         hoteleiros;
+         4 - A atualização monetária foi calculada com base nas projeções constantes do Boletim Focus de 16 de
+         janeiro de 2026, considerando a variação do IPCA de 4,02% para o ano de 2026, com efeitos no IPTU do
+         exercício de 2027, e de 3,8% para o ano de 2027, com efeitos no IPTU do exercício de 2028.
+
+Da estimativa de receita da lei orçamentária e das metas de resultados fiscais previstas
+no anexo próprio da lei de diretrizes orçamentárias:
+
+       O art. 14 da Lei Complementar nº 101/2000 (Lei de Responsabilidade Fiscal)
+estabelece que a concessão de benefícios tributários deve estar contemplada na
+estimativa de receita da Lei Orçamentária Anual e não pode comprometer as metas de
+resultado fiscal fixadas na Lei de Diretrizes Orçamentárias, devendo, caso contrário, ser
+acompanhada de medidas de compensação:
+
+                      “Art. 14. A concessão ou ampliação de incentivo ou benefício de natureza
+                      tributária da qual decorra renúncia de receita deverá estar acompanhada de
+                      estimativa do impacto orçamentário-financeiro no exercício em que deva
+                      iniciar sua vigência e nos dois seguintes, atender ao disposto na lei de diretrizes
+                      orçamentárias e a pelo menos uma das seguintes condições:
+
+                      I - demonstração pelo proponente de que a renúncia foi considerada na
+                      estimativa de receita da lei orçamentária, na forma do art. 12, e de que não
+                      afetará as metas de resultados fiscais previstas no anexo próprio da lei de
+                      diretrizes orçamentárias;
+
+                      II - estar acompanhada de medidas de compensação, no período mencionado
+                      no caput, por meio do aumento de receita, proveniente da elevação de
+                      alíquotas, ampliação da base de cálculo, majoração ou criação de tributo ou
+                      contribuição.”
+
+        O benefício tributário a que se refere este Anexo não acarreta impacto negativo
+na estimativa de receita prevista na LOA, nem compromete o cumprimento das metas
+de resultado fiscal estabelecidas na LDO, uma vez que representa menos de 0,17% da
+estimativa de arrecadação anual do IPTU nos dois exercícios subsequentes à sua
+instituição. Trata-se de percentual pouco significativo, especialmente diante do grau de
+incerteza inerente às projeções de receita. Ainda assim, recomenda-se que a renúncia
+de receita decorrente do Projeto de Lei seja considerada nas estimativas de receita da
+lei orçamentária e nas metas fiscais da LDO do exercício 2027 e seguintes.
+
+Das medidas previstas no art. 14-A da Lei Complementar n° 101/2000:
+
+Estimativa de quantitativo de beneficiários:
+
+        Estima-se que cerca de 31 contribuintes possam ser contemplados pelo benefício
+fiscal previsto no Projeto de Lei.
+
+       A estimativa foi obtida a partir da análise dos contribuintes ativos que emitiram
+NFS-e com o destaque do subitem “9.01 - Hospedagem de qualquer natureza em hotéis,
+apart-service condominiais, flat, apart-hotéis, hotéis residência, residence-service, suite
+service, hotelaria marítima, motéis, pensões e congêneres; ocupação por temporada
+com fornecimento de serviço”. Na sequência, aplicou-se um filtro para identificar
+apenas os contribuintes potencialmente elegíveis ao benefício fiscal, com a exclusão
+daqueles classificados como albergues, hostels, apart-hotéis, entre outros.
+
+       A estimativa não considera eventuais lançamentos de novos empreendimentos
+hoteleiros, bem como a conversão de imóveis existentes em estabelecimentos dessa
+natureza.
+
+Prazo de vigência do benefício fiscal:
+
+       5 (cinco) anos, conforme previsto no art. 8º, caput, do Projeto de Lei.
+
+Metas de desempenho:
+
+       O art. 1º, caput, estabelece como objetivo do Projeto de Lei “o fomento à
+implantação, adaptação, modernização e regularização de empreendimentos
+destinados a hospedagem e a acomodação especializada de caráter temporário ou
+semipermanente no Município de Niterói, de forma a atender à agenda de
+desenvolvimento econômico e urbano, promover a diversificação da oferta de estadas
+temporárias, fortalecer a atividade turística, incentivar a inclusão social e contribuir para
+a geração de empregos e a qualificação do ambiente urbano”.
+
+       Sob a perspectiva econômica, mostra-se pertinente o estabelecimento de meta
+capaz de aferir, ainda que de forma indireta, os efeitos do benefício fiscal sobre a
+implantação, adaptação, modernização e regularização de empreendimentos
+hoteleiros, enquanto reflexos do estímulo concedido ao setor.
+
+       A análise das NFS-e emitidas por estabelecimentos localizados no Município,
+com destaque do subitem 09.01 da Lista de Serviços da Lei Complementar nº 116/2003,
+indica que a receita do setor hoteleiro apresentou crescimento real médio anual de
+aproximadamente 8% (oito por cento) nos últimos anos:
+
+       Receita de serviços declarada nas NFS-e enquadradas no subitem 09.01
+          Período          Receita        Aumento Nom.       IPCA     Aumento Real
+            2023      R$ 120.586.608,58       9,1%          4,62%         4,29%
+            2024      R$ 141.786.983,94      17,6%          4,83%        12,16%
+            2025      R$ 159.034.275,55      12,2%          4,26%         7,58%
+
+      Diante desse desempenho histórico, mostra-se razoável o estabelecimento de
+meta que busque manter ou potencializar o ritmo de crescimento observado.
+
+       Assim, fixa-se como meta de desempenho na dimensão econômica o
+crescimento real anual mínimo de 8% (oito por cento) da receita total de serviços
+declarada nos documentos fiscais eletrônicos emitidos com enquadramento no
+
+subitem 09.01 da Lista de Serviços da Lei Complementar nº 116/2003, por
+estabelecimentos localizados no Município1.
+
+       Considerando que a meta de desempenho anteriormente estabelecida se mostra
+adequada para aferir, de forma simples e objetiva, o crescimento da atividade
+econômica do setor hoteleiro, e tendo em vista que a expansão desse setor tende a
+produzir efeitos positivos sobre a geração de empregos, conclui-se que a referida meta
+também se revela apta, ainda que indiretamente, a avaliar os impactos sociais
+decorrentes do benefício fiscal. Assim, não se propõe o estabelecimento de meta
+específica na dimensão social.
+
+       No que se refere à dimensão ambiental, o setor hoteleiro — fortemente
+associado às atividades turísticas — caracteriza-se, em regra, por baixo potencial de
+geração de impactos ambientais negativos, especialmente quando comparado a outros
+segmentos econômicos. Desse modo, ao incentivar a atividade hoteleira, o Município
+promove, de forma indireta, atividades econômicas de reduzido impacto ambiental.
+Nessa perspectiva, a meta de desempenho definida na dimensão econômica também se
+mostra suficiente, ainda que de forma indireta, para a avaliação dos efeitos ambientais
+do benefício fiscal, não se justificando a fixação de meta ambiental específica.
+
+         Ressalte-se, por fim, que a adoção de metas de desempenho simples, objetivas
+e diretamente mensuráveis encontra respaldo no princípio do custo-benefício do
+controle, segundo o qual a atuação de controle deve ser eficiente e economicamente
+justificável, de modo que os custos associados ao monitoramento não superem os
+benefícios esperados. No caso do benefício fiscal ora analisado, cujo impacto
+orçamentário estimado é inferior a 0,2% da arrecadação anual do IPTU, não se mostra
+vantajosa a implementação de mecanismos adicionais de avaliação de desempenho que
+impliquem maior complexidade ou custos elevados de mensuração.
+
+       De todo modo, em avaliações futuras, poderão ser adotadas outras formas de
+aferição do desempenho do benefício fiscal. Outros indicadores que poderiam ser
+considerados, em eventuais avaliações, seriam: i) número de novos empreendimentos
+hoteleiros implantados; ii) quantidade de leitos hoteleiros disponibilizados; e iii) número
+de empregos gerados pelo setor. Não se propõe, de antemão, a utilização desses
+indicadores em razão da ausência desses dados nos sistemas atualmente disponíveis na
+SMF, bem como das dificuldades práticas envolvidas em sua apuração.
+
+Impacto previsto na redução das desigualdades regionais:
+
+        Não se aplica.
+
+Mecanismos de transparência e de monitoramento e avaliação de resultados:
+
+1
+  O subitem 09.01 contempla um conjunto heterogêneo de prestadores de serviços, dos quais parte não se
+enquadra no benefício fiscal previsto no Projeto de Lei. Ainda assim, considerando que os hotéis
+respondem pela maior parcela da receita tributável associada a esse subitem, sua utilização como base
+para o indicador de desempenho mostra-se adequada e representativa.
+
+        Os principais mecanismos de transparência do benefício fiscal consistem na
+publicação das informações pertinentes na Lei Orçamentária Anual (LOA), na Lei de
+Diretrizes Orçamentárias (LDO) e no Portal de Transparência do Município, assegurando
+amplo acesso às informações relativas à renúncia de receita.
+
+         O monitoramento do benefício fiscal será realizado por meio de relatórios
+analíticos disponibilizados à SMF, os quais possibilitam acompanhar, dentre outras
+informações, os contribuintes beneficiados e os respectivos valores dos benefícios
+fiscais concedidos.
+
+        Quanto à avaliação dos resultados, especialmente no que se refere ao
+cumprimento da meta de desempenho estabelecida, o Secretário Municipal de Fazenda
+poderá, a qualquer tempo, determinar a apuração do referido indicador, com vistas à
+verificação do atingimento, ou não, da meta proposta.

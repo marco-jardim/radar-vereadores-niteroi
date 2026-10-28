@@ -1,0 +1,62 @@
+                                                                                                                                FICHA ORÇAMENTÁRIA DA DESPESA
+                                                                                     As informações constantes neste documento foram prestadas pela Unidade Orçamentária que executará a despesa, inclusive a estimativa do impacto orçamentário.
+                                                                                                                      A SEPLAG apenas verifica os saldos nos relatórios do e-cidade e sistematiza as informações.
+
+                                                                                                                                                         0588-FMAS-2023
+
+                                                                                                                                                 Objeto (descrição da despesa)
+
+                                                                                                                            Alteração do valor do beneficio `Programa Moeda Social Arariboia.
+
+                                                                                                                                                    INFORMAÇÕES GERAIS
+                                                                                                                                                                                                                                                                          Credor
+                           Unidade Orçamentária                                      Plano Orçamentário                                               Programa de Trabalho                                Processo .Adm
+                                                                                                                                                                                                                                                                    (Nome/Razão Social)
+
+                   FUNDO MUNICIPAL PARA
+                                                                      019.00009 - Programas e Projetos - Moeda Social                                16.72.08.244.0124.6240                             9900066306/2023                                      INSTITUTO E-DINHEIRO BRASIL
+                  ASSISTENCIA SOCIAL - FMAS
+
+                                                                                                                                                    MEMÓRIA DE CÁLCULO
+                               Data de Início                         Data de Fim                         Meses de Vigência                            Período de Reajuste                             Método de reajuste                                    Memória de cálculo da estimativa
+                                                                                                                                                                                                                                                      Valores que serão atualizados, por membro familiar.
+                                                                                                                                                                                                                                                                           1 - 308
+                                                                                                                                                                                                                                                                           2 - 420
+                                                                                                                                                                                                Reajuste do valor do beneficio por                                         3 - 532
+                                01/01/2024                             31/12/2024                                                     11                        Anual
+                                                                                                                                                                                                        membro familiar.                                                   4 - 644
+                                                                                                                                                                                                                                                                           5 - 756
+                                                                                                                                                                                                                                                                           6 - 868
+                                                                                                                                                                                                                                                                 Total mensal: 16.173.668,00
+
+                                                                                                                                        ESTIMATIVA DE IMPACTO ORÇAMENTÁRIO
+
+                                                             Estimativa para o exercício que        Estimativa Primeiro exercício                 Estimativa Segundo exercício                  Valor Previsto na LOA antes das
+                           Estimativa Valor Total                                                                                                                                                                                                                  Valor Mensal Estimado
+                                                                     entrar em vigor                        subsequente                                   subsequente                                   emendas no PT
+
+                                          194.084.016,00                      194.084.016,00                                           -                                               -                                             -                                                                 17.644.001,45
+
+                                                                                                 Percentual da Despesa no PT que
+                                                                                                                                             Percentual da Despesa Descoberta na
+                 Saldo atualizado do PT na Data de          Fator Médio de Variação anual da     será Executada (Valor da Despesa                                                           Valor Descoberto no exercício corrente            Valor de despesas submetidas à apreciação no ano corrente no PT
+                                                                                                                                             LOA (Valor Descoberto/Valor da Despesa
+                             verificação                           despesa declarada               Exercício Corrente/Saldo do PT na                                                                       no PT                                               incluindo a despesa em análise
+                                                                                                                                                       no exercício corrente)
+                                                                                                          Data de verificação)
+
+                                                     -     Não se Aplica                            PT com saldo nulo ou não existe                                                  100%                              194.084.016,00                                                                 194.084.016,00
+
+                 Saldo atualizado do PO na data de                                               Valor do PT em fonte de operações             Valor do PT em fontes próprias não                                                          Saldo no Espelho LOA deduzido das despesas que já consumiram essa
+                                                           Valor da despesa descoberta no PO                                                                                                                  ID-LOA
+                             verificação                                                               de crédito ou convênios                       financeiras das indiretas                                                                                           linha.
+
+                                           16.371.410,95                      177.712.605,05                                           -                                               -     002-FBC-PLOA23                                                                                                      -
+
+              Considerações:
+              O objeto de despesa em análise não está coberto pela Lei Orçamentária Anual, considerando os valores declarados pela unidade e verificados no Programa de Trabalho que a despesa será executada.
+              Desse modo, conforme as disposições legais, a despesa em análise somente poderá ser executada caso esteja totalmente coberta por créditos de remanejamento ou de suplementação orçamentária.
+
+Emitida em:   18/12/2023
+
+                                                                                                                                                       Página 1 de 1

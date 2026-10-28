@@ -1,0 +1,47 @@
+PROJETO DE LEI Nº       /2025
+EMENTA: Dispõe sobre a obrigatoriedade de divulgação, no sítio eletrônico oficial do Município de Niterói, do fornecimento mensal e do estoque de medicamentos disponíveis nas Unidades de Saúde do Município e dá outras providências
+
+Autor(es): VEREADOR DOUGLAS GOMES
+A Câmara Municipal de Niterói decreta e eu sanciono e promulgo a seguinte Lei:
+Art. 1º Esta Lei institui a obrigatoriedade de divulgação, no Portal da Transparência do Município de Niterói, das informações relativas ao fornecimento e aos estoques atualizados de medicamentos e insumos para atenção à saúde, disponíveis nas Unidades de Saúde do Município, incluindo Unidades Básicas de Saúde (UBS), Unidades de Urgência e Emergência, Policlínicas e demais estabelecimentos da rede municipal.
+Art. 2º A divulgação das informações sobre os estoques e fornecimentos de medicamentos e insumos nas Unidades de Saúde do Município deverá conter, no mínimo, os seguintes dados:
+I – Identificação do medicamento ou insumo:
+a) nome químico;
+b) nome genérico ou comercial;
+c) descrição detalhada.
+II – Quantitativo disponível:
+a) quantidade total em estoque no sistema municipal de saúde;
+b) quantidade específica disponível em cada unidade de saúde;
+c) níveis mínimo e crítico de estoque, conforme política de segurança sanitária.
+
+III – Informações operacionais:
+a) data de validade dos produtos;
+b) custo unitário e total;
+c) local de armazenamento.
+IV – Informações sobre as unidades de saúde:
+a) nome, endereço e horário de funcionamento das unidades onde os medicamentos estão disponíveis.
+V – Atualização dos dados:
+a) data e horário da última atualização realizada.
+§1º A publicação das informações deverá ser atualizada sempre que houver alteração nos estoques.
+§2º O Portal da Transparência deverá permitir a exportação dos dados em formatos eletrônicos abertos e não proprietários, tais como planilhas (CSV, XLSX) e documentos de texto (PDF, TXT), de modo a garantir acessibilidade, reutilização e análise pela população e pelos órgãos de controle.
+§3º Para os fins desta Lei, adotam-se as seguintes definições:
+I – Nível mínimo de estoque: quantidade mínima considerada segura para evitar ruptura de fornecimento, ensejando o início imediato dos procedimentos de reposição;
+II – Nível crítico de estoque: limite abaixo do qual o atendimento à população poderá ser comprometido, devendo ser evitado a todo custo.
+Art. 3º O Poder Executivo deverá publicar, mensalmente, relatório consolidado com os nomes e quantidades de medicamentos e insumos efetivamente fornecidos pelas Unidades de Saúde do Município de Niterói.
+
+Art. 4º As despesas decorrentes da execução desta Lei correrão por conta de dotações orçamentárias próprias, suplementadas se necessário.
+Art. 5º Esta Lei entra em vigor 60 (sessenta) dias após a data de sua publicação.
+				      Niterói, 26 de novembro de 2025
+
+				       DOUGLAS DE SOUZA GOMES
+					   VEREADOR DO PL
+
+Justificativa
+	O presente Projeto de Lei, de autoria do vereador Douglas Gomes, busca promover maior transparência e controle social sobre os medicamentos e insumos disponibilizados pela rede pública de saúde do Município de Niterói.
+	A medida tem inspiração direta na Lei Ordinária nº 14.120/2022, do município de São José do Rio Preto/SP, que criou norma semelhante de divulgação pública dos estoques de medicamentos nas farmácias municipais. Considerando as peculiaridades locais, este projeto amplia a aplicação para todas as Unidades de Saúde de Niterói, onde efetivamente estão concentrados os estoques de medicamentos da rede municipal.
+	Além disso, este projeto encontra respaldo jurídico sólido na jurisprudência do Supremo Tribunal Federal (STF), que decidiu, no julgamento do Tema 917 da Repercussão Geral (ARE 878.911 RG), que:
+“Não usurpa a competência privativa do chefe do Poder Executivo lei de iniciativa parlamentar que, embora crie obrigações para a Administração Pública, não trata da estrutura administrativa nem do regime jurídico de servidores.” (STF, ARE 878.911 RG, rel. min. Gilmar Mendes, julgamento em 29/09/2016)
+
+	Este entendimento reforça a constitucionalidade de iniciativas parlamentares que visam garantir transparência, acesso à informação e eficiência na gestão pública, sem interferir na autonomia organizacional do Poder Executivo.
+	Por fim, a iniciativa está em conformidade com os princípios da Constituição Federal (art. 196) e da Lei Federal nº 12.527/2011 (Lei de Acesso à Informação), reforçando a importância do controle social e da democratização do acesso à saúde.
+	Diante da relevância do tema, conto com o apoio dos nobres pares para aprovação deste projeto de grande interesse público.

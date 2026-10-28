@@ -1,0 +1,70 @@
+            ESTIMATIVA DE IMPACTO ORÇAMENTÁRIO-FINANCEIRO
+
+            Estimativa do impacto orçamentário-financeiro por exercício (R$)*
+                       2026                               2027                              2028
+                 7.771.660,08                        7.934.996,51                       8.267.809,96
+
+*A instituição do fundo, por si só, não ocasiona a criação/majoração de despesa orçamentária. Os valores apresentados
+acima, portanto, referem-se à estimativa dos recursos destinados ao fundo e, por conseguinte, correspondem ao valor
+máximo projetado para o impacto orçamentário-financeiro caso todos os recursos do fundo sejam efetivamente
+convertidos em despesa orçamentária.
+
+Metodologia e Memorial de Cálculo da Projeção dos Recursos do Fundo de Modernização da
+Administração Fazendária:
+
+1 - Recursos oriundos do aumento da arrecadação semestral da fonte de impostos próprios do Município
+(art. 4º, I):
+
+                                                        Aumento da arrecadação em           Recurso destinado
+                       Valor total arrecadado (R$)
+            Exerc.                                    relação ao exercício anterior (R$)      ao fundo (R$)
+                                    [A]
+                                                                 [B = A-At-1]                   [B*0,06]
+             2025 1.745.455.829,47
+             2026 1.849.015.120,20                   103.559.290,73                         6.213.557,44
+Projetado    2027 1.953.824.693,27                   104.809.573,07                         6.288.574,38
+             2028 2.062.652.728,69                   108.828.035,42                         6.529.682,12
+
+2 - Recursos oriundos do produto da arrecadação de receitas do patrimônio imobiliário municipal (art. 4°, II):
+
+                                     Valor total arrecadado (R$)      Recurso destinado ao fundo (R$)
+                            Exerc.
+                                                  [A]                            [A*0,06]
+                              2025 3.005.124,46
+                              2026 3.183.420,90                    191.005,25
+               Projetado      2027 3.363.869,93                    201.832,20
+                              2028 3.551.237,48                    213.074,25
+
+3 - Recursos oriundos do produto da arrecadação de multas e demais acréscimos incidentes sobre os tributos
+administrados pela Secretaria Municipal de Fazenda, excluídas as multas regulamentares (art. 4°, III):
+
+                     Rua Visconde de Sepetiba, 987 - 6º andar - Centro - Niterói - RJ CEP: 24.020-206
+
+                                    Valor total arrecadado (R$)    Recurso destinado ao fundo (R$)
+                           Exerc.
+                                                 [A]                           [A*0,1]
+                            2025 12.905.292,46
+                            2026 13.670.973,79                    1.367.097,38
+               Projetado    2027 14.445.899,26                    1.444.589,93
+                            2028 15.250.535,85                    1.525.053,59
+
+                          IPCA Projetado                  Aumento real do PIB Projetado
+                       2026          4,06%                          1,80%
+                       2027          3,80%                          1,80%
+                       2028          3,50%                          2,00%
+
+Notas:
+
+1 - A projeção da arrecadação de impostos próprios do Município foi elaborada a partir arrecadação apurada no
+exercício 2025 e das estimativas do aumento real do PIB e do IPCA indicados neste documento (Arrecadação =
+Arrecadação [t-1] * (1+IPCA) * (1+PIB));
+2 - A arrecadação de receitas do patrimônio imobiliário no ano de 2025 tem como fonte o Coordenação de
+Administração do Patrimônio Imobiliário - CAPI/SMF e refere-se às receitas de outorga de área pública e aluguéis de
+imóveis. A projeção para os demais exercícios foi realizada com base na arrecadação de 2025 e nas estimativas do
+aumento real do PIB e do IPCA indicados neste documento;
+3 - A projeção da arrecadação de multas e demais acréscimos incidentes sobre os tributos administrados foi elaborada
+a partir da arrecadação apurada no exercício 2025 e do aumento real do PIB e do IPCA indicados neste documento;
+4 - Valores projetados do IPCA e do aumento real do PIB têm como fonte o BACEN (Focus - Relatório de Mercado,
+publicado em 05/01/2026).
+
+                  Rua Visconde de Sepetiba, 987 - 6º andar - Centro - Niterói - RJ CEP: 24.020-206

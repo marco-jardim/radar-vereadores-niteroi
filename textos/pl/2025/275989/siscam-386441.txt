@@ -1,0 +1,16 @@
+Projeto de Lei Nº ____/2025
+
+Dispõe sobre a Fiscalização dos documentos dos veículos de transportes coletivos do Município de Niterói por meio eletrônico, (QR CODE).
+
+Art. 1º - Ficam as empresas de ônibus, Transportes Escolar e Táxis que tenham concessão de transporte de passageiros sediadas no Município de Niterói ou que prestam outros serviços de transporte Municipal, obrigadas a dispor por meio Eletrônico os Documentos inerentes a fiscalização dos veículos acima citados por meio de QR CODE nos para-brisas dos veículos licenciados pelo poder concedente municipal.
+§ 1º - Todos os documentos de identificação dos veículos e vistorias realizadas pelo poder concedente deverão constar no QR CODE para imediata fiscalização do poder concedente e qualquer usuário que porventura queiram saber idade do veículo, empresa permissionária e se quando foi realizada a última vistoria veicular.
+§ 2º- O poder concedente terá que disponibilizar meios eletrônicos para o armazenamento e codificação dos documentos dos veículos que compõe as frotas de ônibus, veículos escolares e demais veículos vistoriados pelo poder concedente.
+§ 3° - O sistema de armazenamento dos documentos comprobatórios da regularidade dos prestadores de serviços concedidos poderão ser acessados pelos usuários.
+
+Niterói, 19 de fevereiro de 2025.
+
+Leandro portugal
+
+JUSTIFICATIVA:
+
+O presente Projeto de Lei tem como objetivo criar mecanismos de fiscalização pelos próprios usuários, dando maior segurança para quem usa o transporte, sobretudo quanto as condições dos veículos que prestam serviço de transportes coletivo para os munícipes, dando maior transparência ao poder concedente quanto a qualidade dos veículos ofertados para prestação de serviços concedidos.

@@ -1,0 +1,109 @@
+                                                 QUADRO III.a - Gabarito
+                             Embasamento        Lâmina                                                                         Embasamento             Lâmina
+               Zona de Uso                                                                 Zona de Uso
+                              (Pavimentos)   (Pavimentos)                                                                       (Pavimentos)        (Pavimentos)
+
+                 ZCM +21           3             21                                              ZRU                                 2                     -
+
+                 ZCM +17           3             17                                            ZRA +6                                2                     6
+
+                                                             PRESERVAÇÃO
+                 ZCM +14           3             14                                           ZRA +15                                2                     15
+
+                 ZCM +8            3              8                                            ZDS +2                                 -                    2
+
+                 ZEU +15           2             15                                            ZCA +2                                 -                    2
+ESTRUTURAÇÃO
+
+                 ZEU +11           2             11                                              ZPA                                N.A                 N.A
+
+                 ZEU +9            2              9
+
+                 ZEU +6            2              6
+
+                  ZC +6            2              6
+
+                  ZC +7            2              7
+                                                                                           Zona de Uso                                    Gabarito total
+                 ZC +10            2             10
+
+                 ZC +11            2             11
+
+                                                                                           ZEPAC APAU                                           2
+
+                 ZUM +1            1              1                                        ZEPAC APAC                                           3
+                                                                                           Ponta d'Areia 1
+                                                                                           ZEPAC APAC                                           2
+                 ZUM +2            2              2
+                                                                                           Ponta d'Areia 2
+
+                 ZUM +3            2              3                                        ZEPAC APAP                            Análise especial (Lei 2657/09)
+                                                                                         Caminho Niermayer
+
+                 ZUM +4            2              4                                        ZEPAC APAC                                          10
+                                                                                         Marechal Deodoro 1
+
+                 ZUM +5            2              5                                        ZEPAC APAC                                          10
+                                                                                         Marechal Deodoro 2
+                                                                                           ZEPAC APAC                                          10
+                 ZUM +6            2              6
+                                                                                           Jardim São João
+                                                                                           ZEPAC APAC                                          10
+                 ZUM +8            2              8
+                                                                                           Amaral Peixoto
+
+                ZUM +10            2             10                                        ZEPAC APAC                                          16
+                                                                                                Centro
+
+                ZUM +11            2             11                                        ZEPAC APAP                                           6
+                                                             PRESERVAÇÃO
+
+                                                                                            UFF Gragoatá
+
+                ZUM +18            2             18                                        ZEPAC APAP                                           6
+                                                                                         UFF Praia Vermelha
+
+                 ZRM +2            2              2                                        ZEPAC APAC                                           9
+                                                                                  Boa Viagem 1 (R. Cel. Tamarindo)
+                                                                                           ZEPAC APAC                                           3
+                 ZRM +3            2              3
+                                                                                     Boa Viagem 2 (Demais vias)
+                                                                                           ZEPAC APAC                                           4
+                 ZRM +4            2              4
+                                                                                            São Lourenço
+QUALIFICAÇÃO
+
+                 ZRM +5            2              5                                        ZEPAC APAC                                          20
+                                                                                               Barreto
+                                                                                           ZEPAC APAC
+                 ZRM+6             2              6                        Santa Thereza 1 (R. Mariz e Barros, R. Ator Paulo                    5
+                                                                            Gustavo, entre R. Mariz e Barros e Al. Carolina)
+
+                 ZRM+7             2              7                                        ZEPAC APAC                                           2
+                                                                                    Santa Thereza 2 (Demais vias)
+                                                                                           ZEPAC APAP                                           5
+                 ZRM +9            2              9
+                                                                                          Orla São Francisco
+
+                 ZDE +4            2              4                                        ZEPAC APAP                                           2
+                                                                                         Descida da Pestalozzi
+
+                 ZDE +12           2             12                                        ZEPAC APAP                                           2
+                                                                                           Rua das Ávores
+                                                                                           ZEPAC APAC                                           0
+                 ZCL +4            1              4
+                                                                                            Duna Grande
+
+                 ZCL +6            1              6
+
+                ZC ZEIS +4         2              4
+
+                ZC ZEIS +6         2              6
+
+                ZC ZEIS +7         2              7
+
+                ZC ZEIS +8         2              8
+
+               ZC ZEIS +10         2             10
+
+                 ZEIS + 4          1              4

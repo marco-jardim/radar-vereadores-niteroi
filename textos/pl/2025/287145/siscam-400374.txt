@@ -1,0 +1,57 @@
+| Câmara Municipal de Niterói Gabinete Vereador Professor Tulio Partido Socialismo e Liberdade (PSOL)
+
+PROJETO DE LEI Nº        /2025
+
+Institui o Programa IPTU Verde-Permeabilidade e Captação de Águas Pluviais, que concede redução ou isenção parcial do IPTU a imóveis que mantenham percentual significativo de área permeável no lote e/ou implantem sistemas de captação e reuso de águas da chuva, e dá outras providências.
+
+Art. 1º Fica instituído, no âmbito do Município de Niterói, o Programa IPTU Verde-Permeabilidade e Captação de Águas Pluviais, com a finalidade de estimular práticas de drenagem sustentável, reduzir a impermeabilização do solo urbano e mitigar alagamentos, ilhas de calor e sobrecarga do sistema de macrodrenagem.
+Art. 2º Para os fins desta Lei, consideram-se:
+I – Área permeável: porção do lote que permite infiltração de água no solo natural ou em sistemas de pavimento permeável certificados;
+II – Coeficiente de permeabilidade do lote (CPL): razão entre a área permeável e a área total do lote, expressa em porcentagem;
+III – Sistema de captação e reuso de águas pluviais (SCAP): conjunto composto por calhas, filtros, reservatórios (cisternas), dispositivos de extravasamento e rede dedicada para usos não potáveis (irrigação, lavagem de pisos, descargas sanitárias, entre outros);
+IV – Pavimento permeável: solução construtiva que atenda a norma técnica aplicável e permita infiltração (bloquetes drenantes, grelhas gramadas, pisos intertravados com junta drenante etc.), vedado o uso de “asfalto poroso” como área permeável de jardim;
+V – Encosta: porção do lote com declividade natural superior a 30% (1:3) ou classificada pelo órgão municipal como área de instabilidade geotécnica;
+VI – Afloramento rochoso: área do lote onde haja exposição de rocha (maciço ou lajeado) sem horizonte de solo capaz de permitir infiltração efetiva.
+Art. 3º Para imóveis residenciais unifamiliares ou bifamiliares implantados em terrenos com até 2 (dois) pavimentos edificados (ZRU ou ZCA), o Poder Executivo poderá estabelecer, em regulamento, faixas específicas de incentivo considerando a vocação desses lotes para soluções baseadas na natureza (jardins, canteiros infiltrantes e pavimentos permeáveis), vedado em qualquer hipótese fixar percentuais inferiores às taxas mínimas de permeabilidade do QUADRO III da LUOS - Lei nº 3905/2024 aplicáveis à respectiva Zona de Uso.
+§ 1º Para fins de apuração do CPL e enquadramento nas faixas de redução, não serão computadas como área permeável elegível:
+I – as porções em encosta;
+II – as áreas de afloramento rochoso;
+III – taludes revestidos apenas por gramínea sem sistema de infiltração (ex.: drenos, biorretenção, terraços ou valas de infiltração).
+§ 2º Excepcionalmente, poderão ser computados os patamares de encosta que sejam objeto de intervenções de estabilização acompanhadas de soluções de infiltração (jardins de chuva, bacias/biorretenções, valas e trincheiras de infiltração) com solo adequado e camada drenante, desde que apresentados ART/RRT e laudo geotécnico atestando estabilidade e funcionalidade hidráulica.
+Art. 4º Será concedida isenção parcial de IPTU de até 100% por 2 (dois) exercícios para imóveis que realizarem retrofit verde, desde que com aumento do CPL em ≥ 20 (vinte) pontos percentuais e implantação de SCAP, quando comprovado que tais obras substituem áreas impermeáveis por soluções permeáveis e vegetadas.
+Parágrafo único. Encerrado o prazo da isenção parcial, aplica-se a regra de redução recorrente prevista no art. 3º.
+Art. 5º A concessão do benefício dependerá de requerimento anual do contribuinte, instruído com:
+I – planta de Implantação/Quadro de Áreas indicando áreas permeáveis e impermeáveis;
+II – memorial descritivo e fotos georreferenciadas;
+III – comprovante de instalação e dimensionamento do SCAP (quando for o caso), com ART/RRT de responsável técnico;
+IV – termo de compromisso de manutenção;
+V – quando houver intervenção em encosta, laudo geotécnico firmado por profissional habilitado atestando estabilidade e capacidade de infiltração dos patamares e dispositivos executados.
+§ 1º O Município poderá realizar vistoria a qualquer tempo.
+§ 2º A falsidade de informação, a supressão de áreas permeáveis ou a desativação do SCAP implicará perda do benefício, lançamento complementar do tributo e multa regulamentar, sem prejuízo de outras sanções.
+Art. 6º Os benefícios desta Lei não são cumuláveis com outros incentivos tributários incidentes sobre o IPTU com a mesma finalidade, devendo o contribuinte optar pelo mais vantajoso.
+Art. 7º A adesão ao Programa não dispensa o cumprimento da legislação urbanística e ambiental vigente (Plano Diretor, LUOS Lei 3905/2024, Código Ambiental, Código de Obras e normas de drenagem); as taxas mínimas de permeabilidade da LUOS constituem piso normativo, cabendo ao Programa estimular percentuais superiores por meio de benefícios graduais.
+Art. 8º O Executivo poderá priorizar, em regulamento, zonas com maior pressão de adensamento e áreas críticas de alagamento, como critério para ampliar limites de redução dentro do teto previsto e para definir metas de implantação anual.
+Art. 9º Como diretriz de transparência, o Poder Executivo manterá cadastro público dos imóveis beneficiados, com dados agregados de área permeável recuperada, volume de reservação instalado e estimativa de redução de pico de escoamento.
+Art. 10. A concessão dos benefícios observará o disposto na Lei de Responsabilidade Fiscal, devendo o impacto orçamentário-financeiro e as medidas de compensação constarem da LOA e dos anexos da LDO.
+Art. 11. O Poder Executivo regulamentará esta Lei, no que couber, definindo procedimentos, modelos, prazos e critérios técnicos complementares.
+Art. 12. Esta Lei entra em vigor na data de sua publicação, produzindo efeitos a partir do exercício fiscal seguinte.
+
+JUSTIFICATIVA
+
+A presente proposição utiliza o IPTU como instrumento extrafiscal para enfrentar um problema urbano crescente: a redução das áreas permeáveis e o consequente agravamento de alagamentos, ilhas de calor, assoreamento e sobrecarga dos sistemas de drenagem. Tais efeitos tendem a se intensificar com o adensamento construtivo decorrente da Lei de Uso e Ocupação do Solo – LUOS nº 3905/2024, que ampliou potencialidades edificantes em diversas macrozonas.
+
+A Região Oceânica é exemplo emblemático: o processo de verticalização e a substituição de quintais vegetados por lajes, estacionamentos e pisos contínuos elevam a impermeabilização do solo, aceleram o escoamento superficial e aumentam custos públicos com canalizações e obras de macrodrenagem, que muitas vezes não acompanham o ritmo do adensamento. Ao mesmo tempo, perde-se conforto térmico, biodiversidade urbana e qualidade paisagística.
+
+Há também um desafio cultural: consolidou-se a percepção equivocada de que “terra é sujeira” e que o lote “bem cuidado” é aquele completamente cimentado. A política proposta enfrenta esse imaginário ao valorizar economicamente quem preserva jardins, áreas gramadas, canteiros infiltrantes e pavimentos permeáveis que devolvem água ao solo. O incentivo reconhece que soluções baseadas na natureza e drenagem urbana sustentável são mais baratas e resilientes a longo prazo do que expandir, indefinidamente, sistemas de galerias.
+
+Conforme o QUADRO III da LUOS nº 3905/2024, as taxas mínimas de permeabilidade são definidas por Zona de Uso e macroárea (Qualificação x demais) — por exemplo, ZC: 30%/20%, ZUM: 35%/20%, ZRA: 40%/40% —, voltadas às edificações com mais de 2 pavimentos. Assim, o Programa propõe incentivar o excedente aos pisos legais já exigidos, às faixas específicas para unifamiliares e bifamiliares até 2 pavimentos, constantes na Lei como N.A. sem identificação específica supondo tratar-se de ‘Não Aplicável’, dada sua maior aptidão para soluções de infiltração no lote, sem jamais reduzir os percentuais mínimos urbanísticos. Tal desenho reforça o objetivo de contrabalançar o adensamento e a verticalização, especialmente na Região Oceânica, onde a substituição de quintais por lajes e estacionamentos intensifica a impermeabilização do solo e os custos públicos com drenagem — além de enfrentar a percepção cultural de que “terreiro/jardim é sujeira”, valorizando economicamente práticas que mantêm o solo vivo e permeável.
+
+O Programa IPTU Verde-Permeabilidade e Captação de Águas Pluviais articula dois eixos: (i) manutenção/recuperação de áreas permeáveis no lote, com reduções escalonadas conforme o coeficiente de permeabilidade; e (ii) captação e reuso de águas de chuva por meio de cisternas dimensionadas e rede dedicada a usos não potáveis. O desenho combina simplicidade operacional (requerimento padronizado, comprovação por planta e laudo técnico, vistoria) e efetividade ambiental (metas claras de área permeável e volume de reservação). Prevê ainda isenção parcial temporária para retrofits verdes, ou seja, a requalificação ao existente com troca de áreas impermeáveis por soluções que aumentem a infiltração e/ou captar e reutilizar água de chuva, incentivando que imóveis já consolidados substituam pisos impermeáveis por soluções drenantes e vegetadas, com impacto imediato na redução de picos de cheias.
+
+Para evitar distorções e “greenwashing” de áreas inservíveis à infiltração, o texto exclui encostas e afloramentos rochosos do cômputo do benefício, admitindo apenas as intervenções tecnicamente controladas (terraços com biorretenção, valas/trincheiras de infiltração etc.) quando acompanhadas de laudo geotécnico e responsável técnico. A medida garante que o incentivo recaia sobre áreas efetivamente funcionais para a drenagem sustentável, coerente com o objetivo público de redução de escoamento superficial e picos de cheias.
+
+A proposta se harmoniza com o ordenamento vigente (Plano Diretor, LUOS 3905/2024, Código de Obras e normas ambientais) e guarda responsabilidade fiscal, ao condicionar a execução às previsões na LDO e LOA. Trata-se de política focalizada, voluntária e mensurável, que reduz alagamentos e custos de manutenção da drenagem, melhora o microclima urbano, estimula reuso de água, valoriza paisagem e biodiversidade e reorienta práticas privadas por meio de incentivo econômico, e não apenas comando e controle. Diante do exposto, solicita-se o apoio para aprovação da presente iniciativa.
+
+Plenário Brígido Tinoco, 08 de outubro de 2025.
+
+Professor Tulio

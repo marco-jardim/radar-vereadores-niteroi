@@ -1,0 +1,103 @@
+                              Gabinete Vereador Michel Saad Neto
+
+   ESTIMATIVA DE IMPACTO ORÇAMENTÁRIO E FINANCEIRO – ART. 113 DO ADCT
+
+1. Mapeamento das Doenças e Estimativa de População Afetada
+
+Com base na população de 481.749 habitantes (Censo IBGE 2022) e em taxas médias de
+prevalência na população brasileira/mundial relatadas na literatura médica e
+epidemiológica, estimamos o número absoluto de potenciais beneficiários em Niterói.
+
+Nota Metodológica Importante: Várias dessas doenças acometem os mesmos
+indivíduos (comorbidades) e muitas delas já se concentram na população maior de 60
+anos, aposentados ou pensionistas — grupos que já possuem direito à isenção no texto
+atual da lei. Portanto, os números abaixo representam o teto máximo epidemiológico
+isolado.
+
+                                                            Estimativa de Casos
+  Doença Contemplada       Taxa    de      Prevalência
+                                                            em Niterói (Teto
+  no PL                    Estimada (Pop. Geral)
+                                                            Absoluto)
+
+                           ~ 0,40% (Dados Ministério da
+  HIV / AIDS                                                ~ 1.927 pessoas
+                           Saúde)
+
+  Neoplasia    Maligna     ~        0,50%        (Casos
+                                                            ~ 2.408 pessoas
+  (Câncer)                 ativos/tratamento - INCA)
+
+                           ~ 0,15% (Geral) a 1,0% (em
+  Doença de Parkinson                                       ~ 722 pessoas
+                           >60 anos)
+
+                           ~ 1,00% (Considerando casos
+  Cardiopatia Grave                                         ~ 4.817 pessoas
+                           severos)
+
+                           ~      0,15%         (Estágios
+  Nefropatia Grave                                          ~ 722 pessoas
+                           terminais/diálise)
+
+                           ~ 0,015% (15 casos por 100
+  Esclerose Múltipla                                        ~ 72 pessoas
+                           mil hab.)
+
+                                Gabinete Vereador Michel Saad Neto
+
+                                                             Estimativa de Casos
+  Doença Contemplada         Taxa    de      Prevalência
+                                                             em Niterói (Teto
+  no PL                      Estimada (Pop. Geral)
+                                                             Absoluto)
+
+  Espondiloartrose
+                             ~ 0,02%                         ~ 96 pessoas
+  Anquilosante
+
+  Paralisia Irreversível /   ~        0,50%         (Graus
+                                                             ~ 2.408 pessoas
+  Cegueira                   graves/incapacitantes)
+
+Estimativa do Público-Alvo Líquido Real:
+
+Epidemiologicamente, a soma bruta daria cerca de 13.000 pessoas. No entanto, para fins
+tributários e orçamentários, aplica-se um redutor de sobreposição e elegibilidade
+imobiliária de aproximadamente 80% a 85%.
+
+Isso ocorre porque:
+
+   1. Grande parte dos acometidos (ex: Parkinson, Cardiopatias) possui mais de 60
+      anos ou é aposentada/pensionista por invalidez, já estando isenta pela regra
+      atual.
+
+   2. Nem todos os portadores são proprietários ou inquilinos responsáveis pelo
+      pagamento do IPTU de um imóvel residencial único.
+
+   3. A concessão exige laudo médico oficial e requerimento administrativo.
+
+   •   Público-alvo incremental estimado (novos isentos reais):        1.500 a 2.000
+       contribuintes.
+
+2. Estimativa de Impacto Financeiro (Renúncia de Receita)
+
+Como o valor exato do IPTU médio de Niterói varia por bairro (áreas nobres como Icaraí
+têm IPTU consideravelmente maior que regiões periféricas), calculamos o impacto
+projetado utilizando cenários de IPTU Médio Residencial Anual.
+
+Cenários de Renúncia de Receita Anual:
+
+   •   Cenário Otimista (Baixa Adesão / Imóveis de menor valor):
+
+                           Gabinete Vereador Michel Saad Neto
+
+       o   Impacto: R$ 1.800.000,00 / ano
+
+•   Cenário Realista (Média ponderada do município):
+
+       o   Impacto: R$ 3.240.000,00 / ano
+
+•   Cenário Conservador (Alta Adesão / Imóveis de maior valor):
+
+       o   Impacto: R$ 4.840.000,00 / ano

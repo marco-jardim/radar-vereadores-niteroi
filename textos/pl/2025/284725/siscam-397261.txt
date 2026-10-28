@@ -1,0 +1,167 @@
+         Gabinete do Vereador Rodrigo Farah
+Projeto de Lei n.º
+
+                                                          Ementa:         Dispõe      sobre       a
+                                                  disponibilização, em tempo real, da
+                                                  localização dos ônibus, dos horários de
+                                                  linhas e do tempo estimado de chegada nos
+                                                  pontos de parada e em meios digitais, no
+                                                  âmbito do Município de Niterói.
+
+       Art. 1º As concessionárias responsáveis pela operação do transporte coletivo
+por ônibus no Município de Niterói deverão dispor de equipamento de rastreamento
+por GPS, ou tecnologia equivalente, em todos os veículos, integrado a sistema de
+monitoramento do Poder Concedente.
+       Art. 2º O Poder Concedente assegurará aos usuários a disponibilização, em
+tempo real, das seguintes informações:
+       I – localização exata dos veículos em circulação;
+       II – horários programados e itinerários das linhas;
+       III – tempo estimado de chegada dos veículos em cada ponto de parada.
+
+           Gabinete do Vereador Rodrigo Farah
+       Art. 3º A disponibilização das informações de que trata o art. 2º será feita por
+meio de:
+       I – painéis eletrônicos, totens ou meios similares instalados nos pontos de
+parada;
+       II – códigos de resposta rápida (QR Codes) afixados nos pontos de parada,
+direcionando a página ou aplicativo oficial;
+       III – aplicativos móveis de acesso gratuito;
+       IV – sítio eletrônico oficial da Administração Pública;
+       V – outros meios tecnológicos equivalentes.
+       Parágrafo único. As informações indicarão, sempre que possível, o tempo
+estimado de chegada de cada linha em operação no ponto.
+       Art. 4º A implementação dar-se-á de forma gradativa, observadas as condições
+técnicas e orçamentárias da Administração Pública, priorizando-se os pontos de maior
+demanda de usuários.
+       Art. 5º Os processos licitatórios futuros que tenham por objeto a concessão,
+permissão, contratação ou renovação do serviço de transporte coletivo por ônibus
+deverão conter cláusulas específicas que:
+       I – exijam a instalação e manutenção de GPS ou tecnologia equivalente em
+todos os veículos;
+       II – determinem a integração do sistema de rastreamento ao centro de controle
+do Poder Concedente;
+       III – obriguem a disponibilização pública, em tempo real, das informações
+descritas no art. 2º, pelos meios do art. 3º;
+       IV – atribuam responsabilidades de manutenção, atualização e continuidade
+do serviço de informação ao usuário.
+       Parágrafo único. Nos contratos em vigor, o Poder Concedente promoverá a
+adequação das obrigações previstas nesta Lei quando da revisão, prorrogação,
+
+         Gabinete do Vereador Rodrigo Farah
+renovação, reequilíbrio ou aditamento contratual, observado o equilíbrio econômico-
+financeiro e a legislação aplicável.
+       Art. 6º Esta Lei poderá ser regulamentada para garantir sua fiel execução.
+       Art. 7º - Esta lei entra em vigor na data de sua publicação, revogadas as
+disposições em contrário.
+
+Plenário Brígido Tinoco, 6 de junho de 2024.
+
+           Rodrigo Flach Farah
+
+                                         Justificativa
+
+       O presente Projeto de Lei tem como objetivo modernizar e tornar mais
+eficiente o transporte coletivo urbano em Niterói, garantindo ao cidadão o acesso,
+em tempo real, à localização exata dos ônibus em circulação, aos horários
+programados das linhas e ao tempo estimado de chegada dos veículos em cada ponto
+de parada.
+       A proposta tem amparo no artigo 30, inciso V, da Constituição Federal, que
+atribui ao Município competência para organizar e prestar, diretamente ou sob
+regime de concessão ou permissão, os serviços públicos de interesse local, entre os
+quais se insere o transporte coletivo. O direito ao transporte público eficiente está
+ainda reforçado pela Política Nacional de Mobilidade Urbana (Lei Federal nº
+12.587/2012), que estabelece como diretrizes a acessibilidade universal, a
+
+         Gabinete do Vereador Rodrigo Farah
+transparência das informações e a integração entre os modos e serviços de
+transporte.
+       A exigência de instalação de GPS em todos os veículos da frota não se constitui
+em inovação onerosa, pois a grande maioria das concessionárias já dispõe desse
+recurso para fins de controle interno. O que este Projeto propõe é a democratização
+da informação, permitindo que os dados de rastreamento sejam disponibilizados
+também aos usuários, em benefício da coletividade.
+       A disponibilização dos dados poderá ocorrer por painéis eletrônicos, totens
+ou QR Codes instalados nos pontos de ônibus, aplicativos móveis de acesso gratuito
+e sítio eletrônico oficial, sem restringir o uso de tecnologias futuras que venham a ser
+incorporadas. O art. 4º do Projeto prevê a implementação gradativa, respeitando a
+realidade orçamentária e técnica do Município e priorizando os pontos de maior
+fluxo de passageiros, de modo a assegurar efetividade sem comprometer o equilíbrio
+financeiro da Administração.
+       Adicionalmente, o art. 5º estabelece que os próximos processos licitatórios de
+concessão ou renovação do transporte coletivo deverão conter cláusulas específicas
+sobre a disponibilização das informações, garantindo a perpetuidade da política
+pública e a adequação contratual. A previsão de ajuste em contratos vigentes, quando
+de suas revisões ou aditamentos, reforça a segurança jurídica e assegura que o
+sistema seja incorporado de maneira contínua e sustentável.
+       Experiências exitosas em capitais como São Paulo (SPTrans), Curitiba (Urbs)
+e Belo Horizonte (BHTrans) demonstram que a implantação de sistemas de
+monitoramento e divulgação em tempo real gera:
+   • redução do tempo ocioso de espera;
+   • maior sensação de segurança, sobretudo em períodos noturnos;
+   • aumento da confiabilidade e da adesão ao transporte coletivo;
+   • facilidade de integração com outros modais, ampliando a mobilidade urbana.
+
+         Gabinete do Vereador Rodrigo Farah
+       Portanto, a medida ora proposta está em consonância com os princípios da
+eficiência, publicidade e transparência da Administração Pública (art. 37 da
+Constituição Federal), representando um avanço significativo para a mobilidade
+urbana em Niterói e para a qualidade de vida da população que depende do
+transporte coletivo.
+
+                       Estimativa de Impacto Orçamentário-Financeiro
+                                (para atender ao art. 113 do ADCT)
+       1. Natureza da despesa
+       A proposição não cria despesa obrigatória de caráter imediato. A
+implementação das medidas dependerá de regulamentação do Poder Executivo,
+bem como de previsão em contratos de concessão e em futuras licitações.
+       As despesas decorrentes da execução da lei enquadram-se como:
+   •   Investimento em tecnologia da informação e comunicação (TIC):
+       instalação e manutenção de painéis eletrônicos e totens informativos;
+   •   Desenvolvimento e manutenção de software: integração de sistemas de GPS
+       e aplicativos móveis;
+   •   Comunicação e suporte técnico: atendimento ao usuário e atualizações em
+       plataformas digitais.
+       2. Premissas para a estimativa
+   •   O Município de Niterói conta hoje com cerca de X linhas de ônibus e
+       aproximadamente Y pontos de parada (dados a serem obtidos junto à
+       Secretaria Municipal de Urbanismo e Mobilidade / Niterói Transporte e
+       Trânsito).
+
+         Gabinete do Vereador Rodrigo Farah
+   •   Estimativa inicial: implantação gradativa em pontos de maior demanda,
+       equivalente a cerca de 10% do total de pontos por ano, conforme previsto no
+       art. 4º do PL.
+   •   A frota já dispõe de GPS em larga escala, reduzindo custos de implantação.
+   •   Parte do investimento poderá ser realizada por parcerias público-privadas ou
+       patrocínio de empresas de tecnologia e publicidade, mitigando impacto
+       sobre o erário.
+       3. Estimativa preliminar de custos
+   •   Painel eletrônico em ponto de ônibus: R$ 18.000,00 (aquisição + instalação)
+   •   Totem interativo: R$ 12.000,00 (aquisição + instalação)
+   •   QR Code / adesivo com link para aplicativo: custo marginal irrisório (R$
+       5,00/unidade)
+   •   Aplicativo e integração de dados: R$ 400.000,00 (desenvolvimento inicial)
+       + R$ 150.000,00/ano (manutenção e hospedagem)
+       (valores de mercado aproximados, sujeitos à confirmação pela área técnica
+do Executivo).
+       4. Impacto orçamentário
+       Considerando a implantação inicial em 100 pontos de ônibus prioritários:
+   •   Painéis eletrônicos: 50 x R$ 18.000,00 = R$ 900.000,00
+   •   Totens interativos: 50 x R$ 12.000,00 = R$ 600.000,00
+   •   Adesivos QR Code: 100 x R$ 5,00 = R$ 500,00
+   •   Desenvolvimento de aplicativo e integração: R$ 400.000,00
+   •   Manutenção anual: R$ 150.000,00
+       Custo          estimado          no        1º        ano:         R$         1.900.500,00
+Custo estimado a partir do 2º ano (apenas manutenção e expansão gradativa):
+R$ 150.000,00 + investimentos adicionais conforme orçamento anual.
+       5. Conclusão
+
+         Gabinete do Vereador Rodrigo Farah
+       O impacto orçamentário-financeiro do Projeto de Lei é limitado e gradual,
+podendo ser absorvido nas dotações destinadas à mobilidade urbana, transporte e
+tecnologia.
+A implementação será condicionada à disponibilidade orçamentária, não gerando
+despesa obrigatória imediata.
+       Cumpre-se, assim, o disposto no art. 113 do ADCT, cabendo ao Poder
+Executivo, quando da regulamentação e execução, ajustar os valores definitivos no
+âmbito da Lei Orçamentária Anual e do Plano Plurianual.

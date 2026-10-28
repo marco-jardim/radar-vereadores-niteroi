@@ -1,0 +1,111 @@
+                                      701000,000000                                                                         702000,000000                    703000,000000           704000,000000   705000,000000
+
+                                                                                                                                                                                                                                   LEI URBANÍSTICA
+                                                                                                                                                                                                                                   MAPA 1C - ZONEAMENTO
+
+                                                                                                                                                                                                                                                                 SÃO GONÇALO
+
+                                                                                                                                                                                                                                                1A     1B
+7469600,000000
+
+                                                                                                                                                                                                                                                                 1C
+                                                                                                                                                                                                                                                1D     1E        1F          1G
+
+                                                                                                                                                                                                                                                1H    1I      1J       1K      MARICÁ
+
+                                                                                                                                                                                                                                                            1L
+                               ZUM+11
+
+                 ZRU
+
+                                                                                                                                                                                                                                   LEGENDA
+                                                             Av
+                                                                e   nid
+                                                                                                                                                                                                                                   Nome da zona
+7468800,000000
+
+                                                                          a
+                                                                              Ab
+                                                        ZRU                     dia
+                                                                                      sJ
+                                                                                           os
+                                                                                                éd
+                                                                                                                                                                                                                                          ZCM
+                                                                                                  os
+                                                                              ZDS+4
+                                                                                                       Sa
+                                                                                                            n to                                                                                                                                                      ZEPAC - APAP
+                                                                                                                s
+                                                                                                                    ZDS+4
+                                                                                                                                                                                                                                          ZEU                         ZEPAC
+                                                                                                  ZRU                                  ZRU
+                                                                                                                                                                                                                                          ZC                          ZRU
+                 ZRU
+                                                                                                                                                                                                                                          ZC-ZEIS                     ZRM
+                                                                                                                                                                                                                                          ZDE                         ZRA
+                                                                                                                                                     ZEU+6
+                 ZRU                                                                                                                                                                                                                      ZCL                         AEIT
+                                                                                                                                       ZUM+3
+                                                     ZDS+4                                                                                                                                                                                ZUM < 6*                    Parque
+                                                                                                                                                                                                                                                                      Parque
+7468000,000000
+
+                                                                                                               ZRU                                                                                                                        ZUM >= 6*
+                                                                                                                                                                                                                                          ZC-ZEIS                     ZPA
+                                                                                                              ZRU                              ZRU
+                                                                                                                                                                                                                                          ZEIS                        ZCA
+
+                                                                                                                                                                ZRM+3
+
+                                                                                                                    ZC+7
+
+                                                                                                                                               ZRU
+
+                                                                                 ZRU
+7467200,000000
+
+                                                                                                 ZC+7
+                                                                                                                                                                                                                     ZUM+1
+
+                                                                                                       ZRU
+
+                                                                                                                                                                                                                             ZRU
+
+                                      ZRU           ZUM+6
+                                                                                                                                                                                                                                                       1
+7466400,000000
+
+                                                                                                                                                                             ZDS+2                                                                                                Km
+                                             i ro
+                                                e
+
+                               ZRU
+                                             nt
+
+                                                                                                                                                                                                                                   Referências Cartográficas
+                                          Mo
+
+                                                                                                                                                                                                                                                                               ¯
+                                        o
+                                       an
+
+                         ZRU                                                                                                       ZRM+3
+                                      et
+
+                                                       ZEPAC                                                                                                                                                                       Sistema de Coordenadas: UTM Fuso 23K
+                                     Ca
+
+                 ZRU
+                                                                                                                                                                                                                                   Sistema Geodésico: SIRGAS 2000
+                                 da
+
+                                                                                                                      ZRM+3
+                                ra
+
+                                                                                                                                                                                                                                   Datum Vertical: Marégrafo de Imbituba
+                                  t
+
+                 ZRU                            ZRU
+
+                 ZEPAC                                                ZRM+3
+                                                                                                                                                                                                                             ZRU   Escala: 1:15.000            Novembro 2021

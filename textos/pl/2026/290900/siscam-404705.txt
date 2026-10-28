@@ -1,0 +1,122 @@
+PROJETO DE LEI Nº              /2026
+
+Dispõe sobre a garantia da liberdade de manifestação nos meios de comunicação digitais oficiais da Administração Pública do Município de Niterói, estabelece critérios de moderação de conteúdo e fixa limite para despesas com comunicação institucional digital, e dá outras providências.
+
+Art. 1º Esta Lei estabelece normas para assegurar a liberdade de manifestação do pensamento e vedar práticas de censura nos meios de comunicação digitais oficiais da Administração Pública Direta e Indireta do Município de Niterói.
+
+§ 1º Consideram-se meios de comunicação digitais oficiais:
+
+I – perfis institucionais mantidos em redes sociais;
+II – sítios eletrônicos oficiais;
+III – canais de transmissão digital, inclusive transmissões ao vivo;
+IV – quaisquer plataformas digitais utilizadas para comunicação institucional.
+
+§ 2º Os canais referidos neste artigo constituem extensão dos deveres de publicidade, transparência e participação democrática previstos no art. 37 da Constituição Federal.
+
+Art. 2° Para os fins desta Lei, considera-se censura:
+
+I – o bloqueio de usuários motivado exclusivamente por manifestação crítica ou opinião divergente;
+II – a exclusão de comentários ou interações que não configurem ilícito ou violação objetiva das regras de uso;
+III – a restrição arbitrária de palavras ou expressões sem fundamento legal;
+IV – a limitação da participação de agentes públicos ou parlamentares no exercício regular de suas funções fiscalizatórias.
+
+Art. 3° A atuação da Administração Pública nos meios digitais observará os seguintes princípios:
+
+I – legalidade;
+II – impessoalidade;
+III – moralidade administrativa;
+IV – publicidade e transparência;
+V – participação democrática;
+VI – liberdade de expressão;
+VII – motivação dos atos administrativos.
+
+Art. 4º Poderão ser removidos comentários, bloqueadas interações ou restringida a participação exclusivamente quando o conteúdo:
+
+I – configurar crime previsto na legislação penal;
+II – contiver ameaça ou incitação à violência;
+III – divulgar dados pessoais em desacordo com a Lei Federal nº 13.709/2018 (LGPD);
+IV – envolver pornografia ou exploração sexual;
+V – promover spam automatizado ou fraude eletrônica (phishing, malware);
+VI– divulgar comprovadamente informação falsa com potencial de causar dano coletivo relevante.
+
+§ 1º A remoção deverá ser precedida de análise individualizada e fundamentada.
+
+§ 2º É vedada a exclusão de conteúdo meramente crítico à Administração Pública.
+
+§ 3º Sempre que possível, deverá ser preservado o registro do conteúdo removido para fins de controle e fiscalização.
+
+Art. 5º A Administração deverá publicar, em local visível em seus canais digitais, política de uso clara, objetiva e acessível, contendo:
+
+I – critérios de moderação;
+II – hipóteses de remoção de conteúdo;
+III – forma de registro das exclusões;
+IV – canal para solicitação de revisão administrativa.
+
+Art. 6º A exclusão de conteúdo ou bloqueio de usuário deverá:
+
+I – ser formalmente registrada;
+II – conter justificativa objetiva;
+III – permanecer disponível para consulta nos termos da Lei Federal nº 12.527/2011 (Lei de Acesso à Informação), resguardados dados pessoais protegidos por lei.
+
+Art. 7º É assegurada a livre manifestação de vereadores e demais agentes públicos nos canais digitais oficiais quando no exercício regular de suas atribuições institucionais.
+
+Art. 8º As despesas do Município de Niterói com comunicação institucional e publicidade em meios digitais deverão observar os princípios da economicidade, razoabilidade, interesse público e transparência, ficando limitadas ao percentual máximo de 0,18% (zero, dezoito por cento) da Receita Corrente Líquida do exercício anterior.
+
+§ 1º Para fins desta Lei, consideram-se despesas com comunicação institucional:
+
+I – contratação de impulsionamento de conteúdo em redes sociais;
+II – campanhas publicitárias digitais;
+III – contratação de agências de publicidade para gestão de mídias digitais;
+IV – produção de conteúdo audiovisual institucional destinado à divulgação digital.
+
+§ 2º Ficam excluídas do limite estabelecido no caput as campanhas de utilidade pública relacionadas a:
+
+I – emergências sanitárias;
+II – defesa civil;
+III – campanhas obrigatórias por determinação legal;
+IV – situações de calamidade pública oficialmente reconhecidas.
+
+§ 3º O Poder Executivo deverá divulgar, trimestralmente, em portal de transparência específico, relatório detalhado contendo:
+
+I – valores empenhados, liquidados e pagos;
+II – identificação dos contratos vigentes;
+III – objeto da contratação;
+IV – justificativa de interesse público.
+
+§ 4º O descumprimento do limite estabelecido neste artigo deverá ser devidamente justificado mediante ato formal motivado, com comunicação à Câmara Municipal e ao Tribunal de Contas do Estado.
+
+Art. 9º O descumprimento desta Lei poderá caracterizar violação aos princípios da Administração Pública, sujeitando o responsável às sanções administrativas cabíveis.
+
+Art. 10º O Poder Executivo poderá regulamentar esta Lei no que couber.
+
+Art. 11º Esta Lei entra em vigor 90 (noventa) dias após sua publicação.
+
+_____________________________
+Daniel Marques
+
+JUSTIFICATIVA
+
+O presente Projeto de Lei tem por finalidade assegurar que os canais digitais oficiais do Município de Niterói — notadamente redes sociais institucionais e demais meios eletrônicos de comunicação — sejam efetivamente utilizados como instrumentos de transparência, participação popular e controle social da Administração Pública.
+
+Na contemporaneidade, as redes sociais oficiais constituem verdadeira extensão da esfera pública, funcionando como ambiente de informação, diálogo institucional e fiscalização democrática. Por essa razão, sua gestão deve observar rigorosamente os princípios constitucionais que regem a Administração Pública.
+
+A proposta encontra fundamento direto na Constituição Federal, especialmente no art. 5º, incisos IV e IX, que asseguram a liberdade de manifestação do pensamento e de expressão, no art. 37, caput, que impõe à Administração Pública os princípios da legalidade, impessoalidade, moralidade, publicidade e eficiência e no art. 220, que veda toda e qualquer forma de censura de natureza política, ideológica ou artística.
+
+Igualmente, harmoniza-se com o Marco Civil da Internet (Lei nº 12.965/2014), que consagra a liberdade de expressão como princípio estruturante do uso da internet no Brasil; com a Lei de Acesso à Informação (Lei nº 12.527/2011), que fortalece a transparência ativa e o controle social; e com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018), ao prever tratamento adequado de informações pessoais eventualmente envolvidas na moderação de conteúdo.
+
+Ressalte-se que a presente iniciativa não impede a moderação de conteúdos ilícitos, ofensivos ou que violem a legislação vigente. Ao contrário, estabelece critérios objetivos e transparentes para a atuação administrativa, conferindo segurança jurídica à gestão dos perfis institucionais.
+
+O que se busca vedar são práticas arbitrárias de exclusão de manifestações críticas ou divergentes, que possam comprometer a pluralidade democrática, restringir o debate público ou limitar o exercício da fiscalização parlamentar.
+O artigo que estabelece limite máximo de 0,18% (zero vírgula dezoito por cento) da Receita Corrente Líquida do exercício anterior para despesas com comunicação institucional digital visa assegurar o uso responsável, proporcional e transparente dos recursos públicos.
+
+A fixação de teto percentual vinculado à Receita Corrente Líquida atende aos princípios da economicidade, ao evitar gastos desproporcionais com publicidade institucional, razoabilidade, ao compatibilizar a despesa com a capacidade financeira do Município, da moralidade administrativa, ao impedir utilização excessiva de recursos públicos com promoção institucional e da transparência e controle social, permitindo acompanhamento objetivo pela Câmara Municipal e pelos órgãos de controle.
+
+A vinculação ao percentual da Receita Corrente Líquida encontra amparo na sistemática da Lei de Responsabilidade Fiscal (Lei Complementar nº 101/2000), que adota a RCL como parâmetro para diversos limites de despesa pública, conferindo previsibilidade e segurança jurídica à norma.
+
+Importante destacar que o limite proposto não inviabiliza campanhas de utilidade pública nem compromete a comunicação institucional necessária ao interesse coletivo. Ao contrário, garante equilíbrio entre o dever de informar e a obrigação de gestão fiscal responsável.
+
+A medida também reforça a distinção entre comunicação de caráter informativo e eventual promoção institucional desmedida, preservando o interesse público como finalidade exclusiva da despesa.
+
+Assim, o dispositivo fortalece a responsabilidade fiscal municipal, aprimora o controle parlamentar sobre os gastos com comunicação e assegura que os meios digitais oficiais sejam utilizados com moderação e finalidade republicana.
+
+Dessa forma, o Projeto fortalece a democracia local, promove maior transparência na comunicação institucional e assegura que os meios digitais oficiais cumpram sua função republicana de servir ao interesse público, e não a interesses circunstanciais de gestão.

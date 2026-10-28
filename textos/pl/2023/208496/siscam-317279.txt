@@ -1,0 +1,10 @@
+Estimativa de Impacto Orçamentário PL  /2023
+
+IMPACTO | GRUPO | Nº DE ESCOLAS* | VALOR DO FOMENTO** | TOTAL
+POR GRUPO | A | 8 | R$ 194.980,50 | R$ 1.559.884,00
+POR GRUPO | B | 8 | R$ 108.322,50 | R$ 866.580,00
+POR GRUPO | C | 4 | R$ 64.993,50 | R$259.974,00
+ANUAL TOTAL | A, B e C | 20 | - | R$ 2.686.438,00
+
+* Número de escolas que participam do carnaval de Niterói
+** Valor proposto no PL tomando como base a Resolução SEFAZ 482/2022 onde UFIR-RJ é R$ 4,3329

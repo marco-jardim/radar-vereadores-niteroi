@@ -1,0 +1,66 @@
+                                                                                     Processo 9900127571/2025 - Projeto de Lei para autorizar a criação da Tabela Diferenciada, para efeito de
+                                                                                     complementação financeira dos valores fixados na Tabela SUS Nacional.
+
+         Procedimento            Quant Total    Valor SUS     Valor Mercado                 Diferença                    2025                       2026                            2027
+          EXAME USG               10.338      R$ 277.005,85   R$ 748.228,00              R$ 471.222,15              R$ 471.222,15              R$ 497.893,32                    R$ 521.792,20
+          EXAME RNM                5.747     R$ 1.525.053,75 R$ 2.788.030,00            R$ 1.262.976,25            R$ 1.262.976,25            R$ 1.334.460,71                  R$ 1.398.514,82
+       EXAMES OUTROS               7.426      R$ 616.650,74  R$ 3.897.890,00            R$ 3.281.239,26            R$ 3.281.239,26            R$ 3.466.957,40                  R$ 3.633.371,36
+           EXAME TC                5.176      R$ 487.664,43  R$ 1.169.200,00             R$ 681.535,57              R$ 681.535,57              R$ 720.110,48                    R$ 754.675,79
+           CONSULTA               15.518      R$ 155.180,00  R$ 2.082.600,00            R$ 1.927.420,00            R$ 1.927.420,00            R$ 2.036.511,97                  R$ 2.134.264,55
+          EXAME ECO                9.592      R$ 650.913,12  R$ 1.606.082,86             R$ 955.169,74              R$ 955.169,74             R$ 1.009.232,35                  R$ 1.057.675,50
+        EXAME CARDIO               2.308      R$ 38.985,61    R$ 335.090,00              R$ 296.104,39              R$ 296.104,39              R$ 312.863,90                    R$ 327.881,37
+      EXAME OTORRINO               2.248       R$ 9.660,00    R$ 205.630,00              R$ 195.970,00              R$ 195.970,00              R$ 207.061,90                    R$ 217.000,87
+        EXAME GINECO                187          R$ 0,00      R$ 181.203,00              R$ 181.203,00              R$ 181.203,00              R$ 191.459,09                    R$ 200.649,13
+   Rede de Cuidados ao PCD          211          R$ 0,00          R$ 0,00                    R$ 0,00                   R$ 0,00                    R$ 0,00                          R$ 0,00
+        REABILITAÇÃO               3.701         R$ 0,00       R$ 4.140,00                R$ 4.140,00                R$ 4.140,00                R$ 4.374,32                      R$ 4.584,29
+      EXAMES DIVERSOS              1.975         R$ 0,00      R$ 841.330,00              R$ 841.330,00              R$ 841.330,00              R$ 888.949,28                    R$ 931.618,84
+         CIR OFTALMO                837          R$ 0,00     R$ 3.090.000,00            R$ 3.090.000,00            R$ 3.090.000,00            R$ 3.264.894,00                  R$ 3.421.608,91
+            TERAPIA                1.572       R$ 5.137,45     R$ 65.540,00               R$ 60.402,55               R$ 60.402,55               R$ 63.821,33                    R$ 66.884,76
+    Valor total no processo                  R$ 3.766.250,95 R$ 17.014.963,86           R$ 13.248.712,91           R$ 13.248.712,91           R$ 13.998.590,06                R$ 14.670.522,38
+
+                                                                    Valor dos
+                                                     Valor
+                                                                prestadores SUS
+                                               Prestadores SUS
+                                                                reajustados pelo
+                                                atual menos o                               Diferença                    2025                       2026                            2027
+              Risco Associado                                    fator médio de
+                                               chamamento do
+                                                               variação da tabela
+                                                   processo
+                                                                     acima
+                                                 59.930.512,35 R$ 210.820.299,34       R$ 150.889.786,99           R$ 123.103.874,93         R$ 159.430.148,94               R$ 167.082.796,08
+
+                                                                                      Impacto mês a mês                   2025                      2026                           2027
+                                                                                           Janeiro                      R$ 0,00               R$ 14.452.394,92               R$ 15.146.109,87
+                                                                                          Fevereiro                     R$ 0,00               R$ 14.452.394,92               R$ 15.146.109,87
+                                                                                            Março                       R$ 0,00               R$ 14.452.394,92               R$ 15.146.109,87
+                                                                                             Abril                  R$ 13.678.208,33          R$ 14.452.394,92               R$ 15.146.109,87
+                                                                                             Maio                   R$ 13.678.208,33          R$ 14.452.394,92               R$ 15.146.109,87
+                                                                                            Junho                   R$ 13.678.208,33          R$ 14.452.394,92               R$ 15.146.109,87
+                                                                                            Julho                   R$ 13.678.208,33          R$ 14.452.394,92               R$ 15.146.109,87
+                                                                                           Agosto                   R$ 13.678.208,33          R$ 14.452.394,92               R$ 15.146.109,87
+                                                                                          Setembro                  R$ 13.678.208,33          R$ 14.452.394,92               R$ 15.146.109,87
+                                                                                           Outubro                  R$ 13.678.208,33          R$ 14.452.394,92               R$ 15.146.109,87
+                                                                                          Novembro                  R$ 13.678.208,33          R$ 14.452.394,92               R$ 15.146.109,87
+                                                                                          Dezembro                  R$ 13.678.208,33          R$ 14.452.394,92               R$ 15.146.109,87
+                                                                                     Impacto TOTAL                 R$ 123.103.874,93         R$ 173.428.739,00               R$ 181.753.318,47
+
+NOTAS:
+1. Reajuste pela meta do IPCA publicado em, 14 de março de 2025, a partir de 2026.
+2. A discriminação de serviços listados e os respectivos valores estão conforme o declarado pela FMS na peça 10.
+3. Os valores informados são referentes ao Chamamento público para contratação de empresas especializadas em realização de exames, consultas e demais procedimentos prestados por entidades de
+direito privado, com ou sem fins lucrativos, de forma a complementar do Sistema Único de Saúde do Município, por meio de recursos próprio, pelo período de 12 meses.
+4. Salvo melhor juízo, o impacto orçamentário não está restrito ao chamamento público em tela, mas tem potencial de alcançar todos os prestadores de serviços privados complementares ao SUS. Portanto,
+o impacto deve ser significativamente maior no tempo à medida que os convênios, chamamentos públicos e intrumentos congêneres forem se renovando. Em termos genéricos, considerando a média de
+reajuste projetada para o rol de serviços listados na peça 10, que foi de 252%, e aplicando o seu fator de variação implícito no montante estimado de serviços complementares ao SUS prestados pela
+iniciativa privada em 2024, teríamos um impacto orçamentário da ordem de 160 milhões por ano a valor presente, conforme a tabela do RISCO ASSOCIADO discriminada somada ao chamamento público,
+cujos valores foram discriminados na peça 10.
+
+Lucas Neves Da Nágia Bruna
+Cunha Martins Pinto
+Ci v.e 732.857-0 Ci Drumond
+E Ciga Data: 08/04/2025 & Ciga ee [número omitido]
+15:15 Data: 09/04/2025
+11:12
+( Ciga (5 Ciga

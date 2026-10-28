@@ -1,0 +1,46 @@
+                                                                              QUADRO VII - b - Fator de Interesse Social
+
+                                                                                     USOS                                                                                 Valores de Fs
+
+                                                                               Uso Residencial
+                                               Empreendimento Habitacional de Interesse Social (EHIS) com demanda garantida                                                     0
+
+                                                                        Outros tipos de Uso Residencial                                                                        0,4
+
+                                                                               Uso Institucional
+
+                                                                               Hospitais Públicos                                                                               0
+
+                                                                                Escolas Públicas                                                                               0
+
+                                                                Demais unidades Públicas de Saúde e Educação                                                                    0
+
+                                                                       Unidades Administrativas Públicas                                                                       0
+
+                               Entidades Privadas de Serviço Social e de Formação Profissional vinculadas ou não ao Sistema Sindical
+                                                                     Intituições de Cultura, Esporte e Lazer                                                                    0
+
+                                                               Entidades Mantenedoras sem fins lucrativos
+                                                                          Estabelecimentos Religiosos                                                                           0
+
+                                                                               Hospitais e Clinicas                                                                            0,3
+
+                                                                                 Universidades                                                                                 0,3
+
+                                                                                Escolas e Creches                                                                              0,3
+
+                                                                         Equipamentos Culturais e Afins                                                                        0,3
+
+                                                                      Outras entidades mantenedoras
+
+                                                                                    Hospitais                                                                                  0,7
+
+                                                                                 Universidades                                                                                 0,7
+
+                                                                                     Escolas                                                                                   0,7
+
+                                                                         Equipamentos Culturais e Afins                                                                        0,7
+
+                                                                               Outras Atividades                                                                                1
+
+NOTA: O Fator de Interesse Social (Fs) deve ser utilizado para o cálculo do valor da contrapartida financeira correspondente à outorga Onerosa do Direito de Construir.

@@ -1,0 +1,33 @@
+                                                       ESTIMATIVA DO IMPACTO ORÇAMENTÁRIO-FINANCEIRO
+                                                       (Arts. 16 e 17 da Lei Complementar Federal nº 101, de 4 de maio de 2000)
+
+Objeto:                                                  Revisão anual Poder Executivo (1,95%)
+
+                                                                                                                                  Jan 2021 a Dez/2021     Jan 2022 a          Jan 2023 a
+                                                                                                                                       c/ Acrésc.     Dez/2022 c/ Acrésc. Dez/2023 c/ Acrésc.
+
+DESPESA LÍQUIDA COM PESSOAL ( I )                                                                                                     1.884.437.151,8     1.949.231.293,4     2.015.616.477,6
+              Pessoal Ativo (i + ii + iii)                                                                                            1.458.070.741,5     1.509.050.611,4     1.561.173.941,5
+                  (i) Pessoal Ativo (RGF)                                                                                             1.336.433.963,4     1.379.734.423,9     1.424.437.819,2
+                  (ii) Aumentos pendentes de autorização**                                                                              101.221.901,6      108.239.869,1       114.976.931,2
+                  (iii) Aumento relativo à proposta em questão                                                                           20.414.876,5       21.076.318,5        21.759.191,2
+              Pessoal Inativo e Pensionista                                                                                             424.093.256,5      437.833.878,0       452.019.695,6
+              OUTRAS DESP. PESSOAL DECORRENTES CONTRATOS TERCEIRIZAÇÃO (art. 18, § 1º da LRF)                                             2.273.153,8         2.346.804,0         2.422.840,4
+Despesas não Computadas (art. 19, § 1º da LRF) (II)                                                                                     296.805.731,7      306.422.237,4       316.350.317,9
+              ( - ) Decorrentes de Decisão Judicial                                                                                      51.504.294,2       53.173.033,4        54.895.839,7
+              ( - ) Inativos e Pensionistas com Recursos Vinculados                                                                     241.577.154,6      249.404.254,4       257.484.952,2
+              ( - ) Indenizações por Demissão e Incentivos à Demissão Voluntária                                                          3.620.065,2         3.737.355,3         3.858.445,6
+              ( - ) Despesas de Exercícios Anteriores                                                                                       104.217,7          107.594,4           111.080,4
+              ( - ) Convocação Extraordinária (inciso II, § 6º, art. 57 da CF)                                                                    -                   -                   -
+REPASSES PREVIDENCIÁRIOS AO RPPS ( III )
+
+TOTAL DA DESPESA COM PESSOAL PARA FINS DE APURAÇÃO DO LIMITE - TDP (IV) = (I - II + III)                                               1.587.631.420,1    1.642.809.056,0     1.699.266.159,6
+RECEITA CORRENTE LÍQUIDA - RCL (V)                                                                                                    3.335.711.365,1    3.402.425.592,35    3.470.474.104,20
+% do TOTAL DA DESPESA LÍQUIDA COM PESSOAL P/FINS APUR. DO LIMITE - TDP SOBRE A RCL (VI) = (IV/V)*100                                          47,59%              48,28%              48,96%
+LIMITE LEGAL (inciso III, art. 20 da LRF) - <54,00%>                                                                                   1.801.284.137,1    1.837.309.819,9     1.874.056.016,3
+LIMITE PRUDENCIAL 95% (§ único, art. 22 da LRF) - <51,30%>                                                                             1.711.219.930,3    1.745.444.328,9     1.780.353.215,5
+LIMITE DE ALERTA 90% (Inciso II do § 1º do art.59 da LRF) <48,60%>                                                                     1.621.155.723,4    1.653.578.837,9     1.686.650.414,6
+Fonte: RGF 3º quadrimestre de 2020
+
+* Foi considerado um aumento vegetativo de 3,24%
+**Valores de impactos orçamentários ainda não implementados

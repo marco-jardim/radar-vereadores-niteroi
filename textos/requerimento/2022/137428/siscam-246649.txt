@@ -1,0 +1,137 @@
+Câmara Municipal de Niterói - RJ
+2022
+
+Paulo Rodrigo de Moura Sérgio Augusto Costa Macedo
+Assessoria Técnica Anatel
+
+Missão
+regular o setor de telecomunicações para contribuir com o desenvolvimento do Brasil
+
+Lei Geral de Telecomunicações (Lei 9.472/1997)
+
+Primeira	agência reguladora instalada no Brasil.
+
+0,5 %
+77,8 %
+11,4 %
+10,3 %
+Dezembro/2021
+Tecnologias Móveis
+
+Digitalização da rede celular
+Surgimento da telefonia móvel celular
+Introdução dos primeiros serviços IP (internet) e diversificação da conectividade
+Conectividade além da telefonia
+Internet de todas as coisas, de alta
+velocidade, baixa latência e ubíqua
+Carros conectados
+IoT
+Smart Grids
+Internet Banda Larga de alta velocidade
+Alto uso de dados
+Serviços
+Inovação
+Dispositivos
+Implantação e Adoção dos Serviços Móveis
+
+1G
+1980
+2G
+1993
+3G
+2001
+4G
+2009
+5G
+2020
+
+mmWaves
+Beamforming
+Virtualização
+Massive MIMO
+Network Slicing
+Panorama 5G
+
+Panorama 5G
+
+Network Slicing
+Massive MIMO
+Virtualização
+Beamforming
+mmWaves
+
+Tecnologia de Propósito Geral
+
+Tecnologias de Propósito Geral impactam toda a economia.
+Alteram profundamente a sociedade por mudar a economia pré-existente e suas estruturas sociais.
+
+Exemplos:
+Motor a vapor
+Estradas de ferro
+Eletricidade
+Computadores
+Internet
+
+O 5G surge como forte candidato a ser a próxima Tecnologia de Propósito Geral.
+
+Externalidades positivas do 5G
+
+Aumento de US$ 1,5 trilhão a US$ 2 trilhões ao PIB Global por catalisar o processo de conectar mais pessoas aos fluxos globais de informação, comunicação e serviços.
+Geração de US$ 12,3 trilhões de produção econômica até 2035. Por suportar outras atividades econômicas
+No Brasil, aumento de 1% ao PIB em média por ano, entre 2021 de 2035
+
+Fonte: McKinsey Global Institute
+
+R$ 5,5 trilhões nos próximos 15 anos.
+US$ 5 trilhões somente dos setores de manufatura, transporte, construção, serviços públicos e mineração
+
+Fonte: WEF, 2020
+
+Fonte: Nokia e Consultoria OMDIA
+
+Competências dos Municípios
+
+De acordo com a Constituição Federal é de competência privativa da União legislar sobre Telecomunicações.
+O município tem competência para legislar adequado ordenamento territorial e ocupação do solo urbano.
+A LGT reconheceu as competências municipais ao não isentar a prestadoras de telecomunicações do atendimento às normas de engenharia e às leis municipais, estaduais ou distritais relativas à construção civil.
+
+Competências dos Municípios
+
+Licenciamento urbano de infraestruturas
+Licenciamento ambiental
+Ordenamento territorial
+Restringir/limitar a instalação em áreas de
+proteção do patrimônio público
+Planejamento e controle do uso, do parcelamento e da ocupação do solo urbano
+Procedimentos para execução de obras, reparos e serviços em logradouros públicos
+
+Definir limites de exposição a campos eletromagnéticos
+Estabelecer requisitos de operação das estações de radiocomunicação
+Estabelecer distância mínima de residências,
+hospitais, clínicas, escolas e creches
+
+Importância da Legislação Municipal
+
+Recomenda-se que a regulamentação municipal:
+–Esteja de acordo com a legislação federal;
+- Estabeleça um processo centralizado e objetivo que propicie a obtenção de
+autorizações em prazos inferiores a dois meses;
+–Não imponha custos adicionais aos da tramitação do processo.
+
+Página Antenas nos Municípios
+
+https://www.gov.br/anatel/pt-br/dados/infraestrutura/antenas-nos-municipios
+
+Obrigado!
+Paulo Rodrigo de Moura Sérgio Augusto Costa Macedo
+Assessoria Técnica Anatel
+
+www.anatel.gov.br	@anatel.oficial	@anatel_oficial
+
+atc@anatel.gov.br
+
+1332
+
+APP Anatel Serviço Móvel
+
+Agência Nacional de Telecomunicações	1331	APP Anatel Consumidor

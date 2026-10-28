@@ -1,0 +1,380 @@
+                                PARECER FINANCEIRO
+
+PROCESSO Nº 9900239324/2025
+
+Assunto: Operação de crédito BNDES – Programa Pró-Sustentável II (R$ 104.600.000,00) –
+Análise de endividamento e impacto financeiro
+
+Trata-se de parecer financeiro desta Subsecretaria de Finanças – SUBFIN, no âmbito do
+Processo nº 9900239324/2025, destinado a subsidiar a Administração quanto à viabilidade
+financeira da operação de crédito a ser contratada junto ao Banco Nacional de Desenvolvimento
+Econômico e Social – BNDES, no valor global de R$ 104.600.000,00, no contexto do Programa
+Pró-Sustentável II.
+
+Conforme a justificativa do Projeto de Lei constante dos autos, o montante de R$ 104,6 milhões
+contempla parcelas enquadradas em distintas linhas do Fundo Clima, incluindo
+Desenvolvimento Urbano e Florestas Nativas e Recursos Hídricos. Para fins de prudência e
+comparabilidade, as projeções financeiras deste parecer adotam o cenário conservador
+correspondente ao custo da linha de Desenvolvimento Urbano, com taxa efetiva estimada
+de 8,33% ao ano, aplicada à integralidade do montante, ainda que parte da operação esteja
+sujeita a taxa inferior.
+
+A presente análise tem por objetivo responder aos questionamentos formulados nos despachos
+antecedentes, especialmente no que se refere:
+
+   •   à capacidade de endividamento do Município, à luz dos limites estabelecidos na Lei
+       Complementar nº 101/2000 (LRF) e nas Resoluções do Senado Federal nº 40/2001 e nº
+       43/2001;
+   •   ao impacto financeiro do serviço da dívida decorrente da nova operação, considerando
+       as condições informadas (prazo total de 300 meses, carência de 60 meses, sistema SAC
+       e taxa efetiva de 8,33% a.a., para fins conservadores);
+   •   aos efeitos potenciais sobre a liquidez municipal, com base na posição de caixa apurada
+       em 03/02/2026 (D-1) e em projeções referenciais de receitas, com destaque para o FPM
+       líquido, conforme parâmetros constantes dos autos.
+
+Registre-se que esta manifestação se limita estritamente à análise financeira, não abrangendo
+aspectos orçamentários, cuja competência é da Secretaria de Planejamento, Orçamento e
+Modernização da Gestão – SEPLAG, nem aspectos jurídico-formais, já submetidos à
+apreciação da Procuradoria Geral do Município.
+
+1. Análise da Capacidade de Endividamento (LRF e Limites do Senado)
+
+Conforme os demonstrativos fiscais mais recentes, o Município de Niterói mantém Dívida
+Consolidada Líquida (DCL) negativa, evidenciando que as deduções — especialmente
+disponibilidade de caixa e demais haveres financeiros — superam o saldo da Dívida
+
+Consolidada (DC). No RGF – 3º quadrimestre/2025, apura-se DC de R$ 986.322.969,66,
+deduções de R$ 4.988.948.598,71 e, por consequência, DCL de -R$ 4.002.625.629,05, com
+RCL ajustada para fins de limites de endividamento de R$ 6.318.912.153,83 e relação
+DCL/RCL ajustada de -63,34%.
+
+Os mesmos valores são observados no RREO – 6º bimestre/2025, tanto no cálculo “abaixo da
+linha” do Resultado Nominal quanto no demonstrativo da RCL ajustada, confirmando a
+convergência entre os relatórios fiscais.
+
+                                                  RGF – 3º            RREO – 6º
+Indicador
+                                                quadr./2025           bim./2025
+Dívida Consolidada (DC)                       R$ 986.322.969,66   R$ 986.322.969,66
+Deduções (II)                                R$ 4.988.948.598,71 R$ 4.988.948.598,71
+Dívida Consolidada Líquida (DCL)            -R$ 4.002.625.629,05 -R$ 4.002.625.629,05
+RCL ajustada p/ limites                      R$ 6.318.912.153,83 R$ 6.318.912.153,83
+DCL / RCL ajustada                                 -63,34%             -63,34%
+
+O limite global de endividamento (120% da RCL ajustada), conforme Resolução do Senado nº
+40/2001, corresponde a R$ 7.582.694.584,60, permanecendo substancialmente distante da
+situação fiscal atual do Município.
+
+Para fins de análise prudencial, é relevante distinguir: (i) o momento do desembolso, em que o
+aumento do passivo tende a ser acompanhado por ingresso equivalente em disponibilidades
+financeiras, podendo manter a DCL inalterada naquele instante; e (ii) a dinâmica fiscal
+subsequente, na qual, à medida que os recursos sejam aplicados, a redução das deduções pode
+aproximar a DCL de zero.
+
+Considerando o cenário conservador de aplicação integral dos recursos da nova operação no
+montante de R$ 104.600.000,00, tomando-se como referência a DCL apurada no RGF – 3º
+quadrimestre/2025 (-R$ 4.002.625.629,05), a DCL evoluiria para aproximadamente -R$
+3.898.025.629,05. Mantida a RCL ajustada de R$ 6.318.912.153,83, a relação DCL/RCL
+ajustada passaria para cerca de -61,67%, permanecendo negativa e amplamente distante do
+limite de 120%.
+
+Assim, mesmo sob abordagem prudencial e conservadora, a operação não compromete a
+capacidade de endividamento do Município nem altera de forma relevante o posicionamento
+fiscal relativo aos limites legais.
+
+2. Impacto Financeiro do Serviço da Dívida – Operação BNDES
+
+No sistema de amortização constante (SAC), o principal é amortizado de forma linear ao longo
+do período de pagamento, com prestações decrescentes ao longo do tempo em razão da redução
+gradual dos juros incidentes sobre o saldo devedor. Considera-se carência de 60 meses para
+
+amortização do principal, com pagamento exclusivo de juros nesse período, e início da
+amortização a partir do mês 61, totalizando prazo contratual de 300 meses.
+
+Adotando-se, para fins conservadores, a taxa efetiva estimada de 8,33% ao ano (linha de
+Desenvolvimento Urbano) aplicada à integralidade do montante, obtêm-se os seguintes
+parâmetros:
+
+   •   Juros durante a carência (2026–2030): desembolso anual estimado em
+       aproximadamente R$ 8.713.180,28, equivalente a cerca de R$ 726.098,36 por mês,
+       sem amortização de principal;
+   •   Início da amortização (2031): no primeiro ano pós-carência ocorre o maior encargo
+       anual da operação, com serviço da dívida estimado em aproximadamente R$
+       13.955.000,00, composto por amortização anual de R$ 5.230.000,00 e juros
+       aproximados de R$ 8.725.000,00;
+   •   Trajetória decrescente (pós-2031): com a amortização linear do principal, os juros
+       reduzem-se progressivamente, promovendo redução contínua do serviço anual da dívida
+       ao longo do prazo contratual;
+   •   Custo financeiro total no horizonte do contrato: no cenário adotado, os juros totais
+       projetados ao longo dos 25 anos situam-se na ordem de R$ 126 milhões, e o desembolso
+       nominal total (principal + juros) aproxima-se de R$ 230 milhões até o término do
+       contrato.
+
+                        Amortização          Juros          Serviço da
+                 Ano
+                           (R$)               (R$)          Dívida (R$)
+
+                2026         0            8.713.180,28      8.713.180,28
+                2027         0            8.713.180,28      8.713.180,28
+                2028         0            8.713.180,28      8.713.180,28
+                2029         0            8.713.180,28      8.713.180,28
+                2030         0            8.713.180,28      8.713.180,28
+                2031    5.230.000,00      8.713.180,28     13.943.180,28
+                2032    5.230.000,00      8.277.521,27     13.507.521,27
+                2033    5.230.000,00      7.841.862,26     13.071.862,26
+                2034    5.230.000,00      7.406.203,25     12.636.203,25
+                2035    5.230.000,00      6.970.544,24     12.200.544,24
+                2036    5.230.000,00      6.534.885,23     11.764.885,23
+                2037    5.230.000,00      6.099.226,22     11.329.226,22
+                2038    5.230.000,00      5.663.567,21     10.893.567,21
+                2039    5.230.000,00      5.227.908,20     10.457.908,20
+                2040    5.230.000,00      4.792.249,19     10.022.249,19
+                2041    5.230.000,00      4.356.590,18      9.586.590,18
+                2042    5.230.000,00      3.920.931,17      9.150.931,17
+                2043    5.230.000,00      3.485.272,16      8.715.272,16
+
+                  2044    5.230.000,00       3.049.613,15      8.279.613,15
+                  2045    5.230.000,00       2.613.954,14      7.843.954,14
+                  2046    5.230.000,00       2.178.295,13      7.408.295,13
+                  2047    5.230.000,00       1.742.636,12      6.972.636,12
+                  2048    5.230.000,00       1.306.977,11      6.536.977,11
+                  2049    5.230.000,00        871.318,10       6.101.318,10
+                  2050    5.230.000,00        435.659,09       5.665.659,09
+
+Observa-se que o pico do encargo anual ocorre no primeiro exercício após a carência, seguido
+de trajetória de redução contínua do serviço da dívida, o que melhora progressivamente o perfil
+de comprometimento financeiro ao longo do prazo. Durante a carência (2026–2030), embora
+não haja amortização do principal, permanece a necessidade de provisionamento anual para
+pagamento de juros, os quais se somam ao serviço das demais dívidas do Município.
+
+3. Análise de Liquidez e Cobertura do Serviço da Dívida
+
+3.1. Premissas e abordagem
+
+A inclusão do novo encargo financeiro amplia o serviço anual da dívida do Município, com
+maior concentração a partir de 2031, quando se inicia a amortização do principal. Para avaliar
+a sustentabilidade financeira da operação e o eventual risco de pressão sobre a liquidez,
+consideraram-se: (i) a posição de caixa apurada no Controle Financeiro Diário – data-base
+23/02/2026 (D-1); e (ii) a projeção referencial do FPM líquido (após deduções de PASEP e
+vinculações constitucionais), confrontada com o serviço total da dívida projetado,
+contemplando as operações fundadas e demais compromissos financeiros constantes dos autos.
+
+3.2. Posição de caixa (curto prazo)
+
+Na referida data-base, o Município apresentava saldo geral de caixa, incluídas as
+disponibilidades do Fundo de Equalização da Receita – FER, de R$ 4.513.918.870,99,
+evidenciando manutenção de posição financeira robusta. A composição das disponibilidades
+revela significativa diversificação de fontes, com destaque para recursos ordinários do Tesouro,
+royalties e o próprio FER, além de receitas vinculadas como COSIP, multas de trânsito,
+convênios e fundos específicos. Excluídas as disponibilidades do FER, o saldo do Tesouro
+permanece superior a R$ 2,9 bilhões, preservando ampla margem de liquidez operacional.
+
+Embora a aferição do montante efetivamente livre para movimentação dependa da consolidação
+das vinculações por fonte e das obrigações exigíveis de curto prazo, a magnitude do saldo
+apurado indica conforto financeiro no curto prazo. Sob perspectiva estritamente financeira, o
+encargo anual de juros da operação no montante de R$ 104.600.000,00, estimado em
+aproximadamente R$ 8,7 milhões durante o período de carência, apresenta baixa
+representatividade frente às disponibilidades existentes, não se identificando risco de pressão
+imediata sobre a liquidez municipal. Ainda que considerado o cenário ampliado anteriormente
+
+analisado, o comprometimento percentual do caixa permanece reduzido, reforçando a
+capacidade de absorção dos encargos no horizonte inicial da operação.
+
+3.3. Cobertura pelo FPM líquido (médio e longo prazo)
+
+O quadro a seguir sintetiza, em anos-âncora, a cobertura do serviço total anual da dívida pelo
+FPM líquido projetado, já ajustado para refletir o impacto da operação BNDES no montante de
+R$ 104,6 milhões, mantendo-se inalteradas as demais premissas estruturais.
+
+                                    Serviço total da
+                                                           Cobertura            Cobertura
+     Ano      FPM líquido (R$)     dívida (ajustado)
+                                                             (R$)                 (%)
+                                         (R$)
+     2026       96.866.301,88       180.237.401,03       -83.371.099,15           53,74%
+     2030      119.981.658,52       116.902.812,23         3.078.846,29          102,63%
+     2031      125.804.418,44       147.269.386,48       -21.464.968,04           85,41%
+     2035      149.095.458,10       137.044.058,71        12.051.399,39          108,79%
+     2037      160.740.977,92       131.304.926,51        29.436.051,41          122,42%
+     2038      166.563.737,84       110.012.232,46        56.551.505,38          151,38%
+     2040      178.209.257,67        83.066.561,57        95.142.696,10          214,53%
+     2044      201.500.297,33        73.204.781,78       128.295.515,55          275,23%
+
+Observa-se que, embora possam ocorrer insuficiências pontuais nos primeiros anos de
+amortização, a magnitude da operação no montante de R$ 104,6 milhões não altera
+substancialmente o perfil global de cobertura. A partir do segundo terço do horizonte contratual,
+verifica-se melhora progressiva do indicador, refletindo tanto a redução dos encargos da própria
+operação quanto o crescimento projetado das receitas correntes.
+
+4. Análise Financeira Comparativa da Fonte de Financiamento e Economicidade
+
+A decisão de contratação deve ser analisada sob a ótica financeira como escolha da fonte de
+financiamento mais eficiente, considerando custo efetivo, estrutura temporal do serviço da
+dívida, previsibilidade e riscos associados. Nesse contexto, a linha do BNDES ora examinada
+apresenta combinação de taxa, prazo e risco inferior à média das alternativas tipicamente
+disponíveis ao Município, com efeitos relevantes sobre o planejamento de caixa e sobre a
+estabilidade do serviço da dívida ao longo do tempo.
+
+4.1. Custo efetivo anual e eficiência de funding no mercado doméstico
+
+No ambiente doméstico, as operações de crédito para entes subnacionais refletem diretamente
+a estrutura de juros da economia brasileira, caracterizada por taxa básica elevada e significativa
+sensibilidade ao ciclo monetário. Em fevereiro de 2026, a taxa SELIC encontra-se fixada em
+15,00% ao ano, com o CDI operando em torno de 14,9% a.a., patamar que implica custos
+elevados para financiamentos indexados a esses referenciais. Nessas condições, operações
+estruturadas como CDI acrescido de spreads, usualmente entre 2% e 5% ao ano, resultam em
+
+custos nominais totais situados aproximadamente entre 17% e 20% ao ano, refletindo elevado
+encargo financeiro e maior volatilidade ao longo do prazo contratual.
+
+Por sua vez, operações indexadas à inflação apresentam custo associado ao IPCA acumulado
+em 12 meses, atualmente na faixa de 4,3% a 4,5%, acrescido de juros reais que, para entes
+subnacionais, usualmente variam entre 4% e 6% ao ano. Nessas condições, o custo nominal
+situa-se, em média, entre 8% e 10% ao ano, permanecendo sujeito às oscilações inflacionárias
+e à exigência de prêmios adicionais em contextos de maior incerteza macroeconômica.
+
+Em contraste com essas alternativas, a estrutura de financiamento analisada no âmbito do
+BNDES – Fundo Clima apresenta custo final inferior às referências médias do mercado
+doméstico, além de maior previsibilidade contratual. As condições financeiras variam conforme
+a linha aplicável: para as parcelas enquadradas em Desenvolvimento Urbano, a taxa estimada é
+de aproximadamente 8,33% ao ano, composta pelo custo financeiro básico do Fundo Clima
+(6,5% a.a.) e pela remuneração do BNDES (cerca de 1,7% a.a.); para a parcela enquadrada em
+Florestas Nativas e Recursos Hídricos, a taxa estimada é de aproximadamente 2,74% ao ano,
+resultante da combinação de custo financeiro de 1,0% a.a. com remuneração mínima do agente
+financeiro.
+
+Sob perspectiva comparativa, a taxa de 8,33% a.a. da linha urbana situa-se substancialmente
+abaixo das operações indexadas ao CDI e em patamar competitivo frente às operações
+indexadas ao IPCA, com a vantagem adicional de menor volatilidade e maior previsibilidade
+do fluxo de pagamento. Já a taxa de 2,74% a.a. da linha florestal encontra-se abaixo do nível
+corrente da inflação, implicando juros reais negativos, situação pouco usual no mercado
+doméstico recente e indicativa de relevante vantagem financeira.
+
+Do ponto de vista da gestão da dívida, esse diferencial contribui para reduzir o custo médio
+ponderado do estoque de endividamento e aprimora a relação entre o benefício fiscal da
+preservação de liquidez e o custo financeiro do passivo contratado. Em termos práticos, a
+eficiência da fonte de financiamento se traduz em menor dispêndio de juros ao longo do
+horizonte contratual e em perfil de serviço da dívida mais compatível com o ciclo de execução
+e maturação dos investimentos. Tal configuração reduz o risco de compressão de despesas
+discricionárias em cenários adversos do ciclo econômico, fortalecendo a sustentabilidade fiscal
+e a previsibilidade orçamentária no médio e longo prazo.
+
+4.2. Risco financeiro e previsibilidade do serviço da dívida
+
+A avaliação financeira das fontes de financiamento não deve se restringir exclusivamente ao
+nível nominal das taxas de juros, sendo igualmente relevante considerar o vetor de risco
+associado à estrutura contratual, em especial no que se refere à indexação e à previsibilidade do
+serviço da dívida ao longo do tempo. Operações atreladas a indexadores variáveis, como CDI
+ou inflação, tendem a apresentar maior sensibilidade ao ciclo monetário e inflacionário,
+podendo resultar em variações relevantes no encargo anual, com efeitos diretos sobre a
+programação orçamentária.
+
+De forma análoga, operações externas denominadas em moeda estrangeira, embora
+frequentemente apresentem juros nominais competitivos quando comparadas às alternativas
+domésticas, incorporam o risco cambial, o qual pode afetar o custo efetivo da dívida em moeda
+nacional ao longo do tempo. Trata-se, contudo, de um risco conhecido, mensurável e passível
+de gerenciamento, amplamente considerado na prática de financiamento de entes subnacionais,
+sobretudo quando associado a projetos estruturantes e a prazos longos.
+
+Nesse sentido, a experiência recente de entes subnacionais evidencia que a volatilidade cambial
+pode amplificar o serviço da dívida em determinados períodos, especialmente em cenários de
+desvalorização abrupta da moeda nacional. Ao mesmo tempo, observa-se que tais operações
+permanecem amplamente utilizadas por estados e municípios brasileiros, em razão de suas
+condições financeiras atrativas, prazos alongados e relevância institucional dos organismos
+multilaterais, sendo o risco cambial usualmente incorporado às análises de capacidade de
+pagamento e aos cenários de estresse fiscal.
+
+No contexto específico desta análise, a estrutura de financiamento em moeda nacional, ao
+eliminar a exposição cambial e reduzir a volatilidade do fluxo de pagamentos, oferece maior
+previsibilidade ao serviço da dívida, contribuindo para a estabilidade da programação financeira
+e para a qualidade do planejamento plurianual. Essa previsibilidade reduz a necessidade de
+constituição de colchões de liquidez adicionais exclusivamente para absorção de choques
+financeiros, sem, contudo, afastar a possibilidade de utilização complementar de operações
+externas, desde que avaliadas de forma integrada à estratégia de endividamento do Município.
+
+Assim, a opção por estruturas de financiamento com maior previsibilidade não implica
+desconsiderar ou desestimular o uso de operações em moeda estrangeira, mas sim equilibrar o
+portfólio da dívida, combinando fontes domésticas e externas de forma a otimizar custo, prazo
+e risco, preservando a sustentabilidade fiscal e a capacidade de planejamento ao longo do
+tempo.
+
+4.3. Economicidade e custo de oportunidade do caixa
+
+A avaliação entre financiar e utilizar recursos próprios deve ser compreendida como uma
+decisão de alocação intertemporal de recursos, na qual o uso imediato do caixa implica renúncia
+à liquidez que poderia ser empregada para absorver choques de receita, cobrir obrigações
+obrigatórias, equalizar sazonalidades e preservar a continuidade da execução orçamentária.
+
+Sob o princípio da economicidade, o critério decisório não se limita à redução nominal da
+dívida, devendo considerar o custo total da decisão, incluindo:
+
+   i.   o custo de oportunidade da utilização da liquidez, equivalente à perda do retorno
+        financeiro potencial das disponibilidades;
+  ii.   a preservação da flexibilidade e da opcionalidade fiscal; e
+ iii.   a compatibilidade entre o fluxo de desembolsos e o ciclo orçamentário e financeiro do
+        Município.
+
+Quando a fonte de financiamento disponível apresenta custo competitivo, prazo longo e elevada
+previsibilidade, a operação de crédito deixa de representar mera antecipação de despesa e passa
+a configurar instrumento de otimização financeira, ao distribuir o esforço fiscal ao longo do
+tempo, preservar liquidez estrutural e reduzir o risco de necessidade de recomposição futura de
+caixa em condições menos favoráveis.
+
+O elevado patamar da taxa básica de juros reforça essa análise sob a ótica do custo de
+oportunidade das disponibilidades financeiras. Com a SELIC fixada em 15,00% ao ano e o CDI
+operando em torno de 14,9% a.a., as disponibilidades de caixa do Município tendem a
+apresentar retorno financeiro implícito elevado, seja por aplicação direta, seja por remuneração
+vinculada à taxa básica. Nesse contexto, a utilização imediata de recursos próprios para
+financiamento de investimentos implica renúncia a retorno financeiro potencial significativo.
+
+Assim, a decisão entre utilizar caixa ou contratar financiamento deve ser analisada comparando-
+se o retorno esperado das disponibilidades financeiras com o custo marginal da dívida. Quando
+o custo do financiamento se situa abaixo do retorno potencial do caixa, como ocorre nas linhas
+do Fundo Clima, cujas taxas variam entre 2,74% a.a. e 8,33% a.a., a utilização do crédito revela-
+se economicamente eficiente, ao preservar ativos financeiros remunerados a taxas superiores
+ao custo do passivo.
+
+Essa assimetria entre retorno do caixa e custo da dívida é particularmente relevante no cenário
+atual de juros elevados, pois tende a tornar-se a utilização de recursos próprios financeiramente
+menos eficiente no médio prazo, ainda que reduza o endividamento nominal no curto prazo.
+Em termos econômicos, trata-se de substituir um ativo remunerado a taxas próximas à SELIC
+por um passivo com custo inferior, com impactos potenciais sobre a posição financeira líquida
+ao longo do tempo.
+
+Dessa forma, o custo de oportunidade do caixa reforça a racionalidade financeira da contratação
+da operação de crédito em análise, ao permitir que o Município preserve liquidez remunerada
+a taxas elevadas, ao mesmo tempo em que financia investimentos a custos significativamente
+inferiores aos retornos implícitos de suas disponibilidades, contribuindo para a eficiência
+intertemporal da gestão fiscal, em consonância com os princípios da Lei de Responsabilidade
+Fiscal.
+
+5. Conclusão
+
+Diante da análise empreendida, a Subsecretaria de Finanças – SUBFIN conclui, em caráter
+preliminar, que a operação de crédito em avaliação, no valor global de R$ 104.600.000,00,
+apresenta viabilidade financeira, mostrando-se compatível com os parâmetros fiscais
+evidenciados nos demonstrativos oficiais e com as projeções de serviço da dívida adotadas neste
+parecer. Embora o maior encargo anual se concentre a partir de 2031, com o início da
+amortização do principal, a trajetória projetada do serviço da dívida, associada à posição de
+caixa apurada e à evolução estimada das receitas consideradas na análise, indica que os
+impactos financeiros e sobre a liquidez permanecem administráveis no horizonte examinado,
+desde que mantidos planejamento adequado e disciplina fiscal.
+
+Assim, esta Subsecretaria manifesta-se favoravelmente ao prosseguimento do processo sob a
+ótica estritamente financeira, recomendando-se, por ocasião da formalização da contratação, a
+atualização dos demonstrativos de referência (RGF e RREO mais recentes), das certidões
+fiscais aplicáveis e a consolidação final das premissas de desembolso, enquadramento das
+linhas de financiamento e demais condições contratuais pertinentes.
+
+Niterói, 23 de fevereiro de 2026.
+
+Atenciosamente,
+
+                                        SALOMAO DE SOUZA
+                                        NETO
+                                        •••.027.857-••
+                                        Data: 24/02/2026 14:01
+
+                                Salomão de Souza Neto
+                           SUBSECRETÁRIO DE FINANÇAS
+                                Matrícula 1.247.541-0

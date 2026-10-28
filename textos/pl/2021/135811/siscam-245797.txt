@@ -1,0 +1,221 @@
+                                                                                      ANEXO VI
+
+                                                                                                                                                      CLASSES
+ NÍVEL    INSTRUÇÃO       CATEGORIAS                                               CATEGORIA   INSTRUÇÃO                                                 B
+   1     FUNDAMENTAL      I, II, III, IV E V                                            I    FUNDAMENTAL                                                 C
+   2         MÉDIO         II, III, IV E V                                              II        MÉDIO                                                  D
+   3        TÉCNICO           III, IV E V                                              III       TÉCNICO                                                 E
+   4       SUPERIOR             IV E V                                                 IV       SUPERIOR                                                 F
+                                                                                       V     ESPECIALIZAÇÃO                                              G
+                                                                                                                                                         H
+
+                                                                TABELA DE VENCIMENTOS E ADICIONAL POR TEMPO DE SERVIÇO
+
+                                                                                                                                                                   TOTAL VENCIM +
+                                                                                                                                                    ADICIONAL H
+ NÍVEL    CATEGORIA              A               B          C           D              E           F            G         H          VENCIMENTO                     ADICION H 35
+                                                                                                                                                      35 ANOS
+                                                                                                                                                                       ANOS
+   1           I                     1.200,00   1.260,00   1.323,00     1.389,15     1.458,61       1.531,54   1.608,11   1.688,52       1.200,00         488,52          1.688,52
+   1           II                    1.320,00   1.386,00   1.455,30     1.528,07     1.604,47       1.684,69   1.768,93   1.857,37       1.320,00         537,37          1.857,37
+   1          III                    1.452,00   1.524,60   1.600,83     1.680,87     1.764,92       1.853,16   1.945,82   2.043,11       1.452,00         591,11          2.043,11
+   1          IV                     1.597,20   1.677,06   1.760,91     1.848,96     1.941,41       2.038,48   2.140,40   2.247,42       1.597,20         650,22          2.247,42
+   1          V                      1.756,92   1.844,77   1.937,00     2.033,85     2.135,55       2.242,32   2.354,44   2.472,16       1.756,92         715,24          2.472,16
+   2           II                    1.620,00   1.701,00   1.786,05     1.875,35     1.969,12       2.067,58   2.170,95   2.279,50       1.620,00         659,50          2.279,50
+   2          III                    1.782,00   1.871,10   1.964,66     2.062,89     2.166,03       2.274,33   2.388,05   2.507,45       1.782,00         725,45          2.507,45
+   2          IV                     1.960,20   2.058,21   2.161,12     2.269,18     2.382,64       2.501,77   2.626,86   2.758,20       1.960,20         798,00          2.758,20
+   2          V                      2.156,22   2.161,12   2.269,18     2.382,64     2.501,77       2.626,86   2.758,20   2.896,11       2.156,22         877,80          3.034,02
+   3          III                    2.187,00   2.296,35   2.411,17     2.531,73     2.658,31       2.791,23   2.930,79   3.077,33       2.187,00         890,33          3.077,33
+   3          IV                     2.405,70   2.525,99   2.652,28     2.784,90     2.924,14       3.070,35   3.223,87   3.385,06       2.405,70         979,36          3.385,06
+   3          V                      2.646,27   2.778,58   2.917,51     3.063,39     3.216,56       3.377,39   3.546,25   3.723,57       2.646,27       1.077,30          3.723,57
+   4          IV                     2.952,45   3.100,07   3.255,08     3.417,83     3.588,72       3.768,16   3.956,57   4.154,39       2.952,45       1.201,94          4.154,39
+   4          V                      3.247,70   3.410,08   3.580,58     3.759,61     3.947,59       4.144,97   4.352,22   4.569,83       3.247,70       1.322,14          4.569,83
+              VP                      170,6%                                                       VP           170,6%
+
+35% DE VARIAÇÃO ENTRE OS NÍVEIS
+10% DE VARIAÇÃO ENTRE AS CATEGORIAS
+5% DE VARIAÇÃO ENTRE AS CLASSES
+
+                                                                             ANEXO VI
+
+                                                                           CONSULTOR TÉCNICO
+
+                                                                                                                                                         TOTAL VENCIM +
+                                                                                                                                          ADICIONAL H
+ NÍVEL    CATEGORIA           A             B          C        D            E            F           G          H         VENCIMENTO                     ADICION H 35
+                                                                                                                                            35 ANOS
+                                                                                                                                                             ANOS
+   4          IV               6.061,40   6.364,47   6.682,69   7.016,83   7.367,67       7.736,05   8.122,85   8.529,00       6.061,40       2.467,60          8.528,99
+   4          V                6.788,77   7.128,21   7.484,62   7.858,85   8.251,79       8.664,38   9.097,60   9.552,48       6.788,77       2.763,71          9.552,47
+
+12% NA INICIAL
+12% DE VARIAÇÃO ENTRE AS CATEGORIAS
+5% DE VARIAÇÃO ENTRE AS CLASSES
+
+                                                                                 MÉDICO
+PISO          6.951,36
+
+                                                                                                                                                         TOTAL VENCIM +
+                                                                                                                                          ADICIONAL H
+ NÍVEL    CATEGORIA           A             B          C        D            E            F           G          H         VENCIMENTO                     ADICION H 35
+                                                                                                                                            35 ANOS
+                                                                                                                                                             ANOS
+   4          IV               5.067,52   5.320,89   5.586,94   5.866,29   6.159,60       6.467,58   6.790,96   7.130,51       5.068,64       2.063,44          7.132,08
+   4          V                5.675,62   5.959,40   6.257,37   6.570,24   6.898,75       7.243,69   7.605,87   7.986,17       5.676,88       2.311,06          7.987,93
+
+12% NA INICIAL
+12% DE VARIAÇÃO ENTRE AS CATEGORIAS
+5% DE VARIAÇÃO ENTRE AS CLASSES
+
+                                                                             ODONTÓLOGO
+PISO          3.857,56
+
+                                                                                                                                                         TOTAL VENCIM +
+                                                                                                                                          ADICIONAL H
+ NÍVEL    CATEGORIA           A             B          C        D            E            F           G          H         VENCIMENTO                     ADICION H 35
+                                                                                                                                            35 ANOS
+                                                                                                                                                             ANOS
+   4          IV               3.158,53   3.316,46   3.482,28   3.656,40   3.839,22       4.031,18   4.232,74   4.444,38       3.158,53       1.285,84          4.444,38
+   4          V                3.537,56   3.714,44   3.900,16   4.095,17   4.299,92       4.514,92   4.740,67   4.977,70       3.537,56       1.440,14          4.977,70
+
+12% NA INICIAL
+12% DE VARIAÇÃO ENTRE AS CATEGORIAS
+5% DE VARIAÇÃO ENTRE AS CLASSES
+
+                                                                            ANEXO VI
+                                                                            PSICÓLOGO
+PISO          2.745,13
+
+                                                                                                                                                          TOTAL VENCIM +
+                                                                                                                                           ADICIONAL H
+ NÍVEL    CATEGORIA           A             B          C        D            E             F           G          H         VENCIMENTO                     ADICION H 35
+                                                                                                                                             35 ANOS
+                                                                                                                                                              ANOS
+   4          IV               3.158,53   3.316,46   3.482,28   3.656,40   3.839,22        4.031,18   4.232,74   4.444,38       3.158,53       1.285,84          4.444,38
+   4          V                3.537,56   3.714,44   3.900,16   4.095,17   4.299,92        4.514,92   4.740,67   4.977,70       3.537,56       1.440,14          4.977,70
+
+12% NA INICIAL
+12% DE VARIAÇÃO ENTRE AS CATEGORIAS
+5% DE VARIAÇÃO ENTRE AS CLASSES
+
+                                                                              ENFERMEIRO
+PISO          3.140,10
+
+                                                                                                                                                          TOTAL VENCIM +
+                                                                                                                                           ADICIONAL H
+ NÍVEL    CATEGORIA           A             B          C        D            E             F           G          H         VENCIMENTO                     ADICION H 35
+                                                                                                                                             35 ANOS
+                                                                                                                                                              ANOS
+   4          IV               3.158,53   3.316,46   3.482,28   3.656,40   3.839,22        4.031,18   4.232,74   4.444,38       3.158,53       1.285,84          4.444,38
+   4          V                3.537,56   3.714,44   3.900,16   4.095,17   4.299,92        4.514,92   4.740,67   4.977,70       3.537,56       1.440,14          4.977,70
+
+12% NA INICIAL
+12% DE VARIAÇÃO ENTRE AS CATEGORIAS
+5% DE VARIAÇÃO ENTRE AS CLASSES
+
+                                                                      ADMINISTRADOR DE EMPRESAS
+PISO          3.847,56
+
+                                                                                                                                                          TOTAL VENCIM +
+                                                                                                                                           ADICIONAL H
+ NÍVEL    CATEGORIA           A             B          C        D            E             F           G          H         VENCIMENTO                     ADICION H 35
+                                                                                                                                             35 ANOS
+                                                                                                                                                              ANOS
+   4          IV               3.847,56   4.039,94   4.241,93   4.454,03   4.676,73        4.910,57   5.156,10   5.413,90       3.847,56       1.566,34          5.413,90
+   4          V                4.463,17   4.686,33   4.920,64   5.166,68   5.425,01        5.696,26   5.981,07   6.280,13       4.463,17       1.816,96          6.280,13
+
+VALOR DO PISO NA INICIAL
+16% DE VARIAÇÃO ENTRE AS CATEGORIAS
+5% DE VARIAÇÃO ENTRE AS CLASSES
+
+                                                                              ANEXO VI
+                                                                       ADMINISTRADOR DE REDE
+PISO          4.514,94
+
+                                                                                                                                                             TOTAL VENCIM +
+                                                                                                                                              ADICIONAL H
+ NÍVEL    CATEGORIA           A             B          C        D             E               F           G          H         VENCIMENTO                     ADICION H 35
+                                                                                                                                                35 ANOS
+                                                                                                                                                                 ANOS
+   4          IV               4.514,94   4.740,69   4.977,72   5.226,61    5.487,94          5.762,33   6.050,45   6.352,97       4.514,94       1.838,03          6.352,97
+   4          V                5.237,33   5.499,20   5.774,16   6.062,86    6.366,01          6.684,31   7.018,52   7.369,45       5.237,33       2.132,12          7.369,45
+
+VALOR DO PISO NA INICIAL
+16% DE VARIAÇÃO ENTRE AS CATEGORIAS
+5% DE VARIAÇÃO ENTRE AS CLASSES
+
+                                                                           ANALISTA DE SISTEMAS
+PISO          5.395,84
+
+                                                                                                                                                             TOTAL VENCIM +
+                                                                                                                                              ADICIONAL H
+ NÍVEL    CATEGORIA           A             B          C        D             E               F           G          H         VENCIMENTO                     ADICION H 35
+                                                                                                                                                35 ANOS
+                                                                                                                                                                 ANOS
+   4          IV               5.395,84   5.665,63   5.948,91   6.246,36    6.558,68          6.886,61   7.230,94   7.592,49       5.395,84       2.196,65          7.592,49
+   4          V                6.259,17   6.572,13   6.900,74   7.245,78    7.608,07          7.988,47   8.387,89   8.807,29       6.259,17       2.548,11          8.807,28
+
+VALOR DO PISO NA INICIAL
+16% DE VARIAÇÃO ENTRE AS CATEGORIAS
+5% DE VARIAÇÃO ENTRE AS CLASSES
+
+                                                                                  ARQUITETO
+PISO          4.992,76
+
+                                                                                                                                                             TOTAL VENCIM +
+                                                                                                                                              ADICIONAL H
+ NÍVEL    CATEGORIA           A             B          C        D             E               F           G          H         VENCIMENTO                     ADICION H 35
+                                                                                                                                                35 ANOS
+                                                                                                                                                                 ANOS
+   4          IV               4.992,76   5.242,40   5.504,52   5.779,74    6.068,73          6.372,17   6.690,78   7.025,31       4.992,76       2.032,55           7.025,31
+   4          V                5.791,60   6.081,18   6.385,24   6.704,50    7.039,73          7.391,71   7.761,30   8.149,37       5.791,60       2.357,76           8.149,37
+
+VALOR DO PISO NA INICIAL
+16% DE VARIAÇÃO ENTRE AS CATEGORIAS
+5% DE VARIAÇÃO ENTRE AS CLASSES
+
+                                                                                ANEXO VI
+                                                                              BIBLIOTECÁRIO
+PISO          3.530,52
+
+                                                                                                                                                                  TOTAL VENCIM +
+                                                                                                                                                   ADICIONAL H
+ NÍVEL    CATEGORIA           A              B           C         D             E               F            G           H         VENCIMENTO                     ADICION H 35
+                                                                                                                                                     35 ANOS
+                                                                                                                                                                      ANOS
+   4          IV               3.530,52    3.707,05    3.892,40    4.087,02    4.291,37          4.505,94    4.731,23    4.967,80       3.530,52       1.437,27          4.967,80
+   4          V                4.095,40    4.300,17    4.515,18    4.740,94    4.977,99          5.226,89    5.488,23    5.762,64       4.095,40       1.667,24          5.762,64
+
+VALOR DO PISO NA INICIAL
+16% DE VARIAÇÃO ENTRE AS CATEGORIAS
+5% DE VARIAÇÃO ENTRE AS CLASSES
+
+                                                                                     CONTADOR
+PISO          3.864,98
+
+                                                                                                                                                                  TOTAL VENCIM +
+                                                                                                                                                   ADICIONAL H
+ NÍVEL    CATEGORIA           A              B           C         D             E               F            G           H         VENCIMENTO                     ADICION H 35
+                                                                                                                                                     35 ANOS
+                                                                                                                                                                      ANOS
+   4          IV               3.864,98    4.058,23    4.261,14    4.474,20    4.697,91          4.932,80    5.179,44    5.438,41       3.864,98       1.573,43          5.438,41
+   4          V                4.483,38    4.707,55    4.942,92    5.190,07    5.449,57          5.722,05    6.008,15    6.308,56       4.483,38       1.825,18          6.308,56
+
+VALOR DO PISO NA INICIAL
+16% DE VARIAÇÃO ENTRE AS CATEGORIAS
+5% DE VARIAÇÃO ENTRE AS CLASSES
+
+                                                                                 PROCURADOR
+             10.348,98
+
+                                                                                                                                                                  TOTAL VENCIM +
+                                                                                                                                                   ADICIONAL H
+ NÍVEL    CATEGORIA           A              B           C         D             E               F            G           H         VENCIMENTO                     ADICION H 35
+                                                                                                                                                     35 ANOS
+                                                                                                                                                                      ANOS
+   4          IV              10.348,98   10.866,43   11.409,75   11.980,24   12.579,25         13.208,21   13.868,62   14.562,05      10.348,98       4.213,07          14.562,05
+   4          V               11.073,41   11.627,08   12.208,43   12.818,85   13.459,80         14.132,79   14.839,43   15.581,40      11.073,41       4.507,98          15.581,40
+
+INICIAL       10.348,98
+7% DE VARIAÇÃO ENTRE AS CATEGORIAS
+5% DE VARIAÇÃO ENTRE AS CLASSES

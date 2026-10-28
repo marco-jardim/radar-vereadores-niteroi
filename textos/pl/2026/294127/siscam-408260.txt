@@ -1,0 +1,28 @@
+                                       IMPACTO ORÇAMENTÁRIO - PROGRAMA CNH SOCIAL
+                                                           Processo n° 9900209031/2025
+
+                                     Custo Unitário (R$)         Número de                  Impacto Anual
+               Ano
+                                             (a)               Beneficiários (b)              (c)=(a)*(b)
+              2026                        2.089,92                   500                     1.044.960,00
+              2027                        2.177,70                   500                     1.088.848,32
+              2028                        2.260,45                   500                     1.130.224,56
+              2029                        2.339,56                   500                     1.169.782,42
+
+Custos de primeira habilitação, conforme peça 16
+
+            Despesa                  Valor Unitário (R$)
+
+         Taxas Dentran                      401,92
+        Exames Médicos                      288,00
+          Autoescola                       1400,00
+             Total                              2.089,92
+
+Premissas:
+1. Considerado as estimativas informadas na peça 16 do processo 9900209031/2025;
+2. A peça 16 apresenta estimativa de quantitativo de beneficiários, no entanto, não explicita a metodologia adotada para se chegar aos números de beneficiários
+elegíveis estimados. Desse modo, a estimativa de impacto orçamentária pode estar tanto superestimada quanto subestimada;
+3. A estimativa de impacto não considerou os custos operacionais para execução do programa, tendo em vista que não foram informados no processo;
+4. Valores corrigidos anualmente pela estimativa do IPCA, conforme relatório Focus.
+
+                                                                                                                                                                  26/12/2025

@@ -1,0 +1,55 @@
+                        ESTIMATIVA DE IMPACTO ORÇAMENTÁRIO - MEMÓRIA DE CÁLCULO
+                           Criação de 20 vagas de trainees e residentes - Processo 9900181351/2025
+
+                                                         Valor Presente
+                                       Bolsa Auxílio (R$)        Quantidade         Valor Mensal (R$)          Valor Anual (R$)
+   Residentes/Trainees SEPLAG                         3.500,00      10                         35.000,00                420.000,00
+    Residentes/Trainees CGM                           3.500,00      10                         35.000,00                420.000,00
+                            Total                                   20                         70.000,00                840.000,00
+
+                                         Valores Corrigidos Monetariamente
+            Rubricas                          2025                  2026                  2027                      2028
+                  Bolsa Auxílio                 140.000,00        861.560,00                897.422,40                932.255,25
+                                                           -                -                          -                       -
+    Total de impacto na RCL
+
+                             2025                                                                      2026
+               Mês                       Bolsa Auxílio                                     Mês                  Bolsa Auxílio
+             janeiro                                                                     janeiro                        70.000,00
+            fevereiro                                     -                             fevereiro                       70.000,00
+              março                                       -                               março                         70.000,00
+               abril                                      -                                abril                        70.000,00
+               maio                                       -                                maio                         70.000,00
+              junho                                       -                               junho                         73.080,00
+              julho                                       -                               julho                         73.080,00
+             agosto                                       -                              agosto                         73.080,00
+           setembro                                       -                            setembro                         73.080,00
+             outubro                                      -                              outubro                        73.080,00
+           novembro                                70.000,00                           novembro                         73.080,00
+           dezembro                                70.000,00                           dezembro                         73.080,00
+          SUBTOTAL                                140.000,00                          SUBTOTAL                         861.560,00
+
+                             2027                                                                      2028
+               Mês                       Bolsa Auxílio                                     Mês                  Bolsa Auxílio
+             janeiro                              73.080,00                              janeiro                        76.003,20
+            fevereiro                             73.080,00                             fevereiro                       76.003,20
+              março                               73.080,00                               março                         76.003,20
+               abril                              73.080,00                                abril                        76.003,20
+               maio                               73.080,00                                maio                         76.003,20
+              junho                               76.003,20                               junho                         78.891,32
+              julho                               76.003,20                               julho                         78.891,32
+             agosto                               76.003,20                              agosto                         78.891,32
+            setembro                              76.003,20                             setembro                        78.891,32
+             outubro                              76.003,20                              outubro                        78.891,32
+            novembro                              76.003,20                             novembro                        78.891,32
+            dezembro                              76.003,20                             dezembro                        78.891,32
+            TOTAL                                897.422,40                             TOTAL                          932.255,25
+
+      Referências Mensais
+                                                                 JUN/2026 A
+                                      JUN/2025 A MAI/26                            JUN/2027 A MAI/28          JUN/2028 A MAI/29
+            Despesa                                                MAI/27
+      Correção Monetária**                   5,60%                 4,40%                  4,00%                    3,80%
+
+Premissas:
+1. Correções monetárias a partir de 2027, conforme as metas de inflação do relatório focus de 18/08/2025.

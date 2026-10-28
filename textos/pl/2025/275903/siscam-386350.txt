@@ -1,0 +1,77 @@
+                  ESTIMATIVA DE IMPACTO ORÇAMENTÁRIO - MEMÓRIA DE CÁLCULO
+           ALTERAÇÃO DO BENEFÍCIO DA LEI N° 3.622, DE 30 DE JULHO DE 2021.
+
+          Rubrica                             2025                  2026                        2027
+    Quantitativo Projetado                               2.964                4.583                        7.085
+     Valor do Benefício                               1.518,00             1.639,44                     1.749,61
+            Total                                 4.499.352,00         7.513.553,52                12.395.989,46
+
+                                              2025
+                                      Quantitativo Benefício
+              Mês                                                 Diferença
+                                             (média)
+             janeiro                                       247           374.946,00
+           fevereiro                                       247           374.946,00
+             março                                         247           374.946,00
+               abril                                       247           374.946,00
+              maio                                         247           374.946,00
+              junho                                        247           374.946,00
+              julho                                        247           374.946,00
+             agosto                                        247           374.946,00
+           setembro                                        247           374.946,00
+            outubro                                        247           374.946,00
+           novembro                                        247           374.946,00
+           dezembro                                        247           374.946,00
+            TOTAL                                        2.964         4.499.352,00
+
+                                              2026
+                                      Quantitativo Benefício
+              Mês                                                   Total
+                                             (média)
+             janeiro                                        382         626.129,46
+           fevereiro                                        382         626.129,46
+             março                                          382         626.129,46
+               abril                                        382         626.129,46
+              maio                                          382         626.129,46
+              junho                                         382         626.129,46
+              julho                                         382         626.129,46
+             agosto                                         382         626.129,46
+           setembro                                         382         626.129,46
+            outubro                                         382         626.129,46
+           novembro                                         382         626.129,46
+           dezembro                                         382         626.129,46
+            TOTAL                                         4.583        7.513.553,52
+
+                                              2027
+                                      Quantitativo Benefício
+              Mês                                                   Total
+                                             (média)
+             janeiro                                        590        1.032.999,12
+           fevereiro                                        590        1.032.999,12
+             março                                          590        1.032.999,12
+               abril                                        590        1.032.999,12
+              maio                                          590        1.032.999,12
+              junho                                         590        1.032.999,12
+              julho                                         590        1.032.999,12
+             agosto                                         590        1.032.999,12
+           setembro                                         590        1.032.999,12
+            outubro                                         590        1.032.999,12
+           novembro                                         590        1.032.999,12
+           dezembro                                         590        1.032.999,12
+            TOTAL                                        7.085        12.395.989,46
+
+               Ano                           inflação             reajuste            projeção do salário mínimo
+              2025                            5,50%                 7,50%                                 1.518,00
+              2026                            4,22%                 8,00%                                 1.639,44
+              2027                            3,90%                 6,72%                                 1.749,61
+Fonte: boletim focus
+Teto 2,5% acima da inflação*
+* conforme art. 4º da Lei nº 15.077/2024
+
+Nágia Bruna
+Martins Pinto
+i Drumond
+E Ciga see 978.976-0
+Data: 30/01/2025
+17:39
+( Ciga

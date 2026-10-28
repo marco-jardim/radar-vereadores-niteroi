@@ -1,0 +1,38 @@
+                                                                                             PREFEITURA DE NITERÓI
+                                                                                             SECRETARIA MUNICIPAL DE FAZENDA
+
+                                                                                             Registro de Inscrição Municipal
+                                                                                             A PREFEITURA DE NITERÓI certifica que o contribuinte abaixo identificado está inscrito no Cadastro Mobiliário de Niterói,
+                                                                                             concedido automaticamente por desenvolver atividade de baixo risco, na forma da Lei nº 2.624/2008:
+                                                                                                                                                     CNPJ/CPF: 48.148.805/0001-03
+                                                                                                R. Social / Nome: ASSOCIACAO PROJETO AVANTE                                                                Inscrição: 3077080
+                                                                                                  Nome Fantasia: ASSOCIACAO PROJETO AVANTE                                                                      CGM: [CPF omitido]
+                                                                                                       Endereço: RUI BARBOSA                                                                                 Número: 679
+                                                                                                   Complemento: PARTE                                                                                          Bairro: SAO FRANCISCO
+                                                                                                Data de Inscrição: 06/05/2025                                                                              Processo: /
+niteroi_ecidade_prod - requisicao.webservice.php - Leonardo Farias - 16-05-2025 - 14:02:52
+
+                                                                                                CNAE - Atividade Principal
+                                                                                              S9430800      ATIVIDADES DE ASSOCIAÇÕES DE DEFESA DE DIREITOS SOCIAIS
+
+                                                                                                CNAE - Atividade Secundárias
+                                                                                              R9319101      PRODUÇÃO E PROMOÇÃO DE EVENTOS ESPORTIVOS
+                                                                                              S9493600      ATIVIDADES DE ORGANIZAÇÕES ASSOCIATIVAS LIGADAS À CULTURA E À ARTE
+                                                                                              S9499500      ATIVIDADES ASSOCIATIVAS NÃO ESPECIFICADAS ANTERIORMENTE
+
+                                                                                                Observações
+                                                                                              DEFINITIVO
+                                                                                                                                                                                             Documento liberado pelo usuário: LETICIA DE OLIVEIRA BORGES DA COSTA
+                                                                                                                           A DISPENSA DO ALVARÁ NÃO DESOBRIGA O ATENDIMENTO DOS REQUISITOS LEGAIS RELATIVOS
+                                                                                                                    AOS ASPECTOS SANITÁRIOS, AMBIENTAIS, TRIBUTÁRIOS, DE SEGURANÇA PÚBLICA, USO E OCUPAÇÃO DO SOLO,
+                                                                                                                 ATIVIDADES DOMICILIARES, RESTRIÇÕES AO USO DE ESPAÇOS PÚBLICOS E DEMAIS ASSUNTOS DE INTERESSE LOCAL.
+                                                                                             O contribuinte deve observar o Código de Posturas de Niterói (Lei 2.624/2008), especialmente os seguintes dispositivos:
+                                                                                             Art. 378. Os estabelecimentos serão fiscalizados a qualquer tempo, a fim de verificar se ainda subsistem as condições que possibilitaram o licenciamento ou
+                                                                                             a sua dispensa, bem como o cumprimento das obrigações tributárias.
+                                                                                             § 1º O Fiscal de Posturas poderá solicitar documentos do estabelecimento comercial para examiná-los, quando julgar necessário e essencial ao perfeito
+                                                                                             desempenho de suas atribuições funcionais.
+                                                                                             § 2º Na hipótese de identificação de irregularidades, divergências, omissões ou burla no fornecimento das informações que possibilitaram a dispensa de
+                                                                                             Alvará, a concessão do Alvará provisório ou a inscrição como ponto de referência, o registro no Cadastro Mobiliário poderá ser cancelado, ficando ainda o
+                                                                                             infrator sujeito à aplicação de multa no valor de referência M20 do Anexo I da Lei nº 2597/08, sem prejuízo da responsabilização civil e criminal.
+                                                                                             Art. 405. O original do cartão do Alvará ou do registro de inscrição municipal, nos casos de dispensa de Alvará, deve ser mantido em bom estado e em local
+                                                                                             visível e de fácil acesso à fiscalização.

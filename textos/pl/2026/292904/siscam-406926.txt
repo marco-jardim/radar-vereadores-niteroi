@@ -1,0 +1,40 @@
+Projeto de Lei:         /2026
+
+Institui o Sistema de Monitoramento Acústico Inteligente com foco no combate à poluição sonora causada por veículos automotores, especialmente motocicletas com emissão de ruído excessivo, no Município de Niterói, e dá outras providências.
+
+Art. 1º Fica instituído, no âmbito do Município de Niterói, o Sistema de Monitoramento Acústico Inteligente, com a finalidade de identificar e coibir a emissão de ruídos excessivos no meio urbano, especialmente aqueles provenientes de motocicletas e veículos com escapamentos adulterados ou irregulares.
+Art. 2º Para fins desta Lei, considera-se poluição sonora a emissão de ruídos acima dos limites legais, capazes de causar perturbação do sossego, prejuízo à saúde ou ao bem-estar da população.
+Art. 3º O Sistema poderá utilizar:
+I – radares acústicos com múltiplos microfones para identificação da origem sonora;
+II – câmeras integradas para identificação visual da fonte emissora;
+III – sistemas de geolocalização e análise de dados;
+IV – integração com os órgãos municipais de fiscalização.
+Art. 4º A detecção de ruídos excessivos poderá ser utilizada para:
+I – subsidiar ações de fiscalização ambiental urbana;
+II – emissão de advertências;
+III – aplicação de sanções administrativas por poluição sonora, conforme legislação municipal;
+IV – produção de prova técnica.
+
+Art. 5º  O sistema poderá identificar fontes móveis de poluição sonora, inclusive motocicletas e veículos automotores, quando caracterizada emissão de ruído acima dos limites permitidos.
+Parágrafo único. A identificação prevista neste artigo terá natureza exclusivamente administrativa e ambiental, vedada sua utilização direta como autuação de trânsito, devendo observar a legislação federal vigente.
+Art.  6º  O Poder Executivo priorizará a instalação dos equipamentos em locais com:
+I – alta incidência de denúncias de perturbação do sossego;
+II – recorrência de circulação de motocicletas com ruído excessivo;
+III – áreas residenciais com impacto sonoro significativo.
+Art. 7° Os equipamentos deverão respeitar:
+I – normas técnicas aplicáveis;
+II – limites legais de emissão sonora;
+III – a proteção de dados pessoais, sendo vedada a captação de conversas.
+Art. 8° O Município poderá firmar parcerias para implementação do sistema.
+Art. 9° As despesas decorrentes desta Lei correrão por conta de dotações orçamentárias próprias.
+
+_____________________________________
+
+Dr. Emanuel Rocha
+
+Justificativa:
+   A crescente emissão de ruídos excessivos por motocicletas, especialmente aquelas com escapamentos adulterados, tem gerado intensa perturbação do sossego público no Município de Niterói.
+   Trata-se de demanda recorrente da população, que sofre diariamente com barulho abusivo, principalmente no período noturno, afetando diretamente a saúde, o descanso e a qualidade de vida.
+   O presente Projeto de Lei propõe a utilização de tecnologia moderna de monitoramento acústico, já adotada em diversas cidades, capaz de identificar com precisão veículos responsáveis por ruídos excessivos.
+   Ressalta-se que a proposta respeita os limites constitucionais de competência, tratando a matéria como poluição sonora ambiental, permitindo atuação municipal legítima e eficaz.
+   A medida representa avanço na fiscalização urbana, garantindo mais tranquilidade à população e combatendo práticas que desrespeitam o convívio coletivo.

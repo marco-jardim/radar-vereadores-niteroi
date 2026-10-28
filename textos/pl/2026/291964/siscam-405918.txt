@@ -1,0 +1,55 @@
+PROJETO DE LEI Nº       /2026
+
+DISPÕE SOBRE A DIVULGAÇÃO PRÉVIA, NO ÂMBITO DO MUNICÍPIO DE NITERÓI, DAS INTERRUPÇÕES PROGRAMADAS NO FORNECIMENTO DE ENERGIA ELÉTRICA PELAS CONCESSIONÁRIAS E PERMISSIONÁRIAS DE DISTRIBUIÇÃO, E DÁ OUTRAS PROVIDÊNCIAS.
+
+Art. 1º Esta Lei dispõe sobre a obrigação de divulgação prévia, clara e adequada, das interrupções programadas no fornecimento de energia elétrica no âmbito do Município de Niterói, por concessionárias e permissionárias responsáveis pela distribuição de energia elétrica, ressalvadas as hipóteses emergenciais.
+
+Art. 2º Para os fins desta Lei, considera-se interrupção programada toda suspensão temporária do fornecimento de energia elétrica decorrente de manutenção, reparo, obra, melhoria, expansão, inspeção, substituição de equipamentos ou quaisquer intervenções previamente planejadas pela distribuidora.
+
+Art. 3º Nas hipóteses de interrupção programada que atinjam unidades consumidoras situadas no Município de Niterói, a concessionária ou permissionária deverá promover aviso prévio aos moradores e usuários da área afetada com antecedência mínima de 72 (setenta e duas) horas do início previsto da interrupção, sem prejuízo da observância de prazos superiores fixados pela regulamentação da ANEEL.
+§1º O aviso deverá conter, no mínimo:
+I – a identificação da área ou logradouro atingido;
+II – a data da interrupção;
+III – o horário previsto de início e de término;
+IV – o motivo da interrupção programada;
+V – os canais oficiais de atendimento ao consumidor.
+
+§2º Sempre que a regulamentação federal ou da ANEEL estabelecer prazo de aviso superior ao previsto no caput, prevalecerá o prazo mais benéfico ao consumidor.
+
+Art. 4º O aviso prévio de interrupção programada deverá ser realizado, no mínimo, de forma cumulativa, pelos seguintes meios:
+I – publicação no sítio eletrônico oficial e, se houver, no aplicativo da concessionária, com indicação objetiva da área afetada, da data, do horário de início e término previstos e do motivo da interrupção;
+II – envio de comunicação direta aos consumidores cadastrados da área atingida, por SMS, e-mail ou outro meio eletrônico previamente disponibilizado pelo usuário;
+III – divulgação ostensiva no local afetado, sempre que a interrupção atingir área residencial, comercial ou de grande circulação, inclusive por meio de avisos afixados em pontos visíveis, condomínios, associações de moradores ou estabelecimentos de referência da localidade.
+
+§1º Sempre que tecnicamente possível, a concessionária deverá indicar de forma precisa os logradouros, trechos, quadras ou imóveis potencialmente atingidos pela interrupção programada.
+
+§2º Na hipótese de a interrupção atingir escolas, creches, unidades de saúde, instituições de longa permanência para idosos, equipamentos públicos essenciais ou prédios com grande concentração de moradores, a concessionária deverá promover comunicação específica aos respectivos responsáveis, sem prejuízo das demais formas de divulgação previstas neste artigo.
+
+§3º A concessionária deverá manter registro comprobatório dos avisos realizados, pelo prazo mínimo de 6 (seis) meses, para fins de fiscalização pelos órgãos competentes.
+
+Art. 5º Em áreas predominantemente residenciais, a concessionária deverá adotar linguagem simples e informação objetiva, de modo a permitir a imediata compreensão pelos consumidores acerca do local afetado e da duração estimada da interrupção.
+
+Art. 6º Ficam excluídas da exigência de antecedência prevista nesta Lei as interrupções decorrentes de:
+I – emergência;
+II – risco iminente à segurança de pessoas, bens ou instalações;
+III – caso fortuito ou força maior;
+
+Parágrafo único. Nas hipóteses deste artigo, a concessionária deverá dar publicidade à ocorrência pelos meios disponíveis tão logo seja possível, indicando, sempre que cabível, a justificativa da medida e a estimativa de restabelecimento.
+
+Art. 7º O Poder Executivo poderá, por seus órgãos de proteção e defesa do consumidor, fiscalizar o cumprimento desta Lei no que couber à transparência da informação e aos direitos do consumidor, sem prejuízo das competências dos órgãos federais e regulatórios.
+
+Art. 8° O descumprimento do disposto nesta Lei sujeitará o infrator às sanções administrativas cabíveis na legislação de defesa do consumidor, observado o devido processo legal e a competência dos órgãos fiscalizadores.
+
+Art. 9 Esta Lei será aplicada em conformidade com a legislação federal e com a regulamentação editada pela Agência Nacional de Energia Elétrica – ANEEL, vedada interpretação que importe em conflito com normas gerais ou técnicas de regulação do setor elétrico.
+
+Art. 10º Esta Lei entra em vigor na data de sua publicação.
+
+_________________________
+Daniel Marques
+
+JUSTIFICATIVA
+A presente proposição tem por objetivo reforçar, no âmbito do Município de Niterói, o dever de informação prévia aos consumidores acerca das interrupções programadas no fornecimento de energia elétrica, em casos de manutenção, reparo, obras e demais intervenções planejadas pelas distribuidoras.
+A medida prestigia os princípios da transparência, da boa-fé e da proteção do consumidor, permitindo que famílias, comerciantes, prestadores de serviço e demais usuários possam se organizar previamente diante da suspensão temporária do fornecimento. Em uma cidade dinâmica como Niterói, a falta de informação adequada sobre cortes programados pode afetar o funcionamento de residências, atividades econômicas, conservação de alimentos e medicamentos, segurança predial e rotina de trabalho dos cidadãos.
+A proposta observa a regulamentação já existente no âmbito da ANEEL. O Módulo 8 do PRODIST determina que a distribuidora avise os consumidores sobre interrupções programadas, informando data e horário de início e término, com antecedência mínima de 5 dias úteis, 3 dias úteis ou 72 horas, conforme a categoria da unidade consumidora, além de prever proteção específica para consumidores que dependem de equipamentos vitais movidos a energia elétrica.
+Dessa forma, o projeto não busca invadir a competência regulatória federal, mas sim reforçar, em âmbito local, a necessidade de publicidade efetiva e de comunicação clara à população niteroiense, adotando, para a generalidade dos moradores, o piso mínimo de 72 horas já previsto na disciplina setorial e preservando os prazos superiores fixados pela ANEEL quando cabíveis.
+Trata-se, portanto, de medida razoável, proporcional e voltada à tutela do interesse local e dos direitos básicos do consumidor, merecendo a aprovação desta Casa Legislativa.

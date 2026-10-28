@@ -1,0 +1,135 @@
+                 695000,000000                                                      696000,000000   697000,000000                                        698000,000000                                                                                                              699000,000000
+
+                                                                                                                                                                                                                                                                                                                  LEI URBANÍSTICA DE NITERÓI
+
+                                            ic a n
+                                                                                                                                                                                                                                                                                                                  MAPA 1I - ZONEAMENTO
+
+                                         oP vi
+                                        Syl
+                                     ito
+7463200,000000
+
+                                       fe
+                                   Pre
+                                                                                                                                                                                                                                                                                                                                                  SÃO GONÇALO
+                                  ida
+                                    n
+
+                                                                                                                                                                                                                                                                                                                               1A
+                                 Ave
+
+                                                                                                                                                                                                                                                                                                                                      1B
+                                                                                                                                                                                                                                                                                                                                                  1C
+
+                                                                                                                                                                                                                        s
+                                                                                                                                                                                                                     ne
+                                                                                                                                                                                                                                                                                                                               1D
+
+                                                                                                                                                                                                                   Nu
+                                                                                                                                                                                                                                                                                                                                      1E          1F         1G
+
+                                                                                                                                                                                                                  uz
+                                                                                                                                                                                                               Cr
+                                                                                                                                                                                                             da
+                                                                                                                                                                                                           o
+                                                                                                                                                                                                      sc
+                                                                                                                                                                                                                                                                                                                               1H
+
+                                                                                                                                                                                                  i
+                                                                                                                                                                                               nc
+                                                                                                                                                                                                                                                                                                                                     1I        1J       1K
+
+                                                                                                                                                                                               a
+                                                                                                                                                                                            Fr
+                                                                                                                                                                                                                                                                                                                                                              MARICÁ
+
+                                                                                                                                                                                         da
+                                                                                                                                                                                     tra
+                                                                                                                                                                                                                                                                                                                                             1L
+
+                                                                                                                                                                                  Es
+                                        Tún
+                                           el
+                                                 Lu
+                                                    is   An
+                                                            tôn
+                                                                io   Pim
+7462400,000000
+
+                                                                         ent
+                                                                            e   l
+
+                                                                                                                                                                                                                         Es                                                                                       LEGENDA
+                                                                                                                                                                                                                            tra
+                                                                                                                                                                                                                                  da
+                                                                                                                                                                                                                                       Fr
+                                                                                                                                                                                                                                          a   nc
+                                                                                                                                                                                                                                                                                                                  Nome da zona
+                                                                                                                                                                                                                                                 i   sc
+                                                                                                                                                                                                                                                          o
+                                                                                                                                                                                                                                                                                                                         ZCM                           ZEPAC
+                                                                                                                                                                                                                                                              da
+                                                                                                                                                          Av                                                                                                       Cr
+                                                                                                                                                             en                                                                                                       uz
+                                                                                                                                                                i   da                                                                                                     Nu
+                                                                                                                                                                         Do
+                                                                                                                                                                           ut
+                                                                                                                                                                                                                                                                             ne
+                                                                                                                                                                                                                                                                                s                                        ZEU                           ZRU
+                                                                                                                                                                              or                                                                                                    -P
+                                                                                                                                                                                 Ra                                                                                                      is
+                                                                                                                                                                                   ul
+                                                                                                                                                                                        de
+                                                                                                                                                                                           Ol
+                                                                                                                                                                                                                                                                                              ta
+                                                                                                                                                                                                                                                                                                   Ce                    ZC                            ZRM
+                                                                                                                                                                                              iv                                                                                                      nt
+                                                                                                                                                                                                   e ir                                                                                                  ra
+                                                                                                                                                                                                          aR
+                                                                                                                                                                                                            od
+                                                                                                                                                                                                                                                                                                              l
+                                                                                                                                                                                                                                                                                                                         ZDE                           ZRA
+                                                                                                                                                                                                              r ig
+                                                                                                                                                                                                                  ue
+                                                                                                                                                                                                                     s
+                                                                                                                                                                                                                                                                                                                         ZCL                           AEIT
+                                                                                                                                                                                                                                                                                                                                                       Parque
+7461600,000000
+
+                                                                                                                                                                                                                                                                                                                         ZUM < 6*
+                                                                                                                                                                                                                                                                                                                                                       Parque Urbano
+                                                                                                                                                                                                                                                                                                                         ZUM >= 6*
+                                                                                                                                                                                                                                                                                                                         ZC-ZEIS                       ZDS
+
+                                                                                                                                                                                                                                                                                                                         ZEIS                          ZCA
+
+                                                                                                                                                                                                                                                                                                                         ZEPAC - APAP                  ZPA
+7460800,000000
+
+                                                                                                                                                                                                                                                                  da                                     ré
+                                                                                                                                                                                                                                                              man
+                                                                                                                                                                                                                                                        te Ta
+                                                                                                                                                                                                                                                  lmiran
+                                                                                                                                                                                                                                                 A
+                                                                                                                                                                                                                                             ida
+                                                                                                                                                                                                                                        Aven
+
+                                                                                                                    Avenid
+                                                                                                                          a   Douto
+                                                                                                                                   r Acúrc
+                                                                                                                                          io Torr
+                                                                                                                                                    es
+
+                                                                                                                                                     ZUM+8
+7460000,000000
+
+                                                                                                                                                                                                                                                                                                                                      1
+                                                                                                                                                                                                                                                                                                                                                                  Km
+
+                                                                                                                                                                                                                                                                                                                  Referências Cartográficas
+                                                                                                                                                                                                                                                                                                                  Sistema de Coordenadas: UTM Fuso 23K
+                                                                                                                                                                                                                                                                                                                  Sistema Geodésico: SIRGAS 2000
+                                                                                                                                                                                                                                                                                                                  Datum Vertical: Marégrafo de Imbituba
+
+                                                                                                                                                                                                                                                                                                                  Escala: 1:15.000        14 de Setembro de 2023

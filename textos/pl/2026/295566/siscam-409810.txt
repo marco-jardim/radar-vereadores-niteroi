@@ -1,0 +1,96 @@
+| Câmara Municipal de Niterói Gabinete Vereador Professor Tulio Partido Socialismo e Liberdade (PSOL)
+
+PROJETO DE LEI Nº        /2026
+
+Dispõe sobre a criação do Sistema Municipal de Monitoramento de Permeabilidade do solo no Município de Niterói, com inclusão de jardins de chuva como dispositivo de escoamento das águas pluviais, e dá outras providências.
+
+Art. 1º Fica criado o Sistema Municipal de Monitoramento de Permeabilidade do Solo (SMP), com a finalidade de instituir a fiscalização sistemática da permeabilidade do solo nas edificações, nas calçadas e no entorno dos indivíduos arbóreos (golas), bem como incentivar soluções de drenagem sustentável com a criação de jardins de chuva.
+Art. 2º O Sistema Municipal de Monitoramento de Permeabilidade (SMP) deverá:
+I – Centralizar os dados de todos os empreendimentos licenciados;
+II – Disponibilizar informações georreferenciadas à população sobre áreas permeáveis e impermeáveis;
+III – Gerar alertas para áreas com irregularidades ou com risco de alagamento;
+IV – Centralizar denúncias de áreas impermeabilizadas irregularmente;
+V – Mapear anualmente a evolução da impermeabilização no território municipal;
+VI - Incentivar a criação de jardins de chuva.
+§ único. Os espaços destinados à criação de jardins de chuva podem ser financiados por parcerias público privadas.
+Art. 3º Para os fins de integração e monitoramento no âmbito do SMP, consideram-se:
+I – Área Permeável: porção do lote que permite infiltração de água no solo natural, em sistemas de pavimento permeável certificados ou em dispositivos de infraestrutura verde;
+II – Jardins de Chuva: dispositivos de infraestrutura verde projetados para captar, infiltrar, tratar e reduzir a velocidade do escoamento superficial das águas pluviais, integrando técnicas de manejo sustentável de águas urbanas e adaptação climática;
+III – Piso Drenante: solução construtiva que atenda à norma técnica aplicável e permita infiltração, vedado o uso de asfalto poroso como área permeável de jardim, compreendendo:
+a) bloquetes drenantes;
+b) pisos intertravados com junta drenante;
+c) demais soluções previstas em regulamento.
+IV – Golas: áreas de solo no entorno dos indivíduos arbóreos em passeios públicos.
+V – Bueiro ecológico: sistema que funciona com a colocação de um cesto coletor dentro da boca de lobo, retendo resíduos e lixo, impedindo o entupimento da rede de drenagem.
+Parágrafo único. A implantação de jardins de chuva, como dispositivos incentivados pelo SMP, deverá priorizar o uso de espécies vegetais nativas da Mata Atlântica e adaptadas aos ecossistemas locais (restingas e encostas), contribuindo para a biofiltração de poluentes, recarga de lençóis freáticos e combate às ilhas de calor urbana.
+Art. 4º A obrigatoriedade do cumprimento dos índices de permeabilidade do solo para as edificações segue o estabelecido nas leis que regulamentaram os respectivos licenciamentos: Lei nº 3.905, de 20 de maio de 2024 (LUOS), na Lei nº 1.967, de 04 de abril de 2002 (PUR PB), e nas alterações constantes na Lei nº 3.061, de 03 de dezembro de 2013 (Operação Urbana Consorciada do Centro), na Lei nº 1.968, de 05 de abril de 2002 (PUR RO), na Lei nº 2.233, de 19 de outubro de 2005 (PUR RN) e na Lei nº 3.195, de 13 de janeiro de 2016 (PUR Pendotiba).
+§ 1º A fiscalização, coordenada pelo SMP, deverá:
+I – Priorizar as novas construções e as já edificadas com licenciamentos
+a partir da data definida pela Lei Urbanística de 2024;
+II – Em seguida, fomentar a adequação voluntária de imóveis anteriores,
+mediante programa de incentivo à implantação de jardins de chuva e
+pisos drenantes;
+III – Aplicar sanções apenas em caso de descumprimento de exigência
+expressa na legislação vigente na data do licenciamento original,
+ressalvadas as hipóteses de interesse público ambiental justificado
+e risco de inundação comprovado pela Defesa Civil.
+§ 2º Ao final do prazo de dois anos contados a partir da publicação desta Lei, a fiscalização deverá ter sido realizada em todos os imóveis, independentemente da localização.
+Art. 5º São consideradas áreas permeáveis para fins de cálculo dos índices e registro no SMP aquelas que atenderem aos seguintes requisitos:
+I – Estar sobre solo natural e em área descoberta;
+II – Estar localizada dentro dos limites do lote, não podendo estar em calçadas nem em faixas de doação ou desapropriação;
+III – Não conter elementos construídos, sob ou sobre o local, incluindo decks, muros, bancos, construções enterradas etc., exceto quando integrarem jardins de chuva devidamente projetados;
+IV – Para efeito exclusivo desta Lei, para as edificações mais antigas, poderão ser consideradas como áreas permeáveis aquelas cobertas apenas por:
+a) terraços em balanço;
+b) saliências (brises, abas, floreiras, vigas e ornamentos de fachada, beirais, marquises), desde que, obrigatoriamente, recebam diretamente água da chuva ou pela superfície térrea;
+V – Jardins de Chuva implantados conforme definição do Art. 3º, inciso II, desta Lei.
+§ 1º Áreas de coberturas com jardineiras ou outros elementos contendo solo que não integrem um sistema de drenagem e infiltração não são consideradas como áreas permeáveis para efeito desta Lei.
+§ 2º Excepcionalmente, poderão ser computados como permeáveis os patamares de encosta que sejam objeto de intervenções de estabilização acompanhadas de soluções de infiltração, tais como:
+a) jardins de chuva;
+b) bacias de biorretenção;
+c) valas e trincheiras de infiltração;
+com solo adequado e camada drenante, desde que apresentados ART/RRT e laudo geotécnico atestando estabilidade e funcionalidade hidráulica.
+Art. 6º A fiscalização nos novos empreendimentos deverá ser realizada:
+I – Preventivamente, no ato do licenciamento de obras;
+II – Durante a execução das obras, através de vistorias técnicas;
+III – Após a conclusão, mediante verificação final.
+Parágrafo único. Os responsáveis por empreendimentos deverão comprovar o atendimento aos índices através de laudo final de verificação, podendo utilizar jardins de chuva como solução compensatória ou complementar.
+Art. 7º Nos imóveis térreos comerciais e/ou de serviço, com um único pavimento ou no máximo sobrado, áreas descobertas destinadas a estacionamento ou serviço, o percentual permeável exigido por lei poderá ser substituído por piso de material drenante, de comprovada eficiência, ou por jardins de chuva, quando colocados em 100% da área descoberta, respeitadas as condições adequadas à locomoção das pessoas com necessidades especiais.
+Parágrafo único. Para os casos de imóveis antigos reformados ou com mudança de uso nos últimos três anos, a partir da publicação desta Lei, aplica-se a legislação em vigor na data da reforma ou mudança de uso para fins de cômputo de área permeável.
+Art. 8º A fiscalização da permeabilidade em calçadas e entorno de árvores (golas) integrará o SMP, visando garantir a infiltração de água e a saúde do sistema radicular do indivíduo arbóreo.
+Art. 9º Fica o Poder Executivo através da Secretaria Municipal de Meio Ambiente, Recursos Hídricos e Sustentabilidade de Niterói - SMARHS em parceria com a Secretaria Municipal de Conservação e Serviços Públicos - SECONSER responsáveis por:
+I – Realizar vistorias anuais em calçadas em áreas urbanizadas, verificando a permeabilidade no entorno das árvores;
+II – Aplicar sanções administrativas em caso de descumprimento;
+III – Promover ações de recuperação de áreas impermeabilizadas irregularmente no passeio público;
+IV – Priorizar a utilização de jardins de chuva e pavimentos permeáveis no entorno de árvores para garantir a infiltração de água;
+V - Instalar bueiros ecológicos com cestos coletores em bocas de lobo.
+§ 1º A implantação de jardins de chuva em calçadas e passeios públicos
+dependerá de autorização prévia do Poder Executivo, observados o Decreto nº 11.295/2012, o Manual de
+Calçadas Acessíveis do Município e mantida a faixa livre de 1,20m
+mínima para circulação de pedestres conforme NBR 9050.
+Art. 10. Compete à Secretaria Municipal de Urbanismo de Niterói a gestão técnica do SMP, responsável por:
+I – Realizar vistorias anuais em áreas urbanizadas para verificação dos índices de permeabilidade nas edificações;
+II – Atualizar o banco de dados do Sistema Municipal de Monitoramento;
+III – Aplicar sanções administrativas em caso de descumprimento;
+IV – Promover ações de recuperação de áreas impermeabilizadas irregularmente;
+V – Incentivar, nos projetos de paisagismo e drenagem municipais, a implantação de jardins de chuva em calçadas, praças e canteiros centrais.
+Art. 11. As sanções por descumprimento das normas de permeabilidade previstas nesta Lei incluirão:
+I – Multa nos valores de referência M10 a  M20, do Código Tributário Municipal;
+II – Embargo da obra ou intervenção;
+III – Obrigatoriedade de medidas compensatórias em dobro da área afetada, preferencialmente mediante implantação de:
+a) jardins de chuva;
+b) áreas verdes.
+Art. 12. Os recursos arrecadados com multas previstas nesta Lei serão destinados:
+I – 50% para o fundo municipal de meio ambiente;
+II – 30% para programas de drenagem urbana sustentável;
+III – 20% para educação ambiental e projetos de infraestrutura verde.
+Art. 13. Esta Lei entra em vigor 90 (noventa) dias após a data de sua publicação.
+
+Professor Tulio
+
+JUSTIFICATIVA
+Em face da emergência climática global e do aumento de danos/impactos visíveis e cotidianos como cortes e supressões de árvores, impermeabilização desenfreada do solo acompanhada de adensamento, recorrentes enchentes e ilhas de calor, a gestão eficiente da água no solo urbano tornou-se estratégica para a resiliência da cidade. O recente título de "cidade mais quente do país" (INMET, 2025) dado a Niterói, que se autointitula "Cidade Sustentável", demonstra a urgência de medidas efetivas.
+Esta proposição tem como mote central a criação do Sistema Municipal de Monitoramento de Permeabilidade do Solo (SMP) com o objetivo de transformar a fiscalização — hoje muitas vezes reativa e fragmentada — em um processo sistemático, transparente e baseado em dados georreferenciados.
+Através do SMP, o Município passa a ter controle total sobre a evolução da impermeabilização, identificando pontos críticos de alagamento e garantindo o cumprimento da Lei de Uso e Ocupação do Solo (LUOS) Lei 3905/2024 e das legislações anteriores.
+Além da ferramenta de gestão, o PL inova ao introduzir legislativamente os Jardins de Chuva. Esses dispositivos são reconhecidos oficialmente como infraestrutura de drenagem, que permitem que o próprio lote privado atue como uma esponja, retendo a água da chuva, filtrando poluentes e aliviando a pressão sobre as galerias pluviais, evitando alagamentos. De forma semelhante os bueiros ecológicos funcionam como sistema retentor de lixo e resíduos através de cestos coletores colocados no interior da caixa do bueiro.
+A união do monitoramento rigoroso com incentivos a soluções baseadas na natureza (como jardins de chuva e pisos drenantes) representa um avanço na governança ambiental, cumprindo a legislação federal e municipal.
+Pelo exposto, solicitamos o apoio dos nobres pares para a aprovação desta matéria, que institui uma ferramenta moderna de gestão pública em prol da segurança hídrica e da qualidade de vida em Niterói.

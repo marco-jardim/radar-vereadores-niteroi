@@ -1,0 +1,162 @@
+		Niterói,          de abril de 2022
+MENSAGEM EXECUTIVA Nº  09/2022
+
+Excelentíssimo Senhor Presidente,
+
+Tenho a honra de encaminhar a Vossa Excelência e, por seu intermédio, aos ilustres membros dessa Casa Legislativa o incluso Projeto de Lei dispõe sobre as normas para implantação e compartilhamento de infraestrutura de suporte e de telecomunicações.
+	Considerando a Lei Federal 13.116/2015 que estabelece normas gerais para implantação e compartilhamento da infraestrutura de telecomunicações e à luz do disposto no Decreto Federal 10.480/2020 e na Lei Estadual 9.151/2020, após amplas discussões técnicas envolvendo a Secretaria Municipal de Conservação e Serviços Públicos - SECONSER, o Escritório de Gestão de Projetos – EGP, a Secretaria Municipal de Ciência & Tecnologia e Inovação - SMCTI, a Procuradoria Geral do Município – PGM, Secretaria Municipal de Urbanismo – SMU e a Secretaria Municipal de Meio Ambiente, Recursos Hídricos e Sustentabilidade – SMARHS, notadamente num esforço coletivo, resta claro, que no cenário pós-pandemia, a tecnologia 5G será fundamental para a recuperação econômica global.
+	Maior capacidade e velocidade e menor latência permitirão mais usuários, mais dados e conexões rápidas para novos serviços e maior produtividade das empresas.
+	A melhoria nos serviços permitirá também que as chamadas Cidades Inteligentes (Smart Cities), ganhem contornos visíveis.  A Internet das Coisas (Internet of Things – IoT) e as Smart Cities estão diretamente relacionadas em diversos aspectos.  Para os municípios que se prepararem para a chegada da nova tecnologia, transformações tão esperadas e que dependem de comunicação móvel de excelência se tornarão realidade, resultando em ganhos significativos para as áreas de saúde, transportes, educação, segurança e muitas outras.
+	Neste sentido, cabe destacar que no Ranking das Cidades Amigas da Internet de 2020 e que está na 6ª edição, nossa cidade encontra-se na 96ª posição, entre as 100 maiores cidades do Brasil. Essa posição no ranking é fruto exatamente da dificuldade em implantar e licenciar infraestrutura na cidade que não condiz com a posição de destaque que o município vem conquistando nos últimos anos, como acumular duas vezes a nota máxima no Ranking Nacional da Transparência do Ministério Público Federal, ou ainda ser a única cidade do Estado a alcançar excelência na gestão de suas contas públicas em 2016 e 2018, de acordo com o índice Firjan de Gestão Fiscal (IFGF), além do 1º lugar no Estado do Rio de Janeiro e 22º no País no índice de Governança Municipal do Conselho Federal de Administração (CFA).
+	Ressalto que a discussão acerca da regulamentação de antenas de telecomunicação é assunto em pauta em vários municípios do Estado, como Campos dos Goytacazes, Teresópolis, Valença e a Capital.  A regulamentação para a implantação de infraestrutura para telecomunicações é um passo necessário para que as cidades recebam os investimentos privados em conectividade, que contribuirão para seu desenvolvimento econômico e social.
+Assim, esperando contar, mais uma vez, com o apoio e o respaldo dessa Egrégia Casa, reitero a Vossas Excelências os protestos de estima e consideração.
+
+AXEL GRAEL
+
+Excelentíssimo Senhor
+Vereador Milton Carlos Lopes
+M.D. Presidente da Câmara Municipal de Niterói
+PROJETO DE LEI Nº                 , DE          DE                          DE 2022
+
+Dispõe sobre as normas para implantação e compartilhamento de infraestrutura de suporte e de telecomunicações.
+
+A CÂMARA MUNICIPAL DE NITERÓI DECRETA E EU SANCIONO E PROMULGO A SEGUINTE LEI:
+
+CAPÍTULO I
+DAS DISPOSIÇÕES GERAIS
+Art. 1º – O licenciamento para implantação e o compartilhamento de antenas e infraestruturas de suporte destinados à operação de serviços de telecomunicações no Município de Niterói ficam disciplinados por esta Lei, sem prejuízo do disposto na legislação federal e estadual pertinente.
+Art. 2º – A gestão, licenciamento e fiscalização de equipamentos previstos nesta Lei em bens municipais ficará a cargo da Secretaria de Conservação e Serviços Públicos (SECONSER).
+Parágrafo único – A Fiscalização a que se refere o caput deste artigo será exercida pelos Fiscais de Sistema Viário designados.
+Art. 3º – A gestão, licenciamento e fiscalização de equipamentos previstos nesta Lei em áreas privadas ficarão a cargo da Secretaria de Urbanismo e Mobilidade (SMU), ressalvadas as competências dos outros órgãos municipais.
+Parágrafo único – Os componentes das ETR’s, quando localizadas em edificações, deverão atender aos parâmetros estabelecidos pela legislação de uso e ocupação do solo, no Código de Obras e Edificações e nas demais normas correlatas.
+
+CAPÍTULO II
+DA TERMINOLOGIA
+Art. 4º – Para fins de aplicação desta Lei, adotar– se– ão as normas expedidas pela Agência Nacional de Telecomunicações (ANATEL) e as seguintes definições:
+I – Antena: dispositivo para irradiar ou captar ondas eletromagnéticas no espaço;
+II – Detentora: pessoa jurídica que detém, administra ou controla, direta ou indiretamente, antenas e infraestrutura de suporte de ETR;
+III – Operadora: pessoa jurídica que detém a concessão, permissão ou autorização para a exploração de serviços de telecomunicações;
+IV – Estação Transmissora de Radiocomunicação (ETR): conjunto de instalações que comportam equipamentos de radiofrequência, destinado à transmissão de sinais de telecomunicações para a cobertura de determinada área, composto por postes, torres, mastros, antenas, contêineres e demais equipamentos necessários à operação de serviços de telecomunicações;
+V – Estação Transmissora de Radiocomunicação Móvel (ETR móvel): equipamentos destinados à operação de serviços de telecomunicações de radiofrequência, destinado à transmissão de sinais de telecomunicações, de caráter perene ou transitório;
+VI – Estação Transmissora de Radiocomunicação de Pequeno Porte: conjunto de equipamentos de radiofrequência destinado a prover ou aumentar a cobertura ou capacidade de tráfego de transmissão de sinais de telecomunicações para a cobertura de determinada área, apresentando dimensões físicas reduzidas e que seja apto a atender aos critérios de baixo impacto visual, assim considerados aqueles que observam os requisitos definidos no Artigo 15 do Decreto Federal Nº 10.480 de 1 de setembro de 2020;
+VII – Infraestrutura de suporte: meios físicos utilizados para dar suporte a redes de telecomunicações, entre os quais, postes, torres, mastros, armários, estruturas de superfície e estruturas suspensas;
+VIII – Instalação Externa: instalação em locais não confinados, tais como torres, postes, topo de edificações, fachadas, caixas d’água etc.;
+IX – Instalação Interna: instalação em locais internos, tais como no interior de edificações, túneis, shopping centers, aeroportos, estádios etc.
+X – Poste: infraestrutura vertical cônica e auto–suportada, constituída de concreto, metal ou fibra, instalada para suportar as ETR´s;
+XI –  Torre: infraestrutura vertical transversal, triangular ou quadrada, treliçada, que pode ser do tipo auto– suportada ou estaiada;
+XII – Termo de Permissão de Uso (TPU): ato administrativo unilateral, discricionário, negocial e precário, gratuito ou oneroso, pelo qual a Administração Pública faculta ao particular a execução de serviço público ou a utilização de bem imóvel público por período determinado.
+
+CAPÍTULO III
+DAS DIRETRIZES
+Art. 5º – A implantação das ETR’s deverá observar as seguintes diretrizes:
+I – Desenvolvimento econômico, social e tecnológico do Município;
+II – Redução dos impactos ambientais e paisagísticos;
+III – Utilização de tecnologias limpas;
+IV – Prioridade do compartilhamento de infraestrutura;
+V – Uso prioritário da infraestrutura urbana consolidada;
+VI – Universalização de cobertura.
+
+CAPÍTULO IV
+DAS ESTAÇÕES TRANSMISSORAS DE RADIOCOMUNICAÇÃO
+Art. 6º – As Estações Transmissoras de Radiocomunicação e as respectivas infraestruturas de suporte ficam enquadradas na categoria de equipamentos urbanos, sendo considerados bens de utilidade pública e de relevante interesse social, conforme disposto na legislação aplicável, podendo ser implantadas, compartilhadas e utilizadas em todas as zonas e categorias de uso, desde que atendam exclusivamente ao disposto nesta Lei.
+§1º – Em bens privados é permitida a instalação e o funcionamento de estações transmissoras de radiocomunicação e de infraestrutura de suporte, com a autorização do proprietário do imóvel.
+§2º – Nos bens públicos municipais é permitida a implantação da infraestrutura de suporte e a instalação e funcionamento de estações transmissoras de radiocomunicação, através de TPU, que será outorgado pela Administração a título oneroso e/ou mediante medidas compensatórias definidas em regulamentação específica.
+§3º – A cessão de uso de bem público não se dará de forma exclusiva, ressalvados os casos em que sua utilização por outros interessados seja inviável ou puder comprometer a instalação de infraestrutura, a critério da SECONSER.
+§4º – Em razão de relevante interesse social, o Município poderá ceder o uso do bem público para qualquer particular interessado em realizar a instalação de estações transmissoras de radiocomunicação ou a implantação de infraestrutura de suporte, na forma prevista no parágrafo 3º, sendo inexigível, nestes casos, a elaboração de processo licitatório.
+Art. 7º – O limite máximo de emissão de radiação eletromagnética, considerada a soma das emissões de radiação de todos os sistemas transmissores em funcionamento em qualquer localidade do Município, será aquele estabelecido em legislação federal para exposição humana aos campos elétricos, magnéticos ou eletromagnéticos.
+Parágrafo Único – A SECONSER ou outra secretaria que a venha substituir na função de fiscalização dos serviços do Município, deverá oficiar a ANATEL no caso de eventuais indícios de irregularidades quanto aos limites legais de exposição humana a campos elétricos, magnéticos e eletromagnéticos.
+Art. 8º – A instalação de novas Infraestruturas de Suporte levará em conta a redução do impacto urbanístico, bem como observará as condições de compartilhamento de infraestruturas previstas nas regulamentações federais pertinentes.
+§1º - A expedição da licença para instalação de nova Infraestrutura de Suporte será precedida de avaliação de eventual capacidade excedente nas infraestruturas existentes no entorno do local da pretendida instalação.
+§2º – É obrigatório o compartilhamento da capacidade excedente de Infraestruturas de Suporte existentes, exceto quando houver justificado motivo técnico
+§3º – A construção e a ocupação de Infraestruturas de Suporte devem ser planejadas e executadas com vistas a permitir seu compartilhamento pelo maior número possível de Operadoras.
+
+CAPÍTULO V
+DAS RESTRIÇÕES DE INSTALAÇÃO E OCUPAÇÃO DO SOLO
+Art. 9º – Visando à proteção da paisagem urbana, a instalação externa de infraestruturas de suporte deverá atender às seguintes disposições:
+I – Em relação à instalação de torres: 3m (três metros) do alinhamento frontal e 1,5m (um metro e meio) das divisas laterais e de fundos, sempre contados a partir do eixo da base da torre em relação à divisa do imóvel;
+II – Em relação à instalação de postes: 1,5m (um metro e meio) do alinhamento frontal e das divisas laterais e de fundos, sempre contados a partir do eixo do poste em relação à divisa do imóvel.
+§1º – Poderá ser autorizada a implantação de infraestrutura de suporte sem observância das limitações previstas neste artigo, nos casos de impossibilidade técnica para sua implantação, justificada pelo interessado à SECONSER, mediante laudo que justifique a necessidade de sua instalação e indique os eventuais prejuízos caso não seja realizado, ouvida a Secretaria de Urbanismo e Mobilidade.
+§2º – As restrições estabelecidas nos incisos I e II não se aplicam aos demais itens da infraestrutura de suporte, tais como contêineres e esteiras, entre outros.
+§3º – As restrições estabelecidas no inciso II deste artigo não se aplicam aos postes em bens públicos de uso comum.
+Art. 10 – É admitida a instalação dos equipamentos de transmissão, contêineres, antenas, cabos e mastros no topo e fachadas de edificações, desde que garantidas as condições de segurança e distanciamento previstas em legislação pertinente.
+Parágrafo único – Os equipamentos elencados no caput deste artigo obedecerão às limitações das divisas do terreno do imóvel, não podendo apresentar projeção que ultrapasse o limite da edificação existente para o lote vizinho.
+Art. 11 – Em ocasiões em que o ruído dos equipamentos que compõe a ETR ultrapassarem os limites máximos permitidos e estabelecidos para cada zona de uso, conforme legislação pertinente, será necessário tratamento acústico para que o ruído não ultrapasse os limites, devendo dispor, também, de tratamento anti-vibratório, ouvida a Secretaria de Meio Ambiente, Recursos Hídricos e Sustentabilidade.
+
+CAPÍTULO VI
+DA EMISSÃO DE LICENÇA PARA EXECUÇÃO DE OBRAS, DO TERMO DE PERMISSÃO DE USO E PRAZOS
+Art. 12 – A implantação das infraestruturas de suporte para equipamentos de telecomunicações dependerá da expedição de Licença de Instalação; emitida pela SMU, quando da instalação em áreas privadas, e da expedição de Licença para Execução de Obras e Termo de Permissão de Uso, emitidos pela SECONSER, quando da instalação em áreas públicas; ficando a critério destes consultar pareceres de outros órgãos municipais.
+§1º Quando se tratar de instalação de Infraestrutura de Suporte para Estação Transmissora de Radiocomunicação – ETR, ETR de pequeno porte ou ETR móvel que envolva supressão de vegetação, ou intervenção em Área de Preservação Permanente, ou Unidade de Conservação, ou implantação em imóvel tombado, será expedida pela Administração Licença de Instalação mediante expediente administrativo único e simplificado, consultando–se a Secretaria de Meio Ambiente, Recursos Hídricos e Sustentabilidade para que analisem o pedido no prazo máximo de 60 dias.
+§ 2º – Após a emissão a Licença para Execução de Obras tem validade de 30 (trinta) dias, podendo ser prorrogada, a critério da Administração, por igual período.
+Art. 13 – Para solicitação de emissão da Licença Para Execução de Obras e/ou do TPU, deverão ser apresentados os seguintes documentos à SECONSER:
+I – Formulário de requerimento padrão para construção e licenciamento de infraestrutura;
+II – Documento de outorga da ANATEL ou termo de permissão, concessão ou autorização para a exploração do serviço público;
+III – Termo de Compromisso para Execução de Obras;
+IV – Projeto executivo;
+V – Cronograma de execução;
+VI – Quadro resumo dos dispositivos a serem implantados;
+VII – Declaração dos elementos de projeto;
+VIII – Anotação de Responsabilidade Técnica (ART) atualizada;
+IX – Cópia da carteira com registro no órgão responsável pela fiscalização da atividade profissional;
+X – Memorial descritivo da obra;
+XI – Autorização do proprietário ou responsável do imóvel, quando se tratar de propriedade particular;
+XII – Contrato/Estatuto social da empresa responsável;
+XIII – Cartão do CNPJ da Detentora;
+XIV – Procuração assinada pela empresa responsável, com nome dos representantes autorizados a acompanhar os processos de licenciamento, assim como retirar licença e TPU;
+§1º – A taxa para obtenção da Licença para Execução de Obras será pago no ato do protocolo do respectivo requerimento, de acordo com o que estabelecido no artigo 125 da Lei Municipal 2.597/2008.
+§2º – O procedimento de cobrança e preço público pela obtenção do Termo de Permissão de Uso para Instalação das Estações Transmissoras de Radiocomunicação e as respectivas infraestruturas de suporte em bens públicos de uso especial serão regulamentados através de decreto em até 60 (sessenta) dias após publicação desta legislação
+Art. 14 – Após a conclusão das obras, a SMU emitirá a Licença de Instalação, no caso de uso de área privada, e a SECONSER emitirá o respectivo TPU, no caso de uso de área pública.
+Parágrafo único – A Licença de Instalação e o TPU terão prazo de 10 (anos), atestando que a obra foi executada em conformidade com o projeto aprovado.
+Art. 15 – Caso haja interesse da detentora, a Licença de Instalação e o TPU poderão ser renovados, a critério e nas condições em que a Administração julgar necessárias.
+Art. 16 – O prazo para análise dos pedidos de Licença para Execução de Obras, emissão do Termo de Permissão de Uso ou análise de Licença de Instalação será de 60 (sessenta) dias, contados de protocolização do pedido ou da data da comunicação da conclusão da obra, conforme o caso.
+Parágrafo único – Findo o prazo estabelecido no caput deste artigo, se o órgão licenciador municipal não houver finalizado o processo de licenciamento, a(s) empresa(s) interessada(s) estará(ão) habilitada(s) a construir, instalar e ceder sua infraestrutura de suporte, incluindo os equipamentos de telecomunicações, ressalvado o direito de fiscalização do cumprimento da conformidade das especificações constantes do seu Projeto Executivo de implantação pelo Município, nos termos da legislação federal em vigor.
+Art. 17 – Em caso de denegação da concessão da emissão da Licença Para Execução de Obras, o requerente poderá recorrer administrativamente.
+Art. 18 – Na hipótese de compartilhamento da infraestrutura de suporte, fica dispensada a empresa compartilhante de requerer Licença para Execução de Obras, Licença de Instalação ou TPU, desde que não haja alteração no projeto original.
+Art. 19 – O Município, como forma de estimular a universalização de cobertura e garantir o acesso da população aos serviços de telecomunicação, poderá dispensar o recolhimento da taxa de licenciamento ou o cumprimento de parâmetros urbanísticos previstos nesta Lei para a instalação de ETR, ETR móvel e ETR de pequeno porte em áreas prioritárias.
+§1º – As áreas prioritárias serão demarcadas pelo Município levando em conta os seguintes critérios:
+I – Preferencialmente as necessidades dos equipamentos institucionais, em especial os de saúde, educação e segurança pública;
+II – O mapeamento das localidades que apresentam equipamentos destinados à prestação do serviço.
+§2º – O mapeamento de que trata o inciso II do caput deste artigo será realizado considerando a infraestrutura de redes de propagação do sinal existente na localidade e a relação entre o número de habitantes e a quantidade de equipamentos implantados.
+§ 3º – A infraestrutura de suporte já instalada nas áreas prioritárias indicadas no caput, que estejam em atividade sem o devido licenciamento, serão objeto de processo específico de regularização, pela apresentação de justificativa técnica que demonstre sua importância para promoção da cobertura do serviço de telecomunicações na localidade.
+
+CAPÍTULO VII
+DA INSTALAÇÃO DE ETR MÓVEL E DE PEQUENO PORTE
+Art. 20 – A instalação de ETR de pequeno porte e de ETR móvel dependerá de cadastramento eletrônico na SECONSER e independe de emissão prévia de licença.
+§1º – O cadastramento será realizado em até 60 dias após a implantação, por meio de requerimento eletrônico, observados as normas, restrições e documentos a serem definidos em regulamento.
+§2º – O cadastramento deverá ser renovado a cada 5 (cinco) anos ou quando ocorrer a modificação do equipamento instalado.
+§3º – A permanência máxima de uma ETR móvel no mesmo local é de 90 (noventa) dias para cobrir demandas específicas, tais como eventos, calamidades públicas, estado de emergência, convenções, entre outros, sendo prorrogável por igual período.
+§4º – A Instalação Interna de ETR não estará sujeita ao cadastramento aludido no caput, sujeitando–se apenas à autorização do proprietário ou do responsável da edificação.
+Art. 21 – A ETR móvel e a ETR de pequeno porte são consideradas bens de utilidade pública, conforme disposto na Lei Federal 13.116/2015, podendo ser implantadas em todas as zonas ou categorias de uso, respeitados os parâmetros estabelecidos na legislação pertinente.
+Parágrafo único – Os equipamentos que compõem a ETR móvel e a ETR de pequeno não são considerados áreas construídas ou edificadas para fins de aplicação do disposto na legislação de uso e ocupação do solo.
+
+CAPÍTULO VIII
+DA FISCALIZAÇÃO E DAS PENALIDADES
+Art. 22 – Nenhuma Estação Transmissora de Radiocomunicação – ETR, ETR móvel e ETR de pequeno porte, poderá ser instalada sem prévia licença ou sem o cadastro definido nesta lei.
+Art. 23 – Compete à SMU e à SECONSER a ação fiscalizatória referente ao atendimento das normas previstas nesta lei, a qual deverá ser desenvolvida de ofício ou mediante notícia de irregularidade, observado o procedimento estabelecido neste capítulo.
+Art. 24 – Constatado o desatendimento das obrigações e exigências legais, a detentora ficará sujeita às seguintes medidas:
+I – no caso de ETR, ETR móvel ou ETR de pequeno porte previamente cadastrados:
+a) intimação para regularização no prazo de 30 (trinta) dias, contado da data do seu recebimento;
+b) não atendida a intimação de que trata a alínea “a” deste inciso, nova intimação para a retirada da instalação no prazo de 30 (trinta) dias, contado da data do seu recebimento, com a concomitante aplicação de multa no valor estipulado no inciso III do “caput” deste artigo;
+II – no caso de ETR, ETR móvel ou ETR de pequeno porte instalada sem licença ou sem o cadastro definido nesta lei:
+a) intimação para remoção no prazo de 30 (trinta) dias, contado da data do seu recebimento, com a concomitante aplicação de multa no valor estipulado no inciso IV do “caput” deste artigo;
+III – observado o disposto na alínea “b”, inciso I, do caput deste artigo, a detentora ficará sujeita à aplicação de multa no valor de R$ 3.000,00 (três mil reais) por equipamento ou instalação.
+IV – Observado o disposto na alínea “a”, inciso II, do caput deste artigo, a detentora ficará sujeita à aplicação de multa no valor de R$ 9.000,00 (nove mil reais) por equipamento ou instalação.
+§ 1º – Os valores mencionados nos incisos III e IV do caput deste artigo serão atualizados anualmente pelo IPCA (Índice de Preços ao Consumidor Amplo) ou outro índice que vier a substituí–lo.
+§ 2º – A multa será renovável mensalmente e enquanto perdurarem as irregularidades.
+
+CAPÍTULO IX
+DAS DISPOSIÇÕES FINAIS E TRANSITÓRIAS
+Art. 25 – Para que não haja prejuízo na prestação de serviços de telecomunicações ao município, as Estações Transmissoras de Radiocomunicação que se encontrem em operação na data de publicação desta Lei ficam sujeitas à verificação do atendimento aos limites estabelecidos no artigo 7º, mediante a apresentação da Licença Para Funcionamento de estação expedida pela ANATEL, no prazo de 180 (cento e oitenta) dias.
+Parágrafo Único – Em caso de descumprimento do prazo previsto no caput, a prestadora ficará sujeita às sanções previstas nesta legislação.
+Art. 26 – Para que não haja a remoção de infraestrutura e prejuízo à prestação dos serviços de telecomunicações, os equipamentos e as infraestruturas de suporte de telecomunicações que estiverem implantadas até a data de publicação desta Lei, e que ainda não estejam ainda licenciadas perante o Município, ficam sujeitas à verificação do atendimento aos requisitos aqui estabelecidos.
+§1º – Fica concedido o prazo de 180 (cento e oitenta) dias, contado da publicação desta Lei, podendo ser renovado por igual período, a critério do Município, para que as detentoras apresentem os documentos relacionados no artigo 13 e requeiram a expedição de documento comprobatório de sua regularidade perante o Município.
+§2° – Nos casos de descumprimento dos parâmetros desta Lei, será concedido o prazo de 01 (um) ano para adequação das infraestruturas de suporte mencionadas no caput ou apresentação de justificativa técnica que comprove a necessidade de permanência da infraestrutura para o provimento da cobertura dos serviços de telecomunicações à população do entorno, acrescido da licença de funcionamento do equipamento emitida pela Agência Nacional de Telecomunicações – ANATEL.
+Art. 27 – Em casos eventuais de necessidade de remoção de uma estação transmissora de radiocomunicação, a detentora terá o prazo de 180 (cento e oitenta) dias, contado a partir da comunicação da necessidade de remoção pelo poder público, para protocolar o pedido de autorização urbanística para a infraestrutura de suporte que irá substituir a estação a ser remanejada.
+§1º – A remoção da estação transmissora de radiocomunicação deverá ocorrer no prazo de 180 (cento e oitenta) dias, contado a partir da emissão das licenças de infraestrutura da estação que irá substituir.
+§2º – Em caso de descumprimento do prazo previsto no §1º, a detentora ficará sujeita às sanções previstas nessa Lei.
+Art. 28 – É obrigatória a remoção de toda ETR ou infraestrutura de suporte quando constatado seu abandono, inadequação ou estado de degradação que comprometa sua integridade e a segurança dos munícipes.
+Art. 29 – A Prefeitura de Niterói disponibilizará no sistema de informação SIGEO a localização de todas as ETR’s, ETR’s móveis e ETR de pequeno destinados à operação de serviços de telecomunicações.
+Parágrafo único – No local da instalação das estações e/ou na infraestrutura de suporte deverá estar afixada identificação visível, contendo o nome da detentora, nome do engenheiro responsável e número do processo administrativo que gerou a aprovação.
+Art. 30 – As ETR’s regularmente instaladas até a data da entrada em vigor desta Lei deverão renovar o respectivo licenciamento, no prazo de 1 (um) ano, contado da data da publicação desta Lei.
+Art. 31 – O valor do TPU a que se refere o §2º do artigo 6º desta Lei será o valor base calculado de acordo com o valor médio de mercado de locação de imóveis territoriais.
+Parágrafo único – O valor base deverá ser reavaliado periodicamente, conforme as condições de mercado, sendo reajustado anualmente pelo IGP–M ou outro índice que vier a substituí–lo.
+Art. 32 – Esta Lei entra em vigor na data de sua publicação, revogando–se todas as disposições em contrário.

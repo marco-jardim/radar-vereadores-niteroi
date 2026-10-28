@@ -1,0 +1,43 @@
+    Projeto de Lei nº       /2022
+
+DISPÕE SOBRE A INSTALAÇÃO DE CÂMERAS DE VÍDEO NOS UNIFORMES E VIATURAS DA GUARDA CIVIL MUNICIPAL E DÁ OUTRAS PROVIDÊNCIAS
+Art. 1º - Fica determinada a instalação câmeras de vídeo nos uniformes e nas viaturas da Guarda Civil Municipal de Niterói.
+Parágrafo único. O disposto na presente Lei se aplica a todas as pessoas que, a serviço do Poder Executivo Municipal, porventura exerçam funções de vigilância e segurança.
+Art. 2º Através da implantação desse recurso tecnológico, pretende-se garantir:
+I – a produção de prova para finalidades judiciárias ou administrativas;
+II – a segurança nas ações;
+III – a avaliação do trabalho dos guardas civis;
+IV – o uso legal progressivo da força.
+Art. 2º - Para os efeitos desta lei, considera-se:
+I – Força: toda a intervenção compulsória sobre o indivíduo, ou grupo de indivíduos, reduzindo ou eliminando sua capacidade de autodecisão;
+II – uso legal e progressivo da força: a seleção adequada das opções de força à disposição do agente, dentro das normas jurídicas e protocolos de serviço em vigor
+Art. 3º - Para assegurar o uso legal e progressivo da força e a garantia da incolumidade das pessoas, deverá o Poder Executivo instalar câmeras de vídeo nos uniformes e viaturas da Guarda Civil Municipal.
+Parágrafo único. As câmeras acopladas nos uniformes dos guardas civis municipais deverão realizar duas gravações, sendo:
+I – Uma gravação de resolução adequada, constante durante todo o turno de serviço do agente, impassível de ser desativada manualmente;
+II – Uma gravação de alta resolução, com ativação manual, a qual poderá ser acionada pelo próprio agente, um de seus superiores remotamente ou automaticamente quando do disparo de armamento menos letal.
+Parágrafo único. As câmeras acopladas nas viaturas deverão ser ligadas no início de cada turno de trabalho e assim permanecer até o seu término.
+Art. 4º - Constitui infração disciplinar de natureza grave deixar de acionar a câmera de vídeo nos casos previstos nesta lei.
+Art. 5º - As imagens deverão ser gravadas e armazenadas por um período mínimo de um ano, devendo ser preservadas em segurança pela autoridade competente, sendo necessário apresentar requisição justificada para acessá-las.
+§ 1º. É vedada a decretação de sigilo sobre as imagens registradas, respeitando-se os direitos de imagem conforme art. 5º, inciso X, da Constituição Federal.
+§ 2º. Constitui infração disciplinar de natureza grave o acesso injustificado às imagens armazenadas.
+Art. 6º - O Poder Executivo regulamentará esta lei estabelecendo protocolos de serviço para o uso adequado das câmeras de vídeo, no prazo de 120 (cento e vinte) dias.
+Art. 7º - As despesas decorrentes da aplicação desta lei correrão por conta do Programa 0131.3334 (Modernização de equipamentos da Guarda) da Lei Orçamentária Anual – LOA 2022.
+Art. 8º - Esta lei entrará em vigor na data de sua publicação.
+
+JUSTIFICATIVA
+O presente Projeto de Lei tem por objetivo garantir a instalação de câmeras de video nos uniformes tanto dos guardas civis municipais quanto nas viaturas da corporação.
+Isto para que possamos ter meios adequados tanto de garantir a segurança e avaliar o trabalho dos agentes públicos, como para monitorar o uso legal progressivo da força nas diversas operações levadas diariamente a cabo pela GCM. Assim, teremos mais ferramentas para garantir a incolumidade física das pessoas envolvidas, bem como para evitar que os agentes sejam alvo de denúncias falaciosas.
+Assim, pretende-se que as câmeras devam realizer sempre duas gravações, sendo uma constant durante todo o turno de serviço do agente e não poderá ser desativada, e outra de alta resolução que poderá ser acionada manualmente pelo agente, remotamente por seu superior ou automaticamente quando do disparo de armamento menos letal. No caso das câmeras instaladas nas viaturas, elas devem permanecer ligadas a todo momento. As imagens devem ficar armazenadas por ao menos um ano.
+O modelo proposto é semelhante ao utilizado no estado de São Paulo. Os aparelhos paulistas fazem duas gravações, uma de menor qualidade e sem som durante as 12 horas do turno, e outra com mais resolução e som que pode ser acionada pelo próprio agente, um de seus chefes à distância ou que automaticamente passa a gravar se o policial dispara um tiro. O dispositivo também permite recuperar os momentos anteriores de um instante crítico.
+A iniciativa em tela é baseada no Projeto de Lei 189/2020, apresentado pelo saudoso vereador Renatinho do PSOL em 2020. Frise-se que as câmeras já são uma realidade no RJ, dado que desde dezembro do ano passado (em virtude de projeto de Lei de iniciativa legislativa aprovado pela Alerj e sancionado pelo governador) os policiais militares do estado usam câmeras acopladas em seus uniformes; antes disso, há anos já utilizam câmeras nas viaturas. Também em outros estados essa não é uma novidade.
+O uso de câmeras de filmagens nas fardas policiais resultou em uma queda de até 61,2% no uso de força pelos agentes de segurança, incluindo uso de força física, armas letais e não letais, algemas e realização de prisões em ocorrências com a presença de civis. É o que revela estudo realizado por pesquisadores das universidades de Warwick, Queen Mary e da London School of Economics, no Reino Unido, e da PUC-Rio (Pontifícia Universidade Católica do Rio de Janeiro), no Brasil, com base em experimento realizado junto à Polícia Militar de Santa Catarina.
+As câmeras já estão sendo usadas em São Paulo e ajudam a diminuir estatísticas de mortes em operações. Em junho de 2021, mês em que o programa alcançou 18 batalhões da Região Metropolitana daquele estado, o número de homicídios decorrentes de intervenções policiais caiu 54% e chegou ao menor índice desde maio de 2013. Nos 18 batalhões que receberam filmadoras, nenhum caso foi registrado em todo o mês.
+O governo do RJ anunciou que o custo de cada câmera foi de R$ 296,00, enquanto as câmeras paulistas saíram por cerca de R$ 700,00. Deste modo, considerando-se que o modelo aqui proposto é o das câmeras paulistas, temos um custo de cerca de R$ 700 mil, já levando em consideração a proposta de aumento do efetivo apresentado pelo Executivo. Com os atuais 714 agentes, o custo é de cerca de R$ 500 mil. Se considerarmos o número hipotético de cem veículos recebendo câmeras como as existentes nas viaturas fluminenses, teremos um custo de menos de R$ 300 mil.
+
+Registre-se por fim que, de acordo com o entendimento do Supremo Tribunal Federal, não usurpa a competência privativa do chefe do Poder Executivo lei que, embora crie despesa para a Administração Pública, não trata da sua estrutura ou da atribuição de seus órgãos nem do regime jurídico de servidores públicos:
+
+Recurso extraordinário com agravo. Repercussão geral. 2. Ação Direta de Inconstitucionalidade estadual. Lei 5.616/2013, do Município do Rio de Janeiro. Instalação de câmeras de monitoramento em escolas e cercanias. 3. Inconstitucionalidade formal. Vício de iniciativa. Competência privativa do Poder Executivo municipal. Não ocorrência. Não usurpa a competência privativa do chefe do Poder Executivo lei que, embora crie despesa para a Administração Pública, não trata da sua estrutura ou da atribuição de seus órgãos nem do regime jurídico de servidores públicos. 4. Repercussão geral reconhecida com reafirmação da jurisprudência desta Corte. 5. Recurso extraordinário provido.
+(STF - ARE: [CPF omitido] RJ, Relator: GILMAR MENDES, Data de Julgamento: 29/09/2016, Tribunal Pleno, Data de Publicação: 11/10/2016)
+Plenário Brígido Tinoco, 17 de fevereiro de 2022
+
+Professor Tulio                            Verônica Lima

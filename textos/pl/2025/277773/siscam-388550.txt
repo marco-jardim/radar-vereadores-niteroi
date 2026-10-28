@@ -1,0 +1,33 @@
+PROJETO DE LEI Nº       /2025
+EMENTA: Dispõe sobre a obrigatoriedade da divulgação em tempo real das filas de espera para consultas, exames, procedimentos e cirurgias na rede pública de saúde do Município de Niterói e dá outras providências.
+
+Autor(es): VEREADOR DOUGLAS GOMES
+A Câmara Municipal de Niterói decreta e eu sanciono e promulgo a seguinte Lei:
+Art. 1º Fica o Poder Executivo Municipal obrigado a disponibilizar, em tempo real, o número de pacientes em filas de espera para consultas, exames, procedimentos e cirurgias realizados na rede pública de saúde do Município de Niterói.
+Art. 2º As informações deverão estar disponíveis em plataforma digital de livre acesso, por meio do portal oficial da Prefeitura de Niterói e/ou aplicativo oficial do Município.
+Art. 3º As informações deverão conter, no mínimo:
+I – posição do paciente na fila de espera;
+II – data de solicitação do procedimento;
+III – tempo médio estimado de atendimento;
+IV – número total de pessoas aguardando por cada tipo de procedimento ou especialidade;
+V – unidade de saúde responsável pela execução do serviço.
+§1º O paciente poderá acessar seus dados mediante o número do Cartão SUS e CPF.
+
+§2º Deverá ser garantida a proteção aos dados pessoais nos termos da Lei Geral de Proteção de Dados (Lei Federal nº 13.709/2018).
+Art. 4º O Poder Executivo publicará, mensalmente, relatório consolidado com os dados estatísticos sobre as filas de espera em cada unidade e por especialidade médica.
+Art. 5º O descumprimento do disposto nesta lei implicará em responsabilização administrativa dos gestores públicos responsáveis.
+Art. 6º O Poder Executivo regulamentará esta Lei no prazo de 60 (sessenta) dias a contar da data de sua publicação.
+Art. 7º Esta Lei entra em vigor na data de sua publicação.
+
+Justificativa
+	A presente proposição tem como objetivo garantir maior transparência e controle social sobre o sistema de saúde municipal, atendendo ao clamor popular por respeito, dignidade e eficiência no atendimento público de saúde.
+	Diariamente, milhares de pessoas em Niterói aguardam por consultas, exames e procedimentos sem saber sua posição na fila, o tempo médio de espera ou a razão de tanta demora. Tal cenário favorece a desorganização, o desespero da população e, infelizmente, até privilégios e "fura-filas".
+	Este projeto não cria cargos, não interfere na organização interna da administração e tampouco impõe despesa pública obrigatória — apenas obriga a publicação de informações que já existem e que, por força da Lei de Acesso à Informação (Lei nº 12.527/2011), devem ser públicas.
+	A constitucionalidade da iniciativa parlamentar para matérias como esta foi recentemente reafirmada pelo Supremo Tribunal Federal (STF) no julgamento do Recurso Extraordinário com Agravo nº 1.436.429/SP, que tratou da Lei Municipal nº 14.120/2022, a qual dispõe sobre a divulgação do fornecimento e estoque de medicamentos nas farmácias públicas.
+	Na ocasião, o STF reconheceu expressamente que não há vício de iniciativa em leis de autoria parlamentar que tratem da publicidade de atos administrativos e da transparência de informações públicas, desde que não criem órgãos, atribuições ou despesas desproporcionais ao Poder Executivo.
+	A decisão destaca que tais iniciativas se inserem no escopo do princípio constitucional da publicidade (art. 37 da CF/88) e atendem ao interesse público ao fortalecer o controle social e a fiscalização das políticas públicas. Assim, o STF reformou o acórdão do Tribunal de Justiça de São Paulo e afirmou a constitucionalidade da norma municipal, alinhando-se ao entendimento de que o legislador pode implementar medidas de aprimoramento da transparência administrativa, mesmo que voltadas ao Poder Executivo, desde que respeitados os limites da separação de poderes.
+	Trata-se, portanto, de projeto legítimo, funcional, viável, jurídico e urgente, que respeita a separação dos poderes e fortalece o princípio da publicidade, um dos pilares da Administração Pública.
+	Contando com o apoio dos nobres pares desta Casa Legislativa, submeto o presente projeto à apreciação.
+
+				       DOUGLAS DE SOUZA GOMES
+				               VEREADOR DO PL

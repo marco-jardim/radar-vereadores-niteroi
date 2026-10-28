@@ -1,0 +1,51 @@
+                                                               QUADRO VI - Vagas de Estacionamento
+                                                               Vagas de Veículos                                                   Minimo de Vagas de Bicicletas
+ Territórios   Fração Urbana / Zona        Residencial          Não - Residencial       Não - Residencial Especial
+                                                                                                                     Residencial      Não - Residencial       Não - Residencial Especial
+                                      Mínimo       Máximo     Mínimo       Máximo        Mínimo         Máximo
+                                                                       1 para cada 60
+                       ZCM               -        1 p/unid.      -                                                    1 p/unid.    1 para cada 50 m² de AEC   1 para cada 100 m² de AEC
+                                                                       m² de AEC
+                                                                       1 para cada 70 Ver em descrição especifica
+                       ZEU             0,50       2 p/unid.      -                                                    1 p/unid.    1 para cada 50 m² de AEC    1 para cada 80 m² de AEC
+                                                                       m² de AEC      em cada uso não residencial
+ESTRUTURAÇÃO
+                                                                       1 para cada 70 especial no texto da Lei
+                        ZC             0,25       2 p/unid.      -                                                    1 p/unid.    1 para cada 50 m² de AEC    1 para cada 80 m² de AEC
+                                                                       m² de AEC      Urbanistica
+                                                                       1 para cada 80
+                       ZDE             0,50       1 p/unid.      -                                                    1 p/unid.    1 para cada 60 m² de AEC    1 para cada 90 m² de AEC
+                                                                       m² de AEC
+                                                                       1 para cada 50
+                       ZCL             0,50       2 p/unid.      -                                                    1 p/unid.    1 para cada 40 m² de AEC    1 para cada 60 m² de AEC
+                                                                       m² de AEC
+                                                                       1 para cada 50
+                       ZUM             0,50       2 p/unid.      -                                                    1 p/unid.    1 para cada 40 m² de AEC    1 para cada 60 m² de AEC
+                                                                       m² de AEC
+                                                                       1 para cada 50
+                       ZRM             0,50       2 p/unid.      -                                                    1 p/unid.    1 para cada 40 m² de AEC    1 para cada 60 m² de AEC
+                                                                       m² de AEC      Ver em descrição especifica
+                                                                       1 para cada 50 em cada uso não residencial
+QUALIFICAÇÃO           ZRA             0,50       2 p/unid.      -                                                    1 p/unid.    1 para cada 40 m² de AEC    1 para cada 60 m² de AEC
+                                                                       m² de AEC      especial no texto da Lei
+                                                                       1 para cada 50 Urbanistica
+                       ZEIS            0,25       1 p/unid.      -                                                    1 p/unid.    1 para cada 40 m² de AEC    1 para cada 60 m² de AEC
+                                                                       m² de AEC
+                                                                       1 para cada 50
+                      ZC-ZEIS          0,25       1 p/unid.      -                                                    1 p/unid.    1 para cada 40 m² de AEC    1 para cada 60 m² de AEC
+                                                                       m² de AEC
+                                                                       1 para cada 50
+                       ZDE             0,50       1 p/unid.      -                                                    1 p/unid.    1 para cada 40 m² de AEC    1 para cada 60 m² de AEC
+                                                                       m² de AEC
+                                                                       1 para cada 40
+                       ZRU             0,50       1 p/unid.      -                                                    1 p/unid.    1 para cada 30 m² de AEC    1 para cada 50 m² de AEC
+                                                                       m² de AEC
+                                                                       1 para cada 40 Ver em descrição especifica
+                      ZEPAC            0,50       1 p/unid.      -                                                    1 p/unid.    1 para cada 30 m² de AEC    1 para cada 50 m² de AEC
+                                                                       m² de AEC      em cada uso não residencial
+                                                                       1 para cada 80 especial no texto da Lei
+PRESERVAÇÃO            ZDS             0,25       1 p/unid.      -                                                    1 p/unid.    1 para cada 40 m² de AEC    1 para cada 80 m² de AEC
+                                                                       m² de AEC      Urbanistica
+                                                                       1 para cada 80
+                       ZCA             0,25       1 p/unid.      -                                                    1 p/unid.    1 para cada 40 m² de AEC    1 para cada 60 m² de AEC
+                                                                       m² de AEC

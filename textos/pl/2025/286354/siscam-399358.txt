@@ -1,0 +1,25 @@
+                                               ESTIMATIVA DE IMPACTO ORÇAMENTÁRIO
+                                      Programa Taxi Niterói Moderniza - Processo 9900181595/2025
+
+                                               Receita de Capital                                    Perda de Arrecadação de
+  Exercício    Despesa de Capital com                                        Despesas de                                              Despesa Efetiva Total
+                                                (Amortização de                                     Rendimentos (Selic 10,5%)
+ Financeiro      Financiamento (a)                                       Operacionalização (c)                                         (e )=(a)+(b)+(c )+(d)
+                                               Empréstimos) (b)                                        (d)=((a)+(b))*10,5%
+   2025             -R$ 46.170.000                R$ 9.234.000               -R$ 4.782.738                -R$ 3.878.280                  -R$ 45.597.018
+   2026             -R$ 46.170.000               R$ 18.468.000               -R$ 8.387.029                -R$ 6.786.990                  -R$ 42.876.019
+   2027                  R$ 0                    R$ 18.468.000               -R$ 8.874.586                -R$ 4.847.850                   R$ 4.745.564
+   2028                  R$ 0                    R$ 18.468.000               -R$ 6.484.316                -R$ 2.908.710                   R$ 9.074.974
+   2029                  R$ 0                    R$ 18.468.000               -R$ 3.877.665                 -R$ 969.570                    R$ 13.620.765
+   2030                  R$ 0                     R$ 9.234.000                -R$ 956.548                      R$ 0                       R$ 8.277.452
+   Total            -R$ 92.340.000               R$ 92.340.000              -R$ 33.362.882               -R$ 19.391.400                  -R$ 52.754.282
+
+Notas:
+1. Estimativas baseadas nos números apresentados na peça 10, Nota Técnica Subfin 08/2025 do processo 9900181595/2025
+2. Nota-se que a despesa de capital com financiamento é uma inversão financeira, ou seja, configura uma despesa não efetiva que gera o reconhecimento de
+um ativo no balanço patrimonial em contrapartida à transferência dos recursos financeiros para o financiamento de modernização da frota de taxis de
+Niterói.
+3. A aplicação do capital no programa representa a perda de arrecadação com o rendimento financeiro do recurso utilizado para o financiamento da política
+pública. Dessa maneira, a aplicação da taxa Selic sobre o saldo de capital investido na operação foi utilizada como método de cálculo para estimar esse custo
+de oportunidade.
+4. Este demonstrativo deve ser analisado em conjunto com o parecer da peça 20 deste processo 9900181595/2025.

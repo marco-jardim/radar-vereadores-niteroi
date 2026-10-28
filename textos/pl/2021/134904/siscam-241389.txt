@@ -1,0 +1,77 @@
+Projeto de Lei nº, de XX de outubro de 2021
+
+Estabelece dedução no valor do imposto sobre a propriedade predial e territorial urbana – IPTU relativo às matrículas imobiliárias adimplentes com o pagamento do imposto.
+
+A CÂMARA MUNICIPAL DE NITERÓI DECRETA E EU SANCIONO A SEGUINTE LEI:
+
+Art. 1º. Fica estabelecida a dedução de 5% (cinco por cento) do valor do imposto sobre a propriedade predial e territorial urbana – IPTU, relativo aos fatos geradores do imposto ocorridos no ano de 2022, para os contribuintes que, em 15 de novembro do ano imediatamente anterior ao da concessão do benefício, não tenham, nos termos deste artigo, dívida relativa ao imposto.
+
+Art. 2º. Fica estabelecida a dedução de 3% (três por cento) do valor do imposto sobre a propriedade predial e territorial urbana – IPTU, relativo aos fatos geradores do imposto ocorridos no ano de 2023, para os contribuintes que, em 30 de setembro do ano imediatamente anterior ao da concessão do benefício, não tenham, nos termos deste artigo, dívida relativa ao imposto.
+
+Art. 3º. Fica estabelecida a dedução de 2% (dois por cento) do valor do imposto sobre a propriedade predial e territorial urbana – IPTU, relativo aos fatos geradores do imposto ocorridos no ano de 2023, para os titulares de imóveis do Município que apresentarem, na forma e nos prazos estabelecidos pelo Poder Executivo, Declaração de Informações Cadastrais com informações de endereço e contato atualizadas.
+§1º. No caso de o titular possuir mais de um imóvel no Município, a dedução de que trata o caput somente será aplicada ao imóvel de maior valor de IPTU lançado.
+§2º. A responsabilidade pelo preenchimento correto das informações na declaração de que trata o caput é personalíssima e sujeita o signatário às sanções legais em caso de falsidade.
+
+Art. 4º É dívida, para efeito desta Lei, o valor que tenha sido objeto de parcelamento ainda não integralmente pago.
+§1º Não são dívidas, para efeito desta Lei:
+I - as cotas do imposto ainda não vencidas de acordo com o calendário de recolhimento de tributos municipais estabelecido em resolução anual do Secretário Municipal de Fazenda;
+II – os valores correspondentes ao imposto constituído mediante lançamento complementar antes do decurso de 30 (trinta) dias a contar da data da ciência pelo contribuinte da respectiva notificação de lançamento.
+§ 2º A dedução de que trata a art. 1º e o art. 2º se aplica igualmente a todos os valores do imposto lançados com base nos fatos geradores ocorridos em 2022 e 2023, ainda que seu lançamento tenha sido efetuado em anos posteriores, dentro do prazo decadencial definido no art. 173, I, da Lei Federal nº 5.172, de 25 de outubro de 1966 - Código Tributário Nacional.
+
+Art. 5º. O Poder Executivo Municipal, com vistas ao cumprimento do disposto no inciso II do caput do art. 5º e no art. 14 da Lei Complementar nº 101, de 4 de maio de 2000 - Lei de Responsabilidade Fiscal, estimará o montante da renúncia fiscal decorrente do disposto nesta Lei e o incluirá no demonstrativo a que se refere o § 6º do art. 165 da Constituição que acompanhar o projeto de lei orçamentária anual.
+Parágrafo único. O benefício fiscal constante desta Lei somente será concedido se atendido o disposto no caput, inclusive com a demonstração pelo Poder Executivo de que a renúncia foi considerada na estimativa de receita da lei orçamentária, na forma do art. 12 da Lei Complementar nº 101, de 2000 - Lei de Responsabilidade Fiscal, e de que não afetará as metas de resultados fiscais previstas no anexo próprio da lei de diretrizes orçamentárias.
+
+Art. 6º. Esta lei entra em vigor na data de sua publicação.
+
+IMPACTO – DESCONTO DE IPTU – BOM PAGADOR
+
+Parâmetros Utilizados
+IPCA estimado para reajuste do IPTU 2022 (outubro 2020 a setembro de 2021) | 10,25%
+IPCA estimado para reajuste do IPTU 2023 (conforme Relatório Focus 01º/10/21) | 4,14%
+Dedução por adimplência para o fato gerador de 2022 | 5%
+Dedução por adimplência para o fato gerador de 2023 | 3%
+Dedução por atualização de dados cadastrais no fato gerador de 2023 | 2%
+Nº de contribuintes sem débitos | 85.587
+Nº de matrículas potencialmente beneficiárias da atualização cadastral | 124.944
+
+Ano | Impacto
+2022 | R$ 11.460.364,03
+2023 – dedução por adimplência | R$ 7.160.893,86
+2023 – dedução por atualização cadastral (adesão de 100%) | R$ 7.430.897,02
+2023 – dedução por atualização cadastral (adesão de 75%) | R$ 5.573.172,77
+2023 – dedução por atualização cadastral (adesão de 50%) | R$ 3.715.448,51
+2023 – dedução por atualização cadastral (adesão de 25%) | R$ 1.857.724,26
+
+Obs. 1: Os parâmetros utilizados para definição do Impacto da dedução por adimplência em 2022 e 2023 são:
+A - São baseados em relatório emitido pelo sistema tributário em 06/10/2021 relacionando todas as matrículas que foram beneficiadas com tal dedução no exercício de 2021, assim como o valor do IPTU lançado para as mesmas. A partir de tais dados, chegou-se ao total do desconto concedido em 2021.
+B - Sobre o valor total do desconto indicado no relatório do item A, foi aplicada estimativa do reajuste para 2022 (10,25%) - chegando ao impacto de R$ 11.460.364,03 em 2022.
+C – Sobre o valor total do desconto projetado conforme item B, foi aplicada estimativa do reajuste para 2023 (4,14%) e este novo valor foi ajustado ao percentual de dedução de 3% - chegando ao impacto de R$ 7.160.893,86 em 2023.
+
+Obs. 2: Os parâmetros utilizados para definição do Impacto da dedução por atualização de dados cadastrais em 2023 são:
+	A – Baseados em relatório extraído do sistema tributário relacionando todas as matrículas imobiliárias do Município. De tal base, foram excluídas todas as matrículas para as quais existe cadastro de imunidade ou de isenção total de IPTU.
+	B - A partir dos dados levantados no item 1, para cada contribuinte foi mantida apenas 01 matrícula imobiliária – no caso de contribuintes titulares de mais de um imóvel, foi mantido aquele com o maior valor de IPTU lançado em 2021.
+	C – Sobre o valor total do IPTU lançado em 2021 para os imóveis relacionados no item B, foram aplicados os índices estimados de reajuste de forma a projetar o valor total do IPTU lançado para tais imóveis em 2023.
+	D- Sobre o valor alcançado no item C, aplicou-se a dedução de 3% considerando 4 cenários de adesão d os contribuintes aptos ao recadastramento: Adesão de 100%, de 75%, de 50% e de 25%.
+
+Obs. 3: Para o ano de 2024 não há impacto, uma vez que o desconto será aplicado apenas nos anos de 2022 e 2023, nos termos deste Projeto de Lei.
+
+NOTA TÉCNICA – DAS METAS E RESULTADOS FISCAIS
+
+	O presente Projeto de Lei visa incentivar os contribuintes a permanecerem adimplentes com o pagamento do IPTU. Trata-se de norma indutora que premia a regularidade fiscal do contribuinte, colaborando para a permanência em patamares baixos do nível de inadimplência.
+
+	É de se ressaltar que, em virtude da pandemia de covid-19, os números de inadimplência recrudesceram no ano de 2020, enquanto havíamos experimentado uma redução expressiva no ano de 2019, ano de implementação do programa bom pagador.
+
+Índice médio de inadimplência por imposto municipal
+ | 2020 | 2019 | 2018
+IPTU | 22% | 18% | 26%
+
+No que se refere ao anexo de metas e resultados fiscais, da Lei Orçamentária, a aprovação do projeto será acompanhada da alteração no quadro de estimativa de renúncia de receitas. No entanto, esclarecemos que a alteração do quadro de renúncias não implica a revisão das estimativas de receita, seja porque esperamos que o efeito indutor da Lei permaneça, seja porque o próprio cálculo da previsão de receitas para 2022 foi realizado com base nas receitas realizadas no ano de 2021, o qual também contemplou a Lei do Bom Pagador.
+
+ | Orçamento 2021 | Projeção 2021 | LOA 2022 | Aumento x 2021’ | Aumento Orçamento
+IPTU | 398.398.002 | 439.212.160 | 456.341.435 | 3,90% | 14,54%
+
+	Desse modo, é importante destacar que, na atualização de 06 de outubro de 2021, o Município atingiu sua meta prevista no orçamento para o ano. A expectativa é de um excesso de arrecadação no IPTU na casa dos 39 milhões de reais ao fim do exercício.
+
+	Considerando o reajuste do valor nominal do IPTU, o excesso de arrecadação do exercício de 2021 e as iniciativas regulares de fiscalização que produzem impacto positivo na arrecadação, a estimativa de receita foi calculada esperando-se um acréscimo de 14,54% no orçamento do IPTU, com o valor de R$ 456.341.435,00.
+
+	Sendo assim, consideramos que a renúncia de receita advinda da aprovação deste projeto não impactará a estimativa de receita fixada na Lei Orçamentária, ao que será atualizado o anexo de renúncias fiscais da LOA, sem alteração nas metas e resultados fiscais.

@@ -1,0 +1,25 @@
+PROJETO DE LEI _____/2026
+
+Dispõe sobre a obrigatoriedade de aceitação de transações bancárias eletrônicas, tais como o sistema Pix, cartões de débito e crédito, inclusive por aproximação, e carteiras digitais, como forma de pagamento de tarifas no sistema de transporte público coletivo de passageiros por ônibus no Município de Niterói, e dá outras providências.
+
+Art. 1º Ficam as concessionárias e permissionárias do serviço público de transporte coletivo municipal de passageiros por ônibus operantes no Município de Niterói obrigadas a aceitar, como forma de pagamento imediato da tarifa de viagem, os seguintes meios eletrônicos e digitais:
+I – Transações eletrônicas instantâneas através do sistema Pix;
+II – Cartões de débito e de crédito das principais bandeiras em funcionamento no território nacional;
+III – Tecnologias de pagamento por aproximação (Contactless), integradas a cartões físicos, relógios inteligentes (smartwatches) ou aparelhos celulares;
+IV – Aplicativos de carteiras digitais (digital wallets).
+Art. 2º A implementação das modalidades de pagamento dispostas no art. 1º não exclui nem substitui as formas de pagamento já regulamentadas e existentes na data de publicação desta Lei, tais como o dinheiro em espécie e os cartões do sistema de bilhetagem eletrônica em vigor no Município.
+Art. 3º Os validadores e equipamentos de bilhetagem eletrônica instalados nos veículos deverão estar tecnicamente aptos a processar as transações de que trata esta Lei de maneira ágil, de modo a não ensejar atrasos no fluxo de embarque dos passageiros.
+Art. 4º Fica vedada a cobrança de qualquer taxa adicional, sobrepreço ou tarifa excedente ao usuário que optar pelas modalidades de pagamento previstas no art. 1º desta Lei.
+Art. 5º O descumprimento das obrigações previstas nesta Lei sujeitará a concessionária ou permissionária infratora às seguintes sanções administrativas, sem prejuízo das penalidades contratuais e civis cabíveis:
+I – Advertência por escrito na primeira infração apurada;
+II – Suspensão temporária da operação do veículo irregular até a efetiva adequação técnica.
+Art. 6º As concessionárias e permissionárias do serviço de transporte público terão o prazo improrrogável de 180 (cento e oitenta) dias, a contar da data de publicação desta Lei, para promover as adaptações tecnológicas necessárias em toda a frota operante.
+Art. 7º O Poder Executivo regulamentará esta Lei, no que couber, definindo o órgão municipal responsável pela fiscalização do cumprimento das normas nela previstas.
+Art. 8º Esta Lei entra em vigor na data de sua publicação, revogadas as disposições em contrário.
+
+Leandro Portugal
+Justificativa:
+O presente Projeto de Lei visa modernizar o sistema de mobilidade urbana da cidade de Niterói, adequando o transporte público coletivo à realidade tecnológica e financeira contemporânea da população. Atualmente, os meios eletrônicos e instantâneos de pagamento — com grande destaque para o sistema Pix, os cartões com tecnologia de aproximação (contactless) e as carteiras digitais embarcadas em smartphones — tornaram-se as ferramentas financeiras primordiais de movimentação econômica diária dos cidadãos, reduzindo substancialmente a circulação de moeda em espécie.
+A obrigatoriedade de diversificação dos meios de pagamento nos ônibus municipais atende de forma direta a três pilares fundamentais do interesse público: (i) acessibilidade e conveniência ao usuário; (ii) segurança pública e operacional; e (iii) eficiência no fluxo de embarque.
+Isto porque, primeiro facilita o embarque de cidadãos e turistas que eventualmente não disponham de cédulas físicas ou do cartão de bilhetagem eletrônica específico do município no momento da viagem, evitando o constrangimento da retenção na roleta ou a impossibilidade de deslocamento; segundo, diminuição do volume de dinheiro em espécie circulando no interior dos coletivos reduz consideravelmente a atratividade para a prática de roubos e furtos nos ônibus, conferindo maior proteção tanto aos passageiros quanto aos rodoviários e; terceiro, pois o uso de tecnologias de aproximação e transações instantâneas confere celeridade ao pagamento da passagem, diminuindo o tempo de parada dos veículos nos pontos de embarque e otimizando o tempo de viagem em todo o sistema de transporte.
+Por todos esses fundamentos, solicita-se o apoio dos ilustres pares para a aprovação do presente projeto de lei.

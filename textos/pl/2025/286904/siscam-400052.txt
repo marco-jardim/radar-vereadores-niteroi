@@ -1,0 +1,57 @@
+PROJETO DE LEI Nº              /2025
+
+FICA O PODER EXECUTIVO MUNICIPAL AUTORIZADO A CONCEDER DESCONTO NO IPTU PARA IMÓVEIS RESIDENCIAIS QUE INSTALAREM E MANTIVEREM SISTEMA DE VIDEOMONITORAMENTO VOLTADO ÀS VIAS PÚBLICAS E INTEGRADO AO CENTRO INTEGRADO DE SEGURANÇA PÚBLICA (CISP), E DÁ OUTRAS PROVIDÊNCIAS.
+
+Art. 1º Fica o Poder Executivo Municipal autorizado a conceder desconto no Imposto Predial e Territorial Urbano (IPTU) aos imóveis residenciais cujos proprietários instalem, integrem e mantenham em funcionamento sistema de videomonitoramento voltado exclusivamente para as áreas externas e de acesso público do imóvel, integrado ao CISP, nos termos desta Lei e de seu regulamento.
+
+§ 1º O desconto será de até 15% (quinze por cento) do valor do IPTU devido para o exercício, observado o escalonamento e as condições técnicas definidas em regulamento.
+§ 2º A concessão, manutenção, suspensão e perda do benefício observarão o art. 14 da Lei Complementar nº 101/2000 (LRF) e o disposto nesta Lei.
+
+Art. 2° São condições gerais para habilitação ao benefício:
+instalação de câmeras voltadas exclusivamente ao logradouro, vedado o enquadramento de áreas internas de terceiros ou quaisquer ambientes com expectativa de privacidade;
+integração técnica ao CISP, conforme padrões de conectividade, disponibilidade, armazenamento mínimo, qualidade de imagem e demais requisitos definidos em regulamento;
+termo de adesão com autorização de compartilhamento restrito das imagens para fins de segurança pública, observada a Lei Geral de Proteção de Dados (Lei nº 13.709/2018);
+adimplência do imóvel com as obrigações tributárias municipais;
+manutenção dos equipamentos em pleno funcionamento e revalidação anual do credenciamento.
+
+Art. 3º O pedido de concessão do benefício será dirigido ao órgão competente do Poder Executivo, instruído com:
+comprovante de propriedade/posse legítima e de regularidade cadastral;
+laudo/atestado técnico de instalação e funcionamento, emitido por profissional ou empresa habilitada;
+comprovante de integração homologada ao CISP;
+termo de adesão e de ciência das regras de proteção de dados.
+
+Art. 4º O benefício será revalidado anualmente, mediante comprovação de manutenção do sistema, da integração ativa ao CISP e da adimplência fiscal do imóvel.
+
+Art. 5º Implicam suspensão ou perda do benefício, sem prejuízo da cobrança do crédito tributário correspondente:
+interrupção do funcionamento do sistema por período superior ao fixado em regulamento;
+alteração das condições técnicas sem comunicação prévia;
+recusa injustificada de fornecimento de imagens quando regularmente requisitadas pelas autoridades competentes;
+captação indevida de imagens que extrapolem o logradouro público ou violem direitos de terceiros;
+fraude, simulação ou falsidade nas informações prestadas.
+
+§ 1º Na hipótese de perda do benefício por descumprimento, o contribuinte ficará sujeito à revogação retroativa do desconto e ao recolhimento das diferenças de IPTU com os acréscimos legais.
+§ 2º O benefício não é cumulativo com outros abatimentos de mesma natureza eventualmente concedidos ao mesmo imóvel.
+
+Art. 6° O Poder Executivo regulamentará esta Lei no prazo de 90 (noventa) dias, dispondo, no mínimo, sobre:
+percentuais escalonados do desconto por níveis de cobertura/qualidade;
+padrões técnicos de imagem, conectividade, disponibilidade e guarda de registros;
+fluxo de adesão, vistoria, homologação, fiscalização e revalidação anual;
+mecanismos de auditoria, sanções administrativas e defesa do contribuinte;
+salvaguardas de privacidade e proteção de dados, inclusive sinalização ostensiva de “área monitorada”.
+
+           Art. 7° O acesso às imagens será exclusivamente para fins de segurança pública ou por ordem da autoridade competente, vedada sua divulgação pública, ressalvadas as hipóteses legais.
+
+           Art. 8° Esta Lei entra em vigor na data de sua publicação, produzindo efeitos a partir do exercício financeiro seguinte.
+
+_____________________________
+Daniel Marques
+
+JUSTIFICATIVA
+
+A proposição busca fortalecer a segurança urbana por meio de incentivo tributário voluntário, ampliando a rede colaborativa de câmeras integradas ao CISP e potencializando a prevenção, dissuasão e elucidação de delitos no entorno dos imóveis. A medida é geral e impessoal, condicionada a requisitos técnicos e de proteção de dados, sem qualquer violação à privacidade de terceiros, já que limita a captação ao logradouro público.
+
+Do ponto de vista jurídico, o IPTU é de competência municipal (CF, art. 156, I). Incentivos condicionados ao atendimento de interesse público são admitidos, desde que instituídos por lei e observadas as regras fiscais. Por isso, o texto: (i) subordina a concessão ao art. 14 da LRF (estimativa de impacto, metas fiscais ou medidas compensatórias); (ii) determina regulamentação técnica pelo Executivo (padrões, fiscalização, revalidação e sanções); (iii) preserva a anterioridade anual, ao prever efeitos no exercício seguinte; e (iv) assegura LGPD, com acesso restrito e sinalização obrigatória.
+
+A experiência de outros municípios indica viabilidade prática do modelo quando acompanhada de critérios técnicos claros, adesão voluntária, fiscalização efetiva e governança de dados. O Município poderá, no regulamento, calibrar percentuais e exigências para otimizar custo-benefício fiscal e impacto em segurança pública.
+
+Por fim, ressalta-se que o impacto financeiro será analisado oportunamente quando da elaboração do impacto orçamentário do próximo exercício, uma vez que esta Lei produz efeitos apenas a partir do exercício financeiro seguinte, nos termos do art. 8º.

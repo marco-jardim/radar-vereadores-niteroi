@@ -1,0 +1,114 @@
+                                                                           Processo 9900069092/2026 - Projeto de Lei que Autoriza o Poder Executivo a conceder complementação financeira aos valores de
+                                                                           remuneração de serviços de reabilitação prestados ao Sistema Único de Saúde por entidades privadas sem fins lucrativos integrantes
+                                                                           da Rede de Cuidados à Pessoa com Deficiência, conveniadas ou credenciadas pelo Município de Niterói, e dá outras providências.
+
+                                                                            Valor Proposto
+           Serviços              Pacientes atendidos   Valor Atual (Ano)                         Impacto (Ano)                    2026                          2027                          2028
+                                                                                 (Ano)
+Reabilitação Visual CER                  150            R$ 1.134.000,00     R$ 1.474.200,00       R$ 340.200,00               R$ 170.100,00                R$ 354.318,30                 R$ 367.428,08
+                                         600            R$ 3.402.000,00     R$ 4.422.600,00      R$ 1.020.600,00              R$ 510.300,00                R$ 1.062.954,90               R$ 1.102.284,23
+Reabilitação Intelectual CER
+                                         140             R$ 783.988,80      R$ 1.019.185,44       R$ 235.196,64               R$ 117.598,32                R$ 244.957,30                 R$ 254.020,72
+Reabilitação Visual Pactuação
+Reabilitação Física CER                  400            R$ 2.268.000,00     R$ 2.948.400,00       R$ 680.400,00               R$ 340.200,00                R$ 708.636,60                 R$ 734.856,15
+                                         614            R$ 2.578.800,00     R$ 3.352.440,00       R$ 773.640,00               R$ 386.820,00                R$ 805.746,06                 R$ 835.558,66
+Reabilitação Física Pactuação
+Reabilitação Física e
+                                         664            R$ 2.788.800,00     R$ 3.625.440,00       R$ 836.640,00               R$ 418.320,00                R$ 871.360,56                 R$ 903.600,90
+Intelectual Pactuação
+          Total Eixo 1                                 R$ 12.955.588,80     R$ 16.842.265,44     R$ 3.886.676,64          R$ 1.943.338,32                  R$ 4.047.973,72               R$ 4.197.748,75
+
+   Procedimento realizado            Quantidade        Valor Atual (Ano)Valor Proposto (Ano) Impacto (Ano)                        2026                          2027                          2028
+02.09.04.004-1
+                                         493             R$ 22.431,50         R$ 22.431,50             R$ 0,00                   R$ 0,00                       R$ 0,00                       R$ 0,00
+VIDEOLARINGOSCOPIA
+02.11.07.004-1 AUDIOMETRIA
+TONAL LIMIAR (VIA AEREA /               1541             R$ 32.361,00         R$ 42.069,30           R$ 9.708,30               R$ 4.854,15                  R$ 10.111,19                  R$ 10.485,31
+OSSEA)
+
+02.11.07.005-0 AVALIACAO
+                                         37                R$ 666,00           R$ 865,80             R$ 199,80                  R$ 99,90                     R$ 208,09                     R$ 215,79
+AUDITIVA COMPORTAMENTAL
+02.11.07.006-8 AVALIACAO DE
+LINGUAGEM ESCRITA /                     1235              R$ 5.075,85         R$ 6.607,25            R$ 1.531,40               R$ 765,70                     R$ 1.594,95                   R$ 1.653,97
+LEITURA
+02.11.07.007-6 AVALIACAO DE
+                                        1585              R$ 6.514,35         R$ 8.479,75            R$ 1.965,40               R$ 982,70                     R$ 2.046,96                   R$ 2.122,70
+LINGUAGEM ORAL
+02.11.07.015-7 ESTUDO DE
+EMISSOES OTOACUSTICAS
+EVOCADAS TRANSITORIAS E                  117              R$ 5.484,96         R$ 7.131,15            R$ 1.646,19               R$ 823,10                     R$ 1.714,51                   R$ 1.777,94
+PRODUTOS DE DISTORCAO
+(EOA)
+02.11.07.017-3 EXAME DE
+                                        1600              R$ 6.576,00         R$ 8.560,00            R$ 1.984,00               R$ 992,00                     R$ 2.066,34                   R$ 2.142,79
+ORGANIZACAO PERCEPTIVA
+02.11.07.020-3
+                                        1644             R$ 37.812,00         R$ 49.155,60        R$ 11.343,60                 R$ 5.671,80                  R$ 11.814,36                  R$ 12.251,49
+IMITANCIOMETRIA
+02.11.07.021-1
+LOGOAUDIOMETRIA (LDV-IRF-               1543             R$ 40.503,75         R$ 52.662,59        R$ 12.158,84                 R$ 6.079,42                  R$ 12.663,43                  R$ 13.131,98
+LRF)
+02.11.07.026-2 POTENCIAL
+EVOCADO AUDITIVO DE
+                                         152              R$ 7.125,76         R$ 9.264,40            R$ 2.138,64               R$ 1.069,32                   R$ 2.227,39                   R$ 2.309,81
+CURTA MEDIA E LONGA
+LATENCIA
+02.11.07.035-1 TESTES
+VESTIBULARES /                           53                R$ 642,36           R$ 835,28             R$ 192,92                  R$ 96,46                     R$ 200,93                     R$ 208,36
+OTONEUROLOGICOS
+03.01.01.004-8 CONSULTA DE
+PROFISSIONAIS DE NIVEL
+SUPERIOR NA ATENÇÃO                     6571             R$ 41.397,30         R$ 53.816,49        R$ 12.419,19                 R$ 6.209,60                  R$ 12.934,59                  R$ 13.413,17
+ESPECIALIZADA (EXCETO
+MÉDICO)
+
+03.01.07.002-4
+ACOMPANHAMENTO DE
+                                        12309            R$ 217.500,03       R$ 282.737,73        R$ 65.237,70                R$ 32.618,85                  R$ 67.945,06                  R$ 70.459,03
+PACIENTE EM REABILITACAO
+COMUNICATIVA ALTERNATIVA
+
+03.01.07.004-0
+ACOMPANHAMENTO
+                                        17759            R$ 313.801,53       R$ 407.924,23        R$ 94.122,70                R$ 47.061,35                  R$ 98.028,79                 R$ 101.655,86
+NEUROPSICOLÓGICO DE
+PACIENTE EM REABILITACAO
+
+03.01.07.005-9
+ACOMPANHAMENTO
+                                        10587            R$ 187.072,29       R$ 243.183,39        R$ 56.111,10                R$ 28.055,55                  R$ 58.439,71                  R$ 60.601,98
+PSICOPEDAGOGICO DE
+PACIENTE EM REABILITACAO
+
+03.01.07.006-7 ATENDIMENTO
+/ ACOMPANHAMENTO EM
+                                        2234             R$ 17.224,14         R$ 22.384,68           R$ 5.160,54               R$ 2.580,27                   R$ 5.374,70                   R$ 5.573,57
+REABILITAÇÃO NAS
+MULTIPLAS DEFICIÊNCIAS
+
+03.01.07.007-5 ATENDIMENTO
+/ ACOMPANHAMENTO DE
+PACIENTE EM REABILITACAO                8626             R$ 152.421,42       R$ 198.139,22        R$ 45.717,80                R$ 22.858,90                  R$ 47.615,09                  R$ 49.376,85
+DO DESENVOLVIMENTO
+NEUROPSICOMOTOR
+
+03.01.07.011-3 TERAPIA
+FONOAUDIOLÓGICA                          51                R$ 555,90           R$ 722,67             R$ 166,77                  R$ 83,39                     R$ 173,69                     R$ 180,12
+INDIVIDUAL
+03.01.07.009-1 Atendimento
+em oficina terapêutica II em
+grupo para pessoas com                    1                 R$ 25,24            R$ 32,81               R$ 7,57                   R$ 3,79                       R$ 7,88                       R$ 8,18
+deficiência (por oficina
+terapêutica II)
+         Total Eixo 2                   68138           R$ 1.095.191,38     R$ 1.417.003,84     R$      321.812,46   R$                  162.932,23   R$               337.194,68   R$                 349.596,88
+
+                                                                                                                                 2026                          2027                          2028
+                                Estimativa de Impacto Orçamentário total                                             R$          2.106.270,55         R$       4.385.168,40         R$        4.547.345,63
+
+NOTAS:
+1. Reajuste pela meta do IPCA publicado em, 19 de junho de 2026, a partir de 2027.
+2. A discriminação de serviços listados e os respectivos valores estão conforme o declarado pela FMS nas peças 39, 42 e 51.
+
+3. A estimativa de impacto orçamentário se limitou a replicar os valores informados pela FMS, tendo em vista que esta Seplag não possui conhecimento técnico específico para verificar se os valores declarados
+são razoáveis, devido ao grau de especialidade dos serviços que compoem a despesa em tela.

@@ -1,0 +1,49 @@
+| Câmara Municipal de Niterói Gabinete Vereador Professor Tulio Partido Socialismo e Liberdade (PSOL)
+
+PROJETO DE LEI Nº        /2025
+
+Institui o Programa Municipal de Educação Ambiental e Combate à Desinformação Climática, cria instrumentos de ciência cidadã, divulgação científica, apoio à mídia independente e campanhas de comunicação ambiental, com prioridade a organizações da sociedade civil, e dispõe sobre fontes de financiamento, governança, transparência e controle social.
+
+Art. 1º Fica instituído, no âmbito do Município de Niterói, o Programa Municipal de Educação Ambiental e Combate à Desinformação Climática (PMEADC), com os objetivos de:
+I – promover educação ambiental formal e não formal;
+II – fomentar ciência cidadã e o engajamento comunitário em monitoramento socioambiental;
+III – apoiar divulgação científica acessível;
+IV – prevenir e mitigar a desinformação em temas ambientais e climáticos;
+V – priorizar organizações da sociedade civil (OSCs) como executoras de ações, nos termos desta Lei.
+Art. 2º Constituem diretrizes e instrumentos do PMEADC, a serem implementados pelo Poder Executivo, conforme disponibilidade orçamentária:
+I – O desenvolvimento e/ou utilização de Aplicativo municipal de ciência cidadã e plataforma web correlata para coleta, validação e visualização de dados ambientais, observada a governança de dados, a Lei Geral de Proteção de Dados (LGPD) e o código-fonte preferencialmente aberto;
+II – Programa de Divulgação Científica Ambiental, incluindo bolsas/auxílios e licenças abertas dos conteúdos;
+III – Apoio à mídia independente para produção jornalística e verificação de fatos ambientais, mediante chamamento público e cláusula de independência editorial;
+IV – Campanhas de comunicação ambiental multiplataforma, acessíveis e multiterritoriais;
+V – Editais de fomento e termos de fomento/colaboração com OSCs, nos termos do Marco Regulatório das Organizações da Sociedade Civil (MROSC);
+VI – Formação de professores, agentes públicos e lideranças comunitárias;
+VII – A manutenção e/ou disponibilização de um Observatório municipal online com dados, relatórios e boas práticas.
+Art. 3º A implementação dos incisos II a IV do art. 2º priorizará a celebração de parcerias com OSCs por meio de chamamento público (Lei nº 13.019/2014), com critérios objetivos, metas, indicadores e prestações de contas proporcionais.
+Art. 4º O PMEADC poderá ser financiado por:
+I – dotações próprias na Lei Orçamentária Anual (LOA), em consonância com o Plano Plurianual (PPA) e a Lei de Diretrizes Orçamentárias (LDO);
+II – fundo soberano municipal, quando previsto em seu regulamento, observado o crivo do conselho gestor;
+III – receitas de royalties e participações governamentais;
+IV – Termos de Ajustamento de Conduta (TACs), compensações ambientais e doações;
+V – convênios com entes e organismos.
+§1º A aplicação de recursos observará a Lei de Responsabilidade Fiscal (Lei Complementar nº 101/2000), a Lei nº 4.320/1964 e normas correlatas.
+§2º As despesas de custeio, investimento e manutenção deverão constar do Plano de Trabalho dos instrumentos adotados.
+Art. 5º Para fins de governança e controle social, o Poder Executivo poderá instituir, por Decreto, o Comitê Gestor do PMEADC, de caráter intersetorial, com representantes dos órgãos ambiental, educação, comunicação, ciência/tecnologia, planejamento e controle social (COMAN e cadeira para OSCs). Parágrafo único. Compete ao Comitê Gestor aprovar planos anuais, matriz de indicadores, editais, linhas de fomento, normas de dados e relatórios; as reuniões serão públicas, com atas e documentos publicados em portal específico.
+Art. 6º Todos os dados gerados com recursos públicos serão publicados em formato aberto, com metadados, observada a LGPD; caberá ao Município manter painel online com projetos apoiados, valores aplicados, resultados, microdados anonimizados do aplicativo e relatórios de verificação de fatos, sendo que os conteúdos financiados terão licenças abertas, salvo impedimento legal.
+Art. 7º É vedada a interferência editorial do Poder Público em conteúdos jornalísticos apoiados; os editais garantirão pluralidade de abordagens e diversidade de proponentes, e a checagem seguirá metodologias públicas, com retificações explicadas e direito de resposta, observando-se a política de conflitos de interesse nas parcerias.
+Art. 8º O aplicativo e os conteúdos terão acessibilidade (Libras, audiodescrição, contraste, leitura fácil) e multicanalidade, devendo as campanhas priorizar territórios vulneráveis, escolas públicas, unidades de saúde e equipamentos culturais.
+Art. 9º O desenvolvimento e a manutenção do aplicativo e das campanhas observarão a Lei nº 14.133/2021 ou, quando cabível, o MROSC; os editais poderão prever encomendas tecnológicas e protótipos avaliados por resultados.
+Art. 10 Haverá, no mínimo, 1 (um) relatório anual com indicadores, incluindo downloads do aplicativo, usuários ativos, dados validados, materiais publicados, alcance das campanhas, correções/checagens, participação de escolas/OSCs e cobertura territorial, sendo este relatório apresentado ao Comitê e à Câmara, com audiência pública anual.
+Art. 11 O Poder Executivo regulamentará esta Lei em até 120 (cento e vinte) dias, definindo governança de dados, modelos de edital, matriz de indicadores, critérios de seleção, segurança da informação, acessibilidade e política de integridade.
+Art. 12 Esta Lei entra em vigor na data de sua publicação.
+
+JUSTIFICATIVA
+
+A presente proposta decorre de resolução aprovada na II Conferência Municipal de Meio Ambiente realizada em janeiro de 2025 pela sociedade civil e que conforme deliberação na audiência pública de 25 de setembro de 2025 foi transformada em Projeto de Lei que cria o Programa Municipal de Educação Ambiental e Combate à Desinformação Climática, articulando educação ambiental, ciência cidadã, divulgação científica e comunicação pública para fortalecer a resiliência socioambiental e a democracia informacional no Município. A educação ambiental, prevista na Lei 9.795/1999, exige instrumentos concretos: um aplicativo de ciência cidadã que convide moradores a monitorar calor extremo, alagamentos, arborização e qualidade ambiental; editais de divulgação científica para traduzir evidências; apoio a mídias independentes para verificação de fatos ambientais; e campanhas capilarizadas em escolas, unidades de saúde e meios comunitários.
+
+A proposta prioriza OSCs via MROSC, valorizando conhecimento territorial e inovação social. Para segurança jurídica, vincula-se ao ciclo orçamentário (PPA–LDO–LOA), respeita a LRF, a Lei 4.320/1964 e as regras do fundo soberano e dos royalties, com governança intersetorial e transparência ativa (dados abertos e painel on-line). O combate à desinformação adota abordagem não censória e técnica, com independência editorial, pluralidade e metodologias públicas. O aplicativo promove engajamento e alfabetização científica, transformando moradores em coprodutores de dados, com LGPD e acessibilidade.
+
+A matriz de indicadores assegura avaliação por resultados, permitindo ajustes contínuos e uso eficiente de recursos. Diante do exposto, solicita-se o apoio dos(as) Nobres Pares para aprovação da presente proposição.
+
+Plenário Brígido Tinoco, 03 de novembro de 2025.
+
+Professor Tulio

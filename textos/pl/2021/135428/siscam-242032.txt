@@ -1,0 +1,851 @@
+  Tipo de                                                                                    Larguras                                          Recuos
+Logradouro                                                        Testada a Testada     Caixa de Rolamento   Passeios (Par/Ímpar)     Par                  Ímpar
+
+                                             Antiga - Estrada
+                                             Velha de Maricá/
+                                            Estrada do Rio do
+AVENIDA      Abdias José dos Santos                                    30,00                  24,00              3,00 - 3,00                   Variável                  Eixo         R.P.
+                                              Ouro - trecho
+                                            entre a RJ 106 e RJ
+                                                   104
+                                              Trecho entre a
+                                            Rua Comendador
+                                             Antônio Augusto
+AVENIDA      Dr. Acúrcio Torres                                        22,00                  16,00              3,00 - 3,00          3,5                   3,5          Eixo        R. O.
+                                              da Paz e a Rua
+                                              Gal. Cristóvão
+                                                Barcellos
+                                            Trecho entre a Av.
+                                            Alm. Tamandaré e
+                                                   a Rua
+AVENIDA      Dr. Acúrcio Torres                                        22,00                  16,00              3,00 - 3,00         5,00                  5,00          Eixo        R. O.
+                                              Comendador
+                                             Antônio Augusto
+                                                  da Paz
+             Vereador Agostinho de
+   RUA                                               -                 15,00                  9,00               2,50 - 2,50          1,50                  1,50        Local        R. O.
+             Paula Santos
+                                              Trecho entre o
+                                             limite da Região
+ESTRADA      Alarico de Souza               Praias da Baía e a         18,00                  11,00              3,50 - 3,50                   Variável                 Local        R. PB
+                                               Rua Pe. Emílio
+                                                   Miotti
+                                              Trecho entre a
+                                               Estrada Padre
+ESTRADA      Alarico de Souza               Joseph A. Auger e          18,00                  11,00              3,50 - 3,50                   Variável                  Eixo        R. PB
+                                              a Estrada Celso
+                                                  Peçanha
+             Jornalista Alberto Francisco
+AVENIDA                                              -                 32,00                  15,00          7,00 (Praia) - 10,00      -                     -           Eixo        R. PB.
+             Torres
+                                             Trecho entre Est.
+                                            Caetano Monteiro
+ESTRADA      Alcebiades Pinto                                          18,00                  10,00              4,00 - 4,00        Variável              Variável     Arterial       R. P
+                                            e a Av. Nelson de
+                                                 Oliveira
+   RUA       Dr. Alexandre Moura                     -                 17,50                  10,50              3,00 - 4,00           -                     -        Arterial       R. PB.
+   RUA       Profa. Alice Picanço                    -                 12,00                   7,00              2,50 - 2,50           -                     -        Coletora       R. O.
+             Prefeito Altivo Mendes           Antiga Avenida
+   RUA                                                                 15,00                  9,00               2,50 - 2,50          1,50                  1,50        Local        R. O.
+             Linhares                             Quatro
+   RUA       Álvares de Azevedo                      -                 13,00                   7,00              3,00 - 3,00                                 -        Coletora       R. PB
+   RUA       Prof. Álvaro Caetano                    -                 20,00                  14,00              3,00 - 3,00                                 -        Coletora       R. O.
+
+  Tipo
+   RUAde     DeputadoNome
+                        Álvaro                                                  Larguras                                  Recuos
+                                        Descrição- / Trecho   13,00               7,00               3,00 - 3,00    -                 -       Arterial
+                                                                                                                                            Classificação    R. N.
+                                                                                                                                                            Região
+Logradouro
+   RUA       Álvaro Neves                        -            13,00               7,00               3,00 - 3,00    -                 -      Coletora       R. N.
+             Alzira Vargas do Amaral
+TRAVESSA                                         -            13,00               7,00               3,00 - 3,00    -                 -      Coletora       R. N.
+             Peixoto
+                                         Antiga Estrada
+                                           existente
+   RUA       Amadeu Gomes                                     18,00              11,00               3,50 - 3,50   3,00              3,00       Eixo         R. P.
+                                        Municipal/Estrada
+                                           da Almas
+RODOVIA      Amaral Peixoto (RJ 104)            -             60,00              24,00               3,00 - 3,00          Variável             Eixo          R.N.
+RODOVIA      Amaral Peixoto (RJ 106)            -             60,00              24,00               3,00 - 3,00          Variável             Eixo          R.N.
+  RUA        Santo Amaro                        -             15,00               9,00               3,00 - 3,00   1,50              1,50     Local         R. PB.
+  RUA        Barão do Amazonas                  -             13,00               9,00               2,00 - 2,00     -                 -     Arterial       R. PB
+  RUA        Gal. Andrade Neves                               15,00               9,00               3,00 - 3,00   1,00              1,00    Coletora       R. PB.
+
+                                          Trecho entre as
+                                        Ruas Washington
+   RUA       Santo Antônio                                    18,00              12,00               3,00 - 3,00    -                 -      Coletora       R. PB.
+                                             Luiz e São
+                                              Lourenço
+                                         Antiga Rua 12 do
+             Cônsul Antônio Gonçalves
+   RUA                                      Loteamento        15,00               9,00               3,00 - 3,00   2,50              2,50    Coletora       R. O.
+             Corrêa de Noronha
+                                             Maravista
+   RUA       Antônio Parreiras                     -          15,00               9,00               3,00 - 3,00    -                 -      Coletora        P.B.
+                                          Trecho entre a
+                                        Rua Zuleica Brasil
+   RUA       Antônio Silva                                    12,00               7,00               2,00 - 2,00    -                 -      Coletora        R.N.
+                                           Silva e a Rua
+                                           Manoel Areal
+                                          Trecho entre a
+                                        Estrada da Florália
+AVENIDA      Araken Domingues Costa        e o limite das     18,00              12,00               3,00 - 3,00          Variável           Coletora        R. P.
+                                         Regiões Norte /
+                                             Pendotiba
+                                        Antiga Estrada de
+ESTRADA      Aristides Melo                                   18,00              11,00               3,50 - 3,50          Variável             Local         R. P.
+                                               Muriqui
+   RUA       Reverendo Armando             Trecho entre       21,00              14,00               3,50 - 3,50   3,00              3,00       Eixo         R. P.
+                                          Trecho entre a
+                                            Avenida Rui
+             Reverendo Armando
+   RUA                                  Barbosa e Estrada     18,00              11,00               3,50 - 3,50   5,00              5,00     Arterial       R. P.
+             Ferreira
+                                           Demétrio de
+                                               freitras
+                                        Trecho entre a Av.
+                                        Sylvio Picanço e a
+   RUA       Dr. Armando Lopes                                15,00               9,00               3,00 - 3,00    -                 -      Coletora       R. PB.
+                                             Rua Leonel
+                                             Magalhães
+  RUA        Arthur Pereira da Motta               -          12,00               6,00               3,00 - 3,00    -                 -      Coletora       R.N.
+AVENIDA      Almirante Ary Parreiras               -          28,00              23,00               2,50 - 2,50    -                 -        Eixo         R. PB
+
+  Tipo
+   RUAde     AscendinoNome
+                        Pereira              Trecho entre   a     13,00               Larguras
+                                                                                        7,00             3,00 - 3,00          -    Recuos       -      Coletora      R. PB.
+                                            Descrição / Trecho                                                                                       Classificação   Região
+Logradouro
+   RUA       Assis Vasconcelos                        -           12,00                 6,00              3,00 - 3,0          -                 -     Coletora        R.N.
+  RUA        Desembargador Athayde                    -           15,00                 7,00             3,00 - 5,00          -                 -     Coletora       R.P.B.
+AVENIDA      Augusto Ferreira Ramos           Antiga Av. 2 do     12,00                 7,00             2,50 - 2,50        1,00              1,00     Local         R. O.
+  RUA        Ayrosa Galvão                            -           13,00                 7,00             3,00 - 3,00          -                 -     Arterial        R. N.
+  RUA        Presidente Backer                        -           13,00                 7,00             3,00 - 3,00          -                 -     Arterial       R. PB.
+AVENIDA      Badger da Silveira                       -           18,00                12,00             3,00 - 3,00          -                 -       Eixo         R. PB
+AVENIDA      Almirante Benjamim Sodré                 -          Variável              10,50          Var. (Praia) - 3,00     -                 -     Arterial       R. PB
+                                              Trecho entre a
+                                               Alameda São
+   RUA       Benjamin Constant                Boaventura e a      29,00               Variável              Variável               Variável              Eixo        R. N.
+                                                    Rua
+                                            General Castrioto
+                                             Trecho entre a R.
+                                             São Lourenço e a
+   RUA       Benjamin Constant                                    22,00                16,00               3,00 - 3,00       -                 -         Eixo        R. N.
+                                               Alameda São
+                                                Boaventura
+ESTRADA      Bento Pestana                            -           20,00                14,00               3,00 - 3,00             Variável           Arterial       R. N.
+ALAMEDA      São Boaventura (RJ 104)                  -           37,00                31,00               3,00 - 3,00      2,00              2,00      Eixo         R. N.
+  RUA        Dr. Borman                               -           13,00                 7,00               3,00 - 3,00        -                 -     Coletora       R. PB.
+  RUA        Dom Bosco                                -           14,00                 7,00               3,50 - 3,50        -                 -     Coletora       R. PB.
+ESTRADA      Prefeito Brígido Tinoco                  -           13,00                 7,00               3,00 - 3,00             Variável            Local          R. P.
+  RUA        C                              Prolongamento da      15,00                 9,00               3,00 - 3,00       -                 -      Coletora       R.P.B.
+ESTRADA      Caetano Monteiro                         -           30,00                24,00               3,00 - 3,00             Variável             Eixo          R. P.
+                                                 Ligação da
+                                                 Castorina
+                                             Francisco da Cruz
+Caminho      da Formiga                                           13,00                 7,00               3,00 - 3,00             Variável             Local         R. P.
+                                                com a Eng.
+                                                Pacheco de
+                                                  Carvalho
+                                              Antiga Avenida
+AVENIDA      Carlos de Souza                                      25,00                20,00               3,50 - 3,50      2,00              2,00     Arterial      R. O.
+                                                    Nove
+AVENIDA      Carlos Ermelindo Marins                  -           20,00                 13            3,00 - 4,00 (Praia)          Variável           Coletora       R. PB.
+   RUA       Doutor Carlos Maximiano                -             16,50                10,50               3,00 - 3,00             Variável            Arterial      R. N.
+             Prof. Carlos Nelson Ferreira
+AVENIDA                                             -             25,00                18,00               3,50 - 3,50       -                 -      Coletora       R. O.
+             dos Santos
+                                            Trecho entre a Av.
+             Dr. Cássio Rothier do           Central Ewerton
+   RUA                                                            15,00                 9,00               2,50 - 2,50      2,50              2,50    Coletora       R. O.
+             Amaral                         Xavier e Av. Irene
+                                               Lopes Sodré
+                                            Trecho entre a Av.
+                                             Central Ewerton
+             Dr. Cássio Rothier do
+   RUA                                        Xavier e a Rua      12,00                 7,00               2,50 - 2,50      1,00              1,00    Coletora       R. O.
+             Amaral
+                                              Augusto Vieira
+                                                 Jacques
+
+  Tipo de                                  Trecho entre   Est.                     Larguras                                 Recuos
+Logradouro                                 Caetano Monteiro
+   RUA       Castorina Francisco da Cruz                         18,00              11,00               3,50 - 3,50         Variável          Coletora        R. P.
+                                           e Est. Francisco da
+                                               Cruz Nunes
+                                             Trecho entre o
+                                               Caminho da
+   RUA       Castorina Francisco da Cruz    Formiga e a Est.     13,00               7,00               3,00 - 3,00         Variável            Local         R. P.
+                                           Francisco da Cruz
+                                                  Nunes
+                                             Antiga Monan
+   RUA       Castorina Francisco da Cruz                         13,00               7,00               3,00 - 3,00         Variável            Local         R. P.
+                                                Pequeno
+                                             Trecho entre a
+                                           Rua Mário Viana e
+ESTRADA      Gal. Castro Guimarães                               30,00              24,00               3,00 - 3,00         Variável             Eixo        R. P.
+                                           Rua Comandante
+                                                Minervino
+                                            Trecho entre as
+                                            duas interseções
+ESTRADA      Gal. Castro Guimarães                               18,00              12,00               3,00 - 3,00         Variável            Local        R. P.
+                                            com a Est. Celso
+                                                Peçanha
+                                             Trecho entre a
+                                              Estrada Celso
+ESTRADA      Gal. Castro Guimarães             Peçanha e a       18,00              12,00               3,00 - 3,00         Variável             Eixo        R. P.
+                                           Estrada Alarico de
+                                                  Souza
+                                           Trecho entre a Av.
+                                            Visconde do Rio
+   RUA       Marquês de Caxias                Branco e Rua       12,00               6,00               3,00 - 3,00    -                -     Coletora        P.B.
+                                            Coronel PM F. S.
+                                                  Rocha
+  RUA        Dr. Celestino                           -           16,00              12,00               2,00 - 2,00    -                -       Eixo         R. PB.
+AVENIDA      Celso Aprígio de Macêdo        Antiga Av. 10 do     25,00              20,00               2,50 - 2,50   4,5              4,5     Arterial      R. O.
+ESTRADA      Celso Peçanha                           -           18,00              12,00               3,00 - 3,00         Variável            Eixo         R.P.
+                                             Trecho entre a
+                                            Est. Engenho do
+AVENIDA      Central Ewerton Xavier                              25,00              14,00               5,50 - 5,50         Variável             Eixo        R. O.
+                                              Mato e a Est.
+                                            Velha de Maricá
+                                              Trecho entre
+                                                a Estrada
+AVENIDA      Central Ewerton Xavier        Francisco da Cruz     25,00              14,00               5,50 - 5,50         Variável             Eixo        R. O.
+                                           Nunes e a Estrada
+                                           Engenho do Mato
+
+  Tipo de                                    Trecho/entre                        Larguras                                  Recuos
+                      Nome                 Descrição Trecho                                                                                  Classificação   Região
+Logradouro                                    a Rua 57 do
+                                              Loteamento
+AVENIDA      Central Ewerton Xavier          Maravista e a     15,00               9,00               3,00 - 3,00    -                 -        Local        R. O.
+                                                Estrada
+                                           Francisco da Cruz
+                                                 Nunes
+  RUA        Repórter César Donadel                 -          12,00               7,00               2,50 - 2,50   1,00              1,00    Coletora        R.O.
+  RUA        Escrivão Cesar March                   -          12,00               7,00               2,50 - 2,50   1,00              1,00    Coletora       R. O.
+ESTRADA      dos Chibantes                          -          12,00               7,00               2,50 - 2,50          Variável            Local          R. L.
+  RUA        Cinco de Julho                         -          13,00               7,00               3,00 - 3,00    -                 -      Coletora       R.P.B.
+                                              Loteamento
+                                               Terrabrás -
+   RUA       Cinquenta e Nove                                  12,00               7,00               2,50 - 2,50   2,00              2,00      Local        R. O.
+                                           Trecho entre a 12
+                                                 e a 84
+             Clotilde de Oliveira
+   RUA                                        Engenhoca        12,00               7,00               2,50 - 2,50    -                 -      Coletora       R. N.
+             Rodrigues
+   RUA       Clotilde Oliveira Rodrigues     São lourenço      12,00              6,00                3,00 - 3,00    -                 -      Coletora       R. N.
+   RUA       da Conceição                           -          13,00             Variável              Variável      -                 -        Eixo         R. PB.
+                                              Trecho entre
+                                           Estrada Francisco
+             Dr. Cornélio de Mello
+   RUA                                     Cruz Nunes e Av.    15,00               9,00               3,00 - 3,00   1,50              1,50    Coletora       R. O.
+             Júnior
+                                              Raul Oliveira
+                                               Rodrigues
+   RUA       Presidente Craveiro Lopes              -          18,00             Variável              Variável      -                 -         Eixo        R. N.
+                                            Trecho entre a
+                                             Alameda São
+   RUA       Santo Cristo                   Boaventura e a     13,00               7,00               3,00 - 3,00    -                 -      Coletora        R.N.
+                                                Rua Luiz
+                                           Nascimento Lopes
+  RUA        Gal. Cristóvão Barcelos                -          25,00              18,00               6,00 - 6,00    -                 -      Coletora       R. O.
+  RUA        Daniel Torres                          -          12,00               8,00               2,00 - 2,00    -                 -      Coletora        R. N.
+  RUA        Delfina de Jesus                       -          12,00               6,00               3,00 - 3,00    -                 -      Coletora        R.O.
+ESTRADA      Demétrio de Freitas                    -          18,00              11,00               3,50 -3,50           Variável           Coletora        R. P.
+  RUA        Marechal Deodoro                       -          13,00               9,00               2,00 - 2,00    -                 -        Eixo         R. PB.
+  RUA        Desidério de Oliveira          Trecho entre a     22,00              16,00               3,00 - 3,00    -                 -      Coletora       R.P.B.
+  RUA        São Diogo                              -          13,00               7,00               3,00 - 3,00    -                 -      Coletora       R. PB.
+  RUA        Djalma Dutra                           -          13,00               7,00               3,00 - 3,00    -                 -      Coletora       R. PB.
+                                               Acesso ao
+   RUA       Dois A (2A)                                       22,00              12,00               5,00 - 5,00    -                 -      Coletora       R.B.P.
+                                                Terminal
+   RUA       Presidente Domiciano           Trecho entre a     12,00               8,00               2,00 - 2,00     -                 -     Coletora       R. PB.
+   RUA       Domingues de Sá                Trecho entre a     15,00               9,00               3,00 -3,00    1,00              1,00    Arterial       R. PB.
+   RUA       Domingues de Sá                 Trecho entre a    13,00               7,00               3,00 - 3,00     -                 -     Coletora       R. PB.
+   RUA       Vereador Duque Estrada                 -          13,00               7,00               3,00 - 3,00     -                 -     Coletora       R.P.B.
+   RUA       Eduardo Luiz Gomes                     -          13,00               7,00               3,00 - 3,00     -                 -     Coletora       R. PB.
+   RUA       Elias Pedro Sader                      -          13,00               7,00               3,50 - 3,50     -                 -     Coletora
+
+  Tipo
+   RUAde     Padre Emílio   Miotti                                                Larguras                                      Recuos
+                                                                                                                                Variável
+                        Nome              Descrição- / Trecho   15,00               9,00               3,00 - 3,00                                        Local
+                                                                                                                                                      Classificação   R. PB.
+                                                                                                                                                                      Região
+Logradouro
+ ESTRADA     Engenho do Mato                       -            25,00              19,00               3,00 - 3,00       6,50               6,50         Eixo         R. O.
+  RUA        Vereador Erany José da Silva          -            18,00              12,00               3,00 - 3,00              Variável                Local          R.N.
+AVENIDA      Ernani do Amaral Peixoto       Trecho entre as     31,00              18,50               7,50 - 5,00         -               Variável      Eixo         R. PB.
+AVENIDA      Ernani do Amaral Peixoto       Trecho entre as     25,00              23,00               1,00 -1,00          -                  -          Eixo         R. PB.
+AVENIDA      Professor Ernani Faria Alves    Antiga Av. 12      25,00              20,00               2,50 - 2,50       3,50               3,50       Arterial       R. O.
+  RUA        Euclides da Cunha                     -            11,00               7,00               2,00 - 2,00         -                  -        Coletora        R. N.
+  RUA        Euzébio de Queiroz             Trecho entre a      14,00               8,00               3,00 - 3,00         -                  -        Coletora       R. PB.
+  RUA        Evilásio Silva                        -            12,00               6,00               3,00 - 3,00         -                  -          Eixo          R.N.
+  RUA        Fagundes Varela                       -            13,00               7,00               3,00 - 3,00         -                  -        Arterial       R. PB.
+AVENIDA      Feliciano Sodré                       -            30,00              22,00               4,00 - 4,00         -                  -          Eixo         R. PB.
+  RUA        Maestro Felício Toledo                -            13,00               9,00               2,00 - 2,00         -                  -        Arterial       R.P.B.
+                                           Trecho entre Rua
+                                              Maria Elvira
+   RUA       Fernandes Couto                German e a Av.      23,50              19,50               2,00 - 2,00        -                   -           Eixo        R. PB.
+                                                 Pres.
+                                          Franklin Roosevelt
+ESTRADA      Senador Fernandes da                  -            16,00              10,00               3,00 - 3,00              Variável               Coletora        R.O.
+             Senador Fernandes da
+ESTRADA                                            -            13,00               7,00               3,00 - 3,00              Variável                 Local         R.O.
+             Cunha
+                                            Trecho entre a
+Praia das    Flexas                       Praia de Icaraí e a   26,00              12,00          4,00 - 10,00 (Praia)    -                   -           Eixo        R. PB.
+                                             Rua Dr. Paulo
+                                            Trecho entre a
+                                             Rua Dr. Paulo
+Praia das    Flexas                                             26,00              12,00          4,00 - 10,00 (Praia)          Variável                Arterial      R. PB.
+                                          Alves e a Rua Eng.
+                                            Romeo Martins
+ESTRADA      da Florália                           -            18,00              12,00               3,00 - 3,00              Variável                Arterial      R. N.
+                                            Trecho entre a
+                                          Rua Prof. Lealdino
+                                           Alcântara e a Av.
+AVENIDA      Prof. Florestan Fernandes                          25,00              18,00               3,50 - 3,50       2,50               2,50         Local        R. O.
+                                             Projetada do
+                                              Loteamento
+                                          Enseada de Itaipú
+AVENIDA      França                                -            18,00              11,00               3,50 - 3,50       1,50               1,50        Local          R. P.
+AVENIDA      Doutor Francelino Barcelos            -            22,00              15,00               3,50 - 3,50       2,00               2,00       Coletora        R.O.
+                                           Trecho entre Av.
+                                            Rui Barbosa e a
+                                                Estrada
+ESTRADA      Francisco da Cruz Nunes                            30,00              24,00               3,00 - 3,00              Variável                  Eixo         R. P.
+                                              Engenheiro
+                                              Pacheco de
+                                               Carvalho
+
+  Tipo de                                  Trecho entre   a                      Larguras                                     Recuos
+Logradouro                                     Estrada
+                                            Engenheiro
+ESTRADA      Francisco da Cruz Nunes                           33,00             Variável              Variável               Variável              Eixo          R. O.
+                                            Pacheco de
+                                          Carvalho e a Rua
+                                          Roberto Paragó
+                                           Trecho entre a
+                                            Rua Roberto
+ESTRADA      Francisco da Cruz Nunes                           30,00             Variável              Variável               Variável              Eixo          R. O.
+                                          Paragó e a Praia
+                                              de Itaipu
+             Francisco Gabriel de Souza
+AVENIDA                                           -            22,00              15,00               3,50 - 3,50      2,00              2,00     Arterial        R. O.
+             Lobo
+AVENIDA      Padre Francisco Lanna                   -         28,00              22,50               3,00 - 2,50       -                 -        Eixo          R. PB.
+  RUA        Doutor Francisco Sardinha               -         13,00               7,00               3,00 - 3,00       -                 -      Coletora         R.N.
+             Coronel PM Francisco          Antiga Rua UM -
+   RUA                                                         25,00              15,00               5,00 - 5,00       -                 -      Coletora        R.P.B.
+             Spargoli Rocha                 Aterrado Norte
+                                           Trecho entre Est.
+                                          Francisco da Cruz                                                                                                     R. O. / R.
+ESTRADA      Frei Orlando                                      18,00              14,00               2,00 - 2,00             Variável             Local
+                                           Nunes e Estrada                                                                                                          P.
+                                            Aristides Melo
+                                            Trecho entre a
+                                          Rua Coronel PM F.
+   RUA       Dr. Fróes da Cruz              S. Rocha e Av.     20,00              10,00               5,00 - 5,00       -                 -      Coletora        R. PB.
+                                           Visconde do Rio
+                                                 Branco
+   RUA       Galvão                                  -         18,00              12,00               3,00 - 3,00             Variável           Coletora         R.N.
+   RUA       Gavião Peixoto                          -         15,00               9,00               3,00 - 3,00      1,00              1,00      Eixo          R. PB.
+   RUA       General Castrioto                       -         22,00              16,00               3,00 - 3,00             Variável             Eixo          R. N.
+                                           Antiga Rua 59 do
+                                             Loteamento
+             Geralda Pontes Miranda de
+   RUA                                    Terrabrás - Trecho   12,00               7,00               2,50 - 2,50      2,00              2,00      Local          R. O.
+             Oliveira
+                                          entre a Rua 12 e a
+                                                 Rua 84
+             Ministro Geraldo Bezerra       Antiga Estrada
+ESTRADA                                                        15,00               9,00               3,00 - 3,00             Variável             Local          R. L.
+             de Menezes                           Itália
+AVENIDA      Dr. Geraldo de Melo                     -         25,00              18,00               3,50 - 3,50       -                 -       Local          R. O.
+  RUA        Geraldo Martins                         -         13,00               7,00               3,00 - 3,00       -                 -      Coletora        R. PB.
+                                          Antiga Estrada de
+ESTRADA      Gilberto de Carvalho                              12,00               6,00               3,00 - 3,00       -                 -      Coletora         R. O.
+                                               Itaipuaçú
+                                          Trecho entre a Av.
+                                            Cons. Paulo M.
+   RUA       Godofredo Garcia Justo          Kalle e a Est.    16,50              10,50          5,00 - 1,00 (Praça)   4,50               -        Local          R. O.
+                                             Francisco C.
+                                                 Nunes
+
+  Tipo de                                 Trecho entre   a                       Larguras                                 Recuos
+Logradouro                                 Rua Maestro
+   RUA       Cel. Gomes Machado          Felício Toledo e a   13,00                7,00              3,00 - 3,00    -                 -      Coletora       R. PB.
+                                           Av. Jansen de
+                                                Melo
+  RUA        Guilherme Briggs                     -           13,00                7,00              3,00 - 3,00    -                 -      Coletora       R. PB.
+ESTRADA      Guilhermina Bastos                   -           20,00               14,00              3,00 - 3,00          Variável            Local          R. P.
+  RUA        Guimarães Júnior                     -           14,00                8,00              3,00 - 3,00     -                 -     Arterial        R.N.
+  RUA        Prof. Hélio Ferreira da      Antiga Rua Seis     12,00                7,00              2,50 - 2,50   1,00              1,00     Local         R. O.
+                                          Antiga Rua Pref.
+   RUA       Henrique Lage                                    13,00                7,00              3,00 - 3,00    -                 -      Coletora       R. N.
+                                             Bandão Jr
+             Prof. Hernani Pires de
+   RUA                                           -            13,00                7,00              3,00 - 3,00    -                 -       Arterial      R. PB.
+             Mello
+   RUA       Honduras                               -         12,00                7,00              2,50 - 2,50   1,00              1,00      Local        R. O.
+                                           Rua Vital Brasil
+TRAVESSA     Instituto Vital Brasil                           12,00                7,00              2,50 - 2,50    -                 -      Coletora       R.P.B
+                                                 Filho
+                                           Trecho entre a
+                                          Est. Francisco da
+AVENIDA      Irene Lopes Sodré             Cruz Nunes e a     25,00               19,00              3,00 - 3,00   2,50              2,50       Eixo        R. O.
+                                          Rua Engenho do
+                                                Mato
+                                           Trecho entre a
+                                          Rua Engenho do
+AVENIDA      Irene Lopes Sodré              Mato e a Rua      25,00               19,00              3,00 - 3,00   6,50              6,50       Eixo        R. O.
+                                          Augusto Gomes
+                                         da Silva Sobrinho
+   RUA       Jornalista Irineu Marinho              -         15,00                9,00              3,00 - 3,00    -                 -        Eixo         R. PB.
+   RUA       Visconde de Itaboraí                   -         13,00                7,00              3,00 - 3,00    -                 -       Arterial      R.P.B.
+                                           Trecho entre a
+                                         Rua dos Gerânios
+ Estrada     de Itacoatiara                  e a Estrada      18,00               12,00              3,00 - 3,00          Variável           Coletora       R. O.
+                                         Francisco da Cruz
+                                                Nunes
+                                         Antiga Rua A/Rua
+             Sargento Jahir Ubirajara
+   RUA                                   Cruzeiro/Travessa    10,00                6,00              2,00 - 2,00    -                 -       Arterial      R. PB.
+             Ferreira
+                                          Alcebíades Pinto
+                                                                            2x10,50 + cc 2,00 =
+AVENIDA      Jansen de Mello                     -            29,00                                  3,00 - 3,00    -                 -         Eixo        R.P.B.
+                                                                                  23,00
+   RUA       São Janúario                        -            15,00                9,00              3,00 - 3,00    -                 -      Coletora       R. N.
+                                           Trecho entre
+                                         Estrada Senador
+ESTRADA      Jean Vallenteau Mouliac      Fernandes da        16,00               10,00              3,00 - 3,00          Variável           Coletora        R. L.
+                                         Cunha e Estrada
+                                         Velha de Maricá
+
+  Tipo de
+ AVENIDA     Jerônimo Nome
+                       Afonso                                                      Larguras                                  Recuos
+                                                                                                                             Variável
+                                          Descrição- / Trecho   18,00               11,00               3,50 - 3,50                              Coletora
+                                                                                                                                               Classificação    R. N.
+                                                                                                                                                               Região
+Logradouro
+   RUA       São João                              -            12,00                8,00               2,00 - 2,00    -                 -      Arterial       R. PB.
+  RUA        João Baptista da Costa                -            15,00                9,00               3,00 - 3,00    -                 -      Coletora        R.P.
+AVENIDA      Prof. João Brasil                     -            18,00               12,00               3,00 - 3,00          Variável           Arterial       R. N.
+  RUA        João de Deus Freitas                  -            16,00                7,00               5,00 - 5,00    -                 -      Arterial        R.N.
+                                             João Duarte
+                                          Honorato Ferreira
+ESTRADA      Erasmo Braga                                       18,00               12,00               3,00 - 3,00          Variável             Local         R. P.
+                                            / caminho do
+                                                Buraco
+                                           Antiga Rua 19 do
+                                          Loteamento Soter -
+   RUA       João Paulo II                Trecho entre a Av.    12,00                7,00               2,50 - 2,50   1,00              1,00    Coletora       R. O.
+                                           Ewerton Xavier e
+                                              Av. Pilsen
+   RUA       João Pessoa                           -            14,00                7,00               3,50 - 3,50    -                        Coletora       R.P.B.
+             Deputado João Rodrigues        Antiga Rua 2 -
+   RUA                                                          12,00                7,00               2,50 - 2,50   1,00              1,00      Local        R. O.
+             de Oliveira                         Soter
+                                             Piratininga -
+  Túnel      João Sampaio                                                 Conforme Projeto Específico                  -                 -        Eixo          R.O.
+                                               Charitas
+  RUA        Joaquim Távora                       -             14,00                7,00               3,50 - 3,50    -                 -      Arterial       R. PB.
+  RUA        São José                             -             15,00                9,00               3,00 - 3,00          Variável             Eixo         R. N.
+  RUA        José Bonifácio                       -             12,00                6,00               3,00 - 3,00    -                 -      Coletora       R. PB.
+  RUA        Maestro José Botelho                 -             12,00                7,00               2,50 - 2,50    -                 -      Coletora       R. PB.
+  RUA        José Clemente                        -             13,00                7,00               3,00 - 3,00    -                 -      Coletora       R. PB.
+ PRAÇA       Dom José Gonçalves da                -                                                                                             Coletora       R. O.
+AVENIDA      Pastor José Gomes de                 -             18,00               12,00               3,00 - 3,00          Variável           Arterial       R. N.
+TRAVESSA     José Joaquim Pereira                 -             12,00                6,00               3,00 - 3,00    -                 -        Eixo          R.N.
+                                             Antiga Rua
+   RUA       José Vicente Sobrinho            Coronel           16,50               10,50               3,00 - 3,00    -                 -      Coletora       R. N.
+                                             Guimarães
+                                           Antiga Rua 11 -
+   RUA       Prof. José Vieira de Souza                         12,00                7,00               2,50-2,50     1,00              1,00      Local        R. O.
+                                             Maravista
+             Padre Joseph Alexandre
+ESTRADA                                            -            18,00               11,00               3,50 - 3,50          Variável              Eixo        R. P.
+             Augert
+   RUA       Prof. Lara Vilela                    -             13,00                7,00               3,00 - 3,00    -                 -      Coletora       R. PB.
+                                             Antiga Est.
+   RUA       São Lázaro                                         20,00               14,00               3,00 - 3,00          Variável             Local         R.P.
+                                             Matapaca
+   RUA       Leite Ribeiro                         -            14,00                7,00               3,50 - 3,50    -                 -      Coletora       R. N.
+                                            Trecho entre a
+   RUA       Lemos Cunha                                        13,00                7,00               3,00 - 3,00    -                 -       Arterial      R. PB.
+                                           Rua Domingues
+                                            Trecho entre a
+                                          Rua Gal. Silvestre
+   RUA       Lemos Cunha                                        16,50               10,50               3,00 - 3,00    -                3,5      Arterial      R. PB.
+                                            Rocha e a Rua
+                                           Joaquim Távora
+
+  Tipo
+   RUAde     Leonel Magalhães                                                               Larguras                                        Recuos
+                      Nome               Descrição- / Trecho          14,00                   8,00                3,00 - 3,00          1                 1      Coletora
+                                                                                                                                                              Classificação   R. PB.
+                                                                                                                                                                              Região
+Logradouro
+   RUA       Leonor da Glória                      -                  18,00                  11,00                3,50 - 3,50        3,00              3,00       Eixo         R. P.
+                                           Trecho entre a
+                                            Rua Joaquim
+ESTRADA      Leopoldo Fróes               Távora e a saída            13,50                  10,00                1,50 - 1,50               Variável           Coletora       R. PB.
+                                         do Túnel Roberto
+                                               Silveira
+                                           Trecho entre a
+                                           saída do Túnel
+ESTRADA      Leopoldo Fróes              Roberto Silveira e           23,00                  14,00                4,00 - 5,00               Variável              Eixo        R. PB.
+                                                a Av.
+                                         Quintino Bocaiuva
+                                           Trecho entre a
+                                           Rua Almirante
+             Desembargador Leopoldo
+   RUA                                     Tamandaré e a              15,00                   9,00                2,50 - 2,50        1,50              1,50      Local        R. O.
+             Muylaert
+                                           Rua Jornalista
+                                           Sidney Corrêa
+   RUA       Desembargador Lima                    -                  20,00                  14,00                3,00 - 3,00               Variável              Eixo        R. N.
+                                         Trecho entrea Rua
+   RUA       Lion’s Clube                Dr. Mário Viana e            18,00                  11,00                3,50 - 3,50               Variável           Coletora       R.P.B.
+                                         Rua Waldir cabral
+  RUA        Lopes da Cunha                        -                  10,00                  6,00                 2,00 - 2,00         -                 -      Coletora        R.N.
+  RUA        Lopes Trovão                          -                  13,00                  7,00                 3,00 - 3,00         -                 -      Coletora       R. PB.
+  RUA        São Lourenço                                             24,50                Variável                Variável                 Variável             Eixo         R. N.
+ TÚNEL       Luis Antônio Pimentel       Charitas - Cafubá                         Confome Projeto Específico                         -                 -        Eixo         R.P.B.
+                                          Trecho entre a
+             Luis Leopoldo Fernandes      Rua Cel. Gomes
+   RUA                                                         Mantém o alinhamento existente, respeitadas as condições de galeria    -                 -       Arterial      R. PB.
+             Pinheiro                    Machado e a Rua
+                                           da Conceição
+                                          Trecho entre a
+             Luis Leopoldo Fernandes     Rua São Pedro e
+   RUA                                                                13,00                   7,00                3,00 - 3,00         -                 -       Arterial      R. PB.
+             Pinheiro                      R. Cel. Gomes
+                                              Machado
+             Dr. Procurador de Justiça     Antiga Rua 9 -
+   RUA                                                                12,00                   7,00                 2,50-2,50         1,00              1,00      Local        R. O.
+             Luiz de Araújo Braz               Soter
+TRAVESSA     Luiz de Matos                        -                   14,00                   7,00                3,50 - 3,50         -                 -      Coletora       R. N.
+TRAVESSA     Luiz Nascimento Lopes               -                    13,00                  7,00                 3,00 - 3,00         -                 -      Coletora
+  RUA        Dr. Luiz Palmier                    -                    18,00                 Variável               Variável                 Variável             Eixo         R. N.
+                                         Acesso ao hospital
+AVENIDA      Machado                                                   9,00                   6,00                1,50 - 1,50         -                 -      Coletora       R. N.
+                                         Orêncio de Freitas
+  RUA        Magnólia Brasil                     -                    16,50                  10,50                3,00 - 3,00        1,75              1,75    Arterial       R. N.
+TRAVESSA     Maia                                -                    13,00                   7,00                3,00 - 3,00          -                 -     Coletora       R. N.
+
+  Tipo de                              Trecho entre   a                      Larguras                                  Recuos
+Logradouro                               Alameda São
+   RUA       Manoel Areal                                  15,00               7,00               2,50 - 5,50    -                 -      Coletora       R. N.
+                                       Boaventura e a
+                                      Rua Antônio Silva
+   RUA       Prof. Manoel de Abreu             -           16,00              10,00               3,00 - 3,00    -                 -      Coletora       R. PB.
+                                        Trecho entre a
+                                         Alameda São
+   RUA       Manoel João Gonçalves                         15,00               7,00               4,00 - 4,00    -                 -      Coletora        R.N.
+                                       boaventura e a
+                                      rua Antônio Silva
+             Manoel Pacheco de         Aterrado de São
+   RUA                                                     16,00              10,00               3,00 - 3,00    -                 -       Arterial      R. PB.
+             Carvalho                      Lourenço
+   RUA       Manoel Pacheco de           Antiga rua 14     12,00               7,00               2,50 - 2,50     -                 -     Coletora       R.O.
+   RUA       Dr. March                         -           20,00              14,00               3,00 - 3,00     -                 -       Eixo         R. N.
+   RUA       Maria D’Ajuda Medeiros            -           15,00               9,00               3,00 - 3,00   1,50              1,50     Local         R. O.
+   RUA       Maria Elvira German              -            12,00               7,00               2,50 - 2,50    -                 -         Eixo        R. PB.
+   RUA       Maria Izabel Bolckau               -          12,00               7,00               2,50 - 2,50   1,00              1,00      Local        R. O.
+   RUA       Maria Tanure Amora                 -          15,00               9,00               3,00 - 3,00   1,50              1,50      Local        R. O.
+                                      Trecho entre a Av.
+                                       Central Ewerton
+ESTRADA      Marino Nunes Vieira           Xavier e o      15,00               9,00               3,00 - 3,00          Variável             Local         R. L.
+                                        Caminho para
+                                            Itaocaia
+                                        Trecho entre a
+                                        Rua Presidente
+   RUA       Mário Neves                                   12,00               7,00               2,50 - 2,50          Variável           Coletora        R.N.
+                                       Vargas e a praça
+                                        Alcides Pereira
+                                       Trecho entre Av.
+                                         Raul Oliveira
+   RUA       Dr. Mario Souto                               28,00              22,00               3,00 - 3,00   8,00              8,00      Local        R. O.
+                                       Rodrigues e Rua
+                                         Valdir Costa
+  RUA        Dr. Mário Viana                    -          22,00              16,00               3,00 - 3,00          Variável             Eixo         R. PB.
+  RUA        Mariz e Barros                     -          13,50               7,50               3,00 - 3,00    -                 -      Arterial       R. PB.
+  RUA        Martins Torres                     -          12,00               6,00               3,00 - 3,00    -                 -      Coletora       R.P.B.
+  RUA        Barão de Mauá                      -          13,00               9,00               2,00 - 2,00    -                 -      Coletora       R.P.B.
+ESTRADA      Dr. Melchiades Peixoto             -          20,00              14,00               3,00 - 3,00          Variável           Arterial        R. N.
+                                        Trecho entre a
+                                      Rua Lópes Trovão
+   RUA       Mem de Sá                                     13,00               7,00               3,00 - 3,00    -                 -      Coletora       R. PB.
+                                        e Rua Castilho
+                                             França
+                                        Trecho entre a
+                                        Rua Miguel de
+   RUA       Mem de Sá                                     20,00              14,00               3,00 - 3,00          Variável           Coletora       R. PB.
+                                          Frias e Rua
+                                        Castilho França
+   RUA       Miguel de Frias                    -          18,00              12,00               3,00 - 3,00          Variável              Eixo        R. PB.
+
+  Tipo de                                                                           Larguras                                         Recuos
+Logradouro
+   RUA       Miguel Lemos                         -             13,00                 9,00               2,00 - 2,00         -                   -      Coletora
+
+  RUA        Gal. Milton Tavares de                -           Variável              10,50          Var. (Praia) - 5,00      -                   -      Arterial       R. PB.
+  RUA        Cel. Miranda                          -            13,00                 7,00             3,00 - 3,00           -                   -      Coletora       R. PB.
+  RUA        Jornalista Moacyr Padilha             -            10,00                 7,00             1,50 - 1,50           -                   -      Coletora       R. PB.
+  RUA        Visconde de Moraes                    -            13,00                 7,00             3,00 - 3,00           -                   -      Arterial       R. PB.
+ESTRADA      Municipal                             -            18,00                12,00             3,00 - 3,00                   Variável           Coletora        R. P.
+                                            Trecho entre a
+                                          Aristides Melo e a
+ESTRADA      do Muriqui Pequeno                                 18,00                12,00               3,00 - 3,00                 Variável             Local         R. P.
+                                           Av. Abdias José
+                                              dos Santos
+AVENIDA      Nelson de Oliveira e Silva            -            18,00                11,00               3,50 - 3,50                 Variável           Coletora        R. P.
+                                           Antiga Rua 5 do
+   RUA       Tabelião Nelson de Souza                           12,00                 7,00               2,50 - 2,50       1,00                 1,00      Local         R.O.
+                                          Loteamento Soter
+             Desembargador Nestor
+AVENIDA                                           -             20,00                14,00               3,00 - 3,00                 Variável           Coletora       R. N.
+             Rodrigues Perlingeiro
+   RUA       Nicaragua                              -           15,00                 9,00               3,00 - 3,00       2,50                 2,50    Coletora       R. O.
+   RUA       Noronha Torrezão                       -           20,00                14,00               3,00 - 3,00                 Variável             Eixo         R. N.
+   RUA       Oiapoque                               -           12,00                 7,00               3,00 - 3,00         -                    -     Coletora       R.P.B.
+   RUA       Marquês de Olinda                      -           13,00                 7,00               3,00 - 3,00         -                    -     Coletora       R. PB.
+   RUA       Oscar Fonseca                          -           14,00                 7,00               3,50 - 3.50         -                    -     Coletora        R. N.
+   RUA       Dr. Osiris Pitanga             Antiga Rua 64       18,00                 9,00               4,50 - 4,50       3,00                 3,00     Local         R. O.
+   RUA       Gal. Osório                            -           14,00                 9,00               2,50 - 2,50         -                    -     Coletora       R. PB.
+                                            Antiga Estrada
+ESTRADA      Eng. Pacheco de Carvalho                           18,00                11,00               3,50 - 3.50                 Variável            Arterial      R. O.
+                                            Velha de Itaipu
+                                          Trecho entre a Av.
+                                           Ewerton Xavier e
+   RUA       Dr. Pálvaro Silva                                  15,00                 9,00               3,00 - 3,00        2,5                 2,5     Coletora       R. O.
+                                            Av. Irene Lopes
+                                                 Sodré
+                                          Trecho entre a Av.
+                                           Central Ewerton
+   RUA       Dr. Pálvaro Silva               Xavier e a R.      12,00                 7,00               2,50 - 2,50       1,00                 1,00    Coletora       R. O.
+                                            Augusto Vieira
+                                                Jacques
+AVENIDA      Marquês do Paraná                    -             36,00               Variável              variável                   Variável              Eixo        R. PB.
+   RUA       Major Pardal Júnior                  -              9,00                 6,00               1,50 - 1,50         -                   -      Coletora        R.N.
+   RUA       Passo da Pátria                      -             10,00                 6,00               2,00 - 2,00         -                   -      Coletora       R. PB.
+                                           Trecho entre a
+                                            Rua Castilho
+   RUA       Dr. Paulo César                                    22,00                16,00               3,00 - 3,00      Variável               -         Eixo        R. PB.
+                                           França e a Rua
+                                             Santa Rosa
+
+  Tipo de                                  Trecho entre   a                          Larguras                                           Recuos
+   RUA
+Logradouro   Dr. Paulo Nome
+                       César              Descrição / Trecho     27,00                21,00               3,00 - 3,00        Variável               -     Classificação
+                                                                                                                                                              Eixo        Região
+                                                                                                                                                                          R. PB.
+                                            Rua Miguel de
+                                            Trecho entre a
+                                           Est. Francisco da
+             Conselheiro Paulo de Melo        Cruz Nunes e                             Conforme Projeto Específico
+AVENIDA                                                          28,00                                                        5,00                 5,00       Eixo        R. O.
+             Kalle                          Praça dom José                                  (Transoceânica)
+                                             Gonçalves da
+                                                  Costa
+                                            Trecho entre a
+                                            Praça dom José
+             Conselheiro Paulo de Melo       Gonçalves da
+AVENIDA                                                          22,00                18,00               3,00 - 3,00         2,00                 2,00      Local        R. O.
+             Kalle                             Costa e Av.
+                                           Francisco Gabriel
+                                            De Souza Lobo
+                                            Antiga Moreira
+   RUA       Ator Paulo Gustavo                                  13,00                 7,00               3,00 - 3,00           -                   -      Coletora       R. PB.
+                                                  César
+                                            Trecho entre a
+                                             Rua Dr. Paulo
+   RUA       Presidente Pedreira           Alves e a R. Visc.    16,00                10,00               3,00 - 3,00          1,50                1,50     Arterial      R. PB.
+                                                   de
+                                                Moraes
+                                           Trecho entre a R.
+                                          Visc. de Moraes e
+   RUA       Presidente Pedreira                                 16,00                10,00               3,00 - 3,00          1,50                1,50    Coletora       R. PB.
+                                               a Rua Lara
+                                                  Vilela
+  RUA        Gal. Pereira da Silva                   -           13,00                 7,00               3,00 - 3,00           -                    -     Coletora       R. PB.
+AVENIDA      Portugal                     Lot. Jardim Europa     18,00                11,00               3,50 - 3,50         3,00                 3,00    Coletora        R. P.
+                                            Nome popular:
+   RUA       Quarenta e Um                   João de Souza       12,00                 7,00               2,50 - 2,50         1,00                 1,00    Coletora        R.O.
+                                                 Castelo
+AVENIDA      Quintino Bocaiúva                       -          Variável             Variável        Variável(Praia)/12,00      -                            Eixo         R.P.B.
+  RUA        Quinze de Novembro                      -           16,00                10,00               3,00 - 3,00                   Variável             Local        R. PB.
+             Marechal Raul de
+   RUA                                             -             14,00                 8,00               3,00 - 3,00          1,00                1,00    Coletora       R.P.B.
+             Albuquerque
+                                          Trecho entre a Av.
+AVENIDA      Raul de Oliveira Rodrigues      8 e a R. Prof       28,00                22,00               3,00 - 3,00         5,00                 5,00       Eixo        R. O.
+                                           Benjamin Carias
+                                          Techo entre a Av.
+AVENIDA      Raul de Oliveira Rodrigues                          25,00                20,00               2,50 - 2,50           -                   -         Eixo        R. O.
+                                           Calos de Souza e
+                                          Techo entre a Av.
+AVENIDA      Raul de Oliveira Rodrigues    Ernani F. Alves e     25,00                20,00               3,00 - 3,00         3,50                 3,50       Eixo        R. O.
+                                          Av. Calos de Souza
+
+  Tipo de                                 Trecho    entre  a Av.                        Larguras                                  Recuos
+Logradouro                                 Ernani F. Alves e
+AVENIDA      Raul de Oliveira Rodrigues                             18,00                10,50               3,75 - 3,75    -                 -         Eixo        R. O.
+                                                Almirante
+                                               Tamandaré
+ TÚNEL       Raul Veiga                              -                         Conforme Projeto Específico                  -                 -        Eixo         R. PB.
+AVENIDA      Dr. Renato Silva                        -              18,00                14,00               2,00 - 2,00    -                 -      Coletora       R. N.
+  RUA        Presidente Vargas                       -              12,00                 7,00               2,50 - 2,50    -                 -      Coletora       R. N.
+                                             Trecho entre a
+                                             Rua Alexandre
+                                             Moura e a Rua
+AVENIDA      Visconde do Rio Branco                                            Conforme Projeto Específico                  -                 -       Arterial      R. PB.
+                                                   Prof.
+                                             Hernani P. de
+                                                  Mello
+                                             Trecho entre a
+                                          Rua Prof. Hernani
+AVENIDA      Visconde do Rio Branco                                            Conforme Projeto Específico                  -                 -         Eixo        R. PB.
+                                          Pires de Mello e a
+                                              Av. Feliciano
+                                          Trecho entre a Av.
+AVENIDA      Visconde do Rio Branco        Feliciano Sodré e                   Conforme Projeto Específico                  -                 -      Coletora       R. PB.
+                                                a Rua Cel.
+  RUA        Riodades                                -              13,00                7,00                3,00 - 3,00          Variável           Coletora       R. N.
+AVENIDA      Roberto Silveira                        -              27,00              Variável               Variável     2,50              2,50      Eixo         R. PB.
+ TÚNEL       Roberto Silveira                        -                         Conforme Projeto Específico                   -                 -       Eixo         R. PB.
+             Governador Roberto               Antiga Av. do
+AVENIDA                                                            100,00                 Conforme projeto do DNER                Variável              Eixo        R. N.
+             Silveira                           Contorno
+             Jornalista Rogério Coelho    Rua 12 - Aterrado
+   RUA                                                              20,00                12,00               2,00 - 6,00                             Coletora       R.P.B.
+             Neto                              Fluminense
+AVENIDA      Profa. Romanda Gonçalves                -              16,50                10,50               3,00 - 3,00   2,5               2,5       Eixo         R. O.
+  RUA        Eng. Romeo Martins                      -             Variável              10,50                Variável      -                 -      Arterial       R. PB.
+TRAVESSA     Romualdo Peixoto (Nono)                 -              13,00                 7,00               3,00 - 3,00    -                 -      Coletora
+  RUA        General Rondon                          -              14,00                 8,00               3,00 - 3,00    -                 -      Coletora       R. PB.
+AVENIDA      Presidente Roosevelt                    -              37,00                29,00               4,00 - 4,00    -                 -        Eixo         R. PB.
+                                          Trecho entre Rua
+AVENIDA      Presidente Roosevelt           Tocantins e Rua         37,00                22,60               4,00 - 4,00          Variável              Eixo        R. PB.
+                                                 Amapa
+   RUA       Santa Rosa                              -              22,00                16,00               3,00 - 3,00          Variável              Eixo        R. PB.
+                                             Trecho entre a
+                                            Rua Trapuhi e a
+AVENIDA      Ruy Barbosa                                            24,00                14,00               5,00 - 5,00          Variável              Eixo        R. PB.
+                                           Est. Francisco da
+                                               Cruz Nunes
+                                          Trecho entre a Av.
+AVENIDA      Ruy Barbosa                  Quintino Bacaiúva         24,00                14,00               5,00 - 5,00          Variável            Arterial      R. PB.
+                                            e a Rua Trapuhi
+
+  Tipo de                                Trtecho entre  a                        Larguras                                  Recuos
+Logradouro                               Av. Visconde do
+   RUA       Saldanha Marinho           Rio Branco e e Rua    12,00                6,00               3,00 - 3,00    -               -       Arterial      R. PB.
+                                            Porf. Heitor
+                                              Carrilho
+                                        Trecho entre a Av.
+                                         Visconde do Rio
+   RUA       Saldanha Marinho              Brando e Rua       12,00                6,00               3,00 - 3,00    -               -      Coletora       R. PB.
+                                         Coronel PM F. S.
+                                               Rocha
+                                        Trecho entre a Av.
+                                          Cons. Paulo de
+             Dr. Salomão Vergueoro da
+   RUA                                  Melo Kalle e a Rua    16,00                9,00               3,50 - 3,50   2,00            2,00    Coletora       R. O.
+             Cruz
+                                          Dr. Cornélio de
+                                             Mello Jr.
+   RUA       São Sebastião                        -           18,00               12,00               3,00 - 3,00    -               -         Eixo        R. PB.
+                                        Trecho da RJ 102 -
+   RUA       São Sebastião               antiga Est. do Vai   25,00               18,00               3,00 - 3,00   6,50            6,50    Coletora       R. O.
+                                               e Vem
+   RUA       Visconde de Sepetiba                 -           13,00                7,00               3,00 - 3,00                           Coletora       R. PB.
+AVENIDA      Sete de Setembro                    -            15,00                9,00               3,00 - 3,00   1,00            1,00     Arterial      R. PB.
+                                         Trecho entre Av.
+                                        Roberto Silveira e
+   RUA       Gal. Silvestre Rocha                             13,00                6,00               3,00 - 3,00    -               -      Coletora       R. PB.
+                                           a Rua Lemos
+                                               Cunha
+   RUA       Jornalista Silvia Thomé             -            30,00               24,00               3,00 - 3,00   6,00            6,00      Eixo          R. P.
+   RUA       Siqueira Campos                     -            15,00                7,00               2,50 - 2,50    1,5             1,5    Coletora       R.P.B.
+   RUA       Soares Miranda                      -            14,00                7,00               3,50 - 3,50     -                     Coletora        R.N.
+                                          Trecho entre a
+                                        Rua Alzira Vargas
+   RUA       Doutor Souza Soares        Amaral Peixoto e      13,00                7,00               3,00 - 3,00    -               -      Coletora        R.N.
+                                          a Alameda São
+                                            Boaventura
+AVENIDA      Prefeito Sylvio Picanço             -                      Conforme Projeto Específico                  -               -         Eixo        R. PB.
+                                          Trecho entre a
+                                         Est. Francisco da
+AVENIDA      Almirante Tamandaré                              25,00               18,00               3,50 - 3,50   3,5             3,5        Eixo        R. O.
+                                          Cruz Nunes Av.
+                                          Acúrcio Torres
+                                          Trecho entre a
+                                        Av. Acúrcio Torres
+AVENIDA      Almirante Tamandaré                              33,00               25,00               4,00 - 4,00    -               -      Coletora       R. O.
+                                         e Rua Jornalista
+                                          Umbelino Silva
+   RUA       Cel. Tamarindo                      -            13,00                9,00               2,00 - 2,00    -               -      Arterial       R. PB.
+   RUA       Tapajos                             -            12,0 0               6,00               3,00 - 3,00    -               -      Coletora
+
+  Tipo de                                Trecho entre   a                           Larguras                                    Recuos
+Logradouro                              Rua Gal. Andrade
+   RUA       Almirante Teffé                                  12,00                   7,00                 2,50 - 2,50    -                 -      Coletora         R. PB
+                                         Neves e a Rua
+                                         José Clemente
+  RUA        Teixeira de Freitas                -             18,00                  11,00                 3,50 - 3,50          Variável             Eixo
+  RUA        Tenente Osório                     -             14,00                   7,00                 3,50 - 3,50     -                 -     Coletora
+AVENIDA      Thomaz Edson de Andrade            -             30,00                  22,00                 4,00 - 4,00   9,00              9,00    Coletora          R. P.
+  RUA        Tiradentes                         -             13,00                    9                   2,00 - 2,00     -                 -     Coletora         R. PB.
+  RUA        Trapuhi                            -             13,00                   8,00                 2,50 - 2,50     -                 -     Coletora
+  RUA        Visconde do Uruguai                -             13,00                   7,00                 3,00 - 3,00     -                 -     Coletora        R.P.B.
+             Senador Vasconcelos
+AVENIDA                                         -             12,00                   7,00                 2,50 - 2,50    -                 -      Coletora         R. O.
+             Torres
+                                         Alça de ligação
+                                           com a Av.
+ESTRADA      Velha de Maricá                                  25,00                  14,00                 5,50 - 5,50          Variável              Eixo          R. O.
+                                         Ewerton Xavier
+                                         em Várzea das
+   RUA       Prefeito Viçoso Jardim             -             18,00                  11,00                 3,50 - 3,50          Variável              Eixo        R. N./R.P.
+  RUA        Vila Verde                         -             12,00                   7,00                 2,50 - 2,50   1,00              1,00     Local           R.O.
+AVENIDA      Vinte e Dois de Novembro           -             20,00                  14,00                 3,00 - 3,00          Variável             Eixo          R. N.
+  RUA        Waldir Cabral                      -             12,00                   7,00                 2,50 - 2,50     -                 -     Coletora        R.P.B.
+  RUA        Dr. Waldir Costa                   -             16,50                  10,50                 3,00 - 3,00   2,25              2,25    Coletora        R. O.
+             Acadêmico Walter
+   RUA                                          -             13,00                   7,00                 3,00 - 3,00    -                 -      Coletora         R. PB
+             Gonçalves
+                                        Trecho entre a Av.
+                                        Jansen de Melo e
+   RUA       Washington Luiz                                 Variável            2 x 7,0 + canal           3,00 - 3,00    -                 -      Coletora         R. PB.
+                                             a Avenida
+                                          Feliciano Sodré
+                                          Trecho entre a
+                                           Rua Armando
+ESTRADA      Washington Luiz                                  18,00                  11,00                 3,50 - 3,50   3,00              3,00     Arterial        R. P.
+                                         Ferreira e a Rua
+                                         Leonor da Glória
+                                          Trecho entre a
+                                           Rua Amadeu
+ESTRADA      Washington Luiz                                  30,00                   Conforme Projeto Específico               Variável            Arterial        R. P.
+                                        Gomes e a Estrada
+                                            da Florália
+                                          Trecho entre a
+                                          Rua Leonor da
+ESTRADA      Washington Luiz             Gloria e a Área D    18,00                  11,00                 3,50 - 3,50   3,00              3,00    Coletora         R. P.
+                                          do loteamento
+                                         Santa Margarida
+                                           Antiga Praça
+ PRAÇA       Zilda Arns Neumam          Renascença/Expe                 De acordo com Projeto Específico                  -                 -       Arterial       R.P.B.
+                                              diciário

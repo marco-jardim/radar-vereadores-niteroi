@@ -1,0 +1,91 @@
+MENSAGEM Nº xx/2021 Niterói, xx de xxxxx de 2021.
+
+Tenho a honra de submeter à deliberação dessa Egrégia Casa Legislativa o Projeto de Lei (PL) que dispõe sobre a Declaração de Informações Cadastrais do Imóvel – Decad, sobre o procedimento de autorregularização dos sujeitos passivos do ISS e que dá outras providências, alterando dispositivos da Lei nº 2.597/2008 e da Lei nº 3.368/2018.
+De início, cabe dizer que este projeto tem por objetivo possibilitar a construção de uma rede de colaboração efetiva entre fisco e contribuintes para o incremento constante das receitas públicas, proporcionando melhores resultados para os munícipes. Com este objetivo em mente, são propostas algumas medidas que aproximam a Administração dos contribuintes, entre elas a possibilidade de autorregularização fiscal e a ampliação do Domicílio Tributário Eletrônico do Contribuinte.
+Sobre a importância de se construir uma relação de confiança com os contribuintes, nunca são repetitivas as palavras do ilustre professor Sergio André Rocha:
+
+Independentemente da falta desse tipo de dado, como pontuamos, há no Brasil uma visão de “contribuinte-súdito” que é certamente um agente bloqueador do desenvolvimento de um ambiente de compliance voluntário ou colaborativo. O que propomos neste texto é que se passe dessa visão do contribuinte como objeto de uma investigação para outra do “contribuinte-consumidor”, onde a autoridade fiscal é vista menos como agente repressor, mas como instrumento de auxílio ao contribuinte, um verdadeiro prestador de serviços.
+(...)
+Somos defensores da tributação como instrumento de realização da justiça e da superação de desigualdades. É através da arrecadação tributária que o Estado consegue realizar suas funções. Contudo, a relevância da arrecadação não é, em si mesma, fator de legitimação aos olhos do contribuinte. A inclinação do contribuinte depende da criação de uma cultura de cidadania fiscal que não pode ser gerada pela intervenção sancionatória do legislador. Como apontam Charles Delmotte e Jan Verplaetse, “se as autoridades públicas querem restaurar a sua desgastada relação com seus cidadãos, as regras que regem a tributação devem ser justificadas dentro de uma balanceada teoria que considere os contribuintes como portadores ativos de direitos, e não como meros contribuidores de riqueza”.
+
+	Passa-se agora a breve exposição de cada um dos dispositivos que compõem o presente Projeto de Lei.
+
+I – Da Declaração de Informações Cadastrais do Imóvel (DECAD)
+
+	A Declaração de Informações Cadastrais do Imóvel é, mais do que uma obrigação imposta a determinados contribuintes titulares de imóveis situados no Município, uma ferramenta que possibilita a autorregularização dos contribuintes de IPTU que, por força da declaração, informarem alterações cadastrais em suas unidades imobiliárias que ainda não foram levadas ao conhecimento da Secretaria Municipal de Fazenda, para fins de cálculo do imposto.
+	Assim, o artigo 1º do Projeto de Lei prevê a autorização ao Poder Executivo para instituir a referida obrigação acessória. Para o primeiro ano de instituição da obrigação acessória (art. 2º), os contribuintes que apresentarem a Decad terão direito à remissão do IPTU complementar devido referente aos fatos geradores anteriores à declaração ainda não alcançados pela decadência. Isto é, se de um lado o contribuinte tem o benefício de não ter de recolher o imposto retroativo, de outro ganha a Administração Tributária, que passará a tributar o imóvel com base nos dados mais atualizados e que resultam em maior arrecadação para o Município.
+	Por fim, os artigos 3º e 4º do Projeto introduzem modificações no Código Tributário Municipal (CTM) de modo a prever a Decad em seu regramento. A Decad substitui uma antiga obrigação acessória, prevista atualmente no art. 29 do CTM, a qual estabelece a necessidade de o contribuinte informar ao Município quaisquer alterações que impliquem alteração no cálculo do imposto, sob pena de multa. Vale ressaltar que o valor venal do imóvel poderá ser arbitrado com base nos dados disponíveis à autoridade fiscal no caso de deliberada omissão do contribuinte no preenchimento da DECAD.
+
+II – Do incentivo à autorregularização
+
+	O artigo 5º do Projeto de Lei autoriza o Município a propor planos de autorregularização tributária para os contribuintes do ISS. A possibilidade de autorregularização se materializa por meio de notificações, prévias ao início de qualquer medida que inicie uma ação fiscal, apontando possíveis irregularidades na escrituração fiscal do contribuinte. A medida permite que o contribuinte se antecipe a eventual fiscalização e regularize sua situação fiscal, evitando assim incorrer em multas desnecessárias.
+	Os projetos de autorregularização são muito salutares para a Administração Tributária, uma vez que economizam recursos humanos e atingem um maior número de contribuintes, que podem perceber a presença do Município no acompanhamento de suas atividades de declaração e recolhimento de impostos. Por outro lado, os projetos também são muito positivos para os contribuintes, que podem ser alertados de eventual erro na compreensão da legislação tributária ou nos seus registros fiscais, corrigindo a rota sem sofrer as sanções previstas em Lei.
+	É importante destacar que o contribuinte que não se regulariza no prazo regulamentar fica sujeito à fiscalização e sanção por eventual irregularidade.
+	Desse modo, a previsão normativa de dispositivo que permite a autorregularização é indispensável no contexto de disponibilidade de ferramentas tecnológicas de cruzamento de dados, elevando a conformidade dos contribuintes e a presença fiscal da Administração Tributária, em um movimento de colaboração recíproca.
+
+III – Das alterações no regramento do Domicílio Tributário Eletrônico do Contribuinte – DTEC
+
+	Por fim, o PL busca universalizar o acesso dos contribuintes do ISS ao Domicílio Tributário Eletrônico (DTEC), o qual promete dinamizar as comunicações entre fazenda e os diversos contribuintes do imposto.
+	Na era digital, não se pode prescindir de ferramentas digitais de comunicação. As convencionais ferramentas utilizadas por entes públicos, como emissão de cartas e publicação em diários oficiais, além de custosas, são pouco efetivas em seu mister de alcançar o público alvo. Assim, o Domicílio Tributário Eletrônico do Contribuinte, que já possui previsão legal no art. 196-A, do Código Tributário Municipal, é fundamental para a aproximação entre Administração e administrado.
+	As alterações propostas no Projeto são três. A primeira delas (art. 6º), harmoniza o prazo em que o contribuinte se considera comunicado para todos os fins de direito em 15 dias a partir da postagem da comunicação no DTEC. A alteração se justifica porque a previsão atual do CTM (prazo de 10 dias) conflita com aquela prevista no art. 25, III, da Lei Municipal nº 3.368/2018 (prazo de 15 dias), ao que entendemos que o prazo mais dilatado se justifica para garantia total do contraditório e da ampla defesa. A segunda alteração adequa o art. 24, da Lei nº 3368/2018 a redação do Código Tributário Municipal, possibilitando que o cadastramento no DTEC se dê de forma automática. Por fim, revoga-se o dispositivo que exigia necessariamente o uso de certificado digital para credenciamento no DTEC, medida que certamente obstaria o acesso de inúmeros contribuintes mais vulneráveis ao sistema, tais como os Microempreendedores Individuais.
+Ante ao exposto, são essas, Senhor Presidente, as razões que me levam a propor o presente Projeto de Lei.
+Reitero a Vossa Excelência os meus votos de profundo respeito e admiração a essa Egrégia Câmara Municipal e solicito a aprovação do presente Projeto de Lei.
+
+AXEL GRAEL
+Projeto de Lei nº xxxxxxx, de 2021.
+
+Dispõe sobre a Declaração de Informações Cadastrais do Imóvel – Decad, sobre o procedimento de autorregularização dos sujeitos passivos do ISS e dá outras providências, alterando dispositivos da Lei nº 2.597/2008 e da Lei nº 3.368/2018.
+
+O PREFEITO DE NITERÓI Faço saber que a Câmara Municipal de Niterói decreta e eu sanciono a seguinte Lei:
+
+Art. 1º. Fica o Poder Executivo autorizado a instituir a declaração de informações cadastrais do imóvel – Decad mediante a qual o contribuinte do imposto sobre a propriedade territorial e predial urbana - IPTU ou da taxa de coleta imobiliária de lixo – TCIL fornecerá à Secretaria Municipal de Fazenda as informações atualizadas de endereço, telefone e e-mail do titular do imóvel, bem como informações a respeito das características do imóvel.
+
+Art. 2º. No caso em que a Decad exigida no primeiro ano de sua instituição contiver informações que resultarem no aumento do valor do imposto sobre a propriedade territorial e predial urbana ou da taxa de coleta imobiliária de lixo, o sujeito passivo terá direito à remissão dos valores complementares dos tributos mencionados que deveriam ser lançados relativamente aos fatos geradores já ocorridos quando da efetivação da referida declaração, desde que esta seja apresentada no prazo regulamentar.
+
+Art. 3º. Fica alterado o art. 15 da Lei nº 2.597, de 2 de outubro de 2008, que passa a vigorar com a seguinte redação:
+
+“Art. 15.  O valor venal do imóvel somente poderá ser arbitrado quando o levantamento dos elementos necessários à sua fixação for dificultado em razão de o contribuinte do imposto agir da forma prevista em pelo menos uma das seguintes hipóteses:
+
+I – não apresentar a declaração prevista no art. 29 ou apresentá-la com omissão de informações ou informações que não mereçam fé;
+
+II – não prestar esclarecimentos ou não apresentar documentos solicitados mediante intimação regular;
+
+III – não autorizar o procedimento regular de vistoria do imóvel.
+
+Parágrafo Único - Para os efeitos deste artigo, entendem-se como elementos necessários à fixação do valor venal a localização, a área e a destinação da construção, bem como as características do imóvel assim definidas em regulamento.”
+
+Art. 4º. Fica alterado o art. 29 da Lei nº 2.597, de 2 de outubro de 2008, que passa a vigorar com a seguinte redação:
+
+“Art. 29. No ano-calendário de ocorrência de qualquer alteração cadastral relativo ao imóvel, o contribuinte do imposto deve apresentar declaração de informações cadastrais do imóvel – Decad , na forma de regulamento, informando a alteração ocorrida.
+
+Art. 5º. Fica incluído o art. 112-A , caput, §1º e §2º, na Lei nº 2.597, de 2 de outubro de 2008, com a seguinte redação:
+
+“Art. 112-A. Os sujeitos passivos do imposto podem ser incentivados a participar de plano de autorregularização proposto mediante a emissão de notificação cujo objetivo é comunicar as inconsistências observadas pela fiscalização na análise de dados resultante do cruzamento das informações fiscais relativas aos fatos geradores do imposto e que consistem em indícios de irregularidade perante o fisco municipal.
+
+§1º A emissão da notificação prevista no caput não configura início de ação fiscal e não afasta os efeitos da espontaneidade do sujeito passivo.
+
+§2º Resolução do Secretário Municipal de Fazenda disporá sobre os procedimentos e prazos aos quais se submete a notificação prevista no caput”
+
+Art. 6º. Fica alterado o §4º do art. 196-A da Lei nº 2.597 de 2 de outubro de 2008, que passa a vigorar com a seguinte redação:
+
+	“Art. 196-A. (...)
+§4º Não constatado acesso após 15(quinze) dias contados da data em que foi postada a comunicação na sua caixa postal eletrônica, o sujeito passivo será considerado como comunicado para todos os fins de direito.
+(...)”
+
+Art. 7º. Fica alterado o inciso III do §2º, do art. 24, da Lei nº 3.368/2018, de 23 de julho de 2018, que passa a vigorar com a seguinte redação:
+
+	“Art. 24. (...)
+	 § 2º (...)
+	  I - .................................................
+	 II - ................................................
+	III – o domicílio eletrônico tributário do contribuinte.”
+
+Art. 8º. Fica revogado o inciso II do §2º, do art. 196-A, da Lei nº 2.597 de 2 de outubro de 2008.
+
+Art. 9º. Esta Lei entra em vigor na data de sua publicação.
+
+Niterói,   de    de 2021.
+
+Axel Grael
+
+ ROCHA, Sérgio André. Reconstruindo a confiança na relação fisco-contribuinte. In: Revista Direito Tributário Atual, n. 39, p. 507-527 -2018.

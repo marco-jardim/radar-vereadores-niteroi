@@ -1,0 +1,94 @@
+                                                       ANEXO
+
+                  Estimativa do Impacto Orçamentário-Financeiro
+
+         Estimativa de impacto orçamentário-financeiro elaborada em cumprimento ao art. 113
+         do Ato das Disposições Constitucionais Transitórias da Constituição Federal de 1988 e
+         do art. 14 da Lei Complementar n° 101/2000.
+
+               Estimativa do impacto orçamentário-financeiro por exercício (R$)
+                       2026                               2027                      2028
+                     955.138,51                           0,00                      0,00
+
+         Metodologia e Memorial de Cálculo:
+
+         Inicialmente, foram identificadas as inscrições imobiliárias referentes aos
+         empreendimentos do Programa MCMV com a especificação das faixas de renda 1.
+         Esclarece-se que os dados foram retirados da camada de Lotes e da camada Minha Casa
+         Minha Vida, ambas disponíveis no SIGEO, sendo a última alimentada pela Secretaria
+         Municipal de Habitação e Regularização Fundiária (SMHRF). No total, são 347 (trezentos
+         e quarenta e sete) imóveis beneficiados com o benefício fiscal.
+
+         Ato contínuo, foram extraídos do sistema tributário municipal dados relativos aos
+         créditos tributários, inscritos ou não em Dívida Ativa, vencidos e vincendos, do Imposto
+         Predial e Territorial Urbano (IPTU) e da Taxa de Coleta Imobiliária de Lixo (TCIL) dessas
+         inscrições imobiliárias. Valores atualizados até o mês de março/2026. Por fim, foi
+         aplicado o percentual de 100% (cem por cento), tendo em vista que o projeto de lei
+         prevê remissão integral.
+
+Item Descrição                                                                             Valor (R$)
+
+A    Somatório do valor do crédito tributário vencido e vincendo relativo ao IPTU                       328.637,57
+
+B    Somatório do valor do crédito tributário vencido e vincendo relativo à TCIL                        626.500,94
+
+C    Total do crédito tributário [A + B]                                                                955.138,51
+
+D    Remissão integral (100%)                                                                                100%
+
+E    Total do crédito tributário remitido [C * D]                                                       955.138,51
+
+Notas:
+1 - O impacto orçamentário nos exercícios de 2027 e 2028 é nulo, pois considerou-se na estimativa que
+a integralidade dos créditos tributários abarcados pelo projeto de lei será remitida dentro do exercício
+corrente, não restando débitos para os anos subsequentes.
+
+Da estimativa de receita da lei orçamentária e das metas de resultados fiscais previstas
+no anexo próprio da lei de diretrizes orçamentárias:
+
+       O art. 14 da Lei Complementar nº 101/2000 (Lei de Responsabilidade Fiscal)
+estabelece que a concessão de benefícios tributários deve estar contemplada na
+estimativa de receita da Lei Orçamentária Anual e não pode comprometer as metas de
+resultado fiscal fixadas na Lei de Diretrizes Orçamentárias, devendo, caso contrário, ser
+acompanhada de medidas de compensação:
+
+                          “Art. 14. A concessão ou ampliação de incentivo ou benefício de natureza
+                          tributária da qual decorra renúncia de receita deverá estar acompanhada de
+                          estimativa do impacto orçamentário-financeiro no exercício em que deva
+                          iniciar sua vigência e nos dois seguintes, atender ao disposto na lei de diretrizes
+                          orçamentárias e a pelo menos uma das seguintes condições:
+
+                          I - demonstração pelo proponente de que a renúncia foi considerada na
+                          estimativa de receita da lei orçamentária, na forma do art. 12, e de que não
+                          afetará as metas de resultados fiscais previstas no anexo próprio da lei de
+                          diretrizes orçamentárias;
+
+                          II - estar acompanhada de medidas de compensação, no período mencionado
+                          no caput, por meio do aumento de receita, proveniente da elevação de
+                          alíquotas, ampliação da base de cálculo, majoração ou criação de tributo ou
+                          contribuição.”
+
+        O benefício tributário a que se refere este Anexo não acarreta impacto negativo
+na estimativa de receita prevista na LOA, nem compromete o cumprimento das metas
+de resultado fiscal estabelecidas na LDO, uma vez que representa menos de 0,15% da
+estimativa de arrecadação anual do IPTU para o exercício 2026, percentual pouco
+significativo diante do grau de incerteza inerente às projeções de receita. Ainda assim,
+recomenda-se que a renúncia de receita decorrente do Projeto de Lei seja considerada
+nas estimativas de receita da lei orçamentária e nas metas fiscais da LDO do exercício
+2027 e seguintes.
+
+Dos Resultados Esperados:
+
+       Em cumprimento ao art. 2º, parágrafo segundo, do Decreto Municipal n°
+14.577/2022, apresenta-se a seguir o resultado pretendido com a instituição do
+benefício fiscal e o respectivo método de aferição.
+
+Resultado pretendido com a instituição do benefício fiscal: assegurar justiça social, com
+o objetivo de reduzir desigualdades, de garantir o direito social de moradia, de atender
+à função social da propriedade e de diminuir os custos de habitação e moradia.
+
+qasa, PREFEITURA DE
+E-Nitero!
+TEMPO DE AVANÇAR
+Meta proposta: não há.
+Indicador proposto: não há.

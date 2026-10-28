@@ -1,0 +1,82 @@
+                                                        ANEXO
+
+                 Estimativa do Impacto Orçamentário-Financeiro
+
+         Estimativa de impacto orçamentário-financeiro elaborada em cumprimento ao art. 113
+         do Ato das Disposições Constitucionais Transitórias da Constituição Federal de 1988 e
+         do art. 14 da Lei Complementar n° 101/2000.
+
+              Estimativa do impacto orçamentário-financeiro por exercício (R$)
+                       2025                               2026                                2027
+                       0,00                               0,00                                0,00
+
+         Metodologia e Memorial de Cálculo:
+
+Item Descrição                                                                                           Valor
+     ISS devido sobre a prestação de serviços enquadrados no subitem 19.01, quando relacionado
+A    à loteria de apostas virtuais de quota fixa, nos exercícios de 2020 a 2024                                         R$0,00
+     Projeção do ISS devido sobre a prestação de serviços enquadrados no subitem 19.01, quando
+     relacionado à loteria de apostas virtuais de quota fixa, nos exercícios de 2025 a 2027, após a
+B    redução da alíquota do imposto para 2%                                                                             R$0,00
+
+         Notas:
+         1 - Fonte: sistema de emissão de NFS-e;
+         2 - A projeção do ISS devido sobre a prestação de serviços enquadrados no subitem 19.01, quando
+         relacionado à loteria de apostas virtuais de quota fixa, foi calculada exclusivamente utilizando como
+         parâmetro principal os dados relativos aos exercícios 2020 a 2024.
+         3 - Muito embora no exercício de 2025 já existam no sistema de emissão de NFS-e dados referentes ao
+         recolhimento do ISS referente à prestação de serviços enquadrados no subitem 19.01, quando
+         relacionado à loteria de apostas virtuais de quota fixa, não é razoável utilizar tais dados na estimativa do
+         impacto orçamentário-financeiro, em razão de i) os dados ainda serem inconclusivos e inapropriados para
+         o cálculo de projeções minimamente confiáveis; e ii) a exposição dos dados poder comprometer a
+         previsão de sigilo fiscal disposta no art. 198 do Código Tributário Nacional.
+
+Da estimativa de receita da lei orçamentária e das metas de resultados fiscais previstas
+no anexo próprio da lei de diretrizes orçamentárias:
+
+       O art. 14 da Lei Complementar nº 101/2000 (Lei de Responsabilidade Fiscal)
+estabelece que a concessão de benefícios tributários deve estar contemplada na
+estimativa de receita da Lei Orçamentária Anual e não pode comprometer as metas de
+resultado fiscal fixadas na Lei de Diretrizes Orçamentárias, devendo, caso contrário, ser
+acompanhada de medidas de compensação:
+
+                         “Art. 14. A concessão ou ampliação de incentivo ou benefício de natureza
+                         tributária da qual decorra renúncia de receita deverá estar acompanhada de
+                         estimativa do impacto orçamentário-financeiro no exercício em que deva
+                         iniciar sua vigência e nos dois seguintes, atender ao disposto na lei de diretrizes
+                         orçamentárias e a pelo menos uma das seguintes condições:
+
+                         I - demonstração pelo proponente de que a renúncia foi considerada na
+                         estimativa de receita da lei orçamentária, na forma do art. 12, e de que não
+                         afetará as metas de resultados fiscais previstas no anexo próprio da lei de
+                         diretrizes orçamentárias;
+
+                         II - estar acompanhada de medidas de compensação, no período mencionado
+                         no caput, por meio do aumento de receita, proveniente da elevação de
+                         alíquotas, ampliação da base de cálculo, majoração ou criação de tributo ou
+                         contribuição.”
+
+       O benefício tributário a que este anexo se refere não interfere na estimativa de
+receita prevista na LOA, bem como não compromete as metas de resultado fiscal
+previstas na LDO, dado que o seu impacto orçamentário-financeiro é nulo1.
+
+Dos Resultados Esperados:
+
+       Em cumprimento ao art. 2º, parágrafo segundo, do Decreto Municipal n°
+14.577/2022, apresenta-se a seguir o resultado pretendido com a instituição do
+benefício fiscal e o respectivo método de aferição.
+
+Resultado pretendido com a instituição do benefício fiscal: incentivo às atividades de
+apostas virtuais de quota fixa em estabelecimentos localizados no Município; aumento
+da arrecadação do ISS no longo prazo; geração de empregos; dentre outros, conforme
+descrito no PL.
+
+Meta proposta: não há.
+
+Indicador proposto: não há.
+1
+  Ainda que fosse considerado que o impacto orçamentário do benefício fiscal não fosse nulo (em razão
+de já haver dados referentes ao recolhimento do ISS no exercício 2025, conforme descrito na nota 3 da
+Metodologia e Memorial de Cálculo), não haveria comprometimento à estimativa de receita e às metas de
+resultado fiscal, dado que estas foram elaboradas com base nos dados de 2024 e, portanto, não
+consideravam eventuais receitas oriundas de ISS de serviços de apostas virtuais de quotas fixas.

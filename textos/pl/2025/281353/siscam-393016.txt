@@ -1,0 +1,117 @@
+                                                            ANEXO
+
+                      Estimativa do Impacto Orçamentário-Financeiro
+
+             Estimativa de impacto orçamentário-financeiro elaborada em cumprimento ao art. 113
+             do Ato das Disposições Constitucionais Transitórias da Constituição Federal de 1988 e
+             do art. 14 da Lei Complementar n° 101/2000.
+
+                   Estimativa do impacto orçamentário-financeiro por exercício (R$)
+                            2025                               2026                              2027
+                            0,00                               0,00                              0,00
+
+             Metodologia e Memorial de Cálculo:
+
+ Item Descrição                                                                                           Valor
+
+          Valor total dos créditos tributários passíveis de desconto (o valor apresentado refere-se
+          apenas às parcelas dos créditos tributários classificadas como acréscimos moratórios cujos
+          sujeitos passivos são prestadores dos serviços descritos no subitem 20.01 do Anexo III da Lei
+ A        Municipal n° 2.597/2008, conforme disposto nos artigos 1º e 2º da minuta do Projeto de Lei)             408.803.959,79
+ B        Percentual de créditos que serão descontados (Cenário 2)                                                          50%
+ C        Desconto médio estimado (Cenário 2)                                                                               90%
+ D        Renúncia Fiscal (Cenário 2)                                                                       R$ 183.961.781,91
+
+                                                    Análise de Cenários
+
+                                                                                                            Cenário 3: 100% de
+                                                                            Cenário 2: 50% de adesão
+                                                Cenário 1: 0% de adesão à                                   adesão à transação
+                                                                             à transação tributária e
+                                                  transação tributária                                     tributária e desconto
+                                                                            desconto médio de 90%
+                                                                                                              médio de 100%
+
+Total de créditos (acréscimos moratórios)                 408.803.959,00              408.803.959,00                408.803.959,79
+passíveis de desconto (R$)
+Percentual de créditos que serão descontados                          0%                         50%                         100%
+(%)
+Desconto médio estimado (%)                                           0%                        90%                          100%
+Valor dos descontos [A]                                                 -             183.961.781,55                408.803.959,79
+
+Renúncia fiscal (R$) [A]                                                -             183.961.781,55                408.803.959,79
+
+Estimativa de recuperabilidade dos créditos
+(acréscimos moratórios) passíveis de desconto                        20%                         20%                          20%
+
+Valor pago, considerando-se os créditos
+passíveis de desconto, mas que não foram                        81.760.791,80                  40.880.395,90                             -
+descontados porque o contribuinte não aderiu
+à transação (R$) [B]
+
+Estimativa de recuperabilidade dos demais
+créditos em aberto não passíveis de desconto                             20%                          60,0%                        100,0%
+(valor principal dos créditos e multa fiscal) (%)
+Valor pago, considerando os demais débitos em
+aberto não passíveis de desconto (valor                         65.652.431,11                196.957.293,34                 328.262.155,57
+principal dos créditos e multa fiscal) (R$) [C]
+
+Acréscimos moratórios pagos em razão da                                      -                 20.440.197,95                             -
+adesão à transação tributária (R$) [D]
+
+Total de créditos tributários efetivamente                     147.413.222,91                258.277.887,19                 328.262.155,57
+pagos (R$) [B + C + D]
+
+             Notas:
+             1 - Fonte: sistema e-Cidade.
+             2 - Os cenários consideram que todos os contribuintes que aderirem à transação tributária efetivamente
+             quitarão todos os seus débitos.
+
+             Da estimativa de receita da lei orçamentária e das metas de resultados fiscais previstas
+             no anexo próprio da lei de diretrizes orçamentárias:
+
+                    O art. 14 da Lei Complementar nº 101/2000 (Lei de Responsabilidade Fiscal)
+             estabelece que a concessão de benefícios tributários deve estar contemplada na
+             estimativa de receita da Lei Orçamentária Anual e não pode comprometer as metas de
+             resultado fiscal fixadas na Lei de Diretrizes Orçamentárias, devendo, caso contrário, ser
+             acompanhada de medidas de compensação:
+
+                                            “Art. 14. A concessão ou ampliação de incentivo ou benefício de natureza
+                                            tributária da qual decorra renúncia de receita deverá estar acompanhada de
+                                            estimativa do impacto orçamentário-financeiro no exercício em que deva
+                                            iniciar sua vigência e nos dois seguintes, atender ao disposto na lei de diretrizes
+                                            orçamentárias e a pelo menos uma das seguintes condições:
+
+                                            I - demonstração pelo proponente de que a renúncia foi considerada na
+                                            estimativa de receita da lei orçamentária, na forma do art. 12, e de que não
+                                            afetará as metas de resultados fiscais previstas no anexo próprio da lei de
+                                            diretrizes orçamentárias;
+
+                                            II - estar acompanhada de medidas de compensação, no período mencionado
+                                            no caput, por meio do aumento de receita, proveniente da elevação de
+                                            alíquotas, ampliação da base de cálculo, majoração ou criação de tributo ou
+                                            contribuição.”
+
+                    O benefício tributário a que este anexo se refere não impacta negativamente na
+             estimativa de receita prevista na LOA, bem como não compromete as metas de
+
+resultado fiscal previstas na LDO, dado que o seu impacto orçamentário-financeiro é
+positivo - isto é, há expectativa de incremento na arrecadação municipal.
+       Conforme demonstrado na Análise de Cenários anteriormente apresentada,
+embora o benefício implique uma renúncia estimada de receita no valor de R$
+183.961.781,55 (Cenário 2), o montante efetivamente arrecadado supera aquele que
+seria obtido na ausência da concessão do benefício (Cenário 1). Tal resultado decorre
+do fato de que o incentivo fiscal aumenta a recuperabilidade dos créditos tributários.
+
+Dos Resultados Esperados:
+
+       Em cumprimento ao art. 2º, parágrafo segundo, do Decreto Municipal n°
+14.577/2022, apresenta-se a seguir o resultado pretendido com a instituição do
+benefício fiscal e o respectivo método de aferição.
+
+Resultado pretendido com a instituição do benefício fiscal: incentivar o setor produtivo
+relacionado à indústria naval, bem como incrementar a arrecadação municipal.
+
+Meta proposta: não há.
+
+Indicador proposto: não há.

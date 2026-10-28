@@ -1,0 +1,1673 @@
+E E ANEXO III
+, DEMONSTRATIVO DOS
+INDICADORES DE IMPACTO E DE
+RESULTADO
+|
+NITERÓI
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                  INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                            INDICADORES DE IMPACTO E DE RESULTADO
+                                                                         2022 - 2025
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:07                                           Pág 1/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                  INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+ ÁREA DE RESULTADO/INDICADOR DE IMPACTO/PROGRAMA/INDICADORES DE RESULTADO
+
+ Área de Resultado
+ Legislativo
+
+       Indicador de Impacto
+
+                                                                               Número de pessoas inscritas nos canais e mídias digitais da Câmara Municipal de Niterói
+                                    Memória de Cálculo                                        Unidade de Medida                                                      Fonte                        Meta 2025
+
+                Número total de inscritos nos canais e mídias                                        Unidade                                           Câmara Municipal de Niterói                100.000,00
+                       digitais da Câmara Municipal no ano
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:07                                                           Pág 2/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                   INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0156 - GOVERNANÇA E APRIMORAMENTO DAS AÇÕES DO PODER LEGISLATIVO
+
+             Indicador de Resultado
+
+                                                                               Número de pessoas inscritas nos canais e mídias digitais da Câmara Municipal de Niterói
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte           Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                     Número total de inscritos nos canais e mídias digitais da                             Unidade                        Câmara Municipal de Niterói   25.000,00   50.000,00    75.000,00    100.000,00
+                                            Câmara Municipal no ano
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:07                                                            Pág 3/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                              INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+ Área de Resultado
+ Niterói Organizada e Segura
+
+       Indicador de Impacto
+
+                                                                                                                  Taxa de mortes violentas na cidade
+                                    Memória de Cálculo                                        Unidade de Medida                                                      Fonte                    Meta 2025
+
+                      (Somatório dos números de homicídio                               Mortes por 100 mil habitantes                                     ISP, PMERJ e DataSUS                  36,90
+             doloso,roubo seguido de morte (latrocínio), lesão
+             corporal seguida de morte, morte por intervenção
+                 de agente do Estado, morte por acidente de
+                    trânsito e morte por desastres naturais /
+                  população de Niterói) x 100.000 habitantes
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:07                                                       Pág 4/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0010 - CIDADE URBANIZADA
+
+             Indicador de Resultado
+
+                                                                                     1. Tempo médio de resposta às solicitações dos serviços de iluminação pública
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                    [(Número de dias úteis decorridos entre os recebimentos                                   Dia                                   SECONSER           3,00        2,00         2,00          1,00
+                     das demandas e as respostas dos serviços públicos de
+                    iluminação realizados + Número de dias úteis decorridos
+                     entre os recebimentos das demandas e a data atual dos
+                          serviços públicos de iluminação não realizados)] /
+                      Número Total de Demandas Respondidas no Período
+                                                       analisado
+
+                                                                                          2. Tempo médio de resposta dos serviços públicos para poda de árvores
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                    [(Número de dias úteis decorridos entre os recebimentos                                   Dia                                   SECONSER          100,00       80,00        60,00        40,00
+                     das demandas e as respostas dos serviços públicos de
+                         poda de árvore realizados + Número de dias úteis
+                   decorridos entre os recebimentos das demandas e a data
+                         atual dos serviços públicos de poda de árvore não
+                     realizados)] / Número Total de Demandas Respondidas
+                                               no Período analisado]
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:07                                                         Pág 5/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                        3. Tempo médio de resposta à solicitação do serviço público de tapa-buraco
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                     (Número de dias úteis decorridos entre os recebimentos                                   Dia                                   SECONSER           2,00        2,00         1,00          1,00
+                     das demandas e as respostas dos serviços públicos de
+                   tapa-buraco realizados + Número de dias úteis decorridos
+                     entre os recebimentos das demandas e a data atual dos
+                         serviços públicos de tapa-buraco não realizados) ÷
+                      Número Total de Demandas Respondidas no Período
+                                                       analisado
+
+                                                                                                               4. Taxa de urbanização de comunidades
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                       (Total, em m², de área urbanizada em comunidades /                                Percentual                                    EMUSA           8,00        9,00         10,00        11,00
+                             Total, em m², da área de comunidades) x 100
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:07                                                         Pág 6/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0011 - MOBILIDADE URBANA
+
+             Indicador de Resultado
+
+                                                                                                                1. Total de vias municipais urbanizadas
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                            Total em quilômetros de vias construídas e/ou                                     Km                                       EMUSA           51,00       53,00        60,00        73,50
+                              pavimentadas, calçadas e drenadas no ano
+
+                                                                                                                     2. Índice de congestionamento
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                   (Ocorrências de congestionamento na cidade, medida em                                    Km/dia                                   NITTRANS          31,20       21,84        15,28        10,70
+                     quilômetros por software de mobilidade urbana durante
+                                os horários de pico no trânsito / 365 dias)
+
+                                                                                                         3. Tempo médio de deslocamento para o trabalho
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                     Tempo médio de deslocamento para o trabalho, a partir                                  Minuto                                   NITTRANS          50,00       45,00        40,00        35,00
+                    de pontos mais distantes da cidade até o Centro, medido
+                          por software de deslocamento urbano, durante os
+                       horários de pico de ida ao trabalho e volta para casa
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:07                                                         Pág 7/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                   INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                               4. Taxa de variação da malha cicloviária
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte           Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                         (Extensão total de quilômetros de malha cicloviária                             Percentual                          SMU/Niterói de Bicicleta     66,60       40,00        4,80          4,50
+                      construídos no ano / Extensão total de quilômetros de
+                        malha cicloviária construídos no ano anterior) x 100
+
+                                                                                                        5. Taxa de corredores e faixas exclusivas de ônibus
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte           Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                         (Quantidade de quilômetros de faixas e corredores                               Percentual                                      SMU              40,00       45,00        50,00        55,00
+                     exclusivos de ônibus / extensão total de quilômetros de
+                   vias elegíveis - eixos de estruturação do Plano Diretor em
+                                                 quilômetros) x 100
+
+             Programa
+             0053 - SEGURANÇA NO TRÂNSITO
+
+             Indicador de Resultado
+
+                                                                                                      1. Taxa de mortes no trânsito a cada 100 mil habitantes
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte           Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                      Taxa de óbitos causados por acidentes de trânsito, por                  Mortes por 100 mil habitantes                            PMERJ              3,00        2,50         2,20          2,00
+                          local de ocorrência, para cada 100 mil habitantes
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:07                                                            Pág 8/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                    2. Taxa de acidentes de trânsito a cada 100 mil habitantes
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                    Número total de acidentes de trânsito, para cada 100 mil                     Acidentes / 100.000 hab.                       NITTRANS e IBGE       150,00      140,00       130,00        120,00
+                                                       habitantes
+
+             Programa
+             0131 - NITERÓI MAIS SEGURA
+
+             Indicador de Resultado
+
+                                                                                                            1. Taxa de homicídio (por 100 mil habitantes)
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                        (Número total de mortes por homicídio ocorridos no                 Homicídios por 100 mil habitantes                     DataSUS e IPEA        30,00       27,00        24,00        20,00
+                      município / Número total de habitantes do município) x
+                                                  100 mil habitantes
+
+                                                                                                              2. Taxa de roubos (por 100 mil habitantes)
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                      (Número total de ocorrência de roubos registrados nas                  Roubos por 100 mil habitantes                             ISP- RJ        550,00      500,00       450,00        400,00
+                       delegacias operantes no município / Número total de
+                             habitantes no município) x 100 mil habitantes
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:07                                                         Pág 9/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                               3. Taxa de furtos (por 100 mil habitantes)
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                       (Número total de ocorrência de furtos registrados nas                  Furtos por 100 mil habitantes                            ISP-RJ         850,00      800,00       750,00        700,00
+                       delegacias operantes no município / Número total de
+                             habitantes no município) x 100 mil habitantes
+
+                                                                                                                     4. Taxa de homicídio de jovens
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                      (Número total de morte de jovens de 18 a 29 anos por                 Homicídios por 100 mil habitantes                     DataSUS e IPEA        20,00       19,00        18,00        17,00
+                     homicídio / Número total de habitantes da população) x
+                                                  100 mil habitantes
+
+                                                                                                                     5. Taxa de homicídio de negros
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                         (Número total de mortes de negros por homicídio /                 Homicídios por 100 mil habitantes                     DataSUS e IPEA       120,00      119,00       118,00        117,00
+                     Número total de habitantes negros da população) x 100
+                                               mil habitantes negros
+
+                                                                                                              6. Taxa de estupro (por 100 mil mulheres)
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                    (Número total de estupros e atentados violentos ao pudor                   Unidade / 100 mil mulheres                              ISP-RJ          27,00       26,00        25,00        24,00
+                   ocorridos no município no ano / Número total de mulheres
+                                      no município) x 100 mil mulheres
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:07                                                         Pág 10/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                                       7. Taxa de roubo de veículos
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                       (Somatório de roubo e furto de veículos ocorridos no                  Unidade por 100 mil habitantes                            ISP-RJ        1.010,10     909,10       818,20        736,30
+                                        município / 100 mil habitantes)
+
+             Programa
+             0132 - RESILIÊNCIA A DESASTRES
+
+             Indicador de Resultado
+
+                                                                           1. Número de moradias em áreas de alto risco com risco eliminado por intervenções estruturais
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                    Número de moradias em áreas de alto risco cujo risco foi                               Unidade                                  Defesa Civil      200,00      200,00       200,00        200,00
+                   eliminado por intervenções estruturais (obras e replantios)
+
+                                                                                                              2. Habitantes em áreas de risco geológico
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                      Número de habitantes que foram retirados de áreas de                                 Unidade                                  Defesa Civil      600,00      600,00       600,00        600,00
+                           risco por intervenções estruturais ou programas
+                                                       habitacionais
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:07                                                         Pág 11/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                             3. Voluntários capacitados pela Defesa Civil
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                   Número total de voluntários capacitados pela Defesa Civil                               Unidade                                  Defesa Civil      200,00      200,00       200,00        200,00
+                                                no município no ano
+
+                                                                     4. Edificações em construção em área de risco detectadas pelo Sistema de Monitoramento da Defesa Civil (DETEC)
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                     Número total de edificações em construção em área de                                  Unidade                                  Defesa Civil       50,00       50,00        50,00        50,00
+                        risco detectadas pelo Sistema de Monitoramento da
+                                               Defesa Civil (DETEC)
+
+                                                                                   5. Jovens do ensino fundamental atendidos pelo programa Defesa Civil nas escolas
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                      Número total de jovens do ensino fundamental da rede                                 Unidade                                  Defesa Civil      200,00      200,00       200,00        200,00
+                     pública municipal atendidos pelo programa Defesa Civil
+                                                       nas escolas
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:07                                                         Pág 12/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                         INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+ Área de Resultado
+ Niterói Saudável
+
+       Indicador de Impacto
+
+                                                           Taxa de mortalidade prematura (30 e 69 anos) pelos 4 principais grupos de doenças crônicas não transmissíveis (DCNT)
+                                    Memória de Cálculo                                        Unidade de Medida                                                      Fonte                               Meta 2025
+
+               [(Número de óbitos de residentes no município                            Mortes por 100 mil habitantes                      Sistema de Informações sobre Mortalidade (SIM)                  264,20
+                  com idade entre 30 e 69 anos por doenças
+              crônicas não transmissíveis (DCNT) (registrados
+             nos códigos CID-10 I00-I99, C00-C97, E10-E14,
+             J30-J98) / população residente no município com
+              idade entre 30 e 69 anos)] x 100.000 habitantes
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                                  Pág 13/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0133 - ATENÇÃO À SAÚDE
+
+             Indicador de Resultado
+
+                                                                                                      1. Taxa de mortalidade infantil (por mil nascidos vivos)
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                    (Número de óbitos de menores de um ano residentes do                    Mortes por 1.000 nascidos vivos                        SIM e SINASC        10,50       10,00        9,50          9,00
+                           município / Número de nascidos vivos de mães
+                       residentes no município no período) x 1.000 nascidos
+                                                       vivos
+
+                                                                                                  2. Taxa de mortalidade materna (por 100 mil nascidos vivos)
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                         (Número total de óbitos de mulheres residentes no                     Mortes por nascidos vivos /              DATASUS, Banco SIM e Banco     35,00       33,00        20,00        18,00
+                          município, por causas ligadas à gravidez, parto e                       100.000 nascidos vivos                               SINASC
+                        puerpério / Número total de nascidos vivos de mães
+                          residentes no município) x 100 mil nascidos vivos
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 14/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                         3. Taxa de mortalidade fetal (por mil nascimentos)
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                    [Número total de óbitos fetais / (Número total de nascidos Mortes fetais por nascidos / 1.000                       DATASUS, Banco SIM e Banco     10,00       9,50         9,00          8,50
+                             vivos + Número total de óbitos fetais)] x 1.000                            nascimentos                                    SINASC
+                                                       nascimentos
+
+                                                                                    4. Cobertura populacional estimada pelas equipes da Estratégia Saúde da Família
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                    (Número médio anual de Equipes da Saúde da Família x                                 Percentual                                  DATASUS           52,00       55,00        58,00        60,00
+                    2.500 habitantes) / População residente no município no
+                                                       ano avaliado
+
+                                                                                                      5. Cobertura populacional estimada na Atenção Básica
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                           (Número de Equipes da Atenção Básica x 3.000                                  Percentual                                  DATASUS           65,00       70,00        75,00        80,00
+                      habitantes) / População residente no município no ano
+                                                         avaliado
+
+                                                                                  6. Cobertura populacional estimada de leitos hospitalares (internação) SUS municipal
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                     (Número médio anual de leitos hospitalares (internação)                   Unidade por 1 mil habitantes                             CNES           2,00        2,10         2,20          2,40
+                                SUS municipal / População total) x 1.000
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 15/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                        7. Taxa de mortalidade por câncer de colo do útero
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                     (Número de óbitos de residentes por câncer de colo de                      Mortes / 100.000 mulheres                            DATASUS           5,80        5,50         5,20          4,90
+                         útero / Número de mulheres residentes) x 100.000
+
+                                                                                                     8. Taxa de mortalidade de mulheres por câncer de mama
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                       (Número de óbitos por câncer de mama de mulheres                         Mortes / 100.000 mulheres                            DATASUS           35,20       33,20        31,30        29,50
+                     residentes / Número de mulheres residentes) / 100.000
+
+                                                          9. Taxa de internação de caráter de urgência pelos 2 principais grupos de DCNT (doenças do aparelho circulatório e diabetes)
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                        (Número de internações de caráter de urgência, de                    Unidade por 100 mil habitantes                          DATASUS          254,00      231,00       210,00        193,00
+                     residentes, registrados nos códigos da CID-10 I00-I99 e
+                               E10-E14 / População residente) x 100.000
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 16/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0151 - NITERÓI CONTRA O COVID-19 - ÁREA SAUDÁVEL
+
+             Indicador de Resultado
+
+                                                                                                                1. Cobertura vacinal contra a COVID-19
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                      (Número da população alvo definida pelo Ministério da                              Percentual                                      SMS           90,00       90,00        90,00        90,00
+                        Saúde com esquema vacinal completo / Número da
+                          população alvo definida pelo Ministério da Saúde
+                                         residente no município) x 100
+
+                                                                            2. Cobertura de residentes com sequela da COVID-19 acompanhadas pelo rede de reabilitação
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                            (Número de casos positivos acompanhados na                                   Percentual                                      SMS           95,00       95,00        95,00        95,00
+                       reabilitação pós-covid-19/ Número de casos positivos
+                             com critério para reabilitação identificados no
+                                            telemonitoramento) x 100
+
+ Área de Resultado
+ Niterói Escolarizada e Inovadora
+
+       Indicador de Impacto
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 17/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                          INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                             Taxa de conclusão da Educação Básica para jovens de 17 a 19 anos
+                                    Memória de Cálculo                                        Unidade de Medida                                                      Fonte                Meta 2025
+
+                  (Número de pessoas entre 17 e 19 anos de                                          Percentual                                                       SME                    53,10
+              idade, residentes em Niterói, que completaram o
+              Ensino Médio / Total de habitantes no município
+                            com idade entre 17 e 19 anos)
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                   Pág 18/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0134 - CIDADE CIENTÍFICA E TECNOLÓGICA
+
+             Indicador de Resultado
+
+                                                                                             1. Acesso aos conhecimentos científicos e tecnológicos divulgados
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                     Número de acessos aos conteúdos disponibilizados nas                                  Unidade                                     SMCTI          800,00     1.300,00     2.000,00      2.500,00
+                      redes sociais da PMN + Número de peças publicitárias
+                        impressas e distribuídas + Número de pessoas que
+                       participaram das atividades e eventos de divulgação,
+                      relativos aos conhecimentos científicos e tecnológicos
+                                                       divulgados
+
+                                                                                    2. Orçamento municipal investido em fomento à pesquisa e inovação tecnológica
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                    Total de recursos previstos pela Prefeitura de Niterói em                              R$ 1 Mil                                   SEPLAG         2.050,00    2.100,00     2.150,00      2.200,00
+                              fomento à pesquisa e inovação tecnológica
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 19/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                             3. Densidade de acessos à banda larga fixa
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                      Número total de acessos de banda larga fixa / Número                          Unidade / domicílio                               ANATEL          109,00      110,00       111,00        112,00
+                                        total de domicílios no município
+
+             Programa
+             0135 - EDUCAÇÃO PARA TODOS
+
+             Indicador de Resultado
+
+                                                                                                                 1. Taxa de inclusão digital dos alunos
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                             (Número de alunos da rede pública de ensino                                 Percentual                                      SME           90,00       92,00        94,00        96,00
+                     fundamental da rede pública de Niterói que participaram
+                    de projetos de inclusão digital na escola no ano / Total de
+                         alunos da rede pública de ensino de Niterói) x 100
+
+                                                                                  2. Taxa de crianças com até 8 anos que concluíram o 3º ano do Ensino Fundamental
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                         (Número total de crianças até 8 anos de idade que                               Percentual                                      SME           83,00       85,00        87,00        89,00
+                     concluíram o 3º ano do ensino fundamental / População
+                           total de crianças de 8 anos no município) x 100
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 20/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                              3. Taxa de demanda atendida em creches
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                   (Total de crianças de 0 a 3 anos matriculadas em creches                              Percentual                                  SME; IBGE         46,00       50,00        54,00        58,00
+                    (municipais e conveniadas) no ano / Total de crianças de
+                                        0 a 3 anos no município) x 100
+
+                                                                                                            4. Taxa de demanda atendida em pré-escolas
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                          (Total de crianças de 4 e 5 anos matriculadas em                               Percentual                                  SME; IBGE         92,00       93,00        94,00        95,00
+                     pré-escolas (públicas, privadas e filantrópicas) no ano /
+                        Total de crianças de 4 e 5 anos no município) x 100
+
+                                                                                                       5. Taxa de demanda atendida no Ensino Fundamental
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                          (Total de crianças e adolescentes de 6 a 14 anos                               Percentual                                  SME; IBGE         97,00       98,00        99,00        100,00
+                     matriculadas no EF (pública, privadas e filantrópicas) no
+                      ano / Total de crianças de 6 a 14 anos no município) x
+                                                       100
+
+                                                                                 6. Taxa de professores que participaram em atividades de formação continuada no ano
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                        (Total de professores da rede pública municipal que                              Percentual                                      SME           8,00        10,00        12,00        14,00
+                      participaram de atividades de formação continuada no
+                        ano / Total de professores da rede municipal) x 100
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 21/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                               7. Índice de Desenvolvimento da Educação Básica (Ideb) - Rede municipal de 1º ao 5º ano
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                         Combina informações de desempenho em exames                                       Unidade                                   INEP/MEC          6,10        N/A          6,30          N/A
+                          padronizados (Prova Brasil ou Saeb) obtido pelos
+                    estudantes ao final do Ensino Fundamental (5º ano) com
+                      informações sobre rendimento escolar (aprovação). O
+                                               índice varia de 0 a 10
+
+                                                                               8. Índice de Desenvolvimento da Educação Básica (Ideb) - Rede municipal de 6º ao 9º ano
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                    Composto pela nota padronizada em Língua Portuguesa                                    Unidade                                   INEP/MEC          5,50        N/A          6,00          N/A
+                    e Matemática e pelo Fluxo Escolar. O índice varia de 0 a
+                                                        10
+
+                                                                                                       9. Taxa de abandono escolar no ensino fundamental
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                        (Número de alunos matriculados na rede pública de                                Percentual                                      SME           2,00        1,80         1,70          1,60
+                     ensino fundamental que se ausentaram por mais de 45
+                            dias consecutivos ou 60 dias intercalados sem
+                      justificativas / Número total de alunos matriculados na
+                               rede pública de ensino fundamental) x 100
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 22/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                          10. Taxa de conclusão escolar no Ensino Médio
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                         (Número total de alunos matriculados no 3º ano do                               Percentual                                  INEP/MEC          70,00       75,00        80,00        85,00
+                    Ensino Médio na rede pública no ano / Número de alunos
+                    matriculados no 1º ano do Ensino Médio na rede pública
+                                              dois anos antes) x 100
+
+                                                                                                              11. Taxa de jovens e adultos alfabetizados
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                       Número de jovens e adultos de 15 anos ou mais que                                   Unidade                                       SME          326,00      336,00       338,00        342,00
+                        completaram o 2º ciclo de EJA fundamental no ano
+
+                                                                                                12. Taxa de jovens e adultos com ensino fundamental completo
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                       Número de jovens e adultos de 15 anos ou mais que                                   Unidade                                       SME          415,00      423,00       428,00        435,00
+                        completaram o 4º ciclo de EJA fundamental no ano
+
+                                                                                           13. Taxa de aprovação escolar nos anos finais do Ensino Fundamental
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                        (Número de alunos do Ensino Fundamental da rede                                  Percentual                                      SME           88,00       89,00        90,00        91,00
+                      municipal aprovados / Total de alunos matriculados) x
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 23/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0152 - NITERÓI CONTRA O COVID-19 - ÁREA ESCOLARIZADA E INOVADORA
+
+             Indicador de Resultado
+
+                                                                           1. Taxa de alunos com acesso aos conteúdos didáticos digitais disponibilizados pela Prefeitura
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                          (Número de alunos que acessaram os conteúdos                                   Percentual                                  FME/SME           60,00       70,00        80,00        90,00
+                          didáticos digitais disponibilizados pela Prefeitura /
+                                      Número de alunos da rede) x 100
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 24/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                          INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+ Área de Resultado
+ Niterói Próspera e Dinâmica
+
+       Indicador de Impacto
+
+                                                                                              Índice de crescimento do PIB de Niterói em relação ao PIB nacional
+                                    Memória de Cálculo                                        Unidade de Medida                                                      Fonte                Meta 2025
+
+               Taxa de crescimento do PIB de Niterói no ano /                                        Unidade                                                         IBGE                    5,00
+              Taxa de crescimento do PIB do Brasil no mesmo
+                                                ano
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                   Pág 25/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0146 - DESENVOLVIMENTO ECONÔMICO
+
+             Indicador de Resultado
+
+                                                                                                  1. Taxa de variação do nível de emprego formal no município
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                          (Somatório do saldo da movimentação no ano de                                  Percentual                                CAGED/ MTE          1,50        1,80         2,20          2,50
+                     referência / Estoque inicial de janeiro do mesmo ano) x
+                                                        100
+
+                                                                                             2. Índice de crescimento do PIB de Niterói em relação ao PIB do ERJ
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                      Média para a série composta pela razão anual entre a                               Percentual                                     IBGE           3,00        3,00         3,50          3,50
+                          taxa de crescimento do PIB de Niterói e a taxa de
+                          crescimento do PIB do Estado do Rio de Janeiro
+
+                                                                                               3. Taxa de variação de micro e pequenas empresas no município
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                     (Número total de pequenas e micro empresas ativas no                                Percentual                                      SMF           2,50        2,50         2,70          2,70
+                    ano / Número total de pequenas e micro empresas ativas
+                                               do ano anterior) x 100
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 26/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                 INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                 4. Taxa de variação dos microempreendimentos no município
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte         Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                        (Número de cadastros formalizados de MEI no ano /                                Percentual                          Portal do Empreendedor     10,00       10,00        12,00        12,00
+                         Número de cadastros formalizados de MEI no ano
+                                                       anterior) x 100
+
+                                                                                                             5. Empresas do setor criativo no município
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte         Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                       Número de empresas do setor criativo formalizadas e                                 Unidade                                  SMF e SAE         15.609,00   15.989,00    16.389,00    16.749,00
+                                instaladas no município de Niterói no ano
+
+             Programa
+             0138 - NITERÓI: DESTINO TURÍSTICO
+
+             Indicador de Resultado
+
+                                                                                                                    1. Taxa de revitalização das orlas
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte         Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                      (Total em quilômetros de orlas recuperadas / Extensão                              Percentual                                    EMUSA            20,00       20,00        20,00        20,00
+                                    total de orlas em quilômetros) x 100
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                          Pág 27/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                     INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                                      2. Taxa de ocupação hoteleira
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte         Meta 2022      Meta 2023      Meta 2024      Meta 2025
+
+                    (Média de ocupação hoteleira no ano / Total de unidades                              Percentual                                   NELTUR            60,00          64,00          68,00          72,00
+                                      de hospedagem na cidade) x 100
+
+                                                                                                             3. Taxa de atração de turistas para a cidade
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte         Meta 2022      Meta 2023      Meta 2024      Meta 2025
+
+                      {[(Número de turistas no ano) - (Número de turistas no                             Percentual                                   NELTUR            15,00          15,00          20,00          20,00
+                    ano anterior)] / Número de turistas no ano anterior} x 100
+
+                                                                                                         4. Público total em grandes eventos no município
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte         Meta 2022      Meta 2023      Meta 2024      Meta 2025
+
+                        Estimativa do número de pessoas participantes em                                 Percentual                                   NELTUR         1.000.000,00   1.200.000,00   1.400.000,00   1.600.000,00
+                                   grandes eventos no Município no ano
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                               Pág 28/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+ Área de Resultado
+ Niterói Vibrante e Atraente
+
+       Indicador de Impacto
+
+                                                                                                                 Índice de Sustentabilidade Ecológica
+                                    Memória de Cálculo                                        Unidade de Medida                                                      Fonte                      Meta 2025
+
+                [2*(Percentual de área verde + Percentual de                                        Percentual                                 SECONSER, CLIN, SMU, INEA, SMARHS                  53,60
+                   áreas de conservação)+ 2*(Percentual de
+               reciclagem de resíduos sólidos + Percentual de
+                    domicílios com coleta seletiva de lixo ) +
+                (Percentual da frota de transporte público com
+             emissões de Gases de Efeito Estufa reduzidas) +
+                       (Percentual de praias de Niterói com
+                   Balneabilidade + Percentual de população
+                   atendida com esgotamento sanitário)] / 11
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 29/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0114 - PROTEÇÃO À FAUNA
+
+             Indicador de Resultado
+
+                                                                                                                       1. Cães e gatos esterilizados
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                   Número total de cirurgias de esterilização de cães e gatos                              Unidade                               CEDA / SMARHS       5.000,00    5.250,00     5.750,00      6.000,00
+                                                  realizadas no ano
+
+             Programa
+             0147 - CIDADE VERDE E SUSTENTÁVEL
+
+             Indicador de Resultado
+
+                                                                                                              1. Taxa de reciclagem de resíduos sólidos
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                   (Número total, em toneladas, de resíduos sólidos urbanos                              Percentual                                      CLIN          3,50        4,50         5,50          7,00
+                       reciclados / Número total, em toneladas, de resíduos
+                              sólidos urbanos gerado no município) × 100
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 30/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                 INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                          2. Taxa de domicílios com coleta seletiva de lixo
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte         Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                         (Número de domicílios com coleta seletiva de lixo /                             Percentual                         SNIS, Mcid, IBGE - CLIN     14,00       16,00        18,00        20,00
+                            Número total de domicílios no município) x 100
+
+                                                                                                      3. Taxa de resíduos depositados em aterros sanitários
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte         Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                           Número total, em toneladas, de resíduo urbano                                 Percentual                                      CLIN          100,00      100,00       100,00        100,00
+                        depositado em aterros sanitários / Número total, em
+                      toneladas, de resíduo urbano gerado pelo município) x
+                                                         100
+
+                                                                                                   4. Taxa de população atendida com esgotamento sanitário
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte         Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                          (População atendida com esgotamento sanitário /                                Percentual                     SNIS, Mcid, IBGE - SECONSER     97,00       98,00        99,00        100,00
+                                População do Município de Niterói) x 100
+
+                                                                                                                         5. Área verde recuperada
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte         Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                     Número total de áreas degradadas com reflorestamento                                  Hectare                                    SMARHS            10,00       12,00        14,00        16,00
+                                                       realizado
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                          Pág 31/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                               6. Taxa da frota de transporte público com emissões de Gases de Efeito Estufa reduzidas
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                    Total de veículos de transporte público com emissões de                              Percentual                                      SMU           1,00        2,50         5,00          8,50
+                        Gases de Efeito Estufa reduzidas / Total da frota de
+                                          transporte público de Niterói
+
+                                                                                                                    7. Taxa de áreas de conservação
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                     (Áreas de conservação / Área total do município) x 100                              Percentual                                   SMARHS           42,50       43,00        43,50        44,00
+
+                                                                                                          8. Índice de Balneabilidade das praias de Niterói
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                    (Número total de semanas consideradas próprias para o                                Percentual                                     INEA           69,00       70,00        71,00        71,00
+                      banho no município no ano / Número total de semanas
+                                                  analisadas) x 100
+
+                                                                                                                          9. Taxa de áreas verdes
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                      (Áreas de conservação ambiental + Áreas protegidas /                               Percentual                                   SMARHS           56,50       57,00        57,50        58,00
+                                         Área total do município) x 100
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 32/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0136 - CULTURA É UM DIREITO
+
+             Indicador de Resultado
+
+                                                                                              1. Taxa de investimento cultural em áreas de vulnerabilidade social
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                           (Total de recursos empenhados, em reais, para                                 Percentual                                      SMC           7,00        9,00         10,00        10,00
+                     realização de atividades de artes e cultura em áreas de
+                     vulnerabilidade social / Total de recursos empenhados,
+                    em reais, para realização de atividades de artes e cultura
+                                                 no município) x 100
+
+                                                                                      2. Taxa de equipamentos públicos municipais de cultura (por 10 mil habitantes)
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                     (Número de centros culturais, espaços culturais e casas                  Unidade por 10 mil habitantes                         IBGE e FAN         1,20        1,30         1,35          1,40
+                      de cultura municipais / População total do município) x
+                                                       10.000
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 33/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                 INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                           3. Taxa de Empregos Formais no setor de Artes e Cultura no município
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte         Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                    (Número de empregos formais no setor artístico-culutural                             Percentual                                     RAIS            2,00        2,10         2,20          2,30
+                       no município / Número total de empregos formais no
+                                                   município) x 100
+
+                                                                                           4. Taxa de público frequentador dos equipamentos culturais municipais
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte         Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                         [Número de visitantes aos equipamentos culturais                                  Unidade                                       FAN          65.000,00   66.000,00    67.000,00    68.000,00
+                           administrados pela Prefeitura de Niterói no ano]
+
+                                                                                              5. Valorização do patrimônio histórico, cultural e natural de Niterói
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte         Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                     Projetos de restauração, valorização e disseminação do                                Unidade                                       SAE            2,00        4,00         6,00          8,00
+                           patrimônio histórico, cultural e natural de Niterói
+                                                       realizados
+
+                                                                                                         6. Formação musical de alunos da Rede Municipal
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte         Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                         Número de alunos que participam de programa de                                    Unidade                                       FAN          10.000,00   15.000,00    20.000,00    20.000,00
+                     formação musical ofertado pela Prefeitura de Niterói por
+                                                          ano
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                          Pág 34/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0137 - CIDADE DO ESPORTE
+
+             Indicador de Resultado
+
+                                                                                                    1.Taxa de equipamentos esportivos por 10 mil habitantes
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                       (Número total de equipamentos esportivos públicos /                    Unidade por 10 mil habitantes                             SMEL           1,60        1,65         1,70          1,75
+                                  População total do município) x 10.000
+
+                                                                                             2. Taxa de crianças atendidas em atividades esportivas e recreativas
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                         (Somatório das estimativas do número de crianças                                Percentual                                     SMEL           45,00       50,00        55,00        58,00
+                   atendidas em atividades de esporte e recreação / Número
+                                     total de crianças em Niterói) x 100
+
+                                                                                        3. Taxa de empregos formais no setor de Esporte e Recreação no município
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                       (Número de empregos formais no setor de Esporte e                                 Percentual                                     RAIS           2,00        2,10         2,20          2,30
+                       Recreação no município / Número total de empregos
+                                          formais no município) x 100
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 35/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0153 - NITERÓI CONTRA O COVID-19 - ÁREA VIBRANTE E ATRAENTE
+
+             Indicador de Resultado
+
+                                                                1. Taxa de investimentos em projetos culturais mediante chamadas públicas e editais específicos para COVID-19
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                          (Total de recursos destinados pela Prefeitura via                              Percentual                                      SMC           1,28        1,29         1,30          1,32
+                           chamadas públicas e editais específicos para o
+                     COVID-19 para fomento do setor cultural no ano / Total
+                             de recursos para investimento no ano) x 100
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 36/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                           INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+ Área de Resultado
+ Niterói Inclusiva
+
+       Indicador de Impacto
+
+                                                                                                               Taxa de população em extrema pobreza
+                                    Memória de Cálculo                                        Unidade de Medida                                                       Fonte                Meta 2025
+
+                  (Número de pessoas com renda per capita                                           Percentual                                                       SMASES                   6,00
+             inferior à linha de extrema pobreza residentes no
+                  município / População no município) x 100
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                    Pág 37/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0024 - PROTEÇÃO SOCIAL ESPECIAL DE MÉDIA COMPLEXIDADE
+
+             Indicador de Resultado
+
+                         1. Evolução do atendimento de pessoas em situação de vulnerabilidade que sofreram violação de direitos ou se encontram em situação de ameaça, cujos vínculos familiares e
+                                                                                comunitários não foram rompidos, atendidas pelo CREAS
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                      [(Total de pessoas atendidas no Centro de Referência                               Percentual                                   SMASES           85,00       90,00        95,00        100,00
+                      Especializado de Assistência Social (CREAS) no ano /
+                   Total de novos casos (famílias ou indivíduos) inseridos no
+                    acompanhamento do Serviço de Proteção e Atendimento
+                     Especializado a Famílias e Indivíduos (PAEFI) no ano) /
+                       (Total de pessoas atendidas no Centro de Referência
+                       Especializado de Assistência Social (CREAS) no ano
+                      anterior / Total de novos casos (famílias ou indivíduos)
+                    inseridos no acompanhamento do Serviço de Proteção e
+                         Atendimento Especializado a Famílias e Indivíduos
+                                        (PAEFI) no ano anterior)] x 100
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 38/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0027 - PROTEÇÃO SOCIAL ESPECIAL DE ALTA COMPLEXIDADE
+
+             Indicador de Resultado
+
+                                                                                            1. Taxa de população em situação de rua em unidades de acolhimento
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                     (Número de pessoas em situação de rua abrigadas em                                  Percentual                                   SMASES           40,00       45,00        50,00        55,00
+                     unidades de acolhimento municipais / População de rua
+                                             total no município) x 100
+
+             Programa
+             0100 - PROTEÇÃO SOCIAL BÁSICA
+
+             Indicador de Resultado
+
+                                                                                                   1. Grau de cobertura do Serviço de Proteção Social Básica
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                        (Número de famílias em situação de vulnerabilidade                               Percentual                                    CECAD           90,00       92,00        94,00        96,00
+                    atendidas pelo Serviço de Proteção Social Básica / Total
+                          de famílias em situação de vulnerabilidade) x 100
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 39/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                2. Grau de cobertura dos Programas de Transferência de Renda
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                    (Número de famílias em situação de vulnerabilidade que                               Percentual                                   SMASES           90,00       92,00        94,00        96,00
+                       recebem recursos dos programas de transferência de
+                    renda federais, estaduais e municipais / Total de famílias
+                                   em situação de vulnerabilidade) x 100
+
+             Programa
+             0025 - VIVA IDOSO
+
+             Indicador de Resultado
+
+                                                                            1. Grau de cobertura das atividades de atenção ao idoso em situação de vulnerabilidade social
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                     (Número total de idosos em situação de vulnerabilidade                              Percentual                             SAGI/MDS e IBGE        95,00       96,00        98,00        100,00
+                     social atendidos pelas atividades de atenção ao idoso /
+                     Total de idosos em situação de vulnerabilidade social) x
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 40/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                 INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                     2. Percentual de atendimento de idosos acima de 60 anos com prática esportiva
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023    Meta 2024     Meta 2025
+
+                   (Total de frequentadores com idade igual ou superior a 60                             Percentual                                SMID e IBGE         8,00        10,00         12,00        15,00
+                     anos no ano / Total da população com 60 anos ou mais
+                                                 no município) x 100
+
+             Programa
+             0142 - SEGURANÇA ALIMENTAR
+
+             Indicador de Resultado
+
+                                                                           1. Famílias em situação de pobreza e/ou extrema pobreza atendidos pela Rede de Solidariedade
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023    Meta 2024     Meta 2025
+
+                   Total de famílias atendidas no ano realizados por meio da                               Unidade                                    SMASES         93.333,00   100.000,00   103.300,00    106.600,00
+                      Rede Solidariedade (Banco de alimentos, Restaurante
+                          Popular e aquisição direta de cestas básicas) do
+                      município à população com direito ao acesso regular e
+                    permanente de alimentos de qualidade e em quantidade
+                                                       suficiente
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                          Pág 41/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                 2. Taxa de atendimento de famílias em situação de insegurança alimentar e nutricional
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                        (Número de atendimentos à famílias em situação de                                Percentual                                   SMASES           62,00       65,00        68,00        72,00
+                    insegurança alimentar e nutricional / Total de famílias em
+                       situação de pobreza e extrema pobreza no Cadastro
+                                                       Único) x 100
+
+                                                                                   3. Taxa de variação do registro de Pescadores Artesanais e Agricultores Familiares
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                         (Número de pessoas cadastradas no CAF no ano /                                  Percentual                                   SMASES           2,00        3,00         4,00          5,00
+                   Número de pessoas cadastradas no CAF no ano anterior)
+                                                          x 100
+
+                                                                        4. Taxa de evolução de capacitados como agentes de combate à insegurança alimentar e nutricional
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                     [(Número de capacitados pela Escola de Gastronomia +                                Percentual                             SMASES/SUBSAN          40,00       50,00        60,00        70,00
+                      Número de capacitados por Rede de Solidariedade no
+                            ano) / (Número de capacitados pela Escola de
+                        Gastronomia + Número de capacitados por Rede de
+                                   Solidariedade no ano anterior)] x 100
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 42/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0141 - HABITAÇÃO E REGULARIZAÇÃO FUNDIÁRIA
+
+             Indicador de Resultado
+
+                                                                                            1. Taxa de população urbana que reside em Aglomerados Subnormais
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                           (Somatório da população urbana que reside em                                  Percentual                                    SMHRF           15,00       14,00        13,00        12,00
+                    aglomerados subnormais / Total da população urbana do
+                                                   município) x 100
+
+                                                                                                   2. Coeficiente de unidades habitacionais entregues por ano
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                      Número de unidades habitacionais entregues no ano /                                Percentual                                    SMHRF           32,00       37,00        43,00        50,00
+                      Previsão de entrega de unidades habitacionais no ano
+
+                                                                                                 3. Coeficiente de unidades habitacionais regularizadas no ano
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                          Número de certificados de regularização fundiária                              Percentual                                    SMHRF           85,00       90,00        95,00        100,00
+                    emitidos no ano / Previsão de emissão de certificados de
+                                        regularização fundiária no ano
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 43/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                                4. Coeficiente de melhoria habitacional
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                         Total de unidades habitacionais beneficiadas com                                Percentual                                    SMHRF           23,00       30,00        25,00        25,00
+                            melhorias / Quantidade de unidades precárias
+                                        identificadas nas comunidades
+
+             Programa
+             0140 - JUSTIÇA, CIDADANIA E ACESSIBILIDADE
+
+             Indicador de Resultado
+
+                                                                                    1. Taxa de variação de atendimentos realizados pelo Centro de Cidadania (CECID)
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                        (Atendimentos realizados pelo Centro de Cidadania                                Percentual                                     SMDH           30,00       35,00        39,00        42,00
+                    (CECID) vinculados à Secretaria de Direitos Humanos no
+                     ano / atendimentos realizados pelo Centro de Cidadania
+                     (CECID) vinculado à Secretaria de Direitos Humanos no
+                                                 ano anterior) x 100
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 44/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                2. Taxa de variação dos atendimentos de pessoas que sofreram violação de direito no Centro de Cidadania de Niterói
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                     (Pessoas que sofreram violações de direitos individuais                             Percentual                                     SMDH         10.000,00   12.000,00    15.000,00    17.000,00
+                    ou coletivos atendidas no Centro de Cidadania de Niterói
+                        no ano / Pessoas que sofreram violações de direitos
+                   individuais ou coletivos atendidas no Centro de Cidadania
+                                       de Niterói no ano anterior) x 100
+
+                                                                                                       3. Taxa de ações educativas sobre Direitos Humanos
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                       [(Número de oficinas realizadas no ano + Número de                                Percentual                                     SMDH           30,00       38,00        43,00        52,00
+                         mutirões realizados no ano) / (Número de oficinas
+                     realizadas no anos + Número de mutirões realizados no
+                                                 ano anterior)] x 100
+
+                                                                                             4. Taxa de Centros de Mediação Comunitária por 100 mil habitantes
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                       (Número total de Centros de Mediação Comunitária /                    Unidade por 100 mil habitantes                             SMDH           2,00        2,00         2,00          2,00
+                             População total do município) x 100.000 hab.
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 45/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                      5. Evolução dos atendimentos em CEAMs e Sala Lilás
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                       (Número de atendiemntos em CEAMs + Sala Lilás no                                    Unidade                                     CODIM          600,00     1.000,00     1.100,00      1.500,00
+                      anos corrente / Número de atendimentos em CEAMs +
+                                       Sala Lilás no ano anterior) x 100
+
+                                                                                                      6. Pessoas atendidas pelo "Transporte ponto a ponto"
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                         Número de pessoas com deficiência ou mobilidade                                   Unidade                                      SMAC          200,00      220,00       240,00        260,00
+                    reduzida atendidas no "transporte ponto a ponto" no ano
+
+             Programa
+             0098 - PROMOÇÃO DOS DIREITOS DAS CRIANÇAS E ADOLESCENTES
+
+             Indicador de Resultado
+
+                                                                     1. Taxa de crianças de 0 a 5 anos em situação de vulnerabilidade social atendidas em creches e pré-escolas
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                        (Número de crianças de 0 a 5 anos em situação de                                 Percentual                                      FME           30,00       32,00        35,00        40,00
+                            vulnerabilidade social atendidas em creches e
+                   pré-escolas / Total de crianças de 0 a 5 anos em situação
+                             de vulnerabilidade social no município) x 100
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 46/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                  2. Taxa de crianças e adolescentes de 6 a 17 anos em situação de vulnerabilidade social frequentando a escola
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                        (Número de crianças de 6 a 17 anos em situação de                                Percentual                                      FME           90,00       93,00        96,00        98,00
+                      vulnerabilidade social frequentando a escola / Total de
+                     crianças de 6 a 17 anos em situação de vulnerabilidade
+                                            social no município) x 100
+
+                                                        3. Taxa de mortalidade de crianças e adolescentes (0-19 anos) por causas externas de residentes de Niterói, por 100 mil habitantes
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                      (Número de mortes por causas externas na população                     Unidade por 100 mil habitantes                       DataSUS / FMS        41,11       39,60        38,70        38,20
+                   entre 0 e 19 anos / População estimada entre 0 e 19 anos
+                                               em Niterói) x 100.000
+
+                                                                                              4. Doses de vacina per capita aplicadas em crianças de 0 a 4 anos
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                    Número de doses aplicadas da dose indicada - 1ª, 2ª, 3ª                                Unidade                                FMS / DataSUS      3.300,00    3.400,00     3.450,00      3.500,00
+                        dose ou dose única, conforme a vacina / População
+                                      estimada residente da faixa etária
+
+                                                                                     5. Taxa de Mortalidade infantil (neonatal precoce, neonatal tardio e pós neonatal)
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                      (Óbitos infantis por componente residentes de Niterói /               Mortes por 1.000 nascidos vivos                       FMS / DataSUS        10,20       10,00        9,80          9,50
+                         Número de nascidos vivos de mães residentes no
+                                         município no período) x 1000
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:08                                                         Pág 47/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                  INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                         6. Estado nutricional das crianças de até 05 anos
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte          Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                        (Somatório das crianças de 0 a 5 anos fora do peso                               Percentual                                SISVAN-SMS            80,20       75,80        71,30        66,80
+                          adequado em Niterói (com peso muito abaixo do
+                       esperado, peso abaixo do esperado e peso acima do
+                    esperado) / Total de crianças de 0 a 5 anos em Niterói) x
+                                                       100
+
+                                                                                  7. Taxa de evolução de atividades destinadas à proteção de crianças e adolescentes
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte          Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                       (Total de atividades realizadas nos equipamentos da                               Percentual                       SMASES / SSAS / Vigilância     60,00       70,00        80,00        90,00
+                     assistência social e conselhos tutelares e conselhos de                                                                     Socioassistencial
+                          direito no ano / Total de atividades realizadas nos
+                    equipamentos da assistência social e conselhos tutelares
+                             e conselhos de direito no ano anterior) x 100
+
+                                                             8. Taxa de evolução do atendimento de crianças e adolescentes nos Serviços de Convivência e Fortalecimento de Vínculos
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte          Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                    (Total de crianças e adolescentes atendidos no SCFV no                               Percentual                       SMASES / SSAS / Vigilância     60,00       70,00        80,00        90,00
+                        ano / Total de crianças e adolescentes atendidos no                                                                      Socioassistencial
+                                          SCFV no ano anterior) x 100
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:09                                                           Pág 48/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                   INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0154 - NITERÓI CONTRA O COVID-19 - ÁREA INCLUSIVA
+
+             Indicador de Resultado
+
+                                                                                     1.Taxa de pessoas inscritas no Cadastro Único em situação de extrema pobreza
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte           Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                      (Pessoas em situação de extrema pobreza inscritas no                               Percentual                    Ministério da Cidadania/SMASES     8,00        7,00         6,00          5,00
+                    Cadastro Único / Estimativa de população no ano) x 100
+
+             Programa
+             0124 - ECONOMIA SOLIDÁRIA
+
+             Indicador de Resultado
+
+                                                                                       1. Taxa de variação de empreendimentos de economia solidária no município
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte           Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                          (Número total de empreendimentos de Economia                                   Percentual                                DIEESE/MTE             5,00        6,00         7,00          8,00
+                   Solidária por Atividade Econômica Principal, formalizados
+                    no município no ano / Número total de empreendimentos
+                   de Economia Solidária por Atividade Econômica Principal,
+                          formalizados no município no ano anterior) x 100
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:09                                                            Pág 49/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                    2. Empreendimentos de economia solidária no município
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                   Número total de empreendimentos de Economia Solidária                                   Unidade                                    SMASES          700,00      900,00      1.100,00      1.300,00
+                        por Atividade Econômica Principal, formalizados no
+                      município no ano e cadastrados na Coordenadoria de
+                                         Economia Solidária de Niterói
+
+                                                                                                 3. Empreendimentos aptos a receber a Moeda Social Arariboia
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                   Número total de empreendimentos de economia solidária,                                  Unidade                                    SMASES          500,00     1.000,00     1.500,00      2.000,00
+                        comércios e pequenos produtores cadastrados nas
+                             agências dos Bancos Comunitários Arariboia
+
+                                                                                4. Taxa de Centros Públicos de Referência de economia solidária por 100 mil habitantes
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                        (Número total de Centros Públicos de Referência de                   Unidade por 100 mil habitantes                           SMASES           0,60        1,00         1,00          1,00
+                         Economia Solidária na cidade de Niterói / Total de
+                                habitantes no município no ano) x 100 mil
+
+                                                                                 5. Trabalhadores que atuam com materiais recicláveis apoiados pela Casa do Catador
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                            Número total de trabalhadores, associações e                                   Unidade                                    SMASES           20,00       40,00        60,00        80,00
+                       cooperativa de trabalhadores que atuam na coleta de
+                    materiais reciclados cadastrados pela Coordenadoria de
+                       Economia Solidária, atendidos pela Casa do Catador
+                                             Maria Carolina de Jesus
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:09                                                         Pág 50/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                               6. Feiras apoiadas pelo Circuito Arariboia de Economia Solidária
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                     Número total de feiras que foram apoiadas pelo Circuito                               Unidade                                    SMASES           5,00        6,00         7,00          8,00
+                              Arariboia para escoamento da produção dos
+                    trabalhadores de economia solidária da cidade de Niterói
+                                                       no ano
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:09                                                         Pág 51/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+ Área de Resultado
+ Niterói Eficiente e Comprometida
+
+       Indicador de Impacto
+
+                                                                                                                        Índice de Serviços Digitais
+                                    Memória de Cálculo                                        Unidade de Medida                                                      Fonte                      Meta 2025
+
+                  (Total de serviços disponibilizados em meio                                       Percentual                                                Portal de Serviços                  55,00
+              digitais / Total de serviços cadastrados na Carta
+                                     de Serviços) x 100
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:09                                                         Pág 52/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0149 - GESTÃO PÚBLICA INOVADORA
+
+             Indicador de Resultado
+
+                                                                                                           1. Índice de investimento no Tesouro Municipal
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                       (Total de investimentos realizados pelo Município em                              Percentual                                   SEPLAG           20,00       22,00        24,00        25,00
+                        reais, empenhados no ano / Receita corrente líquida
+                         (somatório das receitas tributárias - contribuições,
+                       patrimoniais, industriais, agropecuárias e de serviços,
+                    deduzidos os valores das transferências constitucionais)
+                                                        no ano
+
+                                                                       2. Taxa de investimento municipal em desenvolvimento tecnológico e aperfeiçoamento de processos
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                          (Valor total de orçamento municipal investido em                               Percentual                                   SEPLAG           2,70        2,80         2,90          2,90
+                        desenvolvimento tecnológico e aperfeiçoamento de
+                       processos da PMN / Total do orçamento municipal no
+                                                       ano) x 100
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:09                                                         Pág 53/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                      3. Taxa de digitalização de processos administrativos
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                        [Total de novos processos autuados no Sistema de                                 Percentual                                   SEPLAG           20,00       40,00        60,00        100,00
+                    Processo Eletrônico/ (total de novos processos autuados
+                         no sistema de processo eletrônico + total de novos
+                               processos autuados em meio físico)] x 100
+
+                                                                                                             4. Formação e desenvolvimento de pessoas
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte        Meta 2022   Meta 2023   Meta 2024     Meta 2025
+
+                           Total de servidores, conselheiros e gestores de                                 Unidade                                 EGG/SEPLAG        1.416,00    1.486,00     1.561,00      1.639,00
+                   organizações da sociedade civil do município capacitados
+                        pelas iniciativas de formação e desenvolvimento de
+                     pessoas ofertadas pela Escola de Governo e Gestão no
+                                                       ano
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:09                                                         Pág 54/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                     INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0150 - GESTÃO PÚBLICA TRANSPARENTE E PARTICIPATIVA
+
+             Indicador de Resultado
+
+                                                                                                       1. Taxa de Conselhos Municipais em funcionamento
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte           Meta 2022    Meta 2023    Meta 2024     Meta 2025
+
+                     (Número de Conselhos em funcionamento / Número de                                   Percentual                                   SEMPAS              85,00        90,00         95,00        100,00
+                                 Conselhos legalmente instituídos) x 100
+
+                                                                                                            2. Acesso ao Portal da Transparência da PMN
+
+                                                Memória de Cálculo                                  Unidade de Medida                                   Fonte           Meta 2022    Meta 2023    Meta 2024     Meta 2025
+
+                    Número de acessos ao Portal da Transparência da PMN                                    Unidade                     Portal da Transparência/SEPLAG   100.000,00   120.000,00   140.000,00    150.000,00
+                                                       no ano
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:09                                                              Pág 55/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                  INDICADORES DE IMPACTO E DE RESULTADO
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                  Planejamento>PPA>Indicadores de Impacto e de Resul FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:34:09                                           Pág 56/56

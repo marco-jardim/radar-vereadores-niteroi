@@ -1,0 +1,36 @@
+                                                     ANEXO V
+
+                                   REESTRUTURAÇÃO DOS CARGOS - RESULTADO
+
+                                                       CATEGORIA/                 CATEGORIA/   TOTAL DE    TOTAL DE   TOTAL DE
+            CARGO                   QUADRO   NÍVEL                      NÍVEL2
+                                                       PROGRESSÃO                PROGRESSÃO2    CARGOS    OCUPADOS     VAGOS
+   ADMINISTRADOR DE EMPRESAS          QP       4             IV-V                                  1          0          1
+       ADMINISTRADOR DE REDE          QP       4             IV-V                                 1          0           1
+        AGENTE DE SEGURANÇA           QP       1        I-II-III-IV-V                             21         21          0
+        ANALISTA DE SISTEMAS          QP       4             IV-V                                  1          0          1
+              ARQUITETO               QP       4             IV-V                                  2          0          2
+       ASSISTENTE LEGISLATIVO         QP       2         II-III-IV-V      3         III-IV-V      17         17          0
+   AUXILIAR DE SERVIÇOS GERAIS        QP       1        I-II-III-IV-V                             16         15          1
+AUXILIAR DE MANUTENÇÃO E REPAROS      QP       1        I-II-III-IV-V                              1          1          0
+      AUXILIAR DE ENFERMAGEM          QP       1        I-II-III-IV-V                              2          1          1
+      AUXILIAR DE MULTIGRAFIA         QP       1        I-II-III-IV-V                             2          2           0
+         AUXILIAR LEGISLATIVO         QP       1        I-II-III-IV-V                             35         35          0
+            BIBLIOTECÁRIO             QP       4             IV-V                                 2          0           2
+       COADJUTOR LEGISLATIVO          QP       1        I-II-III-IV-V                             35         35          0
+         CONSULTOR TÉCNICO            QP       4             IV-V                                 10          8          2
+              CONTADOR                QP       4             IV-V                                  2         0           2
+             ENFERMEIRO               QP       4             IV-V                                  2          2          0
+      ESCRITURÁRIO LEGISLATIVO        QP       2         II-III-IV-V      3         III-IV-V      52         51          1
+                MÉDICO                QP       4             IV-V                                 3          3           0
+              MOTORISTA               QP       1        I-II-III-IV-V                             1          1           0
+            ODONTÓLOGO                QP       4             IV-V                                 2          1           1
+          OFICIAL LEGISLATIVO         QP       2         II-III-IV-V      3         III-IV-V      58         56          2
+          OPERADOR DE SOM             QP       1        I-II-III-IV-V                              1          1          0
+             PROCURADOR               QP       4             IV-V                                 10          7          3
+              PSICÓLOGO               QP       4             IV-V                                 2          1           1
+     TAQUÍGRAFO PARLAMENTAR           QP       2         II-III-IV-V      3         III-IV-V      5          5           0
+    TÉCNICO EM CONTABILIDADE          QP       3           III-IV-V                               2          1           1
+         TÉCNICO LEGISLATIVO          QP       2         II-III-IV-V      3         III-IV-V      63         61          2
+             TELEFONISTA              QP       1        I-II-III-IV-V                              2          2          0
+             Total                                                                               351         327         24

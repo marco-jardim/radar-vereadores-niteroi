@@ -1,0 +1,70 @@
+                                                 701000,000000    702000,000000   703000,000000   704000,000000   705000,000000
+
+                                                                                                                                  LEI URBANÍSTICA DE NITERÓI
+                                                                                                                                  MAPA 1C - ZONEAMENTO
+
+                                                                                                                                                                   SÃO GONÇALO
+
+                                                                                                                                               1A        1B
+                                                                                                                                                                   1C
+                                                                                                                                               1D
+7469600,000000
+
+                                                                                                                                                         1E        1F         1G
+
+                                                                                                                                               1H    1I        1J        1K    MARICÁ
+
+                                                                                                                                                              1L
+                 Rodovia Amaral
+                                Pei   xoto
+
+                                                                                                                                  LEGENDA
+                                                                                                                                  Nome da zona
+7468800,000000
+
+                                                                                                                                         ZCM                            ZEPAC
+                                                                                                                                         ZEU                            ZRU
+
+                                                                                                                                         ZC                             ZRM
+
+                                                                                                                                         ZDE                            ZRA
+
+                                                                                                                                         ZCL                            AEIT
+
+                                                                                                                                         ZUM < 6*                       Parque
+                                                                                                                                                                        Parque Urbano
+                                                                                                                                         ZUM >= 6*
+7468000,000000
+
+                                                                                                                                         ZC-ZEIS                        ZDS
+
+                                                                                                                                         ZEIS                           ZCA
+
+                                                                                                                                         ZEPAC - APAP                   ZPA
+7467200,000000
+7466400,000000
+
+                                                            o
+                                                           e ir
+                                                         nt
+                                                      Mo
+
+                                                                                                                                                     1
+                                                        o
+
+                                                                                                                                                                               Km
+                                                    etan
+                                                 Ca
+
+                                                                                                                                  Referências Cartográficas
+                                                a
+
+                                                                                                                                                                                 ¯
+                                              adtr
+                                             Es
+
+                                                                                                                                  Sistema de Coordenadas: UTM Fuso 23K
+                                                                                                                                  Sistema Geodésico: SIRGAS 2000
+                                                                                                                                  Datum Vertical: Marégrafo de Imbituba
+
+                                                                                                                                  Escala: 1:15.000        14 de Setembro de 2023

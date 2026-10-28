@@ -1,0 +1,197 @@
+Análise de Impacto Orçamentário para
+Implementação de CAA em Escolas Públicas
+de Niterói
+Elaboração: Helpers Education
+Data: Setembro/2025
+
+1. Contextualização
+A Comunicação Aumentativa e Alternativa (CAA) é uma estratégia fundamental para garantir o direito
+à comunicação e à aprendizagem de estudantes com deficiência, especialmente autistas e aqueles
+com transtornos de fala e linguagem.
+
+A equipe da Vereadora Fernanda Louback elaborou a presente análise para propor alternativas mais
+viáveis e sustentáveis, conciliando acessibilidade, eficiência e responsabilidade orçamentária.
+
+A equipe avaliou o impacto orçamentário da implementação da CAA considerando exclusivamente
+recursos de alta tecnologia (tablets com softwares especializados). Embora eficazes, esses
+dispositivos encarecem significativamente o processo de universalização da CAA.
+
+2. Cenário Atual – Orçamento com Alta Tecnologia
+De acordo com o estudo preliminar, o impacto orçamentário projetado para aquisição de 500 tablets
+com software de CAA seria:
+
+   ●   Menor custo unitário: R$ 939,15 → R$ 469.575,00 (500 unidades)
+   ●   Maior custo unitário: R$ 1.999,90 → R$ 999.950,00 (500 unidades)
+
+Embora os tablets ofereçam recursos avançados, o investimento total representa grande impacto
+financeiro para implementação em larga escala. Verificar ANEXO I.
+
+3. Alternativas de Baixa Tecnologia
+3.1. Pranchas de Palavras Essenciais
+
+   ●   Material: pranchas impressas plastificadas com vocabulário essencial.
+   ●   Estimativa de custo: R$ 50 a R$ 100/unidade, dependendo da tiragem e material.
+   ●   Potencial de atendimento: pode ser multiplicado por aluno ou grupo, com baixíssimo custo de
+       reposição.
+
+3.2. Kit Civiam de CAA
+
+   ●   Valor unitário aproximado: R$ 559,00
+   ●   Proposta: 1 kit por escola municipal de Niterói (cerca de 92 escolas).
+   ●   Impacto orçamentário estimado: 92 x R$ 559,00 = R$ 51.428,00
+   ●   Vantagem: cada kit pode ser compartilhado por diferentes alunos e usado como recurso de
+       apoio coletivo.
+   ●   importante que cada alunos tenha as suas pranchas impressas adaptadas para as suas
+       necessidades.
+
+4. Comparativo de Cenários
+       Cenário              Custo         Total Estimado             Observação
+                           Unitário
+
+ Alta tecnologia        R$ 939 a R$      R$ 469 mil a R$    Avançado, mas alto impacto
+ (tablets)              1.999            1 mi               financeiro
+
+ Kit Civiam (1 por      R$ 559           ~R$ 51 mil         Recurso coletivo inicial
+ escola)
+
+ Pranchas               R$ 50 a R$       ~R$ 20 mil         Baixo custo, replicável por
+ essenciais             100                                 aluno
+
+5. Recomendações
+   1. Modelo Híbrido: iniciar a política de CAA com kits coletivos e pranchas essenciais, garantindo
+      rápida implementação em todas as escolas com baixo impacto financeiro.
+   2. Escalonamento da Alta Tecnologia: destinar tablets a escolas-piloto ou a alunos com maior
+      necessidade, em fases posteriores.
+   3. Capacitação: fundamental incluir formação de professores e mediadores para uso
+      adequado dos recursos de CAA (baixa e alta tecnologia).
+   4. Monitoramento e Avaliação: implementar indicadores de impacto educacional e social para
+      orientar futuras expansões.
+
+6. Conclusão
+A adoção exclusiva de tablets representa um custo elevado e pode limitar a abrangência da política.
+Já a combinação de kits de CAA e pranchas de palavras essenciais garante maior alcance,
+sustentabilidade financeira e impacto imediato na inclusão escolar.
+
+Assim, a equipe da Helpers Education recomenda que o município de Niterói adote a estratégia híbrida,
+investindo inicialmente em baixa tecnologia com expansão gradual para alta tecnologia,
+assegurando que todos os alunos tenham acesso a recursos de comunicação no ambiente escolar.
+
+                                         ANEXO I
+                                            (item 2)
+
+Marca /         Preço do                                          Prós          Contras
+                               compatíveis +           de
+Modelo          Tablet*                                           principais    principais
+                               custo                   Manutençã
+                                                       o**
+
+                                                                               Assistência pode
+                                                                               ser um pouco
+                                                   Tela: custo Excelente       mais demorada
+                                                   de troca ~    desempenho dependendo da
+                                                   R$ 400-800 para apps        cidade;
+              ~ R$ 1.099,00                        dependendo CAA,             qualidade de
+              (oferta        Exemplos: • Speech da parte         bastante      som pode não
+              Mercado        Assistant AAC –       (varia com RAM e            ser top se não for
+              Livre) para    versão para iOS R$ tamanho,         armazename o modelo com
+              modelo 11″ / 99,90; Android com região).           nto; tela     alto-falantes
+              128 GB. •      compras internas.     Bateria: ao grande ajuda melhores;
+Xiaomi Redmi
+              Outras         (Apple) • LetMeTalk, longo de 2-3 com quadros variantes de 8,7″
+Pad
+              versões 8,7″ / Cboard – gratuitos anos pode de símbolos; têm tela menor,
+SE (11″/128GB
+              64-128GB       ou com custo          ter perda     preço         menos
+)
+              variam entre menor. • PECSTalk significativa; relativamente confortável para
+              ~R$ 1.300 a – pago/licenciado        alto-falantes bom para      muitos símbolos;
+              ~R$ 1.900      (não achei preço fixo & micro-      capacidade; garantia limitada;
+              dependendo recente em BR,            fone: se      Xiaomi tem    versões de RAM
+              da loja. (Mi   pode variar).         danificados, peças          mais baixa
+              Brasil)                              pode sobrar razoavelment poderão ter limite
+                                                   “uma          e disponíveis conforme uso
+                                                   gambiarra” para modelos intenso ou
+                                                   de reparo. populares.       muitos
+                                                                               símbolos/imagen
+                                                                               s.
+
+                                                 Troca de                      Preço um pouco
+                                                 tela          Marca com       mais alto
+                                                 provavelme    assistência     dependendo da
+                            Mesmos apps: •       nte           muito boa no versão;
+                            Speech Assistant semelhante Brasil;                armazenamento
+                            AAC (R$ 99,90 no ou um             estabilidade limitado se
+                            iOS; Android com in- pouco mais de software; versão de 64GB,
+              ~ R$ 1.103,95 app) (Apple) •       caro que      tela grande, se muitas
+Samsung
+              (Amazon.com. LetMeTalk, Cboard, Xiaomi,          interface bem imagens/áudios
+Galaxy Tab
+              br) para      Pictalk (alguns      dependendo trabalhada;        talvez seja
+A9+ 11-polega
+              versão 11″ /  gratuitos ou         do  modelo    bom para        pouco;
+das
+              64 GB.        freemium) •          (Samsung prolongar            peso/tamanho
+                            PECSTalk ou apps costuma ter vida útil;            podem gerar
+                            pagos para           assistência modelo “+,        desconforto se
+                            funcionalidades      melhor -      versão   maior” for usar
+                            avançadas.           peças         facilita        frequentemente
+                                                 originais     visualização fora de casa sem
+                                                 mais          dos símbolos. suporte ou case;
+                                                 disponíveis).                 custo de
+
+Marca /        Preço do                                      Prós            Contras
+                             compatíveis +        de
+Modelo         Tablet*                                       principais      principais
+                             custo                Manutençã
+                                                  o**
+
+                                                  Proteção                   manutenção para
+                                                  (capa)                     peça original
+                                                  imprescindív               pode pesar.
+                                                  el.
+
+                                                                              Tela menor,
+                                                                              menor espaço
+                                                                              visual para
+                                                                              muitos símbolos
+                                                 Manutenção
+                                                                              ou quadros
+                                                 mais barata
+                                                                              grandes; menor
+                                                 para trocas
+                                                               Melhor preço capacidade de
+                                                 simples
+                              Mesmos apps já                   inicial; marca armazenamento/
+                                                 (touch,
+                              citados: Speech                  confiável;     ram limita
+                                                 vidro), mas
+                              Assistant AAC,                   suficiente     crescimento;
+                                                 risco de tela
+               ~ R$ 839,25 LetMeTalk, Cboard,                  para uso leve som / alto
+Samsung                                          menor
+               (Amazon.com. etc. Apps pagos:                   a moderado; falantes piores;
+Galaxy Tab                                       tornar
+               br) para       Speech Assistant ~               versões mais durabilidade
+A9 64GB                                          interface
+               versão básica. R$ 99,90;                        novas da       menor se uso
+                                                 apertada;
+                              PECSTalk/licenciam               Samsung têm pesado sem
+                                                 acessórios
+                              ento dependendo da               bom suporte; proteção; versão
+                                                 (case,
+                              plataforma.                      bastante       básica pode
+                                                 película)
+                                                               portável.      começar já perto
+                                                 ajudam
+                                                                              de seus limites
+                                                 estender
+                                                                              se houver muitos
+                                                 vida.
+                                                                              arquivos
+                                                                              multimídia ou
+                                                                              conteúdo
+                                                                              pesado.
+
+  ●   Considerando a média de preço do modelo Xaiomi Redmi com a média de preço dos outros 2
+      modelos:
+  ●   Custo médio unitário: R$ 1.225,33 → R$ 612.665,00 (500 unidades)

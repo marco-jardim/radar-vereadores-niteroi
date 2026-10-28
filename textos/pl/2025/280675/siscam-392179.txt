@@ -1,0 +1,32 @@
+PROJETO DE LEI Nº     /2025
+
+INSTITUI A POLÍTICA MUNICIPAL DE EDUCAÇÃO DIGITAL E FORMAÇÃO EM TECNOLOGIAS EMERGENTES NA REDE PÚBLICA DE ENSINO DE NITERÓI, E DÁ OUTRAS PROVIDÊNCIAS.
+
+Art. 1º Fica instituída, no âmbito do Município de Niterói, a Política Municipal de Educação Digital e Formação em Tecnologias Emergentes, com o objetivo de promover a inclusão digital, o pensamento computacional, o letramento em dados e a cultura da inovação entre estudantes da rede pública municipal de ensino fundamental e médio.
+Art. 2º A política de que trata esta Lei será implementada de forma gradativa e progressiva, respeitada a capacidade técnica e institucional do Poder Executivo.
+Art. 3º São diretrizes da Política Municipal de Educação Digital:
+I – inclusão de conteúdos relacionados a tecnologia, programação, robótica, inteligência artificial e ética digital no currículo escolar;
+II – formação continuada de professores em práticas pedagógicas digitais;
+III – fomento a parcerias com instituições de ensino superior, organizações do terceiro setor e empresas de base tecnológica para suporte técnico e pedagógico;
+IV – promoção de feiras, desafios de inovação e maratonas tecnológicas (hackathons) nas escolas públicas;
+V – incentivo ao uso de plataformas digitais públicas e de código aberto no processo de ensino-aprendizagem;
+VI – fomento e incentivo à utilização de Laboratórios Makers nas escolas da rede pública municipal de ensino, como espaços de experimentação e desenvolvimento prático de competências tecnológicas, de programação, robótica e inteligência artificial.
+Art. 4º A execução da presente política poderá contar com apoio técnico de universidades, centros de pesquisa, organizações da sociedade civil e empresas de tecnologia, mediante convênios e termos de cooperação técnica, vedada a transferência de recursos públicos sem a devida previsão legal.
+Art. 5º Fica autorizado o Poder Executivo a:
+I – regulamentar esta Lei no que couber;
+II – firmar parcerias com vistas à cessão gratuita de plataformas tecnológicas, softwares, materiais pedagógicos e capacitação de servidores.
+Art. 6º A implementação desta Lei não implica em aumento de despesa, podendo ser realizada por reestruturação de conteúdos, readequação de carga horária, parcerias institucionais e recursos humanos já disponíveis.
+Art. 7º Esta Lei entra em vigor na data de sua publicação.
+
+Sala de Sessões, 21 de julho de 2025.
+
+BINHO GUIMARÃES
+
+JUSTIFICATIVA
+O presente projeto de lei visa preparar os estudantes da rede pública de Niterói para os desafios do século XXI, por meio da inclusão de competências digitais, tecnológicas e científicas no currículo escolar. Inspirado em experiências internacionais exitosas, especialmente de países da Europa, Ásia e América do Norte, que incorporaram Educação Digital, STEM (Ciência, Tecnologia, Engenharia e Matemática) e pensamento computacional em suas escolas, o projeto busca aproximar o ensino público da realidade contemporânea, sem a necessidade de aumento imediato de orçamento.
+A proposta respeita os princípios da Lei de Diretrizes e Bases da Educação Nacional (LDB) e da Base Nacional Comum Curricular (BNCC), especialmente no que se refere à formação integral, uso de tecnologias e desenvolvimento de competências para a cidadania digital. Ademais, esta iniciativa se alinha perfeitamente com a Lei Municipal nº 3990/2025, que dispõe sobre a Política Municipal de Fomento à Criação de Laboratórios Makers nas escolas da rede municipal de educação de Niterói.
+Ao instituir a Política Municipal de Educação Digital e Formação em Tecnologias Emergentes, este projeto estabelece a base teórica e curricular para o desenvolvimento de habilidades essenciais no século XXI, como o pensamento computacional, o letramento em dados e a cultura da inovação. Os Laboratórios Makers, por sua vez, complementam esta política ao fornecerem os espaços físicos e metodológicos essenciais para a concretização desses aprendizados. Nestes ambientes, os estudantes podem "aprender fazendo", experimentando conceitos de eletrônica, robótica, programação e impressão 3D, o que é fundamental para a absorção dos conteúdos digitais e tecnológicos propostos por esta lei.
+A sinergia entre a Educação Digital e os Laboratórios Makers potencializa o desenvolvimento prático de competências e estimula a criatividade, o pensamento crítico e a solução de problemas, elementos-chave para a qualificação dos jovens para o futuro e para as novas demandas do mercado de trabalho.
+Esta colaboração entre as iniciativas permite, ainda, parcerias estratégicas com universidades, empresas e organizações civis, sem comprometer recursos públicos diretos, seguindo modelo de cooperação técnica e doação de soluções educacionais, como já é realizado em municípios como Campinas, Curitiba, Porto Alegre, entre outros, o que reforça seu caráter inovador, inclusivo e financeiramente responsável.
+Dessa forma, a implementação conjunta destas políticas representa um avanço significativo para Niterói, garantindo que a cidade se mantenha na vanguarda da inovação educacional e promovendo a democratização do acesso à tecnologia para todos os seus estudantes.
+Diante do exposto, solicito o apoio dos nobres colegas para a aprovação deste Projeto de Lei.

@@ -1,0 +1,74 @@
+                         701000,000000   702000,000000   703000,000000   704000,000000                             705000,000000
+
+                                                                                                                                   LEI URBANÍSTICA DE NITERÓI
+                                                                                                                                   MAPA 1F - ZONEAMENTO
+7467200,000000
+
+                                                                                                                                                                   SÃO GONÇALO
+
+                                                                                                                                                1A     1B
+                                                                                                                                                                   1C
+                                                                                                                                                1D     1E          1F         1G
+
+                                                                                                                                                1H    1I        1J       1K    MARICÁ
+
+                                                                                                                                                              1L
+7466400,000000
+
+                                o
+                                 e ir
+                               nt
+                            Mo
+
+                                                                                                                                   LEGENDA
+                            o
+                        etan
+                     Ca
+
+                                                                                                                                   Nome da zona
+                    a
+                  adtr
+                 Es
+
+                                                                                                                                          ZCM                           ZEPAC
+                                                                                                                                          ZEU                           ZRU
+
+                                                                                                                                          ZC                            ZRM
+
+                                                                                                                                          ZDE                           ZRA
+
+                                                                                                                                          ZCL                           AEIT
+7465600,000000
+
+                                                                                                                                          ZUM < 6*                      Parque
+                                                                                                                                                                        Parque Urbano
+                                                                                                                                          ZUM >= 6*
+                                                                                                                                          ZC-ZEIS                       ZDS
+
+                                                                                                                                          ZEIS                          ZCA
+
+                                                                                                                                          ZEPAC - APAP                  ZPA
+7464800,000000
+7464000,000000
+
+                                                                                                            ie r
+                                                                                                          av
+                                                                                                                                                       1
+
+                                                                                                         nX
+                                                                                                      rto
+                                                                                                                                                                                   Km
+
+                                                                                                        e
+                                                                                                     Ew
+                                                                                                                                   Referências Cartográficas
+
+                                                                                                     al                                                                          ¯
+                                                                                                 ntr
+                                                                                              Ce
+                                                                                                                                   Sistema de Coordenadas: UTM Fuso 23K
+                                                                                               ida                                 Sistema Geodésico: SIRGAS 2000
+
+                                                                                                                                   Datum Vertical: Marégrafo de Imbituba
+
+                                                                                                                                   Escala: 1:15.000        14 de Setembro de 2023

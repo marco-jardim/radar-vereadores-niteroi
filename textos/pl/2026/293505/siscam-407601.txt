@@ -1,0 +1,46 @@
+Projeto de Lei Nº      /2026
+
+Institui o Painel Municipal de Transparência Tributária – “Impostômetro Niteroiense”, no âmbito do Município de Niterói, e dá outras providências.
+
+Art. 1º Fica instituído, no âmbito do Município de Niterói, o Painel Municipal de Transparência Tributária – “Impostômetro Niteroiense”, com a finalidade de garantir ampla publicidade, controle social e conscientização da população acerca da arrecadação dos tributos municipais.
+
+Art. 2º O Painel Municipal de Transparência Tributária será disponibilizado no portal eletrônico oficial da Prefeitura de Niterói, em área de fácil acesso, com interface clara, objetiva e de linguagem acessível ao cidadão, devendo conter, no mínimo:
+I – o montante total arrecadado com tributos municipais no exercício financeiro corrente;
+II – a arrecadação detalhada por espécie tributária, incluindo:
+a) Imposto Predial e Territorial Urbano – IPTU;
+b) Imposto Sobre Serviços de Qualquer Natureza – ISS;
+c) Imposto sobre Transmissão de Bens Imóveis – ITBI;
+d) taxas e contribuições de melhoria.
+III – demonstrativo de arrecadação acumulada, com detalhamento mensal;
+IV – percentual de participação de cada tributo na composição das receitas correntes do Município;
+V – comparativo entre arrecadação prevista e realizada, conforme Lei Orçamentária Anual;
+VI – acesso direto ao Portal da Transparência, com detalhamento completo das receitas e despesas públicas;
+VII – indicadores que permitam ao cidadão compreender a relação entre arrecadação e prestação de serviços públicos.
+
+§ 1º O sistema deverá prezar pela objetividade das informações, evitando linguagem excessivamente técnica e garantindo a compreensão por qualquer cidadão, independentemente de conhecimento especializado.
+
+§ 2º As informações deverão ser adaptadas à evolução do sistema tributário nacional, especialmente em decorrência da Reforma Tributária instituída pela Emenda Constitucional nº 132/2023, com a inclusão de novos tributos ou mecanismos de arrecadação que venham a impactar a competência municipal.
+
+Art. 3º A atualização das informações deverá ocorrer:
+I – preferencialmente em tempo real, conforme disponibilidade tecnológica dos sistemas municipais;
+II – no mínimo, em periodicidade semanal, quando inviável a atualização instantânea.
+
+Art. 4º O Poder Executivo poderá regulamentar esta Lei para definir aspectos técnicos de implementação, integração de sistemas e padronização das informações.
+
+Art. 5º As despesas decorrentes da execução desta Lei correrão por conta de dotações orçamentárias próprias, observados os princípios da eficiência e economicidade, vedada a criação de estruturas administrativas desnecessárias.
+
+Art. 6º Esta Lei entra em vigor na data de sua publicação.
+
+FABIANO GONÇALVES
+
+JUSTIFICATIVA
+O presente Projeto de Lei tem como objetivo fortalecer um dos pilares fundamentais de uma gestão pública responsável: a transparência fiscal associada ao controle social efetivo.
+Em um cenário onde o cidadão é cada vez mais chamado a contribuir com elevada carga tributária, é dever do Poder Público garantir que ele tenha acesso claro, simples e direto às informações sobre quanto o Município arrecada e como esses recursos impactam sua vida.
+A proposta do “Impostômetro Niteroiense” vai além de uma ferramenta informativa. Trata-se de um instrumento de:
+conscientização fiscal, aproximando o contribuinte da realidade das contas públicas;
+controle social, permitindo que a população acompanhe a evolução da arrecadação;
+responsabilização da gestão pública, ao expor, de forma transparente, a dimensão dos recursos disponíveis.
+A medida reforça o princípio de que todo recurso público tem origem no esforço do cidadão, sendo imprescindível garantir visibilidade total sobre sua arrecadação.
+Fortalece-se a ideia de responsabilidade fiscal, respeito ao contribuinte e eficiência na administração pública, combatendo a cultura de opacidade e distanciamento entre governo e sociedade.
+Importante destacar que o projeto não cria novos tributos nem amplia despesas de forma relevante, podendo ser implementado com o uso de sistemas já existentes, o que reforça seu caráter de baixo custo e alto impacto social.
+Por fim, a iniciativa se alinha às diretrizes modernas de governança pública e às exigências de transparência previstas na legislação vigente, contribuindo para uma administração mais responsável, eficiente e alinhada com os interesses da população de Niterói.

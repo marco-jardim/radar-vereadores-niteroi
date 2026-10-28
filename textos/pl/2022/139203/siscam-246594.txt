@@ -1,0 +1,548 @@
+                 Anexo VII - Anexo de Alterações no Plano Plurianual 2022-2025
+
+I - ALTERAÇÕES NOS INDICADORES DE RESULTADO
+
+ÁREA DE RESULTADO
+2 - NITERÓI ORGANIZADA E SEGURA
+
+     PROGRAMA/ALTERAÇÃO
+
+     0010 - CIDADE URBANIZADA
+
+          Tipo de alteração: Memória de cálculo do indicador de resultado
+          Indicador de resultado: Taxa de urbanização de comunidades
+                           Estabelecido no PPA 2022-2025                                           Ajuste no PPA 2022-2025
+           (Total, em m², de área urbanizada em comunidades / total, em m², da   (Total, em m², de área urbanizada em comunidades no ano / total,
+                               área de comunidades) x 100                                     em m², da área de comunidades) x 100
+
+          Tipo de alteração: Memória de cálculo do indicador de resultado
+          Indicador de resultado: Tempo médio de resposta dos serviços públicos para poda de árvores
+                           Estabelecido no PPA 2022-2025                                         Ajuste no PPA 2022-2025
+               [(Número de dias úteis decorridos entre os recebimentos das        (Número de dias úteis decorridos entre os recebimentos das
+            demandas e as respostas dos serviços públicos de poda de árvore    demandas e as respostas dos serviços públicos de poda de árvore
+           realizados + Número de dias úteis decorridos entre os recebimentos realizados + Número de dias úteis decorridos entre os recebimentos
+          das demandas e a data atual dos serviços públicos de poda de árvore das demandas e a data atual dos serviços públicos de poda de árvore
+          não realizados)] / número total de demandas respondidas no período não realizados) ÷ número total de demandas respondidas no período
+                                        analisado]                                                        analisado
+
+          Tipo de alteração: Memória de cálculo do indicador de resultado
+          Indicador de resultado: Tempo médio de resposta às solicitações dos serviços de iluminação pública
+                            Estabelecido no PPA 2022-2025                                          Ajuste no PPA 2022-2025
+               [(Número de dias úteis decorridos entre os recebimentos das        (Número de dias úteis decorridos entre os recebimentos das
+              demandas e as respostas dos serviços públicos de iluminação        demandas e as respostas dos serviços públicos de iluminação
+           realizados + Número de dias úteis decorridos entre os recebimentos realizados + Número de dias úteis decorridos entre os recebimentos
+          das demandas e a data atual dos serviços públicos de iluminação não das demandas e a data atual dos serviços públicos de iluminação não
+            realizados)] / Número Total de Demandas Respondidas no Período     realizados) / Número Total de Demandas Respondidas no Período
+                                         analisado                                                         analisado
+
+     0011 - MOBILIDADE URBANA
+
+          Tipo de alteração: Memória de cálculo do indicador de resultado
+          Indicador de resultado: Índice de congestionamento
+                           Estabelecido no PPA 2022-2025                                           Ajuste no PPA 2022-2025
+          (Ocorrências de congestionamento na cidade, medida em quilômetros
+                                                                                 (Somatório dos trechos congestionados das vias selecionadas /
+            por software de mobilidade urbana durante os horários de pico no
+                                                                                    Somatório do comprimento das vias selecionadas) x 100
+                                   trânsito / 365 dias)
+
+          Tipo de alteração: Unidade de medida do indicador de resultado
+          Indicador de resultado: Índice de congestionamento
+                            Estabelecido no PPA 2022-2025                                          Ajuste no PPA 2022-2025
+                                        Km/dia                                                            Percentual
+
+                Anexo VII - Anexo de Alterações no Plano Plurianual 2022-2025
+
+     0131 - NITERÓI MAIS SEGURA
+
+          Tipo de alteração: Memória de cálculo do indicador de resultado
+          Indicador de resultado: Taxa de homicídio (por 100 mil habitantes)
+                            Estabelecido no PPA 2022-2025                                            Ajuste no PPA 2022-2025
+                                                                                    (Número total de mortes por homicídio ocorridos no município /
+             (Número total de mortes por homicídio ocorridos no município /
+                                                                                  número total de habitantes do município) x 100 mil hab. DATASUS
+              número total de habitantes do município) x 100 mil habitantes
+                                                                                                  CID-10 (Y-85-Y09 e Y-35 e Y-36)
+
+          Tipo de alteração: Memória de cálculo do indicador de resultado
+          Indicador de resultado: Taxa de roubo de veículos
+                           Estabelecido no PPA 2022-2025                                             Ajuste no PPA 2022-2025
+           (Somatório de roubo e furto de veículos ocorridos no município / 100    (Somatório de roubo e furto de veículos ocorridos no município /
+                                      mil habitantes)                                         população no ano) x 100.000 habitantes
+
+ÁREA DE RESULTADO
+4 - NITERÓI ESCOLARIZADA E INOVADORA
+
+     PROGRAMA/ALTERAÇÃO
+
+     0134 - CIDADE CIENTÍFICA E TECNOLÓGICA
+
+          Tipo de alteração: Memória de cálculo do indicador de resultado
+          Indicador de resultado: Orçamento municipal investido em fomento à pesquisa e inovação tecnológica.
+                            Estabelecido no PPA 2022-2025                                            Ajuste no PPA 2022-2025
+            Total de recursos previstos pela Prefeitura de Niterói em fomento à Total de recursos investidos pela Prefeitura de Niterói em fomento à
+                             pesquisa e inovação tecnológica                                     pesquisa e inovação tecnológica
+
+     0135 - EDUCAÇÃO PARA TODOS
+
+          Tipo de alteração: Nome do indicador de resultado
+          Indicador de resultado: Taxa de jovens e adultos alfabetizados
+                           Estabelecido no PPA 2022-2025                                            Ajuste no PPA 2022-2025
+                         Taxa de jovens e adultos alfabetizados                               Número de jovens e adultos alfabetizados
+
+          Tipo de alteração: Nome do indicador de resultado
+          Indicador de resultado: Taxa de jovens e adultos com ensino fundamental completo
+                           Estabelecido no PPA 2022-2025                                        Ajuste no PPA 2022-2025
+               Taxa de jovens e adultos com ensino fundamental completo         Número de jovens e adultos com ensino fundamental completo
+
+                 Anexo VII - Anexo de Alterações no Plano Plurianual 2022-2025
+
+ÁREA DE RESULTADO
+5 - NITERÓI PRÓSPERA E DINÂMICA
+
+     PROGRAMA/ALTERAÇÃO
+
+     0138 - NITERÓI: DESTINO TURÍSTICO
+
+           Tipo de alteração: Unidade de medida do indicador de resultado
+           Indicador de resultado: Público total em grandes eventos no município
+                            Estabelecido no PPA 2022-2025                                            Ajuste no PPA 2022-2025
+                                      Percentual                                                             Unidade
+
+     0146 - DESENVOLVIMENTO ECONÔMICO
+
+           Tipo de alteração: Unidade de medida do indicador de resultado
+           Indicador de resultado: Índice de crescimento do PIB de Niterói em relação ao PIB do ERJ
+                            Estabelecido no PPA 2022-2025                                           Ajuste no PPA 2022-2025
+                                       Percentual                                                           Unidade
+
+           Tipo de alteração: Ano de referência do indicador de resultado
+           Indicador de resultado: Empresas do setor criativo no município
+                            Estabelecido no PPA 2022-2025                                            Ajuste no PPA 2022-2025
+                                         2019                                                                  2020
+
+ÁREA DE RESULTADO
+6 - NITERÓI VIBRANTE E ATRAENTE
+
+     PROGRAMA/ALTERAÇÃO
+
+     0136 - CULTURA É UM DIREITO
+
+           Tipo de alteração: Nome do indicador de resultado
+           Indicador de resultado: Taxa de público frequentador dos equipamentos culturais municipais
+                            Estabelecido no PPA 2022-2025                                           Ajuste no PPA 2022-2025
+
+           Taxa de público frequentador dos equipamentos culturais municipais       Público frequentador dos equipamentos culturais municipais
+
+           Tipo de alteração: Valor de referência do indicador de resultado
+           Indicador de resultado: Taxa de público frequentador dos equipamentos culturais municipais
+                            Estabelecido no PPA 2022-2025                                           Ajuste no PPA 2022-2025
+                                          64,66                                                              64.662
+
+     0147 - CIDADE VERDE E SUSTENTÁVEL
+
+           Tipo de alteração: Memória de cálculo do indicador de resultado
+           Indicador de resultado: Índice de Balneabilidade das praias de Niterói
+                            Estabelecido no PPA 2022-2025                                            Ajuste no PPA 2022-2025
+                                                                                  Média do somatório de todas as praias: (Número total de semanas
+             (Número total de semanas consideradas próprias para o banho no
+                                                                                consideradas próprias para o banho da praia no ano / Número total de
+              município no ano / Número total de semanas analisadas) x 100
+                                                                                                    semanas analisadas) x 100
+
+                  Anexo VII - Anexo de Alterações no Plano Plurianual 2022-2025
+
+ÁREA DE RESULTADO
+7 - NITERÓI INCLUSIVA
+
+     PROGRAMA/ALTERAÇÃO
+
+     0024 - PROTEÇÃO SOCIAL ESPECIAL DE MÉDIA COMPLEXIDADE
+
+           Tipo de alteração: Memória de cálculo do indicador de resultado
+           Indicador de resultado: Evolução do atendimento de pessoas em situação de vulnerabilidade que sofreram violação de direitos ou se
+           encontram em situação de ameaça, cujos vínculos familiares e comunitários não foram rompidos, atendidas pelo CREAS
+                             Estabelecido no PPA 2022-2025                                              Ajuste no PPA 2022-2025
+
+            [(Total de pessoas atendidas no Centro de Referência Especializado [(Total de pessoas atendidas no Centro de Referência Especializado
+                de Assistência Social (CREAS) no ano / Total de novos casos          de Assistência Social (CREAS) no ano + Total de novos casos
+            (famílias ou indivíduos) inseridos no acompanhamento do Serviço de (famílias ou indivíduos) inseridos no acompanhamento do Serviço de
+                Proteção e Atendimento Especializado a Famílias e Indivíduos          Proteção e Atendimento Especializado a Famílias e Indivíduos
+                 (PAEFI) no ano) / (Total de pessoas atendidas no Centro de            (PAEFI) no ano) / (Total de pessoas atendidas no Centro de
+               Referência Especializado de Assistência Social (CREAS) no ano        Referência Especializado de Assistência Social (CREAS) no ano
+             anterior / Total de novos casos (famílias ou indivíduos) inseridos no anterior + Total de novos casos (famílias ou indivíduos) inseridos no
+                   acompanhamento do Serviço de Proteção e Atendimento                   acompanhamento do Serviço de Proteção e Atendimento
+            Especializado a Famílias e Indivíduos (PAEFI) no ano anterior)] x 100 Especializado a Famílias e Indivíduos (PAEFI) no ano anterior)] x 100
+
+     0098 - PROMOÇÃO DOS DIREITOS DAS CRIANÇAS E DOS ADOLESCENTES
+
+           Tipo de alteração: Valor de referência e metas do indicador de resultado
+           Indicador de resultado: Taxa de mortalidade de crianças e adolescentes (0-19 anos) por causas externas de residentes de Niterói, por 100
+           mil habitantes
+
+                                               Estabelecido no PPA 2022-2025                            Ajuste no PPA 2022-2025
+
+           Valor de referência:                              43,28                                                120,8
+           Meta 2022:                                        41,11                                                 112
+           Meta 2023:                                        39,6                                                  104
+           Meta 2024:                                        38,7                                                   98
+           Meta 2025:                                        38,2                                                   91
+
+           Tipo de alteração: Nome do indicador de resultado
+           Indicador de resultado: Doses de vacina per capita aplicadas em crianças de 0 a 4 anos
+                             Estabelecido no PPA 2022-2025                                              Ajuste no PPA 2022-2025
+                                                                                    Cobertura Vacinal de BCG, Hepatite B, Rotavírus, Pentavalente,
+              Doses de vacina per capita aplicadas em crianças de 0 a 4 anos      Poliomelite, Pneumocócica, Febre Amarela, Hepatite A, Tríplice Viral,
+                                                                                                           Meningocócica
+
+           Tipo de alteração: Memória de cálculo do indicador de resultado
+           Indicador de resultado: Doses de vacina per capita aplicadas em crianças de 0 a 4 anos
+                             Estabelecido no PPA 2022-2025                                              Ajuste no PPA 2022-2025
+              Número de doses aplicadas da dose indicada - 1ª, 2ª, 3ª dose ou      Média da cobertura vacinal de cada imunobiológico (N° de crianças
+              dose única, conforme a vacina/ População estimada residente da      vacinadas com cada imunobiológico/População estimada residente da
+                                        faixa etária                                                          faixa etária)
+
+           Tipo de alteração: Unidade de medida do indicador de resultado
+           Indicador de resultado: Doses de vacina per capita aplicadas em crianças de 0 a 4 anos
+                             Estabelecido no PPA 2022-2025                                              Ajuste no PPA 2022-2025
+                                        Unidade                                                                Percentual
+
+      Anexo VII - Anexo de Alterações no Plano Plurianual 2022-2025
+
+Tipo de alteração: Valor de referência e metas do indicador de resultado
+Indicador de resultado: Doses de vacina per capita aplicadas em crianças de 0 a 4 anos
+
+                                   Estabelecido no PPA 2022-2025                            Ajuste no PPA 2022-2025
+
+Valor de referência:                             3.209                                                    55,8
+Meta 2022:                                       3.300                                                    90
+Meta 2023:                                       3.400                                                    90
+Meta 2024:                                       3.450                                                    90
+Meta 2025:                                       3.500                                                    90
+
+Tipo de alteração: Nome do indicador de resultado
+Indicador de resultado: Taxa de Mortalidade infantil (neonatal precoce, neonatal tardio e pós neonatal)
+                 Estabelecido no PPA 2022-2025                                              Ajuste no PPA 2022-2025
+Taxa de Mortalidade infantil (neonatal precoce, neonatal tardio e pós
+                                                                                      Taxa de Mortalidade neonatal precoce
+                              neonatal)
+
+Tipo de alteração: Memória de cálculo do indicador de resultado
+Indicador de resultado: Taxa de Mortalidade infantil (neonatal precoce, neonatal tardio e pós neonatal)
+                 Estabelecido no PPA 2022-2025                                              Ajuste no PPA 2022-2025
+
+  (óbitos infantis por componente residentes de Niterói / Número de      (N° de óbitos neonatal precoce/ Número de nascidos vivos de mães
+ nascidos vivos de mães residentes no município no período) x 1000                   residentes no município no período) x 1000
+
+Tipo de alteração: Valor de referência, ano de referência e metas do indicador de resultado
+Indicador de resultado: Taxa de Mortalidade infantil (neonatal precoce, neonatal tardio e pós neonatal)
+
+                                   Estabelecido no PPA 2022-2025                            Ajuste no PPA 2022-2025
+
+Valor de referência:                              10,8                                                    4,2
+Ano de referência:                               2019                                                  2020
+Meta 2022:                                        10,2                                                    3,8
+Meta 2023:                                         10                                                     3,4
+Meta 2024:                                         9,8                                                    3,2
+Meta 2025:                                         9,5                                                     3
+
+Tipo de alteração: Nome do indicador de resultado
+Indicador de resultado: Estado nutricional das crianças de até 05 anos
+                 Estabelecido no PPA 2022-2025                                               Ajuste no PPA 2022-2025
+           Estado nutricional das crianças de até 05 anos                    Estado nutricional inadequado das crianças de até 05 anos
+
+Tipo de alteração: Fonte do indicador de resultado
+Indicador de resultado: Estado nutricional das crianças de até 05 anos
+                 Estabelecido no PPA 2022-2025                                              Ajuste no PPA 2022-2025
+                          SISVAN-SMS                                                              FMS/SISVAN
+
+Tipo de alteração: Polaridade do indicador de resultado
+Indicador de resultado: Estado nutricional das crianças de até 05 anos
+                  Estabelecido no PPA 2022-2025                                             Ajuste no PPA 2022-2025
+                       Quanto maior, melhor                                                   Quanto menor, melhor
+
+           Anexo VII - Anexo de Alterações no Plano Plurianual 2022-2025
+
+     Tipo de alteração: Valor de referência e metas do indicador de resultado
+     Indicador de resultado: Estado nutricional das crianças de até 05 anos
+
+                                         Estabelecido no PPA 2022-2025                             Ajuste no PPA 2022-2025
+
+     Valor de referência:                              89,14                                                  10,9
+     Meta 2022:                                         80,2                                                 10,01
+     Meta 2023:                                         75,8                                                  9,3
+     Meta 2024:                                         71,3                                                  8,7
+     Meta 2025:                                         66,8                                                   8
+
+0140 - JUSTIÇA, CIDADANIA E ACESSIBILIDADE
+
+     Tipo de alteração: Nome do indicador de resultado
+     Indicador de resultado: Taxa de variação de atendimentos realizados pelo Centro de Cidadania (CECID)
+                       Estabelecido no PPA 2022-2025                                         Ajuste no PPA 2022-2025
+          Taxa de variação de atendimentos realizados pelo Centro de       Número de de atendimentos realizados pelo Centro de Cidadania
+                              Cidadania (CECID)                                                      (CECID)
+
+     Tipo de alteração: Memória de cálculo do indicador de resultado
+     Indicador de resultado: Taxa de variação de atendimentos realizados pelo Centro de Cidadania (CECID)
+                      Estabelecido no PPA 2022-2025                                          Ajuste no PPA 2022-2025
+
+          (Atendimentos realizados pelo Centro de Cidadania (CECID)
+      vinculados à Secretaria de Direitos Humanos no ano / atendimentos           Atendimentos realizados pelo Centro de Cidadania (CECID)
+      realizados pelo Centro de Cidadania (CECID) vinculado à Secretaria             vinculados à Secretaria de Direitos Humanos no ano
+                  de Direitos Humanos no ano anterior) x 100
+
+     Tipo de alteração: Unidade de medida do indicador de resultado
+     Indicador de resultado: Taxa de variação de atendimentos realizados pelo Centro de Cidadania (CECID)
+                      Estabelecido no PPA 2022-2025                                          Ajuste no PPA 2022-2025
+                                Percentual                                                           Unidade
+
+     Tipo de alteração: Nome do indicador de resultado
+
+     Indicador de resultado: Taxa de variação dos atendimentos de pessoas que sofreram violação de direito no Centro de Cidadania de Niterói
+
+                       Estabelecido no PPA 2022-2025                                               Ajuste no PPA 2022-2025
+         Taxa de variação dos atendimentos de pessoas que sofreram            Número de atendimentos de pessoas que sofreram violação de direito
+             violação de direito no Centro de Cidadania de Niterói                         no Centro de Cidadania de Niterói no ano
+
+     Tipo de alteração: Memória de cálculo do indicador de resultado
+
+     Indicador de resultado: Taxa de variação dos atendimentos de pessoas que sofreram violação de direito no Centro de Cidadania de Niterói
+
+                       Estabelecido no PPA 2022-2025                                               Ajuste no PPA 2022-2025
+
+      (Pessoas que sofreram violações de direitos individuais ou coletivos
+       atendidas no Centro de Cidadania de Niterói no ano / Pessoas que        Pessoas que sofreram violações de direitos individuais ou coletivos
+       sofreram violações de direitos individuais ou coletivos atendidas no          atendidas no Centro de Cidadania de Niterói no ano
+              Centro de Cidadania de Niterói no ano anterior) x 100
+
+     Tipo de alteração: Unidade de medida do indicador de resultado
+
+     Indicador de resultado: Taxa de variação dos atendimentos de pessoas que sofreram violação de direito no Centro de Cidadania de Niterói
+
+                       Estabelecido no PPA 2022-2025                                               Ajuste no PPA 2022-2025
+                                 Percentual                                                                Unidade
+
+           Anexo VII - Anexo de Alterações no Plano Plurianual 2022-2025
+
+     Tipo de alteração: Nome do indicador de resultado
+     Indicador de resultado: Taxa de ações educativas sobre Direitos Humanos
+                      Estabelecido no PPA 2022-2025                                          Ajuste no PPA 2022-2025
+              Taxa de ações educativas sobre Direitos Humanos                    Número de ações educativas sobre Direitos Humanos
+
+     Tipo de alteração: Memória de cálculo do indicador de resultado
+     Indicador de resultado: Taxa de ações educativas sobre Direitos Humanos
+                      Estabelecido no PPA 2022-2025                                          Ajuste no PPA 2022-2025
+         [(Número de oficinas realizadas no ano + Número de mutirões
+                                                                             (Número de oficinas realizadas no ano + Número de mutirões
+         realizados no ano) / (Número de oficinas realizadas no anos +
+                                                                                                  realizados no ano)
+             Número de mutirões realizados no ano anterior)] x 100
+
+     Tipo de alteração: Unidade de medida do indicador de resultado
+     Indicador de resultado: Taxa de ações educativas sobre Direitos Humanos
+                      Estabelecido no PPA 2022-2025                                          Ajuste no PPA 2022-2025
+                                Percentual                                                           Unidade
+
+     Tipo de alteração: Memória de cálculo do indicador de resultado
+     Indicador de resultado: Evolução dos atendimentos em CEAMs e Sala Lilás
+                      Estabelecido no PPA 2022-2025                                          Ajuste no PPA 2022-2025
+             (Número de atendiemntos em CEAMs + Sala Lilás no             (Número de atendimentos em CEAMs + Sala Lilás no ano corrente /
+            anos corrente / Número de atendimentos em CEAMs +             Número de atendimentos em CEAMs + Sala Lilás no ano anterior) x
+                      Sala Lilás no ano anterior) x 100                                               100
+
+     Tipo de alteração: Unidade de medida do indicador de resultado
+     Indicador de resultado: Evolução dos atendimentos em CEAMs e Sala Lilás
+                      Estabelecido no PPA 2022-2025                                          Ajuste no PPA 2022-2025
+                                  Unidade                                                           Percentual
+
+     Tipo de alteração: Metas do indicador de resultado
+     Indicador de resultado: Evolução dos atendimentos em CEAMs e Sala Lilás
+
+                                        Estabelecido no PPA 2022-2025                        Ajuste no PPA 2022-2025
+
+     Meta 2022:                                        600                                              10
+     Meta 2023:                                       1.000                                             5
+     Meta 2024:                                       1.100                                             5
+     Meta 2025:                                       1.500                                              5
+
+0141 - HABITAÇÃO E REGULARIZAÇÃO FUNDIÁRIA
+
+     Tipo de alteração: Ano de referência do indicador de resultado
+     Indicador de resultado: Coeficiente de unidades habitacionais entregues por ano
+                      Estabelecido no PPA 2022-2025                                          Ajuste no PPA 2022-2025
+                                   2020                                                                2019
+
+           Anexo VII - Anexo de Alterações no Plano Plurianual 2022-2025
+
+0142 - SEGURANÇA ALIMENTAR
+
+     Tipo de alteração: Memória de cálculo do indicador de resultado
+     Indicador de resultado: Famílias em situação de pobreza e/ou extrema pobreza atendidos pela Rede de Solidariedade
+                      Estabelecido no PPA 2022-2025                                          Ajuste no PPA 2022-2025
+       Total de famílias atendidas no ano realizados por meio da Rede
+     Solidariedade (Banco de alimentos, Restaurante Popular e aquisição   Total de famílias atendidas no ano por meio da Rede Solidariedade
+      direta de cestas básicas) do município à população com direito ao    (Banco de alimentos, Restaurante Popular e aquisição direta de
+         acesso regular e permanente de alimentos de qualidade e em                           cestas básicas) do município
+                             quantidade suficiente
+
+     Tipo de alteração: Valor de referência e metas do indicador de resultado
+     Indicador de resultado: Famílias em situação de pobreza e/ou extrema pobreza atendidos pela Rede de Solidariedade
+
+                                       Estabelecido no PPA 2022-2025                         Ajuste no PPA 2022-2025
+
+     Valor de referência:                          190.000                                              190
+     Meta 2022:                                    93.333                                               933
+     Meta 2023:                                    100.000                                             1.000
+     Meta 2024:                                    103.300                                             1.330
+     Meta 2025:                                    106.600                                             1.660
+
+     Tipo de alteração: Nome do indicador de resultado
+     Indicador de resultado: Taxa de evolução de capacitados como agentes de combate à insegurança alimentar e nutricional
+                       Estabelecido no PPA 2022-2025                                       Ajuste no PPA 2022-2025
+         Taxa de evolução de capacitados como agentes de combate à       Número de capacitados como agentes de combate à insegurança
+                      insegurança alimentar e nutricional                                    alimentar e nutricional
+
+     Tipo de alteração: Memória de cálculo do indicador de resultado
+     Indicador de resultado: Taxa de evolução de capacitados como agentes de combate à insegurança alimentar e nutricional
+                      Estabelecido no PPA 2022-2025                                        Ajuste no PPA 2022-2025
+      [(Número de capacitados pela Escola de Gastronomia + Número de
+         capacitados por Rede de Solidariedade no ano) / (Número de         Número de pessoas capacitadas como agentes de combate à
+      capacitados pela Escola de Gastronomia + Número de capacitados                insegurança alimentar e nutricional no ano
+              por Rede de Solidariedade no ano anterior)] x 100
+
+     Tipo de alteração: Unidade de medida do indicador de resultado
+     Indicador de resultado: Taxa de evolução de capacitados como agentes de combate à insegurança alimentar e nutricional
+                      Estabelecido no PPA 2022-2025                                        Ajuste no PPA 2022-2025
+                                Percentual                                                         Unidade
+
+                Anexo VII - Anexo de Alterações no Plano Plurianual 2022-2025
+
+II - ALTERAÇÕES NOS OBJETIVOS DE DESENVOLVIMENTO SUSTENTÁVEL (ODS)
+
+ÁREA DE RESULTADO
+
+2 - NITERÓI ORGANIZADA E SEGURA
+
+     PROGRAMA
+
+     0011 - MOBILIDADE URBANA
+
+                          Estabelecido no PPA 2022-2025                           Ajuste no PPA 2022-2025
+                            10 - Redução das desigualdades
+                                                                           11 - Cidades e comunidades sustentáveis
+                       11 - Cidades e comunidades sustentáveis
+
+     0131 - NITERÓI MAIS SEGURA
+
+                          Estabelecido no PPA 2022-2025                           Ajuste no PPA 2022-2025
+                                                                                    5 - Igualdade de gênero
+                               5 - Igualdade de gênero
+                                                                               10 - Redução das desigualdades
+                        16 - Paz, justiça e instituições eficazes
+                                                                            16 - Paz, justiça e instituições eficazes
+
+ÁREA DE RESULTADO
+3 - NITERÓI SAUDÁVEL
+
+     PROGRAMA
+
+     0133 - ATENÇÃO À SAÚDE
+
+                          Estabelecido no PPA 2022-2025                           Ajuste no PPA 2022-2025
+                                3 - Saúde e bem-estar
+                                                                                    3 - Saúde e bem-estar
+                           6 - Água potável e saneamento
+
+                 Anexo VII - Anexo de Alterações no Plano Plurianual 2022-2025
+
+ÁREA DE RESULTADO
+4 - NITERÓI ESCOLARIZADA E INOVADORA
+
+     PROGRAMA
+
+     0134 - CIDADE CIENTÍFICA E TECNOLÓGICA
+
+                              Estabelecido no PPA 2022-2025                           Ajuste no PPA 2022-2025
+
+                           9 - Indústria, inovação e infraestrutura
+                                                                                 9 - Indústria, inovação e infraestrutura
+                          17 - Parcerias e meios de implementação
+
+ÁREA DE RESULTADO
+6 - NITERÓI VIBRANTE E ATRAENTE
+
+     PROGRAMA
+
+     0147 - CIDADE VERDE E SUSTENTÁVEL
+
+                              Estabelecido no PPA 2022-2025                           Ajuste no PPA 2022-2025
+                                6 - Água potável e saneamento                     6 - Água potável e saneamento
+                          11 - Cidades e comunidades sustentáveis           11 - Cidades e comunidades sustentáveis
+                           12 - Consumo e produção responsáveis              12 - Consumo e produção responsáveis
+                         13 - Ação contra a mudança global do clima                      14 - Vida na água
+                                      15 - Vida terrestre                               15 - Vida terrestre
+
+     0153 - NITERÓI CONTRA O COVID-19 - ÁREA VIBRANTE E ATRAENTE
+
+                              Estabelecido no PPA 2022-2025                           Ajuste no PPA 2022-2025
+                                    3 - Saúde e bem-estar
+                                                                          8 - Trabalho decente e crescimento econômico
+                        8 - Trabalho decente e crescimento econômico
+
+ÁREA DE RESULTADO
+7 - NITERÓI INCLUSIVA
+
+     PROGRAMA
+
+     0140 - JUSTIÇA, CIDADANIA E ACESSIBILIDADE
+
+                              Estabelecido no PPA 2022-2025                           Ajuste no PPA 2022-2025
+
+                                                                                      5 - Igualdade de gênero
+                               10 - Redução das desigualdades
+                                                                                 10 - Redução das desigualdades
+                          11 - Cidades e comunidades sustentáveis
+                                                                            11 - Cidades e comunidades sustentáveis
+                           16 - Paz, justiça e instituições eficazes
+                                                                             16 - Paz, justiça e instituições eficazes
+                          17 - Parcerias e meios de implementação
+                                                                            17 - Parcerias e meios de implementação
+
+                Anexo VII - Anexo de Alterações no Plano Plurianual 2022-2025
+
+     0098 - PROMOÇÃO DOS DIREITOS DAS CRIANÇAS E ADOLESCENTES
+
+                         Estabelecido no PPA 2022-2025                            Ajuste no PPA 2022-2025
+
+                                 3 - Saúde e bem-estar
+                              4 - Educação de qualidade                             3 - Saúde e bem-estar
+                                5 - Igualdade de gênero                           4 - Educação de qualidade
+                           10 - Redução das desigualdades                      10 - Redução das desigualdades
+                      11 - Cidades e comunidades sustentáveis               16 - Paz, justiça e instituições eficazes
+                       16 - Paz, justiça e instituições eficazes
+
+     0154 - NITERÓI CONTRA O COVID-19 - ÁREA INCLUSIVA
+
+                         Estabelecido no PPA 2022-2025                            Ajuste no PPA 2022-2025
+                          10 - Redução das desigualdades                           1 - Erradicação da pobreza
+                                                                                10 - Redução das desigualdades
+
+ÁREA DE RESULTADO
+8 - NITERÓI EFICIENTE E COMPROMETIDA
+
+     PROGRAMA
+
+     0149 - GESTÃO PÚBLICA INOVADORA
+
+                         Estabelecido no PPA 2022-2025                            Ajuste no PPA 2022-2025
+                       16 - Paz, justiça e instituições eficazes
+                                                                            16 - Paz, justiça e instituições eficazes
+                      17 - Parcerias e meios de implementação
+
+     0150 - GESTÃO PÚBLICA TRANSPARENTE E PARTICIPATIVA
+
+                         Estabelecido no PPA 2022-2025                            Ajuste no PPA 2022-2025
+
+                      11 - Cidades e comunidades sustentáveis
+                                                                            16 - Paz, justiça e instituições eficazes
+                       16 - Paz, justiça e instituições eficazes

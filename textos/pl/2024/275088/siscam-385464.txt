@@ -1,0 +1,60 @@
+                 Análise das entradas dos BPC’s
+
+                                     BPC IDOSO
+       Composição familiar   N° famílias   Valor por família       Orçamento
+               1               4.707              308            R$ 1.449.756,00
+               2                 690              420             R$ 289.800,00
+               3                 117              532             R$ 62.244,00
+               4                 37               644             R$ 23.828,00
+               5                  5               756              R$ 3.780,00
+            6 ou +                8               868              R$ 6.944,00
+          Total Geral          5.564                             R$ 1.836.352,00
+
+                                       BPC PCD
+       Composição familiar   N° famílias    Valor por família      Orçamento
+               1               1.461               308            R$ 449.988,00
+               2               1.264               420            R$ 530.880,00
+               3                 641               532            R$ 341.012,00
+               4                 294               644            R$ 189.336,00
+               5                 90                756            R$ 68.040,00
+            6 ou +               40                868            R$ 34.720,00
+          Total Geral          3.790                             R$ 1.613.976,00
+
+                                 CONSOLIDADO
+
+                              CONSOLIDADO - BPC GERAL
+Composição familiar    N° famílias  Valor por família         Orçamento              %
+        1                6.168             308              R$ 1.899.744,00        55,06%
+        2                1.954             420               R$ 820.680,00         23,79%
+        3                  758             532               R$ 403.256,00         11,69%
+        4                  331             644               R$ 213.164,00         6,18%
+        5                  95              756               R$ 71.820,00          2,08%
+     6 ou +                48              868               R$ 41.664,00          1,21%
+   Total Geral           9.354                              R$ 3.450.328,00        100,00%
+
+                             Análise quantitativa geral
+                                   Panorama Orçamentário
+                    CONSOLIDADO (corte de renda em R$218,00 + BPC’s)
+                   Público                            N° famílias           Orçamento                   %
+ Famílias com renda per capita até R$ 218,00               43.998         R$ 18.694.424,00            84,42%
+                 BPC's (geral)                             9.354          R$ 3.450.328,00             15,58%
+                 Total Geral                            53.352          R$ 22.144.752,00           100,00%
+
+Percentuais do orçamento geral com relação às composições familiares:
+                                 Corte de renda em R$218,00 + BPC’s
+                                           CONSOLIDADO
+   Composição familiar       N° famílias   Valor por família           Orçamento               %
+             1                   24.086        R$ 308,00             R$ 7.418.488,00         32,38%
+             2                   15.000        R$ 420,00             R$ 6.300.000,00         27,50%
+             3                    8.873        R$ 532,00             R$ 4.720.436,00         20,60%
+             4                    3.784        R$ 644,00             R$ 2.436.896,00         10,64%
+             5                    1.140        R$ 756,00              R$ 861.840,00          3,76%
+          6 ou +                  469          R$ 868,00              R$ 407.092,00          1,78%
+       Total Geral               53.352                             R$ 22.144.752,00        100,00%
+
+Elton Teixeira
+Rosa Da Silva
+Ci se 988.607-+»
+e Ciga Data: 02/12/2024
+12:40
+( Ciga

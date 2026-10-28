@@ -1,0 +1,724 @@
+ANEXO V – METODOLOGIA DE CÁLCULO
+
+       LEI DE DIRETRIZES ORÇAMENTÁRIAS
+                 ATUALIZAÇÃO
+ANEXO DE METAS FISCAIS E ANEXO DE RISCOS FISCAIS
+
+                     Niterói
+
+                      2021
+
+                               PROJETO DE LEI DE DIRETRIZES ORÇAMENTÁRIAS PARA 2022
+
+1. INTRODUÇÃO
+       A LDO é o elo entre o Plano Plurianual (PPA), que funciona como um plano de Governo, e a Lei Orçamentária Anual (LOA), instrumento de viabilização da
+execução dos programas governamentais. A Constituição Federal estabelece que compete à Lei de Diretrizes Orçamentárias:
+
+       •     Compreender as metas e prioridades da administração pública federal, incluindo as despesas de capital para o exercício financeiro subsequente;
+       •     Orientar a elaboração da lei orçamentária anual;
+       •     Dispor sobre as alterações na legislação tributária; e
+       •     Estabelecer a política de aplicação das agências financeiras oficiais de fomento.
+
+       Com a publicação da Lei de Responsabilidade Fiscal (LRF – Lei Complementar 101/2000), além do disposto na Constituição, a LDO deve dispor sobre:
+
+       •     Equilíbrio entre receitas e despesas;
+       •     Critérios e forma de limitação de empenho, a ser efetivada nas seguintes hipóteses:
+                                •     Se verificado, ao final de um bimestre, que a realização da receita poderá não comportar o cumprimento das metas de resultado
+                              primário ou nominal estabelecidas no Anexo de Metas Fiscais; ou
+                                •     Enquanto perdurar o excesso de dívida consolidada de ente da Federação que tenha ultrapassado o respectivo limite ao final
+                              de um quadrimestre.
+       •     Normas relativas ao controle de custos e à avaliação dos resultados dos programas financiados com recursos dos orçamentos; e
+       •     Demais condições e exigências para a transferência de recursos a entidade públicas e privadas.
+
+        A Lei de Responsabilidade Fiscal estabeleceu ainda que integrará o projeto de LDO o Anexo de Metas Fiscais (AMF), em que serão estabelecidas metas
+anuais, em valores correntes e constantes, relativas a receitas, despesas, resultados nominal e primário e montante da dívida pública, para o exercício a que se
+referirem e para os dois seguintes.
+
+       O Anexo de Metas Fiscais conterá ainda:
+
+       •      Avaliação do cumprimento das metas relativas ao ano anterior;
+       •      Demonstrativo das metas anuais, instruído com memória e metodologia de cálculo que justifiquem os resultados pretendidos, comparando- as com
+      as fixadas nos três exercícios anteriores, e evidenciando a consistência delas com as premissas e os objetivos da política econômica nacional;
+       •      Evolução do patrimônio líquido, também nos últimos três exercícios, destacando a origem e a aplicação dos recursos obtidos com a alienação de ativos;
+       •      Avaliação da situação financeira e atuarial dos regimes geral de previdência social e próprio dos servidores públicos e do Fundo de Amparo ao
+      Trabalhador, bem como dos demais fundos públicos e programas estatais de natureza atuarial; e
+       •      Demonstrativo da estimativa e compensação da renúncia de receita e da margem de expansão das despesas obrigatórias de caráter
+      continuado.
+
+        Além do Anexo de Metas Fiscais, a Lei de Diretrizes Orçamentárias conterá Anexo de Riscos Fiscais (ARF), onde serão avaliados os passivos contingentes e
+outros riscos capazes de afetar as contas públicas, informando as providências a serem tomadas, caso se concretizem.
+
+2. CENÁRIO MACROECONÔMICO
+        Os principais parâmetros macroeconômicos projetados para a construção do cenário base são os seguintes: (i) de atividade econômica, envolvendo o PIB;
+(ii) da inflação; (iii) do setor externo, incluindo taxa de câmbio; (iv) dos agregados monetários e taxa de juros básica da economia; e (v) do preço do petróleo.
+Todas as demais variáveis incorporadas na construção do cenário base ou que podem vir a afetá-lo são consideradas de cunho não macroeconômico. O cenário
+base é a referência para a projeção das receitas do governo e para o estabelecimento do nível de despesas compatível com a meta de superávit primário
+estabelecida no corpo da LDO, assim como para as projeções de dívida pública. Todavia, é importante salientar que o próprio lapso temporal entre a elaboração
+da LDO e o início do ano a que ela se aplica resulta na majoração dos riscos em torno da consecução do cenário base originalmente projetado.
+
+      O atual cenário é de incerteza, tanto internamente quanto externamente. Os principais pontos de destaque são:
+
+      1. A irrupção da pandemia relacionada ao novo Coronavírus (Covid-19), decretada em março de 2020 pela OMS, afetou drasticamente o Brasil – e o mundo,
+         causando efeitos sanitários e econômicos avassaladores. No cenário interno, em razão das medidas de distanciamento social adotadas para conter a
+         proliferação do vírus e evitar um colapso no sistema de saúde, houve forte redução da atividade econômica, com elevado número de desempregados e
+         queda da produção industrial e do comércio. No entanto, em que pese o resultado do PIB apurado no ano de 2020, há uma projeção de retomada do
+         crescimento econômico em nível moderado a partir de 2021. Segundo o Banco Central, o crescimento do Produto Interno Bruto (PIB) está estimado em
+         5,04% para o ano de 2021 e 1,57% para o ano de 2022.
+
+      2. Para o cenário macroeconômico brasileiro, há uma preocupação com o descontrole da inflação, com previsão atual em 8,45% na semana do dia 24/09.
+         Ressalta-se que essa é a 25ª semana consecutiva com aumento da projeção desse indicador. Esse panorama é impulsionado pela depreciação da taxa
+         de câmbio, retomada da demanda e o aumento de preços anteriormente cancelados ou adiados. Para 2022, a previsão é de 4,12%.
+
+      3. No cenário externo, merece destaque o crescimento da vacinação contra o coronavírus, especialmente no Brasil após o fim do 1º semestre de 2021. Em
+         28 de setembro, o país contava com 41% da população totalmente imunizada e 70% com, ao menos, uma dose.
+
+      4. No que concerne à taxa de juros básica da economia, conhecida como Taxa SELIC, verifica-se um aumento em relação ao ano anterior, chegando a 6,25%
+         ao ano. Esse aumento está associado à oscilação da inflação decorrente do preço dos alimentos, combustíveis e alta do dólar. Estima-se que a Selic
+         chegue a 8,25 % no final de 2021, podendo chegar a 8,50% ao ano em 2022. Quanto à variação do dólar, a projeção do Banco Central para o dólar é de
+         R$ 5,20 até o final de 2021 e R$ 5,24 em 2022.
+
+5. Por derradeiro, a retomada gradual da economia pós-primeira onda da pandemia e os avanços relacionados às vacinas contribuem diretamente para
+   um aumento do preço do petróleo, podendo o barril variar entre US$ 60 a U$ 75. A expectativa da ANP para esse ano é que o município arrecade R$
+   1,798 bilhão em receita decorrente de royalties e participações especiais.
+
+                      LDO - Projeção de Parâmetros                         2021              2022         2023         2024
+                     PIB Real                                              5,04%             1,57%       2,20%        2,50%
+                     Inflação (IPCA)                                       8,45%             4,12%       3,25%        3,00%
+                     Dólar (US$)                                          R$ 5,20           R$ 5,24      R$ 5,10      R$ 5,08
+                     Preço Médio Petróleo Brent                       $           75,17 $      68,54 $      64,51 $       61,40
+                     Taxa de Juros (Selic)                               8,25%           8,50%         6,75%           6,50%
+                     Salário Mínimo                                     R$ 1.100        R$ 1.193      R$ 1.242        R$ 1.282
+
+                     Fontes: Boletim Focus 24/09/2021 (PIB, IPCA, Dólar, Selic)
+                     Salário Mínimo (reposição inflacionária)
+                     Brent - Site ANP (consultado em 28/09)
+
+        É inegável que a pandemia do novo coronavírus provocou desdobramentos na economia doméstica e global, resultando em um elevado grau de
+incerteza. No entanto, apesar dos desafios de enfrentamento da COVID-19, os indicadores apontam para uma recuperação da atividade econômica a partir
+de 2021. Ao garantir a vacinação em massa da população, as medidas restritivas de combate à pandemia serão reduzidas, e consequentemente, teremos
+um retorno ao mercado de trabalho. Paralelamente, a consolidação fiscal vai permitir um ambiente propício ao investimento privado, à estabilidade da
+inflação e ao risco-país menor, contribuindo para um aquecimento econômico de longo prazo.
+
+        Dentro dessa ótica, o município vem envidando esforços no sentido de mitigar os impactos sociais e econômicos surgidos com a eclosão da pandemia,
+garantido suporte à população por meio da concessão de auxílios emergenciais, investimentos em hospitais. Entretanto, é possível que ações praticadas no
+enfrentamento da pandemia reflitam nos próximos anos, como: (1) a utilização do Fundo de Equalização de Receitas - FER no pagamento de programas
+emergenciais e, (2) os serviços de saúde fortemente demandados pela população; o atendimento à doenças decorrentes da covid e atendimento à doenças
+que foram adiadas devido à emergência do momento.
+
+    3. INTRODUÇÃO AO ANEXO DE METAS FISCAIS
+       O objetivo primordial da política fiscal do governo é promover a gestão equilibrada dos recursos públicos de forma a assegurar o crescimento sustentado, a
+distribuição da renda, o fortalecimento dos programas sociais, o adequado acesso aos serviços públicos, o financiamento de investimentos em infraestrutura, sem
+perder de vista que uma gestão fiscal responsável, que é condição necessária para a continuidade das políticas públicas e para tal deve-se garantir a
+sustentabilidade intertemporal da dívida pública.
+
+     Também fortalece a política fiscal o alinhamento às melhores práticas internacionais de ações de aperfeiçoamento da governança pública, tais como, o
+aprimoramento da eficiência da alocação dos recursos com medidas de racionalização dos gastos públicos, melhoria nas técnicas de gestão e controle, ampliação dos
+mecanismos de transparência.
+
+      A Lei de Responsabilidade Fiscal (Lei Complementar nº 101, de 4 de maio de 2000) faz a correlação entre gestão fiscal responsável e a definição de metas de
+receitas e despesas:
+
+      Art. 1º. [...]
+
+      § 1°A responsabilidade na gestão fiscal pressupõe a ação planejada e transparente, em que se previnem riscos e corrigem desvios capazes de afetar o
+      equilíbrio das contas públicas, mediante o cumprimento de metas de resultados entre receitas e despesas e a obediência a limites e condições no que
+      tange a renúncia de receita, geração de despesas com pessoal, da seguridade social e outras, dívidas consolidada e mobiliária, operações de crédito, inclusive
+      por antecipação de receita, concessão de garantia e inscrição em Restos a Pagar.
+
+      De acordo com o § 1o do art. 4º da Lei de Responsabilidade Fiscal (LRF), integrará o Projeto de Lei de Diretrizes Orçamentárias o Anexo de Metas Fiscais
+(AMF) em que serão estabelecidas metas anuais, em valores correntes e constantes, relativas a receitas, despesas, resultado nominal e primário e montante da
+dívida pública, para o exercício a que se referirem e para os dois seguintes. Também comporá o Anexo de Metas Fiscais o Demonstrativo da Avaliação do
+Cumprimento das Metas Fiscais do Exercício Anterior.
+
+       As metas fiscais representam os resultados a serem alcançados para variáveis fiscais (Resultados Primário e Nominal) visando atingir os objetivos desejados
+quanto à trajetória de endividamento público no médio prazo. Pelo princípio da gestão fiscal responsável, as metas representam a conexão entre o planejamento,
+a elaboração e a execução do orçamento. Esses parâmetros indicam os rumos da condução da política fiscal para os próximos exercícios e servem de indicadores
+para a promoção da limitação de empenho e de movimentação financeira.
+
+            De maneira geral o resultado primário é apurado com base em:
+
+       a) Receitas não financeiras ou primárias – Correspondem ao total da receita arrecadada, deduzidas as seguintes:
+
+              a) ganhos obtidos em aplicações financeiras;
+
+              b) ingressos decorrentes de operações de crédito;
+
+              c) recebimentos decorrentes de empréstimos concedidos pelo governo;
+
+              d) receitas decorrentes de alienações de bens, como as relativas à privatização de empresas estatais.
+
+    Os recursos arrecadados em exercício anterior e que tenham gerado superávit financeiro, quando utilizados como fonte para abertura de créditos
+orçamentários adicionais são classificados como fonte financeira.
+
+       b) Despesas não financeiras ou primárias – Despesa total, deduzidas aquelas com:
+
+              a) amortização, juros e outros encargos da dívida interna e externa;
+
+              b) aquisição de títulos de capital já integralizado;
+
+              c) concessão de empréstimos com retorno garantido.
+
+    O Manual de Demonstrativos Fiscais (MDF), publicado pela Secretaria do Tesouro Nacional (STN), estabelece orientações emanadas a todos os entes federados,
+para, entre outros aspectos, padronizar os demonstrativos fiscais nos três níveis de governo. Assim, a estrutura dos demonstrativos segue o modelo e regras
+estabelecido pela STN no referido Manual. A fim de dar cumprimento ao preceito da LRF, o Anexo de Metas Fiscais deve ser composto pelos seguintes
+demonstrativos:
+
+   a) Demonstrativo 1 – Metas Anuais;
+
+   b) Demonstrativo 2 – Avaliação do Cumprimento das Metas Fiscais do Exercício Anterior;
+
+   c) Demonstrativo 3 – Metas Fiscais Atuais Comparadas com as Metas Fiscais Fixadas nos Três Exercícios Anteriores;
+
+   d) Demonstrativo 4 – Evolução do Patrimônio Líquido;
+
+   e) Demonstrativo 5 – Origem e Aplicação dos Recursos Obtidos com a Alienação de Ativos;
+
+   f) Demonstrativo 6 – Avaliação da Situação Financeira e Atuarial do RPPS;
+
+   g) Demonstrativo 7 – Estimativa e Compensação da Renúncia de Receita;
+
+   h) Demonstrativo 8 – Margem de Expansão das Despesas Obrigatórias de Caráter Continuado.
+
+    O cumprimento das metas deve ser acompanhado com base nas informações divulgadas no Relatório Resumido da Execução Orçamentária e no Relatório de
+Gestão Fiscal. A seguir são apresentados em cumprimento às exigências da LRF os principais parâmetros e a metodologia de cálculo utilizada para as projeções
+dos fluxos de receitas e despesas, bem como a projeção da do estoque de dívida e disponibilidades.
+
+4. PROJEÇÕES DE RECEITAS E DESPESAS (CRITÉRIO ACIMA DA LINHA)
+     As receitas e despesas estimadas para o triênio 2022 a 2024 levaram em consideração a grade de parâmetros macroeconômicos e os fluxos projetados pela
+ Secretaria Municipal de Fazenda (SMF), pela Secretaria do Tesouro Nacional (STN) e Secretaria de Fazenda do Estado do Rio de Janeiro (Sefaz/RJ).Também foram
+ considerados os esforços que estão sendo realizados pela administração fazendária na modernização da cobrança dos tributos, as diversas ações de combate à
+ inadimplência, além da possibilidade de captação de recursos voluntários vindos da União e do Estado, acrescentando-se, também, nos cálculos, as receitas
+ provenientes dos convênios e das operações de crédito. Vale ressaltar também o esforço da SMF em criar e consolidar mecanismos para o controle e a gestão da
+ divida pública municipal, pois sem as informações projetadas dos elementos que influenciam a dinâmica da dívida seria inviável estabelecer metas fiscais
+ consistentes.
+
+             4.1 Receitas que impactam os resultados fiscais
+
+     O resultado primário é impactado do lado das receitas pela apuração e projeção das receitas primárias. A seguir apresentam-se os critérios utilizados para
+ projeção das principais receitas primárias:
+
+     a) Imposto Predial e Territorial Urbano (IPTU) – Representou, em média, considerando o período de 2018 a 2020 cerca de 13% do total das receitas primárias.
+ Ao analisar a variação realizada nos últimos anos constata-se uma queda no ano passado (possivelmente em virtude da pandemia): -3,85%. Já o ano anterior
+ observara um aumento de +8,4%. Para o ano de 2021, as receitas foram projetadas com base no desempenho do imposto até o momento: um aumento de 8,18%
+ em relação a 2020. Vale dizer que o IPTU no município tem a maior parte da arrecadação no primeiro mês do ano, devido ao alto pagamento da cota única.
+
+     b) Imposto de Transmissão de Bens Imóveis (ITBI) – Representando em média cerca de 2% do total das receitas primárias no período de 2018 a 2020. As
+variações realizadas de 2020/2019 (-0,7%) e 2019/2018 (-6,0%). Para 2020 a projeção inicial de queda de 11% foi revisada para uma aumento de 53%, em função
+do aquecimento do setor imobiliário. A arrecadação dos dois primeiros meses do ano foi +60%. Para 2022 a 2024, a projeção foi de aumento apenas inflacionário
+considerando que os baixos resultados de 2019 e 2020 serão recuperados em 2021.
+
+    c) Imposto sobre Serviços de Qualquer Natureza (ISS) - No período de 2018 a 2020 representou, em média, cerca de 9% do total das receitas primárias. A
+variação realizada de 2020/2019 (-9,1%) e 2019/2018 (+5,13%) mostram o impacto da pandemia no ano passado. Para esse ano, a estimativa, com base no
+desempenho atual do imposto é de +20%. Em que pese alguma paralisação imposta pela crise sanitária, estima-se que ela não seja duradoura e este ano ainda
+será arrecadado as parcelas diferidas de 2020. Para os próximos anos, a projeção de crescimento é PIB+Inflação.
+
+   d) Taxas - Representou em média no período de 2018 a 2019 cerca de 2% do total das receitas primárias. Considerando a variação realizada de
+2020/2019(+0,6%) e 2019/2018 (+15,7%), paara 2021, a projeção foi baseada no desempenho atual de -6,2%. Para os próximos anos, a previsão é de aumento
+apenas inflacionário.
+
+                                                                                           R$ (milhões)
+                                                   Exercício       IPTU             ITBI       ISS      TAXAS
+                                                     2021              451,6          89,7     332,4       56,0
+                                                     2022              468,4          93,0     360,4       58,1
+                                                     2023              482,1          95,7     376,2       59,8
+                                                     2024              495,1          98,3     394,1       61,4
+                                                      Fonte: SMF, 28/09/2021
+
+         e) Receitas de Contribuições Previdenciárias - De 2018 a 2020 representou cerca de 4,5% do total das receitas primárias sendo a principal receita dessa
+rubrica, representando no ano de 2019 cerca de 68% das receitas de contribuições. Para 2021, a previsão é a mesma da LOA e para os próximos, uma evolução
+junto com a despesa de pessoal.
+
+     f) Imposto sobre a Renda Retido na Fonte (IRRF) – De 2018 a 2020 representou, em média, cerca de 3% do total das receitas primárias. Esta receita guarda
+ correlação com a despesa com pessoal, pois a maior parte dos valores retidos são decorrentes da incidência sobre a folha de pagamento. A variação realizada de
+ 2020/2019 (+28,14%) e 2019/2018 (+14,9%) é explicada em parte pelo reflexo direto da elevação da folha de pagamento do período, não obstante nem todos os
+ salários estarem acima da faixa de isenção. Além disso, houve melhoria nos processos operacionais de retenção e aumento da incidência sobre outras despesas com
+ fornecedores. Considerando as projeções das despesas com pessoal e o bom resultado no início do ano, receitas de 2021 foram previstas com um aumento de 11,1%.
+ Para o triênio 2022 a 2024 optou-se por projeção conservadora no sentido de seguir os mesmos percentuais de incremento da despesa com pessoal.
+
+      g) Receita patrimonial (exceto aplicação financeira) – As receitas patrimoniais, exceto aplicação financeira, representam 1% do total das receitas primárias.
+ Para 2021, mantém-se a previsão orçamentária de queda de 19,6%. Para o triênio 2022 a 2024 foi considerado o efeito da inflação projetada. Vale ressaltar que na previsão
+ das receitas patrimoniais são excluídas as receitas decorrentes de remuneração de depósitos bancários, pois de acordo com a metodologia de apuração de resultados
+ fiscais são receitas financeiras que não impactam o resultado primário, porém afetam o resultado nominal.
+
+     h) Cota-Parte FPM – A transferência do Fundo de Participação dos Municípios (FPM) representou em média (2018 a 2020) 2% do total das receitas primárias,
+ já deduzida a contribuição para o Fundeb (20%). Da variação realizada dos últimos anos não se pode estabelecer uma tendência, mas considerando que a base
+ de cálculo das transferências são o Imposto de Renda e o Imposto sobre Produtos Industrializados (IPI) projeta-se um cenário futuro de aumento dessa receita
+ em função do aumento da atividade econômica nacional. Para os próximos anos, de 2022 a 2024, projetou-se um aumento considerando a soma do crescimento
+ do PIB + inflação.
+
+     i) Cota-Parte ICMS – A transferência do Imposto sobre Circulação de Mercadorias e Serviços (ICMS) representa em média (2018 a 2020) 11,8% do total das
+ receitas primárias, já deduzida a contribuição para o Fundeb (20%). A variação realizada em 2019/2018 (+7,2%) e 2020/2019 (+18,6%) pode refletir o reflexo do
+ auxílio emergencial. Para esse ano, a projeção é de aumento de 8,4% segundo informação da SEFAZ/RJ (consultada em 26/03). Para 2022 a 2024, o aumento
+ previsto é de PIB + Inflação.
+
+     j) Cota-Parte IPVA – No período de 2018 a 2020 a transferência do Imposto sobre Veículos Automotores (IPVA) representou, em média, cerca de 2,1% do total
+das receitas primárias, já deduzida a contribuição para o Fundeb (20%). Ao observar a variação realizada de 2020/2019 (-4,3%) e 2019/2018 (+1,3%), constata-se
+uma estabilidade dos valores. A previsão para 2020 é uma queda de -0,2%, conforme o desempenho até agora. Para os próximos, reposição inflacionária.
+
+    k) Compensações Financeiras (Royalties Petróleo) – Nos últimos anos a receita de royalties petróleo, incluindo parcela da participação especial definida na
+forma da legislação, tem se consolidada como a principal fonte de financiamento das receitas do município. A transferência das receitas de royalties petróleo
+representou em 2020 cerca de 37% do total das receitas primárias. A instabilidade dessa receita, no entanto, é fator de preocupação, como no ano passado em
+que uma queda no preço do barril derrubou as receitas e – se não houvesse uma recuperação a partir do 2º semestre, poderia haver frustração de receita. Em que
+pese tudo isso, o ano começou com o valores elevados do barril e do dólar e uma estimativa de continuidade na produção. O que, pelo atual cenário, leva a uma
+
+estimativa de um excesso de arrecadação de R$ 600 milhões, levando a um aumento de 42% em relação a receita de 2020. Para o triênio 2022-2024, a estimativa
+é feita com base nos valores passados pela ANP.
+
+             4.2.    Despesas primárias
+
+        No caso das principais despesas primárias os critérios foram os seguintes:
+
+     a) Pessoal – A despesa com pessoal é em geral impactada por novas contratações, crescimento vegetativo da folha, reposição de servidores aposentados e
+ correções salariais. A variação realizada de 2020/2019 (+8,3%) e 2019/2018 (+5,1%), bem como a projeção para 2021 (+11%) mostram uma tendência de aumento.
+ Para o ano de 2022, foi projetado aumento de até 8,46%, sendo 3,5% de crescimento vegetativo, 4,12% de reposição pela inflação e o restante para novos
+ concursos. Para 2023 e 2024, projetou-se aumento de 7,65% e 9,81% respectivamente.
+
+     b) Outras Despesas Correntes - Representa em média (2018 a 2020) 38% do total das despesas primárias. A variações realizadas de 2019/2018 (+2,9%),
+ 2020/2019 (+59,6%) mostram o efeito dos gastos para o combate ao novo coronavírus. No triênio 2022 a 2024, as despesas com combate à pandemia serão
+ reduzidas para os próximos anos.
+
+     c) Investimentos – No que tange aos investimentos, previu-se cerca de R$ 389 milhões para 2022 incluindo o plano de retomada econômica.
+
+Demonstrativo 1 – Metas Anuais
+
+        De acordo com a Lei de Responsabilidade Fiscal devem ser estabelecidas metas anuais, em valores correntes e constantes, relativas a receitas, despesas,
+resultados nominal e primário e montante da dívida pública, para o exercício a que se referirem (2022) e para os dois seguintes (2023 e 2024). Para elaboração das
+projeções foram considerados:
+
+    a) receitas e despesas primárias sob a ótica de caixa (vide tópico 3);
+    b) juros ativos (receitas de aplicações financeiras) e juros passivos (incidentes sobre a DCL) por competência;
+    c) estoque da dívida consolidada;
+    d) haveres financeiros (disponibilidades de caixa, aplicações financeiras e demais haveres financeiros).
+        O demonstrativo a seguir apresenta as metas fiscais para o triênio 2022 a 2024, sendo as metas dos dois últimos anos apenas indicativas da política fiscal
+do Município. Para obtenção dos valores constantes foi utilizado o IPCA. O Quadro demonstra a consolidação da capacidade de geração de superávits primários pelo
+município gerando um estoque de dívida líquida negativa o que indica que os haveres financeiros continuarão maiores do que o valor projetado para a dívida
+consolidada. A expectativa é de que a receita primária diminua gradualmente, principalmente em função das quedas de transferências de receitas da União
+originárias da compensação financeira da exploração do petróleo (vide tópico que trata das projeções das receitas primárias). Outro fator de risco é o
+desdobramento da crise do covid-19: os desdobramentos futuros ainda não têm bases suficientes para projeções acuradas.
+
+         A Dívida Pública Consolidada é impactada principalmente pelos ingressos da operação de crédito contratada para execução do “Programa Pró-Sustentável
+da Região Oceânica (CAF)”, cujo auge da execução financeira foi em 2019 e 2020. No entanto, percebe- se uma trajetória de diminuição da dívida consolidada em
+função de amortização de dívidas contratuais junto às Instituições Financeiras Internas e Externas, terminado o prazo de carência. A partir de 2021 projeta-se uma
+diminuição da dívida consolidada principalmente pelo fato de não haver previsão de desembolsos de operações de crédito e continuidade do pagamento de
+dívidas.
+
+                                                                                     ANEXO DE METAS FISCAIS
+                                                                                         METAS ANUAIS
+                                                                                             2022
+
+      AMF - Demonstrativo 1 (LRF, art. 4º, § 1º)                                                                                                                                               R$ milhares
+                        ESPECIFICAÇÃO                                  2022                                                 2023                                               2024
+                                                        Valor          Valor              % RCL            Valor            Valor            % RCL            Valor            Valor             % RCL
+                                                       Corrente      Constante           (a / RCL)        Corrente        Constante         (b / RCL)        Corrente        Constante          (c / RCL)
+                                                          (a)                              x 100             (b)                              x 100             (c)                               x 100
+      Receita Total                                      4.355.424         4.183.081         105,8%        4.306.904         4.006.277          105,4%        4.198.326         3.791.532           103,3%
+
+      Receitas Primárias (I)                             4.140.944         3.977.088         100,6%        4.111.587         3.824.594          100,6%        4.085.385         3.689.534           100,5%
+
+      Despesa Total                                      4.046.124         3.886.020             98,3%     4.131.428         3.843.050          101,1%        4.085.549         3.689.682           100,5%
+
+      Despesas Primárias (II)                            3.995.784         3.837.672             97,1%     4.094.858         3.809.032          100,2%        4.069.331         3.675.036           100,1%
+
+      Resultado Primário (III) = (I – II)                  145.160             139.416            3,5%           16.729            15.561            0,4%           16.054            14.498            0,4%
+
+      Resultado Nominal                                    171.018             164.251            4,2%           47.457            44.145            1,2%           51.491            46.502            1,3%
+
+      Dívida Pública Consolidada                           814.714             782.476           19,8%       779.715              725.290           19,1%       677.552              611.901           16,7%
+
+      Dívida Consolidada Líquida                        -1.001.514         -961.884              -24,3%    -1.209.532       -1.125.106              -29,6%    -1.425.794       -1.287.642              -35,1%
+
+      Receitas Primárias advindas de PPP (IV)              -               -                 -               -                -                 -               -                -                 -
+
+      Despesas Primárias geradas por PPP (V)               -               -                 -               -                -                 -               -                -                 -
+
+      Impacto do saldo das PPP (VI) = (IV-V)               -               -                 -               -                -                 -               -                -                 -
+
+      FONTE: Secretaria Municipal da Fazenda.Data da emissão 28/09/2021.
+      Valores constantes calculados considerando o IPCA. Resultados fiscais calculados acima da linha sob o critério de caixa para as receitas e despesas e de
+competência para os juros nominais. Por se tratar de informações sob a ótica de caixa os valores da receita total e da despesa total. As projeções consideraram os
+conceitos estabelecidos no Manual dos Demonstrativos Fiscais da STN.
+
+Demonstrativo 2
+Avaliação do Cumprimento das Metas Fiscais do Exercício Anterior
+
+Inciso I do § 2º do artigo 4º da Lei de Responsabilidade Fiscal (LRF)
+
+        O Demonstrativo informa as metas (em valores e em percentual da RCL) para receita (total e primária), despesa (total e primária), resultados primário e
+nominal, dívida pública consolidada e dívida consolidada líquida, para o segundo ano anterior ao ano de referência da LDO (por exemplo, para a LDO feita em 2020
+e se referindo ao exercício de 2021, será avaliado o cumprimento das metas relativas ao exercício de 2019, que é o exercício anterior ao da elaboração da LDO).
+Segundo o Manual dos Demonstrativos Fiscais alguns fatores, tais como o cenário macroeconômico, o desempenho das empresas estatais, as taxas de câmbio e de
+inflação, devem ser motivo de explanação a respeito dos resultados obtidos.
+
+        Assim, a principal finalidade é a de estabelecer uma comparação entre as metas fixadas e o resultado obtido no exercício financeiro de 2020, incluindo
+análise dos fatores determinantes para o alcance ou não dos valores estabelecidos como metas. Para o cálculo do Resultado Primário utiliza-se a metodologia
+acima da linha, isto é, o confronto das Receitas Primárias (I) menos as Despesas Primárias (II) e indica se os níveis de gastos orçamentários são compatíveis com sua
+arrecadação, ou seja, se as Receitas Primárias são capazes de suportar as Despesas Primárias.
+
+         No caso do resultado nominal vale ressaltar que até o exercício de 2017, este era calculado pela diferença entre o saldo da dívida fiscal líquida em 31 de
+dezembro de determinado ano em relação ao apurado em 31 de dezembro do ano anterior. A partir do exercício de 2018 (com possibilidade de adiamento para
+2019, conforme regra do MDF), a meta do resultado nominal passou a ser definida e acompanhada pela metodologia acima da linha. Pela metodologia acima da
+linha, o resultado nominal é obtido a partir do resultado primário por meio da soma da conta de juros (juros ativos menos juros passivos), que não são apresentados
+no quadro exigido pela STN, mas está implícito na diferença entre o resultado nominal e o primário.
+
+        O valor da Dívida Pública Consolidada corresponde ao total apurado:
+
+        a) das obrigações financeiras do ente da Federação, inclusive as decorrentes de emissão de títulos, assumidas em virtude de leis, contratos,
+        convênios ou tratados;
+
+       b) das obrigações financeiras do ente da Federação, assumidas em virtude da realização de operações de crédito para amortização em prazo superior a
+       doze meses, ou que, embora de prazo inferior a doze meses, tenham constado como receitas no orçamento;
+       c) dos precatórios judiciais emitidos a partir de 5 de maio de 2000 e não pagos durante a execução do orçamento em que houverem sido incluídos.
+
+        Já a Dívida Consolidada Líquida (DCL) segundo a LRF corresponde à dívida pública consolidada, deduzidos os valores que compreendem o ativo disponível
+e os haveres financeiros, líquidos dos Restos a Pagar Processados.
+
+       Importante ressaltar que, quando projetado, em 2019, as metas para 2020 não previam o advento da pandemia de covid-19. O surgimento dessa
+pandemia levou o Brasil ao estado de calamidade pública, o que dispensou o cumprimento de obrigações da LRF para observar as metas fiscais previstas. Assim,
+por mais que a receita tenha ficada próxima ao estimado, a despesa foi maior, o que levou a um resultado abaixo do esperado.
+
+      AMF - DEMONSTRATIVO 2 – AVALIAÇÃO DO CUMPRIMENTO DAS METAS FISCAIS DO EXERCÍCIO ANTERIOR
+                                           LEI DE DIRETRIZES ORÇAMENTÁRIAS
+                                                 ANEXO DE METAS FISCAIS
+           AVALIAÇÃO DO CUMPRIMENTO DAS METAS FISCAIS DO EXERCÍCIO ANTERIOR
+                                                          2022
+AMF - Demonstrativo 2 (LRF, art. 4º, §2º, inciso I)                                                                 R$ milhares
+                                                                                                             Variação
+                                    Metas Previstas em                  Metas Realizadas
+                                          2020                             em 2020
+          ESPECIFICAÇÃO                                        % RCL                          % RCL      Valor          %
+
+                                             (a)                              (b)                      (c) = (b-a) (c/a) x 100
+
+Receita Total                                      3.543.487 113,2%            3.489.441 104,6%           -54.046           -1,5
+
+Receitas Primárias (I)                             3.336.543 106,6%            3.381.038 101,4%            44.495            1,3
+
+Despesa Total                                      3.091.944    98,8%          3.437.534 103,1%          345.590            11,2
+
+Despesas Primárias (II)                            2.929.132    93,6%          3.387.750 101,6%          458.618            15,7
+
+Resultado Primário (III) = (I–II)                   407.411     13,0%                -6.712    -0,2%     -414.123        -101,6
+
+Resultado Nominal                                   427.724     13,7%                  -876     0,0%     -428.600        -100,2
+
+Dívida Pública Consolidada                          913.992     29,2%               914.201    27,4%          209            0,0
+
+Dívida Consolidada Líquida                         (760.388)   -24,3%          (321.493)       -9,6%     438.895          -57,7
+FONTE: Anexo de Metas Fiscais da LDO 2020 e Relatório Resumido da Execução Orçamentária - Dezembro/2020
+
+Demonstrativo 3
+Metas Fiscais Atuais Comparadas com as Metas Fiscais Fixadas nos Três Exercícios Anteriores
+
+§ 2o, inciso II, do art. 4o da Lei de Responsabilidade Fiscal (LRF)
+
+        O objetivo do Demonstrativo é dar transparência às informações sobre as metas fiscais dos três exercícios anteriores e dos três exercícios seguintes, para
+uma melhor avaliação da política fiscal do ente federativo, de forma a permitir a análise da política fiscal em uma linha do tempo, combinando execução passada
+e perspectivas futuras, validando a consistência dessas últimas. A fim de gerar maior consistência e subsídio às análises, os valores devem ser demonstrados a
+preços correntes e constantes. Vale ressaltar que para avaliação de consistência deve-se levar em consideração que a partir de 2018 a metodologia de projeção
+considerou os valores sob a ótica de caixa, enquanto nos anos anteriores o critério é o de despesa liquidada.
+
+        Os critérios utilizados para as projeções do triênio 2022 a 2024 estão apresentados e detalhados no tópico “Metodologia de Cálculo”, em cumprimento à
+Lei de Responsabilidade Fiscal que a obrigatoriedade de os demonstrativos de metas serem instruídos com a memória e metodologia de cálculo, objetivando
+demonstrar como tais valores foram obtidos.
+
+       AMF/Tabela 3 - DEMONSTRATIVO 3 – METAS FISCAIS ATUAIS COMPARADAS COM AS FIXADAS NOS TRÊS EXERCÍCIOS ANTERIORES
+                                                         LEI DE DIRETRIZES ORÇAMENTÁRIAS
+                                                              ANEXO DE METAS FISCAIS
+                                METAS FISCAIS ATUAIS COMPARADAS COM AS FIXADAS NOS TRÊS EXERCÍCIOS ANTERIORES
+                                                                        2022
+AMF – Demonstrativo 3 (LRF, art.4º, §2º, inciso II)                                                                                      R$ milhares
+                                                                            VALORES A PREÇOS CORRENTES
+       ESPECIFICAÇÃO                 2019           2020   %        2021        %        2022      %   2023                    %         2024        %
+
+Receita Total                         3.284.491   3.543.487    7,9% 4.242.161       19,7%   4.355.424     2,7%   4.306.904     -1,1%   4.198.326     -2,5%
+
+Receitas Primárias (I)                3.148.400   3.336.543    6,0% 4.123.089       23,6%   4.140.944     0,4%   4.111.587     -0,7%   4.085.385     -0,6%
+
+Despesa Total                         3.044.244   3.091.944    1,6% 3.953.404       27,9%   4.046.124     2,3%   4.131.428     2,1%    4.085.549     -1,1%
+
+Despesas Primárias (II)               2.912.233   2.929.132    0,6% 3.899.904       33,1%   3.995.784     2,5%   4.094.858     2,5%    4.069.331     -0,6%
+
+Resultado Primário (III) = (I - II)    236.167     407.411    72,5%    223.185     -45,2%    145.160    -35,0%      16.729    -88,5%      16.054     -4,0%
+
+Resultado Nominal                      240.806     427.724    77,6%    201.955     -52,8%    171.018    -15,3%      47.457    -72,3%      51.491       8,5%
+
+Dívida Pública Consolidada            1.071.204    913.992    -14,7%   838.995      -8,2%    814.714     -2,9%     779.715     -4,3%     677.552    -13,1%
+
+Dívida Consolidada Líquida             271.074    (760.388) -380,5%    (670.602)   -11,8% (1.001.514)    49,3% (1.209.532)    20,8% (1.425.794)     17,9%
+
+Obs. Valores dos resultados primário e nominal de 2021 a 2024 calculados pelo critério acima da linha. Informações de 2019 a 2020 constantes do AMF - LDO.
+
+                                                                               VALORES A PREÇOS CONSTANTES
+         ESPECIFICAÇÃO                  2019       2020        %        2021       %         2022      %           2023        %         2024        %
+
+Receita Total                         3.695.606   3.842.912    4,0%    4.242.161    10,4%   4.183.081    -1,4%    4.006.277    -4,2%    3.791.532    -5,4%
+
+Receitas Primárias (I)                3.542.482   3.618.481    2,1%    4.123.089    13,9%   3.977.088    -3,5%    3.824.594    -3,8%    3.689.534    -3,5%
+
+Despesa Total                         3.425.288   3.353.213    -2,1%   3.953.404    17,9%   3.886.020    -1,7%    3.843.050    -1,1%    3.689.682    -4,0%
+
+Despesas Primárias (II)               3.276.753   3.176.644    -3,1%   3.899.904    22,8%   3.837.672    -1,6%    3.809.032    -0,7%    3.675.036    -3,5%
+
+Resultado Primário (III) = (I - II)    265.728     441.837    66,3%     223.185    -49,5%     139.416 -37,5%         15.561 -88,8%         14.498    -6,8%
+
+Resultado Nominal                      270.947     463.867    71,2%     201.955    -56,5%     164.251 -18,7%         44.145 -73,1%         46.502      5,3%
+
+Dívida Pública Consolidada            1.205.285    991.224    -17,8%    838.995    -15,4%     782.476    -6,7%      725.290    -7,3%     611.901 -15,6%
+
+Dívida Consolidada Líquida             305.004    (824.641) -370,4%    -670.602    -18,7%    -961.884    43,4%   -1.125.106   17,0% (1.287.642)     14,4%
+
+FONTE: Secretaria Municipal da Fazenda.Data da emissão 28/09/2021. Valores deflacionados pelo IPCA.
+
+Demonstrativo 4
+Evolução do Patrimônio Líquido
+§ 2o, inciso III, do art. 4o da Lei de Responsabilidade Fiscal (LRF)
+
+O Patrimônio Líquido (PL) reflete, em termos monetários, a situação patrimonial líquida do Município, ou seja, representa a diferença entre o “Ativo Real” e o
+“Passivo Real”. Integram o patrimônio líquido: patrimônio/capital social, reservas, resultados acumulados e outros desdobramentos do saldo patrimonial.
+Conforme o Manual de Contabilidade Aplicado ao Setor Público (MCASP), as contas que compõem o PL são as seguintes:
+
+a) Patrimônio/Capital Social: Compreende o patrimônio social das autarquias, fundações e fundos e o capital social das demais entidades da
+administração indireta.
+
+b) Reservas: Compreende os valores acrescidos ao patrimônio que não transitaram pelo resultado, as reservas constituídas com parcelas do lucro líquido
+das entidades para finalidades específicas e as demais reservas, inclusive aquelas que terão seus saldos realizados por terem sido extintas pela legislação.
+
+c) Resultados Acumulados: Compreende o saldo remanescente dos lucros ou prejuízos líquidos das empresas e os superávits ou déficits acumulados da
+administração direta, autarquias, fundações e fundos. A conta Ajustes de Exercícios Anteriores, que registra os efeitos da mudança de critério contábil ou da
+retificação de erro imputável a exercício anterior que não possam ser atribuídos a fatos subsequentes, integra a conta Resultados Acumulados.
+
+                                        EVOLUÇÃO DO PATRIMÔNIO LÍQUIDO
+                                                     2022
+
+AMF - Demonstrativo 4 (LRF, art.4º, §2º, inciso III)                                       R$ milhares
+      PATRIMÔNIO LÍQUIDO                        2018       %        2019        %       2020             %
+Patrimônio/Capital/AFAC                            6.087    0,5%       6.259     0,5%       6.259         0,3%
+Reservas                                           3.941    0,3%       3.951     0,3%       3.951         0,2%
+Resultado Acumulado                            1.234.904   99,2%   1.305.691    99,2%   2.202.390        99,5%
+TOTAL                                          1.244.932   100%     1.315.900   100%     2.212.599       100%
+
+Demonstrativo 7
+ESTIMATIVA E COMPENSAÇÃO DA RENÚNCIA DE RECEITA
+
+§ 2o, inciso V, do art. 4o da Lei de Responsabilidade Fiscal (LRF)
+
+O Demonstrativo tem por objetivo dar transparência às renúncias de receita previstas no projeto de LDO, para uma melhor avaliação do seu impacto nas metas
+fiscais fixadas, além de orientar a elaboração da LOA considerando o montante das renúncias fiscais concedidas. Apesar de esse demonstrativo ter por base legal o
+art. 4°, § 2°, inciso V, da Lei de Responsabilidade Fiscal – LRF, ele visa a dar transparência também ao cumprimento dos requisitos exigidos para a concessão ou
+ampliação de benefícios de natureza tributária dispostos no art. 14 da LRF, que estabelece:
+
+             A concessão ou ampliação de incentivo ou benefício de natureza tributária da qual decorra renúncia de receita deve estar acompanhada de estimativa
+             do impacto orçamentário-financeiro no exercício em que deva iniciar sua vigência e nos dois seguintes, atender ao disposto na LDO e a pelo menos
+             uma das seguintes condições:
+
+             I – demonstração pelo proponente de que a renúncia foi considerada na estimativa de receita da lei orçamentária, na forma do art. 12, e de que não
+             afetará as metas fiscais previstas no anexo próprio da LDO;
+
+             II – estar acompanhada de medidas de compensação, no período mencionado no caput, por meio do aumento de receita, proveniente da elevação de
+             alíquotas, ampliação da base de cálculo, majoração ou criação de tributo ou contribuição.
+
+Para realização das estimativas de renúncia foram realizadas pesquisas no sistema de controle do crédito tributário (E-cidade) relativas ao ano base de 2019 e
+projetado os valores para o triênio 2022 a 2024. Utilizou-se como índice de atualização o IPCA conforme tabela de parâmetros macroeconômicos.
+
+                              ESTIMATIVA E COMPENSAÇÃO DA RENÚNCIA DE RECEITA (Inciso V do § 2º do art. 4º da LC nº 101, de 04/05/2000)
+                                                                           2022
+
+                                                                                                                          RENÚNCIA DE RECEITA PREVISTA
+TRIBUTO      MODALIDADE              SETORES / PROGRAMAS /BENEFICIÁRIOS           BASE LEGAL                 2022            2023           2024           2025       COMPENSAÇÃO
+
+                                                                                                                                                                  Renúncia já considerada
+                                                                                                                                                                  na estimativa da receita,
+                                                                            Lei nº 3.182/15: arts. 61
+                                                                                                                                                                  nos termos do art. 14,
+                                                                            e 62 e Decreto nº
+ISSQN     Incentivo Fiscal.       Lei de Incentivo à Cultura.                                         2.000.000,00   2.000.000,00   2.000.000,00   2.000.000,00   inciso I, da LC nº 101, de
+                                                                            12.747/17: arts. 18 e
+                                                                                                                                                                  04/05/2000, não
+                                                                            19.
+                                                                                                                                                                  afetando as metas de
+                                                                                                                                                                  resultados fiscais.
+
+                                                                                                                                                                  Renúncia já considerada
+                                                                                                                                                                  na estimativa da receita,
+                                                                            Lei nº 3.182/15: arts. 61
+                                                                                                                                                                  nos termos do art. 14,
+                                                                            e 62 e Decreto nº
+IPTU      Incentivo Fiscal.       Lei de Incentivo à Cultura.                                         1.000.000,00   1.000.000,00   1.000.000,00   1.000.000,00   inciso I, da LC nº 101, de
+                                                                            12.747/17: arts. 18 e
+                                                                                                                                                                  04/05/2000, não
+                                                                            19.
+                                                                                                                                                                  afetando as metas de
+                                                                                                                                                                  resultados fiscais.
+
+                                                                                                                                                                  Renúncia já considerada
+                                                                                                                                                                  na estimativa da receita,
+                                                                            Lei nº 2.597/08: arts.
+                                                                                                                                                                  nos termos do art. 14,
+                                                                            73-B e 73-C e Resolução
+ISSQN     Incentivo Fiscal.       Sorteio de prêmios do Programa NitNota.                           365.800,38       380.359,23     392.720,91     404.502,54     inciso I, da LC nº 101, de
+                                                                            SMF nº 18/2017: art.
+                                                                                                                                                                  04/05/2000, não
+                                                                            7º.
+                                                                                                                                                                  afetando as metas de
+                                                                                                                                                                  resultados fiscais.
+
+                                                                                                                                                                  Renúncia já considerada
+                                                                                                                                                                  na estimativa da receita,
+                                                                                                                                                                  nos termos do art. 14,
+          Redução de              Setores de produção cinematográfica e
+ISSQN                                                                       Lei nº 3.360/18.         12.236,10       12.723,09      13.136,59      13.530,69      inciso I, da LC nº 101, de
+          alíquotas.              audiovisual.
+                                                                                                                                                                  04/05/2000, não
+                                                                                                                                                                  afetando as metas de
+                                                                                                                                                                  resultados fiscais.
+
+                                                                                                                                                                            Renúncia já considerada
+                                                                                                                                                                            na estimativa da receita,
+                                                                                  Lei nº 2.597/08: arts.                                                                    nos termos do art. 14,
+                                 Concessão de créditos do IPTU originários de
+IPTU       Incentivo Fiscal.                                                      73-B e 73-C e Decreto      125.634,09     130.634,32      134.879,94      138.926,34      inciso I, da LC nº 101, de
+                                 parcelas do ISSQN do Programa NitNota.
+                                                                                  nº 12.634/2017.                                                                           04/05/2000, não
+                                                                                                                                                                            afetando as metas de
+                                                                                                                                                                            resultados fiscais.
+
+                                                                                                                                                                            Renúncia já considerada
+                                                                                                                                                                            na estimativa da receita,
+                                                                                                                                                                            nos termos do art. 14,
+           Isenção de caráter    Artesãos com exercício de atividade no
+TACE                                                                              Lei nº 3.351/18.           383.747,29     399.020,44      411.988,60      424.348,26      inciso I, da LC nº 101, de
+           não geral.            município.
+                                                                                                                                                                            04/05/2000, não
+                                                                                                                                                                            afetando as metas de
+                                                                                                                                                                            resultados fiscais.
+                                                                                                                                                                            Renúncia já considerada
+                                                                                                                                                                            na estimativa da receita,
+                                                                                                                                                                            nos termos do art. 14,
+           Isenção de caráter
+IPTU                             Entidades religiosas e filantrópicas             Lei nº 3.412/2019          2.330.173,61   2.422.914,52    2.501.659,24    2.576.709,02    inciso I, da LC nº 101, de
+           não geral
+                                                                                                                                                                            04/05/2000, não
+                                                                                                                                                                            afetando as metas de
+                                                                                                                                                                            resultados fiscais.
+                                                                                                                                                                            Renúncia já considerada
+                                                                                                                                                                            na estimativa da receita,
+                                                                                                                                                                            nos termos do art. 14,
+           Alteração da Base                                                                                                                                                inciso I, da LC nº 101, de
+IPTU                             Lojas com jiraus                                 PL 195/2019                1.853.784,44   1.927.565,06    1.990.210,92    2.049.917,25    04/05/2000, não
+           de Cálculo
+                                                                                                                                                                            afetando as metas de
+                                                                                                                                                                            resultados fiscais.
+
+TOTAL                                                                                                        8.071.375,91    8.273.216,66    8.444.596,20   8.607.934,10
+FONTE: SMF – Setembro/2021
+
+Notas:
+1) No cálculo da renúncia foram considerados os seguintes percentuais da expectativa do IPCA (Fonte BC - Focus): 2021 (7,58%), 2022 (3,98%), 2023 (3,25%) e 2024 (3,00%).
+2) As projeções de renúncia de receita referentes a leis aprovadas há mais de 3 (três) anos não estão incluídas neste demonstrativo, na forma do art. 14 da LC nº 101/2000, por já estarem
+incorporadas às séries históricas de arrecadação.
+
+3) A renúncia de receita relativa à remissão e anistia da TACE para artesãos (Lei nº 3.351/18) não foi relacionada neste demonstrativo por não se tratar de renúncia de receita existente, estando a
+estimativa de receita da TACE líquida de qualquer efeito futuro decorrente desta lei.
+
+4) A renúncia de receita de ISS e de IPTU referente à Lei de Incentivo à Cultura foi calculada com base no valor máximo de desconto indicado pela Secretária Municipal de Fazenda no REGULAMENTO
+DO PROCESSO DE SELEÇÃO SMC/FAN Nº 01/2021, conforme previsão no art. 62 da Lei nº 3.182, de 18 de dezembro de 2015, sendo certo que o atingimento destes valores depende da captação de
+recursos por incentivadores e que, via de regra, os limites não são atingidos.
+
+Legendas:
+
+    1)   ISSQN - Imposto sobre Serviços de Qualquer Natureza; IPTU - Imposto sobre a Propriedade Predial e Territorial Urbana; TACE - Taxa de Autorização para Exercício de Atividades Econômicas
+         em caráter eventual ou ambulante.
+    2)   (*) valores majorados em 30% além do reajuste da expectativa do IPCA, em razão das campanhas que serão implementadas pela Administração visando fomentar a utilização do referido
+         benefício.
+
+Demonstrativo 8
+Margem de Expansão das Despesas Obrigatórias de Caráter Continuado
+
+§ 2o, inciso V, do art. 4o da Lei de Responsabilidade Fiscal (LRF)
+
+A estimativa da margem de expansão das despesas obrigatórias de caráter continuado é um requisito introduzido pela Lei Complementar nº 101, de 4 de maio de
+2000, Lei de Responsabilidade Fiscal (LRF).
+
+O aumento permanente de receita é definido como aquele proveniente da elevação de alíquotas, ampliação da base de cálculo ou majoração ou criação de tributo
+ou contribuição (§ 3o do art. 17 da LRF). Além de medidas específicas descritas a seguir, considera-se como ampliação da base de cálculo nesta estimativa a
+expectativa de crescimento real da atividade econômica, mensurada pela expansão marginal da arrecadação a ser provocada isoladamente pelo efeito quantidade
+sobre a arrecadação ajustada e devidamente atualizada pelos efeitos legislação.
+
+AMF/Tabela 8 - DEMONSTRATIVO 8 – MARGEM DE EXPANSÃO DAS DESPESAS OBRIGATÓRIAS DE CARÁTER CONTINUA
+
+                      PREFEITURA MUNICIPAL DE NITERÓI
+                      LEI DE DIRETRIZES ORÇAMENTÁRIAS
+                           ANEXO DE METAS FISCAIS
+   MARGEM DE EXPANSÃO DAS DESPESAS OBRIGATÓRIAS DE CARÁTER CONTINUADO
+                                     2022
+
+AMF - Demonstrativo 8 (LRF, art. 4°, § 2°, inciso V)                                            R$ 1,00
+                         EVENTOS                                     Valor Previsto para 2022
+Aumento Permanente da Receita                                                           155.298.058,57
+(-) Transferências Constitucionais
+(-) Transferências ao FUNDEB
+Saldo Final do Aumento Permanente de Receita (I)                                        155.298.058,57
+Redução Permanente de Despesa (II)
+Margem Bruta (III) = (I+II)                                                             155.298.058,57
+Saldo Utilizado da Margem Bruta (IV)                                                    154.495.481,28
+  Novas DOCC                                                                            154.495.481,28
+  Novas DOCC geradas por PPP
+Margem Líquida de Expansão de DOCC (V) = (III-IV)                                           802.577,29
+FONTE: Secretaria Municipal da Fazenda.Data da emissão 28/09/2021.
+
+                                                     Anexo de Riscos Fiscais
+                             (Art. 4º, § 3º, da Lei Complementar no 101, de 4 de maio de 2000)
+
+       O § 3º do art. 4º da LRF, transcrito a seguir, determina o que a LDO deverá conter no Anexo de Riscos Fiscais (ARF).
+
+        “§ 3o A lei de diretrizes orçamentárias conterá Anexo de Riscos Fiscais, onde serão avaliados os passivos contingentes e outros riscos capazes de afetar as contas públicas,
+        informando as providências a serem tomadas, caso se concretizem.”
+
+       O ARF seguiu as regras, estrutura, conceitos e premissas estabelecidas no Manual dos Demonstrativos Fiscais (MDF) publicado pela
+Secretaria do Tesouro Nacional (STN) que assim define riscos fiscais:
+
+        Riscos Fiscais podem ser conceituados como a possibilidade da ocorrência de eventos que venham a impactar negativamente as contas públicas, eventos estes resultantes
+        da realização das ações previstas no programa de trabalho para o exercício ou decorrentes das metas de resultados, correspondendo, assim, aos riscos provenientes das
+        obrigações financeiras do governo.
+
+        É importante ressaltar que riscos repetitivos deixam de ser riscos, devendo ser tratadas no âmbito do planejamento, ou seja, devem ser incluídas como ações na Lei de
+        Diretrizes Orçamentárias e na Lei Orçamentária Anual do ente federativo.
+
+        Existe um passivo judicializado relacionado com a Carteira Habitacional da Niterói Prev – ex-IBASM e a utilização de recursos do FGTS para
+realizar empreendimentos habitacionais tendo o Niterói Prev na condição de Agente Promotor e Financeiro, com risco assumido pela Prefeitura. O valor
+original da dívida corrigido pelo IGP-M foi lançado no demonstrativo.
+
+       Acerca dos efeitos do julgamento da Ação Direta de Inconstitucionalidade (ADI) nº 4917, referente à lei 12.734/2012, sobre os repasses de
+ royalties e participação especial ao Município de Niterói, é extremamente difícil antecipar o teor da decisão do STF sobre a matéria. Em um cenário em
+ que ocorra o reconhecimento da constitucionalidade da lei, pairam dúvidas sobre a modulação dos efeitos da decisão, mormente quanto ao início do
+ escalonamento das alíquotas
+
+                            DEMONSTRATIVO DE RISCOS FISCAIS E PROVIDÊNCIAS
+                                                 2022
+
+ARF (LRF, art 4º, § 3º)                                                                                 R$ milhares
+                   PASSIVOS CONTINGENTES                                         PROVIDÊNCIAS
+                    Descrição                        Valor                     Descrição                  Valor
+Passivo judicializado relacionado com a Carteira
+Habitacional da Niterói Prev – ex-IBASM e a
+utilização de recursos do FGTS para realizar
+empreendimentos habitacionais tendo o                              Busca do equilíbrio orçamentário a
+                                                       72.188,48                                          72.188,48
+NiteróiPrev na condição de Agente Promotor                         partir do cancelamento de dotações
+eFinanceiro, com risco assumido pela
+Prefeitura.Informações da Secretaria do Tesouro
+Nacional.
+                                                      20.000,00 Busca do equilíbrio orçamentário a        20.000,00
+Dívidas em Processo de Reconhecimento
+                                                                partir do cancelamento de dotações
+TOTAL                                                92.188,48 TOTAL                                     92.188,48
+
+            DEMAIS RISCOS FISCAIS PASSIVOS                                       PROVIDÊNCIAS
+                Descrição                  Valor                               Descrição                  Valor
+Frustração de Arrecadação com Royalties do                      Fundo de Equalização da Receita           29.000,00
+Petróleo, devido a efeitos do julgamento da ADI    236.000,00   Superávit Financeiro Ano Anterior        103.500,00
+4917                                                            Cancelamento de dotações                 103.500,00
+                                                                Superávit Financeiro Ano Anterior         50.000,00
+Impostos arrecadados a menor                       100.000,00
+                                                                Cancelamento de dotações                  50.000,00
+TOTAL                                                336.000,00 TOTAL                                   336.000,00

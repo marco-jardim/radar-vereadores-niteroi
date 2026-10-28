@@ -1,0 +1,190 @@
+É "* Câmara Municipal de Niterói
+pç Comissão Permanente de Urbanismo, Obras, Serviços
+BR Públicos, Transportes e Trânsito - CUOSPTT
+PROJETO DE LEINº ' /2026
+DISPÕE SOBRE A
+OBRIGATORIEDADE DE
+E APRESENTAÇÃO E
+ARQUIVAMENTO DE PROJETOS
+ESTRUTURAIS NOS PROCESSOS
+DE LICENCIAMENTO E DE
+REGULARIZAÇÃO DE OBRAS E
+EDIFICAÇÕES NO MUNICÍPIO DE
+NITERÓL INSTITUI CADASTRO
+DIGITAL DE PROJETOS
+ESTRUTURAIS E DÁ OUTRAS
+PROVIDÊNCIAS.
+Art. 1º - Esta Lei dispõe sobre a obrigatoriedade de apresentação e arquivamento de
+projetos estruturais nos processos administrativos de licenciamento e de
+legalização /regularização de obras e edificações no Município de Niterói, para fins de
+segurança estrutural, fiscalização urbanística, preservação documental e prevenção de
+riscos.
+$1º - Para os fins desta Lei, a obrigatoriedade prevista no caput aplica-se, no mínimo, às
+seguintes hipóteses, quando envolverem sistema estrutural, fundações ou elementos
+resistentes da edificação: o
+I - construção de edificação nova;
+ - acréscimos, ampliações ou elevação de pavimentos;
+IN - reforma, reparo, reforço ou alteração que implique intervenção estrutural, inclusive
+| abertura ou fechamento de vãos em elementos estruturais, remoção ou substituição de
+
+a Comissão Permanente de Urbanismo, Obras, Serviços |
+RR Públicos, Transportes e Trânsito - CUOSPTT
+elementos resistentes, mudanças de layout com impacto em cargas, contenções e muros de
+arrimo;
+IV - reconstrução ou legalização de edificação executada sem o respectivo projeto |
+estrutural arquivado no Município;
+V - demais obras ou serviços que, por sua natureza, sejam definidos em regulamento
+como potencialmente capazes de comprometer a segurança estrutural.
+82º - Ficam excluídas da obrigatoriedade desta Lei as intervenções estritamente de
+manutenção e conservação que não impliquem intervenção estrutural, conforme critérios
+objetivos a serem definidos em regulamento, sem prejuízo de o órgão licenciador exigir
+documentação técnica complementar quando identificar risco, inconsistência ou dúvida
+razoável.
+Art. 2º - Para os fins desta Lei, consideram-se:
+I — projeto estrutural: conjunto de peças gráficas e documentos técnicos elaborados por
+profissional legalmente habilitado, em conformidade com as normas técnicas e a legislação
+profissional aplicável;
+Il - intervenção estrutural: qualquer modificação que altere, corte, remova, substitua,
+reforce ou acrescente elementos estruturais, fundações, contenções ou condições de
+carregamento que impactem a segurança da estrutura;
+HJ - Cadastro Municipal de Projetos Estruturais (CMPE): acervo digital sob custódia do
+Poder Executivo destinado ao arquivamento, preservação, indexação e disponibilização
+controlada dos projetos estruturais de edificações situadas no Município.
+Art. 3º - Os processos administrativos referidos nesta Lei deverão ser instruídos com
+projeto estrutural e documentação correlata em meio digital, contendo:
+I —- peças gráficas necessárias à compreensão e execução;
+H - comprovação de responsabilidade técnica;
+
+acl Câmara Municipal de Niterói
+
+e End pe Comissão Permanente de Urbanismo, Obras, Serviços
+
+o Públicos, Transportes e Trânsito - CUOSPTT
+HI - documentação técnica compatível com a tipologia estrutural, conforme normas
+
+profissionais aplicáveis.
+Art, 4º - O projeto estrutural e a documentação correlata serão arquivados pelo Poder
+Executivo no CMPE, com indexação mínima que permita sua localização e gestão por:
+I - endereço e identificação cadastral do imóvel;
+IH - número do processo administrativo;
+HI - autoria e responsabilidade técnica;
+IV - tipologia da estrutura;
+V - data e versão do documento.
+81º - A apresentação e o arquivamento deverão observar requisitos de integridade,
+autenticidade, rastreabilidade e segurança da informação, admitindo-se assinatura
+eletrônica nos termos da legislação federal aplicável.
+82º - Para documentos digitalizados destinados a produzir efeitos perante a
+Administração Pública municipal, o regulamento poderá exigir padrões de digitalização,
+assinatura digital e metadados mínimos, em consonância com a disciplina federal de
+digitalização e gestão documental.
+Art. 5º - O acesso aos projetos arquivados no CMPE observará os seguintes critérios:
+I - acesso integral, para fins de fiscalização e controle, aos órgãos e agentes públicos com
+necessidade funcional, observadas as regras internas de credenciamento e registro de
+acesso;
+Il - acesso integral ao proprietário/possuidor do imóvel e ao responsável técnico,
+mediante autenticação e comprovação de legitimidade;
+
+rc Câmara Municipal de Niterói
+
+a e a Comissão Permanente de Urbanismo, Obras, Serviços
+
+A Públicos, Transportes e Trânsito - CUOSPTT
+NI - acesso ao síndico /administrador, quando se tratar de condomínio edilício e houver
+necessidade comprovada para manutenção, segurança, reformas ou atendimento a
+exigências públicas.
+Art. 6º - O Poder Executivo poderá instituir programa progressivo de complementação do
+Cadastro Municipal de Projetos Estruturais, mediante cooperação voluntária de
+construtoras, incorporadoras, síndicos e proprietários, priorizando edificações de maior
+risco potencial.
+Art. 7º - O descumprimento das obrigações previstas nesta Lei sujeitará o infrator às
+medidas e sanções previstas na legislação urbanístico-edilícia municipal vigente,
+assegurados o contraditório e a ampla defesa.
+Art. 8º - A apresentação e arquivamento dos projetos estruturais não implicam análise
+técnica estrutural pelo Município, permanecendo integralmente atribuída ao profissional
+habilitado a responsabilidade técnica pelo projeto.
+Art, 9 - O disposto nesta Lei não altera as atribuições do sistema CONFEA/CREA e CAU
+nem interfere na regulamentação federal do exercício profissional.
+Art. 10º - O Poder Executivo regulamentará esta Lei no prazo de 90 (noventa) dias,
+dispondo, no mínimo, sobre: padrões de entrega, formatos digitais, metadados,
+autenticação, níveis de acesso, procedimentos de sigilo/ocultação, termos de
+responsabilidade, rotinas de preservação e fluxos operacionais.
+Art. 11º - As despesas decorrentes da execução desta Lei correrão à conta de dotações
+orçamentárias próprias, observadas as normas orçamentárias e financeiras aplicáveis, |
+podendo ser suplementadas, se necessário.
+
+Av. Amaral Peixoto, 625 - Centro - Niterói - RJ - CEP,: 24.023-900 HC
+
+“Rm Câmara Municipal de Niterói |
+à nei pe Comissão Permanente de Urbanismo, Obras, Serviços
+AGR Públicos, Transportes e Trânsito - CUOSPTT
+Art. 12º - Esta Lei entra em vigor na data de sua publicação.
+Niterói, 25 d raso de 2025
+Leandro Portugal arques
+Presidente da CUOSPTT ice>Presidente da CUOSPTT
+2987 E a 4 e—— x A an - “
+A A A — NO.
+Beto da Pyp Dr. Emmanuel Rocha
+Membrd/ Membro
+| | “Do |
+il Allanbyra 7
+
+“Em Câmara Municipal de Niterói
+| E e aid Comissão Permanente de Urbanismo, Obras, Serviços
+SA Públicos, Transportes e Trânsito - CUOSPTT
+JUSTIFICATIVA
+A presente proposição tem por objetivo instituir, com segurança jurídica e padroni-
+zação técnica, a obrigatoriedade de apresentação e arquivamento dos projetos estruturais
+nos processos de licenciamento e de regularização de obras no Município de Niterói, for-
+mando base documental permanente para fiscalização, manutenção, reformas, prevenção
+de colapsos e responsabilização técnica.
+
+A iniciativa encontra amparo na competência constitucional do Município para le-
+gislar sobre assuntos de interesse local, suplementar a legislação federal e estadual no que
+couber e promover o adequado ordenamento territorial, mediante planejamento e controle
+do uso, parcelamento e ocupação do solo urbano. Nesse âmbito, é legítima a definição de
+requisitos documentais e procedimentais em processos urbanístico-edilícios, sobretudo
+quando diretamente relacionados à segurança coletiva e à mitigação de riscos.
+
+No plano infraconstitucional, o Estatuto da Cidade orienta a política urbana no sen-
+tido de prevenir a exposição da população a riscos de desastres. O arquivamento dos pro-
+jetos estruturais atende a essa diretriz de forma objetiva, pois permite a correta compreen-
+são do comportamento estrutural das edificações, reduz a ocorrência de reformas e inter-
+venções sem base técnica adequada e amplia a capacidade do Poder Público e dos respon-
+sáveis técnicos de avaliar reforços, alterações e mudanças de uso com base em documenta-
+ção confiável e verificável. |
+
+A proposição também atua de forma complementar à legislação urbanística muni-
+cipal vigente, ao disciplinar especificamente a documentação estrutural como elemento
+essencial à segurança das edificações. Com isso, busca-se evitar a dispersão de informa-
+ções técnicas sensíveis e consolidá-las em cadastro técnico municipal, com maior rastreabi-
+lidade, organização e utilidade para fins de fiscalização e prevenção.
+
+Av. Amaral Peixoto, 625 - Centro - Niterói - RJ - CEP.: 24,023-900 HC
+
+É o - Câmara Municipal de Niterói
+Em od e Comissão Permanente de Urbanismo, Obras, Serviços o
+RÃ Públicos, Transportes e Trânsito - CUOSPTT
+
+Importa destacar que o projeto não cria aprovação estrutural paralela nem transfere
+ao Município atribuições próprias de projeto, cálculo ou execução estrutural. Ao contrário,
+a proposta reforça a responsabilização dos profissionais e executores da obra, mediante
+exigência de comprovação de responsabilidade técnica (ART/RRT), fortalecendo a rastre-
+abilidade técnica e a proteção ao interesse público.
+
+A proposição ainda organiza o regime de acesso aos projetos arquivados em con-
+formidade com a Lei de Acesso à Informação (LAT), a Lei Geral de Proteção de Dados Pes-
+soais (LGPD) e a Lei de Direitos Autorais, de modo a compatibilizar transparência admi-
+nistrativa, proteção de dados pessoais e resguardo da autoria técnica. Também se harmo-
+niza com normas de segurança e gestão de risco, inclusive no campo da segurança contra
+incêndio, e com a diretriz de modernização administrativa já adotada pelo Município por
+meio da tramitação digital de processos.
+
+Por fim, o texto prevê regulamentação do arquivo digital com critérios de integri-
+dade, indexação, rastreabilidade e preservação documental, em consonância com a legisla-
+ção federal aplicável e com boas práticas arquivísticas, de modo a assegurar valor probató-
+rio, confiabilidade e adequada gestão do acervo técnico municipal.
+
+Dessa forma, a presente proposição fortalece a prevenção de riscos, padroniza pro-
+cedimentos, qualifica a fiscalização urbanística e aprimora a gestão documental das obras
+no Município de Niterói, sem extrapolar a competência municipal de controle urbano e
+proteção da coletividade.

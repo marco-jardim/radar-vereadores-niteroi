@@ -1,0 +1,41 @@
+                                                                                                                         QUADRO VII - a - Fator de Planejamento (Fp)
+                                                                                                                                                                                             Regiões de Planejamento (Plano Diretor)
+                                                                                                                                              P.Baias                         Norte                           Oceanica                     Pendotiba                     Leste
+                                                               Zona de Uso
+                                                                                                                                       Uso           Uso Não          Uso             Uso Não          Uso          Uso Não         Uso           Uso Não         Uso         Uso Não
+                                                                                                                                    Residencial     Residencial    Residencial       Residencial    Residencial    Residencial   Residencial     Residencial   Residencial   Residencial
+
+                                            Zona de Centralidade Metropolitana - ZCM                                                    0,2             0,3           N.A.             N.A.            N.A.              N.A.      N.A.            N.A.          N.A.            N.A.
+ESTRUTURAÇÃO
+
+                                                Zona de Estruturação Urbana - ZEU                                                       0,2             0,3            0,1              0,2            0,3               0,2        0,3                0,2        0,3            0,2
+
+                                                      Zona de Centralidade - ZC                                                         0,2             0,3            0,1               0             0,3               0,2        0,3                0,2        0,3            0,2
+
+                                                      Zona de Uso Misto - ZUM                                                           0,3             0,3            0,2              0,2            0,3               0,3        0,3                0,3        0,3            0,2
+
+                                                Zona Residencial Multifamiliar - ZRM                                                     1               1             0,8              0,8             1                 1            1               1          0,8            0,8
+
+                                                 Zona Residencial Ambiental - ZRA                                                        1               1              1                1              1                 1            1               1           1              1
+QUALIFICAÇÃO
+
+                                           Zona de Desenvolvimento Economico - ZDE                                                      0,5             0,5            0,5              0,5            0,5               0,5        0,5                0,5        0,5            0,5
+
+                                                  Zona de Centralidade Local - ZCL                                                      0,2              0             0,2               0             0,2                0         0,2                0          0,2             0
+
+                                 Zona de Centralidade de Especial Interesse Social - ZC ZEIS                                             0               0              0                0              0                 0            0               0           0              0
+
+                                              Zona de Especial Interesse Social - ZEIS                                                   0               0              0                0              0                 0            0               0           0              0
+
+                                                  Zona Resiencial Unifamiliar - ZRU                                                     1,5             1,5            1,5              1,5            1,5               1,5        1,5                1,5        1,5            1,5
+
+                                           Zona de desenvolvimento Sustentável - ZDS                                                    0,8             0,8            0,8              0,8            0,8               0,8        0,8                0,8        0,8            0,8
+PRESERVAÇÃO
+
+                                               Zona de Conservação Ambiental - ZCA                                                       1               1              1                1              1                 1            1               1           1              1
+
+                                               Zona de Preservação Ambiental - ZPA                                                     N.A.             N.A.          N.A.             N.A.            N.A.              N.A.      N.A.            N.A.          N.A.            N.A.
+
+                                   Zona Especial de Proteção do Ambiente Cultural - ZEPAC                                               0,5             0,5            0,8              0,8             2                 2            2               2           2              2
+
+               NOTA: O Fator de Planejamento (Fp) deve ser utilizado para o cálculo do valor da contrapartida financeira correspondente à outorga Onerosa do Direito de Construir.

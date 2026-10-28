@@ -1,0 +1,121 @@
+		Niterói,          de abril de 2022
+MENSAGEM EXECUTIVA Nº   07 /2022
+
+Excelentíssimo Senhor Presidente,
+
+	Tenho a honra de submeter à deliberação dessa Egrégia Casa o incluso Projeto de Lei que cria os cargos do Quadro de Direção e Assessoramento em Tecnologia da Informação e Comunicação, institui os cargos de provimento em comissão de Assessor Especial 1 e de Assessor Especial 2, e estabelece percentual mínimo de servidores efetivos em cargos em comissão, e dá outras providências.
+De início, anote-se que o Município de Niterói desenvolve ações e iniciativas relacionadas à Tecnologia da Informação e Comunicação desde 2013. Por esse motivo, Niterói ficou em 9º lugar geral no Ranking Connected Smart Cities 2021.  No eixo “Governança”, Niterói ocupou o 1º lugar geral. Esse ranqueamento, desenvolvido pela Urban Systems, mapeia todas as cidades com mais de 50 mil habitantes (677 cidades) com o objetivo de definir aquelas com maior potencial de desenvolvimento em tecnologia do Brasil.
+Esse esforço de gestão está materializado no Plano Plurianual (2022-2025), o qual estabelece um investimento de mais de R$ 63 milhões reais nos próximos 4 anos na área.
+A Estratégia de Transformação Digital conduzida tem o objetivo de aproximar o poder público do cidadão e desenvolver soluções com foco no usuário dos serviços.
+Com base nesta Estratégia de Transformação Digital, a Município de Niterói iniciou em 2021 a implantação do processo eletrônico administrativo. Também foi lançado o Portal de Serviços ao Cidadão, com catálogo de cerca de 300 serviços.
+A digitalização promove a necessidade de proteção de dados e da criação de uma política de segurança e gestão de riscos. Os dados da Prefeitura devem ser protegidos, por exemplo, contra os recorrentes “sequestro de dados” (ransomware), realizados por organizações criminosas, que atingem grandes corporações e governos em todo o mundo.
+
+Além disso, o Poder Público precisa promover a constante atualização dos seus protocolos e processos internos à Lei Geral de Proteção de Dados (LGPD).
+Com o advento da pandemia, o crescimento da demanda por profissionais de TI tem impactado fortemente nos salários neste ramo de atuação. Como esperado, a alta demanda dificulta a contratação e retenção de bons profissionais em TI, fenômeno percebido no setor público que disputa talentos com o setor privado.
+A Secretaria de Planejamento, Orçamento e Modernização da Gestão, a Secretaria Municipal de Fazenda e a Secretaria Municipal de Administração promoveram estudo para identificar o quantitativo de profissionais de TICs necessários para suprir as demandas dos órgãos municipais, bem como efetuou-se profunda pesquisa sobre o valor dos vencimentos dos diferentes profissionais de TICs no setor público. Cita-se a iniciativa Participa + Brasil, do Governo Federal, que serviu como um dos diversos paradigmas analisados.
+A criação de cargos de direção, assessoramento e chefia para a área de TI da Prefeitura apresenta uma série de vantagens, como: (i) flexibilidade na contratação aderente à agilidade do mercado de tecnologia e às inovações constantes da área; (ii) possibilidade de atendimento à rigorosas exigências e requisitos técnicos no recrutamento, conforme regulamentação, permitindo a contratação de profissionais com conhecimentos atualizados em tecnologia da informação; (iii) economicidade frente às contratações efetivadas por meio de processos licitatórios, pois os bônus, lucros e despesas indiretas das empresas que prestam serviços de consultoria são suprimidos pela contratação direta do pessoal estritamente necessário; (iv) fortalecimento da governança da área de Tecnologia da Informação com o aprimoramento do planejamento, gestão e fiscalização de contratos de tecnologia.
+ 	Nesse contexto, a presente iniciativa institui os cargos de Assessoria Especial. Busca-se, com a medida, aumentar a qualidade da tomada de decisão por parte da alta direção.
+O objetivo do ramo de assessoramento difere-se daquele da linha gerencial. Enquanto a linha gerencial visa preencher o caminho entre a estratégia desenvolvida pela alta liderança até o nível tático e operacional, a linha de assessoramento atua exclusivamente na órbita da alta administração, auxiliando a formulação das políticas públicas.
+Este modelo é o mais adequado para organizações complexas, dado que permite maior capacidade de gerenciamento em temas que exigem alto grau de especialização. Não se pode confundir a figura do gestor com a figura de Hércules, capaz de sozinho enfrentar qualquer desafio.
+A complexidade e amplitude do setor público exigem a participação de uma equipe multiprofissional e interdisciplinar no desenho das diretrizes e estratégias ideais para as políticas públicas.
+Finalmente, repousa na proposta a alvissareira regulamentação do percentual mínimo de servidores efetivos que devem ocupar cargos em comissão da administração pública.
+A regra do princípio da eficiência, ao garantir a profissionalização do corpo de colaboradores, em sentido amplo, que atuam no serviço público do Município de Niterói. O princípio da continuidade dos serviços públicos também é fortalecido, com a utilização do corpo permanente da administração pública em cargos estratégicos, que permitem a consolidação da memória institucional e do conhecimento adquirido pelas experiências pretéritas.
+Em arremate, a medida obedece ao mandamento contido no art. 37, inciso V, da Constituição da República Federativa do Brasil, de 05 de outubro de 1988.
+Assim, ante o exposto, esperando contar mais uma vez com o apoio e o respaldo dessa Egrégia Casa, reitero a Vossas Excelências os protestos de estima e consideração.
+
+AXEL GRAEL
+
+Excelentíssimo Senhor
+Vereador Milton Carlos Lopes
+M.D. Presidente da Câmara Municipal de Niterói
+PROJETO DE LEI Nº                 /2022
+
+Cria os cargos do Quadro de Direção e Assessoramento em Tecnologia da Informação e Comunicação, institui os cargos de provimento em comissão de Assessor Especial 1 e de Assessor Especial 2, e estabelece percentual mínimo de servidores efetivos em cargos em comissão, e dá outras providências.
+
+A CÂMARA MUNICIPAL DE NITERÓI DECRETA E EU SANCIONO E PROMULGO A SEGUINTE LEI:
+
+CAPÍTULO I
+DAS DISPOSIÇÕES PRELIMINARES
+
+Art. 1º Esta Lei dispõe sobre a:
+I – instituição do Quadro de Direção e Assessoramento em Tecnologia da Informação e Comunicação;
+II – instituição dos cargos comissionados de Assessor Especial 1 e de Assessor Especial 2; e
+III – fixação de percentual mínimo de cargos em comissão preenchidos por servidores de carreira, consoante disposto o art. 37, inciso V, da Constituição da República Federativa do Brasil de 05 de outubro de 1988.
+
+CAPÍTULO II
+DO QUADRO DE DIREÇÃO E ASSESSORAMENTO EM TECNOLOGIA DA INFORMAÇÃO E COMUNICAÇÃO
+
+Art. 2º Fica instituído o Quadro de Direção e Assessoramento em Tecnologias da Informação e Comunicação - QDATIC, a partir da criação de cargos de provimento comissionado.
+Art. 3º O Quadro de Direção e Assessoramento em Tecnologias da Informação e Comunicação contará com a composição relacionada no Anexo I desta Lei.
+§ 1º O regime de trabalho dos ocupantes dos cargos comissionados criados por esta Lei será de 40 horas semanais.
+§ 2º Os profissionais ocupantes dos cargos ora criados farão jus aos adicionais de tempo integral e de trabalho técnico-científico, conforme disposto nos artigos 152 e 154 da Lei Municipal nº 531 de 18 de janeiro de 1985.
+Art. 4º Os cargos ficam distribuídos na administração conforme Anexo II desta Lei.
+Art. 5º Para tomar posse nos cargos do Quadro de Profissionais de Tecnologias da Informação e Comunicação - QDATIC, os profissionais deverão apresentar documentos comprobatórios dos requisitos necessários ao exercício das funções à Secretaria Municipal de Administração, de acordo com regulamentação a ser publicada pelo Poder Executivo.
+Art. 6º As diretrizes, regras e a estrutura de governança relacionadas à gestão do Quadro de Direção e Assessoramento em Tecnologias da Informação e Comunicação (QDATIC) serão regulamentadas por meio de Decreto.
+
+CAPÍTULO III
+DOS NOVOS CARGOS DE ASSESSORIA
+
+Art. 7º Ficam instituídos, sem aumento de despesa, os cargos comissionados de Assessor Especial 1 (AE1) e de Assessor Especial 2 (AE2), que receberão remuneração conforme Anexo III.
+Parágrafo único. Os cargos criados no “caput” deste artigo se destinam à função de assessoramento da alta administração e da linha gerencial da estrutura da administração pública.
+Art. 8º O Poder Executivo fica autorizado a realizar a instituição e alocação dos cargos previstos no art. 10 desta lei na administração pública direta, mediante a transformação dos quantitativos e da distribuição dos cargos criados nesta lei e dos atuais cargos em comissão e funções de confiança, observados os respectivos valores de remuneração.
+
+CAPÍTULO IV
+DO PERCENTUAL MÍNIMO DE SERVIDORES EFETIVOS NOS CARGOS EM COMISSÃO
+
+Art. 9º Nas nomeações para os cargos em comissão das administrações direta e indireta regidas pelo regime estatutário, serão reservados, no mínimo, 15% (quinze por cento) do total dos cargos em comissão existentes na administração pública municipal direta e indireta a servidores de carreira.
+
+CAPÍTULO V
+DAS DISPOSIÇÕES FINAIS
+
+Art. 10 Ficam criados os cargos em comissão conforme Anexo IV.
+
+Art. 11 O Poder Executivo realizará as compensações para reequilíbrio dos quantitativos de cargos de provimento em comissão, mediante as transformações que se fizerem necessárias, de forma a atender a proporcionalidade e razoabilidade, em prazo não superior a três meses desde a publicação desta Lei.
+Art. 12 Esta Lei entrará em vigor na data de sua publicação.
+
+ANEXO I
+Cargo | Atribuições envolvidas | Vencimento | Símbolo | Nº de cargos
+Gestor de TICs | O profissional atuará em nível estratégico com todos os órgãos da prefeitura com o objetivo de promover o alinhamento entre a estratégia dos órgãos e a política de TICs da prefeitura; formular e coordenar a implementação, o monitoramento e a avaliação da política de TICs dos órgãos; zelar pela institucionalização de boas práticas de TICs e pelo desenvolvimento das equipes de TICs; e liderar a execução da política de TICs da Prefeitura. | R$ 6.250,00 | TIC1 | 1
+Gestor Setorial de TICs | O profissional atuará em nível estratégico no setor alocado com o objetivo de promover o alinhamento entre a estratégia do órgão e a política de TICs; formular e coordenar a implementação, o monitoramento e a avaliação da política de TICs do órgão; zelar pela institucionalização de boas práticas de TICs e pelo desenvolvimento das equipes de TICs. | R$ 4.230,77 | TIC2 | 5
+Gerente de TICs | O profissional atuará em nível gerencial no desenvolvimento e implementação de políticas, projetos, processos e rotinas relacionadas à conectividade, segurança da informação, infraestrutura de TI, desenvolvimento de sistemas, computação em nuvem, gestão e fiscalização de contratos de TICs,  adequação do órgão às regras da Lei Geral de Proteção de Dados, definição de metas e indicadores de desempenho relacionados à política de TICs e demais atividades de gestão relacionadas à política TICs municipal. | R$ 3.461,74 | TIC3 | 8
+Assessor 1 de TICs | O profissional atuará como especialista no desenvolvimento e implementação de políticas, projetos, processos e rotinas relacionadas à conectividade, segurança da informação, infraestrutura de TI, desenvolvimento de sistemas; computação em nuvem, gestão e fiscalização de contratos de TICs,  adequação do órgão às regras da Lei Geral de Proteção de Dados, definição de metas e indicadores de desempenho relacionados à política de TICs e demais atividades de gestão relacionadas à política TICs municipal. | R$ 2.692,31 | TIC4 | 17
+Assessor 2 de TICs | O profissional atuará em nível de assessoria operacional no desenvolvimento e implementação de políticas, projetos, processos e rotinas relacionadas à conectividade, segurança da informação, infraestrutura de TI, desenvolvimento de sistemas; computação em nuvem, gestão e fiscalização de contratos de TICs,  adequação do órgão às regras da Lei Geral de Proteção de Dados, definição de metas e indicadores de desempenho relacionados à política de TICs e demais atividades de gestão relacionadas à política TICs municipal. | R$ 1.538,46 | TIC5 | 15
+Total | 46
+
+ANEXO II:
+
+Órgão | Gestor | Gestor Setorial | Gerente | Analista | Assessor | Total
+Secretaria Municipal de Fazenda | 0 | 1 | 2 | 4 | 3 | 10
+Secretaria de Planejamento, Orçamento e Modernização da Gestão | 1 | 2 | 3 | 6 | 6 | 18
+Secretaria Municipal de Administração | 0 | 1 | 2 | 5 | 5 | 13
+Secretaria Executiva | 0 | 1 | 1 | 2 | 1 | 5
+TOTAL | 1 | 5 | 8 | 17 | 15 | 46
+
+ANEXO III:
+
+Símbolo | Valor padrão
+AE-01 | R$ 3.550,00
+AE-02 | R$ 2.100,00
+ANEXO IV:
+
+Órgão | SS | CG | DG
+Administração Regional do Engenho do Mato | 1 |  |
+Administração Regional Fonseca |  |  | 1
+Controladoria Geral do Município |  |  | 2
+Coordenadoria de Políticas e Direitos das Mulheres |  |  | 1
+Coordenadoria de Trabalho e Renda |  | 1 | 2
+Coordenadoria Niterói de Bicicleta |  |  | 2
+Escritório de Gestão de Projetos |  |  | 1
+Secretaria Executiva | 3 |  | 5
+Secretaria Municipal de Ciência, Tecnologia e Inovação | 1 |  |
+Secretaria Municipal de Culturas | 1 |  |
+Secretaria Municipal de Desenvolvimento Econômico | 1 |  | 1
+--- Secretaria Municipal de Esporte e Lazer | -- | -- | -- 2
+Secretaria Municipal de Governo | 1 |  | 3
+Secretaria Municipal de Habitação e Regularização Fundiária |  |  | 1
+Secretaria Municipal de Participação Social | 1 |  | 2
+Secretaria Municipal de Planejamento, Orçamento e Modernização da Gestão |  |  | 4
+Secretaria Municipal de Relações Institucionais | 1 |  | 1
+Secretaria Municipal de Assistência Social e Economia Solidária | 1 |  |
+Secretaria Municipal de Administração |  |  | 1
+TOTAL | 11 | 1 | 29

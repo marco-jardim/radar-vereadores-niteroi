@@ -1,0 +1,49 @@
+             ESTIMATIVA DE IMPACTO ORÇAMENTÁRIO DA REVISÃO ANUAL
+
+                     (a) Estimativa de        (b) Estimativa de    Impacto Orçmentário
+Instituição
+                      Liquidação sem    Liquidação com reajuste de     (c) = (b)-(a)
+PMN                      325.462.450,77            329.213.733,63        3.751.282,86
+NITTRANS                   6.778.525,27               6.856.654,60           78.129,34
+NITPREV          4.433.283,29                                     4.484.381,35                         51.098,06
+NITPREV-PREV    12.816.998,42                                    12.964.727,24                         147.728,83
+NITPREV-FIN    363.561.079,58                                   367.751.487,55                       4.190.407,97
+NELTUR           9.204.887,00                                     9.310.982,60                         106.095,60
+FMAS             4.230.497,76                                     4.279.258,51                          48.760,75
+FMS            370.073.318,89                                   374.338.786,98                       4.265.468,09
+FME            420.009.495,22                                   424.850.528,08                       4.841.032,87
+FAN             12.552.897,68                                    12.697.582,48                         144.684,80
+CLIN           164.512.638,91                                   166.408.812,93                       1.896.174,02
+Total        1.693.636.072,77                                 1.713.156.935,95                      19.520.863,18
+
+  ESTIMATIVA DO IMPACTO ORÇAMENTÁRIO NO ANO EM QUE ENTRAR EM VIGOR E
+                         NOS DOIS SUBSEQUENTES
+
+Instituição                         2021                                     2022                             2023
+PMN                         3.751.282,86                             3.872.824,43                     3.998.303,94
+NITTRANS                       78.129,34                                80.660,73                        83.274,14
+NITPREV                        51.098,06                                52.753,64                        54.462,85
+NITPREV-PREV                  147.728,83                               152.515,24                       157.456,74
+NITPREV-FIN                 4.190.407,97                            4.326.177,18                     4.466.345,33
+NELTUR                        106.095,60                               109.533,10                       113.081,97
+FMAS                           48.760,75                                50.340,60                        51.971,64
+FMS                         4.265.468,09                            4.403.669,26                     4.546.348,14
+FME                         4.841.032,87                            4.997.882,33                     5.159.813,72
+FAN                           144.684,80                               149.372,59                       154.212,26
+CLIN                        1.896.174,02                            1.957.610,06                     2.021.036,62
+Total                      19.520.863,18                           20.153.339,15                    20.806.307,34
+Premissas:
+
+Para se estimar a liquidação da folha considerou-se a média de liquidação de janeiro a abril projetada para os meses
+seguintes, sendo que em dezembro foi utilizado o fator de 2,3 referente ao décimo terceiro e ao terço constitucional de
+férias, salvo para os inativos e pensionistas que não fazem jus ao adicional de férias. Considerou-se ainda a aplicação do
+reajuste a partir de junho de 2021, conforme expresso na Lei Orgânica Municipal.
+
+                                                                                         Responsável pela elaboração:
+
+                                                                                                 Lucas Neves da Cunha
+                                                            Analista de Políticas Públicas e Gestão Governamental
+                                                                                                       Mat.: 1244762-0
+                                             Secretaria de Planejamento, Orçamento e Modernização da Gestão
+
+                                                                                                                             18/06/2021

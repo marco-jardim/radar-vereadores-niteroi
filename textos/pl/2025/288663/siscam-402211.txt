@@ -1,0 +1,373 @@
+                               Gabinete Vereador Allan Lyra
+
+PROJETO DE LEI Nº ___/2025
+
+                                          EMENTA:
+                                          INSTITUI O BANCO MUNICIPAL DE
+                                          REGISTRO DE PICHAÇÕES – BMRP, DISPÕE
+                                          SOBRE O USO DE TECNOLOGIAS DIGITAIS
+                                          E DE INTELIGÊNCIA ARTIFICIAL PARA
+                                          APOIO À IDENTIFICAÇÃO DE AUTORES DE
+                                          PICHAÇÃO, REGISTRO E TRATAMENTO DE
+                                          OCORRÊNCIAS,     RESPONSABILIZAÇÃO
+                                          ADMINISTRATIVA    E    PARTICIPAÇÃO
+                                          CIDADÃ     NA    PRESERVAÇÃO      DO
+                                          PATRIMÔNIO PÚBLICO E PRIVADO NO
+                                          MUNICÍPIO DE NITERÓI, E DÁ OUTRAS
+                                          PROVIDÊNCIAS.
+
+A CÂMARA MUNICIPAL DE NITERÓI
+
+DECRETA:
+
+Art. 1º Fica o Poder Executivo autorizado a criar, no âmbito do Município de Niterói, o Banco
+Municipal de Registro de Pichações – BMRP, consistente em sistema informatizado destinado
+ao registro, organização e gestão de informações relativas a ocorrências de pichação em bens
+públicos municipais e, mediante adesão do interessado, em bens privados situados no território
+municipal.
+
+        § 1º O BMRP terá caráter estritamente administrativo e auxiliará a fiscalização
+municipal na aplicação das sanções previstas na legislação de posturas, de ordenamento urbano
+e de proteção do patrimônio público e privado, sem prejuízo das responsabilidades civil e penal
+previstas em outras normas.
+
+        § 2º A implementação e a gestão do BMRP caberão ao Poder Executivo Municipal, por
+meio do órgão responsável pela fiscalização urbana e pela conservação do patrimônio público,
+observada a legislação orçamentária e a iniciativa privativa do Chefe do Poder Executivo para
+dispor sobre a organização e o funcionamento da Administração.
+
+       § 3º O BMRP observará, em todas as suas etapas, os princípios da legalidade,
+impessoalidade, moralidade, publicidade, eficiência, proporcionalidade, proteção de dados
+pessoais, segurança da informação, participação cidadã e desenvolvimento urbano sustentável.
+
+                                Gabinete Vereador Allan Lyra
+
+Art. 2º São objetivos do Banco Municipal de Registro de Pichações – BMRP:
+
+       I – contribuir para a preservação e a recuperação do patrimônio público e privado
+pichado no Município de Niterói;
+
+        II – racionalizar e reduzir os gastos públicos com limpeza, pintura e recuperação de
+áreas pichadas;
+
+       III – organizar, em base única, os registros de pichações para fins de fiscalização e
+responsabilização administrativa;
+
+        IV – subsidiar a identificação de infratores e a verificação de reincidência, nos termos
+da legislação vigente;
+
+       V – incentivar a participação da população na proteção do patrimônio urbano, por meio
+de canal oficial de comunicação com a Prefeitura;
+
+        VI – apoiar a formulação de políticas públicas de ordenamento urbano, segurança,
+cultura e juventude, a partir da análise de dados estatísticos;
+
+        VII – fomentar ações educativas e preventivas contra a prática da pichação e de
+valorização de manifestações artísticas autorizadas, como o grafite.
+
+Art. 3º O BMRP será alimentado por registros de ocorrências de pichação realizados:
+
+        I – por órgão ou entidade da Administração Pública Municipal, no exercício de
+atividade de fiscalização ou manutenção de bens públicos;
+
+       II – por outros entes e órgãos da Administração Pública, mediante convênios ou
+instrumentos de cooperação;
+
+       III – por pessoas físicas ou jurídicas proprietárias, possuidoras ou legítimas detentoras
+de bens privados atingidos por pichação;
+
+        IV – por cidadãos, por meio de aplicativo oficial, sítio eletrônico ou outros canais
+digitais disponibilizados pela Prefeitura, que permitam o envio de fotografias, vídeos,
+geolocalização e demais informações pertinentes.
+
+       § 1º Os registros realizados pelos cidadãos terão natureza informativa e servirão de
+subsídio para a atuação dos órgãos competentes, não configurando, por si só, prova suficiente
+para aplicação de sanções, devendo ser confirmados por fiscalização ou por outros meios de
+prova admitidos em direito.
+
+       § 2º O Poder Executivo regulamentará os requisitos mínimos das informações a serem
+enviadas, a forma de cadastramento de usuários e os procedimentos para triagem, validação e
+tratamento das denúncias.
+
+                                 Gabinete Vereador Allan Lyra
+
+Art. 4º Para fins desta Lei, considera-se:
+
+       I – pichação: inscrição, desenho ou rabisco não autorizado, feito por qualquer meio, em
+bens públicos ou privados, em desacordo com a legislação federal, estadual e municipal
+pertinente;
+
+       II – grafite autorizado: manifestação artística realizada com autorização do proprietário
+ou do poder público, quando se tratar de bem público, em conformidade com a legislação em
+vigor.
+
+        Parágrafo único. O BMRP deverá distinguir, em seus registros, as ocorrências de
+pichação das manifestações artísticas autorizadas, vedada qualquer utilização do sistema para
+restringir ou censurar expressões artísticas legitimamente permitidas.
+
+Art. 5º O BMRP poderá utilizar técnicas de Inteligência Artificial e outros recursos
+tecnológicos para:
+
+        I – analisar padrões gráficos, estilos, símbolos, assinaturas (“tags”) e demais elementos
+característicos das pichações;
+
+       II – correlacionar diferentes ocorrências, indicando possíveis coincidências de autoria
+ou grupos de atuação;
+
+       III – identificar pontos críticos do território municipal, com maior incidência de
+ocorrências, para fins de planejamento de políticas públicas;
+
+       IV – gerar relatórios estatísticos e mapas temáticos de incidência de pichação.
+
+       § 1º As técnicas de Inteligência Artificial terão caráter meramente auxiliar, devendo
+qualquer conclusão sobre identificação de infratores ou aplicação de sanções ser objeto de
+análise e decisão humanas, em processo administrativo regular, com observância do
+contraditório e da ampla defesa.
+
+       § 2º As regras de funcionamento dos algoritmos, quando aplicáveis, deverão observar
+os princípios de transparência, não discriminação e respeito aos direitos fundamentais, nos
+termos da legislação federal de proteção de dados pessoais.
+
+Art. 6º A vinculação de ocorrências de pichação a pessoas físicas ou jurídicas, para fins de
+responsabilização administrativa, somente poderá ocorrer:
+
+       I – após a lavratura de auto de infração por agente público competente, com indicação
+dos elementos de prova disponíveis;
+
+                                Gabinete Vereador Allan Lyra
+
+       II – em decorrência de flagrante, ato de fiscalização, confissão ou outras provas idôneas
+obtidas por meios lícitos;
+
+       III – em razão de informações oficiais compartilhadas por órgãos de segurança pública,
+Ministério Público ou Poder Judiciário, nos termos da legislação aplicável e de eventual
+convênio celebrado.
+
+       § 1º A atribuição de responsabilidade administrativa e a vinculação de registros ao CPF
+ou CNPJ do infrator dependerão de processo administrativo, assegurados o contraditório, a
+ampla defesa e os recursos cabíveis, na forma da legislação municipal.
+
+        § 2º Em nenhuma hipótese a mera indicação algorítmica fornecida por sistema de
+Inteligência Artificial poderá, por si só e de forma automática, gerar imputação de
+responsabilidade ou aplicação de sanções.
+
+        § 3º Concluído o processo administrativo com decisão definitiva, as informações
+poderão ser registradas em campo próprio do BMRP para fins de histórico de ocorrências e
+apuração de reincidência, observado o prazo de guarda e as regras de descarte de dados
+previstas em regulamento.
+
+Art. 7º A prática de pichação sujeitará o infrator às sanções administrativas previstas na
+legislação municipal, especialmente no Código de Posturas, nas normas de limpeza urbana e de
+proteção do patrimônio público, sem prejuízo das sanções civis e penais cabíveis.
+
+       § 1º As multas aplicadas deverão observar critérios de proporcionalidade em relação à
+extensão do dano, à reincidência e às condições do infrator, nos termos da regulamentação do
+Poder Executivo.
+
+       § 2º Poderão ser previstas, em regulamento, formas de composição e medidas de caráter
+educativo, tais como:
+
+       I – participação do infrator em atividades de limpeza, recuperação ou preservação de
+espaços públicos, observada a legislação trabalhista e de segurança do trabalho;
+
+       II – participação em cursos ou programas educativos sobre preservação do patrimônio,
+cidadania e arte urbana, eventualmente em parceria com instituições de ensino e entidades da
+sociedade civil.
+
+       § 3º Os valores arrecadados com multas e outras receitas decorrentes da aplicação desta
+Lei poderão ser destinados, na forma do regulamento, a fundos municipais relacionados à
+limpeza urbana, meio ambiente, cultura, juventude ou segurança cidadã.
+
+                               Gabinete Vereador Allan Lyra
+
+Art. 8º O tratamento de dados pessoais no âmbito do BMRP observará, em todas as fases, o
+disposto na Lei Federal nº 13.709, de 14 de agosto de 2018 (Lei Geral de Proteção de Dados
+Pessoais – LGPD), e demais normas correlatas.
+
+         § 1º O Poder Executivo definirá, em regulamento, o controlador e o encarregado pelo
+tratamento de dados pessoais relativos ao BMRP, bem como as medidas de segurança, técnicas
+e administrativas aptas a proteger os dados de acessos não autorizados e de situações acidentais
+ou ilícitas de destruição, perda, alteração, comunicação ou difusão.
+
+         § 2º Deverão ser garantidos aos titulares de dados os direitos de acesso, correção,
+anonimização, oposição e demais prerrogativas previstos na legislação de proteção de dados
+pessoais, observados os limites necessários à proteção do interesse público e à persecução de
+ilícitos administrativos.
+
+       § 3º Os dados que possibilitem a identificação direta de pessoas deverão ser acessíveis
+apenas a servidores autorizados, no estrito desempenho de suas atribuições legais.
+
+Art. 9º O Poder Executivo poderá, observada a legislação aplicável:
+
+       I – firmar convênios, termos de cooperação ou outros instrumentos congêneres com
+órgãos e entidades federais, estaduais, distritais, municipais e com o Ministério Público,
+visando à troca de informações e à atuação coordenada na prevenção e repressão à pichação;
+
+       II – estabelecer parcerias com instituições de pesquisa, universidades, organizações da
+sociedade civil e entidades privadas para desenvolvimento, aperfeiçoamento e auditagem das
+soluções tecnológicas utilizadas no BMRP;
+
+        III – promover a integração futura do BMRP com cadastros e sistemas de outros
+municípios da Região Metropolitana, na forma da legislação e de acordos intermunicipais, com
+vistas à cooperação em políticas de ordenamento urbano.
+
+       Parágrafo único. As parcerias e convênios de que trata este artigo deverão respeitar as
+normas de proteção de dados pessoais, de transparência, de licitações e contratos e de
+responsabilidade fiscal.
+
+Art. 10. O Poder Executivo desenvolverá campanhas educativas voltadas:
+
+       I – à conscientização sobre os prejuízos econômicos, sociais e ambientais da pichação;
+
+       II – à valorização do espaço público e da estética urbana;
+
+       III – à divulgação de canais oficiais de denúncia e de participação no BMRP;
+
+       IV – ao incentivo a manifestações artísticas autorizadas, como o grafite, em áreas e
+condições definidas pelo Município.
+
+                                Gabinete Vereador Allan Lyra
+
+Art. 11. A implementação do BMRP deverá priorizar o uso de recursos humanos, materiais e
+tecnológicos já existentes na Administração, ficando vedada a criação de novos cargos ou
+órgãos sem observância da legislação orçamentária, da iniciativa privativa do Chefe do Poder
+Executivo e das normas de responsabilidade fiscal.
+
+Art. 12. O Poder Executivo regulamentará a presente Lei no que couber, no prazo de até 90
+(noventa) dias, contado da sua publicação, especialmente quanto:
+
+       I – ao órgão responsável pela gestão do BMRP;
+
+       II – aos procedimentos de registro, validação e tratamento das ocorrências;
+
+       III – aos fluxos de processo administrativo para apuração de responsabilidade;
+
+       IV – às medidas de proteção de dados pessoais e de transparência ativa;
+
+       V – à definição de critérios de reincidência, sanções e formas de composição;
+
+       VI – à interface com demais sistemas municipais de fiscalização, limpeza urbana e
+conservação do patrimônio.
+
+Art. 13. Esta Lei entra em vigor na data de sua publicação.
+
+                        ALLAN PINHO      Assinado de forma digital por
+                                         ALLAN PINHO LYRA:[CPF omitido]
+                        LYRA:[CPF omitido] Dados: 2025.11.19 16:47:45 -03'00'
+                                   ALLAN PINHO LYRA
+                                      Vereador – PL
+
+        JUSTIFICATIVA
+
+        A pichação de bens públicos e privados é problema recorrente em diversos centros
+urbanos, inclusive em Niterói, gerando prejuízos              econômicos, degradação visual,
+desvalorização imobiliária e sensação de abandono nas comunidades. A restauração desses
+bens representa custo elevado tanto para a Administração Pública quanto para proprietários
+
+                                  Gabinete Vereador Allan Lyra
+
+particulares, além de demandar tempo e mão de obra que poderiam ser direcionados a outras
+prioridades da cidade.
+
+         Com o propósito de enfrentar esse problema de forma moderna, eficiente e alinhada às
+tendências tecnológicas, esta proposição institui o Banco Municipal de Registro de Pichações –
+BMRP, um sistema digital inovador que permitirá:
+
+         •    o registro fotográfico e georreferenciado das pichações;
+         •    a organização e correlação das ocorrências em banco de dados único;
+         •    o apoio tecnológico à identificação de possíveis autores e reincidentes;
+         •    a aplicação mais efetiva das penalidades administrativas previstas na legislação
+municipal de posturas e de ordenamento urbano.
+
+         A proposta está em consonância com a competência municipal prevista no art. 30,
+incisos I e II, da Constituição Federal, que atribuem aos Municípios a prerrogativa de legislar
+sobre assuntos de interesse local e de suplementar a legislação federal e estadual no que couber.
+O enfrentamento da pichação, enquanto fenômeno que afeta diretamente a limpeza urbana, a
+conservação do patrimônio e a sensação de segurança da população, insere-se claramente no
+âmbito do interesse local.
+
+         Ao mesmo tempo, a iniciativa respeita a repartição de competências em matéria penal,
+não criando tipos penais nem procedimentos próprios de persecução criminal, mas tão somente
+estabelecendo instrumentos de organização de informações e de responsabilização
+administrativa, em harmonia com as normas já vigentes.
+
+         O BMRP utilizará técnicas de Inteligência Artificial para analisar padrões das
+pichações, como estilos gráficos, assinaturas (tags), apelidos e símbolos característicos. Essa
+tecnologia permitirá:
+
+         •    facilitar a identificação de possíveis infratores, a partir de elementos objetivos;
+         •    reconhecer reincidências, mesmo quando os atos forem cometidos em diferentes
+bairros e momentos distintos;
+         •    mapear pontos críticos da cidade, subsidiando ações integradas de segurança,
+urbanismo, cultura e juventude.
+
+                                Gabinete Vereador Allan Lyra
+
+         Importante destacar que o projeto assegura que a Inteligência Artificial terá papel
+meramente auxiliar, cabendo sempre a agentes públicos, em processo administrativo regular, a
+análise dos elementos de prova, a atribuição de responsabilidade e a eventual aplicação de
+sanções, com garantia do contraditório, da ampla defesa e dos demais direitos fundamentais.
+Essa salvaguarda afasta qualquer alegação de automatismo punitivo, preservando a centralidade
+da decisão humana e o devido processo legal.
+
+         Por meio de aplicativo oficial, sítio eletrônico ou outros canais digitais, qualquer
+cidadão poderá registrar pichações com fotos e localização georreferenciada, fortalecendo a
+participação popular e a corresponsabilidade na preservação do espaço urbano. Tais registros
+terão natureza informativa, servindo de subsídio para a atuação da fiscalização municipal, o que
+evita abusos e garante tratamento técnico das denúncias.
+
+         Quando o autor da pichação for identificado por meios lícitos — como flagrante,
+fiscalização, confissão ou compartilhamento de informações por órgãos oficiais —, a
+vinculação das ocorrências ao seu CPF ou CNPJ dependerá de processo administrativo, com
+decisão devidamente fundamentada. Isso permite:
+
+         •    a aplicação de multas proporcionais ao dano, conforme a legislação de posturas
+e limpeza urbana;
+         •    a inscrição em dívida ativa em caso de inadimplemento, quando cabível;
+         •    o registro de histórico de reincidência, para fins de graduar sanções e priorizar
+ações preventivas.
+
+         A proposição também se preocupa com a proteção de dados pessoais, determinando a
+observância da Lei Geral de Proteção de Dados (Lei nº 13.709/2018) em todas as fases de
+coleta, tratamento, armazenamento e compartilhamento de informações. Define-se a
+necessidade de medidas de segurança da informação, de regras claras de acesso a dados e de
+garantia dos direitos dos titulares, evitando qualquer risco de uso indevido das informações.
+
+         Os benefícios diretos para Niterói incluem:
+
+         •    redução expressiva dos gastos com limpeza de muros, fachadas, viadutos e
+equipamentos públicos pichados;
+
+                                 Gabinete Vereador Allan Lyra
+
+           •   ação ao mesmo tempo preventiva, educativa e punitiva, combinando tecnologia,
+fiscalização e participação cidadã;
+           •   aumento da sensação de ordem, cuidado urbano e valorização do espaço
+público;
+           •   organização de dados que permitem identificar reincidentes, responsabilizar
+infratores e planejar políticas públicas com base em evidências;
+           •   fortalecimento da colaboração entre poder público e sociedade, por meio de
+canais oficiais de denúncia e acompanhamento;
+           •   possibilidade de integração futura com outros municípios da Região
+Metropolitana (como São Gonçalo, Maricá, Itaboraí, entre outros), transformando Niterói em
+referência estadual e nacional no uso de Inteligência Artificial na gestão urbana.
+
+           Importa salientar que o projeto evita ingerência indevida na organização
+administrativa do Poder Executivo, limitando-se a instituir a política pública e o sistema de
+registros, deixando para a regulamentação posterior a definição detalhada da estrutura de
+gestão, dos fluxos internos e das eventuais parcerias, em respeito à iniciativa privativa do
+Prefeito e às normas de responsabilidade fiscal.
+
+           Em síntese, o Banco Municipal de Registro de Pichações – BMRP representará:
+
+           •   modernização da gestão urbana;
+           •   economia de recursos públicos;
+           •   maior eficiência na fiscalização e responsabilização de infratores;
+           •   valorização do espaço público e do patrimônio privado;
+           •   protagonismo de Niterói na adoção responsável de tecnologias emergentes a
+serviço do interesse coletivo.
+
+           Diante do exposto, certos de que esta iniciativa se encontra em plena consonância com
+a Constituição Federal, com a Lei Orgânica do Município e com a legislação de proteção de
+dados pessoais, contamos com o apoio dos nobres Pares para a aprovação do presente Projeto
+de Lei, em benefício de uma Niterói mais organizada, moderna, sustentável e participativa.

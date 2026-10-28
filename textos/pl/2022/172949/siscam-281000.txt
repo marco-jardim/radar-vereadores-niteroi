@@ -1,0 +1,512 @@
+                                                         AMF - DEMONSTRATIVO I – METAS ANUAIS
+                                                                       ANEXO DE METAS FISCAIS
+                                                                            METAS ANUAIS
+                                                                                 2023
+
+AMF - Demonstrativo 1 (LRF, art. 4º, § 1º)                                                                                                                            R$ milhares
+                      ESPECIFICAÇÃO                                         2023                                         2024                                          2025
+                                                             Valor             Valor          % RCL       Valor           Valor          % RCL          Valor           Valor          % RCL
+                                                            Corrente         Constante       (a / RCL)   Corrente       Constante       (b / RCL)      Corrente       Constante       (c / RCL)
+                                                               (a)                             x 100        (b)                           x 100           (c)                           x 100
+
+Receita Total                                                 5.173.924       4.927.077       104,6%      5.074.988      4.669.432        102,2%        5.157.330       4.606.983        102,2%
+
+Receitas Primárias (I)                                        4.841.733       4.610.735         97,9%     4.882.271      4.492.115         98,3%        4.980.018       4.448.593         98,7%
+
+   Receitas Primárias Correntes                               4.841.733       4.610.735         97,9%     4.882.271      4.492.115         98,3%        4.980.018       4.448.593         98,7%
+
+      Impostos, Taxas e Contribuições de Melhoria             1.295.977       1.234.147         26,2%     1.362.681      1.253.786         27,4%        1.419.902       1.268.382         28,1%
+
+      Contribuições                                             149.528         142.394          3,0%       156.751        144.225              3,2%      162.883        145.502              3,2%
+
+      Transferências Correntes                                3.343.394       3.183.882         67,6%     3.308.155      3.043.791         66,6%        3.340.909       2.984.396         66,2%
+
+      Demais Receitas Primárias Correntes                          52.834        50.313          1,1%        54.683         50.313              1,1%       56.324          50.313             1,1%
+
+      Receitas Primárias de Capital                                    0                 -       0,0%               0               -           0,0%              0               -           0,0%
+
+Despesa Total                                                 4.897.858       4.664.183         99,0%     4.927.185      4.533.440         99,2%        4.980.222       4.448.775         98,7%
+
+Despesas Primárias (II)                                       4.746.388       4.519.939         95,9%     4.775.631      4.393.997         96,1%        4.834.238       4.318.370         95,8%
+
+   Despesas Primárias Correntes                               3.741.781       3.563.261         75,6%     3.923.880      3.610.312         79,0%        4.039.271       3.608.234         80,0%
+
+      Pessoal e Encargos Sociais                              2.010.560       1.914.637         40,6%     2.141.246      1.970.133         43,1%        2.251.911       2.011.606         44,6%
+
+      Outras Despesas Correntes                               1.731.221       1.648.625         35,0%     1.782.634      1.640.178         35,9%        1.787.360       1.596.628         35,4%
+
+   Despesas Primárias de Capital                                771.724         734.905         15,6%       617.379        568.043         12,4%          555.641        496.348          11,0%
+
+   Pagamento de Restos a Pagar de Despesas Primárias            232.883         221.772          4,7%       234.371        215.642              4,7%      239.326        213.787              4,7%
+
+Resultado Primário (III) = (I – II)                                95.345        90.797          1,9%       106.640         98.118              2,1%      145.779         130.223             2,9%
+
+   Juros, Encargos e Variações Monetárias Ativos (IV)           213.692         203.497          4,3%       192.782        177.376              3,9%      177.377        158.449              3,5%
+
+   Juros, Encargos e Variações Monetárias Passivos (V)             52.277        49.783          1,1%        46.096         42.412              0,9%       39.396          35.192             0,8%
+
+Resultado Nominal (VI = III + (IV-V))                           256.761         244.511          5,2%       253.326        233.082              5,1%      283.760        253.480              5,6%
+
+Dívida Pública Consolidada                                      843.932         803.668         17,1%       691.658        636.386         13,9%          567.287        506.751          11,2%
+
+Dívida Consolidada Líquida                                   (2.571.107)     (2.448.440)       -52,0%    (2.870.679)    (2.641.275)        -57,8%      (3.171.082)    (2.832.691)        -62,8%
+
+Receitas Primárias advindas de PPP (IV)                        -                -                -           -              -               -             -               -               -
+
+Despesas Primárias geradas por PPP (V)                         -                -                -           -              -               -             -               -               -
+
+Impacto do saldo das PPP (VI) = (IV-V)                         -                -                -           -              -               -             -               -               -
+
+FONTE: Secretaria Municipal de Fazenda. Data de emissão 23/09/2022.
+
+        AMF - DEMONSTRATIVO 2 – AVALIAÇÃO DO CUMPRIMENTO DAS METAS FISCAIS DO EXERCÍCIO ANTERIOR
+
+                                            ANEXO DE METAS FISCAIS
+                 AVALIAÇÃO DO CUMPRIMENTO DAS METAS FISCAIS DO EXERCÍCIO ANTERIOR
+                                                      2023
+
+AMF - Demonstrativo 2 (LRF, art. 4º, §2º, inciso I)                                                                   R$ milhares
+
+                                                                                                                Variação
+                                       Metas Previstas em                  Metas Realizadas
+                                             2021                             em 2021
+          ESPECIFICAÇÃO                                           % RCL                          % RCL      Valor          %
+
+                                                (a)                              (b)                      (c) = (b-a) (c/a) x 100
+
+Receita Total                                         3.457.145 109,5%            4.556.349 103,1% 1.099.204                31,80
+
+Receitas Primárias (I)                                3.185.193 100,9%            4.439.037 100,4% 1.253.844                39,36
+
+Despesa Total                                         3.298.408 104,5%            3.662.319      82,9%      363.911         11,03
+
+Despesas Primárias (II)                               3.135.100    99,3%          3.553.046      80,4%      417.946         13,33
+
+Resultado Primário (III) = (I–II)                       50.093      1,6%               885.990    20,0%     835.897     1.668,69
+
+Resultado Nominal                                      132.207      4,2%               918.069    20,8%     785.862        594,42
+
+Dívida Pública Consolidada                             753.367     23,9%               788.867   17,8%       35.500            4,71
+
+Dívida Consolidada Líquida                        (1.325.976)     -42,0%         (1.207.997)     -27,3%     117.979         -8,90
+FONTE: Anexo de Metas Fiscais da LDO 2021 e Relatório Resumido da Execução Orçamentária - Dezembro/2021
+
+                              AMF/Tabela 3 - DEMONSTRATIVO 3 – METAS FISCAIS ATUAIS COMPARADAS COM AS FIXADAS NOS TRÊS EXERCÍCIOS ANTERIORES
+
+                                                                           ANEXO DE METAS FISCAIS
+                                              METAS FISCAIS ATUAIS COMPARADAS COM AS FIXADAS NOS TRÊS EXERCÍCIOS ANTERIORES
+                                                                                     2023
+AMF – Demonstrativo 3 (LRF, art.4º, §2º, inciso II)                                                                                                              R$ milhares
+                                                                                         VALORES A PREÇOS CORRENTES
+        ESPECIFICAÇÃO                     2020         2021         %         2022         %         2023        %       2024                         %        2025             %
+
+Receita Total                            3.359.879     3.457.145       2,9%    3.653.342         5,7%     5.173.924       41,6%       5.074.988       -1,9%   5.157.330         1,6%
+
+Receitas Primárias (I)                   2.972.062     3.185.193       7,2%    3.481.097         9,3%     4.841.733       39,1%       4.882.271        0,8%   4.980.018         2,0%
+
+Despesa Total                            3.133.777     3.298.408       5,3%    3.417.619         3,6%     4.897.858       43,3%       4.927.185        0,6%   4.980.222         1,1%
+
+Despesas Primárias (II)                  2.969.749     3.135.100       5,6%    3.367.279         7,4%     4.746.388       41,0%       4.775.631        0,6%   4.834.238         1,2%
+
+Resultado Primário (III) = (I - II)          2.313        50.093    2065,7%      113.819       127,2%        95.345       -16,2%        106.640      11,8%      145.779        36,7%
+
+Resultado Nominal                          84.027       132.207       57,3%       97.472       -26,3%       256.761      163,4%         253.326       -1,3%     283.760        12,0%
+
+Dívida Pública Consolidada                729.945       753.367        3,2%      814.714         8,1%       843.932         3,6%        691.658      -18,0%     567.287        -18,0%
+
+Dívida Consolidada Líquida             (1.192.124)   (1.325.976)      11,2%     (779.236)      -41,2%    (2.571.107)     230,0%      (2.870.679)     11,7%    (3.171.082)      10,5%
+
+Obs. Valores dos resultados primário e nominal de 2023 a 2025 calculados pelo critério acima da linha. Informações de 2020 a 2022 constantes do AMF - LDO.
+
+                                                                                            VALORES A PREÇOS CONSTANTES
+           ESPECIFICAÇÃO                 2020          2021           %          2022         %          2023       %                  2024           %        2025             %
+
+Receita Total                           3.919.756     3.664.574        -6,5%   3.653.342        -0,3%      4.927.077      34,9%        4.669.432      -5,2%    4.606.983        -1,3%
+
+Receitas Primárias (I)                  3.467.315     3.376.305        -2,6%   3.481.097         3,1%      4.610.735      32,5%        4.492.115      -2,6%    4.448.593        -1,0%
+
+Despesa Total                           3.655.977     3.496.312        -4,4%   3.417.619        -2,3%      4.664.183      36,5%        4.533.440      -2,8%    4.448.775        -1,9%
+
+Despesas Primárias (II)                 3.464.616     3.323.206        -4,1%   3.367.279         1,3%      4.519.939      34,2%        4.393.997      -2,8%    4.318.370        -1,7%
+
+Resultado Primário (III) = (I - II)         2.698        53.099     1867,8%      113.819       114,4%         90.797      -20,2%          98.118       8,1%      130.223       32,7%
+
+Resultado Nominal                          98.029       140.139       43,0%       97.472       -30,4%        244.511     150,9%          233.082      -4,7%      253.480        8,8%
+
+Dívida Pública Consolidada                851.580       798.569        -6,2%     814.714         2,0%        803.668       -1,4%         636.386     -20,8%      506.751       -20,4%
+
+Dívida Consolidada Líquida             (1.390.775)   (1.405.535)       1,1%     (779.236)      -44,6%    (2.448.440)     214,2%      (2.641.275)       7,9%   (2.832.691)       7,2%
+
+FONTE: Secretaria Municipal da Fazenda. Data da emissão 23/09/2022. Valores deflacionados pelo IPCA.
+
+AMF/Tabela 4 - DEMONSTRATIVO 4 – EVOLUÇÃO DO PATRIMÔNIO LÍQUIDO
+
+                                                 ANEXO DE METAS FISCAIS
+                                           EVOLUÇÃO DO PATRIMÔNIO LÍQUIDO
+                                                           2023
+
+AMF - Demonstrativo 4 (LRF, art.4º, §2º, inciso III)                                              R$ milhares
+      PATRIMÔNIO LÍQUIDO                        2019            %           2020        %       2021            %
+Patrimônio/Capital/AFAC                             6.259         0,2%          6.259    0,3%       7.297        0,2%
+Reservas                                            9.499         0,4%         27.492    1,2%      33.192        1,0%
+Resultado Acumulado                             2.510.036        99,4%      2.202.390   98,5%   3.309.929       98,8%
+TOTAL                                           2.525.793        100%       2.236.140   100%    3.350.417       100%
+
+                                                  REGIME PREVIDENCIÁRIO
+      PATRIMÔNIO LÍQUIDO                        2019            %           2020        %       2021            %
+Patrimônio                                             -                           -
+Reservas                                               -                           -
+Resultados Acumulados                              23.949            100%    167.978    100%     356.495        100%
+TOTAL                                              23.949            100%    167.978    100%     356.495        100%
+FONTE: Secretaria Municipal da Fazenda. Data da emissão 23/09/2022
+
+AMF/Tabela 5 - DEMONSTRATIVO 5 – ORIGEM E APLICAÇÃO DOS RECURSOS OBTIDOS COM A ALIENAÇÃO DE ATIVOS
+
+                                      ANEXO DE METAS FISCAIS
+                ORIGEM E APLICAÇÃO DOS RECURSOS OBTIDOS COM A ALIENAÇÃO DE ATIVOS
+                                                2023
+
+AMF - Demonstrativo 5 (LRF, art.4º, §2º, inciso III)                                                      R$ milhares
+                                                                         2021               2020               2019
+                       RECEITAS REALIZADAS
+                                                                          (a)                (b)                (c)
+RECEITAS DE CAPITAL - ALIENAÇÃO DE ATIVOS (I)                                       0                0                        0
+  Alienação de Bens Móveis                                                          0                0                        0
+  Alienação de Bens Imóveis
+
+                                                                         2021               2020               2019
+                       DESPESAS EXECUTADAS
+                                                                          (d)                (e)                (f)
+APLICAÇÃO DOS RECURSOS DA ALIENAÇÃO DE ATIVOS (II)                               0,00              0,00                 0,00
+ DESPESAS DE CAPITAL                                                             0,00              0,00                 0,00
+    Investimentos
+    Inversões Financeiras
+    Amortização da Dívida
+  DESPESAS CORRENTES DOS REGIMES DE PREVIDÊNCIA                                  0,00              0,00                 0,00
+    Regime Geral de Previdência Social
+    Regime Próprio de Previdência dos Servidores
+
+                                                                         2021               2020               2019
+
+                         SALDO FINANCEIRO                           (g) = ((Ia – IId)
+                                                                                      (h) = ((Ib – IIe)
+                                                                         + IIIh)                           (i) = (Ic – IIf)
+                                                                                           + IIIi)
+VALOR (III)                                                                         0                 0                       0
+FONTE: Secretaria Municipal da Fazenda.Data da emissão 01/03/2022
+
+      AMF/Tabela 6 - DEMONSTRATIVO 6 – AVALIAÇÃO DA SITUAÇÃO FINANCEIRA E ATUARIAL DO REGIME PRÓPRIO DE PREVIDÊNCIA DOS
+                                                          SERVIDORES
+                                                 PREFEITURA MUNICIAPL DE NITERÓI
+                                                     ANEXO DE METAS FISCAIS
+                                      AVALIAÇÃO DA SITUAÇÃO FINANCEIRA E ATUARIAL DO RPPS
+                                                              2023
+
+AMF - Demonstrativo 6 (LRF, art. 4º, § 2º, inciso IV, alínea "a")
+                      RECEITAS E DESPESAS PREVIDENCIÁRIOS DO REGIME PRÓPRIO DE PREVIDÊNCIA DOS SERVIDORES
+                                                                  PLANO PREVIDENCIÁRIO
+RECEITAS PREVIDENCIÁRIAS - RPPS                                                  2018            2019           2020           2021
+RECEITAS CORRENTES (I)                                                        110.345.874,71 156.868.954,58 112.241.859,73   126.955.468,42
+  Receita de Contribuições dos Segurados                                       29.620.499,52  33.840.156,89  43.020.471,78    49.153.610,34
+    Civil                                                                      29.620.499,52  33.840.156,89  43.020.471,78    49.153.610,34
+       Ativo                                                                   29.424.826,31  33.544.215,44  42.645.859,73    48.664.471,29
+       Inativo                                                                    190.651,15     284.088,63     342.674,36       452.573,55
+       Pensionista                                                                  5.022,06      11.852,82      31.937,69        36.565,50
+    Militar                                                                              -              -              -
+       Ativo                                                                             -              -              -
+       Inativo                                                                           -              -              -
+       Pensionista                                                                       -              -              -
+  Receita de Contribuições Patronais                                           42.686.837,16  47.947.734,49  56.588.667,79    67.279.118,40
+    Civil                                                                      39.052.053,59  44.563.268,29  56.588.667,79    67.279.118,43
+       Ativo                                                                   39.052.053,59  44.563.268,29  56.588.667,79    67.279.118,43
+       Inativo                                                                           -              -              -
+       Pensionista                                                                       -              -              -
+    Militar                                                                              -              -              -
+       Ativo                                                                             -              -              -
+       Inativo                                                                           -              -              -
+       Pensionista                                                              3.634.783,57            -              -
+    Em Regime de Parcelamento de Débitos                                       26.545.766,79   3.384.466,20
+  Receita Patrimonial                                                          26.545.766,79  63.451.714,52   3.159.283,11       709.130,50
+    Receitas Imobiliárias                                                          61.538,56     102.394,85            -
+    Receitas de Valores Mobiliários                                            26.484.228,23  63.349.319,67   3.159.283,11      709.130,50
+    Outras Receitas Patrimoniais                                                         -              -              -
+  Receita de Serviços                                                                    -              -              -
+  Receita de Aporte Periódico de Valores Predefinidos                                    -              -     6.361.596,34
+  Outras Receitas Correntes                                                    11.492.771,24  11.629.348,68   3.111.840,71     9.813.609,18
+    Compensação Previdenciária do RGPS para o RPPS                                       -              -              -                -
+    Demais Receitas Correntes                                                  11.492.771,24  11.629.348,68   3.111.840,71     9.813.609,18
+RECEITAS DE CAPITAL (II)                                                                 -              -              -
+  Alienação de Bens, Direitos e Ativos                                                   -              -              -
+  Amortização de Empréstimos                                                             -              -              -
+  Outras Receitas de Capital                                                             -              -              -
+TOTAL DAS RECEITAS PREVIDENCIÁRIAS RPPS - (III) = (I + II)                    110.345.874,71 156.868.954,58 105.880.263,39   126.955.468,42
+
+      AMF/Tabela 6 - DEMONSTRATIVO 6 – AVALIAÇÃO DA SITUAÇÃO FINANCEIRA E ATUARIAL DO REGIME PRÓPRIO DE PREVIDÊNCIA DOS
+                                                          SERVIDORES
+                                                 PREFEITURA MUNICIAPL DE NITERÓI
+                                                     ANEXO DE METAS FISCAIS
+                                      AVALIAÇÃO DA SITUAÇÃO FINANCEIRA E ATUARIAL DO RPPS
+                                                              2023
+DESPESAS PREVIDENCIÁRIAS - RPPS                                                       2018               2019             2020           2021
+ADMINISTRAÇÃO (IV)                                                                            -                 -                -
+  Despesas Correntes                                                                          -                 -                -
+  Despesas de Capital                                                                         -                 -                -
+PREVIDÊNCIA (V)                                                                      7.789.217,75      9.998.837,70    11.406.437,85    13.982.670,76
+  Benefícios - Civil                                                                 7.212.565,33      9.103.907,78    11.406.437,85    13.982.670,76
+    Aposentadorias                                                                   5.725.114,15      7.374.601,04     9.061.647,87    11.008.892,38
+    Pensões                                                                          1.487.451,18      1.729.306,74     2.344.789,98     2.973.778,38
+    Outros Benefícios Previdenciários                                                         -                 -                -
+  Benefícios - Militar                                                                        -                 -                -
+    Reformas                                                                                  -                 -                -
+    Pensões                                                                                   -                 -                -
+    Outros Benefícios Previdenciários                                                         -                 -                -
+  Outras Despesas Previdenciárias                                                      576.652,42        894.929,92              -                -
+    Compensação Previdenciária do RPPS para o RGPS                                            -                 -                -
+    Demais Despesas Previdenciárias                                                    576.652,42        894.929,92
+TOTAL DAS DESPESAS PREVIDENCIÁRIAS RPPS (VI) = (IV + V)                              7.789.217,75      9.998.837,70    11.406.437,85    13.982.670,76
+RESULTADO PREVIDENCIÁRIO (VII) = (III – VI)                                        102.556.656,96    146.870.116,88    94.473.825,54    112.972.797,66
+RECURSOS RPPS ARRECADADOS EM EXERCÍCIOS ANTERIORES                                    2018               2019             2020           2021
+VALOR
+RESERVA ORÇAMENTÁRIA DO RPPS                                                          2018               2019             2020           2021
+VALOR                                                                                                                 103.523.709,00    127.747.191,04
+
+APORTES DE RECURSOS PARA O PLANO PREVIDENCIÁRIO DO
+                                                                                      2018               2019             2020           2021
+RPPS
+Plano de Amortização - Contribuição Patronal Suplementar
+Plano de Amortização - Aporte Periódico de Valores Predefinidos
+Outros Aportes para o RPPS                                                            6.693.983,55    13.939.923,28      6.939.923,28     9.741.124,12
+Recursos para Cobertura de Déficit Financeiro
+
+BENS E DIREITOS DO RPPS                                                               2018               2019             2020           2021
+Caixa e Equivalentes de Caixa                                                          702.220,49        961.514,80       276.204,80      6.021.696,43
+Investimentos e Aplicações                                                         422.672.178,86    583.243.855,62   773.034.087,20    816.289.052,98
+Outro Bens e Direitos                                                                                                                    24.599.408,30
+
+     AMF/Tabela 6 - DEMONSTRATIVO 6 – AVALIAÇÃO DA SITUAÇÃO FINANCEIRA E ATUARIAL DO REGIME PRÓPRIO DE PREVIDÊNCIA DOS
+                                                         SERVIDORES
+                                              PREFEITURA MUNICIAPL DE NITERÓI
+                                                  ANEXO DE METAS FISCAIS
+                                   AVALIAÇÃO DA SITUAÇÃO FINANCEIRA E ATUARIAL DO RPPS
+                                                           2023
+PLANO FINANCEIRO
+RECEITAS PREVIDENCIÁRIAS - RPPS                                                    2018               2019              2020           2021
+RECEITAS CORRENTES (VIII)                                                       200.756.035,63    205.987.552,95    231.755.458,45    142.809.750,61
+  Receita de Contribuições dos Segurados                                         31.946.773,22     31.948.055,81     34.660.606,31     38.120.277,41
+    Civil                                                                        31.946.773,22     31.948.055,81     34.660.606,31     38.120.277,41
+       Ativo                                                                     20.445.051,80     19.307.412,37     20.718.478,23     21.930.488,85
+       Inativo                                                                    7.170.679,95      8.149.629,52      9.464.120,10     10.976.315,16
+       Pensionista                                                                4.331.041,47      4.491.013,92      4.478.007,98      5.213.473,40
+    Militar                                                                                -                 -                 -
+       Ativo                                                                               -                 -                 -
+       Inativo                                                                             -                 -                 -
+       Pensionista                                                                         -                 -                 -
+  Receita de Contribuições Patronais                                             27.016.121,31     25.866.076,41     27.495.001,41     29.657.608,06
+    Civil                                                                        27.016.121,31     25.866.076,41     27.495.001,41     29.657.608,06
+       Ativo                                                                     27.016.121,31     25.866.076,41     27.495.001,41     29.657.608,06
+       Inativo                                                                             -                 -                 -
+       Pensionista                                                                         -                 -                 -
+    Militar                                                                                  -                 -                 -
+       Ativo                                                                               -                 -                 -
+       Inativo                                                                             -                 -                 -
+       Pensionista                                                                         -                 -                 -
+    Em Regime de Parcelamento de Débitos                                                   -                 -                 -
+  Receita Patrimonial                                                               604.934,51      1.132.641,64        123.012,48        261.643,35
+    Receitas Imobiliárias                                                                  -                 -                 -
+    Receitas de Valores Mobiliários                                                 604.934,51      1.132.641,64        123.012,48       261.643,35
+    Outras Receitas Patrimoniais                                                           -                 -                 -
+  Receita de Serviços                                                                      -                 -                 -
+  Outras Receitas Correntes                                                     141.188.206,59    147.040.779,09    169.476.838,25     74.770.221,79
+    Compensação Previdenciária do RGPS para o RPPS                                         -                 -                 -
+    Demais Receitas Correntes                                                   141.188.206,59    147.040.779,09    169.476.838,25     74.770.221,79
+RECEITAS DE CAPITAL (IX)                                                                     -                 -                 -
+  Alienação de Bens, Direitos e Ativos                                                     -                 -                 -
+  Amortização de Empréstimos                                                               -                 -                 -
+  Outras Receitas de Capital                                                               -                 -                 -
+TOTAL DAS RECEITAS PREVIDENCIÁRIAS RPPS - (X) = (VIII + IX)                      200.756.035,63    205.987.552,95    231.755.458,45   142.809.750,61
+
+     AMF/Tabela 6 - DEMONSTRATIVO 6 – AVALIAÇÃO DA SITUAÇÃO FINANCEIRA E ATUARIAL DO REGIME PRÓPRIO DE PREVIDÊNCIA DOS
+                                                         SERVIDORES
+                                             PREFEITURA MUNICIAPL DE NITERÓI
+                                                 ANEXO DE METAS FISCAIS
+                                  AVALIAÇÃO DA SITUAÇÃO FINANCEIRA E ATUARIAL DO RPPS
+                                                          2023
+
+DESPESAS PREVIDENCIÁRIAS - RPPS                                                    2018               2019               2020                 2021
+ADMINISTRAÇÃO (XI)                                                                        -                  -                  -              9.225.186,45
+  Despesas Correntes                                                                      -                  -                  -              9.162.024,45
+  Despesas de Capital                                                                     -                  -                  -                 63.162,00
+PREVIDÊNCIA (XII)                                                              302.520.219,56     328.517.382,49     354.853.959,26          370.358.101,73
+  Benefícios - Civil                                                           300.415.842,47     326.244.558,24     353.440.621,37          369.569.746,21
+    Aposentadorias                                                             202.142.849,53     224.328.197,89     249.249.967,61          258.963.252,49
+    Pensões                                                                     98.272.992,94     101.916.360,35     104.190.653,76          110.606.493,72
+    Outros Benefícios Previdenciários                                                     -                  -                  -
+  Benefícios - Militar                                                                    -                  -                  -
+    Reformas                                                                              -                  -                  -
+    Pensões                                                                               -                  -                  -
+    Outros Benefícios Previdenciários                                                     -                  -                  -
+  Outras Despesas Previdenciárias                                                2.104.377,09       2.272.824,25       1.413.337,89              788.355,52
+    Compensação Previdenciária do RPPS para o RGPS                                        -                  -                  -
+    Demais Despesas Previdenciárias                                              2.104.377,09       2.272.824,25       1.413.337,89              788.355,52
+TOTAL DAS DESPESAS PREVIDENCIÁRIAS RPPS (XIII) = (XI + XII)                    302.520.219,56     328.517.382,49     354.853.959,26          370.358.101,73
+RESULTADO PREVIDENCIÁRIO (XIV) = (X – XIII)                                    (101.764.183,93)   (122.529.829,54)   (123.098.500,81)       (227.548.351,12)
+
+APORTES DE RECURSOS PARA O PLANO FINANCEIRO DO RRPS                               2018                2019               2020                  2021
+Recursos para Cobertura de Insuficiências Financeiras                           103.488.193,04     121.312.153,53     124.371.371,50          232.452.792,17
+Recursos para Formação de Reserva
+
+                         PROJEÇÃO ATUARIAL DO REGIME PRÓPRIO DE PREVIDÊNCIA DOS SERVIDORES
+                                               PLANO PREVIDENCIÁRIO
+                                                                                                                                             SALDO
+                                                                                                 Despesas              Resultado        FINANCEIRO DO
+                                                                               Receitas
+                         EXERCÍCIO                                                            Previdenciárias        Previdenciário       EXERCÍCIO
+                                                                          Previdenciárias (a)
+                                                                                                    (b)                (c) = (a-b)       (d)=("d" exerc.
+                                                                                                                                          Anterior)+( c)
+                                                                  2018          117.039.858,26       7.789.217,75     109.250.640,51          356.878.151,74
+                                                                  2019          170.808.877,86       9.998.837,70     160.810.040,16          517.688.191,90
+                                                                  2020          104.403.813,69      13.105.933,70      91.297.879,99          686.859.041,19
+                                                                  2021          111.834.672,27      13.742.336,40      98.092.335,87          784.951.377,06
+                                                            PLANO FINANCEIRO
+                                                                                                                                             SALDO
+                                                                                                 Despesas              Resultado
+                                                                               Receitas                                                 FINANCEIRO DO
+                         EXERCÍCIO                                                            Previdenciárias        Previdenciário
+                                                                          Previdenciárias (a)                                             EXERCÍCIO
+                                                                                                    (b)                (c) = (a-b)
+                                                                                                                                         (d)=("d" exerc.
+                                                                  2018         200.756.035,63     302.520.219,56     (101.764.183,93)       (281.693.935,87)
+                                                                  2019         205.987.552,95     328.517.382,49     (122.529.829,54)       (404.223.765,41)
+                                                                  2020          73.467.710,04     345.489.301,08     (272.021.591,04)       (234.072.739,81)
+                                                                  2021          73.378.623,59     313.703.037,98     (240.324.414,39)       (474.397.154,20)
+
+                                                                               AMF/Tabela 7 - DEMONSTRATIVO 7 – ESTIMATIVA E COMPENSAÇÃO DA RENÚNCIA DE RECEITA
+
+                                                                                                                   ANEXO DE METAS FISCAIS
+                                                                                                     ESTIMATIVA E COMPENSAÇÃO DA RENÚNCIA DE RECEITA
+                                                                                                                             2023
+
+AMF - Demonstrativo 7 (LRF, art. 4°, § 2°, inciso V)                                                                                                                                                                                                                   R$ 1,00
+
+                                                                                                                                                                                                                 RENÚNCIA DE RECEITA PREVISTA
+ TRIBUTO          MODALIDADE                                SETORES/ PROGRAMAS/ BENEFICIÁRIO                                                                          LEGISLAÇÃO                                                                         COMPENSAÇÃO
+                                                                                                                                                                                                               2023         2024          2025
+ISSQN      Incentivo Fiscal.
+                                          Lei de Incentivo à Cultura, beneficiando contribuintes do ISSQN que patrocinarem/doarem
+                                          recursos a projetos culturais selecionados.
+                                                                                                                                  Lei nº 3.182/15: arts. 61 e 62 e Decreto nº 12.747/17: arts. 18 e 19.         2.000.000    2.000.000     2.000.000
+
+IPTU       Incentivo Fiscal.              Lei de Incentivo à Cultura, beneficiando contribuintes do ISSQN que patrocinarem/doarem
+                                          recursos a projetos culturais selecionados.
+                                                                                                                                       Lei nº 3.182/15: arts. 61 e 62 e Decreto nº 12.747/17: arts. 18 e 19.    1.000.000    1.000.000     1.000.000
+IPTU       Incentivo Fiscal.              Concessão de créditos do IPTU originários de parcelas do ISSQN do Programa NitNota.
+                                          Beneficia contribuintes do IPTU que sejam tomadores de serviços para os quais foram          Lei nº 2.597/08: arts. 73-B e 73-C e Decreto nº 12.634/2017.              155.087      163.353       168.923
+                                          emitidas notas fiscais de serviços.
+IPTU       Isenção de caráter não geral   Beneficia proprietários de imóveis que locarem/cederem em comodato imóveis para
+                                          instituições religiosas e filantrópicas.
+                                                                                                                                       Lei nº 3.412/2019                                                         317.577      334.504       345.911
+IPTU       Alteração da Base de Cálculo   Lojas com jiraus                                                                             Lei nº 3.430/2019                                                        1.980.213    1.927.565     1.990.211
+IPTU       Incentivo Fiscal
+                                          Aumento no desconto da cota única de 8,5% para 10%. Beneficia contribuintes que
+                                          anteciparem o pagamento integral do imposto, na forma do art.
+                                                                                                                                       Lei nº 2.597/2008: arts. 19, 21, pár. Único e 227.                       3.016.816    3.177.612     3.285.969
+
+ISSQN      Incentivo Fiscal               Aumento no desconto da cota única de 8,5% para 10%                                           Lei nº 2.597/2008: art. 227.                                                3.475        3.608            3.723
+ISSQN      Alteração de Alíquota          Reduz de 5% para 2% as alíquotas do ISSQN para os serviços de streaming de áudios e
+                                          vídeos (subitem 1.09 da Lista Anexa à LC nº 116/03) e para os serviços de plataformas
+                                          digitais da economia digitalizada (subitem 10.02, quando relacionado às operações de
+                                                                                                                                       Lei nº 3.682/2021: art. 4º.                                                    -            -               -
+                                                                                                                                                                                                                                                         Renúncia já considerada
+                                          intermediação por plataforma digital)                                                                                                                                                                          na estimativa da receita,
+IPTU       Isenção                        Estende a isenção prevista no art. 6º, VII, da Lei nº 2.597/2008 à parte do imóvel                                                                                                                              nos termos do art. 14,
+                                          titularizada pelos demais herdeiros ou sucessores.
+                                                                                                                                       Lei nº 3.682/2021: art. 3º.                                               144.559      152.264       157.456
+                                                                                                                                                                                                                                                         inciso I, da LC nº 101, de
+IPTU       Incentivo Fiscal                                                                                                                                                                                                                                  04/05/2000, não
+                                          Dedução de 5% no valor do IPTU para contribuintes adimplentes com o imposto em 2021.
+                                                                                                                                                                                                                                                           afetando as metas de
+                                          Dedução de 3% para os contribuintes adimplentes em 2022 e de 2% para contribuintes que Lei nº 3.663/2021                                                             12.879.578          -               -
+                                                                                                                                                                                                                                                             resultados fiscais.
+                                          promoverem a atualização de seus dados cadastrais.
+
+                                          Redução da alíquota do IPTU dos imóveis inseridos no Projeto de Regularização Fundiária
+                                                                                                                                       REURB São José e Igrejinha e Ciclovia/Barreira (Processo n°
+IPTU       Alteração de Alíquota.         de Interesse Social de São José e Igrejinha e no Projeto de Regularização Fundiária de
+                                                                                                                                       750/3851/2022)
+                                                                                                                                                                                                                 506.869      533.886       552.091
+                                          Interesse Social da Favela da Ciclovia/Barreira para 0,3%.
+
+                                          Remissão e anistia de créditos tributários decorrentes de IPTU relativos aos imóveis
+                                                                                                                                        REURB São José e Igrejinha e Ciclovia/Barreira (Processo n°
+IPTU       Anistia e Remissão.            inseridos no Projeto de Regularização Fundiária de Interesse Social de São José e Igrejinha e
+                                                                                                                                        750/3851/2022)
+                                                                                                                                                                                                                      -            -               -
+                                          no Projeto de Regularização Fundiária de Interesse Social da Favela da Ciclovia/Barreira
+
+                                          Remissão e anistia de créditos tributários decorrentes da TCIL relativos aos imóveis
+                                                                                                                                        REURB São José e Igrejinha e Ciclovia/Barreira (Processo n°
+TCIL       Anistia e Remissão.            inseridos no Projeto de Regularização Fundiária de Interesse Social de São José e Igrejinha e
+                                                                                                                                        750/3851/2022)
+                                          no Projeto de Regularização Fundiária de Interesse Social da Favela da Ciclovia/Barreira
+
+TOTAL                                                                                                                                                                                                          22.004.173    9.292.791     9.504.283
+FONTE: SMF, 23/08/2022
+
+         AMF/Tabela 8 - DEMONSTRATIVO 8 – MARGEM DE EXPANSÃO DAS DESPESAS
+                         OBRIGATÓRIAS DE CARÁTER CONTINUADO
+
+                                        ANEXO DE METAS FISCAIS
+
+    MARGEM DE EXPANSÃO DAS DESPESAS OBRIGATÓRIAS DE CARÁTER CONTINUADO
+                                    2023
+
+AMF - Demonstrativo 8 (LRF, art. 4°, § 2°, inciso V)                                            R$ 1,00
+                          EVENTOS                                    Valor Previsto para 2023
+Aumento Permanente da Receita                                                             58.596.728,95
+(-) Transferências Constitucionais
+(-) Transferências ao FUNDEB
+Saldo Final do Aumento Permanente de Receita (I)                                          58.596.728,95
+Redução Permanente de Despesa (II)
+Margem Bruta (III) = (I+II)                                                              58.596.728,95
+Saldo Utilizado da Margem Bruta (IV)                                                    143.491.559,10
+  Novas DOCC                                                                            143.491.559,10
+  Novas DOCC geradas por PPP
+Margem Líquida de Expansão de DOCC (V) = (III-IV)                                        -84.894.830,15
+Fonte: Secretaria Municipal da Fazenda. Data da emissão 23/09/2022
+
+ARF/Tabela 1 - DEMONSTRATIVO DOS RISCOS FISCAIS E PROVIDÊNCIAS
+
+                                      ANEXO DE RISCOS FISCAIS
+                          DEMONSTRATIVO DE RISCOS FISCAIS E PROVIDÊNCIAS
+                                                2023
+
+ARF (LRF, art 4º, § 3º)                                                                                R$ milhares
+                PASSIVOS CONTINGENTES                                          PROVIDÊNCIAS
+                   Descrição                        Valor                    Descrição                   Valor
+
+Passivo judicializado relacionado com a Carteira
+Habitacional da Niterói Prev – ex-IBASM e a                    Busca do equilíbrio orçamentário a
+utilização de recursos do FGTS para realizar                   partir do cancelamento de dotações e
+                                                       262.267                                            262.267
+empreendimentos habitacionais tendo o                          utilização do Superávit Financeiro do
+NiteróiPrev na condição de Agente Promotor                     ano anterior.
+eFinanceiro, com risco assumido pela Prefeitura.
+Informações da Secretaria do Tesouro Nacional.
+TOTAL                                              262.267     TOTAL                                    262.267
+
+             DEMAIS RISCOS FISCAIS PASSIVOS                                     PROVIDÊNCIAS
+                    Descrição                       Valor                     Descrição                  Valor
+ Judicialização dos critérios de distribuição das              Utilização de recursos do Fundo de
+                                                                                                          200.000
+    participações governamentais do Petróleo                   Equalização da Receita
+  provenientes do Campo de Tupi, que podem                     Busca do equilíbrio orçamentário a
+                                                  1.335.389
+    acarretar em frustração de arrecadação de                  partir da revisão de contratos,
+                                                                                                        1.135.389
+   receitas de Royalties (processo nº 1003642-                 cancelamento de dotações e utilização
+               12.2022.4.01.3400).                             do Superávit Financeiro ano anterior.
+Frustração de arrecadação com Royalties do                     Utilização de recursos do Fundo de         100.000
+Petróleo, devido a efeitos do julgamento da ADI    236.000     Equalização da Receita
+4917                                                           Superávit Financeiro do ano anterior       136.000
+TOTAL                                             1.571.389    TOTAL                                   1.571.389

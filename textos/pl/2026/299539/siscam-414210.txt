@@ -1,0 +1,96 @@
+PROJETO DE LEI Nº ___/2026
+
+Institui a Política Municipal de Governança, Transparência e Uso Responsável de Inteligência Artificial no âmbito da Administração Pública do Município de Niterói e dá outras providências.
+
+Art. 1º. Fica instituída a Política Municipal de Governança, Transparência e Uso Responsável de Inteligência Artificial no âmbito da Administração Pública Direta e Indireta do Município de Niterói.
+Art. 2º. A utilização de sistemas de Inteligência Artificial pelo Poder Público Municipal terá por finalidade:
+I – aumentar a eficiência e a qualidade dos serviços públicos;
+II – aprimorar a tomada de decisões administrativas;
+III – promover a inovação na gestão pública;
+IV – ampliar a transparência governamental;
+V – garantir maior acessibilidade aos serviços públicos; e
+VI – melhorar a experiência do cidadão no acesso às políticas públicas.
+Art. 3º. Para os efeitos desta Lei, considera-se:
+I – Inteligência Artificial (IA): sistemas computacionais aptos a realizar análises, inferências, previsões, recomendações ou suporte à tomada de decisão;
+II – Sistema Automatizado: ferramenta tecnológica capaz de executar processos ou apoiar decisões com mínima intervenção humana;
+III – Decisão Automatizada: resultado produzido total ou parcialmente por sistema de IA; e
+IV – Sistema de Alto Impacto: aquele capaz de produzir efeitos relevantes sobre direitos individuais, acesso a benefícios públicos ou prestação de serviços essenciais.
+Art. 4º. A utilização de Inteligência Artificial pela Administração Pública Municipal observará os seguintes princípios:
+I – legalidade;
+II – interesse público;
+III – transparência;
+IV – proteção de dados pessoais;
+V – segurança da informação;
+VI – eficiência administrativa;
+VII – não discriminação;
+VIII – supervisão humana;
+IX – responsabilidade e prestação de contas;
+X – inclusão digital; e
+XI – inovação responsável.
+Art. 5º. Os órgãos e entidades municipais deverão observar as seguintes diretrizes:
+I – utilização da IA exclusivamente para finalidades legítimas e compatíveis com o interesse público;
+II – respeito às disposições da Lei Federal nº 13.709, de 14 de agosto de 2018 (Lei Geral de Proteção de Dados Pessoais – LGPD);
+III – adoção de medidas para mitigação de vieses algorítmicos;
+IV – manutenção de registros que permitam auditoria e rastreabilidade das decisões automatizadas;
+V – implementação de mecanismos de segurança cibernética; e
+VI – observância dos direitos fundamentais dos cidadãos.
+Art. 6º. Nenhum sistema de IA poderá substituir integralmente a análise humana em processos que envolvam:
+I – aplicação de penalidades administrativas;
+II – concessão ou suspensão de benefícios sociais;
+III – avaliação de direitos individuais; e
+IV – procedimentos que possam gerar impacto relevante à população.
+Art. 7º. O Poder Executivo publicará, em portal eletrônico de acesso público, o Cadastro Municipal de Sistemas de Inteligência Artificial.
+§ 1º O Cadastro deverá conter, sempre que possível:
+I – descrição do sistema utilizado;
+II – finalidade da aplicação;
+III – órgão responsável;
+IV – categoria dos dados utilizados;
+V – grau de automação do sistema; e
+VI – medidas de proteção de dados adotadas.
+§ 2º As informações protegidas por sigilo legal ou relacionadas à segurança da informação poderão ser restringidas mediante justificativa técnica.
+Art. 8º. O cidadão terá direito:
+I – à informação clara sobre a utilização de sistemas de IA em serviços públicos;
+II – à revisão humana de decisões automatizadas que afetem seus direitos;
+III – à solicitação de esclarecimentos sobre decisões produzidas por sistemas de IA; e
+IV – à proteção de seus dados pessoais nos termos da legislação vigente.
+Art. 9º. Os sistemas classificados como de alto impacto deverão ser precedidos de Relatório de Impacto Algorítmico.
+Art. 10. O relatório deverá conter:
+I – objetivos da implementação;
+II – benefícios esperados;
+III – riscos identificados;
+IV – medidas mitigadoras;
+V – avaliação sobre privacidade e proteção de dados; e
+VI – análise de possíveis impactos discriminatórios.
+Art. 11. O Poder Executivo poderá instituir Comitê Municipal de Governança em Inteligência Artificial, com a finalidade de:
+I – acompanhar a implementação desta Lei;
+II – propor boas práticas e normas complementares;
+III – elaborar recomendações de transparência e ética digital; e
+IV – incentivar a participação de universidades, centros de pesquisa e sociedade civil organizada.
+Art. 12. O Município promoverá ações permanentes de capacitação dos servidores públicos em:
+I – inteligência artificial;
+II – proteção de dados;
+III – segurança da informação;
+IV – ética digital; e
+V – inovação na gestão pública.
+Art. 13. O Poder Executivo publicará anualmente Relatório Municipal de Inteligência Artificial contendo:
+I – sistemas em operação;
+II – resultados obtidos;
+III – economia de recursos gerada;
+IV – riscos identificados;
+V – medidas corretivas adotadas; e
+VI – quantidade de decisões submetidas à revisão humana.
+Art. 14. Esta Lei não autoriza a coleta ou o tratamento de dados pessoais em desconformidade com a legislação federal.
+Art. 15. O Poder Executivo regulamentará esta Lei no que couber e no que entender necessário.
+Art. 16. As despesas decorrentes da execução desta Lei correrão por conta das dotações orçamentárias próprias, suplementadas se for o caso e necessário.
+Art. 17. Esta Lei entra em vigor na data da sua publicação, revogadas as disposições em contrário.
+Niterói, 11 de setembro de 2026.
+
+Leandro Portugal
+
+JUSTIFICATIVA:
+O presente Projeto de Lei tem por objetivo estabelecer princípios, diretrizes e mecanismos de governança para a utilização responsável da Inteligência Artificial no âmbito da Administração Pública Municipal de Niterói.
+As tecnologias de inteligência artificial vêm sendo incorporadas progressivamente aos serviços públicos em áreas como atendimento ao cidadão, gestão urbana, mobilidade, educação, saúde e análise de dados. Seu uso adequado pode ampliar significativamente a eficiência administrativa, reduzir custos operacionais e aperfeiçoar a prestação de serviços à população.
+Por outro lado, a crescente adoção dessas ferramentas exige parâmetros normativos claros no tocante à transparência, proteção de dados pessoais, supervisão humana e prevenção de decisões discriminatórias ou desprovidas de auditabilidade.
+Niterói possui histórico reconhecido de pioneirismo e inovação na gestão pública, destacando-se pela transformação digital e pela formulação de políticas públicas voltadas à modernização administrativa. Nesse contexto, torna-se indispensável fixar um marco regulatório local que assegure o emprego ético, seguro, transparente e responsável dessas soluções tecnológicas.
+Cumpre ressaltar que a proposta não cria despesas obrigatórias imediatas nem invade a competência privativa de organização administrativa do Poder Executivo, limitando-se a dispor sobre normas gerais de governança, transparência e proteção de direitos, de inequívoco interesse local.
+Diante da relevância da matéria para o aperfeiçoamento da gestão pública municipal e para a salvaguarda dos direitos dos munícipes, contamos com o valoroso apoio dos ilustres Pares para a apreciação e aprovação deste Projeto de Lei.

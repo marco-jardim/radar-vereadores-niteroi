@@ -1,0 +1,81 @@
+                 691000,000000   692000,000000   693000,000000   694000,000000                                                     695000,000000                                                      696000,000000
+
+                                                                                                                                                                                                                      LEI URBANÍSTICA DE NITERÓI
+                                                                                                                                                                                                                      MAPA 1H - ZONEAMENTO
+7464000,000000
+
+                                                                                                                                                                                                                                                       SÃO GONÇALO
+
+                                                                                                                                                                                                                                   1A        1B
+                                                                                                                                                                                                                                                       1C
+                                                                                                                                                                                                                                   1D
+
+                                                                                                                                                                    ço
+                                                                                                                                                                                                                                             1E        1F         1G
+
+                                                                                                                                                              ic a n
+                                                                                                                                                            oPvi
+                                                                                                                                                                                                                                   1H
+
+                                                                                                                                                          Syl
+                                                                                                                                                                                                                                         1I        1J        1K    MARICÁ
+
+                                                                                                                                                      ito
+7463200,000000
+
+                                                                                                                                                         fe
+                                                                                                                                                     Pre
+                                                                                                                                                                                                                                                  1L
+
+                                                                                                                                                    ida
+                                                                                                                                                      n
+                                                                                                                                                   Ave
+                                                                                                                                                                                                                      LEGENDA
+                                                                                                                                                                                                                      Nome da zona
+
+                                                                                                                                                          Tún
+                                                                                                                                                                                                                             ZCM                            ZEPAC
+                                                                                                                                                             el
+                                                                                                                                                                   Lu
+                                                                                                                                                                      is   An
+                                                                                                                                                                              tôn                                            ZEU                            ZRU
+                                                                                                                                                                                  io   Pim
+7462400,000000
+
+                                                                                                                                                                                           ent
+                                                                                                                                                                                              e   l                          ZC                             ZRM
+                                                                                                                             nço
+                                                                                                                  P   ic a
+                                                                                                   o   Sy   lv io
+                                                                                                                                                                                                                             ZDE                            ZRA
+                                                                                               feit
+                                                                                           Pre
+                                                                                       ida
+                                                                                 Av en
+                                                                                                                                                                                                                             ZCL                            AEIT
+
+                                                                                                                                                                                                                             ZUM < 6*                       Parque
+                                                                                                                                                                                                                                                            Parque Urbano
+                                                                                                                                                                                                                             ZUM >= 6*
+                                                                                                                                                                                                                             ZC-ZEIS                        ZDS
+
+                                                                                                                                                                                                                             ZEIS                           ZCA
+
+                                                                                                                                                                                                                             ZEPAC - APAP                   ZPA
+7461600,000000
+7460800,000000
+
+                                                                                                                                                                                 Avenida
+                                                                                                                                                                                         Doutor A
+                                                                                                                                                                                                 cúrcio   Torres
+
+                                                                                                                                                                                                                                         1
+                                                                                                                                                                                                                                                                   Km
+7460000,000000
+
+                                                                                                                                                                                                                      Referências Cartográficas
+                                                                                                                                                                                                                      Sistema de Coordenadas: UTM Fuso 23K
+                                                                                                                                                                                                                      Sistema Geodésico: SIRGAS 2000
+                                                                                                                                                                                                                      Datum Vertical: Marégrafo de Imbituba
+
+                                                                                                                                                                                                                      Escala: 1:15.000        14 de Setembro de 2023

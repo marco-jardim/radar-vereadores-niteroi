@@ -1,0 +1,93 @@
+Projeto de Lei nº XXXXX, de XX de outubro de 2021.
+
+Altera dispositivos das Leis nº 2.597, de 30 de setembro de 2008 (Código Tributário do Município) e nº 3.368, de 23 de julho de 2018 (Lei do Processo Administrativo Tributário).
+
+A CÂMARA MUNICIPAL DE NITERÓI DECRETA E EU SANCIONO A SEGUINTE LEI:
+
+Art. 1º. Fica autorizado o poder executivo a conceder parcelamento de créditos tributários de IPTU referentes aos exercícios de 2020 e 2021, não inscritos em dívida ativa, nas seguintes condições:
+I – em até 48 (quarenta e oito) parcelas, quando os créditos não ultrapassarem o montante de R$ 10.000,00 (dez mil reais);
+II – em até 60 (sessenta) parcelas, quando os créditos forem superiores a R$ 10.000,00 (dez mil reais) e não ultrapassarem o montante de R$ 100.000,00 (cem mil reais);
+III – em até 72 (setenta e duas) parcelas, quando os créditos forem superiores a R$ 100.000,00 (cem mil reais) e não ultrapassarem o montante de R$ 1.000.000,00 (um milhão de reais);
+IV – em até 84 (oitenta e quatro) parcelas, quando os créditos forem superiores a R$ 1.000.000,00 (um milhão de reais) e não ultrapassarem o montante de R$ 3.000.000,00 (três milhões de reais);
+V – em até 96 (noventa e seis) parcelas, quando os créditos forem superiores a R$ 3.000.000,00 (três milhões de reais).
+§ 1º Os créditos superiores a R$ 10.000.000,00 (dez milhões de reais) poderão ser parcelados em até 120 (cento e vinte) parcelas desde que autorizados pelo(a) Secretário(a) Municipal de Fazenda.
+§ 2º Mediante petição e exposição de razões pelo contribuinte, o Subsecretário de Receita da Secretaria Municipal de Fazenda poderá conceder parcelamento não sujeito aos parâmetros previstos neste artigo, limitado a 100 (cem) parcelas, mediante despacho fundamentado.
+§ 3º O requerente que comprovar estar inscrito no Cadastro Único do Governo Federal ou demonstrar, ainda que através de laudo médico, que porta doença grave, conforme regulamento, poderá realizar o parcelamento de seus débitos em até 120 (cento e vinte) vezes.
+§ 4º O parcelamento autorizado na forma desta Lei terá o prazo de pagamento definido no ato da sua concessão em 	razão do valor do crédito e da capacidade de pagamento do contribuinte, respeitados os limites de parcelas previstos neste artigo e os seguintes limites mínimos mensais para cada parcela:
+I – em se tratando de pessoa jurídica: valor de referência A15;
+II – em se tratando de pessoa física: valor de referência A4.
+§ 5º O parcelamento de que trata o caput não se aplica aos lançamentos complementares de IPTU, oriundos de revisão de ofício por parte do fisco.
+
+Art. 2º. A alínea “b”, do inciso VII, do art. 6º da Lei 2.597, de 30 de setembro de 2008, passa a vigorar com a seguinte redação:
+
+	Art. 6º.
+(...)
+VII – (...)
+b) ser titular de um único imóvel utilizado para sua residência, persistindo o direito à isenção após o seu falecimento, inclusive no que se refere ao imposto devido sobre a parte do imóvel titularizada pelos demais herdeiros ou sucessores, desde que a unidade imobiliária continue a ser utilizada como residência do cônjuge ou de seus filhos até que alcancem a maioridade civil e desde que preencham os mesmos requisitos exigidos do primeiro titular;
+(...)
+
+Art. 3º. Fica incluído o parágrafo 10, no art. 6.º
+ da Lei nº 2597, de 30 de setembro de 2008, com a seguinte redação:
+
+Art. 6º.
+(...)
+§ 10. A renovação das isenções previstas neste artigo poderá ser feita de forma simplificada, nos termos da regulamentação definida pelo Secretário(a) Municipal de Fazenda.
+(...)
+
+Art. 4º. Ficam alteradas as redações das alíneas “a” e “j” e inserida a alínea “k” no inciso II do art. 91 da Lei nº 2.597, de 30 de setembro de 2008, que passam a vigorar com a seguinte redação:
+
+II -  a alíquota de 2%, na prestação dos serviços:
+a) 1.01, 1.02, 1.03, 1.04, 1.05, 1.06, 1.07, 1.08, 1.09, 3.01, 3.02, 4.01, 4.02, 4.03, 4.04, 4.05, 4.06, 4.07, 4.08, 4.09, 4.10, 4.11, 4.12, 4.13, 4.14, 4.15, 4.16, 4.17, 4.18, 4.19, 4.20, 4.21, 4.22, 4.23, 7.09, 7.12, 7.13, 7.14, 7.15, 7.18, 7.19, 7.20, 9.02, 9.03, 10.06, 11.02, 13.04, 18.01, 20.01, 21.01, 33.01; (Redação dada pela Lei nº 3189/2015);
+(...)
+j)  10.10, 12.02, 12.16, 13.01, 13.02, 13.03, 17.09 e 37.01, quando relacionados à produção cinematográfica ou à produção audiovisual. (Redação acrescida pela Lei nº 3.360/2018);
+k)   10.02, quando relacionado à intermediação de negócios realizada por plataformas digitais da economia compartilhada.
+
+Art. 5º. Fica alterado o art. 139 da Lei nº 3.368, de 23 de julho de 2018, passando a vigorar com a seguinte redação:
+
+“Art. 139 O procedimento para revisão de dados cadastrais de imóvel poderá ser iniciado:
+
+I - de ofício, caso em que o sujeito passivo poderá apresentar impugnação às alterações cadastrais promovidas sempre que estas resultarem em acréscimo no valor da base de cálculo dos tributos.; ou
+
+II – mediante solicitação do sujeito passivo, caso em que caberá recurso à autoridade hierarquicamente superior àquela que indeferir, total ou parcialmente, a solicitação.
+
+§ 1º No caso de procedimento iniciado mediante solicitação do sujeito passivo que tenha por resultado o aumento do valor da base de cálculo dos tributos, a fase não litigiosa do procedimento se encerrará com a notificação das alterações cadastrais promovidas e do crédito tributário eventualmente lançado, sendo cabível impugnação.
+
+§ 2º O procedimento de ofício para revisão de elementos cadastrais do imóvel será iniciado com a abertura de processo administrativo para este fim, por iniciativa do titular do órgão responsável pelo lançamento do tributo.
+
+§ 3º Quando os autos contiverem elementos suficientes para a revisão de ofício ou quando se restar caracterizada omissão do contribuinte, ficará dispensada a vistoria no local em que se situa o imóvel cujos dados cadastrais serão revisados, justificando-se o arbitramento em caso de omissão.
+
+§ 4º Quando a revisão de elementos cadastrais motivar a revisão de lançamento tributário, a notificação de ambos os procedimentos poderá ser feita de forma conjunta, mediante a lavratura de um único documento.
+
+§ 5º As impugnações referidas no inciso I e no §1º deste artigo darão início à fase litigiosa do procedimento e deverão obedecer às regras de competência, aos prazos e aos ritos do capítulo IV, do Título II, desta Lei.
+
+§ 6º Não será admitida impugnação à notificação de alteração de elementos cadastrais com base na revisão de valor venal de que trata os artigos 129 a 134.
+
+Art. 6º. Fica alterado o §2º do art. 141 da Lei nº 3.368, de 23 de julho de 2018, passando a vigorar com a seguinte redação:
+
+“Art. 141. (...)
+(...)
+§ 2º O deferimento do pedido de revisão de elementos cadastrais que resulte em redução do valor venal do imóvel não se sujeitará ao recurso de ofício previsto nos arts. 77 e 78.
+
+Art. 7º. Ficam alterados os incisos I e II do art. 142 da Lei nº 3.368, de 23 de julho de 2018, passando a vigorar com a seguinte redação:
+
+“Art. 142. (...)
+(...)
+I - pela decisão do órgão competente, quando não recorrida ou impugnada;
+
+II - pela decisão definitiva, esgotadas as instâncias recursais, em sede de recurso ou impugnação.”
+
+Art. 8º. Ficam revogados o §2º do art. 131, da Lei nº 2.597, de 30 de setembro de 2008, o § 1º do art. 63, o art. 138, o §1º do art. 139, o §1º e o §2º do art. 140 e o § 1º do art. 141, todos da Lei nº 3.368, de 23 de julho de 2018.
+
+Art. 9º. Esta lei entra em vigor na data de sua publicação.
+
+ANEXO I – DA RENÚNCIA DE RECEITA
+
+	O presente Projeto de Lei prevê redução de alíquotas do ISS para os serviços descritos nos subitens 1.09 e 10.02 da lista de serviços prevista no Código Tributário Municipal, sendo que a redução de alíquotas do subitem 10.02 atinge apenas as intermediações efetuadas por plataformas digitais da economia compartilhada.
+	A redução de 5% para 2%, em que pese tenha a natureza jurídica de isenção parcial, não produz impacto nas contas ou renúncia de receita. Isto porque todas as empresas que atualmente prestam estes serviços na cidade são optantes pelo regime tributário do Simples Nacional. Como as empresas do Simples estão sujeitas a um regime diferenciado de alíquotas de ISS, a medida não produz impacto, mas dá ao Município a possibilidade de atrais grandes empresas que atuam na economia digital.
+
+Quadro I - ISS calculado de janeiro de 2018 até agosto de 2021 no regime normal de tributação
+Subitem 1.09 | R$ 784,26
+Subitem 10.02 (quando relacionado a plataformas digitais) | Nenhum valor localizado
+TOTAL | R$ 784,26
+
+	Ademais o projeto estende o alcance da isenção de IPTU para aposentados e pensionistas no caso de falecimento de um dos cônjuges, quando os cônjuges e os demais herdeiros serão contemplados pela permanência da isenção. Esta modificação, considerando os dados de isenções do ano de 2021, teria um impacto da ordem de R$ 122.970,72. Aplicando-se o IPCA dos últimos 12 meses, que servirá de base para o reajuste do IPTU, atualmente na casa dos 10,5% (prévia do IPCA de setembro), o impacto será de R$ 135.329,27 (cento e trinta e cinco mil, trezentos e vinte e nove reais e vinte e sete centavos).

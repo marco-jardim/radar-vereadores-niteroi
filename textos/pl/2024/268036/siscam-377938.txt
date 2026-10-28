@@ -1,0 +1,328 @@
+ Niterói,      de abril de 2024.
+
+MENSAGEM EXECUTIVA Nº         /2024
+
+Tenho a honra de dirigir-me a Vossa Excelência com o intuito de submeter à apreciação dos ilustres Pares dessa Egrégia Câmara Municipal, o projeto de lei em anexo, que institui a Política Municipal de Saneamento Básico de Niterói, o Sistema Municipal de Saneamento Básico, estabelece metas e prazos a serem cumpridos e dá outras providências.
+O referido Projeto de Lei tem por objetivo tratar de tema relevante e considera que as Leis Federais 9.984/2000, 10.768/2003, 11.107/2005, 11.445/2007, 13.089/2015, 13.529/2017 e 14.026/2020 trouxeram novas diretrizes e estabeleceram o planejamento dos serviços básicos como instrumento fundamental para alcançar o acesso universal ao saneamento básico.
+Assim, a necessidade de superação das desigualdades sociais no acesso aos serviços de saneamento básico é crucial para impulsionar o setor e cumprir o objetivo de universalização, conforme estabelecido nas diretrizes nacionais e na Política Federal de Saneamento Básico.
+A presente mensagem executiva considera os princípios fundamentais da Política Federal de Saneamento Básico, que incluem: a universalização do acesso com integralidade das ações, segurança, qualidade e regularidade na prestação dos serviços; a promoção da saúde pública, segurança da vida e do patrimônio; proteção do meio ambiente; a articulação com as políticas de desenvolvimento urbano, saúde, proteção ambiental e interesse social; a adoção de tecnologias apropriadas às peculiaridades locais e regionais; o uso de soluções graduais e progressivas; a integração com a gestão eficiente de recursos hídricos; a gestão com transparência baseada em sistemas de informações; processos decisórios institucionalizados e controle social; e a promoção da eficiência e sustentabilidade econômica.
+É fundamental a busca por soluções que representem maior eficiência, eficácia e efetividade na prestação dos serviços públicos de saneamento básico, através da formulação de soluções sustentáveis e adequadas a cada realidade, em conformidade com as diretrizes e princípios da Política Federal de Saneamento Básico.
+Nesse contexto, o estabelecimento de planos e metas é indispensável para a efetiva universalização do saneamento básico, sendo um dever do Governo Federal, dos Estados, dos Municípios e da população em geral discutir metodologias, metas e elaborar planos municipais para promover melhorias concretas no setor de saneamento.
+Ante ao exposto, são essas, Senhor Presidente, as razões que me levam a propor o Presente Projeto de Lei.
+	Reitero a Vossa Excelência os meus votos de profundo respeito e admiração a essa Egrégia Câmara Municipal e solicito a aprovação deste Projeto de Lei.
+
+AXEL GRAEL
+
+EXCELENTÍSSIMO SENHOR VEREADOR MILTON CARLOS LOPES – CAL
+M.D PRESIDENTE DA CÂMARA MUNICIPAL DE NITERÓI
+
+PROJETO DE LEI N° , DE DE DE 2024.
+
+Institui a Política Municipal de Saneamento Básico de Niterói, o Sistema Municipal de Saneamento Básico, estabelece metas e prazos a serem cumpridos e dá outras providências.
+
+A CÂMARA MUNICIPAL DE NITERÓI DECRETA E EU SANCIONO A SEGUINTE LEI:
+
+CAPÍTULO I
+DA POLÍTICA MUNICIPAL DE SANEAMENTO BÁSICO
+SEÇÃO I
+DAS CONSIDERAÇÕES INICIAIS
+
+Art. 1º Política Municipal de Saneamento Básico reger-se-á pelas disposições desta Lei, de seus regulamentos e das normas administrativas deles decorrentes, tendo por finalidade assegurar a proteção da saúde da população, a busca pelo desenvolvimento sustentável e a salubridade ambiental, além de disciplinar o planejamento e a execução das ações, obras e serviços de saneamento básico, estabelecer diretrizes e definir os instrumentos para a regulação e fiscalização da prestação dos serviços de saneamento básico do Município de Niterói, em consonância com o que estabelecem as Leis Federais nº 11.445/2007 e 14.026/2020.
+Parágrafo único. Estão sujeitas ao disposto na presente Lei as pessoas físicas ou jurídicas, de direito público ou privado, responsáveis, direta ou indiretamente, pelos setores e ações em saneamento básico.
+Art. 2º Para os efeitos desta Lei, considera–se:
+I – saneamento básico: conjunto de serviços, infraestruturas e instalações operacionais de:
+a) abastecimento de água potável: constituído pelas atividades e pela disponibilização e manutenção de infraestruturas e instalações operacionais necessárias ao abastecimento público de água potável, desde a captação até as ligações prediais e seus instrumentos de medição;
+b) esgotamento sanitário: constituído pelas atividades e pela disponibilização e manutenção de infraestruturas e instalações operacionais necessárias à coleta, ao transporte, ao tratamento e à disposição final adequados dos esgotos sanitários, desde as ligações prediais até sua destinação final para produção de água de reuso ou seu lançamento de forma adequada no meio ambiente;
+c) limpeza urbana e manejo de resíduos sólidos: constituídos pelas atividades e pela disponibilização e manutenção de infraestruturas e instalações operacionais de coleta, varrição manual e mecanizada, asseio e conservação urbana, transporte, transbordo, tratamento e destinação final ambientalmente adequada dos resíduos sólidos domiciliares e dos resíduos de limpeza urbana; e
+d) drenagem e manejo das águas pluviais urbanas: constituídos pelas atividades, pela infraestrutura e pelas instalações operacionais de drenagem de águas pluviais, transporte, detenção ou retenção para o amortecimento de vazões de cheias, tratamento e disposição final das águas pluviais drenadas, contempladas a limpeza e a fiscalização preventiva das redes.
+II – gestão associada: associação voluntária entre entes federativos, por meio de consórcio público ou convênio de cooperação, conforme disposto no artigo 241 da Constituição Federal;
+III – universalização: ampliação progressiva do acesso de todos os domicílios ocupados ao saneamento básico, incluídos o tratamento e a disposição final adequados dos esgotos sanitários;
+IV – controle social: conjunto de mecanismos e procedimentos que garantem à sociedade informações, representações técnicas e participação nos processos de formulação de políticas, de planejamento e de avaliação relacionados com os serviços públicos de saneamento básico;
+V – subsídios: instrumentos econômicos de política social que contribuem para a universalização do acesso aos serviços públicos de saneamento básico por parte de populações de baixa renda;
+VI – núcleo urbano: assentamento humano, com uso e características urbanas, constituído por unidades imobiliárias com área inferior à fração mínima de parcelamento prevista no artigo 8º da Lei nº 5.868, de 12 de dezembro de 1972, independentemente da propriedade do solo, ainda que situado em área qualificada ou inscrita como rural;
+VII – operação regular: aquela que observa integralmente as disposições constitucionais, legais e contratuais relativas ao exercício da titularidade e à contratação, prestação e regulação dos serviços;
+VIII – serviços públicos de saneamento básico de interesse comum: serviços de saneamento básico prestados em regiões metropolitanas, aglomerações urbanas e microrregiões instituídas por lei complementar estadual, em que se verifique o compartilhamento de instalações operacionais de infraestrutura de abastecimento de água e/ou de esgotamento sanitário entre 2 (dois) ou mais Municípios;
+IX – serviços públicos de saneamento básico de interesse local: funções públicas e serviços cujas infraestruturas e instalações operacionais atendam a um único município;
+X – sistema individual alternativo de saneamento: ação de saneamento básico ou de afastamento e destinação final dos esgotos, quando o local não for atendido diretamente pela rede pública;
+XI – sistema separador absoluto: conjunto de condutos, instalações e equipamentos destinados a coletar, transportar, condicionar e encaminhar exclusivamente esgoto sanitário;
+XII – sistema unitário: conjunto de condutos, instalações e equipamentos destinados a coletar, transportar, condicionar e encaminhar conjuntamente esgoto sanitário e águas pluviais.
+Art. 3º A salubridade ambiental, indispensável à segurança sanitária e à melhoria da qualidade de vida, é direito de todos e obrigação do Poder Público, assegurada pela adoção de políticas setoriais integradas e pela eficiência gerencial que viabilizem o acesso universal e igualitário no território aos benefícios do saneamento básico.
+Art. 4º Os serviços públicos de saneamento básico terão a sustentabilidade econômico–financeira assegurada, sempre que possível, mediante remuneração pela cobrança dos serviços, podendo ser adotados subsídios tarifários e não tarifários para os usuários e localidades que não tenham capacidade de pagamento ou escala econômica suficiente para cobrir o custo integral dos serviços.
+Art. 5º Os subsídios necessários ao atendimento de usuários e localidades de baixa renda serão, dependendo das características dos beneficiários e da origem dos recursos:
+I – diretos, quando destinados a usuários determinados, ou indiretos, quando destinados ao prestador dos serviços;
+II – tarifários, quando integrarem a estrutura tarifária, ou fiscais, quando decorrerem da alocação de recursos orçamentários, inclusive por meio de subvenções;
+III – internos a cada titular ou entre localidades, nas hipóteses de gestão associada e de prestação regional.
+Art. 6º O saneamento básico possui natureza essencial e é direito de todos, devendo ser prestado satisfatoriamente e planejado, regulado, fiscalizado e submetido ao controle social.
+Art. 7º Não constitui serviço público a ação de saneamento básico executada por meio de soluções individuais, desde que o usuário não dependa de terceiros para operar os serviços, bem como as ações e serviços de saneamento básico de responsabilidade privada, incluindo o manejo de resíduos de responsabilidade do gerador.
+§ 1º Para os fins do caput deste artigo considera–se como soluções individuais todas e quaisquer soluções alternativas de saneamento básico que atendam a apenas uma unidade de consumo., dela se excluindo:
+I – a solução que atenda condomínios ou localidades de pequeno porte;
+II – a fossa séptica, quando norma específica atribua ao Poder Público a responsabilidade por sua operação.
+§ 2º Soluções individuais de abastecimento de água e saneamento só serão admitidas onde não houver rede pública de saneamento básico instalada.
+§ 3º A instalação predial hidráulica ligada à rede pública de abastecimento de água não poderá ser também alimentada por outras fontes, ressalvado o disposto nos parágrafos 11 e 12 do artigo 45 da Lei nº 11.445/2007.
+Art. 8º Compete ao Município organizar e prestar diretamente ou autorizar a delegação dos serviços de saneamento básico de interesse local, mediante concessão, nos termos da legislação vigente.
+§ 1º Os serviços de saneamento básico deverão integrar–se com as demais funções essenciais de competência municipal, de modo a assegurar prioridade para a segurança sanitária e o bem-estar de seus habitantes.
+§ 2º A prestação de serviços públicos de saneamento básico por entidade que não integre a administração do titular depende da celebração de contrato, sendo vedada a sua disciplina mediante convênios, termos de parceria ou outros instrumentos de natureza precária.
+Art. 9º Os contratos de concessão para prestação de serviços públicos de saneamento básico, formalizados mediante prévia licitação, estabelecerão as condições de seu controle e fiscalização pelo poder concedente, término, reversão dos bens e serviços, direitos dos concessionários ou permissionários, prorrogação, caducidade e remuneração, que permitam o atendimento das necessidades de saneamento básico da população e que disciplinem os aspectos econômico–financeiros dos contratos.
+
+SEÇÃO II
+DOS PRINCÍPIOS
+
+Art. 10. A Política Municipal de Saneamento Básico orientar–se–á pelos seguintes princípios:
+I – prevalência do interesse público;
+II – integralidade, compreendida como o conjunto de atividades e componentes de cada um dos diversos serviços de saneamento que propicie à população o acesso a eles em conformidade com suas necessidades e maximize a eficácia das ações e dos resultados;
+III – ambiente salubre, indispensável à segurança sanitária e à melhoria da qualidade de vida, como direito de todos, impondo–se ao Poder Público e à coletividade o dever de assegurá–lo;
+IV – articulação com as políticas de desenvolvimento urbano e regional, de habitação, combate à pobreza e sua erradicação, proteção ambiental, promoção da saúde, recursos hídricos e outras de interesse social relevante, destinadas à melhoria da qualidade de vida, para as quais o saneamento básico seja fator determinante;
+V – participação social e o controle social nos processos de formulação das políticas, definição das estratégias, planejamento e controle de serviços e obras de saneamento básico, de decisão e fiscalização sobre custos, qualidade dos serviços, prioridades financeiras e planos de investimentos e na defesa da salubridade ambiental;
+VI – universalização do acesso aos serviços prestados, a equidade e a integralidade dos serviços de saneamento básico prestados, no que tange aos seis componentes: abastecimento de água potável, esgotamento sanitário, limpeza urbana, manejo de resíduos sólidos, drenagem e manejo das águas pluviais;
+VII – respeito à capacidade de pagamento dos usuários na remuneração dos investimentos e dos custos de operação e manutenção dos serviços de saneamento básico;
+VIII – prestação dos serviços públicos de drenagem e manejo das águas pluviais, tratamento, limpeza e fiscalização preventiva das redes adequados à saúde pública, proteção do meio ambiente e segurança da vida e do patrimônio público e privado;
+IX – estímulo à pesquisa, ao desenvolvimento e à utilização de tecnologias apropriadas, consideradas a capacidade de pagamento dos usuários, a adoção de soluções graduais e progressivas e a melhoria da qualidade com ganhos de eficiência, sustentabilidade e econômica e redução dos custos para os usuários;
+X – redução e controle das perdas de água, inclusive na distribuição de água tratada, com estímulo à racionalização de seu consumo pelos usuários e fomento à eficiência energética, ao reuso de efluentes sanitários e ao aproveitamento de águas de chuva;
+XI – transparência das ações, baseada em sistemas de informações e processos decisórios institucionalizados e participativos;
+XII – segurança, qualidade e regularidade e continuidade do serviço prestado;
+XIII – a integração das infraestruturas e serviços com a gestão eficiente dos recursos hídricos;
+XIV – adoção de instrumentos regulatórios para eficiência, eficácia e efetividade das ações previstas ou planejadas no Plano Municipal de Saneamento Básico, atribuindo competência à população local para o exercício de controle social, conforme Leis Federais nº 11.445/2007 e 14.026/2020.
+
+SEÇÃO III
+DOS OBJETIVOS
+
+Art. 11. São objetivos da Política Municipal de Saneamento Básico:
+I – contribuir para o desenvolvimento nacional, a redução das desigualdades regionais, a geração de emprego e de renda, a inclusão social e a promoção da saúde pública;
+II – priorizar planos, programas e projetos que visem à implantação e à ampliação dos serviços e das ações de saneamento básico nas áreas ocupadas por populações de baixa renda, incluídos os núcleos urbanos informais consolidados, quando não se encontrarem em situação de risco;
+III – proporcionar condições adequadas de salubridade sanitária às populações rurais e de pequenos núcleos urbanos isolados;
+IV – assegurar que a aplicação dos recursos financeiros administrados pelo poder público dê-se segundo critérios de promoção da salubridade sanitária, de maximização da relação benefício/custo e de maior retorno social;
+V – incentivar a adoção de mecanismos de planejamento, regulação e fiscalização da prestação dos serviços de saneamento básico;
+VI – promover alternativas de gestão que viabilizem a autossustentação econômica e financeira dos serviços de saneamento básico, com ênfase na cooperação com os governos estadual, federal e região metropolitana;
+VII – promover o desenvolvimento institucional do saneamento básico, estabelecendo meios para a unidade e articulação das ações dos diferentes agentes, bem como do desenvolvimento de sua organização, capacidade técnica, gerencial, financeira e de recursos humanos contemplados as especificidades locais;
+VIII – fomentar o desenvolvimento científico e tecnológico, a adoção de tecnologias apropriadas e a difusão dos conhecimentos gerados de interesse para o saneamento básico;
+IX – minimizar os impactos ambientais relacionados à implantação e desenvolvimento das ações, obras e serviços de saneamento básico e assegurar que sejam executadas de acordo com as normas relativas à proteção do meio ambiente, ao uso e ocupação do solo e à saúde;
+X – promover educação ambiental destinada à economia de água pelos usuários;
+XI – promover a capacitação técnica do setor;
+XII – promover a concorrência na prestação dos serviços;
+XIII – priorizar, apoiar e incentivar planos, programas e projetos que visem à implantação e à ampliação dos serviços e das ações de saneamento integrado, nos termos desta Lei.
+
+SEÇÃO IV
+DAS DIRETRIZES GERAIS
+
+Art. 12. O acompanhamento e execução da Política Municipal de Saneamento Básico será de competência da Secretaria Municipal de Conservação e Serviços Públicos (SECONSER), que distribuirá de forma transdisciplinar em todas as Secretarias e órgãos da Administração Municipal, respeitadas as suas competências.
+Art. 13. A formulação, implantação, funcionamento e aplicação dos instrumentos da Política Municipal de Saneamento Básico orientar-se-ão pelas seguintes diretrizes:
+I – a adoção de critérios objetivos de elegibilidade e prioridade, levando em consideração fatores como nível de renda e cobertura, grau de urbanização, concentração populacional, disponibilidade hídrica, riscos sanitários, epidemiológicos e ambientais;
+II – a destinação de recursos financeiros administrados pelo Município far–se–á segundo critérios de melhoria da saúde pública e do meio ambiente, de maximização da relação benefício/custo e da maximização do aproveitamento das instalações existentes, bem como do desenvolvimento da capacidade técnica, gerencial e financeira das instituições contempladas;
+III – a valorização do processo de planejamento e decisão sobre medidas preventivas ao crescimento caótico de qualquer tipo, objetivando resolver problemas de dificuldade de drenagem, disposição de esgotos, poluição e a ocupação territorial sem a devida observância das normas de saneamento básico previstas nesta Lei, no Plano Municipal de Saneamento Básico e demais normas municipais;
+IV – a coordenação e integração das políticas, planos, programas e ações governamentais de saneamento, saúde, meio ambiente, recursos hídricos, desenvolvimento urbano e rural, habitação, uso e ocupação do solo;
+V – a atuação integrada dos órgãos públicos municipais, estaduais e federais de saneamento básico;
+VI – a consideração às exigências e características locais, à organização social e às demandas socioeconômicas da população;
+VII – a prestação dos serviços públicos de saneamento básico será orientada pela busca permanente da universalidade e qualidade;
+VIII – as ações, obras e serviços de saneamento básico deverão ser planejados e executados de acordo com as normas relativas ao ordenamento urbano, à proteção do meio ambiente e à saúde pública, cabendo aos órgãos e entidades por elas responsáveis o licenciamento, a fiscalização e o controle dessas ações, obras e serviços, nos termos de sua competência legal;
+IX – a bacia hidrográfica deverá ser considerada como unidade de planejamento para fins de revisão do Plano Municipal de Saneamento Básico, compatibilizando com o Plano Municipal de Saúde, Plano Municipal de Meio Ambiente, Plano Diretor e com o Plano Diretor de Recursos Hídricos;
+X – o incentivo ao desenvolvimento científico na área de saneamento básico, à capacitação tecnológica da área, à formação de recursos humanos e à busca de alternativas adaptadas às condições de cada local;
+XI – a adoção de indicadores e parâmetros sanitários e epidemiológicos e do nível de vida da população como norteadores do planejamento e definição dos programas, projetos e ações de saneamento básico;
+XII – a promoção de programas de educação ambiental, participação e mobilização social, com ênfase em saneamento básico;
+XIII – a realização de investigação e divulgação sistemáticas de informações sobre os problemas de saneamento básico e educação ambiental, além de diagnóstico da situação e de seus impactos nas condições de vida, utilizando sistema de indicadores sanitários, epidemiológicos, ambientais e socioeconômicos e apontando as causas das deficiências detectadas;
+XIV – o sistema de informações sobre saneamento básico deverá ser compatibilizado com o Sistema Nacional de Informações em Saneamento Básico e os sistemas de informações sobre meio ambiente, recursos hídricos, desenvolvimento urbano e saúde;
+XV – a participação social na definição de princípios e diretrizes da política pública de saneamento, no planejamento das ações, no acompanhamento da sua execução e na sua avaliação;
+XVI – a educação ambiental e mobilização social como estratégia permanente para o fortalecimento da participação e controle social, respeitadas as peculiaridades locais e assegurando–se os recursos e condições necessárias para sua viabilização;
+XVII – a participação social na definição de estratégias de comunicação e canais de acesso às informações, com linguagem acessível a todos os segmentos sociais;
+XVIII – a promoção de alternativas de gestão que viabilizem a autossustentação econômica e financeira dos serviços de saneamento básico, com ênfase na cooperação com os governos federal e estadual, bem como com entidades municipais;
+XIX – a promoção do desenvolvimento institucional do saneamento básico, estabelecendo meios para a unidade e articulação das ações dos diferentes agentes, bem como do desenvolvimento de sua organização, capacidade técnica, gerencial, financeira e de recursos humanos, contempladas as especificidades locais;
+XX – o fomento do desenvolvimento científico e tecnológico, com a adoção de tecnologias apropriadas e a difusão dos conhecimentos gerados de interesse para o saneamento básico.
+Art. 14. Ficam obrigados os agentes prestadores de serviços públicos de saneamento básico a divulgar a planilha de custos dos serviços, obedecendo ao princípio da transparência das ações.
+
+CAPÍTULO II
+DO SISTEMA MUNICIPAL DE SANEAMENTO BÁSICO
+SEÇÃO I
+DA COMPOSIÇÃO
+
+Art. 15. A Política Municipal de Saneamento Básico contará, para execução das ações dela decorrentes, com o Sistema Municipal de Saneamento Básico (SMSB).
+Art. 16. O SMSB fica definido como o conjunto de agentes institucionais e instrumento legais que, no âmbito das respectivas competências, atribuições, prerrogativas e funções, integram-se, de modo articulado e cooperativo, para a formulação das políticas, definição de estratégias e execução das ações de saneamento básico.
+Art. 17. O SMSB é composto dos seguintes instrumentos:
+I – Plano Municipal de Saneamento Básico (PMSB);
+II – Conferência Municipal de Saneamento Básico (COMUSB);
+III – Conselho Municipal de Saneamento Básico (COMSAB);
+IV – Fundo Municipal de Saneamento Básico (FMSB);
+V – Sistema Municipal de Informações em Saneamento Básico (SIMISAB).
+
+SEÇÃO II
+DO PLANO MUNICIPAL DE SANEAMENTO BÁSICO
+
+Art. 18. O Plano Municipal de Saneamento Básico (PMSB) é o conjunto de ações destinado a articular, integrar e coordenar recursos tecnológicos, humanos, econômicos e financeiros, com vistas ao alcance de níveis crescentes de salubridade ambiental para a execução dos serviços públicos de saneamento básico, em conformidade com o estabelecido nas Leis Federais Lei nº 11.445/2007 e 14.026/2020 e Decreto Municipal nº 13.669/2020.
+Art. 19. O PMSB contemplará um período de 10 (dez) anos e conterá, como principais elementos:
+I – avaliação e caracterização da situação de saneamento básico do Município, por meio de indicadores sanitários, epidemiológicos e ambientais;
+II – objetivos e diretrizes gerais, definidos mediante planejamento integrado, levando em conta outros planos setoriais e regionais;
+III – estabelecimento de metas de curto, médio e longo prazos;
+IV – Identificação dos obstáculos de natureza político–institucional, legal, econômico-financeira, administrativa, cultural e tecnológica que se interpõem à consecução dos objetivos e metas propostos;
+V – formulação de estratégias e diretrizes para a superação dos obstáculos identificados;
+VI – caracterização e quantificação dos recursos humanos, materiais, tecnológicos, institucionais e administrativos necessários à execução das ações propostas;
+VII – cronograma de execução das ações formuladas;
+VIII – definição dos recursos financeiros necessários, das fontes de financiamento e cronograma de aplicação;
+IX – programa de investimentos em obras e outras medidas relativas à utilização, recuperação, conservação e proteção dos sistemas de saneamento básico, em consonância com o Plano Plurianual de Ação Governamental.
+Art. 20. O PMSB será atualizado quadrienalmente, durante o período de sua vigência, tomando por base os relatórios sobre o saneamento básico de cada região.
+§ 1º  Os relatórios referidos no caput deste artigo serão publicados até 30 de março do quadriênio pelo COMSAB, reunidos sob o título de “Situação de Saneamento Básico do Município”.
+§ 2º O relatório “Situação de Saneamento Básico do Município”, conterá, dentre outros:
+I – avaliação da situação do saneamento básico dos agrupamentos populacionais urbano e rural da área adstrita ao Município;
+II – avaliação do cumprimento dos programas previstos no PMSB;
+III – proposição de possíveis ajustes dos programas, cronogramas de obras e serviços e das necessidades financeiras previstas;
+IV – as decisões tomadas pelo COMSAB previstos no artigo 24 desta Lei.
+Art. 21. A previsão orçamentária para a implantação do PMSB deverá constar das leis sobre o Plano Plurianual, as Diretrizes Orçamentárias e Orçamento Anual do Município.
+
+SEÇÃO III
+DA CONFERÊNCIA MUNICIPAL DE SANEAMENTO BÁSICO
+
+Art. 22.  A Conferência Municipal de Saneamento Básico (COMUSB), parte do processo de elaboração e revisão do PMSB, contará com a representação dos vários segmentos sociais e será convocada pelo Chefe do Poder Executivo ou, extraordinariamente, pelo Conselho Municipal de Saneamento Básico.
+§ 1º A Conferência Municipal de Saneamento Básico ocorrerá a cada 2 (dois) anos.
+§ 2º Preferencialmente serão realizadas pré-conferências como parte do processo e
+contribuição para a Conferência Municipal de Saneamento Básico.
+§ 3º A representação dos usuários pertencentes ao segmento que congrega as associações comunitárias ou sociedade civil na COMUSB será paritária em relação ao conjunto dos demais segmentos.
+§ 4º A Conferência Municipal de Saneamento Básico terá sua organização e normas de funcionamento definidas em regimento próprio, proposta pelo Conselho Municipal de Saneamento Básico e aprovada pelo Chefe do Poder Executivo.
+
+SEÇÃO IV
+DO CONSELHO MUNICIPAL DE SANEAMENTO BÁSICO (COMSAB)
+
+Art. 23. Fica instituído o Conselho Municipal de Saneamento Básico (COMSAB), órgão colegiado deliberativo, consultivo e normativo, de nível estratégico superior do SMSB, para atuar no controle social do SIMISAB e do FMSB, sem prejuízo das atribuições e responsabilidades das instâncias dos poderes executivo e legislativo municipais.
+Parágrafo único. As atribuições e as regras de funcionamento do COMSAB serão definidas por decreto.
+Art. 24. Compete ao COMSAB:
+I – auxiliar na formulação das políticas de saneamento básico, definir estratégias e prioridades, acompanhar e avaliar sua implementação;
+II – publicar o relatório “Situação de Saneamento Básico do Município”;
+III – deliberar sobre propostas de projetos de lei e programas de saneamento básico;
+IV – fomentar o desenvolvimento científico, a pesquisa, a capacitação tecnológica e a formação de recursos humanos;
+V – monitorar o cumprimento da Política Municipal de Saneamento Básico, especialmente no que diz respeito ao fiel cumprimento de seus princípios e objetivos e adequada prestação dos serviços e utilização dos recursos;
+VI – decidir sobre propostas de alteração da Política Municipal de Saneamento Básico;
+VII – atuar no sentido da viabilização de recursos destinados aos planos, programas e projetos de saneamento básico;
+VIII – estabelecer diretrizes para a formulação de programas de aplicação dos recursos do Fundo Municipal de Saneamento Básico;
+IX – estabelecer diretrizes e mecanismos para o acompanhamento, fiscalização e controle do Fundo Municipal de Saneamento Básico;
+X – estimular a criação de associações (ou conselhos) locais de saneamento básico;
+XI – articular-se com outros conselhos municipais existentes no País e com o conselho estadual, com vistas à implementação de ações conjuntas na Política de Saneamento Básico;
+XII – estabelecer as metas relativas à cobertura de abastecimento de água, de cobertura dos serviços de esgotamento sanitário, índice e níveis de tratamento de esgotos, perdas em sistema de água e de regularidade do abastecimento;
+XIII – propor a estrutura da comissão organizadora da Conferência Municipal de Saneamento Básico;
+XIV – examinar propostas e denúncias e responder a consultas sobre assuntos pertinentes a ações e serviços de saneamento;
+XV – elaborar e aprovar o seu regimento interno.
+Art. 25. Em conformidade com o disposto no artigo 47 da Lei Federal nº 11.445, de 05 de janeiro de 2007, alterado pela Lei 14.026/2020, de 15 de julho de 2020, o COMSAB, o órgão de composição tripartite e paritária, será constituído pelos seguintes membros e seus respectivos suplentes:
+ I – dos titulares dos serviços:
+a) 1 (um) representante do Gabinete do Prefeito;
+II – de órgãos governamentais relacionados ao setor de saneamento básico:
+a) 1 (um) representante da Secretaria Municipal de Conservação o e Serviços Públicos – SECONSER;
+b) 1 (um) representante da Secretaria Municipal de Meio Ambiente, Recursos Hídricos e Sustentabilidade – SMARHS;
+c) 1 (um) representante da Fundação Municipal de Saúde – FMS;
+d) 1 (um) representante da Companhia Municipal de Limpeza Urbana – CLIN;
+e) 1 (um) representante da Secretaria Municipal de Habitação e Regularização Fundiária – SMHRF;
+f) 1 (um) representante da Empresa Municipal de Urbanização e Saneamento – EMUSA;
+g) 1 (um) representante do Instituto Rio Metrópole – IRM, designado pelo Estado no campo funcional de Saneamento Básico; e
+h) 1 (um) representante do Comitê da Região Hidrográfica da Baía de Guanabara – CBH–BG.
+III – dos prestadores de serviços públicos de saneamento básico:
+a) 1 (um) representante da Concessionária Águas de Niterói – CAN; e
+b) 1 (um) representante da Econit Engenharia Ambiental – ECONIT.
+IV – dos usuários de serviços de saneamento básico:
+a) 1 (um) representante da Câmara de Dirigentes Lojistas de Niterói – CDL;
+b) 1 (um) representante da Associação das Empresas do Mercado Imobiliário de Niterói – ADEMI;
+c) 1 (um) representante da Federação das Associações de Moradores do Município de Niterói – FAMNIT; e
+d) 1 (um) representante do Conselho Comunitário da Orla da Baia de Niterói – CCOB.
+V – de entidades técnicas, organizações da sociedade civil e de defesa do consumidor relacionadas ao setor de saneamento básico:
+a) 1 (um) representante da Associação Brasileira de Engenharia Sanitária – ABES;
+b) 1 (um) representante do Conselho Regional de Engenharia e Agronomia do Rio de Janeiro – CREA;
+c) 1 (um) representante do Comissão de Defesa do Consumidor da Ordem dos Advogados do Brasil – OAB/RJ; e
+d) 1 (um) representante de instituição de ensino superior, com notório saber no campo da engenharia sanitária.
+§ 1º Os conselheiros e seus suplentes serão indicados pelo respetivo segmento, entidade ou órgão com representação o no Conselho e nomeados por decreto do Prefeito.
+ § 2º Os membros do Conselho e seus respectivos suplentes, terão mandato de 02 (dois) anos.
+Art. 26. A estrutura do COMSAB compreenderá o Colegiado e a Secretaria Executiva, cujas atividades e funcionamento serão definidos no seu Regimento Interno.
+Parágrafo único. A Secretaria Executiva do COMSAB será exercida pela Secretaria Municipal de Conservação e Serviços Públicos – SECONSER.
+Art. 27. Os representantes do Poder Executivo Municipal no COMSAB serão responsáveis por viabilizar nos órgãos onde estejam lotados, o suporte técnico e administrativo ao Conselho.
+Parágrafo único. Os serviços prestados ao COMSAB serão considerados como de relevante serviço público e não terão caráter remuneratório.
+
+SEÇÃO V
+DO FUNDO MUNICIPAL DE SANEAMENTO BÁSICO
+
+Art. 28. Fica instituído o Fundo Municipal de Saneamento Básico (FMSB), tendo por finalidade concentrar recursos para a realização de investimentos em ampliação, expansão, substituição, melhoria e modernização das infraestruturas operacionais e em recursos gerenciais necessários à prestação dos serviços de saneamento básico do Município de Niterói, visando à sua disposição universal, integral e igualitária.
+Art. 29. Fica vedada a consignação de recursos financeiros para aplicação em ações de saneamento básico pelo Município que não seja por meio do FMSB, ressalvados os recursos financeiros oriundos de transferência de fundos estaduais e federais que tenham como objeto de suas ações o saneamento básico, com regras previamente estabelecidas.
+Art. 30. Os repasses financeiros do FMSB serão realizados, levando–se em conta que:
+I – os recursos serão objeto de contratação de financiamento, com taxas a serem fixadas;
+II – a utilização dos recursos do FMSB, inclusive nas operações sem retorno financeiro, será acompanhada de contrapartida da entidade tomadora;
+III – a aplicação dos recursos do FMSB, a título de concessão de subsídios ou a fundo perdido, dependerá da comprovação de interesse público relevante ou da existência de riscos elevados à saúde pública;
+IV – o PMSB é o único instrumento hábil para orientar a aplicação dos recursos financeiros do FMSB;
+V – fica vedada a utilização dos recursos do FMSB para pagamento de dívidas e cobertura de déficits dos órgãos e entidades envolvidas direta ou indiretamente na PMSB.
+Art. 31. Constituem receitas do FMSB:
+I – recursos provenientes de dotações orçamentárias do Município;
+II – recursos vinculados às receitas de taxas e tarifas;
+III – recursos provenientes de multas administrativas;
+IV – transferência voluntária de recursos do Estado ou da União, ou de instituições vinculadas a estes, destinadas a ações de saneamento básico;
+V – parcelas de amortização e juros dos empréstimos concedidos;
+VI – recursos provenientes de doações ou subvenções de organismos e entidades nacionais e internacionais, públicas ou privadas;
+VII – recursos provenientes de ajuda e cooperação internacional e de acordos bilaterais entre governos;
+VIII – percentual do faturamento de serviços de saneamento, desde que autorizado por Agência Reguladora e/ou pelo COMSAB;
+IX – as rendas provenientes das aplicações dos seus recursos;
+X – parcelas de royalties;
+XI – outros recursos que vierem a ser agregados.
+Art. 32. As disponibilidades do FMSB não vinculadas a desembolsos de curto prazo ou a garantias de financiamento com prazos e liquidez deverão ser investidas em aplicações financeiras com prazos de liquidez compatíveis com o seu programa de execução.
+Art. 33. O saldo financeiro do FMSB apurado ao final de cada exercício será transferido para o exercício seguinte, a crédito do mesmo Fundo.
+Art. 34. Constituem passivos do FMSB as obrigações de qualquer natureza que venham a assumir para a execução dos programas e ações previstos no Plano Municipal de Saneamento Básico e no Plano Plurianual, observada a Lei de Diretrizes Orçamentárias.
+Art. 35. A organização administrativa e o funcionamento do FMSB serão regulamentados através de Decreto.
+
+SEÇÃO VI
+DO SISTEMA MUNICIPAL DE INFORMAÇÕES EM SANEAMENTO BÁSICO (SIMISAB)
+
+Art. 36. Fica instituído o Sistema Municipal de Informações em Saneamento Básico (SIMISAB), que possui como objetivos:
+I – ser articulado com o Sistema Nacional de Informações em Saneamento Básico (SINISA);
+II – considerar as fontes secundárias de informações, tais como: IBGE, SNIS/SINISA, DATASUS, CADÚNICO/MDS, SEDEC, ANA, dentre outros, e de diagnósticos e estudos realizados por órgãos ou instituições regionais, estaduais ou por programas específicos em áreas afins ao saneamento básico;
+III – coletar e sistematizar dados relativos às condições da prestação dos serviços públicos de saneamento básico, com informações dos diversos componentes do saneamento básico, devendo estar associado a ferramentas de geoprocessamento;
+IV – disponibilizar estatísticas, indicadores e outras informações relevantes para a caracterização da demanda e da oferta de serviços públicos de saneamento básico;
+V – ser composto por indicadores de fácil obtenção, apuração e compreensão, confiáveis do ponto de vista do seu conteúdo e fontes;
+VI – permitir e facilitar o monitoramento e avaliação da eficiência e da eficácia da prestação dos serviços de saneamento básico;
+VII – contemplar os critérios analíticos da eficácia, eficiência e efetividade da prestação dos serviços de saneamento básico.
+Art. 37. O Município de Niterói poderá articular–se com outros municípios, por meio da gestão associada ou instituições estaduais ou federais, para a construção de sistemas de informações em saneamento básico que possam ser compartilhados coletivamente por meio de plataformas centralizadas ou módulos customizados articulados com o SINISA, podendo a implantação do SIMISAB ocorrer conforme modelo disponibilizado pelo Ministério das Cidades.
+Art. 38. As informações do SIMISAB serão públicas e acessíveis a todos, devendo os dados serem atualizados e disponibilizados no sítio eletrônico da SECONSER.
+Art. 39. O funcionamento e a organização do SIMISAB serão regulamentados através de Decreto.
+
+CAPÍTULO III
+DA PARTICIPAÇÃO E DO CONTROLE SOCIAL
+
+Art. 40. A participação social deverá ocorrer por meio de mecanismos e procedimentos que garantam à sociedade informações, representações técnicas e participações nos processos de formulação de políticas, de planejamento e de avaliação relacionados aos serviços públicos de saneamento básico.
+Art. 41. O controle e a participação social serão exercidos mediante adoção dos seguintes mecanismos:
+I – debates e audiências públicas;
+II – consultas públicas;
+III – participação em órgãos colegiados de caráter consultivo na formulação da política municipal, no seu planejamento, avaliação e representação no organismo de regulação e fiscalização;
+IV – participação nas etapas de monitoramento e avaliação, bem como na revisão do PMSB.
+
+CAPÍTULO IV
+DA REGULAÇÃO E FISCALIZAÇÃO DA PRESTAÇÃO DOS
+SERVIÇOS DE SANEAMENTO BÁSICO
+
+Art. 42. A regulação deverá atender aos princípios da independência decisória, incluindo autonomia administrativa, orçamentária e financeira da entidade reguladora, da transparência, tecnicidade, celeridade e objetividade das decisões.
+Art. 43. São objetivos da regulação:
+I – estabelecer padrões e normas para a adequada prestação dos serviços e para a satisfação dos usuários;
+II – garantir o cumprimento das condições e metas estabelecidas;
+III – prevenir e reprimir o abuso do poder econômico, ressalvada a competência dos órgãos integrantes do sistema nacional de defesa da concorrência;
+IV – definir tarifas que assegurem tanto o equilíbrio econômico e financeiro dos contratos como a modicidade tarifária, mediante mecanismos que induzam a eficiência e eficácia dos serviços e que permitam a apropriação social dos ganhos de produtividade;
+V – editar normas relativas às dimensões técnica, econômica e social de prestação dos serviços, devendo abranger, ao menos, os seguintes aspectos:
+a) padrões e indicadores de qualidade da prestação dos serviços;
+b) requisitos operacionais e de manutenção dos sistemas;
+c) metas progressivas de expansão e de qualidade dos serviços e os respectivos prazos;
+d) regime, estrutura e níveis tarifários, bem como os procedimentos e prazos de sua fixação, reajuste e revisão;
+e) medição, faturamento e cobrança de serviços;
+f) monitoramento dos custos;
+g) avaliação da eficiência e eficácia dos serviços prestados;
+h) plano de contas e mecanismos de informação, auditoria e certificação;
+i) subsídios tarifários e não tarifários;
+j) padrões de atendimento ao público e mecanismos de participação e informação; e
+k) medidas de contingências e de emergências, inclusive racionamento.
+Art. 44. O órgão ou a entidade regulatória deverá propor a fixação dos Direitos e Deveres dos Usuários, devendo esta proposição ser aprovada e homologada no COMSAB.
+Art. 45. As normas a que se referem o inciso V do artigo 43 fixarão os prazos para os prestadores de serviços comunicarem aos usuários as providências adotadas em face de queixas ou de reclamações relativas aos serviços.
+Parágrafo único. As entidades fiscalizadoras deverão receber e se manifestar conclusivamente sobre as reclamações que, a juízo do interessado, não tenham sido suficientemente atendidas pelos prestadores dos serviços.
+Art. 46. O órgão ou entidade responsável pela regulação e fiscalização dos serviços públicos de saneamento básico deverá proceder à monitorização e fiscalização dos parâmetros para a garantia do atendimento essencial à saúde pública, inclusive quanto ao volume mínimo per capita de água para abastecimento público, observadas as normas nacionais relativas à potabilidade da água.
+Parágrafo único. Os órgãos locais responsáveis pela vigilância à saúde deverão definir os parâmetros para o atendimento essencial à saúde.
+Art. 47. Os prestadores dos serviços de saneamento básico deverão fornecer à entidade reguladora todos os dados e informações necessários ao desempenho de suas atividades, na forma das normas legais, regulamentares e contratuais.
+
+CAPÍTULO V
+DAS DISPOSIÇÕES FINAIS E TRANSITÓRIAS
+
+Art. 48. Os órgãos e entidades municipais da área de saneamento básico serão reorganizados para atender ao disposto nesta lei.
+Art. 49. No que não conflitarem com as disposições desta Lei, aplicam–se aos serviços de saneamento básico as demais normas legais do Município, especialmente as legislações tributária, de uso e ocupação do solo, de obras, sanitária e ambiental.
+Art. 50. A partir da data de promulgação desta Lei, a concessionária responsável pelos serviços de abastecimento de água e esgotamento sanitário no município de Niterói terá o prazo de 180 (cento e oitenta) dias para apresentar um estudo técnico com o objetivo de atingir a meta de 100% de universalização da coleta e tratamento de esgoto no Município.
+Art. 51. O Poder Público Municipal poderá criar uma agência reguladora a fim de gerenciar e fiscalizar as políticas definidas nesta Lei e fazer cumprir as metas estabelecidas no artigo 50.
+Art. 52. Poderão ser cobradas tarifas de drenagem para todos os que vierem a ser contemplados pelos efeitos desta Lei, conforme determinam as Leis Federais 11.445/2007 e 14.026/2020.
+§ 1º Caberão ao COMSAB e à agência reguladora, a que se refere o artigo 51 desta Lei, estabelecerem o percentual e o cálculo periódico dos reajustes da tarifa a que se refere o caput deste artigo.
+§ 2º O cálculo da tarifa e seus reajustes periódicos a que se refere o parágrafo primeiro deste artigo serão estabelecidos segundo as diferentes categorias e faixas de consumo.
+Art. 53. Toda edificação permanente urbana será conectada às redes públicas de abastecimento de água e de esgotamento sanitário disponíveis e sujeita ao pagamento das tarifas e de outros preços públicos decorrentes da conexão e do uso desses serviços.
+Parágrafo único. Na ausência de redes públicas de abastecimento de água e coleta de esgoto, serão admitidas soluções individuais de abastecimento e de tratamento e disposição final dos esgotos sanitários, observadas as normas editadas pela entidade reguladora e pelos órgãos responsáveis pelas políticas ambiental, sanitária e de recursos hídricos.
+Art. 54. Em situação crítica de escassez ou contaminação de recursos hídricos que obrigue a adoção de racionamento, declarada pela autoridade gestora de recursos hídricos, o ente regulador poderá adotar mecanismos tarifários de contingência, com objetivo de cobrir custos adicionais decorrentes, garantindo o equilíbrio financeiro da prestação do serviço e a gestão da demanda.
+Art. 55. Os prestadores de serviços de saneamento básico são obrigados a disponibilizar manual de prestação de serviço e atendimento ao usuário e assegurar seu amplo e gratuito acesso.
+Art. 56. O Executivo Municipal regulamentará as disposições desta Lei no prazo de 180 (cento e oitenta) dias, a contar de sua promulgação.
+Art. 57. Esta Lei entra em vigor na data de sua publicação, revogando–se as disposições em contrário.

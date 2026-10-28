@@ -1,0 +1,35 @@
+                                                       ESTIMATIVA DO IMPACTO ORÇAMENTÁRIO-FINANCEIRO
+                                                        (Arts. 16 e 17 da Lei Complementar Federal nº 101, de 4 de maio de 2000)
+
+                                                           APPGGs e AMCI
+Objeto:
+                                Criação de 10 cargos com gratificação + gratificação do servidores atuais
+                                                                                                                                    Jan 2023 a         Jan 2024 a         Jan 2025 a
+                                                                                                                                   Dez/2023 c/        Dez/2024 c/        Dez/2025 c/
+                                                                                                                                      Acrésc.            Acrésc.            Acrésc.
+DESPESA LÍQUIDA COM PESSOAL ( I )                                                                                                   2.036.430.726,4   2.115.511.590,4     2.180.763.806,2
+               Pessoal Ativo (i + ii + iii)                                                                                         1.643.822.319,6   1.711.124.931,5     1.764.245.547,4
+                    (i) Pessoal Ativo (RGF)                                                                                         1.556.719.447,6   1.603.421.031,0     1.651.523.661,9
+                    (ii) Potenciais aumentos**                                                                                       85.223.182,57      104.454.380,7      109.333.741,7
+                    (iii) Aumento relativo à proposta em questão                                                                        1.879.689,4       3.249.519,8         3.388.143,8
+               Pessoal Inativo e Pensionista****                                                                                     389.294.036,2      400.972.857,3      413.002.043,0
+               OUTRAS DESP. PESSOAL DECORRENTES CONTRATOS TERCEIRIZAÇÃO (art. 18, § 1º da LRF)                                          3.314.370,6       3.413.801,7         3.516.215,7
+Despesas não Computadas (art. 19, § 1º da LRF) (II)                                                                                  114.057.046,7      117.476.286,0      121.000.574,6
+               ( - ) Decorrentes de Decisão Judicial                                                                                  37.667.933,2       38.797.971,2       39.961.910,3
+               ( - ) Inativos e Pensionistas com Recursos Vinculados****                                                              69.109.604,7       71.182.892,8       73.318.379,6
+               ( - ) Indenizações por Demissão e Incentivos à Demissão Voluntária                                                       7.277.108,8       7.495.422,0         7.720.284,7
+               ( - ) Despesas de Exercícios Anteriores                                                                                      2.400,1               -                   -
+               ( - ) Convocação Extraordinária (inciso II, § 6º, art. 57 da CF)                                                                 -                 -                   -
+REPASSES PREVIDENCIÁRIOS AO RPPS ( III )
+
+TOTAL DA DESPESA COM PESSOAL PARA FINS DE APURAÇÃO DO LIMITE - TDP (IV) = (I - II + III)                                            1.922.373.679,6    1.998.035.304,4    2.059.763.231,6
+RECEITA CORRENTE LÍQUIDA - RCL (V)                                                                                                  5.054.702.680,7   4.851.869.122,36   4.893.266.724,84
+% do TOTAL DA DESPESA LÍQUIDA COM PESSOAL P/FINS APUR. DO LIMITE - TDP SOBRE A RCL (VI) = (IV/V)*100                                        38,03%             41,18%             42,09%
+LIMITE LEGAL (inciso III, art. 20 da LRF) - <54,00%>                                                                                2.729.539.447,6    2.620.009.326,1    2.642.364.031,4
+LIMITE PRUDENCIAL 95% (§ único, art. 22 da LRF) - <51,30%>                                                                          2.593.062.475,2    2.489.008.859,8    2.510.245.829,8
+LIMITE DE ALERTA 90% (Inciso II do § 1º do art.59 da LRF) <48,60%>                                                                  2.456.585.502,8    2.358.008.393,5    2.378.127.628,3
+Fonte: RGF 3º quadrimestre de 2022
+
+*Foi considerado um aumento vegetativo de 3%
+**Valores que potencialmente aumentarão o Pessoal Ativo (RGF)
+***Receita Corrente Líquida - RCL conforme projeção da Secretaria Municipal de Fazenda para envio do Anexo de Metas Fiscais

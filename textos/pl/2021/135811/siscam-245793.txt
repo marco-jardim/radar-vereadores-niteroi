@@ -1,0 +1,21 @@
+                                      ANEXO II
+
+                           NOVA NOMENCLATURA DOS CARGOS
+
+          DE               QUADRO   SAIR             PARA                QUADRO2   ENTRAR
+
+  AGENTE DE SEGURANÇA        QS       5      AGENTE DE SEGURANÇA           QP        5
+   ASSESSOR LEGISLATIVO      QS      19       TÉCNICO LEGISLATIVO          QP        19
+  ASSISTENTE LEGISLATIVO     QS      17      ASSISTENTE LEGISLATIVO        QP        17
+   AUXILIAR DE ARQUIVO       QS       4     ESCRITURÁRIO LEGISLATIVO       QP        4
+  AUXILIAR DE BIBLIOTECA     QS       4     ESCRITURÁRIO LEGISLATIVO       QP        4
+   AUXILIAR LEGISLATIVO      QS      35       AUXILIAR LEGISLATIVO         QP        35
+  COADJUTOR LEGISLATIVO      QS       8      COADJUTOR LEGISLATIVO         QP        8
+         CONTÍNUO            QS       3    AUXILIAR DE SERVIÇOS GERAIS     QP        3
+        DIGITADOR            QP       8        OFICIAL LEGISLATIVO         QP        8
+ESCRITURÁRIO DATILÓGRAFO     QS       3     ESCRITURÁRIO LEGISLATIVO       QP        3
+        MOTORISTA            QS       1            MOTORISTA               QP        1
+    OFICIAL LEGISLATIVO      QS       3        OFICIAL LEGISLATIVO         QP        3
+OPERADOR DE COMPUTADOR       QP       1        OFICIAL LEGISLATIVO         QP        1
+         SERVENTE            QP       3    AUXILIAR DE SERVIÇOS GERAIS     QP        3
+         Total                      114               Total                         114

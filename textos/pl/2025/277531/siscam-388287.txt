@@ -1,0 +1,86 @@
+                         ESTIMATIVA DE IMPACTO ORÇAMENTÁRIO - MEMÓRIA DE CÁLCULO
+
+           Rubricas                       2025                     2026                       2027                  2028
+                  Vencimento -              284.793,71 -             424.302,62 -              451.026,55 -          481.373,48
+                    Encargos                         -                        -                         -                     -
+                       Total -              284.793,71 -             424.302,62 -              451.026,55 -          481.373,48
+
+                                                    2025
+               Mês                     Vencimento                Encargos                    TOTAL
+             janeiro                                 -                         -                        -
+           fevereiro                                 -                         -                        -
+             março                                   -                         -                        -
+               abril                                 -                         -                        -
+              maio              -             29.040,83                        -   -             29.040,83
+              junho             -             30.690,35                        -   -             30.690,35
+              julho             -             30.690,35                        -   -             30.690,35
+             agosto             -             30.690,35                        -   -             30.690,35
+           setembro             -             30.690,35                        -   -             30.690,35
+            outubro             -             30.690,35                        -   -             30.690,35
+           novembro             -             30.690,35                        -   -             30.690,35
+           dezembro             -             30.690,35                        -   -             30.690,35
+         SUBTOTAL               -            243.873,25                        -
+     13º Salário+1/3 Férias     -             40.920,46                        -   -             40.920,46
+            TOTAL               -            284.793,71                        -   -            284.793,71
+
+                                                    2026
+               Mês                     Vencimento                Encargos                    TOTAL
+             janeiro            -            30.690,35                         -   -             30.690,35
+           fevereiro            -            30.690,35                         -   -             30.690,35
+             março              -            30.690,35                         -   -             30.690,35
+               abril            -            30.690,35                         -   -             30.690,35
+              maio              -            30.690,35                         -   -             30.690,35
+              junho             -            32.040,72                         -   -             32.040,72
+              julho             -            32.040,72                         -   -             32.040,72
+             agosto             -            32.040,72                         -   -             32.040,72
+           setembro             -            33.001,94                         -   -             33.001,94
+            outubro             -            33.001,94                         -   -             33.001,94
+           novembro             -            33.001,94                         -   -             33.001,94
+           dezembro             -            33.001,94                         -   -             33.001,94
+         SUBTOTAL               -           381.581,66                         -    -
+     13º Salário+1/3 Férias     -            42.720,96                         -   -             42.720,96
+            TOTAL               -           424.302,62                         -   -            424.302,62
+
+                                                    2027
+               Mês                     Vencimento                Encargos                    TOTAL
+             janeiro            -            33.001,94                         -   -             33.001,94
+           fevereiro            -            33.001,94                         -   -             33.001,94
+             março              -            33.001,94                         -   -             33.001,94
+               abril            -            33.001,94                         -   -             33.001,94
+              maio              -            33.001,94                         -   -             33.001,94
+              junho             -            34.322,02                         -   -             34.322,02
+              julho             -            34.322,02                         -   -             34.322,02
+             agosto             -            34.322,02                         -   -             34.322,02
+           setembro             -            34.322,02                         -   -             34.322,02
+            outubro             -            34.322,02                         -   -             34.322,02
+           novembro             -            34.322,02                         -   -             34.322,02
+           dezembro             -            34.322,02                         -   -             34.322,02
+         SUBTOTAL               -           405.263,85                         -    -
+     13º Salário+1/3 Férias     -            45.762,69                         -   -             45.762,69
+            TOTAL               -           451.026,55                         -   -            451.026,55
+
+                                                    2028
+               Mês                     Vencimento                Encargos                    TOTAL
+             janeiro            -            34.322,02                         -   -             34.322,02
+           fevereiro            -            35.351,68                         -   -             35.351,68
+             março              -            35.351,68                         -   -             35.351,68
+               abril            -            35.351,68                         -   -             35.351,68
+              maio              -            35.351,68                         -   -             35.351,68
+              junho             -            36.677,37                         -   -             36.677,37
+              julho             -            36.677,37                         -   -             36.677,37
+             agosto             -            36.677,37                         -   -             36.677,37
+           setembro             -            36.677,37                         -   -             36.677,37
+            outubro             -            36.677,37                         -   -             36.677,37
+           novembro             -            36.677,37                         -   -             36.677,37
+           dezembro             -            36.677,37                         -   -             36.677,37
+         SUBTOTAL               -           432.470,32                         -    -
+     13º Salário+1/3 Férias     -            48.903,16                         -   -             48.903,16
+            TOTAL               -           481.373,48                         -   -            481.373,48
+
+     Referências Mensais
+
+           Despesa                  JUN/2025 A MAI/26       JUN/2026 A MAI/27           JUN/2027 A MAI/28     JUN/2028 A MAI/29
+     Correção Monetária**                5,68%                     4,40%                     4,00%                 3,75%
+
+Premissas:
+Correções monetárias, conforme as metas de inflação do relatório focus de 10/03/2025

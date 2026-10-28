@@ -1,0 +1,46 @@
+| Câmara Municipal de Niterói Gabinete Vereador Professor Tulio Partido Socialismo e Liberdade (PSOL)
+
+Projeto de Lei Nº      /2026
+Institui a Política Municipal de Transparência Ativa e Governança Inteligente da Arborização Urbana (SIGA-Niterói), torna obrigatória a publicidade digital do Inventário Arbóreo em formato de dados abertos e dá outras providências.
+Art. 1º Fica instituída a Política Municipal de Transparência Ativa e Governança Inteligente da Arborização Urbana, denominada SIGA-Niterói, com o objetivo de assegurar o acesso público, irrestrito e atualizado às informações sobre o patrimônio arbóreo da cidade, utilizando tecnologias de monitoramento para a gestão eficiente do meio ambiente urbano.
+Art. 2º São objetivos do SIGA-Niterói:
+I – Garantir o princípio da publicidade e da transparência administrativa na gestão dos ativos verdes;
+II – Permitir o monitoramento dinâmico da cobertura vegetal e sua correlação com ilhas de calor;
+III – Otimizar os recursos públicos de manejo através do uso de dados preditivos;
+IV – Assegurar a integridade dos dados para cumprimento das diretrizes do Plano Nacional de Arborização Urbana (PlaNAU).
+Art. 3º Para cumprimento do dever constitucional de proteger o meio ambiente, o Poder Executivo manterá o Inventário Arbóreo Municipal em formato digital, georreferenciado e de acesso público.
+§ 1º A atualização da base de dados do inventário priorizará a utilização de tecnologias de sensoriamento remoto, varredura a laser (LiDAR) e Inteligência Artificial, visando substituir ou complementar as vistorias manuais e garantir a dinâmica das informações.
+§ 2º O sistema de gestão deverá ser capaz de identificar, no mínimo:
+I – Localização georreferenciada de cada indivíduo arbóreo;
+II – Espécie e estimativa de porte;
+III – Situação fitossanitária e risco de queda;
+IV – Conflitos com equipamentos urbanos (fiação elétrica, iluminação, calçamento).
+Art. 4º Fica instituído o Painel da Transparência Arbórea, portal digital que deverá disponibilizar à população, de forma intuitiva e em linguagem clara:
+I – O mapa das árvores da cidade;
+II – O cronograma de podas programadas e executadas;
+III – Os laudos técnicos que autorizaram supressões (cortes) de árvores;
+IV – O contador de saldo arbóreo (árvores suprimidas versus árvores plantadas no período).
+Parágrafo único. Os dados brutos deverão ser disponibilizados em formato aberto (open data), permitindo seu uso por universidades e pesquisadores.
+Art. 5º A Política SIGA-Niterói adotará indicadores de desempenho para orientar as decisões de plantio e manejo, a serem publicados anualmente:
+I – Índice de Equidade Verde: Métrica que avalia a distribuição da cobertura arbórea entre os diferentes bairros, visando priorizar investimentos nas áreas de menor renda e maior temperatura;
+II – Balanço de Biomassa: Cálculo da perda ou ganho de massa vegetal, não se limitando à contagem numérica de indivíduos.
+Art. 6º As despesas decorrentes da implementação tecnológica prevista nesta Lei correrão por conta das dotações orçamentárias vigentes, especificamente aquelas destinadas à Inovação, Modernização Administrativa e Cidades Inteligentes, conforme previsto na Lei Orçamentária Anual (LOA).
+Parágrafo único. O Poder Executivo poderá firmar convênios com universidades, startups (via Marco Legal das Startups) e entes federativos para o aprimoramento tecnológico da ferramenta.
+Art. 7º O Poder Executivo regulamentará a presente Lei no prazo de 120 (cento e vinte) dias.
+Art. 8º Esta Lei entra em vigor na data de sua publicação.
+JUSTIFICATIVA
+A gestão ambiental de uma cidade com a complexidade e a importância de Niterói exige a superação de métodos analógicos de registro e de aferições visuais subjetivas, incompatíveis com a dinâmica de um centro urbano em constante transformação. Em tempos de Emergência Climática, onde a arborização urbana transcende a função paisagística para se consolidar como infraestrutura essencial de saúde pública e conforto térmico, a administração municipal necessita de dados precisos, auditáveis e atualizados em tempo real.
+
+O presente Projeto de Lei institui o SIGA-Niterói (Sistema de Informações e Governança da Arborização), uma política de transparência ativa que visa institucionalizar e potencializar os instrumentos de gestão já iniciados pelo Poder Executivo. Nesse sentido, a proposta reconhece a importância da base de dados existente no sistema "Arbóribus", mas propõe sua evolução para uma política de Estado, garantindo que esta ferramenta não seja apenas um repositório estático de informações, mas um sistema dinâmico, obrigatório e alimentado continuamente por tecnologias de monitoramento.
+
+A proposição estabelece regras de governança e eficiência administrativa, matérias de competência legislativa asseguradas pela Constituição Federal e pacificadas pelo Supremo Tribunal Federal (Tema 917), que reconhece a legitimidade de leis que, visando a transparência e a modernização, não interferem na estrutura orgânica do Executivo.
+
+O objetivo central é transformar o inventário arbóreo em um instrumento de planejamento preditivo, utilizando as tecnologias de Inteligência Artificial e sensoriamento remoto para antecipar riscos de queda, identificar ilhas de calor e planejar o plantio de forma equânime entre os bairros.
+
+Ressalta-se a plena viabilidade financeira da medida, uma vez que a Lei Orçamentária Anual (LOA 2026) já contempla dotações específicas para inovação tecnológica e monitoramento urbano (via emendas parlamentares e rubricas de "Cidades Inteligentes"). Portanto, este PL não cria despesa nova, mas qualifica o gasto público já autorizado, assegurando que os recursos tecnológicos sejam aplicados na proteção do patrimônio ambiental e na prestação de contas ao cidadão.
+
+Ademais, a proposta alinha Niterói às diretrizes do Plano Nacional de Arborização Urbana (PlaNAU 2025), que condiciona o repasse de futuros recursos federais à existência de sistemas municipais de monitoramento e gestão de dados. Aprovar o SIGA-Niterói é garantir a continuidade administrativa, a transparência no manejo da flora urbana e a aplicação eficiente da tecnologia em favor da qualidade de vida da população.
+
+Plenário Brígido Tinoco, 20 de janeiro de 2026.
+
+Professor Tulio

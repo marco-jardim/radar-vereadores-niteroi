@@ -1,0 +1,114 @@
+            Programa de Desenvolvimento Urbano Sustentável - Vida Nova no Morro Niterói/RJ criado em 08/04/2025 - 15:59
+            Número processo SEI: 03101.000989/2025-78
+                                                                                                                                                  Página: 57
+
+5. FINANCIAMENTO
+  5. 1. Condições Financeiras da Operação
+                                                                                        Taxa de                     Valor
+    Fonte                                                                 Moeda                                                        Valor em USD
+                                                                                        câmbio                      proposto
+
+    Banco Interamericano de Desenvolvimento -
+                                                                          Dólar                1.0000                146.411.000,00    146.411.000,00
+    BID
+
+    5. 1. 1. Banco Interamericano de Desenvolvimento - BID
+        Carência (EM MESES)                            Amortização (EM MESES)                                     Prazo Total (EM MESES)
+
+                          60                                                    240                                              300
+
+    Juros aplicáveis:
+    SOFR + margem de fundo em relação a SOFR (0,41% para o 1º trimestre 2025) + acrescida de spread de crédito
+    (0,80% para o ano de 2025)
+    Periodicidade dos Pagamentos:
+    PAGAMENTOS SEMESTRAIS
+    Comissão de Compromisso:
+    0,5% semestral do valor do saldo do desembolso
+    Comissão de Avaliação:
+    0
+    Taxa de Abertura:
+    0
+    Outros encargos:
+
+    0
+
+    Outras Informações:
+
+    Valor do financiamento (USD) - 117.128.800,00
+    Contrapartida financeira (USD) - 29.282.200,00
+
+            Programa de Desenvolvimento Urbano Sustentável - Vida Nova no Morro Niterói/RJ criado em 08/04/2025 - 15:59
+            Número processo SEI: 03101.000989/2025-78
+                                                                                                                                                 Página: 58
+
+  5. 2. Cronograma de Desembolso
+
+   Nome do componente
+   ( C ) 1 - DESENVOLVIMENTO SOCIOECONOMICO
+   Fonte de financiamento
+   BID
+   Anos
+   1° ano                                                2° ano                                                  3° ano
+   Financiamento             Contrapartida               Financiamento                Contrapartida              Financiamento   Contrapartida
+   1.972.800,00              493.200,00                  1.644.000,00                 411.000,00                 1.315.200,00    328.800,00
+   4° ano                                                5° ano
+   Financiamento             Contrapartida               Financiamento                Contrapartida
+   986.400,00                246.600,00                  657.600,00                   164.400,00
+
+   Nome do componente
+   ( C ) 2 - MELHORIAS HABITACIONAIS
+   Fonte de financiamento
+   BID
+   Anos
+   1° ano                                                2° ano                                                  3° ano
+   Financiamento             Contrapartida               Financiamento                Contrapartida              Financiamento   Contrapartida
+   1.713.216,00              428.304,00                  10.279.296,00                2.569.824,00               10.279.296,00   2.569.824,00
+   4° ano                                                5° ano
+   Financiamento             Contrapartida               Financiamento                Contrapartida
+   10.279.296,00             2.569.824,00                10.279.296,00                2.569.824,00
+
+   Nome do componente
+   ( C ) 3 - URBANIZAÇÃO INTEGRADA E RESILIÊNCIA URBANA
+   Fonte de financiamento
+   BID
+   Anos
+   1° ano                                                2° ano                                                  3° ano
+   Financiamento             Contrapartida               Financiamento                Contrapartida              Financiamento   Contrapartida
+   5.396.400,00              1.349.100,00                11.872.080,00                2.968.020,00               12.411.720,00   3.102.930,00
+   4° ano                                                5° ano
+   Financiamento             Contrapartida               Financiamento                Contrapartida
+   12.411.720,00             3.102.930,00                11.872.080,00                2.968.020,00
+
+            Programa de Desenvolvimento Urbano Sustentável - Vida Nova no Morro Niterói/RJ criado em 08/04/2025 - 15:59
+            Número processo SEI: 03101.000989/2025-78
+                                                                                                                                                  Página: 59
+
+   Nome do componente
+   ( C ) 4 - FORTALECIMENTO INSTITUCIONAL
+   Fonte de financiamento
+   BID
+   Anos
+   1° ano                                                2° ano                                                  3° ano
+   Financiamento             Contrapartida               Financiamento                Contrapartida              Financiamento    Contrapartida
+   1.540.000,00              384.000,00                  1.131.000,00                 284.800,00                 138.200,00       34.000,00
+   4° ano                                                5° ano
+   Financiamento             Contrapartida               Financiamento                Contrapartida
+   137.000,00                34.000,00                   137.000,00                   34.000,00
+
+   Nome do componente
+   (C) 5 - GOVERNANÇA
+   Fonte de financiamento
+   BID
+   Anos
+   1° ano                                                2° ano                                                  3° ano
+   Financiamento             Contrapartida               Financiamento                Contrapartida              Financiamento    Contrapartida
+   2.135.200,00              533.000,00                  2.135.000,00                 534.000,00                 2.135.000,00     534.800,00
+   4° ano                                                5° ano
+   Financiamento             Contrapartida               Financiamento                Contrapartida
+   2.135.000,00              534.000,00                  2.135.000,00                 533.000,00
+
+                                                                                                                                 Danielly Brondani
+                                                                                                                                 dos Santos
+                                                                                                                                 •••.931.377-••
+                                                                                                                                 Data: 11/07/2025
+                                                                                                                                 16:40

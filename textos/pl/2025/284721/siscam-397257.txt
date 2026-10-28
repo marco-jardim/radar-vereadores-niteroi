@@ -1,0 +1,33 @@
+PROJETO DE LEI N.º       /2025
+Dispõe sobre a obrigatoriedade de instalação de sinalização vertical informando a velocidade máxima permitida em ciclovias, ciclofaixas e calçadas compartilhadas no Município de Niterói e dá outras providências.
+Art. 1º Torna-se obrigatória, em todo o território do Município de Niterói, a implantação e manutenção de sinalização vertical indicando a velocidade máxima permitida nas ciclovias, ciclofaixas e calçadas compartilhadas com circulação de bicicletas e equipamentos de mobilidade individual autopropelidos, conforme os padrões técnico-normativos previstos no Manual Brasileiro de Sinalização de Trânsito, Vol. VIII – Sinalização Cicloviária – CONTRAN (2022), ou outro documento que venha a substituí-lo, na regulamentação federal aplicável e no Decreto Municipal Nº 15.004/2023.
+Art. 2.º Para efeitos desta Lei, considera-se:
+I. Ciclovia — pista própria destinada à circulação de ciclos, separada fisicamente do tráfego comum;
+II. Ciclofaixa — parte da pista de rolamento destinada à circulação exclusiva de ciclos, delimitada por sinalização específica;
+III. Calçada compartilhada — passeio público destinado ao uso principal por pedestres e autorizado, por legislação municipal, ao compartilhamento com bicicletas e equipamentos de micromobilidade, com limites de circulação determinados;
+IV. Velocidade máxima — Conforme regulamentado pelo Decreto Municipal Nº 15.004/2023, a circulação de bicicletas elétricas, bicicletas elétricas para uso esportivo ou equipamentos de mobilidade individual autopropelidos possui velocidade máxima permitida nas ciclovias e ciclofaixas de 20Km/h e nas calçadas compartilhadas a velocidade máxima permitida é de 6Km/h.
+Art. 3.º A sinalização vertical prevista no art. 1º deverá obedecer, no que couber, às especificações do Manual Brasileiro de Sinalização de Trânsito, Vol. VIII – Sinalização Cicloviária – CONTRAN (2022), ou outro documento que venha a substituí-lo, quanto a dimensão, pictograma, posicionamento, materiais e padrões de legibilidade, devendo sempre exibir o valor da velocidade máxima em km/h.
+Art. 4.º A sinalização deverá:
+I. ser instalada em ambos os sentidos de circulação sempre que a geometria e o sentido da via assim exigir;
+II. ser posicionada de forma visível e desobstruída, à altura e afastamento recomendados pelo Manual;
+III. indicar, quando houver, redução de velocidade (p.ex. ao aproximar de travessias de pedestres, áreas escolares, pontos de grande travessia) mediante sinalização auxiliar;
+IV. observar diferenciação gráfica quando se tratar de trechos compartilhados com pedestres (calçadas compartilhadas), deixando claro o caráter compartilhado e o limite de velocidade específico para proteção dos pedestres.
+Art. 5.º O órgão municipal competente deverá padronizar os modelos de placa a serem adotados no município, respeitando as normas federais e especificações técnicas.
+Art. 6.º O Poder Executivo deverá concluir, em prazo razoável, a instalação da sinalização nas ciclovias, ciclofaixas e calçadas compartilhadas existentes, priorizando trechos com maiores índices de circulação e conflitos registrados.
+Art. 7.º As despesas decorrentes do cumprimento desta Lei correrão por conta de dotações orçamentárias próprias do Município, podendo ser programadas em etapas anuais de execução.
+Art. 8.º O não cumprimento injustificado das determinações desta Lei pelo órgão municipal responsável constituirá infração administrativa, sujeita às sanções previstas em normativos municipais e a medidas administrativas internas, sem prejuízo da responsabilização de agentes por omissão, conforme legislação aplicável.
+Art. 9º Esta Lei entra em vigor na data de sua publicação.
+Sala de Sessões, 29 de setembro de 2025.
+
+____________________________________
+DANIEL MARQUES
+JUSTIFICATIVA
+A presente proposição tem por objetivo aumentar a segurança de ciclistas, pedestres e usuários de micromobilidade em Niterói, garantindo que os limites de velocidade em espaços cicloviários e em calçadas compartilhadas estejam visíveis e formalmente informados por meio de sinalização vertical padronizada. A medida se vincula a regulamentação municipal (Decreto nº 15.004/2023, que estabelece diretrizes para circulação de bicicletas elétricas, ciclomotores e equipamentos de mobilidade) com os critérios federais sobre categorias e limites de circulação fixados pela Resolução CONTRAN nº 996/2023, e adota os padrões técnicos do Manual Brasileiro de Sinalização de Trânsito, Vol. VIII – Sinalização Cicloviária – CONTRAN (2022).
+A sinalização clara e padronizada contribui para:
+redução de conflitos entre modais;
+promoção da segurança viária e da convivência entre pedestres e ciclistas;
+uniformização técnica dos dispositivos no Município, facilitando fiscalização e manutenção.
+A presente proposição tem ainda respaldo no Código de Trânsito Brasileiro, onde no Capítulo V:
+“Art. 72. Todo cidadão ou entidade civil tem o direito de solicitar, por escrito, aos órgãos ou entidades do Sistema Nacional de Trânsito, sinalização, fiscalização e implantação de equipamentos de segurança, bem como sugerir alterações em normas, legislação e outros assuntos pertinentes a este Código.
+        Art. 73. Os órgãos ou entidades pertencentes ao Sistema Nacional de Trânsito têm o dever de analisar as solicitações e responder, por escrito, dentro de prazos mínimos, sobre a possibilidade ou não de atendimento, esclarecendo ou justificando a análise efetuada, e, se pertinente, informando ao solicitante quando tal evento ocorrerá.”
+A medida reforça a política cicloviária do Município de Niterói e está em consonância com os princípios da mobilidade urbana sustentável, prevenção de sinistros e educação para o trânsito, conforme o Código de Trânsito Brasileiro.

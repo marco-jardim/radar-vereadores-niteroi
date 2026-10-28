@@ -1,0 +1,1691 @@
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                              INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                            INDICADORES DE IMPACTO E DE RESULTADO
+                                                                         2026 - 2029
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:30                                            Pág 1/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                              INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+ ÁREA DE RESULTADO/INDICADOR DE IMPACTO/PROGRAMA/INDICADORES DE RESULTADO
+
+ Área de Resultado
+ Legislativo
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:30                                            Pág 2/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                      INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+ Área de Resultado
+ Niterói Organizada e Segura
+
+       Indicador de Impacto
+
+                                                       Taxa de mortalidade de crianças e adolescentes (0-19 anos) por causas externas de residentes de Niterói, por 100 mil habitantes
+
+                                                                                 Memória de Cálculo                                                          Unidade de Medida              Fonte            Meta 2029
+
+ (Número de mortes por causas externas na população entre 0 e 19 anos / População estimada entre 0 e 19 anos em Niterói) x 100.000                            Unidade por 100 mil          DATASUS              18,7
+                                                                                                                                                                  habitantes
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:30                                                                    Pág 3/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                              INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0011 - Mobilidade Urbana
+
+             Indicador de Resultado
+
+                                                                                                        Investimento em Intervenção de Mobilidade Urbana
+
+                                                                                                                                                                                                                    Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026      Meta 2027      Meta 2028      Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ Total empenhado em Intervenção de Mobilidade Urbana no                                    R$                         ION               21.181.816,9    135.826.952,   221.382.814,   29.833.095,7        N/A            N/A              N/A
+ ano                                                                                                                                                         6              9              2
+
+                                                                                                       Taxa de mortes no trânsito a cada 100 mil habitantes
+
+                                                                                                                                                                                                                    Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026      Meta 2027      Meta 2028      Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ (Número total de mortes em acidentes de trânsito / Número                       Mortes por 100 mil            DATASUS/IBGE                      12,1      11,85          11,15           10,8            N/A            N/A              N/A
+ total de habitantes) x 100 mil                                                       habitantes
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:30                                                                                               Pág 4/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                       INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                                 Taxa de variação da malha cicloviária
+
+                                                                                                                                                                                                             Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026     Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ (Extensão total de quilômetros de malha cicloviária                                  Percentual               CONB/SEMOBI                       5,53     10,72       4,34        13,83            N/A            N/A              N/A
+ construídos no ano de referência - Extensão total de
+ quilômetros de malha cicloviária do ano anterior / Extensão
+ total de quilômetros de malha cicloviária do ano anterior ) x
+ 100
+
+                                                                                                                   Taxa de implantação de paraciclos
+
+                                                                                                                                                                                                             Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026     Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ (Número total de paraciclos instalados no ano de referência                          Percentual               CONB/SEMOBI                       8,69      8          7,41        6,89             N/A            N/A              N/A
+ / Número total de paraciclos do ano anterior ) x 100
+
+                                                                                                      Taxa de acidentes de trânsito a cada 100 mil habitantes
+
+                                                                                                                                                                                                             Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026     Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ (Número total de acidentes de trânsito / Número total de                        Acidentes por 100                NITTRANS                       148      133         120         108              N/A            N/A              N/A
+ habitantes) x 100 mil                                                              mil habitantes
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:30                                                                                        Pág 5/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                    INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0132 - Resiliência a Desastres e Adaptação às Mudanças Climáticas
+
+             Indicador de Resultado
+
+                                                                         Taxa de cobertura do programa Defesa Civil nas Escolas na rede municipal de ensino fundamental
+
+                                                                                                                                                                                                          Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Total de escolas municipais do EF 1 e 2 atendidas pelo                              Percentual                    Defesa                       50       55          60          65            N/A            N/A            6 a 14
+ programa Defesa Civil nas Escolas / Total de escolas da                                                        Civil/SMCDCR
+ rede municipal do EF 1 e 2 no município) x 100
+
+                                                                 Número de moradias em áreas de alto risco com risco eliminado por intervenções estruturais e não estruturais
+
+                                                                                                                                                                                                          Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ Número de moradias com risco eliminado após a execução                                Unidade                      Defesa                       150     150         150         150            N/A            N/A              N/A
+ de intervenções estruturais e não estruturais.                                                                 Civil/SMCDCR
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:30                                                                                     Pág 6/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                    INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                              Taxa de cobertura de NUDECs em comunidades com áreas classificadas com risco alto e muito alto
+
+                                                                                                                                                                                                          Desagregação
+
+                               Memória de Cálculo                                   Unidade de Medida                Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Número de comunidades que possuem áreas de risco alto                                Percentual                   Defesa                       60       65          70          75            N/A            N/A              N/A
+ e muito alto com NUDECs / Total de comunidades que                                                             Civil/SMCDCR
+ possuem           áreas        de      risco      alto   e    muito   alto    no
+ município) x 100
+
+                                                              Número de habitantes retirados de áreas de risco geológico por intervenções estruturais ou programas habitacionais geológico
+
+                                                                                                                                                                                                          Desagregação
+
+                               Memória de Cálculo                                   Unidade de Medida                Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ Somatório do número de habitantes retirados de áreas de                                Unidade                     Defesa                       450     450         450         450            N/A            N/A              N/A
+ risco por meio de intervenções estruturais e/ou não                                                            Civil/SMCDCR
+ estruturais.
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:30                                                                                     Pág 7/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                     INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0131 - Cidade Segura e Promotora da Paz
+
+             Indicador de Resultado
+
+                                                                                                                         Taxa de roubo de veículos
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                    Unidade de Medida               Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ (Somatório          das      ocorrências          de       roubos   de   veículos   Roubos de Veículos             ISP-RJ                   63,43      61,53       59,68       57,89            N/A            N/A              N/A
+ registrados nas delegacias de Polícia Civil ocorridos no                                por 100 mil
+ município / Número total de habitantes no município) x 100                              habitantes
+ mil habitantes
+
+                                                                                                                         Taxa de furto de veículos
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                    Unidade de Medida               Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ (Somatório          das       ocorrências             de   furtos   de   veículos   Furtos de Veículos             ISP-RJ                  121,44      117,8      114,26      110,83            N/A            N/A              N/A
+ registrados nas delegacias de Polícia Civil ocorridos no                                por 100 mil
+ município / Número total de habitantes no município) x 100                              habitantes
+ mil habitantes
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:30                                                                                      Pág 8/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                     INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                                                Taxa de roubos
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ (Somatório das ocorrências de roubos registrados nas                            Roubos por 100 mil                 ISP-RJ                  348,03     337,59      327,46      317,64            N/A            N/A              N/A
+ delegacias de Polícia Civil ocorridos no município / Número                          habitantes
+ total de habitantes no município) x 100 mil habitantes
+
+                                                                                                                                Taxa de furtos
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ (Somatório das ocorrências de furtos registrados nas                                 Percentual                    ISP-RJ                 1.470,03   1.425,93    1.383,15    1.341,66           N/A            N/A              N/A
+ delegacias de Polícia Civil ocorridos no município / Número
+ total de habitantes no município) x 100 mil habitantes
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:30                                                                                      Pág 9/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                    INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0010 - Cidade Urbanizada
+
+             Indicador de Resultado
+
+                                                                                        Percentual de Projetos de Urbanização em Comunidades Finalizados no ano
+
+                                                                                                                                                                                                          Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Total finalizado no ano de Urbanização em Comunidades /                             Percentual                      ION                        100     100         100         100            N/A            N/A              N/A
+ Total previsto no ano de Urbanização em Comunidades) x
+ 100
+
+                                                                                   Tempo médio de resposta às solicitações dos serviços de iluminação pública (Dias)
+
+                                                                                                                                                                                                          Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Número de dias úteis decorridos entre os recebimentos                                   Dia                    SECONSER                        12       8           5           3             N/A            N/A              N/A
+ das demandas e as respostas dos serviços públicos de
+ iluminação realizados + Número de dias úteis decorridos
+ entre os recebimentos das demandas e a data atual dos
+ serviços públicos de iluminação não realizados) / Número
+ total de demandas respondidas no período analisado
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:30                                                                                    Pág 10/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                   INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                Taxa de Variação da ATC dos licenciamentos no Centro de Niterói
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ [(ATC dos licenciamentos no Centro no ano atual -                                    Percentual                      SMU                        60      65          70          75            N/A            N/A              N/A
+ licenciamentos no Centro no ano anterior) / ATC dos
+ licenciamentos no Centro no ano anterior] x 100
+
+                                                                                     Tempo médio de resposta à solicitação do serviço público de tapa buraco (Dias)
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Número de dias úteis decorridos entre os recebimentos                                   Dia                    SECONSER                        35      30          20          15            N/A            N/A              N/A
+ das demandas e as respostas dos serviços públicos de tapa
+ buraco realizados + Número de dias úteis decorridos entre
+ os recebimentos das demandas e a data atual dos serviços
+ públicos de tapa buraco não realizados) / Número total de
+ demandas respondidas no período analisado
+
+                                                                                                   Taxa de ampliação das fachadas ativas no Centro de Niterói
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ [(Testada empreendimentos com fachada ativa no Centro                                Percentual                      SMU                        10      12          15          18            N/A            N/A              N/A
+ no ano - Testada empreendimentos com fachada ativa no
+ Centro no ano anterior) / Testada empreendimentos com
+ fachada ativa no Centro no ano anterior)] x 100
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                   Pág 11/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                       INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+ Área de Resultado
+ Niterói Saudável
+
+       Indicador de Impacto
+
+                                                                           Taxa padronizada de mortalidade prematura (30 e 69 anos) pelos 4 principais grupos de DCNTs
+
+                                                                                 Memória de Cálculo                                                           Unidade de Medida              Fonte            Meta 2029
+
+ [(Número de óbitos de residentes no município com idade entre 30 e 69 anos por doenças crônicas não transmissíveis - DCNT - registrados nos                  Unidade por 100 mil            SES-RJ              215,8
+ códigos CID-10 I00-I99; C00-C97; E10-E14; J30-J98 no ano) / População residente no município com idade entre 30 e 69 anos)] x 100.000                             habitantes
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                     Pág 12/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                      INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0133 - Atenção à Saúde
+
+             Indicador de Resultado
+
+                                                                                                          Taxa de mortalidade por câncer de colo do útero
+
+                                                                                                                                                                                                            Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026     Meta 2027   Meta 2028   Meta 2029       Por sexo     Por raça/cor   Por faixa etária
+
+ (Número de óbitos de residentes por câncer de colo de                           Mortes por 100 mil                 SES-RJ                       2,16     1,44        0,72         0           Feminino          N/A              N/A
+ útero / Número de mulheres residentes) x 100.000                                      mulheres
+
+                                                                                                  Cobertura vacinal do imunobiológico: Tríplice Viral (1ª dose)
+
+                                                                                                                                                                                                            Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026     Meta 2027   Meta 2028   Meta 2029       Por sexo     Por raça/cor   Por faixa etária
+
+ Nº de doses aplicadas da dose indicada (1ª, 2ª, 3ª dose ou                           Percentual            DATASUS/PNI/RND                      95        95          95          95             N/A            N/A              N/A
+ dose única, conforme a vacina) dividida pela população                                                                 S
+ alvo, multiplicado por 100.
+
+                                                                                        Proporção de internações por condições sensíveis a atenção básica - ICSAB
+
+                                                                                                                                                                                                            Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026     Meta 2027   Meta 2028   Meta 2029       Por sexo     Por raça/cor   Por faixa etária
+
+ (Número de internações por causas sensíveis selecionadas                             Percentual                    SES-RJ                       15,1     14,8        14,5        14,2            N/A            N/A              N/A
+ a Atenção Básica / Número total de internações exceto por
+ parto (CID-10: O80-O84)) x 100
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                      Pág 13/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                     INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                        Taxa de mortalidade infantil (por mil nascidos vivos)
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ (Número de óbitos de menores de um ano residentes do                               Mortes por mil                  SES-RJ                   12,63      12,44       12,27       12,09            N/A            N/A             0a1
+ município / Número de nascidos vivos de mães residentes                            nascidos vivos
+ no município no período) x 1.000 nascidos vivos
+
+                                                                                                      Taxa de mortalidade de mulheres por câncer de mama
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ (Número de óbitos por câncer de mama de mulheres                                Mortes por 100 mil                 SES-RJ                       30      26          22          18           Feminino          N/A              N/A
+ residentes / Número de mulheres residentes) x 100.000                                 mulheres
+
+                                                                                               Cobertura Potencial Estimada da Atenção Primária à Saúde (APS)
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ ((nº eSF do Município x 3.500) + (nº eAP 20h do Município                            Percentual                 SISAB/IBGE                      95      95          95          95              N/A            N/A              N/A
+ x 1.750) + (nº eAP 30h do Município x 2.625) (população
+ eCR, eSFR e eAPP com cadastro vinculado informada no
+ Sisab do Município)) x 100 / Estimativa Populacional IBGE
+ do Município
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                     Pág 14/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                   INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                   Cobertura vacinal do imunobiológico: Poliomielite (3ª dose)
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ Nº de doses aplicadas da dose indicada (1ª, 2ª, 3ª dose ou                           Percentual            DATASUS/PNI/RND                      90      90          95          95            N/A            N/A              N/A
+ dose única, conforme a vacina) dividida pela população                                                                 S
+ alvo, multiplicado por 100.
+
+                                                                                                              Cobertura vacinal do imunobiológico: BCG
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ Nº de doses aplicadas da dose indicada (1ª, 2ª, 3ª dose ou                           Percentual            DATASUS/PNI/RND                      90      90          90          90            N/A            N/A              N/A
+ dose única, conforme a vacina) dividida pela população                                                                 S
+ alvo, multiplicado por 100.
+
+                                                                                                   Razão de mortalidade materna (por 100 mil nascidos vivos)
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Número total de óbitos de mulheres residentes no                               Mortes por 100 mil                 SES-RJ                   22,29      22,42        0           0          Feminino          N/A              N/A
+ município, por causas ligadas à gravidez, parto e puerpério                        nascidos vivos
+ / Número total de nascidos vivos de mães residentes no
+ município) x 100 mil nascidos vivos
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                   Pág 15/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                       INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                   Estado nutricional inadequado das crianças de até 05 anos
+
+                                                                                                                                                                                                             Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026     Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ (Somatório de crianças de 0 a 5 anos fora do IMC                                     Percentual             DATASUS/SISVAN                  31,86        31,22       30,59       29,97            N/A            N/A             0a5
+ adequado para a idade em Niterói (com magreza
+ acentuada, magreza, risco de sobrepeso, sobrepeso e
+ obesidade) / Total de crianças de 0 a 5 anos atendidos no
+ SUS) X 100
+
+                                                                                                  Cobertura vacinal do imunobiológico: Pentavalente (3ª dose)
+
+                                                                                                                                                                                                             Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026     Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ Nº de doses aplicadas da dose indicada (1ª, 2ª, 3ª dose ou                           Percentual            DATASUS/PNI/RND                      90        90          95          95              N/A            N/A              N/A
+ dose única, conforme a vacina) dividida pela população                                                                 S
+ alvo, multiplicado por 100.
+
+                                                                                                           Taxa de mortalidade fetal (por mil nascimentos)
+
+                                                                                                                                                                                                             Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026     Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ [Número total de óbitos fetais / (Número total de nascidos                         Mortes por mil                  SES-RJ                       9,55     9,32        9,09        8,88             N/A            N/A              N/A
+ vivos + Número total de óbitos fetais)] x 1.000 nascimentos                        nascidos vivos
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                       Pág 16/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                     INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                            Cobertura do estado nutricional da população
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ (Número de registros de antropometria registrados no                                 Percentual             DATASUS/SISVAN                  29,36      34,36       39,36       44,36            N/A            N/A              N/A
+ SISVAN no período / População residente estimada para o
+ ano corrente) x 100
+
+                                                                                               Cobertura vacinal do imunobiológico: Pneumocócica 10 (2ª dose)
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ Nº de doses aplicadas da dose indicada (1ª, 2ª, 3ª dose ou                           Percentual            DATASUS/PNI/RND                      90      95          95          95              N/A            N/A              N/A
+ dose única, conforme a vacina) dividida pela população                                                                 S
+ alvo, multiplicado por 100.
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                     Pág 17/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                        INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+ Área de Resultado
+ Niterói Escolarizada e Inovadora
+
+       Indicador de Impacto
+
+                                                                            Índice de Desenvolvimento da Educação Básica (Ideb) - Rede municipal pública de 1º ao 5º ano
+
+                                                                                 Memória de Cálculo                                                             Unidade de Medida             Fonte            Meta 2029
+
+ Combina informações de desempenho em exames padronizados (Prova Brasil ou saeb) obtido pelos estudantes ao final do ensino fundamental I                          Adimensional             INEP/MEC               6,5
+ (5º ano) com informações sobre rendimento escolar (aprovação). O índice varia de 0 a 10, e o recorte definido abrange a rede pública municipal
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                      Pág 18/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                   INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0135 - Educação para Todos
+
+             Indicador de Resultado
+
+                                                                                  Percentual de jovens egressos do Aprova Jovem aprovados em vestibulares e ENEM
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Nº de aprovados / Nº de egressos do projeto no ano) × 100                           Percentual                   COJUVE                        15      20          25          30            N/A            N/A            15 a 29
+
+                                                                                                                Taxa de demanda atendida em creches
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Total de crianças de 0 a 3 anos matriculadas em creches                             Percentual                  SME/IBGE                       22      24          26          28            N/A            N/A             0a3
+ municipais e conveniadas no ano / Total de crianças de 0 a
+ 3 anos no município) x 100
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                   Pág 19/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                      INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                        Taxa de demanda atendida no Ensino Fundamental
+
+                                                                                                                                                                                                            Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026     Meta 2027   Meta 2028   Meta 2029       Por sexo     Por raça/cor   Por faixa etária
+
+ (Total de crianças e adolescentes de 6 a 14 anos                                     Percentual                  INEP/IBGE                      100      100         100         100             N/A            N/A            6 a 14
+ matriculadas no EF em escolas públicas, privadas ou
+ filantrópicas no ano / Total de crianças de 6 a 14 anos no
+ município) x 100
+
+                                                                                      Taxa de variação do número de estudantes beneficiados pelo Poupança Escola
+
+                                                                                                                                                                                                            Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026     Meta 2027   Meta 2028   Meta 2029       Por sexo     Por raça/cor   Por faixa etária
+
+ [(Nº de alunos dentro do programa Poupança Escola                                    Percentual                    SEMUG                        2,36      2,3        2,25         2,2            N/A            N/A              N/A
+ no ano atual - Nº de alunos dentro do programa Poupança
+ Escola ano anterior)/(Nº de alunos dentro do programa
+ Poupança Escola ano anterior)] x 100
+
+                                                                                 Índice de Desenvolvimento da Educação Básica (Ideb) - Rede municipal de 6º ao 9º ano
+
+                                                                                                                                                                                                            Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026     Meta 2027   Meta 2028   Meta 2029       Por sexo     Por raça/cor   Por faixa etária
+
+ Combina          informações            de      desempenho     em   exames         Adimensional                  INEP/MEC                       N/A       4,5        N/A          6              N/A            N/A              N/A
+ padronizados            (Prova        Brasil      ou   saeb)   obtido   pelos
+ estudantes ao final do ensino fundamental II (9º ano) com
+ informações sobre rendimento escolar (aprovação), O
+ índice varia de 0 a 10, e o recorte definido abrange a rede
+ pública municipal.
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                      Pág 20/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                   INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                           Taxa de aprovação escolar no Ensino Fundamental II da rede municipal
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                 Unidade de Medida                  Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Número de alunos dos anos finais do Ensino Fundamental                              Percentual                  INEP/MEC                       90      92          94          96            N/A            N/A            11 a 14
+ da rede municipal que foram aprovados / número total de
+ alunos matriculados) x 100
+
+                                                                             Taxa de distorção idade-série do ensino fundamental da rede municipal de ensino - anos finais
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                 Unidade de Medida                  Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Número          total     de     matrículas          com   idade   acima   do       Percentual                  INEP/MEC                       30      28          25          20            N/A            N/A            11 a 14
+ recomendado para o nível de ensino / Número total de
+ matrículas no nível de ensino) x 100
+
+                                                                       Taxa de distorção idade-série do 5º Ano do Ensino Fundamental da rede municipal de ensino - anos iniciais
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                 Unidade de Medida                  Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Número          total     de     matrículas          com   idade   acima   do       Percentual                  INEP/MEC                       20      18          17          15            N/A            N/A            6 a 10
+ recomendado para o nível de ensino / Número total de
+ matrículas no nível de ensino) x 100
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                   Pág 21/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                     INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                              Taxa de abandono escolar no Ensino Fundamental II (6º ao 9º ano)
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029       Por sexo     Por raça/cor   Por faixa etária
+
+ (Número de alunos matriculados na rede pública de ensino                             Percentual                      SME                        2,2      2           1,8         1,5            N/A            N/A            11 a 14
+ fundamental II que se ausentaram por mais de 45 dias
+ consecutivos ou 60 dias intercalados sem justificativas /
+ Número total de alunos matriculados na rede pública de
+ ensino fundamental) x 100
+
+                                                                         Percentual de permanência estudantil dos beneficiários do Auxílio Aluguel Universitário após 1 ano
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029       Por sexo     Por raça/cor   Por faixa etária
+
+ (Nº de beneficiários com matrícula ativa após 12 meses / Nº                          Percentual                   COJUVE                        60       65          70          75             N/A            N/A              N/A
+  total de beneficiários do ano anterior) × 100
+
+                                                                                                              Taxa de demanda atendida em pré-escolas
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029       Por sexo     Por raça/cor   Por faixa etária
+
+ (Total de crianças de 4 e 5 anos matriculadas em                                     Percentual                  SME/IBGE                       100     100         100         100             N/A            N/A             4a5
+ pré-escolas públicas, privadas e filantrópicas no ano / Total
+ de crianças de 4 e 5 anos no município) x 100
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                     Pág 22/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                     INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                           Taxa de aprovação escolar no Ensino Fundamental I da rede municipal
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                   Unidade de Medida                Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029       Por sexo     Por raça/cor   Por faixa etária
+
+ (Número          de      alunos        dos      anos    iniciais    do    Ensino      Percentual                 INEP/MEC                       92       93          94          96             N/A            N/A            6 a 10
+ Fundamental da rede municipal que foram aprovados /
+ número total de alunos matriculados) x 100
+
+                                                                          Taxa de distorção idade-série do 3º Ano do Ensino Fundamental da rede municipal de ensino - anos iniciais
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                   Unidade de Medida                Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029       Por sexo     Por raça/cor   Por faixa etária
+
+ (Número          total     de     matrículas          com   idade   acima     do      Percentual                 INEP/MEC                       20       18          17          15             N/A            N/A            6 a 10
+ recomendado para o nível de ensino / Número total de
+ matrículas no nível de ensino) x 100
+
+                                                                                               Taxa de abandono escolar no Ensino Fundamental I (1º ao 5º ano)
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                   Unidade de Medida                Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029       Por sexo     Por raça/cor   Por faixa etária
+
+ (Número de alunos matriculados na rede pública de ensino                              Percentual                     SME                        0,5      0,4         0,4         0,3            N/A            N/A            6 a 10
+ fundamental I que se ausentaram por mais de 45 dias
+ consecutivos ou 60 dias intercalados sem justificativas /
+ Número total de alunos matriculados na rede pública de
+ ensino fundamental) x 100
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                     Pág 23/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                     INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0134 - Cidade Científica e Tecnológica
+
+             Indicador de Resultado
+
+                                                                        Número de crianças, adolescentes e jovens (0 a 17 anos) atendidos por cursos e oficinas das PUDs
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ Número de crianças, adolescentes e jovens de 0 a 17 anos                              Unidade                       SMICT                   3.000      3.200       3.500       4.000            N/A            N/A            0 a 17
+ inscritos em cursos e/ou oficinas ofertados pelas PUDs
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                     Pág 24/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                   INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+ Área de Resultado
+ Niterói Próspera e Dinâmica
+
+       Indicador de Impacto
+
+                                                                                                            Índice de Arrecadação de ISS Não Petrolífero
+
+                                                                                 Memória de Cálculo                                                        Unidade de Medida             Fonte            Meta 2029
+
+ 1 - [ISS recolhido do setor Naval/Óleo & Gás] / [ISS Total Recolhido]                                                                                         Percentual                 SMF                 70
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                 Pág 25/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                     INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0146 - Desenvolvimento Econômico
+
+             Indicador de Resultado
+
+                                                                             Percentual de ISS arrecadado com a indústrial naval em relação ao total arrecadado com ISS
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029       Por sexo     Por raça/cor   Por faixa etária
+
+ (Valor arrecadado de ISS com a indústria naval / Valor total                         Percentual                      SMF                        23      23,5         24         24,5            N/A            N/A              N/A
+ do ISS arrecadado ) x 100
+
+                                                                                                           Taxa de Rentabilidade Real dos Ativos do FER
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029       Por sexo     Por raça/cor   Por faixa etária
+
+ Resultado Nominal: ((Valor Final do FER - Valor Inicial                              Percentual                      SMF                        9,5      7,5        7,15        7,15            N/A            N/A              N/A
+ do FER - Aportes Líquidos no Período) / (Valor Inicial do
+ FER + (Aportes Líquidos)) x 100
+
+ Resultado                              Real:               (1+(Resultado
+ Nominal/100)/1+(Inflação/100)-1) x 100
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                     Pág 26/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                           INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                   Taxa de variação do nível de emprego formal no município
+
+                                                                                                                                                                                                                 Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026     Meta 2027     Meta 2028     Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ (Somatório do saldo da movimentação no ano de referência                             Percentual             RAIS/CAGED/MTE                       2         2             2             2              N/A            N/A              N/A
+ / Estoque inicial de janeiro do mesmo ano) x 100
+
+                                                                                                           Compensação absoluta das perdas de royalties
+
+                                                                                                                                                                                                                 Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026     Meta 2027     Meta 2028     Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ |Variação absoluta anual da arrecadação de receitas                                       R$                         SMF                123.893.486    539.942.136   729.166.623   727.980.481        N/A            N/A              N/A
+ correntes (exceto royalties)| - |Variação absoluta anual da
+ arrecadação de royalties|
+
+                                                                                                                Aumento da arrecadação de ISS e ICMS
+
+                                                                                                                                                                                                                 Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026     Meta 2027     Meta 2028     Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ [(Arrecadação            ISS+ICMS)            -       (Arrecadação   ISS+ICMS        Percentual                      SMF                        20         15            10            10             N/A            N/A              N/A
+ período anterior)]/Arrecadação ISS+ICMS período anterior
+
+                                                                                                 Taxa de variação de micro e pequenas empresas no município
+
+                                                                                                                                                                                                                 Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026     Meta 2027     Meta 2028     Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ [(Número total de pequenas e micro empresas ativas no                                Percentual                      SMF                        18,7      19,1          19,5          19,9            N/A            N/A              N/A
+ ano - Número total de pequenas e micro empresas ativas
+ no ano anterior) / (Número total de pequenas e                          micro
+ empresas ativas do ano anterior)] x 100
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                           Pág 27/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                     INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                   Taxa de variação dos microempreendimentos no município
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ [(Número de cadastros formalizados de MEI no ano vigente                             Percentual                      SMF                        1       3,5         5,5         7               N/A            N/A              N/A
+ - Número de cadastros formalizados de MEI no ano
+ anterior) / (Número de cadastros formalizados de MEI no
+ ano anterior)] x 100
+
+                                                                                          Índice de Cobertura da Receita Projetada de Royalties pelo Saldo do FER
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ [(Rendimentos FER Ano Corrente) / (Royalties Projetados                              Percentual                      SMF                    10,77      11,91       13,16       14,55            N/A            N/A              N/A
+ Ano Corrente)] x 100
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                     Pág 28/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                   INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0138 - Niterói: Destino Turístico
+
+             Indicador de Resultado
+
+                                                                                                                        Taxa de ocupação hoteleira
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Média de ocupação hoteleira no ano / Total de unidades de                           Percentual                   NELTUR                        81      82          82          83            N/A            N/A              N/A
+ hospedagem na cidade) x 100
+
+                                                                                Taxa de variação do atendimento nos Centros de Atendimento ao Turista - CATs da cidade
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ [(Número          de     atendimentos             no   ano   -   Número   de         Percentual                   NELTUR                        10      10          10          10            N/A            N/A              N/A
+ atendimentos no ano anterior) / (Número de atendimentos
+ no ano anterior)] x 100
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                   Pág 29/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                            INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+ Área de Resultado
+ Niterói Vibrante e Atraente
+
+       Indicador de Impacto
+
+                                                                                              Emissões per capita de dióxido de carbono no Município de Niterói
+
+                                                                                 Memória de Cálculo                                                                Unidade de Medida               Fonte           Meta 2029
+
+ Estimativa em toneladas de Emissão de Carbono Equivalente ocasionada por agropecuária, mudança de uso da terra, energia, processos                                Toneladas de CO2         SEEG - System Gas          1,3
+ industriais e resíduos em Niterói / População total                                                                                                              equivalente Per Capita    Emissions Estimation
+                                                                                                                                                                                                  (Brasil)
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                          Pág 30/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                   INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0136 - Cultura é um Direito
+
+             Indicador de Resultado
+
+                                                                 Número de licenciamentos em imóveis tombados ou de interesse de preservação (IIP) na Região Praias da Baía
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ Número de licenciamentos em imóveis tombados ou de                                    Unidade                        SMU                        4       8           12          16            N/A            N/A              N/A
+ interesse de preservação (IIP) na Região Praias da Baía no
+ ano
+
+                                                                                            Taxa de investimento cultural em Zonas de Interesse Especiais (ZEIs)
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Total de recursos empenhados, em reais, para realização                             Percentual              SMC/FAN/SECAE                      47      48          49          50            N/A            N/A              N/A
+ de atividades de artes e cultura em favelas e comunidades
+ urbanas / Total de recursos empenhados, em reais, para
+ realização de atividades de artes e cultura no municípío) x
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                   Pág 31/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                     INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                          Formação musical de alunos da Rede Municipal
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ Número de alunos que participam de programas de                                       Unidade                      SECAE                    9.000     10.000      10.100      10.500            N/A            N/A            6 a 24
+ formação musical ofertado pela Prefeitura de Niterói por
+ ano
+
+                                                                                                            Índice de Retorno Social de Grandes Eventos
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ (População beneficiada no período / Número de grandes                              Adimensional                   NELTUR                  299.999     299.999     333.333     333.333           N/A            N/A              N/A
+ eventos realizados no período) X (Impacto Social / 10)
+
+                                                                                                  Taxa de variação dos Postos de Trabalho na área da Cultura
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ [(Total de postos criados no ano atual - Total de postos                             Percentual            SMC/FAN/SECAE/C                      5       5           5           5               N/A            N/A              N/A
+ criados no ano anterior) / Total de postos criados no ano                                                             GE
+ anterior] × 100
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                     Pág 32/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                       INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0137 - Cidade do Esporte
+
+             Indicador de Resultado
+
+                                                                                Taxa de crianças e adolescentes atendidos no projeto Niterói Esporte e Cidadania (NEC)
+
+                                                                                                                                                                                                             Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026     Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ (Somatório das estimativas do número de crianças e                                   Percentual                     SMEL                        6,42      7,7        9,24        11,09            N/A            N/A            6 a 16
+ adolescentes atendidos no projeto NEC / Número total de
+ crianças e adolescentes de 6 a 16 anos em Niterói) x 100
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                       Pág 33/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                    INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0147 - Cidade Verde e Sustentável
+
+             Indicador de Resultado
+
+                                                                                                      Percentual de resíduos recicláveis na coleta domiciliar
+
+                                                                                                                                                                                                          Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029       Por sexo     Por raça/cor   Por faixa etária
+
+ (Massa do composto * 100) / Massa da amostra                                         Percentual               ECONIT / CLIN                     3       2,7         2,5         2,2            N/A            N/A              N/A
+
+                                                                                Taxa da frota de transporte público com baixa emissão de Gases de Efeito Estufa (GEE)
+
+                                                                                                                                                                                                          Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029       Por sexo     Por raça/cor   Por faixa etária
+
+ (Número de veículos com baixa emissão de GEE / Total de                              Percentual                   SEMOBI                        5       10          15          20             N/A            N/A              N/A
+ veículos da frota de transporte público) × 100
+
+                                                                                                                           Área verde recuperada
+
+                                                                                                                                                                                                          Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029       Por sexo     Por raça/cor   Por faixa etária
+
+ Número total de áreas degradadas com reflorestamento                                   Hectare                    SMARHS                        3       3           3           3              N/A            N/A              N/A
+ realizado
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                    Pág 34/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                    INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                            Índice de Balneabilidade das praias de Niterói
+
+                                                                                                                                                                                                          Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ [(Somatório da média de balneabilidade de cada praia) /                              Percentual                      INEA                       60       62          65          67            N/A            N/A              N/A
+ número de praias no município)] x 100
+
+                                                                                                                Taxa de reciclagem de resíduos sólidos
+
+                                                                                                                                                                                                          Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Número total, em toneladas, de resíduos sólidos urbanos                             Percentual                      CLIN                       3,5      4           4,5         5             N/A            N/A              N/A
+ reciclados / Número total, em toneladas, de resíduos
+ sólidos urbanos gerado no município) × 100
+
+                                                                                                            Taxa de domicílios com coleta seletiva de lixo
+
+                                                                                                                                                                                                          Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Número de domicílios com coleta seletiva de lixo / Número                           Percentual              SNIS/CLIN/IBGE                     20      20,3        20,7         21            N/A            N/A              N/A
+ total de domicílios no município) x 100
+
+                                                                                                     Taxa de população atendida com esgotamento sanitário
+
+                                                                                                                                                                                                          Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (População           atendida          com        esgotamento   sanitário   /        Percentual            SNIS/IBGE/SECONS                     97       98          99         100            N/A            N/A              N/A
+ População do Município de Niterói) x 100                                                                              ER
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                    Pág 35/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                   INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0114 - Proteção Animal
+
+             Indicador de Resultado
+
+                                                                                           Proporção de animais vacinados na campanha de vacinação antirrábica
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Número de animais (cães e gatos) vacinados com a vacina                             Percentual            COOVA/SVEA/SES-                      80      80          80          80            N/A            N/A              N/A
+ antirrábica / População estimada de cães e gatos) × 100                                                               RJ
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                   Pág 36/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                      INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+ Área de Resultado
+ Niterói Inclusiva
+
+       Indicador de Impacto
+
+                                                                                                    Índice de Vulnerabilidade das Famílias do Cadastro Único
+
+                                                                                 Memória de Cálculo                                                            Unidade de Medida            Fonte            Meta 2029
+
+ (Necessidade de Cuidados + Desenvolvimento na Primeira Infância + Desenvolvimento de Crianças e Adolescentes + Trabalho e Qualificação de                       Adimensional           Observatório do         0,234
+ Adultos + Disponibilidade de Recursos + Condições Habitacionais) / 6                                                                                                                   CadÚnico/ MDS
+                                                                                                                                                                                          /SAGICAD
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                    Pág 37/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                  INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0024 - Proteção Social Especial de Média Complexidade
+
+             Indicador de Resultado
+
+                                                                                              Indicador de Superação da Vulnerabilidade - Média Complexidade.
+
+                                                                                                                                                                                                        Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029     Por sexo     Por raça/cor   Por faixa etária
+
+ (Total de famílias desligadas dos CREAS por terem                                    Percentual                   SMASES                        2       3           4           5            N/A            N/A              N/A
+ alcançado os objetivos do PAEFI / Total de famílias                                                           /SSAS/Vigilância
+ acompanhadas CREAS) x 100                                                                                    Socioassistencial
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                  Pág 38/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                     INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0027 - Proteção Social Especial de Alta Complexidade
+
+             Indicador de Resultado
+
+                                                                                                           Taxa de pessoas em situação de rua acolhidas
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026     Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Pessoas em situação de rua abrigadas em unidades de                                 Percentual                   SMASES                        26,8      35          45          50            N/A            N/A              N/A
+ acolhimento municipais / Média de pessoas atendidas no
+ Centro POP) x 100
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                     Pág 39/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                     INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0141 - Habitação e Regularização Fundiária
+
+             Indicador de Resultado
+
+                                                                                                     Número de unidades habitacionais regularizadas no ano
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ Número de certificados de regularização fundiária emitidos                            Unidade                      SMHRF                   11.200      2.000       2.000       2.000            N/A            N/A              N/A
+ no ano
+
+                                                                                             Número de unidades habitacionais atendidas por melhorias por ano
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ Quantidade de unidades habitacionais atendidas por                                    Unidade                      SMHRF                        0      380         380         380              N/A            N/A              N/A
+ melhorias
+
+                                                                          Quantidade de unidades habitacionais licenciadas para construção e retrofit no Centro da Cidade
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ Quantidade de unidades habitacionais com licenças de                                  Unidade                      SMHRF                    1.500      2.000       2.500       2.000            N/A            N/A              N/A
+ construção ou retrofit emitidas na região central da cidade,
+ conforme a área de abrangência da Lei Municipal
+ 4.009/2025
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                     Pág 40/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                   INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                       Número de unidades habitacionais entregues por ano
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Quantidade de Unidades Habitacionais HIS com recursos                                Unidade                      SMHRF                        96      0          640         640            N/A            N/A              N/A
+ do FAR construídas e entregues + Quantidade de Unidades
+ Habitacionais entregues na Modalidade de Compra e
+ Venda Assistida )
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                   Pág 41/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                   INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0914 - Niterói pela Igualdade Racial
+
+             Indicador de Resultado
+
+                                                                             Percentual de jovens negros egressos do Aprova Jovem aprovados em vestibulares e ENEM
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Nº de jovens pretos e pardos do Aprova Jovem aprovados                              Percentual                   COJUVE                        30      35          37          40            N/A           Preta           15 a 29
+ em vestibulares / Nº de jovens pretos e pardos no Aprova                                                                                                                                                    Parda
+ Jovem no ano) x 100
+
+                                                                               Percentual de jovens negros universitários beneficiados pelo Auxílio Aluguel Universitário
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Nº de jovens pretos e pardos atendidos pelo programa / Nº                           Percentual                   COJUVE                        30      32          35          40            N/A           Preta           15 a 29
+ de jovens beneficiados total) x 100                                                                                                                                                                         Parda
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                   Pág 42/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                   INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0915 - Niterói pela Acessibilidade e Inclusão
+
+             Indicador de Resultado
+
+                                                                                         Taxa de Reabilitação de pessoas atendidas pelo Transporte Ponto a Ponto
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Número de pessoas atendidas pelo Programa Ponto a                                   Percentual               CODAC/SEXEC                       50      54          56          63            N/A            N/A              N/A
+ Ponto que obtiveram alta do tratamento / Total de pessoas
+ atendidas pelo Programa Ponto a Ponto no ano) x 100
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                   Pág 43/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                    INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0025 - Viver Bem Mais
+
+             Indicador de Resultado
+
+                                                                                            Número de idosos atendidos pelo Centro de Convivência Helena Tibau
+
+                                                                                                                                                                                                          Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ Total de idosos atendidos pelo Centro de Convivência                                  Unidade                       SMID                        703     716         730         766            N/A            N/A             60+
+ Helena Tibau no ano
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                    Pág 44/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                   INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0142 - Segurança Alimentar e Nutricional
+
+             Indicador de Resultado
+
+                                                                                                    Número de refeições servidas em Restaurantes Populares
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ Número total anual de refeiçoes servidas nos Restaurantes                             Unidade                     SMASES                 1.200.000   1.200.000   1.200.000   1.200.000        N/A            N/A              N/A
+ Populares em Niterói
+
+                                                                                            Taxa de alunos formados pela Escola de Gastronomia Nédio Mocellin
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Número total de alunos formados pela escola de                                      Percentual            SMASES / SUBSAN                      60      60          60          60            N/A            N/A              N/A
+ gastronomia no município no ano/Número total de alunos
+ matriculados na escola de gastronomia no município no
+ ano) x 100
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                   Pág 45/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                  INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0124 - Economia Solidária
+
+             Indicador de Resultado
+
+                                                                                          Taxa de variação da circulação da Moeda Social Araribóia na região Leste
+
+                                                                                                                                                                                                        Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029     Por sexo     Por raça/cor   Por faixa etária
+
+ [(Número total de compras realizadas na região Leste da                              Percentual                   SMASES                        1       1           1           1            N/A            N/A              N/A
+ cidade na rede comercial credenciada pelo Banco Araribóia
+ no ano - Número total de compras realizadas na região
+ Leste da cidade na rede comercial credenciada pelo Banco
+ Araribóia no ano anterior) / Número total de compras
+ realizadas na região Leste da cidade na rede comercial
+ credenciada pelo Banco Araribóia no ano anterior] x 100
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                  Pág 46/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                  INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                      Taxa de variação da circulação da Moeda Social Araribóia na região Pendotiba
+
+                                                                                                                                                                                                        Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029     Por sexo     Por raça/cor   Por faixa etária
+
+ [(Número total de compras realizadas na região de                                    Percentual                   SMASES                        1       1           1           1            N/A            N/A              N/A
+ Pendotiba da cidade na rede comercial credenciada pelo
+ Banco Araribóia no ano - Número total de compras
+ realizadas na região Pendotiba da cidade na rede comercial
+ credenciada pelo Banco Araribóia no ano anterior) / Número
+ total de compras realizadas na região Pendotiba da cidade
+ na rede comercial credenciada pelo Banco Araribóia no ano
+ anterior]x 100
+
+                                                                                       Taxa de variação da circulação da Moeda Social Araribóia na região Oceânica
+
+                                                                                                                                                                                                        Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029     Por sexo     Por raça/cor   Por faixa etária
+
+ ([(Número total de compras realizadas na região oceânica                             Percentual                   SMASES                        1       1           1           1            N/A            N/A              N/A
+ da cidade na rede comercial credenciada pelo Banco
+ Araribóia no ano - Número total de compras realizadas na
+ região oceânica da cidade na rede comercial credenciada
+ pelo Banco Araribóia no ano anterior) / Número total de
+ compras realizadas na região oceânica da cidade na rede
+ comercial credenciada pelo Banco Araribóia no ano
+ anterior] x 100
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                  Pág 47/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                  INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                          Taxa de variação da circulação da Moeda Social Araribóia na região Norte
+
+                                                                                                                                                                                                        Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029     Por sexo     Por raça/cor   Por faixa etária
+
+ [(Número total de compras realizadas na região Norte da                              Percentual                   SMASES                        1       2           3           4            N/A            N/A              N/A
+ cidade na rede comercial credenciada pelo Banco Araribóia
+ no ano - Número total de compras realizadas na região
+ Norte da cidade na rede comercial credenciada pelo Banco
+ Araribóia no ano anterior) / Número total de compras
+ realizadas na região Norte da cidade na rede comercial
+ credenciada pelo Banco Araribóia no ano anterior] x 100
+
+                                                                                    Taxa de variação da circulação da Moeda Social Araribóia na região Praias da Baía
+
+                                                                                                                                                                                                        Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029     Por sexo     Por raça/cor   Por faixa etária
+
+ [(Número total de compras realizadas na região Praias da                             Percentual                   SMASES                        1       1           1           1            N/A            N/A              N/A
+ Baía da cidade na rede comercial credenciada pelo Banco
+ Araribóia no ano - Número total de compras realizadas na
+ região Praias da Baía da cidade na rede comercial
+ credenciada pelo Banco Araribóia no ano anterior)/Número
+ total de compras realizadas na região Praias da Baía da
+ cidade na rede comercial credenciada pelo Banco Araribóia
+ no ano anterior]x 100
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                  Pág 48/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                   INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0140 - Justiça, Cidadania e Diversidade
+
+             Indicador de Resultado
+
+                                                                               Taxa de variação no número de atendimentos realizados na Casa das Humanidades (CDH)
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Total de atendimentos realizados na CDH no ano atual -                              Percentual                     SMDH                        50     100          50          10            N/A            N/A              N/A
+ Total de atendimentos na CDH no ano anterior / Total de
+ atendimentos no ano anterior) x 100
+
+                                                                                                  Índice de satisfação dos usuários da Casa das Humanidades
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Média das notas atribuídas pelos usuários aos serviços                            Adimensional                     SMDH                        3       3           3           3             N/A            N/A              N/A
+ ofertados pela Casa das Humanidades)/número total de
+ respondentes
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                   Pág 49/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                   INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0098 - Promoção dos Direitos das Crianças e Adolescentes
+
+             Indicador de Resultado
+
+                                                                                           Índice de Atendimento Socioassistencial para Crianças e Adolescentes
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ [(Número de atendimento de crianças e adolescentes no                                Percentual            SMASES/SSAS/Vigil                    20      21          22          23            N/A            N/A            0 a 17
+ PAIF + Número de atendimento de crianças e adolescentes                                                              ância
+ no SCFV + Número de atendimento de crianças e                                                                Socioassistencial
+ adolescentes no PAEFI) / (Total de atendimento no PAIF +
+ Total de atendimento no SCFV + Total de atendimento no
+ PAEFI)] x 100
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                   Pág 50/56
+
+                              RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                 INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                              21 26200403 - CNPJ : 28.521.748/0001-59
+                              prefeitura@niteroi.rj.gov.br
+                              www.niteroi.rj.gov.br
+
+             Programa
+             0100 - Proteção Social Básica
+
+             Indicador de Resultado
+
+                                                                                                     Grau de cobertura do Serviço de Proteção Social Básica
+
+                                                                                                                                                                                                         Desagregação
+
+                                Memória de Cálculo                               Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Número de famílias em situação de vulnerabilidade                                   Percentual                   CECAD -                       57      57          57          57            N/A            N/A              N/A
+ atendidas pelo Serviço de Proteção Social Básica no                                                        SAGI/MDS/SMASES
+ corrente        ano      /    Total      de     famílias   em   situação   de
+ vulnerabilidade no corrente ano) x 100
+
+                                                                                                  Grau de cobertura dos Programas de Transferência de Renda
+
+                                                                                                                                                                                                         Desagregação
+
+                                Memória de Cálculo                               Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Número de famílias em situação de pobreza que recebem                               Percentual                   SMASES                    62,84       63          64          65            N/A            N/A              N/A
+ recursos dos programas de transferência de renda federais,
+ estaduais e municipais / Total de famílias em situação de
+ vulnerabilidade) x 100
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                   Pág 51/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                   INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0916 - Niterói por Elas
+
+             Indicador de Resultado
+
+                                                                                       Evolução do n° de primeiros atendimentos realizados no CEAM Neuza Santos
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ [(Número de primeiros atendimentos em CEAMs no ano                                   Percentual                     SMMU                        10      10          10          10         Feminino          N/A              N/A
+ vigente - Número de primeiros atendimentos em CEAMs no
+ ano anterior) / Número de primeiros atendimentos em
+ CEAMs no ano anterior] x 100
+
+                                                                                          Taxa de variação da participação de mulheres em capacitações da SMMU
+
+                                                                                                                                                                                                         Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026   Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ [(Número de participação nas capacitações ofertadas pela                             Percentual                     SMMU                        15      15          15          15         Feminino          N/A              N/A
+ SMMU no ano vigente - Número de participação nas
+ capacitações ofertadas pela SMMU no ano anterior) /
+ Número de participação nas capacitações ofertadas pela
+ SMMU no ano anterior] x 100
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                   Pág 52/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                   INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+ Área de Resultado
+ Niterói Eficiente e Comprometida
+
+       Indicador de Impacto
+
+                                                                                                           Índice de Dependência do Custeio em Royalties
+
+                                                                                 Memória de Cálculo                                                        Unidade de Medida             Fonte            Meta 2029
+
+ (Despesa de Custeio Financiada por Royalties no ano pelo município / Despesa Total de Custeio do Município no ano) x100                                       Percentual             SSO/SEPLAG              54
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                 Pág 53/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                     INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Programa
+             0149 - Gestão Pública Inovadora, Transparente e Participativa
+
+             Indicador de Resultado
+
+                                                                                   Percentual de Cargos de Liderança exercidos por Profissionais Negros e Indígenas
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029       Por sexo     Por raça/cor   Por faixa etária
+
+ (Número de cargos de liderança ocupados por profissionais                            Percentual                      SMA                    33,84        35         36,15       37,3            N/A           Preta             N/A
+ negros e indígenas / Total de cargos de liderança) × 100                                                                                                                                                      Parda
+                                                                                                                                                                                                             Indígena
+
+                                                                                                                        Índice de Serviços Digitais
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029       Por sexo     Por raça/cor   Por faixa etária
+
+ (Serviços ofertados pela prefeitura municipal de Niterói em                          Percentual             GovDigital/SEXEC                77,91       85,28       92,64       100             N/A            N/A              N/A
+ meio digital / Serviços passíveis de digitalização ofertados
+ pela Prefeitura Municipal de Niterói ) x100
+
+                                                                                                         Taxa de Conselhos Municipais em funcionamento
+
+                                                                                                                                                                                                           Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029       Por sexo     Por raça/cor   Por faixa etária
+
+ (Número de Conselhos em funcionamento / Número de                                    Percentual                   SEMPAS                        100     100         100         100             N/A            N/A              N/A
+ Conselhos legalmente instituídos) x 100
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                     Pág 54/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                    INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                            Proporção Orçamentária de Investimentos em Tecnologia da Informação e Comunicação (TIC)
+
+                                                                                                                                                                                                          Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ [(Valor Empenhado em TIC - Valor Anulado em TIC)/ (Valor                             Percentual                SSTD/SEXEC                       0,7      0,8         0,9         1             N/A            N/A              N/A
+ Total Empenhado no Orçamento Municipal)] x100
+
+                                                                 Taxa de resolução do atendimento da zeladoria urbana na plataforma de relacionamento com o cidadão (Colab)
+
+                                                                                                                                                                                                          Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ (Soma dos atendimentos finalizados no ano / Quantidade                               Percentual             GovDigital/SEXEC                    80       80          80          80            N/A            N/A              N/A
+ de atendimentos cadastrados no ano) x 100
+
+                                                                                                 Taxa de Variação da Formação e Desenvolvimento de Pessoas
+
+                                                                                                                                                                                                          Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ [(Total de certificados emitidos pela EGG na PMN no                                  Percentual                EGG/SEPLAG                        5       5           4           3             N/A            N/A              N/A
+ período atual - Total de certificados emitidos pela EGG na
+ PMN no período anterior) / Total de certificados emitidos
+ pela EGG na PMN no período anterior] × 100
+
+                                                                                     Eficiência administrativa na execução orçamentária voltada à área de tecnologia
+
+                                                                                                                                                                                                          Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026    Meta 2027   Meta 2028   Meta 2029      Por sexo     Por raça/cor   Por faixa etária
+
+ [Valor Liquidado / (Valor Empenhado - Valor Anulado)] x                              Percentual                SSTD/SEXEC                       100     100         100         100            N/A            N/A              N/A
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                    Pág 55/56
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                       INDICADORES DE IMPACTO E DE RESULTADO 2026 -
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                                                                                     Taxa de variação das capacitações realizadas pela CGM
+
+                                                                                                                                                                                                             Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026     Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ [(Capacitações no período atual - Capacitações no período                            Percentual                      CGM                        10        10          10          10              N/A            N/A              N/A
+ anterior) / (Capacitações no período anterior)] x100
+
+                                                                                          Percentual de Cargos de Liderança exercidos por Profissionais Mulheres
+
+                                                                                                                                                                                                             Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026     Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ (Número de cargos de liderança ocupados por profissionais                            Percentual                      SMA                    42,69        43,84        45         46,15         Feminino          N/A              N/A
+ mulheres / Total de cargos de liderança) × 100
+
+                                                                                                   Percentual de servidores públicos com e-mail institucional
+
+                                                                                                                                                                                                             Desagregação
+
+                               Memória de Cálculo                                Unidade de Medida                   Fonte                Meta 2026     Meta 2027   Meta 2028   Meta 2029        Por sexo     Por raça/cor   Por faixa etária
+
+ (Número de servidores com e-mail institucional ativo /                               Percentual                SSTD/SEXEC                       57,9     67,2        76,44        80              N/A            N/A              N/A
+ Número total de servidores) x 100
+
+                  Planejamento>Cadastros>PPA FrontController.php Emissor: Ana Clara Pinheiro Figueiredo Exerc: 2025Data: 28-08-2025 - 17:01:31                                                                                       Pág 56/56

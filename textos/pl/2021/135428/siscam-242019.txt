@@ -1,0 +1,102 @@
+            691000,000000
+7464000,000000              692000,000000            693000,000000                      694000,000000                                                                  695000,000000
+
+                                                                                                                                                                                                                                                               LEI URBANÍSTICA
+                                                                                                                                                                                                                                 ZUM+6
+
+                                                                                                                                                                                                                                               ZRU             MAPA 1H - ZONEAMENTO
+
+                                                                                                                                                                                                                                                                                             SÃO GONÇALO
+
+                                                                                                                                                                                                                            ZRM+6
+                                                                                                                                                                                                                                                                            1A     1B
+
+                                                                                                                                                                                                       ço
+                                                                                                                                                                                                                                                                                             1C
+
+                                                                                                                                                                                                  i can
+                                            ZUM+1
+                                                                                                                                                                                                                                                                            1D
+
+                                                                                                                                                                                                     oP
+                                                                                                                                                                                                          ZUM+6                                                                    1E        1F          1G
+
+                                                                                                                                                                                                yl vi
+                                                                                                                                                                                                oS
+                                                                                                                                                                                            f ei t
+7463200,000000
+
+                                                    ZUM+4                                                                                                                                                                                                                   1H
+
+                                                                                                                                                                                           P re
+                                                                                                                                                                                                                                                                                  1I      1J       1K      MARICÁ
+
+                                                                                                                                                                                         idan
+                                                                                                                                                                                                                                                                                        1L
+
+                                                                                                                                                                                        Ave
+                                                                        AEIT
+
+                                                                                                                                                                                          ZRU                                                                  LEGENDA
+                                                                                                                                                                           AEIT ZC+10
+                                                                                                                                                                                                                                                               Nome da zona
+                                                                                                                                                                                                Tún
+                                                                                                                                                                                                    el                                                                ZCM                         ZEPAC - APAP
+                                                                     ZUM+4                                                                                                                                Lu
+                                                                                                                                                                                                             is   An
+                                              ZEPAC
+                                                                                                                                                                                                                    tôn
+                                                                                                                                                                                                                          io P
+                                                                                                                                                                                                                                 ime
+                                                                                                                                                                                                                                                                      ZEU                         ZEPAC
+7462400,000000
+
+                                                                                                                                                                     ZC-ZEIS+6                                                         nte
+                                                                                                                                                                                                                                           l
+                                                                                                                                                                 o                                                                                                    ZC                          ZRU
+                                                                                                                                                           anç
+                                                                                                                                                     Pic
+                                                                                                                                               vio
+                                                                                                AEIT                         f ei t
+                                                                                                                                      o   S yl                                                                                                                        ZC-ZEIS                     ZRM
+                                                                                                                      P re
+                                                                                                            n   ida
+                                                                                                        Ave                                                                                                                                                           ZDE                         ZRA
+                                                                                                         ZRA+15                                                                                                                                                       ZCL                         AEIT
+
+                                                                                                                                                                                                                                                                      ZUM < 6*                    Parque
+
+                                                                                       ZRA+6                                                                                                                                                                          ZUM >= 6*                   Parque
+
+                                                                                                                                                                                                                                                                      ZC-ZEIS                     ZPA
+                                                                                                                                                                                                                                                                      ZEIS                        ZCA
+7461600,000000
+
+                                                                               ZEPAC
+                                                                                                   ZEPAC
+
+                                                                                                                                                                             ZRU
+7460800,000000
+
+                                                                                                                                                            ZEPAC
+
+                                                                                                                                                                                                              Avenida
+                                                                                                                                                                                                                                                 ZUM+8
+                                                                                                                                                                                                                             Doutor A
+                                                                                                                                                                                                                                               cúrcio To
+                                                                                                                                                                                                                                                        rres
+
+                                                                                                                                                                                                                  ZUM+6
+                                                                                                                                                                                                                                                                                   1
+                                                                                                                                                                                                                                                                                                              Km
+                                                                                                                                                                                 AEIT
+                                                                                                                                                                                                                                                               Referências Cartográficas
+                                                                                                                                                                                                                                                               Sistema de Coordenadas: UTM Fuso 23K
+
+                                                                                                                                                                                                                                                                                                           ¯
+7460000,000000
+
+                                                                                                                                                                                                                                                               Sistema Geodésico: SIRGAS 2000
+                                                                                                                                                                                                                                                               Datum Vertical: Marégrafo de Imbituba
+
+                                                                                                                                                                                                                                                               Escala: 1:15.000            Novembro 2021

@@ -1,0 +1,1052 @@
+E E ANEXO IV
+, DEMONSTRATIVO CONSOLIDADO
+DE VALORES ORÇAMENTÁRIOS
+|
+NITERÓI
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                  DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                                   DEMONSTRATIVO CONSOLIDADO DE VALORES
+                                                         ORÇAMENTÁRIOS
+                                                               2022 - 2025
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:51:00                                          Pág 1/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                            DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+ ÁREA DE RESULTADO/PROGRAMA/ÓRGÃO/UNIDADE ORÇAMENTÁRIA                                                                                      2022                       2023             2024              2025             TOTAL
+
+ Área de Resultado
+ Legislativo                                                                                                                             1.230.000,00                1.307.500,00   1.395.000,00    1.477.500,00        5.410.000,00
+
+       Programa
+       GOVERNANÇA E APRIMORAMENTO DAS AÇÕES DO PODER LEGISLATIVO                                                                         1.230.000,00                1.307.500,00   1.395.000,00    1.477.500,00        5.410.000,00
+
+             Órgão
+             CÂMARA MUNICIPAL DE NITEROI                                                                                                 1.230.000,00                1.307.500,00   1.395.000,00    1.477.500,00        5.410.000,00
+
+                   Unidade Orçamentária
+                   CÂMARA MUNICIPAL DE NITEROI                                                                                           1.230.000,00                1.307.500,00   1.395.000,00    1.477.500,00        5.410.000,00
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:51:01                                                                     Pág 2/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                              DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+ ÁREA DE RESULTADO/PROGRAMA/ÓRGÃO/UNIDADE ORÇAMENTÁRIA                                                                                      2022                        2023              2024              2025             TOTAL
+
+ Área de Resultado
+ Niterói Organizada e Segura                                                                                                            603.425.820,69           559.897.442,37      574.038.839,87   503.839.365,57      2.241.201.468,50
+
+       Programa
+       CIDADE URBANIZADA                                                                                                                281.280.883,60           308.702.684,63      346.224.085,08   279.881.806,26      1.216.089.459,57
+
+             Órgão
+             SEC MUNICIPAL DE CONSERVACAO E SERVICOS PÚBLICOS                                                                           73.296.456,06                73.296.456,06   68.296.456,06    68.296.456,06       283.185.824,24
+
+                   Unidade Orçamentária
+                   SEC MUNICIPAL DE CONSERVACAO E SERVICOS PÚBLICOS                                                                     73.296.456,06                73.296.456,06   68.296.456,06    68.296.456,06       283.185.824,24
+
+             Órgão
+             SECRETARIA MUNICIPAL DE OBRAS E INFRAESTRUTURA                                                                             207.984.427,54           235.406.228,57      277.927.629,02   211.585.350,20      932.903.635,33
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE OBRAS E INFRAESTRUTURA                                                                       13.930.000,00                22.074.000,00   77.491.273,91    75.741.273,91       189.236.547,82
+                   EMPRESA MUN DE MORADIA, URBANIZACAO E SANEAMENTO                                                                     194.054.427,54           213.332.228,57      200.436.355,11   135.844.076,29      743.667.087,51
+
+       Programa
+       MOBILIDADE URBANA                                                                                                                154.030.055,27               99.252.096,14   79.332.593,19    77.540.444,60       410.155.189,20
+
+             Órgão
+             SECRETARIA MUNICIPAL DE URBANISMO E MOBILIDADE                                                                             98.884.000,00                69.487.500,00   68.988.925,00    71.988.346,25       309.348.771,25
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:51:13                                                                      Pág 3/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                               DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE URBANISMO E MOBILIDADE                                                                       36.560.000,00                8.300.000,00    4.840.000,00      4.680.000,00        54.380.000,00
+                   NITEROI TRANSPORTE E TRANSITO S/A - NITTRANS                                                                         41.124.000,00                40.287.500,00   42.998.925,00     45.908.346,25       170.318.771,25
+                   FUNDO MUNICIPAL DE TRANSPORTE                                                                                        20.400.000,00                20.900.000,00   21.150.000,00     21.400.000,00       83.850.000,00
+                   FUNDO MUNICIPAL DE MOBILIDADE URBANA                                                                                    800.000,00                    0,00            0,00              0,00            800.000,00
+
+             Órgão
+             SEC MUNICIPAL DE CONSERVACAO E SERVICOS PÚBLICOS                                                                              12.000,00                  12.000,00       12.000,00          12.000,00         48.000,00
+
+                   Unidade Orçamentária
+                   SEC MUNICIPAL DE CONSERVACAO E SERVICOS PÚBLICOS                                                                        12.000,00                  12.000,00       12.000,00          12.000,00         48.000,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE OBRAS E INFRAESTRUTURA                                                                             55.134.055,27                29.752.596,14   10.331.668,19     5.540.098,35        100.758.417,95
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE OBRAS E INFRAESTRUTURA                                                                       18.000.000,00                18.525.000,00    525.000,00           0,00            37.050.000,00
+                   EMPRESA MUN DE MORADIA, URBANIZACAO E SANEAMENTO                                                                     37.134.055,27                11.227.596,14   9.806.668,19      5.540.098,35        63.708.417,95
+
+       Programa
+       SEGURANÇA NO TRÂNSITO                                                                                                             2.895.000,00                2.965.000,00    3.036.500,00      3.120.150,00        12.016.650,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE URBANISMO E MOBILIDADE                                                                              2.895.000,00                2.965.000,00    3.036.500,00      3.120.150,00        12.016.650,00
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:51:24                                                                       Pág 4/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                             DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                   Unidade Orçamentária
+                   NITEROI TRANSPORTE E TRANSITO S/A - NITTRANS                                                                          2.895.000,00                2.965.000,00    3.036.500,00    3.120.150,00        12.016.650,00
+
+       Programa
+       NITERÓI MAIS SEGURA                                                                                                              50.689.532,86                53.309.112,64   53.549.112,64   53.689.112,64       211.236.870,78
+
+             Órgão
+             SECRETARIA EXECUTIVA DO PREFEITO                                                                                            1.134.500,00                1.000.000,00    1.000.000,00    1.000.000,00        4.134.500,00
+
+                   Unidade Orçamentária
+                   SECRETARIA EXECUTIVA DO PREFEITO                                                                                      1.134.500,00                1.000.000,00    1.000.000,00    1.000.000,00        4.134.500,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE ORDEM PÚBLICA                                                                                      49.555.032,86                52.309.112,64   52.549.112,64   52.689.112,64       207.102.370,78
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE ORDEM PUBLICA                                                                                49.555.032,86                52.309.112,64   52.549.112,64   52.689.112,64       207.102.370,78
+
+       Programa
+       RESILIÊNCIA A DESASTRES                                                                                                          114.530.348,96               95.668.548,96   91.896.548,96   89.607.852,07       391.703.298,95
+
+             Órgão
+             SEC MUNICIPAL DE CONSERVACAO E SERVICOS PÚBLICOS                                                                            7.231.557,21                10.031.557,21   7.231.557,21    7.231.557,21        31.726.228,84
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:51:28                                                                      Pág 5/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                             DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                   Unidade Orçamentária
+                   SEC MUNICIPAL DE CONSERVACAO E SERVICOS PÚBLICOS                                                                      7.231.557,21                10.031.557,21   7.231.557,21    7.231.557,21        31.726.228,84
+
+             Órgão
+             SEC MUN MEIO AMB, REC. HÍDRICOS E SUSTENTABILIDADE                                                                            650.000,00                    0,00            0,00            0,00            650.000,00
+
+                   Unidade Orçamentária
+                   SEC MUN MEIO AMB, REC. HÍDRICOS E SUSTENTABILIDADE                                                                      650.000,00                    0,00            0,00            0,00            650.000,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE OBRAS E INFRAESTRUTURA                                                                             77.513.101,83                77.363.101,83   77.363.101,83   75.734.404,94       307.973.710,43
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE OBRAS E INFRAESTRUTURA                                                                          150.000,00                    0,00            0,00            0,00            150.000,00
+                   EMPRESA MUN DE MORADIA, URBANIZACAO E SANEAMENTO                                                                     77.363.101,83                77.363.101,83   77.363.101,83   75.734.404,94       307.823.710,43
+
+             Órgão
+             SECRETARIA MUNICIPAL DE DEFESA CIVIL E GEOTECNIA                                                                           29.135.689,92                8.273.889,92    7.301.889,92    6.641.889,92        51.353.359,68
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE DEFESA CIVIL E GEOTECNIA                                                                     29.135.689,92                8.273.889,92    7.301.889,92    6.641.889,92        51.353.359,68
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:51:40                                                                     Pág 6/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                           DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+ ÁREA DE RESULTADO/PROGRAMA/ÓRGÃO/UNIDADE ORÇAMENTÁRIA                                                                                      2022                      2023             2024              2025             TOTAL
+
+ Área de Resultado
+ Niterói Saudável                                                                                                                       522.189.650,97           471.472.606,46   466.389.400,77   468.626.811,78      1.928.678.469,98
+
+       Programa
+       ATENÇÃO À SAÚDE                                                                                                                  493.638.031,97           470.572.606,46   466.189.400,77   468.426.811,78      1.898.826.850,98
+
+             Órgão
+             SECRETARIA MUNICIPAL DE SAUDE                                                                                              482.493.176,81           469.785.106,46   465.401.900,77   468.426.811,78      1.886.106.995,82
+
+                   Unidade Orçamentária
+                   FUNDO MUNICIPAL DE SAUDE                                                                                             482.493.176,81           469.785.106,46   465.401.900,77   468.426.811,78      1.886.106.995,82
+
+             Órgão
+             SEC MUN MEIO AMB, REC. HÍDRICOS E SUSTENTABILIDADE                                                                            350.000,00                   0,00           0,00             0,00           350.000,00
+
+                   Unidade Orçamentária
+                   SEC MUN MEIO AMB, REC. HÍDRICOS E SUSTENTABILIDADE                                                                      350.000,00                   0,00           0,00             0,00           350.000,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE OBRAS E INFRAESTRUTURA                                                                             10.794.855,16                787.500,00    787.500,00           0,00           12.369.855,16
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE OBRAS E INFRAESTRUTURA                                                                              0,00                  787.500,00    787.500,00           0,00           1.575.000,00
+                   EMPRESA MUN DE MORADIA, URBANIZACAO E SANEAMENTO                                                                     10.794.855,16                   0,00           0,00             0,00           10.794.855,16
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:52:26                                                                    Pág 7/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                        DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+       Programa
+       NITERÓI CONTRA O COVID-19 - ÁREA SAUDÁVEL                                                                                        28.551.619,00                900.000,00   200.000,00     200.000,00         29.851.619,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE SAUDE                                                                                              28.551.619,00                900.000,00   200.000,00     200.000,00         29.851.619,00
+
+                   Unidade Orçamentária
+                   FUNDO MUNICIPAL DE SAUDE                                                                                             28.551.619,00                900.000,00   200.000,00     200.000,00         29.851.619,00
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:52:27                                                                Pág 8/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                              DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+ ÁREA DE RESULTADO/PROGRAMA/ÓRGÃO/UNIDADE ORÇAMENTÁRIA                                                                                      2022                        2023              2024              2025             TOTAL
+
+ Área de Resultado
+ Niterói Escolarizada e Inovadora                                                                                                       169.179.294,61           167.605.413,36      127.327.290,30   128.404.379,30      592.516.377,57
+
+       Programa
+       CIDADE CIENTÍFICA E TECNOLÓGICA                                                                                                  22.322.090,92                25.322.090,92   17.740.000,00    17.740.000,00       83.124.181,84
+
+             Órgão
+             SECRETARIA MUNICIPAL DE OBRAS E INFRAESTRUTURA                                                                              5.082.090,92                5.082.090,92         0,00             0,00           10.164.181,84
+
+                   Unidade Orçamentária
+                   EMPRESA MUN DE MORADIA, URBANIZACAO E SANEAMENTO                                                                      5.082.090,92                5.082.090,92         0,00             0,00           10.164.181,84
+
+             Órgão
+             SEC MUNICIPAL DE CIÊNCIA, TECNOLOGIA E INOVAÇÃO                                                                            16.840.000,00                19.840.000,00   17.340.000,00    17.340.000,00       71.360.000,00
+
+                   Unidade Orçamentária
+                   SEC MUNICIPAL DE CIÊNCIA, TECNOLOGIA E INOVAÇÃO                                                                      16.840.000,00                19.840.000,00   17.340.000,00    17.340.000,00       71.360.000,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE AÇÕES ESTRATÉGICAS                                                                                    400.000,00                 400.000,00      400.000,00       400.000,00         1.600.000,00
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE AÇÕES ESTRATÉGICAS                                                                              400.000,00                 400.000,00      400.000,00       400.000,00         1.600.000,00
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:52:31                                                                       Pág 9/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                            DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+       Programa
+       EDUCAÇÃO PARA TODOS                                                                                                              145.257.203,69           140.283.322,44     107.387.290,30   107.964.379,30     500.892.195,73
+
+             Órgão
+             SECRETARIA EXECUTIVA DO PREFEITO                                                                                              219.430,21                215.585,30      215.585,30       215.585,30        866.186,11
+
+                   Unidade Orçamentária
+                   SECRETARIA EXECUTIVA DO PREFEITO                                                                                        219.430,21                215.585,30      215.585,30       215.585,30        866.186,11
+
+             Órgão
+             SECRETARIA DE GOVERNO                                                                                                       3.620.000,00                3.620.000,00    3.620.000,00     3.620.000,00      14.480.000,00
+
+                   Unidade Orçamentária
+                   SECRETARIA DE GOVERNO                                                                                                 3.620.000,00                3.620.000,00    3.620.000,00     3.620.000,00      14.480.000,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE EDUCAÇÃO                                                                                           123.982.258,00           130.467.008,00     99.551.705,00    100.128.794,00     454.129.765,00
+
+                   Unidade Orçamentária
+                   FUNDACAO MUNICIPAL DE EDUCACAO - FME                                                                                 123.982.258,00           130.467.008,00     99.551.705,00    100.128.794,00     454.129.765,00
+
+             Órgão
+             ADMINISTRACAO REGIONAL DO FONSECA                                                                                           4.000.000,00                4.000.000,00    4.000.000,00     4.000.000,00      16.000.000,00
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:53:18                                                                    Pág 10/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                           DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                   Unidade Orçamentária
+                   ADMINISTRACAO REGIONAL DO FONSECA                                                                                     4.000.000,00                4.000.000,00   4.000.000,00   4.000.000,00        16.000.000,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE OBRAS E INFRAESTRUTURA                                                                             13.435.515,48                1.980.729,14      0,00            0,00            15.416.244,62
+
+                   Unidade Orçamentária
+                   EMPRESA MUN DE MORADIA, URBANIZACAO E SANEAMENTO                                                                     13.435.515,48                1.980.729,14      0,00            0,00            15.416.244,62
+
+       Programa
+       NITERÓI CONTRA O COVID-19 - ÁREA ESCOLARIZADA E INOVADORA                                                                         1.600.000,00                2.000.000,00   2.200.000,00   2.700.000,00        8.500.000,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE EDUCAÇÃO                                                                                            1.600.000,00                2.000.000,00   2.200.000,00   2.700.000,00        8.500.000,00
+
+                   Unidade Orçamentária
+                   FUNDACAO MUNICIPAL DE EDUCACAO - FME                                                                                  1.600.000,00                2.000.000,00   2.200.000,00   2.700.000,00        8.500.000,00
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:53:42                                                                   Pág 11/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                               DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+ ÁREA DE RESULTADO/PROGRAMA/ÓRGÃO/UNIDADE ORÇAMENTÁRIA                                                                                      2022                        2023             2024                2025             TOTAL
+
+ Área de Resultado
+ Niterói Próspera e Dinâmica                                                                                                            62.248.958,92                83.974.682,67   64.240.082,67     63.254.628,83       273.718.353,09
+
+       Programa
+       DESENVOLVIMENTO ECONÔMICO                                                                                                        24.195.000,00                22.892.000,00   3.254.200,00      3.249.000,00        53.590.200,00
+
+             Órgão
+             SECRETARIA EXECUTIVA DO PREFEITO                                                                                            2.140.000,00                2.040.000,00    2.040.000,00      2.040.000,00        8.260.000,00
+
+                   Unidade Orçamentária
+                   SECRETARIA EXECUTIVA DO PREFEITO                                                                                      2.140.000,00                2.040.000,00    2.040.000,00      2.040.000,00        8.260.000,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE PARTICIPACAO SOCIAL                                                                                   100.000,00                 100.000,00      100.000,00        100.000,00         400.000,00
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE PARTICIPACAO SOCIAL                                                                             100.000,00                 100.000,00      100.000,00        100.000,00         400.000,00
+
+             Órgão
+             SECRETARIA DE GOVERNO                                                                                                         50.000,00                  50.000,00       50.000,00          50.000,00         200.000,00
+
+                   Unidade Orçamentária
+                   SECRETARIA DE GOVERNO                                                                                                   50.000,00                  50.000,00       50.000,00          50.000,00         200.000,00
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:53:46                                                                       Pág 12/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                            DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Órgão
+             SECRETARIA MUNICIPAL DE DESENV. ECONOMICO                                                                                   1.545.000,00                 692.000,00     529.200,00      519.000,00         3.285.200,00
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE DESENV. ECONOMICO                                                                             1.545.000,00                 692.000,00     529.200,00      519.000,00         3.285.200,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE OBRAS E INFRAESTRUTURA                                                                             19.475.000,00                19.475.000,00      0,00            0,00            38.950.000,00
+
+                   Unidade Orçamentária
+                   EMPRESA MUN DE MORADIA, URBANIZACAO E SANEAMENTO                                                                     19.475.000,00                19.475.000,00      0,00            0,00            38.950.000,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE DEFESA DO CONSUMIDOR                                                                                  535.000,00                 235.000,00     235.000,00      240.000,00         1.245.000,00
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE DEFESA DO CONSUMIDOR                                                                            535.000,00                 235.000,00     235.000,00      240.000,00         1.245.000,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE AÇÕES ESTRATÉGICAS                                                                                    350.000,00                 300.000,00     300.000,00      300.000,00         1.250.000,00
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE AÇÕES ESTRATÉGICAS                                                                              350.000,00                 300.000,00     300.000,00      300.000,00         1.250.000,00
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:53:51                                                                    Pág 13/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                             DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+       Programa
+       NITERÓI: DESTINO TURÍSTICO                                                                                                       38.053.958,92                61.082.682,67   60.985.882,67   60.005.628,83       220.128.153,09
+
+             Órgão
+             SECRETARIA EXECUTIVA DO PREFEITO                                                                                           24.255.750,00                24.534.750,00   24.593.750,00   24.624.750,00       98.009.000,00
+
+                   Unidade Orçamentária
+                   NITEROI EMPRESA DE LAZER E TURISMO - NELTUR                                                                          24.255.750,00                24.534.750,00   24.593.750,00   24.624.750,00       98.009.000,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE PARTICIPACAO SOCIAL                                                                                   200.000,00                    0,00            0,00            0,00            200.000,00
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE PARTICIPACAO SOCIAL                                                                             200.000,00                    0,00            0,00            0,00            200.000,00
+
+             Órgão
+             SEC MUNICIPAL DE CONSERVACAO E SERVICOS PÚBLICOS                                                                            1.200.000,00                1.200.000,00    1.200.000,00    1.200.000,00        4.800.000,00
+
+                   Unidade Orçamentária
+                   SEC MUNICIPAL DE CONSERVACAO E SERVICOS PÚBLICOS                                                                      1.200.000,00                1.200.000,00    1.200.000,00    1.200.000,00        4.800.000,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE OBRAS E INFRAESTRUTURA                                                                             12.239.208,92                35.288.932,67   35.133.132,67   34.121.878,83       116.783.153,09
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:54:02                                                                     Pág 14/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                               DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE OBRAS E INFRAESTRUTURA                                                                              0,00                   43.750,00       43.750,00            0,00            87.500,00
+                   EMPRESA MUN DE MORADIA, URBANIZACAO E SANEAMENTO                                                                     12.239.208,92                35.245.182,67   35.089.382,67     34.121.878,83       116.695.653,09
+
+             Órgão
+             SECRETARIA MUNICIPAL DE ACESSIBILIDADE                                                                                        159.000,00                 59.000,00       59.000,00          59.000,00         336.000,00
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE ACESSIBILIDADE                                                                                  159.000,00                 59.000,00       59.000,00          59.000,00         336.000,00
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:54:08                                                                       Pág 15/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                               DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+ ÁREA DE RESULTADO/PROGRAMA/ÓRGÃO/UNIDADE ORÇAMENTÁRIA                                                                                      2022                       2023              2024                2025             TOTAL
+
+ Área de Resultado
+ Niterói Vibrante e Atraente                                                                                                            252.475.572,55           266.510.568,56     212.321.205,80    207.323.320,75       938.630.667,66
+
+       Programa
+       PROTEÇÃO À FAUNA                                                                                                                  1.368.000,00                1.055.000,00    1.060.000,00      1.065.000,00        4.548.000,00
+
+             Órgão
+             SEC MUN MEIO AMB, REC. HÍDRICOS E SUSTENTABILIDADE                                                                          1.368.000,00                1.055.000,00    1.060.000,00      1.065.000,00        4.548.000,00
+
+                   Unidade Orçamentária
+                   SEC MUN MEIO AMB, REC. HÍDRICOS E SUSTENTABILIDADE                                                                    1.368.000,00                1.055.000,00    1.060.000,00      1.065.000,00        4.548.000,00
+
+       Programa
+       CIDADE VERDE E SUSTENTÁVEL                                                                                                       166.083.260,66           183.036.927,98     142.255.254,35    144.514.829,76       635.890.272,75
+
+             Órgão
+             SECRETARIA MUNICIPAL DE PARTICIPACAO SOCIAL                                                                                   70.000,00                  70.000,00       70.000,00          70.000,00         280.000,00
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE PARTICIPACAO SOCIAL                                                                             70.000,00                  70.000,00       70.000,00          70.000,00         280.000,00
+
+             Órgão
+             SECRETARIA DE GOVERNO                                                                                                       2.519.107,60                2.346.254,05    2.481.029,29      2.623.891,05        9.970.281,99
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:54:15                                                                       Pág 16/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                             DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                   Unidade Orçamentária
+                   SECRETARIA DE GOVERNO                                                                                                 2.519.107,60                2.346.254,05    2.481.029,29    2.623.891,05        9.970.281,99
+
+             Órgão
+             SEC MUNICIPAL DE CONSERVACAO E SERVICOS PÚBLICOS                                                                           15.719.700,68                14.180.871,44   13.649.646,96   13.433.836,73       56.984.055,81
+
+                   Unidade Orçamentária
+                   SEC MUNICIPAL DE CONSERVACAO E SERVICOS PÚBLICOS                                                                     15.719.700,68                14.180.871,44   13.649.646,96   13.433.836,73       56.984.055,81
+
+             Órgão
+             SEC MUN MEIO AMB, REC. HÍDRICOS E SUSTENTABILIDADE                                                                         97.070.170,33                92.595.520,44   95.133.296,05   96.755.819,93       381.554.806,75
+
+                   Unidade Orçamentária
+                   SEC MUN MEIO AMB, REC. HÍDRICOS E SUSTENTABILIDADE                                                                    7.518.333,33                1.213.333,33    1.158.333,33     708.333,33         10.598.333,32
+                   COMPANHIA DE LIMPEZA DE NITEROI - CLIN                                                                               88.151.837,00                91.382.187,11   93.974.962,72   96.047.486,60       369.556.473,43
+                   FUNDO MUNICIPAL DE CONSERVACAO AMBIENTAL - FMCA                                                                       1.400.000,00                    0,00            0,00            0,00            1.400.000,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE OBRAS E INFRAESTRUTURA                                                                             50.155.282,05                73.265.282,05   30.385.282,05   31.085.282,05       184.891.128,20
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE OBRAS E INFRAESTRUTURA                                                                       50.155.282,05                73.265.282,05   30.385.282,05   31.085.282,05       184.891.128,20
+
+             Órgão
+             SECRETARIA MUNICIPAL DO CLIMA                                                                                                 549.000,00                 579.000,00      536.000,00      546.000,00         2.210.000,00
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:54:38                                                                     Pág 17/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                               DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DO CLIMA                                                                                           549.000,00                 579.000,00      536.000,00        546.000,00         2.210.000,00
+
+       Programa
+       CULTURA É UM DIREITO                                                                                                             69.662.062,83                67.536.391,52   51.623.702,39     44.261.241,93       233.083.398,67
+
+             Órgão
+             SECRETARIA EXECUTIVA DO PREFEITO                                                                                            1.514.240,00                1.556.240,00    1.599.500,00      1.644.057,80        6.314.037,80
+
+                   Unidade Orçamentária
+                   SECRETARIA EXECUTIVA DO PREFEITO                                                                                      1.514.240,00                1.556.240,00    1.599.500,00      1.644.057,80        6.314.037,80
+
+             Órgão
+             SECRETARIA DE GOVERNO                                                                                                         60.000,00                  360.000,00      60.000,00          60.000,00         540.000,00
+
+                   Unidade Orçamentária
+                   SECRETARIA DE GOVERNO                                                                                                   60.000,00                  360.000,00      60.000,00          60.000,00         540.000,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DAS CULTURAS                                                                                          22.701.477,00                18.357.347,00   19.405.042,00     19.647.304,00       80.111.170,00
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DAS CULTURAS                                                                                     6.670.000,00                5.970.000,00    6.270.000,00      6.520.000,00        25.430.000,00
+                   FUNDACAO DE ARTE DE NITEROI - FAN                                                                                    16.031.477,00                12.387.347,00   13.135.042,00     13.127.304,00       54.681.170,00
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:55:00                                                                       Pág 18/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                             DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Órgão
+             SECRETARIA MUNICIPAL DE OBRAS E INFRAESTRUTURA                                                                             29.412.893,71                35.863.215,57   17.428.312,50   11.266.137,50       93.970.559,28
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE OBRAS E INFRAESTRUTURA                                                                        1.000.000,00                1.000.000,00        0,00            0,00            2.000.000,00
+                   EMPRESA MUN DE MORADIA, URBANIZACAO E SANEAMENTO                                                                     28.412.893,71                34.863.215,57   17.428.312,50   11.266.137,50       91.970.559,28
+
+             Órgão
+             ADMINISTRACAO REGIONAL DE JURUJUBA                                                                                          2.500.000,00                2.500.000,00    2.500.000,00    2.500.000,00        10.000.000,00
+
+                   Unidade Orçamentária
+                   ADMINISTRACAO REGIONAL DE JURUJUBA                                                                                    2.500.000,00                2.500.000,00    2.500.000,00    2.500.000,00        10.000.000,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE AÇÕES ESTRATÉGICAS                                                                                 13.473.452,12                8.899.588,95    10.630.847,89   9.143.742,63        42.147.631,59
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE AÇÕES ESTRATÉGICAS                                                                           13.473.452,12                8.899.588,95    10.630.847,89   9.143.742,63        42.147.631,59
+
+       Programa
+       CIDADE DO ESPORTE                                                                                                                12.462.249,06                12.382.249,06   14.882.249,06   14.982.249,06       54.708.996,24
+
+             Órgão
+             SECRETARIA EXECUTIVA DO PREFEITO                                                                                              872.249,06                 872.249,06      872.249,06      872.249,06         3.488.996,24
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:55:24                                                                     Pág 19/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                              DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                   Unidade Orçamentária
+                   SECRETARIA EXECUTIVA DO PREFEITO                                                                                        872.249,06                872.249,06      872.249,06        872.249,06         3.488.996,24
+
+             Órgão
+             SECRETARIA MUNICIPAL DE ESPORTES E LAZER                                                                                    8.890.000,00                8.890.000,00   11.390.000,00     11.490.000,00       40.660.000,00
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE ESPORTES E LAZER                                                                              8.890.000,00                8.890.000,00   11.390.000,00     11.490.000,00       40.660.000,00
+
+             Órgão
+             ADMINISTRACAO REGIONAL DO BARRETO                                                                                           1.000.000,00                1.000.000,00   1.000.000,00      1.000.000,00        4.000.000,00
+
+                   Unidade Orçamentária
+                   ADMINISTRACAO REGIONAL DO BARRETO                                                                                     1.000.000,00                1.000.000,00   1.000.000,00      1.000.000,00        4.000.000,00
+
+             Órgão
+             ADMINISTRACAO REGIONAL DO FONSECA                                                                                           1.600.000,00                1.600.000,00   1.600.000,00      1.600.000,00        6.400.000,00
+
+                   Unidade Orçamentária
+                   ADMINISTRACAO REGIONAL DO FONSECA                                                                                     1.600.000,00                1.600.000,00   1.600.000,00      1.600.000,00        6.400.000,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE ACESSIBILIDADE                                                                                        100.000,00                 20.000,00      20.000,00          20.000,00         160.000,00
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:55:29                                                                      Pág 20/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                              DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE ACESSIBILIDADE                                                                                  100.000,00                 20.000,00      20.000,00          20.000,00         160.000,00
+
+       Programa
+       NITERÓI CONTRA O COVID-19 - ÁREA VIBRANTE E ATRAENTE                                                                              2.900.000,00                2.500.000,00   2.500.000,00      2.500.000,00        10.400.000,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DAS CULTURAS                                                                                           2.500.000,00                2.500.000,00   2.500.000,00      2.500.000,00        10.000.000,00
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DAS CULTURAS                                                                                     2.500.000,00                2.500.000,00   2.500.000,00      2.500.000,00        10.000.000,00
+
+             Órgão
+             SEC MUN MEIO AMB, REC. HÍDRICOS E SUSTENTABILIDADE                                                                            400.000,00                   0,00           0,00               0,00            400.000,00
+
+                   Unidade Orçamentária
+                   COMPANHIA DE LIMPEZA DE NITEROI - CLIN                                                                                  400.000,00                   0,00           0,00               0,00            400.000,00
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:55:31                                                                      Pág 21/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                              DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+ ÁREA DE RESULTADO/PROGRAMA/ÓRGÃO/UNIDADE ORÇAMENTÁRIA                                                                                      2022                        2023              2024              2025             TOTAL
+
+ Área de Resultado
+ Niterói Inclusiva                                                                                                                      164.945.313,17           173.204.239,18      164.080.471,21   169.370.411,21      671.600.434,77
+
+       Programa
+       PROTEÇÃO SOCIAL ESPECIAL DE MÉDIA COMPLEXIDADE                                                                                    3.590.000,00                3.690.000,00     3.630.000,00     3.710.000,00       14.620.000,00
+
+             Órgão
+             SEC MUN DE ASSISTENCIA SOCIAL E ECONOMIA SOLIDÁRIA                                                                          3.590.000,00                3.690.000,00     3.630.000,00     3.710.000,00       14.620.000,00
+
+                   Unidade Orçamentária
+                   SEC MUN DE ASSISTENCIA SOCIAL E ECONOMIA SOLIDÁRIA                                                                    1.520.000,00                1.570.000,00     1.590.000,00     1.620.000,00       6.300.000,00
+                   FUNDO MUNICIPAL PARA ASSISTENCIA SOCIAL - FMAS                                                                        2.070.000,00                2.120.000,00     2.040.000,00     2.090.000,00       8.320.000,00
+
+       Programa
+       PROTEÇÃO SOCIAL ESPECIAL DE ALTA COMPLEXIDADE                                                                                    14.812.000,00                15.460.000,00   15.876.000,00    15.824.000,00       61.972.000,00
+
+             Órgão
+             SEC MUN DE ASSISTENCIA SOCIAL E ECONOMIA SOLIDÁRIA                                                                         14.812.000,00                15.460.000,00   15.876.000,00    15.824.000,00       61.972.000,00
+
+                   Unidade Orçamentária
+                   SEC MUN DE ASSISTENCIA SOCIAL E ECONOMIA SOLIDÁRIA                                                                    7.182.000,00                6.042.000,00     6.042.000,00     6.042.000,00       25.308.000,00
+                   FUNDO MUNICIPAL PARA ASSISTENCIA SOCIAL - FMAS                                                                        7.630.000,00                9.418.000,00     9.834.000,00     9.782.000,00       36.664.000,00
+
+       Programa
+       PROTEÇÃO SOCIAL BÁSICA                                                                                                           12.218.280,00                9.118.280,00     8.618.280,00     8.668.280,00       38.623.120,00
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:55:36                                                                      Pág 22/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                            DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Órgão
+             SEC MUN DE ASSISTENCIA SOCIAL E ECONOMIA SOLIDÁRIA                                                                         12.218.280,00                9.118.280,00    8.618.280,00   8.668.280,00        38.623.120,00
+
+                   Unidade Orçamentária
+                   SEC MUN DE ASSISTENCIA SOCIAL E ECONOMIA SOLIDÁRIA                                                                    6.268.280,00                7.468.280,00    6.968.280,00   6.968.280,00        27.673.120,00
+                   FUNDO MUNICIPAL PARA ASSISTENCIA SOCIAL - FMAS                                                                        5.950.000,00                1.650.000,00    1.650.000,00   1.700.000,00        10.950.000,00
+
+       Programa
+       VIVA IDOSO                                                                                                                        4.040.000,00                4.940.000,00    4.740.000,00   4.740.000,00        18.460.000,00
+
+             Órgão
+             SEC MUN DE ASSISTENCIA SOCIAL E ECONOMIA SOLIDÁRIA                                                                            500.000,00                 700.000,00     500.000,00      500.000,00         2.200.000,00
+
+                   Unidade Orçamentária
+                   SEC MUN DE ASSISTENCIA SOCIAL E ECONOMIA SOLIDÁRIA                                                                      500.000,00                 700.000,00     500.000,00      500.000,00         2.200.000,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DO IDOSO                                                                                               3.540.000,00                4.240.000,00    4.240.000,00   4.240.000,00        16.260.000,00
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DO IDOSO                                                                                         3.540.000,00                4.240.000,00    4.240.000,00   4.240.000,00        16.260.000,00
+
+       Programa
+       SEGURANÇA ALIMENTAR                                                                                                               4.810.000,00                11.904.000,00   6.920.000,00   7.020.000,00        30.654.000,00
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:55:38                                                                    Pág 23/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                            DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Órgão
+             SEC MUN DE ASSISTENCIA SOCIAL E ECONOMIA SOLIDÁRIA                                                                          4.810.000,00                11.820.000,00   6.920.000,00   7.020.000,00        30.570.000,00
+
+                   Unidade Orçamentária
+                   SEC MUN DE ASSISTENCIA SOCIAL E ECONOMIA SOLIDÁRIA                                                                    4.810.000,00                11.820.000,00   6.920.000,00   7.020.000,00        30.570.000,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE OBRAS E INFRAESTRUTURA                                                                                    0,00                   84.000,00         0,00            0,00            84.000,00
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE OBRAS E INFRAESTRUTURA                                                                              0,00                   84.000,00         0,00            0,00            84.000,00
+
+       Programa
+       HABITAÇÃO E REGULARIZAÇÃO FUNDIÁRIA                                                                                              23.734.578,17                21.380.639,18   9.826.131,21   8.876.131,21        63.817.479,77
+
+             Órgão
+             SECRETARIA MUNICIPAL DE OBRAS E INFRAESTRUTURA                                                                              9.017.479,78                1.400.000,00    1.600.000,00   1.800.000,00        13.817.479,78
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE OBRAS E INFRAESTRUTURA                                                                        9.017.479,78                1.400.000,00    1.600.000,00   1.800.000,00        13.817.479,78
+
+             Órgão
+             SECRETARIA MUNICIPAL DE HABITACAO E REGULARIZACAO                                                                          14.717.098,39                19.980.639,18   8.226.131,21   7.076.131,21        49.999.999,99
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:55:42                                                                    Pág 24/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                             DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE HABITACAO E REGULARIZACAO                                                                     8.815.525,97                16.417.639,18   6.088.623,21    5.288.623,21        36.610.411,57
+                   FUNDO M. DE HABITAÇÃO DE INTERESSE SOCIAL - FUHAB                                                                     5.901.572,42                3.563.000,00    2.137.508,00    1.787.508,00        13.389.588,42
+
+       Programa
+       JUSTIÇA, CIDADANIA E ACESSIBILIDADE                                                                                              25.008.455,00                24.069.320,00   24.438.060,00   23.500.000,00       97.015.835,00
+
+             Órgão
+             SECRETARIA EXECUTIVA DO PREFEITO                                                                                            4.889.645,00                4.645.000,00    4.686.500,00    4.722.000,00        18.943.145,00
+
+                   Unidade Orçamentária
+                   SECRETARIA EXECUTIVA DO PREFEITO                                                                                      4.889.645,00                4.645.000,00    4.686.500,00    4.722.000,00        18.943.145,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE PARTICIPACAO SOCIAL                                                                                15.410.000,00                15.070.000,00   15.070.000,00   15.070.000,00       60.620.000,00
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE PARTICIPACAO SOCIAL                                                                          15.410.000,00                15.070.000,00   15.070.000,00   15.070.000,00       60.620.000,00
+
+             Órgão
+             SEC MUN DE ASSISTENCIA SOCIAL E ECONOMIA SOLIDÁRIA                                                                            180.000,00                 663.000,00      696.000,00      196.000,00         1.735.000,00
+
+                   Unidade Orçamentária
+                   SEC MUN DE ASSISTENCIA SOCIAL E ECONOMIA SOLIDÁRIA                                                                      180.000,00                 663.000,00      696.000,00      196.000,00         1.735.000,00
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:56:02                                                                     Pág 25/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                           DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Órgão
+             SECRETARIA MUNICIPAL DE EDUCAÇÃO                                                                                              500.000,00                500.000,00   500.000,00        500.000,00         2.000.000,00
+
+                   Unidade Orçamentária
+                   FUNDACAO MUNICIPAL DE EDUCACAO - FME                                                                                    500.000,00                500.000,00   500.000,00        500.000,00         2.000.000,00
+
+             Órgão
+             SEC MUNICIPAL DE CONSERVACAO E SERVICOS PÚBLICOS                                                                              10.000,00                 50.000,00    60.000,00          70.000,00         190.000,00
+
+                   Unidade Orçamentária
+                   SEC MUNICIPAL DE CONSERVACAO E SERVICOS PÚBLICOS                                                                        10.000,00                 50.000,00    60.000,00          70.000,00         190.000,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE OBRAS E INFRAESTRUTURA                                                                                80.000,00                    0,00         0,00              0,00            80.000,00
+
+                   Unidade Orçamentária
+                   EMPRESA MUN DE MORADIA, URBANIZACAO E SANEAMENTO                                                                        80.000,00                    0,00         0,00              0,00            80.000,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE DIREITOS HUMANOS                                                                                    1.042.000,00                987.000,00   992.000,00        882.000,00         3.903.000,00
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE DIREITOS HUMANOS                                                                              1.042.000,00                987.000,00   992.000,00        882.000,00         3.903.000,00
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:56:25                                                                   Pág 26/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                              DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Órgão
+             SEC MUNICIPAL DE CIÊNCIA, TECNOLOGIA E INOVAÇÃO                                                                               170.000,00                170.000,00     170.000,00         170.000,00         680.000,00
+
+                   Unidade Orçamentária
+                   SEC MUNICIPAL DE CIÊNCIA, TECNOLOGIA E INOVAÇÃO                                                                         170.000,00                170.000,00     170.000,00         170.000,00         680.000,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE ACESSIBILIDADE                                                                                      2.726.810,00                1.984.320,00   2.263.560,00      1.890.000,00        8.864.690,00
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE ACESSIBILIDADE                                                                                2.726.810,00                1.984.320,00   2.263.560,00      1.890.000,00        8.864.690,00
+
+       Programa
+       PROMOÇÃO DOS DIREITOS DAS CRIANÇAS E ADOLESCENTES                                                                                   622.000,00                512.000,00     402.000,00         402.000,00         1.938.000,00
+
+             Órgão
+             SEC MUN DE ASSISTENCIA SOCIAL E ECONOMIA SOLIDÁRIA                                                                            622.000,00                512.000,00     402.000,00         402.000,00         1.938.000,00
+
+                   Unidade Orçamentária
+                   SEC MUN DE ASSISTENCIA SOCIAL E ECONOMIA SOLIDÁRIA                                                                      162.000,00                162.000,00     162.000,00         162.000,00         648.000,00
+                   FUNDO MUNICIPAL PARA ASSISTENCIA SOCIAL - FMAS                                                                          30.000,00                  30.000,00      30.000,00          30.000,00         120.000,00
+                   FUNDO PARA INFANCIA E ADOLESCENCIA - FIA                                                                                430.000,00                320.000,00     210.000,00         210.000,00         1.170.000,00
+
+       Programa
+       NITERÓI CONTRA O COVID-19 - ÁREA INCLUSIVA                                                                                          280.000,00                280.000,00     280.000,00         280.000,00         1.120.000,00
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:56:43                                                                      Pág 27/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                             DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Órgão
+             SEC MUN DE ASSISTENCIA SOCIAL E ECONOMIA SOLIDÁRIA                                                                            280.000,00                 280.000,00      280.000,00      280.000,00         1.120.000,00
+
+                   Unidade Orçamentária
+                   SEC MUN DE ASSISTENCIA SOCIAL E ECONOMIA SOLIDÁRIA                                                                      280.000,00                 280.000,00      280.000,00      280.000,00         1.120.000,00
+
+       Programa
+       ECONOMIA SOLIDÁRIA                                                                                                               75.830.000,00                81.850.000,00   89.350.000,00   96.350.000,00       343.380.000,00
+
+             Órgão
+             SEC MUN DE ASSISTENCIA SOCIAL E ECONOMIA SOLIDÁRIA                                                                         75.830.000,00                81.850.000,00   89.350.000,00   96.350.000,00       343.380.000,00
+
+                   Unidade Orçamentária
+                   SEC MUN DE ASSISTENCIA SOCIAL E ECONOMIA SOLIDÁRIA                                                                    5.830.000,00                4.850.000,00    4.350.000,00    4.350.000,00        19.380.000,00
+                   FUNDO MUNICIPAL PARA ASSISTENCIA SOCIAL - FMAS                                                                       70.000.000,00                77.000.000,00   85.000.000,00   92.000.000,00       324.000.000,00
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:56:44                                                                     Pág 28/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                               DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+ ÁREA DE RESULTADO/PROGRAMA/ÓRGÃO/UNIDADE ORÇAMENTÁRIA                                                                                      2022                        2023             2024                2025             TOTAL
+
+ Área de Resultado
+ Niterói Eficiente e Comprometida                                                                                                       38.505.379,83                19.931.593,95   18.602.013,33     6.023.301,19        83.062.288,30
+
+       Programa
+       GESTÃO PÚBLICA INOVADORA                                                                                                         35.196.379,83                14.261.990,09   8.590.497,36      5.218.314,59        63.267.181,87
+
+             Órgão
+             SECRETARIA EXECUTIVA DO PREFEITO                                                                                            2.256.747,47                1.618.734,32        0,00              0,00            3.875.481,79
+
+                   Unidade Orçamentária
+                   SECRETARIA EXECUTIVA DO PREFEITO                                                                                      1.000.000,00                    0,00            0,00              0,00            1.000.000,00
+                   NITEROI EMPRESA DE LAZER E TURISMO - NELTUR                                                                             256.747,47                 18.734,32          0,00              0,00            275.481,79
+                   NITEROI PREV - NITPREV                                                                                                1.000.000,00                1.600.000,00        0,00              0,00            2.600.000,00
+
+             Órgão
+             PROCURADORIA GERAL DO MUNICIPIO                                                                                                9.394,00                  10.333,40       11.366,74          12.503,40         43.597,54
+
+                   Unidade Orçamentária
+                   PROCURADORIA GERAL DO MUNICIPIO                                                                                          9.394,00                  10.333,40       11.366,74          12.503,40         43.597,54
+
+             Órgão
+             SECRETARIA MUNICIPAL DE PARTICIPACAO SOCIAL                                                                                   234.260,58                 58.147,60          0,00              0,00            292.408,18
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:56:46                                                                       Pág 29/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                         DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE PARTICIPACAO SOCIAL                                                                             234.260,58                58.147,60       0,00            0,00            292.408,18
+
+             Órgão
+             SECRETARIA MUNICIPAL DE ESPORTES E LAZER                                                                                      31.008,00                    0,00         0,00            0,00            31.008,00
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE ESPORTES E LAZER                                                                                31.008,00                    0,00         0,00            0,00            31.008,00
+
+             Órgão
+             SECRETARIA DE GOVERNO                                                                                                       3.576.889,06                264.000,00   264.000,00      264.000,00         4.368.889,06
+
+                   Unidade Orçamentária
+                   SECRETARIA DE GOVERNO                                                                                                 3.576.889,06                264.000,00   264.000,00      264.000,00         4.368.889,06
+
+             Órgão
+             SEC MUN DE ASSISTENCIA SOCIAL E ECONOMIA SOLIDÁRIA                                                                            604.058,89                316.132,20   275.000,00      275.000,00         1.470.191,09
+
+                   Unidade Orçamentária
+                   SEC MUN DE ASSISTENCIA SOCIAL E ECONOMIA SOLIDÁRIA                                                                      329.058,89                41.132,20       0,00            0,00            370.191,09
+                   FUNDO MUNICIPAL PARA ASSISTENCIA SOCIAL - FMAS                                                                          275.000,00                275.000,00   275.000,00      275.000,00         1.100.000,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE ADMINISTRACAO                                                                                      10.097.000,01                   0,00         0,00            0,00            10.097.000,01
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:56:49                                                                 Pág 30/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                           DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE ADMINISTRACAO                                                                                10.097.000,01                   0,00           0,00            0,00            10.097.000,01
+
+             Órgão
+             SECRETARIA MUNICIPAL DE ORDEM PÚBLICA                                                                                         170.233,90                 54.281,83        0,00            0,00            224.515,73
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE ORDEM PUBLICA                                                                                   170.233,90                 54.281,83        0,00            0,00            224.515,73
+
+             Órgão
+             SECRETARIA MUNICIPAL DE EDUCAÇÃO                                                                                            1.219.371,21                540.133,04        0,00            0,00            1.759.504,25
+
+                   Unidade Orçamentária
+                   FUNDACAO MUNICIPAL DE EDUCACAO - FME                                                                                  1.219.371,21                540.133,04        0,00            0,00            1.759.504,25
+
+             Órgão
+             SECRETARIA MUNICIPAL DE FAZENDA                                                                                             2.000.000,00                1.000.000,00   1.000.000,00   1.000.000,00        5.000.000,00
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE FAZENDA                                                                                       2.000.000,00                1.000.000,00   1.000.000,00   1.000.000,00        5.000.000,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE URBANISMO E MOBILIDADE                                                                                790.201,14                288.850,70     220.000,00      220.000,00         1.519.051,84
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:56:52                                                                   Pág 31/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                           DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE URBANISMO E MOBILIDADE                                                                          690.201,14                188.850,70     120.000,00      120.000,00         1.119.051,84
+                   NITEROI TRANSPORTE E TRANSITO S/A - NITTRANS                                                                            100.000,00                100.000,00     100.000,00      100.000,00         400.000,00
+
+             Órgão
+             SEC MUN DE PLANEJAMENTO, ORÇAMENTO E MOD. GESTAO                                                                            3.113.120,35                3.043.014,76   2.232.000,00   2.068.000,00        10.456.135,11
+
+                   Unidade Orçamentária
+                   SEC MUN DE PLANEJAMENTO, ORÇAMENTO E MOD. GESTAO                                                                      3.113.120,35                3.043.014,76   2.232.000,00   2.068.000,00        10.456.135,11
+
+             Órgão
+             SECRETARIA MUNICIPAL DE SAUDE                                                                                               3.762.815,10                921.140,73     212.177,98         0,00            4.896.133,81
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE SAUDE                                                                                         3.762.815,10                921.140,73     212.177,98         0,00            4.896.133,81
+
+             Órgão
+             SECRETARIA MUNICIPAL DAS CULTURAS                                                                                             138.134,55                 59.951,20        0,00            0,00            198.085,75
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DAS CULTURAS                                                                                       138.134,55                 59.951,20        0,00            0,00            198.085,75
+
+             Órgão
+             SEC MUN MEIO AMB, REC. HÍDRICOS E SUSTENTABILIDADE                                                                            613.842,18                199.803,83        0,00            0,00            813.646,01
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:56:56                                                                   Pág 32/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                           DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                   Unidade Orçamentária
+                   SEC MUN MEIO AMB, REC. HÍDRICOS E SUSTENTABILIDADE                                                                      613.842,18                199.803,83      0,00              0,00            813.646,01
+
+             Órgão
+             SECRETARIA MUNICIPAL DE DESENV. ECONOMICO                                                                                     660.059,87                313.006,26      0,00              0,00            973.066,13
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE DESENV. ECONOMICO                                                                               660.059,87                313.006,26      0,00              0,00            973.066,13
+
+             Órgão
+             SECRETARIA MUNICIPAL DE OBRAS E INFRAESTRUTURA                                                                                390.000,00                120.000,00   120.000,00        120.000,00         750.000,00
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE OBRAS E INFRAESTRUTURA                                                                          390.000,00                120.000,00   120.000,00        120.000,00         750.000,00
+
+             Órgão
+             CONTROLADORIA GERAL DO MUNICÍPIO                                                                                              84.501,65                 87.183,07    89.951,64          92.810,19         354.446,55
+
+                   Unidade Orçamentária
+                   CONTROLADORIA GERAL DO MUNICÍPIO                                                                                        84.501,65                 87.183,07    89.951,64          92.810,19         354.446,55
+
+             Órgão
+             SECRETARIA MUNICIPAL DE DEFESA CIVIL E GEOTECNIA                                                                              585.748,17                153.119,29      0,00              0,00            738.867,46
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:56:59                                                                   Pág 33/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                            DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE DEFESA CIVIL E GEOTECNIA                                                                        585.748,17                153.119,29         0,00            0,00            738.867,46
+
+             Órgão
+             SECRETARIA MUNICIPAL DE DIREITOS HUMANOS                                                                                      136.478,90                 50.605,90         0,00            0,00            187.084,80
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE DIREITOS HUMANOS                                                                                136.478,90                 50.605,90         0,00            0,00            187.084,80
+
+             Órgão
+             SEC MUNICIPAL DE CIÊNCIA, TECNOLOGIA E INOVAÇÃO                                                                               56.513,80                    0,00            0,00            0,00            56.513,80
+
+                   Unidade Orçamentária
+                   SEC MUNICIPAL DE CIÊNCIA, TECNOLOGIA E INOVAÇÃO                                                                         56.513,80                    0,00            0,00            0,00            56.513,80
+
+             Órgão
+             ESCRITÓRIO DE GESTÃO DE PROJETOS                                                                                            4.666.001,00                5.163.551,96   4.166.001,00    1.166.001,00        15.161.554,96
+
+                   Unidade Orçamentária
+                   ESCRITÓRIO DE GESTÃO DE PROJETOS                                                                                      4.666.001,00                5.163.551,96   4.166.001,00    1.166.001,00        15.161.554,96
+
+       Programa
+       GESTÃO PÚBLICA TRANSPARENTE E PARTICIPATIVA                                                                                       3.309.000,00                5.669.603,86   10.011.515,97    804.986,60         19.795.106,43
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:57:02                                                                    Pág 34/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                              DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Órgão
+             SECRETARIA EXECUTIVA DO PREFEITO                                                                                            2.436.000,00                5.491.350,00   9.555.000,00       628.200,00         18.110.550,00
+
+                   Unidade Orçamentária
+                   SECRETARIA EXECUTIVA DO PREFEITO                                                                                      2.436.000,00                5.491.350,00   9.555.000,00       628.200,00         18.110.550,00
+
+             Órgão
+             SEC MUN DE PLANEJAMENTO, ORÇAMENTO E MOD. GESTAO                                                                              798.000,00                128.000,00     418.000,00         138.000,00         1.482.000,00
+
+                   Unidade Orçamentária
+                   SEC MUN DE PLANEJAMENTO, ORÇAMENTO E MOD. GESTAO                                                                        798.000,00                128.000,00     418.000,00         138.000,00         1.482.000,00
+
+             Órgão
+             SECRETARIA MUNICIPAL DE DEFESA DO CONSUMIDOR                                                                                  35.000,00                  10.000,00      15.000,00          15.000,00         75.000,00
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DE DEFESA DO CONSUMIDOR                                                                            35.000,00                  10.000,00      15.000,00          15.000,00         75.000,00
+
+             Órgão
+             CONTROLADORIA GERAL DO MUNICÍPIO                                                                                               8.000,00                   8.253,86       8.515,97          8.786,60          33.556,43
+
+                   Unidade Orçamentária
+                   CONTROLADORIA GERAL DO MUNICÍPIO                                                                                         8.000,00                   8.253,86       8.515,97          8.786,60          33.556,43
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:57:04                                                                      Pág 35/36
+
+                            RUA VISCONDE DE SEPETIBA, 987, 6º ANDAR                                                                                                                          DEMONSTRATIVO CONSOLIDADO DE VALORES
+                            21 26200403 - CNPJ : 28.521.748/0001-59
+                            prefeitura@niteroi.rj.gov.br
+                            www.niteroi.rj.gov.br
+
+             Órgão
+             SECRETARIA MUNICIPAL DO CLIMA                                                                                                 32.000,00                 32.000,00   15.000,00          15.000,00         94.000,00
+
+                   Unidade Orçamentária
+                   SECRETARIA MUNICIPAL DO CLIMA                                                                                           32.000,00                 32.000,00   15.000,00          15.000,00         94.000,00
+
+ TOTAL PPA 2022 - 2025                                                                                                                                                                                             6.734.818.059,87
+
+                  Planejamento>PPA>Demonstrativo Consolidado Valores FrontController.php Emissor: Thiago Pentagna Fernandes Exerc: 2022Data: 26-08-2021 - 22:57:08                                                                  Pág 36/36

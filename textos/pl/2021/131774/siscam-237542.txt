@@ -1,0 +1,3368 @@
+Proc, Nº. LÃO DO 14X / od
+ed E Data; 2H pOC ] PA Fls: I5$
+me Consórcio de Informático :
+| g a | na Gestão Póblica Municipal Rubrica:
+Letícia Bravo
+Matr. 42363
+
+Os Municípios catarinenses listados no Anexo |, através de seus Prefeitos Municipais, reunidos
+na cidade de Penha, no dia 29 de novembro de 2007, resolvem formalizar o presente
+Protocolo de Intenções com o objetivo de constituir consórcio público, com personalidade
+jurídica de direito público, sob a forma de associação pública, objetivando ordenar a
+
+= utilização dos recursos disponíveis e reforçar o papel do município na modernização da
+
+gestão pública, com observância da Lei n.º 11.107/05 e legislação municipal pertinente.
+
+DA DENOMINAÇÃO E CONSTITUIÇÃO
+Art. 1.º.0 Consórcio de Informática na Gestão Pública Municipal - CIGA é pessoa jurídica de
+direito público, sob a forma de associação pública, devendo reger-se pelas normas da
+Constituição da República Federativa do Brasil, da Lei n.º 11.107, de 6 de abril de 2005, do
+Decreto n.º 6.017, de 17 de janeiro de 2007, e demais normas pertinentes, pelo presente
+Protocolo de Intenções e pela regulamentação que vier a ser adotada pelos seus órgãos
+competentes. (Redação dada pela Emenda ao Contrato de Consórcio Público n.º 05, de 2017)
+Parágrafo único. O CIGA adquirirá personalidade jurídica mediante a vigência das leis de
+ratificação de no mínimo três municípios subscritores do Protocolo de Intenções.
+Art. 2.º. O CIGA é constituído pelos municípios subscritos no Anexo | e demais municípios do
+território nacional, cuja representação se dará através do Prefeito Municipal. (Redação dada
+
+ms pela Emenda ao Contrato de Consórcio Público n.º 03, de 2014)
+81.º. Somente será considerado consorciado o município subscritor do Protocolo de
+Intenções que o ratificar por meio de lei no prazo de dois anos, contados a partir da data de
+publicação do Protocolo de Intenções.
+82.º. A ratificação realizada após dois anos da subscrição do Protocolo de Intenções somente
+será válida após homologação da Assembleia Geral do CIGA.
+83.º. A ratificação poderá ser realizada com reserva, implicando em consorciamento parcial
+do ente, após aprovação de cada uma das reservas pelos demais subscritores do Protocolo
+de Intenções ou, caso já constituído o consórcio público, pela Assembleia Geral.
+84.º, O consorciamento de município designado como possível integrante do consórcio se
+dará mediante lei municipal que autorize seu ingresso no consórcio e homologação da
+Assembleia Geral do CIGA.
+
+1-69
+
+Proc. Nº 140 000 MY /d021
+2 | Consórcio de Informática Data:dh 106, Flsis 156
+Iga | na Gestão Pública Municipal
+Rubrica:
+matr. 423
+DA SEDE, ÁREA DE ATUAÇÃO E DURAÇÃO
+Art. 3.º. O Consórcio de Informática na Gestão Pública Municipal - CIGA tem sua sede à Rua
+General Liberato Bittencourt, n.º 1885, Centro Executivo Imperatriz, Sala n.º 1307, Bairro
+Canto, CEP 88.070-800, Florianópolis, Estado de Santa Catarina. (Redação dada pela Emenda
+ao Contrato de Consórcio Público n.º 04, de 2016)
+Art. 4.º. A área de atuação do CIGA será formada pelo território dos municípios que o
+integram, constituindo-se numa unidade territorial sem limites intermunicipais para as
+finalidades a que se propõe.
+Art. 5.º. O CIGA vigorará por tempo indeterminado.
+DO OBJETO E FINALIDADES
+Art. 6.º. Constitui objeto do CIGA o desenvolvimento, implantação, capacitação, manutenção
+e suporte de sistemas, voltados para a relação governo-cidadão, que empreguem tecnologias
+da informação e comunicação aplicadas a um amplo arco das funções de governo, em
+especial a gestão administrativa e a relação do Poder Público com a sociedade civil, e que
+promovam o acesso a informações relevantes de governos, que implementem a provisão de
+serviços públicos pela web (internet e/ou intranet), promovam a inclusão digital, desenvolvam
+formas de acesso e comunicação com os gestores e induzam a modernização de rotinas e
+aumento de eficiência e eficácia da gestão pública municipal.
+Art. 7.º. O CONSÓRCIO DE INFORMÁTICA NA GESTÃO PÚBLICA MUNICIPAL — CIGA tem
+natureza multifinalitária, destinado a cumprir as seguintes finalidades: (Redação dada pela
+Emenda ao Contrato de Consórcio Público n.º 05, de 2017)
+| - prestar, de forma direta ou indireta, serviços especializados em desenvolvimento,
+
+Já atualização, manutenção, suporte e fornecimento de sistemas informatizados “softwares” em
+gestão pública municipal, nos serviços de processamento de dados e geração das
+informações, no âmbito de cada município consorciado e que permitam trazer benefícios
+para a administração e sociedade;
+
+Il - promover a implantação de sistemas de gestão pública municipal, treinamento,
+capacitação e suporte técnico aos municípios e aos usuários dos sistemas, diretamente com
+seus empregados, colaboradores, por meio da Federação Catarinense de Municípios —
+FECAM, das respectivas associações microrregionais de municípios ou por intermédio de
+terceiros;
+Il - celebrar convênios ou contratos de parcerias que viabilizem o fornecimento de
+tecnologias, serviços e sistemas para a gestão pública municipal;
+IV - desenvolver, de acordo com as necessidades e interesses dos consorciados, ações
+conjuntas para atendimento do objeto do Consórcio;
+
+2-69
+
+Proc. Nº [número omitido]
+» Data; | bo ARO
+som] 4 /06.j 21 Fls 49 T AMA !
+a ra
+o | Consórcio de Informática Rubrica: é
+iga | na Gestão Pública Municipal T pao |
+Let 36
+L matr 42
+V - criar instrumentos de controle, avaliação e acompanhamento dos serviços prestados aos
+municípios consorciados;
+VI - viabilizar ações conjuntas, de acordo com a adesão de cada município consorciado, para
+a aquisição nacional ou internacional de equipamentos, softwares aplicativos, contratação de
+sistemas e serviços aplicados à gestão pública municipal; (Redação dada pela Emenda ao
+Contrato de Consórcio Público n.º 02, de 2013)
+MIL - representar os municípios que integram o CIGA, perante fornecedores, prestadores de
+serviços, autoridades, órgãos e instituições nos assuntos atinentes ao objeto do Consórcio;
+Mill - prestar assessoria e consultoria na aquisição e implantação de sistemas e
+equipamentos de tecnologia da informação destinados ao desenvolvimento das atividades
+dos municípios consorciados;
+IX - estabelecer relações cooperativas com outros consórcios que por sua localização e
+peculiaridades possibilite o desenvolvimento de ações conjuntas em defesa dos consorciados;
+(Redação dada pela Emenda ao Contrato de Consórcio Público n.º 02, de 2013)
+X - realizar estudos e pesquisas de tecnologias da informação relacionadas à gestão pública
+municipal, tanto no desenvolvimento de sistemas e aquisição de equipamentos quanto na
+inserção tecnológica dos municípios;
+XI - promover a articulação entre os atores envolvidos no processo de desenvolvimento
+tecnológico dos municípios, FECAM e associações de municípios catarinenses;
+XIl - propor políticas de inserção e desenvolvimento tecnológico dos consorciados, bem
+como a inclusão digital da sociedade;
+xi — desenvolver, contratar, fornecer ou manter sistemas, serviços e equipamentos de
+geração e transmissão de energia, iluminação pública convencionais ou sistemas inteligentes
+voltados a eficiência energética e energias renováveis; (Redação dada pela Emenda ao
+Contrato de Consórcio Público n.º 02, de 2013)
+XIv. — planejar, coordenar, orientar, controlar e executar projetos de pesquisa e implantação
+de políticas de gestão territorial, geoprocessamento, cartografia e planejamento rural e
+urbano; (Redação dada pela Emenda ao Contrato de Consórcio Público n.º 02, de 2013)
+XV. — instituir, através de resolução aprovada pelos consorciados, Fundo Intermunicipal para
+recebimento e aplicação de recursos financeiros oriundos de outros entes federados, bem
+como recursos provindos do setor privado, de compensações financeiras e de doações de
+outras fontes, inclusive de instituições de outros países; (Redação dada pela Emenda ao
+Contrato de Consórcio Público n.º 02, de 2013)
+XvI — receber, processar e disponibilizar entre os entes federados, dados cadastrais,
+tributários, econômicos ou analíticos de qualquer tipo, que possam ser utilizados direta ou
+indiretamente para acompanhamento ou fiscalização, incluindo dados de Notas Fiscais
+Eletrônicas, operações de crédito, inclusive de Cartões de Crédito, compra venda de
+mercadorias ou de prestações de serviços sujeitos ao ISSQN ou ICMS, inclusive serviços
+3-69
+
+Proc. Nº. 140 00b Wi Jal
+ol [Data A, 06 OU Fig, 156
+= | Consórcio de Infomótica à Rubrica: AU ú /) |
+Iga | na Gestão Pública Municipal - : ZPE AS - f
+LARA e
+Lettoto 42363
+mall.
+bancários, operação de vendas de bens móveis e imóveis e outras composições de
+informações que os sistemas fiscalizadores possam realizar cruzamentos ou auditorias.
+(Redação dada pela Emenda ao Contrato de Consórcio Público n.º 02, de 2013)
+Parágrafo único. Para cumprir as suas finalidades o CIGA poderá:
+| - adquirir e/ou receber em doação ou cessão de uso, os bens que entender necessários
+ao desenvolvimento de suas atividades, os quais integrarão ou não o seu patrimônio;
+Il - firmar convênios, contratos, acordos de qualquer natureza, receber auxílios,
+contribuições e subvenções de outras entidades e órgãos governamentais ou privados
+nacionais ou internacionais; (Redação dada pela Emenda ao Contrato de Consórcio Público
+n.º 02, de 2013)
+pi ll - prestar por seus empregados e colaboradores os serviços previstos no presente
+Protocolo a seus consorciados;
+IV - requisitar técnicos de entes públicos, dos consorciados, FECAM e das associações
+microrregionais de municípios, para integrarem o quadro de profissionais na prestação dos
+serviços ao CIGA;
+V - realizar licitações para contratação de bens ou serviços em nome dos municípios
+consorciados, nos termos do 81.º do art. 112 da Lei n.º 8.666/93 e do art. 19 do Decreto n.º
+[número omitido]; (Redação dada pela Emenda ao Contrato de Consórcio Público n.º 04, de 2016)
+VI - contratar e ser contratado pela administração direta ou indireta dos entes consorciados,
+dispensada a licitação nos termos do art. 24 da Lei n.º 8.666/93; (Redação dada pela Emenda
+ao Contrato de Consórcio Público n.º 04, de 2016)
+VII — adquirir produtos ou serviços em outros países, quando demonstrada a vantagem
+técnica do bem ou serviço, ou ainda, quando houver incorporação tecnológica para o CIGA
+e aos municípios consorciados. (Redação dada pela Emenda ao Contrato de Consórcio
+Público n.º 02, de 2013)
+DOS DIREITOS E DEVERES DOS CONSORCIADOS
+Art. 8.º. Constituem direitos dos consorciados:
+| - participar das Assembleias Gerais e discutir os assuntos submetidos à apreciação dos
+consorciados;
+Il - votar e ser votado para os cargos do Conselho de Administração e do Conselho Fiscal;
+Il - propor medidas que visem atender aos objetivos e interesses dos Municípios e ao
+aprimoramento do CIGA;
+IV — compor o Conselho de Administração e o Conselho Fiscal do CIGA nas condições
+estabelecidas pelo Protocolo de Intenções.
+4-69
+
+Proc. Nº 149 Ovo + (020 |
+ml Data: A 4 by dA Fis 45q |
+ai | Consórcio de Informática
+C iga | no Gestão Pública Municipal Rubrica:
+re AyaL
+matt.
+
+Art. 9.º, Constituem deveres dos consorciados:
+| - cumprir e fazer cumprir o presente Protocolo de Intenções, em especial quanto à inserção
+no orçamento anual e o repasse de recursos financeiros previstos em contrato; (Redação
+dada pela Emenda ao Contrato de Consórcio Público n.º 04, de 2016)
+Il - acatar as determinações da Assembleia Geral, cumprindo com as deliberações e
+obrigações do CIGA; (Redação dada pela Emenda ao Contrato de Consórcio Público n.º 04,
+de 2016)
+III - cooperar para o desenvolvimento das atividades do CIGA, bem como contribuir com a
+ordem e a harmonia entre os consorciados e colaboradores;
+IV - participar ativamente das reuniões e assembleias gerais do CIGA.
+DO CONTRATO DE PROGRAMA
+Art. 10. Os contratos de programa, tendo por objeto alguma das finalidades do CIGA
+dispostas no art. 7º deste Protocolo de Intenções, serão firmados entre o consórcio e cada
+ente consorciado. (Redação dada pela Emenda ao Contrato de Consórcio Público n.º 05, de
+2017)
+$1.º. O contrato de programa deverá:
+| - atender à legislação de concessões e permissões de serviços públicos;
+Il - promover procedimentos que garantam a transparência da gestão econômica e
+financeira de cada serviço em relação a cada um de seus titulares;
+52.º. O CIGA poderá celebrar contrato de programa com autarquia, empresa pública ou
+sociedade de economia mista integrante da administração indireta de um dos entes
+
+a consorciados, dispensada a licitação pública nos termos do art. 24, inciso XXVI da Lei n.º
+8.666/93.
+DO CONTRATO DE RATEIO
+Art. 11. Os contratos de rateio serão firmados por cada ente consorciado com o CIGA, e terão
+por objeto a disciplina da entrega de recursos financeiros ao consórcio.
+$1.º. O contrato de rateio será formalizado em cada exercício e o prazo de vigência será o da
+respectiva dotação orçamentária, exceto os contratos de rateio que tenham por objeto
+exclusivamente projetos consistentes em programas e ações contemplados em plano
+plurianual.
+52.º. É vedada a aplicação de recursos entregues por meio de contrato de rateio para o
+atendimento de despesas genéricas, inclusive transferências ou operações de crédito.
+
+5 -69
+
+Proc. nº 14o pio LUA mel
+Resdipo =
+ed Data: WUpridl. 19 e ammpmrmemsiratems |
+= Consórcio de Informática ; é a
+o Iga | na Gestão Pública Municipal Rubricas, MPN
+«m Bravo
+o . ab iO Bios
+83.º, Os entes consorciados, isolados ou em conjunto, bem como o CIGA, são partes legítimas mat
+para exigir o cumprimento das obrigações previstas no contrato de rateio.
+DA ESTRUTURA
+Art. 12. O CIGA estará organizado a partir da seguinte estrutura:
+| - Assembleia Geral;
+Il - Conselho de Administração;
+III - Conselho Fiscal;
+di IV - Diretoria Executiva.
+ASSEMBLEIA GERAL
+Art. 13. A Assembleia Geral, instância máxima do CIGA, é um órgão colegiado composto
+pelos Chefes do Poder Executivo de todos os municípios consorciados e será gerida por um
+Conselho de Administração.
+81.º. Os membros do Conselho de Administração e do Conselho Fiscal serão escolhidos em
+Assembleia Geral, pela maioria simples dos prefeitos dos municípios consorciados, para o
+mandato de um ano, podendo ser reeleitos por mais um período.
+82.º, A eleição do Conselho de Administração e do Conselho Fiscal acontecerá entre o período
+do dia 1º (primeiro) de dezembro do exercício e 31 (trinta e um) de janeiro do ano seguinte.
+83.º. Ocorrendo empate considerar-se-á eleito o prefeito concorrente mais idoso.
+di 84.º. Poderão concorrer à eleição para o Conselho de Administração e o Conselho Fiscal, os
+prefeitos dos municípios consorciados e em dia com suas obrigações contratuais, até 90
+(noventa) dias antes da eleição, em no máximo três chapas completas para os dois órgãos.
+85.º. Os vice-prefeitos poderão participar de todas as reuniões da Assembleia Geral, com
+direito a voz.
+86.º. No caso de ausência do Prefeito, o Vice-Prefeito assumirá a representação do município
+na Assembleia Geral, inclusive com direito a voto, mediante credencial, sendo vedada a
+substituição do titular nos cargos do CIGA.
+87.º. Ninguém poderá representar mais de um consorciado na mesma reunião da Assembleia
+Geral.
+88.º. A Assembleia Geral será presidida pelo Presidente do Conselho de Administração ou, na
+sua falta, pelo Primeiro Vice-Presidente.
+6-69
+
+Proc. Nº 140 0dO 44) LD l
+semj 7 Data: [4 4 O! pal pio AG]
+E | Consórcio de Informática /)
+Iga | na Gestão Pública Municipal Rubrica: / 5 EE a a
+ATÃU +
+LetiCi n2363
+até
+Art. 14, A Assembleia Geral reunir-se-á ordinariamente no período de 01 de dezembro a 31
+de janeiro, para proceder às eleições e apreciar o Orçamento, o Plano de Trabalho e a
+prestação de contas, e extraordinariamente quando convocado pelo Presidente do Conselho
+de Administração, por um quinto de seus membros ou pelo Conselho Fiscal, para outras
+finalidades.
+81.º. As convocações da Assembleia Geral serão publicadas no sítio do CIGA com
+antecedência mínima de 10 dias.
+82.º. A Assembleia Geral reunir-se-á:
+| - em primeira convocação, presentes a maioria dos entes consorciados;
+Il - em segunda convocação, trinta minutos após o horário estabelecido para a primeira
+pm convocação, com qualquer número de entes consorciados.
+$3.º. A Assembleia Geral poderá se dar virtualmente, sendo obrigatório o uso de métodos
+que garantam a autenticidade da participação dos membros convocados e de seus
+respectivos votos. (Incluído pela Emenda ao Contrato de Consórcio Público n.º 04, de 2016)
+Art. 15. Cada município consorciado terá direito a um voto na Assembleia Geral.
+Parágrafo único. O voto será público e nominal, admitindo-se o voto secreto somente nos
+casos de julgamento em que se suscite a aplicação de penalidade aos servidores do
+Consórcio ou a ente consorciado.
+Art. 16. Compete à Assembleia Geral:
+| - eleger os membros do Conselho de Administração e do Conselho Fiscal;
+Il - homologar o ingresso no CIGA de município subscritor do Protocolo de Intenções que o
+tenha ratificado após dois anos da sua subscrição ou de município não subscritor que
+discipline por lei o seu ingresso;
+HI - aprovar as alterações do Contrato de Consórcio Público;
+IV - aplicar a pena de exclusão ao enteconsorciado;
+V - deliberar sobre a entrega mensal de recursos financeiros a ser definida em contrato de
+rateio;
+VI - homologar as decisões que o Conselho de Administração deliberou “ad referendum" da
+Assembleia Geral; (Redação dada pela Emenda ao Contrato de Consórcio Público n.º 04, de
+2016)
+VII - autorizar: (Redação dada pela Emenda ao Contrato de Consórcio Público n.º 04, de 2016)
+a) a realização de operações de crédito;
+b) a alienação e a oneração debens imóveis do CIGA;
+7-69
+
+Proc. Nº J4D Doo [ua Z2931
+an s tos ( 0 l E 529)
+( a | Consórcio de Infomética Data JA 106 pat Fls: E!
+ui iga | no Gestão Pública Municipal cas TA |
+, L IA Bravo
+Matr. 42363
+
+c) a mudança da sede;
+VIII - aprovar a extinção do consórcio;
+IX - deliberar sobre assuntos gerais do CIGA;
+X - aprovar as alterações do Estatuto. (Incluído pela Emenda ao Contrato de Consórcio
+Público n.º 04, de 2016)
+Art. 17. O quórum de deliberação da Assembleia Geral será de:
+| - unanimidade de votos de todos dos consorciados para as competências dispostas nos
+incisos Ill e VIII do artigo anterior;
+
+o Il - maioria absoluta de todos os consorciados para a competência disposta no inciso VII,
+
+alínea “c”, do artigo anterior;
+
+HI - maioria simples dos consorciados presentes às assembleias para as demais deliberações.
+$1.º. Compete ao Presidente, além do voto normal, o voto de minerva.
+82.º. Havendo consenso entre seus membros, as deliberações dos consorciados presentes
+poderão ser efetivadas por meio de aclamação. (Redação dada pela Emenda ao Contrato de
+Consórcio Público n.º 05, de 2017)
+DO CONSELHO DE ADMINISTRAÇÃO
+Art. 18. O Conselho de Administração do CIGA é formado pelos prefeitos dos municípios
+consorciados, constituído de:
+| - Um Presidente;
+
+a Il - Um Primeiro Vice-Presidente;
+HI - Um Segundo Vice-Presidente;
+IV - Um Primeiro Secretário;
+V - Um Segundo Secretário.
+Art. 19. Compete ao Conselho de Administração do CIGA: (Renumerado pela Emenda ao
+Contrato de Consórcio Público n.º 04, de 2016)
+| | - nomear e exonerar o Diretor Executivo e tomar-lhe mensalmente as contas da gestão
+financeira e administrativa do CIGA, que atenda ao disposto na Lei Federal n.º 11.107, de 6 de
+abril de 2005;
+Il - definir e acompanhar a execução da política patrimonial e financeira e os programas de
+investimento do CIGA;
+
+8 - 69
+
+proc. Nº 142 000 UU7 Ao
+41 7 . Aa pi |
+pata [LIOCa ri 263
+i a | Consórcio de Informática CPO Cap cs
+| no Gestão Pública Municipal aa 3
+HI - prestar contas ao órgão concessor dos auxílios e subvenções que o CIGA venha a
+receber;
+IV - contratar serviços de auditoria interna e externa;
+V - autorizar a alienação de bens móveis inservíveis do consórcio;
+VI - autorizar o Diretor Executivo a contratação de estagiários;
+VII - autorizar o Diretor Executivo a contratar serviços terceirizados para atendimento das
+finalidades do CIGA;
+VIII - aceitar a cessão onerosa de servidores do ente consorciado ou conveniado ao CIGA;
+IX - autorizar o Diretor Executivo do Consórcio a prover os empregos públicos previstos no
+al Anexo Il deste Protocolo de Intenções;
+X - autorizar a celebração de convênios;
+XI - deliberar sobre a revisão geral anual da remuneração dos empregados do CIGA,
+inclusive de vantagens pecuniárias; (Redação dada pela Emenda ao Contrato de Consórcio
+Público n.º 05, de 2017)
+XIl - a instituição de diárias para fins de ressarcimento das despesas de deslocamento e
+estada dos empregados públicos e em comissão do CIGA, bem como dos membros dos
+Conselhos de Administração e Fiscal que viajarem a serviço do Consórcio no Brasil ou no
+Exterior, nos valores e termos fixados no Estatuto do CIGA; (Redação dada pela Emenda ao
+Contrato de Consórcio Público n.º 04, de 2016)
+xill - regulamentar a forma de custeio de despesas de deslocamento e estada pelos
+integrantes das Câmaras Técnicas, tendo em vista o interesse público na participação efetiva
+de seus integrantes; (Incluído pela Emenda ao Contrato de Consórcio Público n.º 04, de 2016)
+
+Ea XIV - autorizar a celebração de Contrato de Cota de Patrocínio de eventos que visem ao
+fortalecimento municipalista, mediante apresentação, pela Patrocinada, de Projeto, a ser
+aprovado pelo Conselho de Administração, e, após o término do evento, de Relatório de
+Execução do Evento, para comprovação do cumprimento da contrapartida; (Incluído pela
+Emenda ao Contrato de Consórcio Público n.º 04, de 2016)
+
+XV - aprovar, ad referendum da Assembleia Geral: (Incluído pela Emenda ao Contrato de
+Consórcio Público n.º 04, de 2016)
+a) o Orçamento anual do CIGA, bem como respectivos créditos adicionais, inclusive a
+previsão de aportes a serem cobertos por recursos advindos de eventuais contratos de rateio;
+b) o Plano de Trabalho;
+c) o Relatório Anual de Atividades;
+d) a prestação de contas, após a análise do Conselho Fiscal;
+
+9-69
+
+Proc. Nº 142ppo atado DU
+sad Data JU 106) 21 Fis 4/4
+” | Consórcio de Informática ;
+o Iga | na Gestão Pública Municipal Rubrica: f
+Letíciá a
+Matr. 42
+e) a criação de câmaras técnicas, comitês, ou grupos de discussão com a participação da
+sociedade civil.
+Art. 20. Ao Presidente do Conselho de Administração compete:
+| - convocar e presidir as Assembleias Gerais do CIGA, as reuniões do Conselho de
+Administração e manifestar o voto de minerva;
+Il - tomar e dar posse aos membros do Conselho de Administração e Conselho Fiscal;
+Ill - representar o CIGA ativa e passivamente, judicial ou extrajudicialmente, podendo firmar
+contratos ou convênios bem como constituir procuradores “ad negotia” e “ad juditia”,
+podendo esta competência ser delegada parcial ou totalmente ao Diretor Executivo;
+Es IV - ordenar as despesas e a movimentação financeira dos recursos do CIGA, podendo esta
+competência ser delegada total ou parcialmente ao Diretor Executivo;
+Art. 21. Ao Primeiro Secretário compete secretariar as reuniões da Assembleia Geral e do
+Conselho de Administração e promover todos os atos relativos à função do CIGA;
+Art. 22. Aos demais prefeitos membros do Conselho de Administração compete substituir os
+titulares e colaborar para o funcionamento adequado do CIGA.
+DO CONSELHO FISCAL
+Art. 23. O Conselho Fiscal é o órgão de fiscalização do CIGA e será composto por 3 (três)
+membros titulares e 3 (três) membros suplentes.
+Art. 24. Compete ao Conselho Fiscal:
+| - fiscalizar a contabilidade do CIGA; (Redação dada pela Emenda ao Contrato de Consórcio
+a Público n.º 05, de 2017)
+Il - acompanhar e fiscalizar sempre que considerar oportuno e conveniente, as operações
+econômicas ou financeiras da entidade e propor ao Conselho de Administração a contratação
+de auditorias;
+Il - emitir parecer sempre que requisitado, sobre contratos, convênios, credenciamentos,
+proposta orçamentária, balanços e relatórios de contas em geral a serem submetidas à
+Assembleia Geral pelo Conselho de Administração e pelo Diretor Executivo;
+Iv - eleger entre seus pares um Presidente.
+Parágrafo único. O Conselho Fiscal, por seu Presidente e por decisão da maioria de seus
+membros, poderá convocar o Conselho de Administração e o Diretor Executivo para prestar
+informações e tomar as devidas providências quando forem verificadas irregularidades na
+escrituração contábil, nos atos de gestão financeira ou ainda inobservância de normas legais,
+estatutárias ou regimentais.
+10-69
+
+Proc. Nº 440 oo MA)
+Data: 14 4 DC LÃ Fi ES
+sm] Rubricas (O (0)
+= | Consórcio de Informática Ê
+q Ig Pa | | na Gestão Pública Municipal matf. 4
+DA DIRETORIA EXECUTIVA
+Art. 25. A Diretoria Executiva é o órgão executivo e de gestão administrativa do CIGA e será
+constituída por um Diretor Executivo escolhido pelo Conselho de Administração.
+Art. 26. Compete ao Diretor Executivo:
+| - promover a execução das atividades e gestão do CIGA;
+Il - realizar concursos públicos e promover a contratação, demissão e aplicação de sanções
+aos empregados públicos, bem como praticar todos os atos relativos à gestão dos recursos
+humanos, mediante homologação do Presidente do CIGA;
+HI - elaborar a Proposta Orçamentária Anual e o Plano de Trabalho a serem submetidos à
+apreciação da Assembleia Geral do CIGA;
+IV - elaborar a Prestação de Contas e o Relatório de Atividades a serem submetidos ao
+Presidente do Conselho de Administração, ao Conselho Fiscal e à Assembleia Geral do CIGA;
+V - elaborar as prestações de contas dos auxílios e subvenções concedidas ao CIGA para
+ser apresentada pelo Presidente ao órgão concedente;
+VI - movimentar, quando a este delegado, as contas bancárias e os recursos financeiros do
+CIGA;
+Vil - executar a gestão administrativa e financeira do CIGA dentro dos limites do orçamento
+aprovado pela Assembleia Geral, e observada a legislação em vigor, em especial as normas
+da administração pública;
+vil - designar seu substituto, em caso de impedimento ou ausência para responder pelo
+expediente e pelas atividades do CIGA;
+IX - providenciar as convocações, agendas e locais para as reuniões da Assembleia Geral,
+Conselho de Administração e Conselho Fiscal;
+X - providenciar e solucionar todas as diligências solicitadas pelo Conselho Fiscal;
+XI - autorizar as compras e elaborar os processos de licitação para contratação de bens e
+serviços;
+XIL - propor ao Conselho de Administração a requisição de servidores públicos para servir ao
+CIGA;
+XII — instituir Horário Flexível, Home Office, Banco de Horas e o regime de Sobreaviso.
+(Incluído pela Emenda ao Contrato de Consórcio Público n.º 04, de 2016)
+11-69
+
+Proc. Nº Vão 009 IZ a! [Dom
+ao Datas, Vi ol j dy Fis MEO
+= Consórcio de Informática , Ê - 110
+e Iga | na Gestão Pública Municipal Ruprcas pd!
+Lelo a23
+att:
+
+DA GESTÃO ADMINISTRATIVA E DO REGIME DE TRABALHO
+Art. 27. O Regime de Trabalho dos empregados do CIGA é o da Consolidação das Leis do
+Trabalho — CLT, com ingresso mediante aprovação em concurso público.
+81.º. As disposições complementares da estrutura administrativa do CIGA, obedecido o
+disposto neste Protocolo de Intenções, serão definidas no Estatuto do CIGA. (Redação dada
+pela Emenda ao Contrato de Consórcio Público n.º 04, de 2016)
+82.º. Os empregados do CIGA não poderão ser cedidos, inclusive para os entes consorciados.
+83.º, Os empregados incumbidos da gestão de consórcio não responderão pessoalmente
+pelas obrigações contraídas pelo consórcio, salvo pelos atos cometidos em desacordo com
+a lei ou com as disposições dos estatutos do consórcio.
+Art. 28. O quadro de pessoal do Consórcio é composto por 34 (trinta e quatro) empregados
+públicos, na conformidade do Anexo Il deste Protocolo de Intenções. (Redação dada pela
+Emenda ao Contrato de Consórcio Público n.º 04, de 2016)
+$1.º. O emprego de Diretor Executivo do CIGA deverá ser ocupado por profissional com
+comprovada experiência em gestão pública municipal ou em tecnologia da informação, com
+formação de nível superior, e sua contratação se dará por livre admissão e demissão.
+82.º. Os empregos de Gerente Administrativo e Gerente de Tecnologias da Informação
+deverão ser ocupados por profissionais com comprovada experiência em suas respectivas
+áreas, com formação de nível superior, e suas contratações se darão por livre admissão e
+demissão.
+83.º, A remuneração, a qualificação e a descrição dos empregos estão definidas no Anexo Il
+deste Protocolo de Intenções.
+84.º, O Estatuto preverá, após a deliberação e aprovação pela Assembleia Geral do CIGA, as
+
+RN formas de concessão de outras vantagens aos empregados públicos, inclusive quanto às
+
+gratificações por titulação e pelo desempenho de atividades especiais de Especialista em TI,
+Coordenador de Operações, Controlador Interno, Membros da Comissão de Licitação, Gestor
+de Contratos e Assessor Administrativo; à progressão por merecimento e por antiguidade, e
+quaisquer outras parcelas remuneratórias ou de caráter indenizatório, condicionadas à
+disponibilidade orçamentária, suficiente para atender às projeções de despesa de pessoal e
+aos acréscimos dela decorrentes. (Redação dada pela Emenda ao Contrato de Consórcio
+Público n.º 05, de 2017)
+85.º. Observado o orçamento anual do CIGA, o salário dos empregados públicos que
+compõem o seu quadro de pessoal, bem como dos valores referentes às gratificações pelo
+desempenho de atividades especiais e por titulação, serão revistos anualmente, sempre no
+mês de janeiro, de acordo com a variação do Índice Nacional de Preços ao Consumidor —
+INPC, apurado pelo Instituto Brasileiro de Geografia e Estatística — IBGE, ou outro índice que
+venha a substituí-lo, mediante Resolução do Presidente do CIGA. (Redação dada pela Emenda
+ao Contrato de Consórcio Público n.º 05, de 2017)
+12-69
+
+ProcNi Jiocop tg
+É Data li sotyos pg dE
+end ; (4) 4 h
+i a | Consórcio de Informática Rubrica: A Ah hLO,
+na Gestão Pública Municipal i E 7 E ass
+Sa S Leticiê 236
+ati
+86.º. Compete ao Conselho de Administração, mediante resolução, aprovar a revisão anual
+dos valores das indenizações concedidas a título de hospedagem, alimentação e
+deslocamento, previstas nos Anexos IIl e IV do Estatuto do CIGA, bem como dos valores do
+auxílio alimentação e do auxílio refeição, previstos no Anexo V do mesmo Estatuto, e demais
+vantagens pecuniárias, desde que haja disponibilidade orçamentária, suficiente para atender
+às projeções de despesa de pessoal e aos acréscimos dela decorrentes. (Incluído pela Emenda
+ao Contrato de Consórcio Público n.º 05, de 2017)
+87.º. Fica autorizado ao Diretor Executivo, após autorização do Conselho de Administração, a
+contratação de estagiários nos termos da Lei n.º 6.494/77. (Incluído pela Emenda ao Contrato
+de Consórcio Público n.º 05, de 2017)
+88.º. Os empregados públicos não terão direito à estabilidade no emprego. (Incluído pela
+o Emenda ao Contrato de Consórcio Público n.º 05, de 2017)
+89.º. Poderá ser firmado com os empregados públicos Acordo de Resultados e Prêmio por
+Produtividade, observadas as determinações legais e orçamentárias. (Incluído pela Emenda ao
+Contrato de Consórcio Público n.º 05, de 2017)
+DA GESTÃO ADMINISTRATIVA E FINANCEIRA
+Art. 29. As contratações de bens, obras e serviços realizadas pelo consórcio observarão as
+normas de licitações públicas e contratos administrativos.
+Art. 30. Os editais de licitações e os extratos de contratos celebrados pelo consórcio deverão
+ser publicados no sítio que o CIGA mantiver na rede mundial de computadores — internet.
+Art. 31. A execução das receitas e das despesas do CIGA obedecerá às normas de direito
+financeiro aplicáveis às entidades públicas.
+Art. 32. O patrimônio do CIGA será constituído:
+| - pelos bens e direitos que vier a adquirir a qualquer título;
+Il - pelos bens e direitos que lhe forem transferidos por entidades públicas ou privadas.
+Art. 33. Constituem recursos financeiros do CIGA:
+| - a entrega mensal de recursos financeiros dos consorciados, de acordo com o contrato de
+rateio;
+Il - a remuneração dos próprios serviços prestados;
+III - os auxílios, contribuições e subvenções concedidas por entidades públicas ou privadas;
+IV - os saldos do exercício;
+V- as doações e legados;
+13-69
+
+Proc.Nº Lão oD9 Wr/dodt
+gi Data: IM / 06 | dl AÇO
+í ie Consórcio de Informática f O
+Ê g g | na Gestão Pública Municipal Rubrica: dos j Ro le
+4 LS
+VI - o produto de alienação de seus benslivres;
+VII - o produto de operações de crédito;
+VIII - as rendas eventuais, inclusive as resultantes de depósito e de aplicação financeira;
+IX - os créditos e ações;
+X-o produto da arrecadação do imposto de renda, incidente na fonte, sobre rendimentos
+pagos, a qualquer título, pelo CIGA, que atuará na qualidade de substituto tributário e com
+base na autonomia dos entes federativos, facultada a sua devolução aos entes federativos no
+caso de apuração de superávit no exercício anterior. (Incluído pela Emenda ao Contrato de
+Consórcio Público n.º 04, de 2016)
+pelo-artigo-158 | -da-Constituição- Federal: (Revogado pela Emenda ao Contrato de Consórcio
+Público n.º 05, de 2017)
+Art. 34. A contabilidade do consórcio será realizada de acordo com as normas de
+contabilidade pública, em especial a Lei n.º 4.320/64 e Lei Complementar n.º 101/00.
+DO USO DOS EQUIPAMENTOS E SERVIÇOS
+Art. 35. Os entes consorciados terão acesso aos bens adquiridos pelo CIGA e aos serviços
+prestados nos termos definidos em contrato. (Redação dada pela Emenda ao Contrato de
+Consórcio Público n.º 04, de 2016)
+Art. 36. Respeitadas as respectivas legislações municipais, cada consorciado poderá colocar
+à disposição do CIGA os bens e serviços de sua própria administração para uso comum, nos
+termos definidos em contrato. (Redação dada pela Emenda ao Contrato de Consórcio Público
+e n.º 04, de 2016)
+DO INGRESSO, RETIRADA E EXCLUSÃO DE CONSORCIADO
+Art. 37. O ingresso de novos consorciados será submetido à apreciação da Assembleia Geral
+e deverá atender ao disposto no 8 4º do art. 2º deste Protocolo de Intenções. (Redação dada
+pela Emenda ao Contrato de Consórcio Público n.º 05, de 2017)
+Art. 38. Cada consorciado poderá se retirar do CIGA a qualquer momento, desde que
+denuncie sua retirada num prazo nunca inferior a sessenta dias, sem prejuízo das obrigações
+e direitos, até sua efetiva retirada.
+Art. 39. Será excluído do CIGA o participante que tenha deixado de incluir no Orçamento
+Municipal do ano em curso a dotação devida de acordo com o respectivo contrato. (Redação
+dada pela Emenda ao Contrato de Consórcio Público n.º 04, de 2016)
+14-69
+
+e VR
+proc. Nº. Liv ovo UI/Jodl..
+pet Data; MW DO Jo ft: a
+e E o | qo
+“” | Consórcio de Informática Rubrica: E
+IG à | na Gestão Pública Municipal t
+A N+ sb
+Pass"
+
+Parágrafo único. A exclusão somente ocorrerá após prévia suspensão, período em que o
+consorciado poderá se reabilitar.
+Art. 40, Será igualmente excluído o consorciado inadimplente com as obrigações assumidas
+em contrato. (Redação dada pela Emenda ao Contrato de Consórcio Público n.º 04, de 2016)
+Parágrafo único. A exclusão prevista neste artigo não exime o consorciado do pagamento de
+débitos decorrentes do tempo em que permaneceu inadimplente.
+DA ALTERAÇÃO E EXTINÇÃO
+Art. 41. A alteração e a extinção do Contrato de Consórcio Público dependerão de
+
+qe instrumento aprovado pela Assembleia Geral Extraordinária, ratificada mediante lei por todos
+os entes consorciados.
+$1.º. Os bens, direitos, encargos e obrigações do Consórcio reverterão aos consorciados
+proporcionalmente aos investimentos feitos ao CIGA.
+82.º. Até que haja decisão que indique os responsáveis por cada obrigação, os entes
+consorciados responderão solidariamente pelas obrigações remanescentes, garantido o
+direito de regresso em face dos entes beneficiados ou dos que deram causa à obrigação.
+83.º, Com a extinção, o pessoal cedido ao consórcio público retornará aos seus órgãos de
+origem.
+84.º. A retirada ou a extinção do consórcio não prejudicará as obrigações já constituídas,
+inclusive os contratos de programa, cuja extinção dependerá do prévio pagamento das
+indenizações eventualmente devidas.
+
+= DAS DISPOSIÇÕES GERAIS
+Art. 42. O exercício fiscal coincidirá com o ano civil, para efeitos de Execução do Orçamento
+e Prestação de Contas.
+$1.º. Até 31 de Janeiro de cada ano deverão ser apresentados pelo Diretor Executivo ao
+Presidente do Conselho de Administração, e este à deliberação da Assembleia Geral, o Plano
+de Trabalho e o Orçamento das Receitas e Despesas para o exercício seguinte, o Relatório de
+Atividades, a Prestação de Contas, o Balanço do Exercício anterior com o Parecer do Conselho
+Fiscal.
+52.º. Os membros do Conselho de Administração e do Conselho Fiscal da gestão anterior
+ficam obrigados a apresentar os relatórios e documentos citados e participar da Assembleia
+Geral mencionada no parágrafo anterior.
+Art. 43. A interpretação do disposto neste Protocolo de Intenções deverá ser compatível com
+o exposto em seu Preâmbulo e, bem como, aos seguintes princípios:
+
+15-69
+
+Proc. Nº AD 509 xl dod! =
+Data; MIDIA A CO E
+aê E TR Rubrica; ? NAVES
+= | Consórcio de Informática Seg
+Iga | no Gestão Pública Municipal : ny A
+
+| - respeito à autonomia dos entes federativos consorciados, pelo que o ingresso ou retirada
+do CIGA depende apenas da vontade de cada ente consorciado, sendo vedado a oferta de
+incentivos para o ingresso;
+Il - solidariedade, em razão da qual os entes consorciados se comprometem a não praticar
+qualquer ato, comissivo ou omissivo, que venha a prejudicar a boa implementação de
+qualquer dos objetivos do CIGA;
+Il - transparência, facultado ao Poder Executivo ou Legislativo do ente consorciado ter
+acesso a qualquer reunião ou documento do CIGA;
+IV - eficiência, exigindo que todas as decisões do CIGA tenham explícita e prévia
+fundamentação técnica que demonstrem sua viabilidade e economicidade.
+
+es V - respeito aos princípios da administração pública, de modo que todos os atos
+executados pelo CIGA sejam coerentes com os principios da legalidade, impessoalidade,
+moralidade, publicidade e eficiência;
+Art. 44. Quando adimplente com suas obrigações, qualquer ente consorciado é parte legítima
+para exigir o pleno cumprimento das cláusulas previstas neste Contrato.
+Art. 45. Os membros do Conselho de Administração e do Conselho Fiscal não serão
+remunerados, considerando-se de alta relevância os serviços por eles prestados.
+Art. 46. Os municípios consorciados ao CIGA respondem solidariamente pelo Consórcio.
+Parágrafo único. Os membros do Conselho de Administração e o Diretor Executivo do CIGA
+não responderão pessoalmente pelas obrigações contraídas com a ciência e em nome do
+Consórcio, mas assumirão as responsabilidades pelos atos praticados de forma contrária à
+Lei ou às disposições contidas no presente Protocolo.
+Art. 47. O CIGA será organizado por Contrato de Consórcio Público, decorrente da
+homologação, por lei, deste Protocolo de Intenções.
+Parágrafo único. O CIGA regulamentará em Estatuto, aprovado em Assembleia Geral, as
+demais situações não previstas no Contrato de Consórcio Público. (Redação dada pela
+Emenda ao Contrato de Consórcio Público n.º 04, de 2016)
+Art. 48. O CIGA poderá delegar à Federação Catarinense de Municípios — FECAM a execução
+de atividades administrativas previstas neste Protocolo de Intenções até estruturação
+completa do Consórcio.
+Art. 49. Os casos omissos ao presente Protocolo de Intenções serão resolvidos pela
+Assembleia Geral e pelas legislações aplicáveis a espécie.
+Art. 50. As normas do presente Protocolo de Intenções entrarão em vigor a partir da data da
+sua publicação na imprensa oficial,
+Art. 51. Fica instituído como órgão oficial de publicação do Consórcio de Informática na
+
+16-69
+
+procno Usos pr/dod
+Data A | Opjdl Fis:
+É | Consórcio de Informática Rubrica:
+iga | no Gestão Pública Municipal : nº
+AQ by
+ANTAS
+DV
+Gestão Pública Municipal — CIGA o Diário Oficial dos Municípios de Santa Catarina - DOM/SC,
+veiculado por meio do endereço eletrônico www.diariomunicipal.sc.gov.br. (Redação dada
+pela Emenda ao Contrato de Consórcio Público n.º 04, de 2016)
+Art. 52. As alterações do Contrato de Consórcio Público passam a viger após sua ratificação
+por pelo menos 3 (três) municipios consorciados, e as modificações do Estatuto entram em
+vigor após sua publicação no órgão oficial de publicação. (Redação dada pela Emenda ao
+Contrato de Consórcio Público n.º 05, de 2017)
+Parágrafo único. Após a aprovação das alterações do Contrato de Consórcio Público do CIGA,
+os municípios consorciados terão o prazo de 12 (doze) meses para ratificação, por lei,
+observadas as disposições do Contrato de Consórcio Público do CIGA. (Incluído pela Emenda
+ao Contrato de Consórcio Público n.º 05, de 2017)
+
+a Art. 53. Fica estabelecido o foro da Comarca da Capital de Santa Catarina para dirimir
+quaisquer demandas envolvendo o Consórcio. (Incluído pela Emenda ao Contrato de
+Consórcio Público n.º 05, de 2017)
+
+Florianópolis, 29 de novembro de 2007.
+Leonel José Martins João Romão
+Prefeito Municipal de Balneário Piçarras Prefeito Municipal de Garuva
+di: Antônio Coelho Lopes Junior Adilson Luis Schimitt
+
+Prefeito Municipal de Capão Alto Prefeito Municipal de Gaspar
+Wanderley Agostini Nestor Sprícego
+
+Prefeito Municipal de Curitibanos Prefeito Municipal de Lauro Muller
+
+17-69
+
+roça Vanda don
+Proc. Nº Vo 200 Il (9021
+Data: [lt 406) QI Fis: (HQ
+Rubrica;
+a | Consórcio de Informática
+e Ê O a | na Gestão Pública Monieigs! go o)
+TONA
+Maria Carlesso Doré
+Prefeita Municipal de Luzerna Ênio Reckziegel
+Prefeito Municipal de Paraíso
+Davio Leu
+Prefeito Municipal de Massaranduba Hugo Lembeck
+Prefeito Municipal de Salete
+Antoninho Tibúrcio Gonçalves Elio Pedro Hoss Godoy
+Prefeito Municipal de Monte Carlo Prefeito Municipal de São Carlos
+José Milton Scheffer
+Prefeito Municipal de Sombrio
+18-69
+
+Proc, lia Cop l4y got
+Data; 1 po y BM pe 39 mea
+Rubricas () O cá
+io iga [na Gestão Pública Municipal 10 o
+ANEXO |
+Municípios subscritores do Protocolo de Intenções
+Balneário Piçarras/SC
+Capão Alto/SC
+Curitibanos/SC
+Garuva/SC
+Gaspar/SC
+Lauro Muller/SC
+| Luzerna/SC
+a Massaranduba/SC
+Monte Carlo/SC
+Paraíso/SC
+Salete/SC
+São Carlos/SC
+Sombrio/SC
+Municípios consorciados ao Consórcio CIGA (Redação dada pela Emenda ao Contrato
+de Consórcio Público n.º 05, de 2017)
+Abdon Batista/SC Atalanta/SC Bombinhas/SC
+Abelardo Luz/SC Aurora/SC Botuverá/SC
+Agrolândia/SC Balneário Arroio do Braço do Norte/SC
+Agronômica/SC Silva/SC Braço do Trombudo/SC
+Água Doce/SC Balneário Barra do Sul/SC Brunópolis/SC
+Águas de Chapecó/SC Balneário Camboriú/SC Brusque/SC
+Águas Frias/SC Balneário Gaivota/SC Caçador/SC
+o Alfredo Wagner/SC Balneário Piçarras/SC Caibi/SC
+Alto Bela Vista/SC Balneário Rincão/SC Calmon/SC
+Anchieta/SC Barra Bonita/SC Camaçari/BA
+Anita Garibaldi/SC Barra Velha/SC Cambori/SC
+Anitápolis/SC Bela Vista do Toldo/SC Campo Alegre/SC
+Antônio Carlos/SC Belmonte/SC Campo Erê/SC
+Apiúna/SC Benedito Novo/SC Campos Novos/SC
+Arabutã/SC Biguaçu/SC Canelinha/SC
+Araquari/SC Blumenau/SC Canoinhas/SC
+Araranguá/SC Bocaina do Sul/SC Capão Alto/SC
+Armazém/SC Bom Jardim da Serra/SC Capinzal/SC
+Arroio Trinta/SC Bom Jesus do Oeste/SC Capivari de Baixo/SC
+Arvoredo/SC Bom Jesus/SC Catanduvas/SC
+Ascurra/SC Bom Retiro/SC Caxambu do Sul/SC
+19-69
+
+Proc.n Jão Ops 144 / dodl
+Data; Llyof pal Eis; JM
+Rubrica: (MP qo”
+Ciga | messes es
+Celso Ramos/SC Ibirama/SC Major Gercino/SC
+Chapadão do Lageado/SC Içara/SC Major Vieira/SC
+Chapecó/SC Ilhota/SC Maracajá/SC
+Cocal do Sul/SC Imaruí/SC Maravilha/SC
+Concórdia/SC Imbituba/SC Marema/SC
+Cordilheira Alta/SC Imbuia/SC Massaranduba/SC
+Coronel Freitas/SC Indaial/SC Meleiro/SC
+Coronel Martins/SC lomerê/SC Mirim Doce/SC
+Correia Pinto/SC Ipira/SC Modelo/SC
+Corupá/SC Iporã do Oeste/SC Mondaíi/SC
+Criciúma/SC Ipuaçu/SC Monte Carlo/SC
+Cunha Porã/SC Ipumirim/SC Monte Castelo/SC
+Cunhataí/SC Irati/SC Morro da Fumaça/SC
+, Curitiba/PR Ilraceminha/SC Morro Grande/SC
+Curitibanos/SC Irineópolis/SC Navegantes/SC
+Descanso/SC Itá/SC Nova Erechim/SC
+Dionísio Cerqueira/SC Itaiópolis/SC Nova Itaberaba/SC
+Dona Emma/SC Itajaí/SC Nova Trento/SC
+Doutor Pedrinho/SC Itapema/SC Nova Veneza/SC
+Entre Rios/SC Itapiranga/SC Novo Horizonte/SC
+Ermo/SC Itapoá/SC Orleans/SC
+Erval Velho/SC Itu/SP Otacílio Costa/SC
+Farroupilha/RS Ituporanga/SC Ouro Verde/SC
+Faxinal dos Guedes/SC Jaborá/SC Ouro/SC
+Flor do Sertão/SC Jacinto Machado/SC Paial/SC
+Florianópolis/SC Jaguaruna/SC Painel/SC
+Formosa do Sul/SC Jaraguá do Sul/SC Palhoça/SC
+Forquilhinha/SC Jardinópolis/SC Palma Sola/SC
+Fraiburgo/SC Joaçaba/SC Palmeira/SC
+Frei Rogério/SC João Pessoa/PB Palmitos/SC
+Galvão/SC Joinville/SC Papanduva/SC
+& Garopaba/SC José Boiteux/SC Paraíso/SC
+Garuva/SC Jupiá/SC Passo de Torres/SC
+Gaspar/SC Lacerdópolis/SC Passos Maia/SC
+Governador Celso Lages/SC Paulo Lopes/SC
+Ramos/SC Laguna/SC Pedras Grandes/SC
+Grão Pará/SC Lajeado Grande/SC Penha/SC
+Gravatal/SC Lauro Muller/SC Peritiba/SC
+Guabiruba/SC Lebon Régis/SC Pescaria Brava/SC
+Guaraciaba/SC Leoberto Leal/SC Petrolândia/SC
+Guaramirim/SC Lindóia do Sul/SC Pinhalzinho/SC
+Guarujá do Sul/SC Lontras/SC Pinheiro Preto/SC
+Guatambu/SC Luiz Alves/SC Piratuba/SC
+Herval d'Oeste/SC Luzerna/SC Planalto Alegre/SC
+Ibiam/SC Macieira/SC Pomerode/SC
+Ibicare/SC Mafra/SC Ponte Alta do Norte/SC
+20 - 69
+
+Proc.Nº lão 0po [UP doll
+Datas My Ob ja Fis JS
+Rubrica: 4 rá PAR RNA
+o. iga | esco inicirincos serao
+Ponte Alta/SC São João do Itaperiú/SC Vidal Ramos/SC
+Ponte Serrada/SC São João do Oeste/SC Videira/SC
+Porto Alegre/RS São João do Sul/SC Vitor Meireles/SC
+Porto Belo/SC São Joaquim/SC Witmarsum/SC
+Porto União/SC São José do Cedro/SC Xanxerê/SC
+Pouso Redondo/SC São José do Cerrito/SC Xavantina/SC
+Presidente Castello São José/SC Xaxim/SC
+Branco/SC São Lourenço do Zortéa/SC
+Presidente Getúlio/SC Oeste/SC
+Presidente Nereu/SC São Ludgero/SC
+Princesa/SC São Martinho/SC
+Quilombo/SC São Miguel da Boa
+Rancho Queimado/SC Vista/SC
+- Rio Branco/AC São Miguel do Oeste/SC
+Rio das Antas/SC São Pedro de
+Rio do Campo/SC Alcântara/SC
+Rio do Oeste/SC Saudades/SC
+Rio do Sul/SC Schroeder/SC
+Rio dos Cedros/SC Seara/SC
+Rio Fortuna/SC Serra Alta/SC
+Rio Negrinho/SC Siderópolis/SC
+Rio Rufino/SC Simões Filho/BA
+Riqueza/SC Sombrio/SC
+Rodeio/SC Sul Brasil/SC
+Romelândia/SC Tangará/SC
+Salete/SC Taquara/RS
+Salto Veloso/SC Tigrinhos/SC
+Salvador/BA Tijucas/SC
+Sangão/SC Timbé do Sul/SC
+Santa Cecília/SC Timbó Grande/SC
+Santa Rosa de Lima/SC Timbó/SC
+sê Santa Rosa do Sul/SC Três Barras/SC
+Santa Terezinha do Treviso/SC
+Progresso/SC Treze de Maio/SC
+Santa Terezinha/SC Treze Tílias/SC
+Santiago Do Sul/SC Trombudo Central/SC
+Santo Amaro da Tubarão/SC
+Imperatriz/SC Tunápolis/SC
+São Bento do Sul/SC Turvo/SC
+São Bernardino/SC União do Oeste/SC
+São Bonifácio/SC Urubici/SC
+São Carlos/SC Urupema/SC
+São Cristóvão do Sul/SC Urussanga/SC
+São Domingos/SC Vargeão/SC
+São Francisco do Sul/SC Vargem Bonita/SC
+São João Batista/SC Vargem/SC
+21-69
+
+Proc. Nº Lo çoo WU+/99
+Data; 144 by Mo Fig FG a
+sed Sióld ad Vá Qteo |
+| Consórcio de infor 4 E
+C iga | na Gestão Pública Municipal Veias
+Municípios possíveis de integrar o Consórcio CIGA (Redação dada pela Emenda ao Contrato
+de Consórcio Público n.º 05, de 2017)
+Abadia de Goiás/GO Agricolândia/P| Aluruoca/MG
+Abadia dos Dourados/MG Água Azul do Norte/PA Ajuricaba/RS
+Abadiânia/GO Água Boa/MG Alagoa Grande/PB
+Abaeté/MG Água Boa/MT Alagoa Nova/PB
+Abaetetuba/PA Água Branca/AL Alagoa/MG
+Abaiara/CE Água Branca/PB Alagoinha do Piauí/PI
+Abaíra/BA Água Branca/PI Alagoinha/PB
+á Abaré/BA Água Clara/MS Alagoinha/PE
+Abatiá/PR Água Comprida/MG Alagoinhas/BA
+Abel Figueiredo/PA Água Doce do Alambari/SP
+Abre-Campo/MG Maranhão/MA Albertina/MG
+Abreu e Lima/PE Água Doce do Norte/ES Alcântara/MA
+Abreu e Lima/PE Água Fria de Goiás/GO Alcântaras/CE
+Acaiaca/MG Água Fria/BA Alcantil/PB
+Açailândia/MA Água Limpa/GO Alcinópolis/MS
+Acajutiba/BA Água Nova/RN Alcobaça/BA
+Acará/PA Água Preta/PE Aldeias Altas/MA
+Acarape/CE Água Santa/RS Alecrim/RS
+Acaraú/CE Aguaí/SP Alegre/ES
+Acari/RN Aguanil/MG Alegrete do Piauí/PI
+Acauã/PI Águas Belas/PE Alegrete/RS
+Aceguá/RS Águas da Prata/SP Alegria/RS
+Acopiara/CE Águas de Lindóia/SP Além Paraíba/MG
+Acorizal/MT Águas de Santa Alenquer/PA
+E Acrelândia/AC Bárbara/SP Alexandria/RN
+Acreúna/GO Águas de São Pedro/SP Alexânia/GO
+Açu/RN Águas Formosas/MG Alfenas/MG
+Açucena/MG Águas Lindas de Alfredo Chaves/ES
+Adamantina/SP Goiás/GO Alfredo Marcondes/SP
+Adelândia/GO Águas Mornas/SC Alfredo Vasconcelos/MG
+Adolfo/SP Águas Vermelhas/MG Algodão de Jandaíra/PB
+Adrianópolis/PR Agudo/RS Alhandra/PB
+Adustina/BA Agudos do Sul/PR Aliança do Tocantins/TO
+Afogados da Ingazeira/PE Agudos/SP Aliança/PE
+Afonso Bezerra/RN Águia Branca/ES Almadina/BA
+Afonso Cláudio/ES Aguiar/PB Almas/TO
+Afonso Cunha/MA Aguiarnópolis/TO Almeirim/PA
+Afrânio/PE Aimorés/MG Almenara/MG
+Afuá/PA Aiquara/BA Almino Afonso/RN
+Agrestina/PE Aiuaba/CE
+22 - 69
+
+Procne Jo Do Mal dom |
+Datas 14) 0) A Fis] |
+rca LED Sl quod
+( ea | Consórcio de Informática po NE nd
+Unai | | à | no Gestão Pública Municipal ha
+Almirante Tamandaré do Altônia/PR Anahy/PR
+Sul/RS Altos/PI Anajás/PA
+Almirante Tamandaré/PR Alumínio/SP Anajatuba/MA
+Aloândia/GO Alvarães/AM Analândia/SP
+Alpercata/MG Alvarenga/MG Anamã/AM
+Alpestre/RS Álvares Florence/SP Ananás/TO
+Alpinópolis/MG Álvares Machado/SP Ananindeua/PA
+Alta Floresta dVOeste/RO Álvaro de Carvalho/SP Anápolis/GO
+Alta Floresta/MT Alvinlândia/SP Anapu/PA
+Altair/SP Alvinópolis/MG Anapurus/MA
+Altamira do Alvorada dVOeste/RO Anastácio/MS
+Maranhão/MA Alvorada de Minas/MG Anaurilândia/MS
+Altamira do Paraná/PR Alvorada do Gurguéia/P| Anchieta/ES
+, Altamira/PA Alvorada do Norte/GO Andaraí/BA
+Altaneira/CE Alvorada do Sul/PR Andirá/PR
+Alterosa/MG Alvorada/RS Andorinha/BA
+Altinho/PE Alvorada/TO Andradas/MG
+Altinópolis/SP Amajari/RR Andradina/SP
+Alto Alegre do Amambai/MS André da Rocha/RS
+Maranhão/MA Amapá do Maranhão/MA Andrelândia/MG
+Alto Alegre do Amapá/AP Angatuba/SP
+Pindaré/MA Amaporã/PR Angelândia/MG
+Alto Alegre dos Amaraji/PE Angélica/MS
+Parecis/RO Amaral Ferrador/RS Angelim/PE
+Alto Alegre/RR Amaralina/GO Angelina/SC
+Alto Alegre/RS Amarante do Angical do Piauí/PI
+Alto Alegre/SP Maranhão/MA Angical/BA
+Alto Araguaia/MT Amarante/PI Angico/TO
+Alto Caparaó/MG Amargosa/BA Angicos/RN
+Alto da Boa Vista/MT Amaturá/AM Angra dos Reis/RJ
+Alto do Rodrigues/RN Amélia Rodrigues/BA Anguera/BA
+Ei Alto Feliz/RS América Dourada/BA Ângulo/PR
+Alto Garças/MT Americana/SP Anhanguera/GO
+Alto Horizonte/GO Americano do Brasil/GO Anhembi/SP
+Alto Jequitibá/MG Américo Brasiliense/SP Anhumas/SP
+Alto Longá/PI Américo de Campos/SP Anicuns/GO
+Alto Paraguai/MT Ametista do Sul/RS Anísio de Abreu/PI
+Alto Paraíso de Goiás/GO Amontada/CE Anori/AM
+Alto Paraíso/PR Amorinópolis/GO Anta Gorda/RS
+Alto Paraiso/RO Amparo da Serra/MG Antas/BA
+Alto Paraná/PR Amparo de São Antonina do Norte/CE
+Alto Parnaíba/MA Francisco/SE Antonina/PR
+Alto Piquiri/PR Amparo/PB Antônio Almeida/PI
+Alto Rio Doce/MG Amparo/SP Antônio Cardoso/BA
+Alto Rio Novo/ES Ampére/PR Antônio Carlos/MG
+Alto Santo/CE Anadia/AL Antônio Dias/MG
+Alto Taquari/MT Anagé/BA Antônio Gonçalves/BA
+23 - 69
+
+Proc. Nº Ávo Oro W+1 931
+Data: IU POB g dA Fis LIS
+dia Ec es Asia e) Q 4 BO
+GRE Vig
+
+Antônio João/MS Aragarças/GO Araucária/PR
+Antônio Martins/RN Aragoiânia/GO Araújos/MG
+Antônio Olinto/PR Aragominas/TO Araxá/MG
+Antônio Prado de Araguacema/TO Arceburgo/MG
+Minas/MG Araguaçu/TO Arco/Íris/SP
+Antônio Prado/RS Araguaiana/MT Arcos/MG
+Aparecida dVOeste/SP Araguaína/TO Arcoverde/PE
+Aparecida de Goiânia/GO Araguainha/MT Areado/MG
+Aparecida do Rio Araguanã/MA Areal/RJ
+Doce/GO Araguanã/TO Arealva/SP
+Aparecida do Rio Araguapaz/GO Areia Branca/RN
+Negro/TO Araguari/MG Areia Branca/SE
+Aparecida do Araguatins/TO Areia de Baraúnas/PB
+Taboado/MS Araioses/MA Areia/PB
+Aparecida/PB Aral Moreira/MS Areial/PB
+Aparecida/SP Aramari/BA Areias/SP
+Aperibé/RJ Arambaré/RS Areiópolis/SP
+Apiacá/ES Arame/MA Arenápolis/MT
+Apiacás/MT Aramina/SP Arenópolis/GO
+Apiai/SP Arandu/SP Arês/RN
+Apicum/Açu/MA Arantina/MG Argirita/MG
+Apodi/RN Arapeí/SP Aricanduva/MG
+Aporá/BA Arapiraca/AL Arinos/MG
+Aporé/GO Arapoema/TO Aripuanã/MT
+Apuarema/BA Araponga/MG Ariquemes/RO
+Apucarana/PR Arapongas/PR Ariranha do lIvaí/PR
+Apuí/AM Araporã/MG Ariranha/SP
+Apuiarés/CE Arapoti/PR Armação dos Búzios/RJ
+Aquidabã/SE Arapuá/MG Arneiroz/CE
+Aquidauana/MS Arapuã/PR Aroazes/PI
+Aquiraz/CE Araputanga/MT Aroeiras do Itaim/PI
+
+á Araçagi/PB Arara/PB Aroeiras/PB
+Araçaí/MG Araraquara/SP Arraial do Cabo/RJ
+Aracaju/SE Araras/SP Arraial/P|
+Araçariguama/SP Ararendá/CE Arraias/TO
+Araçás/BA Arari/MA Arroio do Meio/RS
+Aracati/CE Araricá/RS Arroio do Padre/RS
+Aracatu/BA Araripe/CE Arroio do Sal/RS
+Araçatuba/SP Araripina/PE Arroio do Tigre/RS
+Araci/BA Araruama/RJ Arroio dos Ratos/RS
+Aracitaba/MG Araruna/PB Arroio Grande/RS
+Araçoiaba da Serra/SP Araruna/PR Artur Nogueira/SP
+Aracoiaba/CE Arataca/BA Aruanã/GO
+Araçoiaba/PE Aratiba/RS Arujá/SP
+Aracruz/ES Aratuba/CE Arvorezinha/RS
+Araçu/GO Aratuípe/BA Aspásia/SP
+Araçuaí/MG Arauá/SE Assaí/PR
+
+24 - 69
+
+Proc. nº [número omitido]
+Data OCA Fis XÁ
+e Rubrica: da Lasodº |
+( a | Consórcio de informática PRATA coa
+tor | O é | na Gestão Pública Municipal 1 K e b;
+
+Assaré/CE Baixa Grande do Barra de Santa Rosa/PB
+Assis Brasil/AC Ribeiro/PI Barra de Santana/PB
+Assis Chateaubriand/PR Baixa Grande/BA Barra de Santo
+Assis/SP Baixio/CE Antônio/AL
+Assunção do Piauí/PI Baixo Guandu/ES Barra de São Francisco/ES
+Assunção/PB Balbinos/SP Barra de São Miguel/AL
+Astolfo Dutra/MG Baldim/MG Barra de São Miguel/PB
+Astorga/PR Baliza/GO Barra do Bugres/MT
+Atalaia do Norte/AM Balneário Pinhal/RS Barra do Chapéu/SP
+Atalaia/AL Balsa Nova/PR Barra do Choça/BA
+Atalaia/PR Bálsamo/SP Barra do Corda/MA
+Ataléia/MG Balsas/MA Barra do Garças/MT
+Atibaia/SP Bambui/MG Barra do Guarita/RS
+Atílio Vivácqua/ES Banabuiú/CE Barra do Jacaré/PR
+
+dio Augustinópolis/TO Bananal/SP Barra do Mendes/BA
+Augusto Corrêa/PA Bananeiras/PB Barra do Ouro/TO
+Augusto de Lima/MG Bandeira do Sul/MG Barra do Piraí/RJ
+Augusto Pestana/RS Bandeira/MG Barra do Quaraí/RS
+Áurea/RS Bandeirante/SC Barra do Ribeiro/RS
+Aurelino Leal/BA Bandeirantes do Barra do Rio Azul/RS
+Auriflama/SP Tocantins/TO Barra do Rocha/BA
+Aurilândia/GO Bandeirantes/MS Barra do Turvo/SP
+Aurora do Pará/PA Bandeirantes/PR Barra dos Coqueiros/SE
+Aurora do Tocantins/TO Bannach/PA Barra Funda/RS
+Aurora/CE Banzaê/BA Barra Longa/MG
+Autazes/AM Barão de Antonina/SP Barra Mansa/RJ
+Avai/SP Barão de Cocais/MG Barra/BA
+Avanhandava/SP Barão de Cotegipe/RS Barracão/PR
+Avaré/SP Barão de Grajaú/MA Barracão/RS
+Aveiro/PA Barão de Melgaço/MT Barras/P|
+Avelino Lopes/PI Barão de Monte Alto/MG Barreira/CE
+
+ai Avelinópolis/GO Barão do Triunfo/RS Barreiras do Piauí/PI
+Axixá do Tocantins/TO Barão/RS Barreiras/BA
+Axixá/MA Baraúna/PB Barreirinha/AM
+Babaçulândia/TO Baraúna/RN Barreirinhas/MA
+Bacabal/MA Barbacena/MG Barreiros/PE
+Bacabeira/MA Barbalha/CE Barretos/SP
+Bacuri/MA Barbosa Ferraz/PR Barrinha/SP
+Bacurituba/MA Barbosa/SP Barro Alto/BA
+Bady Bassitt/SP Barcarena/PA Barro Alto/GO
+Baependi/MG Barcelona/RN Barro Duro/PI
+Bagé/RS Barcelos/AM Barro Preto/BA
+Bagre/PA Bariri/SP Barro/CE
+Baía da Traição/PB Barra Bonita/SP Barrocas/BA
+Baía Formosa/RN Barra dVAlcântara/PI Barrolândia/TO
+Baianópolis/BA Barra da Estiva/BA Barroquinha/CE
+Baião/PA Barra de Guabiraba/PE Barros Cassal/RS
+
+25 - 69
+
+Proc. Nº. 14,0 00t VA /dodt
+pata: LU OG pd is: COL o
+: Rubrica: a eee dl
+( 2 | Consórcio de Informática 00
+ER Gbiica Municio
+ao Ig a | no Gestão Pública Municipal | ao 8?
+1X q"
+Barroso/MG Benjamin Constant/AM Boa Vista do Incra)
+Barueri/SP Bento de Abreu/SP Boa Vista do Ramos/AM
+Bastos/SP Bento Fernandes/RN Boa Vista do Sul/RS
+Bataguaçu/MS Bento Gonçalves/RS Boa Vista do Tupim/BA
+Batalha/AL Bequimão/MA Boa Vista/PB
+Batalha/PI Berilo/MG Boa Vista/RR
+Batatais/SP Berizal/MG Boca da Mata/AL
+Batayporã/MS Bernardino Batista/PB Boca do Acre/AM
+Baturité/CE Bernardino de Bocaina de Minas/MG
+Bauru/SP Campos/SP Bocaina/PI
+Bayeux/PB Bernardo do Mearim/MA Bocaina/SP
+Bebedouro/SP Bernardo Sayão/TO Bocaiuva do Sul/PR
+Beberibe/CE Bertioga/SP Bocaiuva/MG
+A Bela Cruz/CE Bertolínia/P| Bodó/RN
+Bela Vista da Caroba/PR Bertópolis/MG Bodocó/PE
+Bela Vista de Goiás/GO Beruri/AM Bodoquena/MS
+Bela Vista de Minas/MG Betânia do Piauí/PI Bofete/SP
+Bela Vista do Betânia/PE Boituva/SP
+Maranhão/MA Betim/MG Bom Conselho/PE
+Bela Vista do Paraíso/PR Bezerros/PE Bom Despacho/MG
+Bela Vista do Piauí/PI Bias Fortes/MG Bom Jardim de Goiás/GO
+Bela Vista/MS Bicas/MG Bom Jardim de Minas/MG
+Belágua/MA Bilac/SP Bom Jardim/MA
+Belém de Maria/PE Biquinhas/MG Bom Jardim/PE
+Belém do Brejo do Birigui/SP Bom Jardim/RJ
+Cruz/PB Biritiba Mirim/SP Bom Jesus da Lapa/BA
+Belém do Piauí/P| Biritinga/BA Bom Jesus da Penha/MG
+Belém do São Bituruna/PR Bom Jesus da Serra/BA
+Francisco/PE Boa Esperança do Bom Jesus das Selvas/MA
+Belém/AL Iguaçu/PR Bom Jesus de Goiás/GO
+Belém/PA Boa Esperança do Sul/SP Bom Jesus do
+E Belém/PB Boa Esperança/ES Amparo/MG
+Belford Roxo/R]J Boa Esperança/MG Bom Jesus do
+Belmiro Braga/MG Boa Esperança/PR Araguaia/MT
+Belmonte/BA Boa Hora/PI Bom Jesus do Galho/MG
+Belo Campo/BA Boa Nova/BA Bom Jesus do
+Belo Horizonte/MG Boa Saúde/RN Itabapoana/RJ
+Belo Jardim/PE Boa Ventura de São Bom Jesus do Norte/ES
+Belo Monte/AL Roque/PR Bom Jesus do Sul/PR
+Belo Oriente/MG Boa Ventura/PB Bom Jesus do
+Belo Vale/MG Boa Viagem/CE Tocantins/PA
+Belterra/PA Boa Vista da Bom Jesus do
+Beneditinos/PI Aparecida/PR Tocantins/TO
+Benedito Leite/MA Boa Vista das Missões/RS Bom Jesus dos
+Benevides/PA Boa Vista do Buricá/RS Perdões/SP
+Benjamin Constant do Boa Vista do Cadeado/RS Bom Jesus/PB
+Sul/RS Boa Vista do Gurupi/MA Bom Jesus/PI
+26 - 69
+
+Date: LOBO ri FI
+iii Rubricas AF (Ó a
+| Consórcio de Informátic
+C Í g gi | rop a o qeu º
+Bom Jesus/RN Braga/RS Brumadinho/MG
+Bom Jesus/RS Bragança Paulista/SP Brumado/BA
+Bom Lugar/MA Bragança/PA Bueno Brandão/MG
+Bom Princípio do Piauí/PI Braganey/PR Buenópolis/MG
+Bom Princípio/RS Branquinha/AL Buenos Aires/PE
+Bom Progresso/RS Brás Pires/MG Buerarema/BA
+Bom Repouso/MG Brasil Novo/PA Bugre/MG
+Bom Retiro do Sul/RS Brasilândia de Minas/MG Buíque/PE
+Bom Sucesso de Brasilândia do Sul/PR Bujari/AC
+Itararé/SP Brasilândia do Bujaru/PA
+Bom Sucesso do Sul/PR Tocantins/TO Buri/SP
+Bom Sucesso/MG Brasilândia/MS Buritama/SP
+Bom Sucesso/PB Brasileia/AC Buriti Alegre/GO
+Bom Sucesso/PR Brasileira/PI Buriti Bravo/MA
+, Bonfim do Piauí/PI Brasília de Minas/MG Buriti de Goiás/GO
+
+Bonfim/MG Brasília/DF Buriti do Tocantins/TO
+Bonfim/RR Brasnorte/MT Buriti dos Lopes/PI
+Bonfinópolis de Brasópolis/MG Buriti dos Montes/PI
+Minas/MG Braúna/SP Buriti/MA
+Bonfinópolis/GO Braúnas/MG Buriticupu/MA
+Boninal/BA Brazabrantes/GO Buritinópolis/GO
+Bonito de Minas/MG Brejão/PE Buritirama/BA
+Bonito de Santa Fé/PB Brejetuba/ES Buritirana/MA
+Bonito/BA Brejinho de Nazaré/TO Buritis/MG
+Bonito/MS Brejinho/PE Buritis/RO
+Bonito/PA Brejinho/RN Buritizal/SP
+Bonito/PE Brejo Alegre/SP Buritizeiro/MG
+Bonópolis/GO Brejo da Madre de Butiá/RS
+Boqueirão do Leão/RS Deus/PE Caapiranga/AM
+Boqueirão do Piauí/P| Brejo de Areia/MA Caaporã/PB
+Boqueirão/PB Brejo do Cruz/PB Caarapó/MS
+
+— Boquim/SE Brejo do Piauí/PI Caatiba/BA
+Boquira/BA Brejo dos Santos/PB Cabaceiras do
+Borá/SP Brejo Grande do Paraguaçu/BA
+Boracéia/SP Araguaia/PA Cabaceiras/PB
+Borba/AM Brejo Grande/SE Cabeceira Grande/MG
+Borborema/PB Brejo Santo/CE Cabeceiras do Piauí/PI
+Borborema/SP Brejo/MA Cabeceiras/GO
+Borda da Mata/MG Brejões/BA Cabedelo/PB
+Borebi/SP Brejolândia/BA Cabixi/RO
+Borrazópolis/PR Breu Branco/PA Cabo de Santo
+Bossoroca/RS Breves/PA Agostinho/PE
+Botelhos/MG Britânia/GO Cabo Frio/RJ
+Botucatu/SP Brochier/RS Cabo Verde/MG
+Botumirim/MG Brodowski/SP Cabrália Paulista/SP
+Botuporã/BA Brotas de Macaúbas/BA Cabreúva/SP
+Bozano/RS Brotas/SP Cabrobó/PE
+
+27 -69
+
+Proc. Nº Jão 000 Id / 2224 |
+ed | Rubrica; |
+t É | Consórcio de Informática AS
+bed até .
+
+Caçapava do Sul/RS Caiapônia/GO Cambuci/RJ
+Caçapava/SP Caibaté/RS Cambuí/MG
+Cacaulândia/RO Caiçara do Norte/RN Cambuquira/MG
+Cacequi/RS Caiçara do Rio do Cametá/PA
+Cáceres/MT Vento/RN Camocim de São Félix/PE
+Cachoeira Alta/GO Caiçara/PB Camocim/CE
+Cachoeira da Prata/MG Caiçara/RS Campanário/MG
+Cachoeira de Goiás/GO Caicó/RN Campanha/MG
+Cachoeira de Minas/MG Caieiras/SP Campestre da Serra/RS
+Cachoeira de Pajeú/MG Cairu/BA Campestre de Goiás/GO
+Cachoeira do Arari/PA Caiuá/SP Campestre do
+Cachoeira do Piriá/PA Cajamar/SP Maranhão/MA
+Cachoeira do Sul/RS Cajapió/MA Campestre/AL
+
+A Cachoeira dos Índios/PB Cajari/MA Campestre/MG
+Cachoeira Dourada/GO Cajati/SP Campina da Lagoa/PR
+Cachoeira Dourada/MG Cajazeiras do Piauí/PI Campina das Missões/RS
+Cachoeira Grande/MA Cajazeiras/PB Campina do Monte
+Cachoeira Paulista/SP Cajazeirinhas/PB Alegre/SP
+Cachoeira/BA Cajobi/SP Campina do Simão/PR
+Cachoeiras de Macacu/R]J Cajueiro da Praia/PI Campina Grande do
+Cachoeirinha/PE Cajueiro/AL Sul/PR
+Cachoeirinha/RS Cajuri/MG Campina Grande/PB
+Cachoeirinha/TO Cajuru/SP Campina Verde/MG
+Cachoeiro de Calçado/PE Campinaçu/GO
+Itapemirim/ES Calçoene/AP Campinápolis/MT
+Cacimba de Areia/PB Caldas Brandão/PB Campinas do Piauí/PI
+Cacimba de Dentro/PB Caldas Novas/GO Campinas do Sul/RS
+Cacimbas/PB Caldas/MG Campinas/SP
+Cacimbinhas/AL Caldazinha/GO Campinorte/GO
+Cacique Doble/RS Caldeirão Grande do Campo Alegre de
+Cacoal/RO Piauí/PI Goiás/GO
+
+T Caconde/SP Caldeirão Grande/BA Campo Alegre de
+Caçu/GO Califórnia/PR Lourdes/BA
+Caculé/BA Calumbi/PE Campo Alegre do
+Caém/BA Camacan/BA Fidalgo/PI
+Caetanópolis/MG Camacho/MG Campo Alegre/AL
+Caetanos/BA Camalaú/PB Campo Azul/MG
+Caeté/MG Camamu/BA Campo Belo do Sul/SC
+Caetés/PE Camanducaia/MG Campo Belo/MG
+Caetité/BA Camapuã/MS Campo Bom/RS
+Cafarnaum/BA Camaquã/RS Campo Bonito/PR
+Cafeara/PR Camaragibe/PE Campo do Brito/SE
+Cafelândia/PR Camargo/RS Campo do Meio/MG
+Cafelândia/SP Cambará do Sul/RS Campo do Tenente/PR
+Cafezal do Sul/PR Cambará/PR Campo Florido/MG
+Caiabu/SP Cambé/PR Campo Formoso/BA
+Caiana/MG Cambira/PR
+
+28 - 69
+
+Procno 140000 U+/9091
+Data: 1/0642] rio 143 I
+aa : ubrica; Ê Vi
+( » | Consórcio de Informáico a» a aid,
+Cusd Ig a | na Gestão Pública Municipal A é IVA
+Campo Grande do Candeal/BA Capela/SE
+Piauí/PI Candeias do Jamari/RO Capelinha/MG
+Campo Grande/AL Candeias/BA Capetinga/MG
+Campo Grande/MS Candeias/MG Capim Branco/MG
+Campo Grande/RN Candelária/RS Capim Grosso/BA
+Campo Largo do Piaui/P| Candiba/BA Capim/PB
+Campo Largo/PR Cândido de Abreu/PR Capinópolis/MG
+Campo Limpo de Cândido Godói/RS Capinzal do Norte/MA
+Goiás/GO Cândido Mendes/MA Capistrano/CE
+Campo Limpo Paulista/SP Cândido Mota/SP Capitão Andrade/MG
+Campo Magro/PR Cândido Rodrigues/SP Capitão de Campos/PI
+Campo Maior/PI Cândido Sales/BA Capitão Enéas/MG
+Campo Mourão/PR Candiota/RS Capitão Gervásio
+— Campo Novo de Candói/PR Oliveira/PI
+Rondônia/RO Canela/RS Capitão Leônidas
+Campo Novo do Canguaretama/RN Marques/PR
+Parecis/MT Canguçu/RS Capitão Poço/PA
+Campo Novo/RS Canhoba/SE Capitão/RS
+Campo Redondo/RN Canhotinho/PE Capitólio/MG
+Campo Verde/MT Canindé de São Capivari do Sul/RS
+Campos Altos/MG Francisco/SE Capivari/SP
+Campos Belos/GO Canindé/CE Capixaba/AC
+Campos Borges/RS Canitar/SP Capoeiras/PE
+Campos de Júlio/MT Canoas/RS Caputira/MG
+Campos do Jordão/SP Cansanção/BA Caraá/RS
+Campos dos Cantá/RR Caracarai/RR
+Goytacazes/RJ Cantagalo/MG Caracol/MS
+Campos Gerais/MG Cantagalo/PR Caracol/PI
+Campos Lindos/TO Cantagalo/RJ Caraguatatuba/SP
+Campos Novos Cantanhede/MA Caraí/MG
+Paulista/SP Canto do Buriti/P| Caraíbas/BA
+h Campos Sales/CE Canudos do Vale/RS Carambei/PR
+Campos Verdes/GO Canudos/BA Caranaíba/MG
+Camutanga/PE Canutama/AM Carandaí/MG
+Cana Verde/MG Capanema/PA Carangola/MG
+Canaã dos Carajás/PA Capanema/PR Carapebus/RJ
+Canaã/MG Capão Bonito do Sul/RS Carapicuíba/SP
+Canabrava do Norte/MT Capão Bonito/SP Caratinga/MG
+Cananéia/SP Capão da Canoa/RS Carauari/AM
+Canapi/AL Capão do Cipó/RS Caraúbas do Piauí/P|
+Canápolis/BA Capão do Leão/RS Caraúbas/PB
+Canápolis/MG Caparaó/MG Caraúbas/RN
+Canarana/BA Capela de Santana/RS Caravelas/BA
+Canarana/MT Capela do Alto Alegre/BA Carazinho/RS
+Canas/SP Capela do Alto/SP Carbonita/MG
+Canavieira/PI Capela Nova/MG Cardeal da Silva/BA
+Canavieiras/BA Capela/AL Cardoso Moreira/RJ
+29 - 69
+
+Proc no Aápo0s W44 (999
+Data; My DR! ris A
+pr rca, TOO fas
+am iga | Vade
+
+Cardoso/SP Casa Branca/SP Caxambu/MG
+Careaçu/MG Casa Grande/MG Caxias do Sul/RS
+Careiro da Várzea/AM Casa Nova/BA Caxias/MA
+Careiro/AM Casca/RS Caxingó/PI
+Cariacica/ES Cascalho Rico/MG Ceará/Mirim/RN
+Caridade do Piauí/P| Cascavel/CE Cedral/MA
+Caridade/CE Cascavel/PR Cedral/SP
+Carinhanha/BA Caseara/TO Cedro de São João/SE
+Carira/SE Caseiros/RS Cedro do Abaeté/MG
+Cariré/CE Casimiro de Abreu/R)J Cedro/CE
+Cariri do Tocantins/TO Casinhas/PE Cedro/PE
+Caririaçu/CE Casserengue/PB Centenário do Sul/PR
+Cariús/CE Cássia dos Coqueiros/SP Centenário/RS
+
+o Carlinda/MT Cássia/MG Centenário/TO
+Carlópolis/PR Cassilândia/MS Central de Minas/MG
+Carlos Barbosa/RS Castanhal/PA Central do Maranhão/MA
+Carlos Chagas/MG Castanheira/MT Central/BA
+Carlos Gomes/RS Castanheiras/RO Centralina/MG
+Carmésia/MG Castelândia/GO Centro do Guilherme/MA
+Carmo da Cachoeira/MG Castelo do Piaui/PI Centro Novo do
+Carmo da Mata/MG Castelo/ES Maranhão/MA
+Carmo de Minas/MG Castilho/SP Cerejeiras/RO
+Carmo do Cajuru/MG Castro Alves/BA Ceres/GO
+Carmo do Paranaíba/MG Castro/PR Cerqueira César/SP
+Carmo do Rio Claro/MG Cataguases/MG Cerquilho/SP
+Carmo do Rio Verde/GO Catalão/GO Cerrito/RS
+Carmo/R) Catanduva/SP Cerro Azul/PR
+Carmolândia/TO Catanduvas/PR Cerro Branco/RS
+Carmópolis de Minas/MG Catarina/CE Cerro Corá/RN
+Carmópolis/SE Catas Altas da Cerro Grande do Sul/RS
+Carnaíba/PE Noruega/MG Cerro Grande/RS
+
+pi, Carnaúba dos Dantas/RN Catas Altas/MG Cerro Largo/RS
+Carnaubais/RN Catende/PE Cerro Negro/SC
+Carnaubal/CE Catiguá/SP Cesário Lange/SP
+Carnaubeira da Penha/PE Catingueira/PB Céu Azul/PR
+Carneirinho/MG Catolândia/BA Cezarina/GO
+Camneiros/AL Catolé do Rocha/PB Chã de Alegria/PE
+Caroebe/RR Catu/BA Chã Grande/PE
+Carolina/MA Catuípe/RS Chã Preta/AL
+Carpina/PE Catuji/MG Chácara/MG
+Carrancas/MG Catunda/CE Chalé/MG
+Carrapateira/PB Caturaí/GO Chapada da
+Carrasco Bonito/TO Caturama/BA Natividade/TO
+Caruaru/PE Caturité/PB Chapada de Areia/TO
+Carutapera/MA Catuti/MG Chapada do Norte/MG
+Carvalhópolis/MG Caucaia/CE Chapada dos
+Carvalhos/MG Cavalcante/GO Guimarães/MT
+
+30-69
+
+Proc. Nº, 0009 VA / 234 E
+Data; Mol rdl Fls ACO
+ga Rca PRO ) ovo
+C E | Consórcio de Informática e G9
+| 6 & | no Gestão Pública Municipal ra ;
+Chapada Gaúcha/MG Coité do Noia/AL Conceição do Lago
+Chapada/RS Coivaras/PI Açu/MA
+Chapadão do Céu/GO Colares/PA Conceição do Mato
+Chapadão do Sul/MS Colatina/ES Dentro/MG
+Chapadinha/MA Colider/MT Conceição do Pará/MG
+Charqueada/SP Colina/SP Conceição do Rio
+Charqueadas/RS Colinas do Sul/GO Verde/MG
+Charrua/RS Colinas do Tocantins/TO Conceição do
+Chaval/CE Colinas/MA Tocantins/TO
+Chavantes/SP Colinas/RS Conceição dos Ouros/MG
+Chaves/PA Colméia/TO Conceição/PB
+Chiador/MG Colniza/MT Conchal/SP
+Chiapetta/RS Colômbia/SP Conchas/SP
+— Chopinzinho/PR Colombo/PR Concórdia do Pará/PA
+Choró/CE Colônia do Gurguéia/PI Condado/PB
+Chorozinho/CE Colônia do Piauí/PI Condado/PE
+Chorrochó/BA Colônia Leopoldina/AL Conde/BA
+Chuí/RS Colorado do Oeste/RO Conde/PB
+Chupinguaia/RO Colorado/PR Condeúba/BA
+Chuvisca/RS Colorado/RS Condor/RS
+Cianorte/PR Coluna/MG Cônego Marinho/MG
+Cícero Dantas/BA Combinado/TO Confins/MG
+Cidade Gaúcha/PR Comendador Gomes/MG Confresa/MT
+Cidade Ocidental/GO Comendador Levy Congo/PB
+Cidelândia/MA Gasparian/RJ Congonhal/MG
+Cidreira/RS Comercinho/MG Congonhas do Norte/MG
+Cipó/BA Comodoro/MT Congonhas/MG
+Cipotânea/MG Conceição da Congonhinhas/PR
+Ciríaco/RS Aparecida/MG Conquista dVOeste/MT
+Claraval/MG Conceição da Barra de Conquista/MG
+Claro dos Poções/MG Minas/MG Conselheiro Lafaiete/MG
+” Cláudia/MT Conceição da Barra/ES Conselheiro Mairinck/PR
+Cláudio/MG Conceição da Feira/BA Conselheiro Pena/MG
+Clementina/SP Conceição das Consolação/MG
+Clevelândia/PR Alagoas/MG Constantina/RS
+Coaraci/BA Conceição das Pedras/MG Contagem/MG
+Coari/AM Conceição de Contenda/PR
+Cocal de Telha/PI Ipanema/MG Contendas do Sincorá/BA
+Cocal dos Alves/P| Conceição de Macabu/R) Coqueiral/MG
+Cocal/PI Conceição do Almeida/BA Coqueiro Baixo/RS
+Cocalinho/MT Conceição do Coqueiro Seco/AL
+Cocalzinho de Goiás/GO Araguaia/PA Coqueiros do Sul/RS
+Cocos/BA Conceição do Canindé/PI Coração de Jesus/MG
+Codajás/AM Conceição do Castelo/ES Coração de Maria/BA
+Codó/MA Conceição do Coité/BA Corbélia/PR
+Coelho Neto/MA Conceição do Jacuípe/BA Cordeiro/RJ
+Coimbra/MG Cordeirópolis/SP
+31-69
+
+Proc, Nº —Apopo Ur /d0)
+Dataslh pol joj Fis JC
+E pia: Rubrica: )) Ay
+e | Consórcio de Informática
+IQ | | na Gestão Pública Municipal e CM 12?
+L NIVA .
+
+Cordeiros/BA Cosmópolis/SP Cruzaltense/RS
+Cordisburgo/MG Cosmorama/SP Cruzeiro da Fortaleza/MG
+Cordislândia/MG Costa Marques/RO Cruzeiro do Iguaçu/PR
+Coreaú/CE Costa Rica/MS Cruzeiro do Oeste/PR
+Coremas/PB Cotegipe/BA Cruzeiro do Sul/AC
+Corguinho/MS Cotia/SP Cruzeiro do Sul/PR
+Coribe/BA Cotiporã/RS Cruzeiro do Sul/RS
+Corinto/MG Cotriguaçu/MT Cruzeiro/SP
+Cornélio Procópio/PR Couto de Magalhães de Cruzeta/RN
+Coroaci/MG Minas/MG Cruzilia/MG
+Coroados/SP Couto de Magalhães/TO Cruzmaltina/PR
+Coroatá/MA Coxilha/RS Cubatão/SP
+Coromandel/MG Coxim/MS Cubati/PB
+
+pat Coronel Barros/RS Coxixola/PB Cuiabá/MT
+Coronel Bicaco/RS Craíbas/AL Cuité de
+Coronel Domingos Crateús/CE Mamanguape/PB
+Soares/PR Crato/CE Cuité/PB
+Coronel Ezeguiel/RN Cravinhos/SP Cuitegi/PB
+Coronel Fabriciano/MG Cravolândia/BA Cujubim/RO
+Coronel João Pessoa/RN Crisólita/MG Cumari/GO
+Coronel João Sá/BA Crisópolis/BA Cumaru do Norte/PA
+Coronel José Dias/P!| Crissiumal/RS Cumaru/PE
+Coronel Macedo/SP Cristais Paulista/SP Cumbe/SE
+Coronel Murta/MG Cristais/MG Cunha/SP
+Coronel Pacheco/MG Cristal do Sul/RS Cuparaque/MG
+Coronel Pilar/RS Cristal/RS Cupira/PE
+Coronel Sapucaia/MS Cristalândia do Piauí/PI Curaçá/BA
+Coronel Vivida/PR Cristalândia/TO Curimatá/PI
+Coronel Xavier Cristália/MG Curionópolis/PA
+Chaves/MG Cristalina/GO Curiúva/PR
+Córrego Danta/MG Cristiano Otoni/MG Currais Novos/RN
+
+- Córrego do Bom Cristianópolis/GO Currais/P|
+Jesus/MG Cristina/MG Curral de Cima/PB
+Córrego do Ouro/GO Cristinápolis/SE Curral de Dentro/MG
+Córrego Fundo/MG Cristino Castro/PI Curral Novo do Piauí/PI
+Córrego Novo/MG Cristópolis/BA Curral Velho/PB
+Corrente/PI Crixás do Tocantins/TO Curralinho/PA
+Correntes/PE Crixás/GO Curralinhos/PI
+Correntina/BA Croatá/CE Curuá/PA
+Cortês/PE Cromínia/GO Curuçá/PA
+Corumbá de Goiás/GO Crucilândia/MG Cururupu/MA
+Corumbá/MS Cruz Alta/RS Curvelândia/MT
+Corumbaiba/GO Cruz das Almas/BA Curvelo/MG
+Corumbatai do Sul/PR Cruz do Espírito Santo/PB Custódia/PE
+Corumbatai/SP Cruz Machado/PR Cutias/AP
+Corumbiara/RO Cruz/CE Damianópolis/GO
+Coruripe/AL Cruzália/SP Damião/PB
+
+32-69
+
+nie SSL
+Proc. Nº 140909 MA [Jor
+Datas UDF É j
+peish | Rubrica; LA 4
+q iga | re Geo ro ade Lea N [YA
+Damolândia/GO Divinolândia de Dores do Turvo/MG
+Darcinópolis/TO Minas/MG Doresópolis/MG
+Dário Meira/BA Divinolândia/SP Dormentes/PE
+Datas/MG Divinópolis de Goiás/GO Douradina/MS
+David Canabarro/RS Divinópolis do Douradina/PR
+Davinópolis/GO Tocantins/TO Dourado/SP
+Davinópolis/MA Divinópolis/MG Douradoquara/MG
+Delfim Moreira/MG Divisa Alegre/MG Dourados/MS
+Delfinópolis/MG Divisa Nova/MG Doutor Camargo/PR
+Delmiro Gouveia/AL Divisópolis/MG Doutor Maurício
+Delta/MG Dobrada/SP Cardoso/RS
+Demerval Lobão/PI Dois Córregos/SP Doutor Ricardo/RS
+Denise/MT Dois Irmãos das Doutor Severiano/RN
+— Deodápolis/MS Missões/RS Doutor Ulysses/PR
+Deputado Irapuan Dois Irmãos do Buriti/MS Doverlândia/GO
+Pinheiro/CE Dois Irmãos do Dracena/SP
+Derrubadas/RS Tocantins/TO Duartina/SP
+Descalvado/SP Dois Irmãos/RS Duas Barras/RJ
+Descoberto/MG Dois Lajeados/RS Duas Estradas/PB
+Desterro de Entre Dois Riachos/AL Dueré/TO
+Rios/MG Dois Vizinhos/PR Dumont/SP
+Desterro do Melo/MG Dolcinópolis/SP Duque Bacelar/MA
+Desterro/PB Dom Aquino/MT Duque de Caxias/RJ
+Dezesseis de Dom Basílio/BA Durandé/MG
+Novembro/RS Dom Bosco/MG Echaporã/SP
+Diadema/SP Dom Cavati/MG Ecoporanga/ES
+Diamante dVOeste/PR Dom Eliseu/PA Edealina/GO
+Diamante do Norte/PR Dom Expedito Lopes/PI Edéia/GO
+Diamante do Sul/PR Dom Feliciano/RS Eirunepé/AM
+Diamante/PB Dom Inocêncio/PI Eldorado do Sul/RS
+Diamantina/MG Dom Joaquim/MG Eldorado dos Carajás/PA
+Ea Diamantino/MT Dom Macedo Costa/BA Eldorado/MS
+Dianópolis/TO Dom Pedrito/RS Eldorado/SP
+Dias dV'Ávila/BA Dom Pedro de Elesbão Veloso/PI
+Dilermando de Aguiar/RS Alcântara/RS Elias Fausto/SP
+Diogo de Dom Pedro/MA Eliseu Martins/PI
+Vasconcelos/MG Dom Silvério/MG Elisiário/SP
+Dionisio/MG Dom Viçoso/MG Elísio Medrado/BA
+Diorama/GO Domingos Martins/ES Elói Mendes/MG
+Dirce Reis/SP Domingos Mourão/PI Emas/PB
+Dirceu Arcoverde/PI Dona Eusébia/MG Embaúba/SP
+Divina Pastora/SE Dona Francisca/RS Embu das Artes/SP
+Divinésia/MG Dona Inês/PB Embu-Guaçu/SP
+Divino das Laranjeiras/MG Dores de Campos/MG Emilianópolis/SP
+Divino de São Dores de Guanhães/MG Encantado/RS
+Lourenço/ES Dores do Indaiã/MG Encanto/RN
+Divino/MG Dores do Rio Preto/ES Encruzilhada do Sul/RS
+33-69
+
+soca Rubrica: «O P
+q iga |rscerso pena Lois.
+Encruzilhada/BA Esplanada/BA Fazenda Vilanova/RS
+Enéas Marques/PR Espumoso/RS Feijó/AC
+Engenheiro Beltrão/PR Estação/RS Feira da Mata/BA
+Engenheiro Caldas/MG Estância Velha/RS Feira de Santana/BA
+Engenheiro Coelho/SP Estância/SE Feira Grande/AL
+Engenheiro Navarro/MG Esteio/RS Feira Nova do
+Engenheiro Paulo de Estiva Gerbi/SP Maranhão/MA
+Frontin/RJ Estiva/MG Feira Nova/PE
+Engenho Velho/RS Estreito/MA Feira Nova/SE
+Entre Folhas/MG Estrela dV'Oeste/SP Felício dos Santos/MG
+Entre Ijuís/RS Estrela Dalva/MG Felipe Guerra/RN
+Entre Rios de Minas/MG Estrela de Alagoas/AL Felisburgo/MG
+Entre Rios do Oeste/PR Estrela do Indaiá/MG Felixlândia/MG
+a Entre Rios do Sul/RS Estrela do Norte/GO Feliz Deserto/AL
+
+Entre Rios/BA Estrela do Norte/SP Feliz Natal/MT
+Envira/AM Estrela do Sul/MG Feliz/RS
+Epitaciolândia/AC Estrela Velha/RS Fênix/PR
+Equador/RN Estrela/RS Fernandes Pinheiro/PR
+Erebango/RS Euclides da Cunha Fernandes Tourinho/MG
+Erechim/RS Paulista/SP Fernando de Noronha/PE
+Ererê/CE Euclides da Cunha/BA Fernando Falcão/MA
+Érico Cardoso/BA Eugênio de Castro/RS Fernando Pedroza/RN
+Ernestina/RS Eugenópolis/MG Fernando Prestes/SP
+Erval Grande/RS Eunápolis/BA Fernandópolis/SP
+Erval Seco/RS Eusébio/CE Fernão/SP
+Ervália/MG Ewbank da Câmara/MG Ferraz de Vasconcelos/SP
+Escada/PE Extrema/MG Ferreira Gomes/AP
+Esmeralda/RS Extremoz/RN Ferreiros/PE
+Esmeraldas/MG Exu/PE Ferros/MG
+Espera Feliz/MG Fagundes Varela/RS Fervedouro/MG
+Esperança do Sul/RS Fagundes/PB Figueira/PR
+
+ii Esperança Nova/PR Faina/GO Figueirão/MS
+Esperança/PB Fama/MG Figueirópolis dVOeste/MT
+Esperantina/PI Faria Lemos/MG Figueirópolis/TO
+Esperantina/TO Farias Brito/CE Filadélfia/BA
+Esperantinópolis/MA Faro/PA Filadélfia/TO
+Espigão Alto do Farol/PR Firmino Alves/BA
+Iguaçu/PR Fartura do Piauí/P| Firminópolis/GO
+Espigão dVOeste/RO Fartura/SP Flexeiras/AL
+Espinosa/MG Fátima do Sul/MS Flor da Serra do Sul/PR
+Espírito Santo do Fátima/BA Flora Rica/SP
+Dourado/MG Fátima/TO Floraí/PR
+Espírito Santo do Faxinal do Soturno/RS Florânia/RN
+Pinhal/SP Faxinal/PR Floreal/SP
+Espírito Santo do Faxinalzinho/RS Flores da Cunha/RS
+Turvo/SP Fazenda Nova/GO Flores de Goiás/GO
+Espírito Santo/RN Fazenda Rio Grande/PR Flores do Piauí/PI
+
+34 - 69
+
+Proc. Nº 000 [4X (dodL
+Data: 1M y LM Es: Aga |
+gssaaã ie: o
+é ga | sóeico osicorncico Lear 12383
+Flores/PE Francisco Morato/SP General Sampaio/CE
+Floresta Azul/BA Francisco Sá/MG Gentil/RS
+Floresta do Araguaia/PA Francisco Santos/P| Gentio do Ouro/BA
+Floresta do Piauí/PI Franciscópolis/MG Getulina/SP
+Floresta/PE Franco da Rocha/SP Getúlio Vargas/RS
+Floresta/PR Frecheirinha/CE Gilbués/PI
+Florestal/MG Frederico Westphalen/RS Girau do Ponciano/AL
+Florestópolis/PR Frei Gaspar/MG Giruá/RS
+Floriano Peixoto/RS Frei Inocêncio/MG Glaucilândia/MG
+Floriano/PI Frei Lagonegro/MG Glicério/SP
+Flórida Paulista/SP Frei Martinho/PB Glória dVOeste/MT
+Flórida/PR Frei Miguelinho/PE Glória de Dourados/MS
+Florinea/SP Frei Paulo/SE Glória do Goitá/PE
+— Fonte Boa/AM Fronteira dos Vales/MG Glória/BA
+Fontoura Xavier/RS Fronteira/MG Glorinha/RS
+Formiga/MG Fronteiras/P!| Godofredo Viana/MA
+Formigueiro/RS Fruta de Leite/MG Godoy Moreira/PR
+Formosa da Serra Frutal/MG Goiabeira/MG
+Negra/MA Frutuoso Gomes/RN Goianá/MG
+Formosa do Oeste/PR Fundão/ES Goiana/PE
+Formosa do Rio Preto/BA Funilândia/MG Goianápolis/GO
+Formosa/GO Gabriel Monteiro/SP Goiandira/GO
+Formoso do Araguaia/TO Gado Bravo/PB Goianésia do Pará/PA
+Formoso/GO Gália/SP Goianésia/GO
+Formoso/MG Galileia/MG Goiânia/GO
+Forquetinha/RS Galinhos/RN Goianinha/RN
+Forquilha/CE Gameleira de Goiás/GO Goianira/GO
+Fortaleza de Minas/MG Gameleira/PE Goianorte/TO
+Fortaleza do Tabocão/TO Gameleiras/MG Goiás/GO
+Fortaleza dos Gandu/BA Goiatins/TO
+Nogueiras/MA Garanhuns/PE Goiatuba/GO
+E Fortaleza dos Valos/RS Gararu/SE Goioerê/PR
+Fortaleza/CE Garça/SP Goioxim/PR
+Fortim/CE Garibaldi/RS Gonçalves Dias/MA
+Fortuna de Minas/MG Garrafão do Norte/PA Gonçalves/MG
+Fortuna/MA Garruchos/RS Gongogi/BA
+Foz do Iguaçu/PR Gastão Vidigal/SP Gonzaga/MG
+Foz do Jordão/PR Gaúcha do Norte/MT Gouvêia/MG
+Franca/SP Gaurama/RS Gouvelândia/GO
+Francinópolis/P| Gavião Peixoto/SP Governador Archer/MA
+Francisco Alves/PR Gavião/BA Governador Dix-Sept
+Francisco Ayres/PI Geminiano/PI Rosado/RN
+Francisco Badaró/MG General Câmara/RS Governador Edison
+Francisco Beltrão/PR General Carneiro/MT Lobão/MA
+Francisco Dantas/RN General Carneiro/PR Governador Eugênio
+Francisco Dumont/MG General Maynard/SE Barros/MA
+Francisco Macedo/PI General Salgado/SP
+35-69
+
+Proc. Nº 142009 Mk /doal
+Data My pt jd Fis 440
+Se ” | Consórcio de Informática Ali À a!
+
+Governador Jorge Guanambi/BA Guia Lopes da Laguna/MS
+Teixeira/RO Guanhães/MG Guidoval/MG
+Governador Guapé/MG Guimarães/MA
+Lindenberg/ES Guapiaçu/SP Guimarânia/MG
+Governador Luiz Guapiara/SP Guiratinga/MT
+Rocha/MA Guapimirim/RJ Guiricema/MG
+Governador Guapirama/PR Gurinhatã/MG
+Mangabeira/BA Guapó/GO Gurinhém/PB
+Governador Newton Guaporé/RS Gurjão/PB
+Bello/MA Guaporema/PR Gurupá/PA
+Governador Nunes Guará/SP Gurupi/TO
+Freire/MA Guarabira/PB Guzolândia/SP
+Governador Guaraçaí/SP Harmonia/RS
+
+Lo Valadares/MG Guaraci/PR Heitoraí/GO
+Graça Aranha/MA Guaraci/SP Heliodora/MG
+Graça/CE Guaraciaba do Norte/CE Heliópolis/BA
+Graccho Cardoso/SE Guaraciaba/MG Herculândia/SP
+Grajaú/MA Guaraciama/MG Herval/RS
+Gramado dos Guaraí/TO Herveiras/RS
+Loureiros/RS Guaraíta/GO Hidrolândia/CE
+Gramado Xavier/RS Guaramiranga/CE Hidrolândia/GO
+Gramado/RS Guaranésia/MG Hidrolina/GO
+Grandes Rios/PR Guarani dVOeste/SP Holambra/SP
+Granito/PE Guarani das Missões/RS Honório Serpa/PR
+Granja/CE Guarani de Goiás/GO Horizonte/CE
+Granjeiro/CE Guarani/MG Horizontina/RS
+Grão Mogol/MG Guaraniaçu/PR Hortolândia/SP
+Gravatá/PE Guarantã do Norte/MT Hugo Napoleão/PI
+Gravataí/RS Guarantã/SP Hulha Negra/RS
+Groairas/CE Guarapari/ES Humaitá/AM
+Grossos/RN Guarapuava/PR Humaitá/RS
+
+é Grupiara/MG Guaraqueçaba/PR Humberto de
+Guabiju/RS Guarará/MG Campos/MA
+Guaçuí/ES Guararapes/SP lacanga/SP
+Guadalupe/PI Guararema/SP laciara/GO
+Guaíba/RS Guaratinga/BA lacri/SP
+Guaiçara/SP Guaratinguetá/SP laçu/BA
+Guaimbê/SP Guaratuba/PR lapu/MG
+Guaira/PR Guarda-Mor/MG laras/SP
+Guaíra/SP Guareí/SP lati/PE
+Guairaçã/PR Guariba/SP Ibaiti/PR
+Guaiuba/CE Guaribas/P| lbarama/RS
+Guajará/AM Guarinos/GO Ilbaretama/CE
+Guajará/Mirim/RO Guarujá/SP Ibaté/SP
+Guajeru/BA Guarulhos/SP lbateguara/AL
+Guamaré/RN Guatapará/SP Ibatiba/ES
+Guamiranga/PR Guaxupé/MG lbema/PR
+
+36 - 69
+
+Proc. Nº 14h Dgo (Mt /doo
+Data; 14 j Of | il Eis: À U (0)
+Rubrica; a X o
+| Consórcio de Informát: É:
+
+Ibertioga/MG Igaci/AL Inconfidentes/MG
+Ibiá/MG Igaporã/BA Indaiabira/MG
+Ibiaçã/RS Igaraçu do Tietê/SP Indaiatuba/SP
+Ibiai/MG Igaracy/PB Independência/CE
+Ibiapina/CE Igarapava/SP Independência/RS
+Ibiara/PB Igarapé do Meio/MA Indiana/SP
+Ibiassucê/BA Igarapé Grande/MA Indianópolis/MG
+Ibicaraí/BA Igarapé/Açu/PA Indianópolis/PR
+Ibicoara/BA Igarapé/MG Indiaporã/SP
+Ibicuí/BA Igarapé/Mirim/PA Indiara/GO
+Ibicuitinga/CE Igarassu/PE Indiaroba/SE
+Ibimirim/PE Igaratá/SP Indiavaí/MT
+Ibipeba/BA Igaratinga/MG Ingá/PB
+
+pis, Ibipitanga/BA Igrapiúna/BA Ingaí/MG
+Ibiporã/PR Igreja Nova/AL Ingazeira/PE
+Ibiquera/BA Igrejinha/RS Inhacorá/RS
+Ibirá/SP Iguaba Grande/RJ Inhambupe/BA
+Ibiracatu/MG Iguaí/BA Inhangapi/PA
+Ibiraci/MG Iguape/SP Inhapi/AL
+Ibiraçu/ES Iguaraci/PE Inhapim/MG
+Ibiraiaras/RS Iguaraçu/PR Inhaúma/MG
+Ibirajuba/PE Iguatama/MG Inhuma/PI
+Ibirapitanga/BA Iguatemi/MS Inhumas/GO
+Ibirapuã/BA Iguatu/CE Inimutaba/MG
+Ibirapuitã/RS Iguatu/PR lnocência/MS
+Ibirarema/SP ljaci/MG Inúbia Paulista/SP
+Ibirataia/BA Ijuí/RS Ipaba/MG
+Ibirité/MG Ilha Comprida/SP Ipameri/GO
+Ibirubá/RS Ilha das Flores/SE Ipanema/MG
+Ibitiara/BA Ilha de Itamaracá/PE lpanguaçu/RN
+Ibitinga/SP Ilha Grande/PI lpaporanga/CE
+
+é Ibitirama/ES Ilha Solteira/SP Ipatinga/MG
+Ibititá/BA Ilhabela/SP Ipaumirim/CE
+Ibitiúra de Minas/MG Ilhéus/BA Ipaussu/SP
+Ibituruna/MG Ilicinea/MG Ipê/RS
+Ibiúna/SP Ilópolis/RS Ipecaetá/BA
+Ibotirama/BA Imaculada/PB Iperó/SP
+Icapuí/CE Imbaú/PR Ipeúna/SP
+Icaraí de Minas/MG Imbé de Minas/MG Ipiaçu/MG
+Icarafma/PR Imbé/RS Ipiaú/BA
+Icatu/MA Imbituva/PR Ipiguá/SP
+Icém/SP Imigrante/RS Ipirá/BA
+Ichu/BA Imperatriz/MA Ipiranga de Goiás/GO
+Icó/CE Inácio Martins/PR Ipiranga do Norte/MT
+Iconha/ES Inaciolândia/GO Ipiranga do Piauí/PI
+lelmo Marinho/RN Inajá/PE Ipiranga do Sul/RS
+lepê/SP Inajá/PR Ipiranga/PR
+
+37-69
+
+Proc.N 140 oho (Ut /gr9u
+aa Rubrica: Q sã Br quo
+és é | Consórcio de Informatica 4 10. 238?
+Ê q a | na Gestão Pública Municipal NA E h
+
+Ipixuna do Pará/PA Itabirito/MG Itambé do Mato
+Ipixuna/AM Itaboraí/RJ Dentro/MG
+Ipojuca/PE Itabuna/BA Itambé/BA
+Iporá/GO Itacajá/TO Itambé/PE
+Iporã/PR Itacambira/MG Itambé/PR
+Iporanga/SP Itacarambi/MG Itamogi/MG
+Ipu/CE Itacaré/BA Itamonte/MG
+Ipuã/SP Itacoatiara/AM Itanagra/BA
+Ipubi/PE Itacuruba/PE Itanhaém/SP
+Ipueira/RN Itacurubi/RS Itanhandu/MG
+Ipueiras/CE Itaeté/BA Itanhangá/MT
+Ipueiras/TO Itagi/BA Itanhém/BA
+Ipuiuna/MG Itagibá/BA Itanhomi/MG
+
+ar Ipupiara/BA Itagimirim/BA Itaobim/MG
+lracema do Oeste/PR Itaguaçu da Bahia/BA Itaóca/SP
+lracema/CE Itaguaçu/ES Itaocara/RJ
+lracema/RR Itaguaí/RJ Itapaci/GO
+lracemápolis/SP Itaguajé/PR Itapagipe/MG
+Iraí de Minas/MG Itaguara/MG Itapajé/CE
+Iraí/RS Itaguari/GO Itaparica/BA
+lrajuba/BA Itaguaru/GO Itapé/BA
+lramaia/BA Itaguatins/TO Itapebi/BA
+lranduba/AM Itaí/SP Itapecerica da Serra/SP
+Irani/SC Itaíba/PE Itapecerica/MG
+lrapuã/SP Itaiçaba/CE Itapecuru-Mirim/MA
+lrapuru/SP Itainópolis/PI Itapejara dVOeste/PR
+lraquara/BA Itaipava do Grajaú/MA Itapema/SC
+lrará/BA Itaipé/MG Itapemirim/ES ;
+Irati/PR Itaipulândia/PR Itaperuçu/PR
+lrauçuba/CE Itaitinga/CE Itaperuna/RJ
+lrecê/BA Itaituba/PA Itapetim/PE
+
+lretama/PR Itajá/GO Itapetinga/BA
+Irituia/PA Itajá/RN Itapetininga/SP
+Irupi/ES Itajobi/SP Itapeva/MG
+Isafas Coelho/PI Itaju do Colônia/BA Itapeva/SP
+Israelândia/GO Itaju/SP Itapevi/SP
+Itaara/RS Itajubá/MG Itapicuru/BA
+Itabaiana/PB Itajuípe/BA Itapipoca/CE
+Itabaiana/SE Italva/RJ Itapira/SP
+Itabaianinha/SE Itamaraju/BA Itapiranga/AM
+Itabela/BA Itamarandiba/MG Itapirapuã Paulista/SP
+Itaberá/SP Itamarati de Minas/MG Itapirapuã/GO
+Itaberaba/BA Itamarati/AM Itapiratins/TO
+Itaberaí/GO ltamari/BA Itapissuma/PE
+Itabi/SE Itambacuri/MG Itapitanga/BA
+Itabira/MG Itambaracá/PR Itapiúna/CE
+Itabirinha/MG Itápolis/SP
+38 - 69
+
+Proc Ne 240 pec Mt /dog(
+Data: 14 06 pl) Fis 44 | ;
+ne É
+sm Rubrica; Tala quo
+iga | na Gestão Pública Municipal Vas by
+Itaporã do Tocantins/TO Itobi/SP Jacupiranga/SP
+Itaporá/MS Itororó/BA Jacutinga/MG
+Itaporanga dV'Ajuda/SE Ituaçu/BA Jacutinga/RS
+Itaporanga/PB Ituberá/BA Jaguapitã/PR
+Itaporanga/SP ltueta/MG Jaguaquara/BA
+Itapororoca/PB Ituiutaba/MG Jaguaraçu/MG
+Itapuã do Oeste/RO Itumbiara/GO Jaguarão/RS
+Itapuca/RS Itumirim/MG Jaguarari/BA
+Itapui/SP Itupeva/SP Jaguaré/ES
+Itapura/SP Itupiranga/PA Jaguaretama/CE
+Itapuranga/GO Iturama/MG Jaguari/RS
+Itaquaquecetuba/SP Itutinga/MG Jaguariaíva/PR
+Itaquara/BA Ituverava/SP Jaguaribara/CE
+er Itaqui/RS luiú/BA Jaguaribe/CE
+Itaquiraí/MS lúna/ES Jaguaripe/BA
+Itaquitinga/PE Ivaí/PR Jaguariúna/SP
+Itarana/ES Ivaiporã/PR Jaguaruana/CE
+Itarantim/BA Ivaté/PR Jaíba/MG
+Itararé/SP Ivatuba/PR Jaicós/PI
+Itarema/CE Ivinhema/MS Jales/SP
+Itariri/SP Ivolândia/GO Jambeiro/SP
+Itarumã/GO Ivorá/RS Jampruca/MG
+Itati/RS Ivoti/RS Janaúba/MG
+Itatiaia/RJ Jaboatão dos Jandaia do Sul/PR
+Itatialuçu/MG Guararapes/PE Jandaia/GO
+Itatiba do Sul/RS Jaborandi/BA Jandaíra/BA
+Itatiba/SP Jaborandi/SP Jandaíra/RN
+Itatim/BA Jaboti/PR Jandira/SP
+Itatinga/SP Jaboticaba/RS Janduís/RN
+Itatira/CE Jaboticabal/SP Jangada/MT
+Itatuba/PB Jaboticatubas/MG Janiópolis/PR
+Itaú de Minas/MG Jaçanã/RN Januária/MG
+Itaú/RN Jacaraci/BA Japaraíba/MG
+Itaúba/MT Jacaraú/PB Japaratinga/AL
+Itaubal/AP Jacaré dos Homens/AL Japaratuba/SE
+Itauçu/GO Jacareacanga/PA Japeri/RJ
+Itaueira/PI Jacareí/SP Japi/RN
+Itaúna do Sul/PR Jacarezinho/PR Japira/PR
+Itaúna/MG Jaci/SP Japoatã/SE
+Itaverava/MG Jaciara/MT Japonvar/MG
+Itinga do Maranhão/MA Jacinto/MG Japorã/MS
+Itinga/MG Jacobina do Piauí/PI Japurá/AM
+Itiquira/MT Jacobina/BA Japurá/PR
+Itirapina/SP Jacuí/MG Jaqueira/PE
+Itirapuã/SP Jacuípe/AL Jaquirana/RS
+Itiruçu/BA Jacuizinho/RS Jaraguá/GO
+Itiúba/BA Jacundá/PA Jaraguari/MS
+39 - 69
+
+Proene [ADODO Ms /G031
+; Data pol yo Fls;
+( is | Consórcio de Informática Rubrica: quo
+E Ig & | na Gestão Público Municipal e
+Lad
+Jaramataia/AL Joanésia/MG Júlio Mesquita/SP
+Jardim Alegre/PR Joanópolis/SP Jumirim/SP
+Jardim de Angicos/RN João Alfredo/PE Junco do Maranhão/MA
+Jardim de Piranhas/RN João Câmara/RN Junco do Seridó/PB
+Jardim do Mulato/PI| João Costa/PI Jundiá/AL
+Jardim do Seridó/RN João Dias/RN Jundiá/RN
+Jardim Olinda/PR João Dourado/BA Jundiaí do Sul/PR
+Jardim/CE João Lisboa/MA Jundiaí/SP
+Jardim/MS João Monlevade/MG Jungueiro/AL
+Jardinópolis/SP João Neiva/ES Junqueirópolis/SP
+Jari/RS João Pinheiro/MG Jupi/PE
+Jarinu/SP João Ramalho/SP Juquiá/SP
+Jaru/RO Joaquim Felício/MG Juquitiba/SP
+= Jataí/GO Joaquim Gomes/AL Juramento/MG
+Jataizinho/PR Joaquim Nabuco/PE Juranda/PR
+Jataúba/PE Joaquim Pires/PI Jurema/PE
+Jateí/MS Joaquim Távora/PR Jurema/PI
+Jati/CE Joca Claudino/PB Juripiranga/PB
+Jatobá do Piauí/PI Joca Marques/PI Juru/PB
+Jatobá/MA Jóia/RS Juruá/AM
+Jatobá/PE Jordânia/MG Juruaia/MG
+Jaú do Tocantins/TO Jordão/AC Juruena/MT
+Jaú/SP José Bonifácio/SP Juruti/PA
+Jaupaci/GO José da Penha/RN Juscimeira/MT
+Jauru/MT José de Freitas/P| Jussara/BA
+Jeceaba/MG José Gonçalves de Jussara/GO
+Jenipapo de Minas/MG Minas/MG Jussara/PR
+Jenipapo dos Vieiras/MA José Raydan/MG Jussari/BA
+Jequeri/MG Joselândia/MA Jussiape/BA
+Jequiá da Praia/AL Josenópolis/MG Jutai/AM
+Jequié/BA Joviânia/GO Juti/MS
+A Jequitaí/MG Juara/MT Juvenilia/MG
+Jequitibá/MG Juarez Távora/PB Kaloré/PR
+Jequitinhonha/MG Juarina/TO Lábrea/AM
+Jeremoabo/BA Juatuba/MG Ladainha/MG
+Jericó/PB Juazeirinho/PB Ladário/MS
+Jeriquara/SP Juazeiro do Norte/CE Lafaiete Coutinho/BA
+Jerônimo Monteiro/ES Juazeiro do Piauí/PI Lagamar/MG
+Jerumenha/PI Juazeiro/BA Lagarto/SE
+Jesuânia/MG Jucás/CE Lago da Pedra/MA
+Jesuítas/PR Jucati/PE Lago do Junco/MA
+Jesúpolis/GO Jucuruçu/BA Lago dos Rodrigues/MA
+Jijoca de Jericoacoara/CE Jucurutu/RN Lago Verde/MA
+Ji-Paraná/RO Juína/MT Lagoa Alegre/PI
+Jiquiriçã/BA Juiz de Fora/MG Lagoa Bonita do Sul/RS
+Jitaúna/BA Júlio Borges/PI Lagoa dV'Anta/RN
+Joaima/MG Júlio de Castilhos/RS Lagoa da Canoa/AL
+40 - 69
+
+Proc, Nº Mo pop yyiagr
+Data; UM y UM dl Pi: Ad |
+gd Rubrica; :
+o i a | pa de ion SR aq O
+na Gestão Pública Municipal
+g | lá PAIVA, AZ3
+nat”
+Lagoa da Confusão/TO Lajes/RN Lindolfo Collor/RS
+Lagoa da Prata/MG Lajinha/MG Linha Nova/RS
+Lagoa de Dentro/PB Lamarão/BA Linhares/ES
+Lagoa de Itaenga/PE Lambari dVOeste/MT Lins/SP
+Lagoa de Pedras/RN Lambari/MG Livramento de Nossa
+Lagoa de São Francisco/P| Lamim/MG Senhora/BA
+Lagoa de Velhos/RN Landri Sales/PI Livramento/PB
+Lagoa do Barro do Lapa/PR Lizarda/TO
+Piauí/PI Lapão/BA Loanda/PR
+Lagoa do Carro/PE Laranja da Terra/ES Lobato/PR
+Lagoa do Mato/MA Laranjal do Jari/AP Logradouro/PB
+Lagoa do Ouro/PE Laranjal Paulista/SP Londrina/PR
+Lagoa do Piauí/PI Laranjal/MG Lontra/MG
+Es Lagoa do Sítio/PI Laranjal/PR Lorena/SP
+Lagoa do Tocantins/TO Laranjeiras do Sul/PR Loreto/MA
+Lagoa dos Gatos/PE Laranjeiras/SE Lourdes/SP
+Lagoa dos Patos/MG Lassance/MG Louveira/SP
+Lagoa dos Três Cantos/RS Lastro/PB Lucas do Rio Verde/MT
+Lagoa Dourada/MG Lauro de Freitas/BA Lucélia/SP
+Lagoa Formosa/MG Lavandeira/TO Lucena/PB
+Lagoa Grande do Lavínia/SP Lucianópolis/SP
+Maranhão/MA Lavras da Mangabeira/CE Luciara/MT
+Lagoa Grande/MG Lavras do Sul/RS Lucrécia/RN
+Lagoa Grande/PE Lavras/MG Luís Antônio/SP
+Lagoa Nova/RN Lavrinhas/SP Luís Correia/PI
+Lagoa Real/BA Leandro Ferreira/MG Luís Domingues/MA
+Lagoa Salgada/RN Leme do Prado/MG Luís Eduardo
+Lagoa Santa/GO Leme/SP Magalhães/BA
+Lagoa Santa/MG Lençóis Paulista/SP Luís Gomes/RN
+Lagoa Seca/PB Lençóis/BA Luisburgo/MG
+Lagoa Vermelha/RS Leopoldina/MG Luisiana/PR
+cm Lagoa/PB Leopoldo de Bulhões/GO Luisiânia/SP
+Lagoão/RS Leópolis/PR Luislândia/MG
+Lagoinha do Piauí/PI Liberato Salzano/RS Luminárias/MG
+Lagoinha/SP Liberdade/MG Lunardelli/PR
+Laguna Carapã/MS Licínio de Almeida/BA Lupércio/SP
+Laje do Muriaé/RJ Lidianópolis/PR Lupionópolis/PR
+Laje/BA Lima Campos/MA Lutécia/SP
+Lajeado do Bugre/RS Lima Duarte/MG Luz/MG
+Lajeado Novo/MA Limeira do Oeste/MG Luziânia/GO
+Lajeado/RS Limeira/SP Luzilândia/P|
+Lajeado/TO Limoeiro de Anadia/AL Luzinópolis/TO
+Lajedão/BA Limoeiro do Ajuru/PA Macaé/RJ
+Lajedinho/BA Limoeiro do Norte/CE Macaíba/RN
+Lajedo do Tabocal/BA Limoeiro/PE Macajuba/BA
+Lajedo/PE Lindoeste/PR Maçambara/RS
+Lajes Pintadas/RN Lindóia/SP Macambira/SE
+41-69
+
+Proc. Nº. 1Ap 000 MX/Qme |
+Data; Mt 06) Ri Fis: | Al
+goad Rubrica; VAR A O à
+SE TAVÕS
+Macapá/AP Mampituba/RS Maratá/RS
+Macaparana/PE Manacapuru/AM Marataizes/ES
+Macarani/BA Manaíra/PB Maraú/BA
+Macatuba/SP Manaquiri/AM Marau/RS
+Macau/RN Manari/PE Maravilha/AL
+Macaubal/SP Manaus/AM Maravilhas/MG
+Macaúbas/BA Mâncio Lima/AC Marcação/PB
+Macedônia/SP Mandaguaçu/PR Marcelândia/MT
+Maceió/AL Mandaguari/PR Marcelino Ramos/RS
+Machacalis/MG Mandirituba/PR Marcelino Vieira/RN
+Machadinho dV'Oeste/RO Manduri/SP Marcionílio Souza/BA
+Machadinho/RS Manfrinópolis/PR Marco/CE
+Machado/MG Manga/MG Marcolândia/PI
+—, Machados/PE Mangaratiba/RJ Marcos Parente/PI
+Macuco/RJ Mangueirinha/PR Marechal Cândido
+Macururé/BA Manhuaçu/MG Rondon/PR
+Madalena/CE Manhumirim/MG Marechal Deodoro/AL
+Madeiro/PI Manicoré/AM Marechal Floriano/ES
+Madre de Deus de Manoel Emídio/PI Marechal
+Minas/MG Manoel Ribas/PR Thaumaturgo/AC
+Madre de Deus/BA Manoel Urbano/AC Mari/PB
+Mãe dVÁgua/PB Manoel Viana/RS Maria da Fé/MG
+Mãe do Rio/PA Manoel Vitorino/BA Maria Helena/PR
+Maetinga/BA Mansidão/BA Marialva/PR
+Magalhães Barata/PA Mantena/MG Mariana Pimentel/RS
+Magalhães de Mantenópolis/ES Mariana/MG
+Almeida/MA Maquiné/RS Mariano Moro/RS
+Magda/SP Mar de Espanha/MG Marianópolis do
+Magé/RJ Mar Vermelho/AL Tocantins/TO
+Maiquinique/BA Mara Rosa/GO Mariápolis/SP
+Mairi/BA Maraã/AM Maribondo/AL
+ai Mairinque/SP Marabá Paulista/SP Maricá/RJ
+Mairiporã/SP Marabá/PA Marilac/MG
+Mairipotaba/GO Maracaçumé/MA Marilândia do Sul/PR
+Major Isidoro/AL Maracaí/SP Marilândia/ES
+Major Sales/RN Maracaju/MS Marilena/PR
+Malacacheta/MG Maracanã/PA Marília/SP
+Malhada de Pedras/BA Maracanaú/CE Mariluz/PR
+Malhada dos Bois/SE Maracás/BA Maringá/PR
+Malhada/BA Maragogi/AL Marinópolis/SP
+Malhador/SE Maragogipe/BA Mário Campos/MG
+Mallet/PR Maraial/PE Mariópolis/PR
+Malta/PB Marajá do Sena/MA Maripá de Minas/MG
+Mamanguape/PB Maranguape/CE Maripá/PR
+Mambaí/GO Maranhãozinho/MA Marituba/PA
+Mamborê/PR Marapanim/PA Marizópolis/PB
+Mamonas/MG Marapoama/SP Marliéria/MG
+42 - 69
+
+Proc. Nº 442600 UF /Do de
+Data: IM / Ob poll Fis: Ja Y ;
+end | Rubrica: UA
+a | Consórcio de informatica É . E qem do Estão
+am É q a | na Gestão Pública Municipal alo pn
+y 1 MZ, (e
+Marmeleiro/PR Matriz de Camaragibe/AL Minador do Negrão/AL |
+Marmelópolis/MG Matupá/MT Minas do Leão/RS
+Marques de Souza/RS Maturéia/PB Minas Novas/MG
+Marquinho/PR Matutina/MG Minduri/MG
+Martinho Campos/MG Mauá da Serra/PR Mineiros do Tietê/SP
+Martinópole/CE Mauá/SP Mineiros/GO
+Martinópolis/SP Maués/AM Ministro Andreazza/RO
+Martins Soares/MG Maurilândia do Mira Estrela/SP
+Martins/RN Tocantins/TO Mirabela/MG
+Maruim/SE Maurilândia/GO Miracatu/SP
+Marumbi/PR Mauriti/CE Miracema do
+Marzagão/GO Maxaranguape/RN Tocantins/TO
+Mascote/BA Maximiliano de Miracema/RJ
+ai Massapê do Piauí/P| Almeida/RS Mirador/MA
+Massapê/CE Mazagão/AP Mirador/PR
+Massaranduba/PB Medeiros Neto/BA Miradouro/MG
+Mata de São João/BA Medeiros/MG Miraguaí/RS
+Mata Grande/AL Medianeira/PR Miraí/MG
+Mata Roma/MA Medicilândia/PA Miraíma/CE
+Mata Verde/MG Medina/MG Miranda do Norte/MA
+Mata/RS Melgaço/PA Miranda/MS
+Matão/SP Mendes Pimentel/MG Mirandiba/PE
+Mataraca/PB Mendes/RJ Mirandópolis/SP
+Mateiros/TO Mendonça/SP Mirangaba/BA
+Matelândia/PR Mercedes/PR Miranorte/TO
+Materlândia/MG Mercês/MG Mirante da Serra/RO
+Mateus Leme/MG Meridiano/SP Mirante do
+Mathias Lobato/MG Meruoca/CE Paranapanema/SP
+Matias Barbosa/MG Mesópolis/SP Mirante/BA
+Matias Cardoso/MG Mesquita/MG Miraselva/PR
+Matias Olímpio/PI Mesquita/RJ Mirassol dVOeste/MT
+ai Matina/BA Messias Targino/RN Mirassol/SP
+Matinha/MA Messias/AL Mirassolândia/SP
+Matinhas/PB Miguel Alves/PI Miravânia/MG
+Matinhos/PR Miguel Calmon/BA Mirinzal/MA
+Matipó/MG Miguel Leão/PI Missal/PR
+Mato Castelhano/RS Miguel Pereira/R) Missão Velha/CE
+Mato Grosso/PB Miguelópolis/SP Mocajuba/PA
+Mato Leitão/RS Milagres do Mococa/SP
+Mato Queimado/RS Maranhão/MA Moeda/MG
+Mato Rico/PR Milagres/BA Moema/MG
+Mato Verde/MG Milagres/CE Mogeiro/PB
+Matões do Norte/MA Milhã/CE Mogi das Cruzes/SP
+Matões/MA Milton Brandão/PI Mogi Guaçu/SP
+Matos Costa/SC Mimoso de Goiás/GO Mogi Mirim/SP
+Matozinhos/MG Mimoso do Sul/ES Moiporá/GO
+Matrinchã/GO Minaçu/GO Moita Bonita/SE
+43 - 69
+
+Proc Nº JHo Doo [Hy/dogt
+Data: IM / Op Id Fls: Mg |
+E é | Consórcio de informática bra: EA y «g0O
+| q é | na Gestão Pública Municipal oo ps"
+1 Q Ç.
+Moju/PA Monte Santo do Motuca/SP o
+Mojuí dos Campos/PA Tocantins/TO Mozarlândia/GO
+Mombaça/CE Monte Santo/BA Muaná/PA
+Mombuca/SP Monte Sião/MG Mucajaí/RR
+Monção/MA Monteiro Lobato/SP Mucambo/CE
+Monções/SP Monteiro/PB Mucugê/BA
+Mongaguá/SP Monteirópolis/AL Muçumy/RS
+Monjolos/MG Montenegro/RS Mucuri/BA
+Monsenhor Gil/P| Montes Altos/MA Mucurici/ES
+Monsenhor Hipólito/PI Montes Claros de Muitos Capões/RS
+Monsenhor Paulo/MG Goiás/GO Muliterno/RS
+Monsenhor Tabosa/CE Montes Claros/MG Mulungu do Morro/BA
+Montadas/PB Montezuma/MG Mulungu/CE
+a Montalvânia/MG Montividiu do Norte/GO Mulungu/PB
+Montanha/ES Montividiu/GO Mundo Novo/BA
+Montanhas/RN Morada Nova de Mundo Novo/GO
+Montauri/RS Minas/MG Mundo Novo/MS
+Monte Alegre de Morada Nova/CE Munhoz de Melo/PR
+Goiás/GO Moraújo/CE Munhoz/MG
+Monte Alegre de Moreilândia/PE Muniz Ferreira/BA
+Minas/MG Moreira Sales/PR Muniz Freire/ES
+Monte Alegre de Moreno/PE Muquém de São
+Sergipe/SE Mormaço/RS Francisco/BA
+Monte Alegre do Piauí/P| Morpará/BA Muqui/ES
+Monte Alegre do Sul/SP Morretes/PR Muriaé/MG
+Monte Alegre dos Morrinhos do Sul/RS Muribeca/a (SE
+Campos/RS Morrinhos/CE Murici dos Portelas/PI
+Monte Alegre/PA Morrinhos/GO Murici/AL
+Monte Alegre/RN Morro Agudo de Muricilândia/TO
+Monte Alto/SP Goiás/GO Muritiba/BA
+Monte Aprazível/SP Morro Agudo/SP Murutinga do Sul/SP
+“il Monte Azul Paulista/SP Morro Cabeça no Mutuípe/BA
+Monte Azul/MG Tempo/PI Mutum/MG
+Monte Belo do Sul/RS Morro da Garça/MG Mutunópolis/GO
+Monte Belo/MG Morro do Chapéu do Muzambinho/MG
+Monte Carmelo/MG Piauí/PI Nacip Raydan/MG
+Monte Castelo/SP Morro do Chapéu/BA Nantes/SP
+Monte das Morro do Pilar/MG Nanuque/MG
+Gameleiras/RN Morro Grande/SC Não-Me-Toque/RS
+Monte do Carmo/TO Morro Redondo/RS Naque/MG
+Monte Formoso/MG Morro Reuter/RS Narandiba/SP
+Monte Horebe/PB Morros/MA Natal/RN
+Monte Mor/SP Mortugaba/BA Natalândia/MG
+Monte Negro/RO Morungaba/SP Natércia/MG
+Monte Santo de Mossâmedes/GO Natividade da Serra/SP
+Minas/MG Mossoró/RN Natividade/R]J
+Mostardas/RS Natividade/TO
+44-69
+
+Proc.Nº 140000 [44 PLATA
+Data: My Oba Es MM
+( PMPA Rubrica; 980
+pe | Consórcio de Informática a [rofe)
+or iga | na Gestão Pública Municipal 1?
+Vegas
+Natuba/PB Nossa Senhora do Nova Granada/SP
+Naviraí/MS Socorro/SE Nova Guarita/MT
+Nazaré da Mata/PE Nossa Senhora dos Nova Guataporanga/SP
+Nazaré do Piauí/PI Remédios/PI Nova Hartz/RS
+Nazaré Paulista/SP Nova Aliança do lIvaí/PR Nova Ibiá/BA
+Nazaré/BA Nova Aliança/SP Nova Iguaçu de Goiás/GO
+Nazaré/TO Nova Alvorada do Sul/MS Nova Iguaçu/RJ
+Nazareno/MG Nova Alvorada/RS Nova Independência/SP
+Nazarezinho/PB Nova América da Nova lorque/MA
+Nazária/P| Colina/PR Nova Ipixuna/PA
+Nazário/GO Nova América/GO Nova Itarana/BA
+Neópolis/SE Nova Andradina/MS Nova Lacerda/MT
+Nepomuceno/MG Nova Araçá/RS Nova Laranjeiras/PR
+ds, Nerópolis/GO Nova Aurora/GO Nova Lima/MG
+Neves Paulista/SP Nova Aurora/PR Nova Londrina/PR
+Nhamundá/AM Nova Bandeirantes/MT Nova Luzitânia/SP
+Nhandeara/SP Nova Bassano/RS Nova Mamoré/RO
+Nicolau Vergueiro/RS Nova Belém/MG Nova Marilândia/MT
+Nilo Peçanha/BA Nova Boa Vista/RS Nova Maringá/MT
+Nilópolis/RJ Nova Brasilândia Nova Módica/MG
+Nina Rodrigues/MA dVOeste/RO Nova Monte Verde/MT
+Ninheira/MG Nova Brasilândia/MT Nova Mutum/MT
+Nioaque/MS Nova Bréscia/RS Nova Nazaré/MT
+Nipoã/SP Nova Campina/SP Nova Odessa/SP
+Niquelândia/GO Nova Canaã do Norte/MT Nova Olímpia/MT
+Nísia Floresta/RN Nova Canaã Paulista/SP Nova Olímpia/PR
+Niterói/RJ Nova Canaã/BA Nova Olinda do
+Nobres/MT Nova Candelária/RS Maranhão/MA
+Nonoai/RS Nova Cantu/PR Nova Olinda do
+Nordestina/BA Nova Castilho/SP Norte/AM
+Normandia/RR Nova Colinas/MA Nova Olinda/CE
+ó. Nortelândia/MT Nova Crixás/GO Nova Olinda/PB
+Nossa Senhora Nova Cruz/RN Nova Olinda/TO
+Aparecida/SE Nova Era/MG Nova Pádua/RS
+Nossa Senhora da Nova Esperança do Nova Palma/RS
+Glória/SE Piriá/PA Nova Palmeira/PB
+Nossa Senhora das Nova Esperança do Nova Petrópolis/RS
+Dores/SE Sudoeste/PR Nova Ponte/MG
+Nossa Senhora das Nova Esperança do Nova Porteirinha/MG
+Graças/PR Sul/RS Nova Prata do Iguaçu/PR
+Nossa Senhora de Nova Esperança/PR Nova Prata/RS
+Lourdes/SE Nova Europa/SP Nova Ramada/RS
+Nossa Senhora de Nova Fátima/BA Nova Redenção/BA
+Nazaré/PI Nova Fátima/PR Nova Resende/MG
+Nossa Senhora do Nova Floresta/PB Nova Roma do Sul/RS
+Livramento/MT Nova Friburgo/RJ Nova Roma/GO
+Nova Glória/GO Nova Rosalândia/TO
+45 - 69
+
+Proc. Nº [número omitido]!
+Data: My girdd esdon / O
+us ÍA | Gero isca TP
+Nova Russas/CE Novo Repartimento/PA Orizânia/MG
+Nova Santa Bárbara/PR Novo Santo Antônio/MT Orizona/GO
+Nova Santa Helena/MT Novo Santo Antônio/PI Orlândia/SP
+Nova Santa Rita/Pl Novo São Joaquim/MT Orobó/PE
+Nova Santa Rita/RS Novo Tiradentes/RS Orocó/PE
+Nova Santa Rosa/PR Novo Triunfo/BA Orós/CE
+Nova Serrana/MG Novo Xingu/RS Ortigueira/PR
+Nova Soure/BA Novorizonte/MG Osasco/SP
+Nova Tebas/PR Nuporanga/SP Oscar Bressane/SP
+Nova Timboteua/PA Óbidos/PA Osório/RS
+Nova Ubiratã/MT Ocara/CE Osvaldo Cruz/SP
+Nova União/MG Ocauçu/SP Ourém/PA
+Nova União/RO Oeiras do Pará/PA Ouriçangas/BA
+—, Nova Venécia/ES Oeiras/PI Ouricuri/PE
+Nova Veneza/GO Oiapoque/AP Ourilândia do Norte/PA
+Nova Viçosa/BA Olaria/MG Ourinhos/SP
+Nova Xavantina/MT Óleo/SP Ourizona/PR
+Novais/SP Olho dVÁgua das Ouro Branco/AL
+Novo Acordo/TO Cunhãs/MA Ouro Branco/MG
+Novo Airão/AM Olho dVÁgua das Ouro Branco/RN
+Novo Alegre/TO Flores/AL Ouro Fino/MG
+Novo Aripuanã/AM Olho dVÁgua do Ouro Preto do Oeste/RO
+Novo Barreiro/RS Borges/RN Ouro Preto/MG
+Novo Brasil/GO Olho dVÁgua do Ouro Velho/PB
+Novo Cabrais/RS Casado/AL Ouro Verde de Goiás/GO
+Novo Cruzeiro/MG Olho dVvÁgua do Piauí/PI Ouro Verde de Minas/MG
+Novo Gama/GO Olho dv Água Grande/AL Ouro Verde do Oeste/PR
+Novo Hamburgo/RS Olho dVÁgua/PB Ouro Verde/SP
+Novo Horizonte do Olhos/dVÁgua/MG Ouroeste/SP
+Norte/MT Olímpia/SP Ourolândia/BA
+Novo Horizonte do Olímpio Noronha/MG Ouvidor/GO
+á Oeste/RO Olinda Nova do Pacaembu/SP
+Novo Horizonte do Maranhão/MA Pacajá/PA
+Sul/MS Olinda/PE Pacajus/CE
+Novo Horizonte/BA Olindina/BA Pacaraima/RR
+Novo Horizonte/SP Olivedos/PB Pacatuba/CE
+Novo Itacolomi/PR Oliveira de Fátima/TO Pacatuba/SE
+Novo Jardim/TO Oliveira dos Brejinhos/BA Paço do Lumiar/MA
+Novo Lino/AL Oliveira Fortes/MG Pacoti/CE
+Novo Machado/RS Oliveira/MG Pacujá/CE
+Novo Mundo/MT Olivença/AL Padre Bernardo/GO
+Novo Oriente de Onça de Pitangui/MG Padre Carvalho/MG
+Minas/MG Onda Verde/SP Padre Marcos/PI
+Novo Oriente do Piauí/P| Oratórios/MG Padre Paraiso/MG
+Novo Oriente/CE Oriente/SP Paes Landim/PI
+Novo Planalto/GO Orindiúva/SP Pai Pedro/MG
+Novo Progresso/PA Oriximiná/PA Paiçandu/PR
+46 - 69
+
+Proc. Nº —Íêpodo 43 /d0 3 ga
+Data; [MU j OB y Fis à Pa
+E " | Consórcio de Informático Rubrica; É Ú
+Ê g a | na Gestão Pública Municipal em
+e pat
+
+Paim Filho/RS Paquetá/PI Parecis/RO
+Paineiras/MG Pará de Minas/MG Parelhas/RN
+Pains/MG Paracambi/RJ Pariconha/AL
+Paiva/MG Paracatu/MG Parintins/AM
+Pajeú do Piauí/PI Paracuru/CE Paripiranga/BA
+Palestina de Goiás/GO Paragominas/PA Paripueira/AL
+Palestina do Pará/PA Paraguaçu Paulista/SP Pariquera/Açu/SP
+Palestina/AL Paraguaçu/MG Parisi/SP
+Palestina/SP Paraí/RS Parnaguá/PI
+Palhano/CE Paraíba do Sul/RJ Parnaiba/PI
+Palma/MG Paraibano/MA Parnamirim/PE
+Palmácia/CE Paraibuna/SP Parnamirim/RN
+Palmares do Sul/RS Paraipaba/CE Parnarama/MA
+
+a Palmares Paulista/SP Paraíso das Águas/MS Parobé/RS
+Palmares/PE Paraíso do Norte/PR Passa Tempo/MG
+Palmas de Monte Alto/BA Paraíso do Sul/RS Passabém/MG
+Palmas/PR Paraíso do Tocantins/TO Passa-e-Fica/RN
+Palmas/TO Paraíso/SP Passagem Franca do
+Palmeira dVOeste/SP Paraisópolis/MG Piauí/PI
+Palmeira das Missões/RS Parambu/CE Passagem Franca/MA
+Palmeira do Piauí/P| Paramirim/BA Passagem/PB
+Palmeira dos Índios/AL Paramoti/CE Passagem/RN
+Palmeira/PR Paraná/RN Passa-Quatro/MG
+Palmeirais/PI Paranã/TO Passa-Sete/RS
+Palmeirândia/MA Paranacity/PR Passa-Vinte/MG
+Palmeirante/TO Paranaguá/PR Passira/PE
+Palmeiras de Goiás/GO Paranaíba/MS Passo de Camaragibe/AL
+Palmeiras do Paranaiguara/GO Passo do Sobrado/RS
+Tocantins/TO Paranaita/MT Passo Fundo/RS
+Palmeiras/BA Paranapanema/SP Passos/MG
+Palmeirina/PE Paranapoema/PR Pastos Bons/MA
+
+á Palmeirópolis/TO Paranapuã/SP Patis/MG
+Palmelo/GO Paranatama/PE Pato Bragado/PR
+Palminópolis/GO Paranatinga/MT Pato Branco/PR
+Palmital/PR Paranavai/PR Patos de Minas/MG
+Palmital/SP Paranhos/MS Patos do Piaui/PI
+Palmitinho/RS Paraopeba/MG Patos/PB
+Palmópolis/MG Parapuã/SP Patrocínio do Muriaé/MG
+Palotina/PR Parari/PB Patrocínio Paulista/SP
+Panamá/GO Paratinga/BA Patrocínio/MG
+Panambi/RS Paraty/RJ Patu/RN
+Pancas/ES Paraú/RN Paty do Alferes/RJ
+Panelas/PE Parauapebas/PA Pau Brasil/BA
+Panorama/SP Paraúna/GO Pau dos Ferros/RN
+Pantano Grande/RS Parazinho/RN Pau/dVArco do Piauí/PI
+Pão de Açúcar/AL Pardinho/SP Pau/dV' Arco/PA
+Papagaios/MG Pareci Novo/RS Pau/dVArco/TO
+
+47-69
+
+Proc. Nº SAD 000 UA 7201 Pé
+Data; IM DG, aj Fls; ad
+( pe | Consórcio de Informática pat: Ea qqu o
+Paudalho/PE Pedras de Maria da Pérola/PR
+Pauini/AM Cruz/MG Perolândia/GO
+Paula Cândido/MG Pedregulho/SP Peruíbe/SP
+Paula Freitas/PR Pedreira/SP Pescador/MG
+Paulicéia/SP Pedreiras/MA Pesqueira/PE
+Paulínia/SP Pedrinhas Paulista/SP Petrolândia/PE
+Paulino Neves/MA Pedrinhas/SE Petrolina de Goiás/GO
+Paulista/PB Pedrinópolis/MG Petrolina/PE
+Paulista/PE Pedro Afonso/TO Petrópolis/RJ
+Paulistana/PI Pedro Alexandre/BA Piaçabuçu/AL
+Paulistânia/SP Pedro Avelino/RN Piacatu/SP
+Paulistas/MG Pedro Canário/ES Piancó/PB
+Paulo Afonso/BA Pedro de Toledo/SP Piatã/BA
+E Paulo Bento/RS Pedro do Rosário/MA Piau/MG
+Paulo de Faria/SP Pedro Gomes/MS Picada Café/RS
+Paulo Frontin/PR Pedro II/PI Piçarra/PA
+Paulo Jacinto/AL Pedro Laurentino/PI Picos/PI
+Paulo Ramos/MA Pedro Leopoldo/MG Picuí/PB
+Pavão/MG Pedro Osório/RS Piedade de Caratinga/MG
+Paverama/RS Pedro Régis/PB Piedade de Ponte
+Pavussu/PI Pedro Teixeira/MG Nova/MG
+Pé de Serra/BA Pedro Velho/RN Piedade do Rio
+Peabiru/PR Peixe/TO Grande/MG
+Peçanha/MG Peixe-Boi/PA Piedade dos Gerais/MG
+Pederneiras/SP Peixoto de Azevedo/MT Piedade/SP
+Pedra Azul/MG Pejuçara/RS Piên/PR
+Pedra Bela/SP Pelotas/RS Pilão Arcado/BA
+Pedra Bonita/MG Penaforte/CE Pilar de Goiás/GO
+Pedra Branca do Penalva/MA Pilar do Sul/SP
+Amapari/AP Penápolis/SP Pilar/AL
+Pedra Branca/CE Pendências/RN Pilar/PB
+e Pedra Branca/PB Penedo/AL Pilões/PB
+Pedra do Anta/MG Pentecoste/CE Pilões/RN
+Pedra do Indaiá/MG Pequeri/MG Pilôezinhos/PB
+Pedra Dourada/MG Pequi/MG Pimenta Bueno/RO
+Pedra Grande/RN Pequizeiro/TO Pimenta/MG
+Pedra Lavrada/PB Perdigão/MG Pimenteiras do Oeste/RO
+Pedra Mole/SE Perdizes/MG Pimenteiras/PI
+Pedra Preta/MT Perdões/MG Pindaí/BA
+Pedra Preta/RN Pereira Barreto/SP Pindamonhangaba/SP
+Pedra/PE Pereiras/SP Pindaré/Mirim/MA
+Pedralva/MG Pereiro/CE Pindoba/AL
+Pedranópolis/SP Peri Mirim/MA Pindobaçu/BA
+Pedrão/BA Periquito/MG Pindorama do
+Pedras Altas/RS Peritoró/MA Tocantins/TO
+Pedras de Fogo/PB Perobal/PR Pindorama/SP
+Pérola dVOeste/PR Pindoretama/CE
+48 - 69
+
+ProcNe L8O popuia/gog
+Data VU DÊL OL eo dD3
+" ep Rubrica: o)
+” | Consórcio de informática h
+q É a | na Gestão Público Municipal
+q | Le sã j Ok)
+Pingo dVAgua/MG Piraquara/PR Poconé/MT
+Pinhais/PR Piraquê/TO Poços de Caldas/MG
+Pinhal da Serra/RS Pirassununga/SP Pocrane/MG
+Pinhal de São Bento/PR Piratini/RS Pojuca/BA
+Pinhal Grande/RS Piratininga/SP Poloni/SP
+Pinhal/RS Piraúba/MG Pombal/PB
+Pinhalão/PR Pirenópolis/GO Pombos/PE
+Pinhalzinho/SP Pires do Rio/GO Pompeia/SP
+Pinhão/PR Pires Ferreira/CE Pompéu/MG
+Pinhão/SE Piripá/BA Pongai/SP
+Pinheiral/RJ Piripiri/PI Ponta de Pedras/PA
+Pinheirinho do Vale/RS Piritiba/BA Ponta Grossa/PR
+Pinheiro Machado/RS Pirpirituba/PB Ponta Porã/MS
+pa Pinheiro/MA Pitanga/PR Pontal do Araguaia/MT
+Pinheiros/ES Pitangueiras/PR Pontal do Paraná/PR
+Pintadas/BA Pitangueiras/SP Pontal/SP
+Pinto Bandeira/RS Pitangui/MG Pontalina/GO
+Pintópolis/MG Pitimbu/PB Pontalinda/SP
+Pio IX/PI Pium/TO Pontão/RS
+Pio XII/MA Piúma/ES Ponte Alta do Bom
+Piquerobi/SP Piumhi/MG Jesus/TO
+Piquet Carneiro/CE Placas/PA Ponte Alta do
+Piquete/SP Plácido de Castro/AC Tocantins/TO
+Piracaia/SP Planaltina do Paraná/PR Ponte Branca/MT
+Piracanjuba/GO Planaltina/GO Ponte Nova/MG
+Piracema/MG Planaltino/BA Ponte Preta/RS
+Piracicaba/SP Planalto da Serra/MT Pontes e Lacerda/MT
+Piracuruca/PI Planalto/BA Pontes Gestal/SP
+Piraí do Norte/BA Planalto/PR Ponto Belo/ES
+Piraí do Sul/PR Planalto/RS Ponto Chique/MG
+Piraí/RJ Planalto/SP Ponto dos Volantes/MG
+Piraju/SP Planura/MG Ponto Novo/BA
+Pirajuba/MG Platina/SP Populina/SP
+Pirajuí/SP Poá/SP Poranga/CE
+Pirambu/SE Poção de Pedras/MA Porangaba/SP
+Piranga/MG Poção/PE Porangatu/GO
+Pirangi/SP Pocinhos/PB Porciúncula/RJ
+Piranguçu/MG Poço Branco/RN Porecatu/PR
+Piranguinho/MG Poço Dantas/PB Portalegre/RN
+Piranhas/AL Poço das Antas/RS Portão/RS
+Piranhas/GO Poço das Trincheiras/AL Porteirão/GO
+Pirapemas/MA Poço de José de Porteiras/CE
+Pirapetinga/MG Moura/PB Porteirinha/MG
+Pirapó/RS Poço Fundo/MG Portel/PA
+Pirapora do Bom Jesus/SP Poço Redondo/SE Portelândia/GO
+Pirapora/MG Poço Verde/SE Porto Acre/AC
+Pirapozinho/SP Poções/BA
+49 - 69
+
+Proc.No ÃO 000 AY /Bpót
+Datas 14 06) ol. Fis: do SO
+pesa Rubrica; A ne ida 19 On?
+a | Consórcio de Informática coesa sem JP (emp MA
+t | é à | na Gestão Pública Municipal & FA :
+
+Porto Alegre do Pracinha/SP Primavera/PA
+Norte/MT Pracuuba/AP Primavera/PE
+Porto Alegre do Piauí/P| Prado Ferreira/PR Primeira Cruz/MA
+Porto Alegre do Prado/BA Primeiro de Maio/PR
+Tocantins/TO Pradópolis/SP Princesa Isabel/PB
+Porto Amazonas/PR Prados/MG Professor Jamil/GO
+Porto Barreiro/PR Praia Grande/SC Progresso/RS
+Porto Calvo/AL Praia Grande/SP Promissão/SP
+Porto da Folha/SE Praia Norte/TO Propriá/SE
+Porto de Moz/PA Prainha/PA Protásio Alves/RS
+Porto de Pedras/AL Pranchita/PR Prudente de Morais/MG
+Porto do Mangue/RN Prata do Piauí/PI Prudentópolis/PR
+Porto dos Gaúchos/MT Prata/MG Pugmil/TO
+
+a Porto Esperidião/MT Prata/PB Pureza/RN
+Porto Estrela/MT Pratânia/SP Putinga/RS
+Porto Feliz/SP Pratápolis/MG Puxinanã/PB
+Porto Ferreira/SP Pratinha/MG Quadra/SP
+Porto Firme/MG Presidente Alves/SP Quaraí/RS
+Porto Franco/MA Presidente Bernardes/MG Quartel Geral/MG
+Porto Grande/AP Presidente Bernardes/SP Quarto Centenário/PR
+Porto Lucena/RS Presidente Castelo Quatá/SP
+Porto Mauá/RS Branco/PR Quatiguá/PR
+Porto Murtinho/MS Presidente Dutra/BA Quatipuru/PA
+Porto Nacional/TO Presidente Dutra/MA Quatis/RJ
+Porto Real do Colégio/AL Presidente Epitácio/SP Quatro Barras/PR
+Porto Real/RJ Presidente Figueiredo/AM Quatro Irmãos/RS
+Porto Rico do Presidente Jânio Quatro Pontes/PR
+Maranhão/MA Quadros/BA Quebrangulo/AL
+Porto Rico/PR Presidente Juscelino/MA Quedas do Iguaçu/PR
+Porto Seguro/BA Presidente Juscelino/MG Queimada Nova/PI
+Porto Velho/RO Presidente Kennedy/ES Queimadas/BA
+
+ai Porto Vera Cruz/RS Presidente Kennedy/TO Queimadas/PB
+Porto Vitória/PR Presidente Queimados/RJ
+Porto Walter/AC Kubitschek/MG Queiroz/SP
+Porto Xavier/RS Presidente Lucena/RS Queluz/SP
+Porto/PI Presidente Médici/MA Queluzito/MG
+Posse/GO Presidente Médici/RO Querência do Norte/PR
+Poté/MG Presidente Olegário/MG Querência/MT
+Potengi/CE Presidente Prudente/SP Quevedos/RS
+Potim/SP Presidente Sarney/MA Quijingue/BA
+Potiraguá/BA Presidente Tancredo Quinta do Sol/PR
+Potirendaba/SP Neves/BA Quintana/SP
+Potiretama/CE Presidente Vargas/MA Quinze de Novembro/RS
+Pouso Alegre/MG Presidente Venceslau/SP Quipapá/PE
+Pouso Alto/MG Primavera de Quirinópolis/GO
+Pouso Novo/RS Rondônia/RO Quissamã/RJ
+Poxoréu/MT Primavera do Leste/MT Quitandinha/PR
+50 - 69
+
+jProcne 149 000 UA / dar
+| Date: UOL dl Fis: dOS
+ad Rubrica; | O
+GE se Pres
+
+Quiterianópolis/CE Restinga Seca/RS Ribeirãozinho/MT
+Quixaba/PB Restinga/SP Ribeiro Gonçalves/PI
+Quixaba/PE Retirolândia/BA Ribeirópolis/SE
+Quixabeira/BA Riachão das Neves/BA Rifaina/SP
+Quixadá/CE Riachão do Bacamarte/PB Rincão/SP
+Quixelô/CE Riachão do Dantas/SE Rinópolis/SP
+Quixeramobim/CE Riachão do Jacuípe/BA Rio Acima/MG
+Quixeré/CE Riachão do Poço/PB Rio Azul/PR
+Rafael Fernandes/RN Riachão/MA Rio Bananal/ES
+Rafael Godeiro/RN Riachão/PB Rio Bom/PR
+Rafael Jambeiro/BA Riachinho/MG Rio Bonito do Iguaçu/PR
+Rafard/SP Riachinho/TO Rio Bonito/R)
+Ramilândia/PR Riacho da Cruz/RN Rio Branco do lIvai/PR
+
+dm Rancharia/SP Riacho das Almas/PE Rio Branco do Sul/PR
+Rancho Alegre Riacho de Santana/BA Rio Branco/MT
+dN'Oeste/PR Riacho de Santana/RN Rio Brilhante/MS
+Rancho Alegre/PR Riacho de Santo Rio Casca/MG
+Raposa/MA Antônio/PB Rio Claro/RJ
+Raposos/MG Riacho dos Cavalos/PB Rio Claro/SP
+Raul Soares/MG Riacho dos Rio Crespo/RO
+Realeza/PR Machados/MG Rio da Conceição/TO
+Rebouças/PR Riacho Frio/PI Rio das Flores/RJ
+Recife/PE Riachuelo/RN Rio das Ostras/RJ
+Recreio/MG Riachuelo/SE Rio das Pedras/SP
+Recursolândia/TO Rialma/GO Rio de Contas/BA
+Redenção da Serra/SP Rianápolis/GO Rio de Janeiro/RJ
+Redenção do Gurguéia/PI Ribamar Fiquene/MA Rio do Antônio/BA
+Redenção/CE Ribas do Rio Pardo/MS Rio do Fogo/RN
+Redenção/PA Ribeira do Amparo/BA Rio do Pires/BA
+Redentora/RS Ribeira do Piauí/PI Rio do Prado/MG
+Reduto/MG Ribeira do Pombal/BA Rio Doce/MG
+
+ê Regeneração/PI Ribeira/SP Rio dos Bois/TO
+Regente Feijó/SP Ribeirão Bonito/SP Rio dos Índios/RS
+Reginópolis/SP Ribeirão Branco/SP Rio Espera/MG
+Registro/SP Ribeirão Cascalheira/MT Rio Formoso/PE
+Relvado/RS Ribeirão Claro/PR Rio Grande da Serra/SP
+Remanso/BA Ribeirão Corrente/SP Rio Grande do Piauí/PI
+Remígio/PB Ribeirão das Neves/MG Rio Grande/RS
+Renascença/PR Ribeirão do Largo/BA Rio Largo/AL
+Reriutaba/CE Ribeirão do Pinhal/PR Rio Manso/MG
+Resende Costa/MG Ribeirão do Sul/SP Rio Maria/PA
+Resende/RJ Ribeirão dos Índios/SP Rio Negro/MS
+Reserva do Cabaçal/MT Ribeirão Grande/SP Rio Negro/PR
+Reserva do Iguaçu/PR Ribeirão Pires/SP Rio Novo do Sul/ES
+Reserva/PR Ribeirão Preto/SP Rio Novo/MG
+Resplendor/MG Ribeirão Vermelho/MG Rio Paranaíba/MG
+Ressaquinha/MG Ribeirão/PE Rio Pardo de Minas/MG
+
+51-69
+
+Proc.Nº 140000 Ar LD +
+Det JOG AL Fis DOE / À
+di pa US Rubrica: 3
+( ” | Consórcio de Informática =
+Quid iga | na Gestão Pública Municipal v es
+Rio Pardo/RS Roteiro/AL Salvaterra/PA
+Rio Piracicaba/MG Rubelita/MG Sambaiba/MA
+Rio Pomba/MG Rubiácea/SP Sampaio/TO
+Rio Preto da Eva/AM Rubiataba/GO Sananduva/RS
+Rio Preto/MG Rubim/MG Sanclerlândia/GO
+Rio Quente/GO Rubinéia/SP Sandolândia/TO
+Rio Real/BA Rurópolis/PA Sandovalina/SP
+Rio Sono/TO Russas/CE Sanharó/PE
+Rio Tinto/PB Ruy Barbosa/BA Santa Adélia/SP
+Rio Verde de Mato Ruy Barbosa/RN Santa Albertina/SP
+Grosso/MS Sabará/MG Santa Amélia/PR
+Rio Verde/GO Sabáudia/PR Santa Bárbara
+Rio Vermelho/MG Sabino/SP dVOeste/SP
+ma Riolândia/SP Sabinópolis/MG Santa Bárbara de
+Riozinho/RS Saboeiro/CE Goiás/GO
+Ritápolis/MG Sacramento/MG Santa Bárbara do
+Riversul/SP Sagrada Família/RS Leste/MG
+Roca Sales/RS Sagres/SP Santa Bárbara do Monte
+Rochedo de Minas/MG Sairé/PE Verde/MG
+Rochedo/MS Saldanha Marinho/RS Santa Bárbara do Pará/PA
+Rodeio Bonito/RS Sales Oliveira/SP Santa Bárbara do Sul/RS
+Rodeiro/MG Sales/SP Santa Bárbara do
+Rodelas/BA Salesópolis/SP Tugúrio/MG
+Rodolfo Fernandes/RN Salgadinho/PB Santa Bárbara/BA
+Rodrigues Alves/AC Salgadinho/PE Santa Bárbara/MG
+Rolador/RS Salgado de São Félix/PB Santa Branca/SP
+Rolândia/PR Salgado Filho/PR Santa Brígida/BA
+Rolante/RS Salgado/SE Santa Carmem/MT
+Rolim de Moura/RO Salgueiro/PE Santa Cecília do Pavão/PR
+Romaria/MG Salinas da Margarida/BA Santa Cecília do Sul/RS
+Roncador/PR Salinas/MG Santa Cecília/PB
+Ronda Alta/RS Salinópolis/PA Santa Clara dVOeste/SP
+Rondinha/RS Salitre/CE Santa Clara do Sul/RS
+Rondolândia/MT Salmourão/SP Santa Cruz Cabrália/BA
+Rondon do Pará/PA Saloá/PE Santa Cruz da Baixa
+Rondon/PR Saltinho/SC Verde/PE
+Rondonópolis/MT Saltinho/SP Santa Cruz da
+Roque Gonzales/RS Salto da Divisa/MG Conceição/SP
+Rorainópolis/RR Salto de Pirapora/SP Santa Cruz da
+Rosana/SP Salto do Céu/MT Esperança/SP
+Rosário da Limeira/MG Salto do Itararé/PR Santa Cruz da Vitória/BA
+Rosário do Catete/SE Salto do Jacuí/RS Santa Cruz das
+Rosário do Ivaí/PR Salto do Lontra/PR Palmeiras/SP
+Rosário do Sul/RS Salto Grande/SP Santa Cruz de Goiás/GO
+Rosário Oeste/MT Salto/SP Santa Cruz de Minas/MG
+Rosário/MA Salvador das Missões/RS Santa Cruz de Monte
+Roseira/SP Salvador do Sul/RS Castelo/PR
+52 - 69
+
+Data; VA Ob / O Fis, J0%
+di Rubrica; (E (2 /|
+dia | St Fo
+ÇIO na
+
+Santa Cruz de Salinas/MG Santa Izabel do Oeste/PR Santa Rita de Caldas/MG -
+Santa Cruz do Arari/PA Santa Juliana/MG Santa Rita de Cássia/BA
+Santa Cruz do Santa Leopoldina/ES Santa Rita de
+Capibaribe/PE Santa Lúcia/PR Ibitipoca/MG
+Santa Cruz do Santa Lúcia/SP Santa Rita de
+Escalvado/MG Santa Luz/PI Jacutinga/MG
+Santa Cruz do Piauí/PI Santa Luzia dVOeste/RO Santa Rita de Minas/MG
+Santa Cruz do Rio Santa Luzia do Itanhy/SE Santa Rita do
+Pardo/SP Santa Luzia do Norte/AL Araguaia/GO
+Santa Cruz do Sul/RS Santa Luzia do Para/PA Santa Rita do Itueto/MG
+Santa Cruz do Xingu/MT Santa Luzia do Paruá/MA Santa Rita do Novo
+Santa Cruz dos Santa Luzia/BA Destino/GO
+Milagres/PI Santa Luzia/MA Santa Rita do Pardo/MS
+
+— Santa Cruz/PB Santa Luzia/MG Santa Rita do Passa
+Santa Cruz/PE Santa Luzia/PB Quatro/SP
+Santa Cruz/RN Santa Margarida do Santa Rita do Sapucaíi/MG
+Santa Efigênia de Sul/RS Santa Rita do
+Minas/MG Santa Margarida/MG Tocantins/TO
+Santa Ernestina/SP Santa Maria da Boa Santa Rita do
+Santa Fé de Goiás/GO Vista/PE Trivelato/MT
+Santa Fé de Minas/MG Santa Maria da Serra/SP Santa Rita/MA
+Santa Fé do Araguaia/TO Santa Maria da Vitória/BA Santa Rita/PB
+Santa Fé do Sul/SP Santa Maria das Santa Rosa da Serra/MG
+Santa Fé/PR Barreiras/PA Santa Rosa de Goiás/GO
+Santa Filomena do Santa Maria de Santa Rosa de Lima/SE
+Maranhão/MA Itabira/MG Santa Rosa de Viterbo/SP
+Santa Filomena/PE Santa Maria de Jetibá/ES Santa Rosa do Piauí/P|
+Santa Filomena/PI Santa Maria do Santa Rosa do Purus/AC
+Santa Gertrudes/SP Cambucá/PE Santa Rosa do
+Santa Helena de Santa Maria do Herval/RS Tocantins/TO
+Goiás/GO Santa Maria do Oeste/PR Santa Rosa/RS
+
+E Santa Helena de Santa Maria do Pará/PA Santa Salete/SP
+Minas/MG Santa Maria do Salto/MG Santa Teresa/ES
+Santa Helena/MA Santa Maria do Santa Teresinha/BA
+Santa Helena/PB Suaçuí/MG Santa Teresinha/PB
+Santa Helena/PR Santa Maria do Santa Tereza de Goiás/GO
+Santa Helena/SC Tocantins/TO Santa Tereza do Oeste/PR
+Santa Inês/BA Santa Maria Madalena/RJ Santa Tereza do
+Santa Inês/MA Santa Maria/RN Tocantins/TO
+Santa Inês/PB Santa Maria/RS Santa Tereza/RS
+Santa Inês/PR Santa Mariana/PR Santa Terezinha de
+Santa Isabel do Ivaí/PR Santa Mercedes/SP Goiás/GO
+Santa Isabel do Pará/PA Santa Mônica/PR Santa Terezinha de
+Santa Isabel do Rio Santa Quitéria do Itaipu/PR
+Negro/AM Maranhão/MA Santa Terezinha do
+Santa Isabel/GO Santa Quitéria/CE Tocantins/TO
+Santa Isabel/SP Santa Rita dVOeste/SP Santa Terezinha/MT
+
+53-69
+
+Procne JD oa? jus ode |
+Data; 14,06) LOM Fls: Jof
+( no “= | Consórcio de Informática Rubica; Da 4 «vao Sm S! y
+or | q ck | aa Gestão Pública Municipal j À = e
+' 1 ANO N
+1 em at:
+Santa Terezinha/PE Santo Amaro das Santo Antônio do 2 No
+Santa Vitória do Brotas/SE Jardim/SP
+Palmar/RS Santo Amaro do Santo Antônio do
+Santa Vitória/MG Maranhão/MA Leste/MT
+Santaluz/BA Santo Amaro/BA Santo Antônio do
+Santana da Boa Vista/RS Santo Anastácio/SP Leverger/MT
+Santana da Ponte Santo André/PB Santo Antônio do
+Pensa/SP Santo André/SP Monte/MG
+Santana da Vargem/MG Santo Ângelo/RS Santo Antônio do
+Santana de Santo Antônio da Palma/RS
+Cataguases/MG Alegria/SP Santo Antônio do
+Santana de Mangueira/PB Santo Antônio da Paraíso/PR
+Santana de Parnaíba/SP Barra/GO Santo Antônio do
+E Santana de Pirapama/MG Santo Antônio da Pinhal/SP
+Santana do Acaraú/CE Patrulha/RS Santo Antônio do
+Santana do Araguaia/PA Santo Antônio da Planalto/RS
+Santana do Cariri/CE Platina/PR Santo Antônio do
+Santana do Deserto/MG Santo Antônio das Retiro/MG
+Santana do Missões/RS Santo Antônio do Rio
+Garambéu/MG Santo Antônio de Abaixo/MG
+Santana do Ipanema/AL Goiás/GO Santo Antônio do
+Santana do Itararé/PR Santo Antônio de Sudoeste/PR
+Santana do Jacaré/MG Jesus/BA Santo Antônio do
+Santana do Santo Antônio de Tauá/PA
+Livramento/RS Lisboa/P| Santo Antônio dos
+Santana do Santo Antônio de Lopes/MA
+Manhuaçu/MG Pádua/RJ Santo Antônio dos
+Santana do Santo Antônio de Milagres/PI
+Maranhão/MA Posse/SP Santo Antônio/RN
+Santana do Matos/RN Santo Antônio do Santo Augusto/RS
+Santana do Mundaú/AL Amparo/MG Santo Cristo/RS
+4 Santana do Paraíso/MG Santo Antônio do Santo Estêvão/BA
+Santana do Piauí/PI Aracanguá/SP Santo Expedito do Sul/RS
+Santana do Riacho/MG Santo Antônio do Santo Expedito/SP
+Santana do São Aventureiro/MG Santo Hipólito/MG
+Francisco/SE Santo Antônio do Santo Inácio do Piauí/PI
+Santana do Seridó/RN Caiuá/PR Santo Inácio/PR
+Santana dos Garrotes/PB Santo Antônio do Santópolis do Aguapeí/SP
+Santana dos Montes/MG Descoberto/GO Santos Dumont/MG
+Santana/AP Santo Antônio do Santos/SP
+Santana/BA Grama/MG São Benedito do Rio
+Santanópolis/BA Santo Antônio do Içá/AM Preto/MA
+Santarém Novo/PA Santo Antônio do São Benedito do Sul/PE
+Santarém/PA Itambé/MG São Benedito/CE
+Santiago/RS Santo Antônio do São Bento Abade/MG
+Santo Afonso/MT Jacinto/MG São Bento de Pombal/PB
+São Bento do Norte/RN
+54 - 69
+
+Proc. Nm dão 200 Wi (da. E
+Data; 14 KI dl Fis AOA
+ur Ig a | na Gestão Pública Municipal O e Rn
+À AN NE b
+São Bento do Sapucaí/SP São Félix do Araguaia/MT São Geraldo do 7 AM?
+São Bento do São Félix do Coribe/BA Araguaia/PA
+Tocantins/TO São Félix do Piauí/PI São Geraldo do
+São Bento do Trairi/RN São Félix do Tocantins/TO Baixio/MG
+São Bento do Una/PE São Félix do Xingu/PA São Geraldo/MG
+São Bento/MA São Félix/BA São Gonçalo do
+São Bento/PB São Fernando/RN Abaeté/MG
+São Bernardo do São Fidélis/RJ São Gonçalo do
+Campo/SP São Francisco de Assis do Amarante/CE
+São Bernardo/MA Piauí/PI São Gonçalo do
+São Borja/RS São Francisco de Assis/RS Amarante/RN
+São Brás do Suaçuí/MG São Francisco de São Gonçalo do
+São Brás/AL Goiás/GO Gurguéia/PI
+dá São Braz do Piauí/P| São Francisco de São Gonçalo do Pará/MG
+São Caetano de Itabapoana/RJ São Gonçalo do Piauí/P|
+Odivelas/PA São Francisco de São Gonçalo do Rio
+São Caetano do Sul/SP Paula/MG Abaixo/MG
+São Caetano/PE São Francisco de Paula/RS São Gonçalo do Rio
+São Carlos do lvai/PR São Francisco de Preto/MG
+São Carlos/SP Sales/MG São Gonçalo do
+São Cristóvão/SE São Francisco do Sapucai/MG
+São Desidério/BA Brejáo/MA São Gonçalo dos
+São Domingos das São Francisco do Campos/BA
+Dores/MG Conde/BA São Gonçalo/RJ
+São Domingos do São Francisco do São Gotardo/MG
+Araguaia/PA Glória/MG São Jerônimo da Serra/PR
+São Domingos do São Francisco do São Jerônimo/RS
+Azeitão/MA Guaporé/RO São João Batista do
+São Domingos do São Francisco do Glória/MG
+Capim/PA Maranhão/MA São João Batista/MA
+São Domingos do São Francisco do São João dV'Aliança/GO
+s Cariri/PB Oeste/RN São João da Baliza/RR
+São Domingos do São Francisco do Pará/PA São João da Barra/RJ
+Maranhão/MA São Francisco do Piauí/PI São João da Boa Vista/SP
+São Domingos do São Francisco/MG São João da Canabrava/PI
+Norte/ES São Francisco/PB São João da Fronteira/P|
+São Domingos do São Francisco/SE São João da Lagoa/MG
+Prata/MG São Francisco/SP São João da Mata/MG
+São Domingos do Sul/RS São Gabriel da São João da Paraúna/GO
+São Domingos/BA Cachoeira/AM São João da Ponta/PA
+São Domingos/GO São Gabriel da Palha/ES São João da Ponte/MG
+São Domingos/PB São Gabriel do Oeste/MS São João da Serra/PI
+São Domingos/SE São Gabriel/BA São João da Urtiga/RS
+São Felipe dVOeste/RO São Gabriel/RS São João da Varjota/PI
+São Felipe/BA São Geraldo da São João das Duas
+São Félix de Balsas/MA Piedade/MG Pontes/SP
+São Félix de Minas/MG São João das Missões/MG
+55 - 69
+
+ProeN 140 000 MUyidya
+Data: Moby) Fis Mp
+ra | Consórcio de Informática - aÃ
+Iga| ão Pública Municipal A
+São João de Iracema/SP São José da Coroa São José do Rio Pardo/SP
+São João de Meriti/RJ Grande/PE São José do Rio Preto/SP
+São João de Pirabas/PA São José da Lagoa São José do Sabugi/PB
+São João del-Rei/MG Tapada/PB São José do Seridó/RN
+São João do Araguaia/PA São José da Laje/AL São José do Sul/RS
+São João do Arraial/PI São José da Lapa/MG São José do Vale do Rio
+São João do Caiuá/PR São José da Safira/MG Preto/RJ
+São João do Cariri/PB São José da Tapera/AL São José do Xingu/MT
+São João do Caru/MA São José da Varginha/MG São José dos Ausentes/RS
+São João do Ivai/PR São José da Vitória/BA São José dos Basílios/MA
+São João do Jaguaribe/CE São José das Missões/RS São José dos Campos/SP
+São João do São José das São José dos
+Manhuaçu/MG Palmeiras/PR Cordeiros/PB
+pm São João do São José de Caiana/PB São José dos Pinhais/PR
+Manteninha/MG São José de São José dos Quatro
+São João do Oriente/MG Espinharas/PB Marcos/MT
+São João do Pacuí/MG São José de Mipibu/RN São José dos Ramos/PB
+São João do Paraíso/MA São José de Piranhas/PB São Julião/P|
+São João do Paraíso/MG São José de Princesa/PB São Leopoldo/RS
+São João do São José de Ribamar/MA São Lourenço da Mata/PE
+Pau/dVAlho/SP São José de Ubá/RJ São Lourenço da Serra/SP
+São João do Piauí/PI São José do Alegre/MG São Lourenço do Piauí/PI
+São João do Polêsine/RS São José do Barreiro/SP São Lourenço do Sul/RS
+São João do Rio do São José do Belmonte/PE São Lourenço/MG
+Peixe/PB São José do Bonfim/PB São Luís de Montes
+São João do Sabugi/RN São José do Brejo do Belos/GO
+São João do Soter/MA Cruz/PB São Luís do Curu/CE
+São João do Tigre/PB São José do Calçado/ES São Luís do Norte/GO
+São João do Triunfo/PR São José do São Luís do Piauí/PI
+São João dos Patos/MA Campestre/RN São Luís do Quitunde/AL
+São João Evangelista/MG São José do Divino/MG São Luís Gonzaga do
+São João São José do Divino/PI Maranhão/MA
+Nepomuceno/MG São José do Egito/PE São Luís/MA
+São João/PE São José do Goiabal/MG São Luis/RR
+São João/PR São José do Herval/RS São Luiz do Paraitinga/SP
+São Joaquim da Barra/SP São José do Hortêncio/RS São Luiz Gonzaga/RS
+São Joaquim de Bicas/MG São José do Inhacorá/RS São Mamede/PB
+São Joaquim do São José do Jacuípe/BA São Manoel do Paraná/PR
+Monte/PE São José do Jacuri/MG São Manuel/SP
+São Jorge dVOeste/PR São José do São Marcos/RS
+São Jorge do Ivaí/PR Mantimento/MG São Martinho da Serra/RS
+São Jorge do São José do Norte/RS São Martinho/RS
+Patrocínio/PR São José do Ouro/RS São Mateus do
+São Jorge/RS São José do Peixe/PI Maranhão/MA
+São José da Barra/MG São José do Piauí/PI São Mateus do Sul/PR
+São José da Bela Vista/SP São José do Povo/MT São Mateus/ES
+São José da Boa Vista/PR São José do Rio Claro/MT São Miguel Arcanjo/SP
+56 - 69
+
+Proc, Ne 24O DO) 4 (03,
+Data: jotya( Fis; AM
+a = | Consórcio de Informática Rubrica; É E É Nan ONO
+LASAY
+São Miguel da Baixa São Pedro do Suaçui/MG São Sebastião do Rio
+Grande/PI São Pedro do Sul/RS Verde/MG
+São Miguel das Matas/BA São Pedro do Turvo/SP São Sebastião do
+São Miguel das São Pedro dos Tocantins/TO
+Missões/RS Crentes/MA São Sebastião do
+São Miguel de Taipu/PB São Pedro dos Ferros/MG Uatumã/AM
+São Miguel do Aleixo/SE São Pedro/RN São Sebastião do
+São Miguel do Anta/MG São Pedro/SP Umbuzeiro/PB
+São Miguel do São Rafael/RN São Sebastião/AL
+Araguaia/GO São Raimundo das São Sebastião/SP
+São Miguel do Fidalgo/PI Mangabeiras/MA São Sepé/RS
+São Miguel do São Raimundo do Doca São Simão/GO
+Gostoso/RN Bezerra/MA São Simão/SP
+A São Miguel do Guamá/PA São Raimundo Nonato/PI São Thomé das
+São Miguel do São Roberto/MA Letras/MG
+Guaporé/RO São Romão/MG São Tiago/MG
+São Miguel do Iguaçu/PR São Roque de Minas/MG São Tomás de
+São Miguel do Passa- São Roque do Canaã/ES Aquino/MG
+Quatro/GO São Roque/SP São Tomé/PR
+São Miguel do Tapuio/P| São Salvador do São Tomé/RN
+São Miguel do Tocantins/TO São Valentim do Sul/RS
+Tocantins/TO São Sebastião da São Valentim/RS
+São Miguel dos Amoreira/PR São Valério da
+Campos/AL São Sebastião da Bela Natividade/TO
+São Miguel dos Vista/MG São Valério do Sul/RS
+Milagres/AL São Sebastião da Boa São Vendelino/RS
+São Miguel/RN Vista/PA São Vicente de Minas/MG
+São Nicolau/RS São Sebastião da São Vicente do Sul/RS
+São Patrício/GO Grama/SP São Vicente Ferrer/MA
+São Paulo das Missões/RS São Sebastião da Vargem São Vicente Ferrer/PE
+São Paulo de Alegre/MG São Vicente/RN
+- Olivença/AM São Sebastião de Lagoa São Vicente/SP
+São Paulo do Potengi/RN de Roça/PB Sapé/PB
+São Paulo/SP São Sebastião do Alto/RJ Sapeaçu/BA
+São Pedro da Água São Sebastião do Sapezal/MT
+Branca/MA Anta/MG Sapiranga/RS
+São Pedro da Aldeia/RJ São Sebastião do Caí/RS Sapopema/PR
+São Pedro da Cipa/MT São Sebastião do Sapucai/Mirim/MG
+São Pedro da Serra/RS Maranhão/MG Sapucaia do Sul/RS
+São Pedro da União/MG São Sebastião do Sapucaia/PA
+São Pedro das Oeste/MG Sapucaia/RJ
+Missões/RS São Sebastião do Saquarema/RJ
+São Pedro do Butiá/RS Paraiso/MG Sarandi/PR
+São Pedro do Iguaçu/PR São Sebastião do Sarandi/RS
+São Pedro do lIvaí/PR Passé/BA Sarapuí/SP
+São Pedro do Paraná/PR São Sebastião do Rio Sardoá/MG
+São Pedro do Piauí/P| Preto/MG Sarutaiá/SP
+57-69
+
+Proc, m 189070 ja 32
+A | a a re Rubrica:
+Ho 8
+
+Sarzedo/MG Sericita/MG Sertão/RS Maas
+Sátiro Dias/BA Seridó/PB Sertãozinho/PB
+Satuba/AL Seringueiras/RO Sertãozinho/SP
+Satubinha/MA Sério/RS Sete Barras/SP
+Saubara/BA Seritinga/MG Sete de Setembro/RS
+Saudade do Iguaçu/PR Seropédica/RJ Sete Lagoas/MG
+Saúde/BA Serra Azul de Minas/MG Sete Quedas/MS
+Seabra/BA Serra Azul/SP Setubinha/MG
+Sebastianópolis do Sul/SP Serra Branca/PB Severiano de Almeida/RS
+Sebastião Barros/PI Serra Caiada/RN Severiano Melo/RN
+Sebastião Laranjeiras/BA Serra da Raiz/PB Severínia/SP
+Sebastião Leal/P| Serra da Saudade/MG Sidrolândia/MS
+Seberi/RS Serra de São Bento/RN Sigefredo Pacheco/PI
+
+— Sede Nova/RS Serra do Mel/RN Silva Jardim/RJ
+Segredo/RS Serra do Navio/AP Silvânia/GO
+Selbach/RS Serra do Ramalho/BA Silvanópolis/TO
+Selvíria/MS Serra do Salitre/MG Silveira Martins/RS
+Sem-Peixe/MG Serra dos Aimorés/MG Silveirânia/MG
+Sena Madureira/AC Serra Dourada/BA Silveiras/SP
+Senador Alexandre Serra Grande/PB Silves/AM
+Costa/MA Serra Negra do Norte/RN Silvianópolis/MG
+Senador Amaral/MG Serra Negra/SP Simão Dias/SE
+Senador Canedo/GO Serra Nova Dourada/MT Simão Pereira/MG
+Senador Cortes/MG Serra Preta/BA Simões/PI
+Senador Elói de Souza/RN Serra Redonda/PB Simolândia/GO
+Senador Firmino/MG Serra Talhada/PE Simonésia/MG
+Senador Georgino Serra/ES Simplício Mendes/PI
+Avelino/RN Serrana/SP Sinimbu/RS
+Senador Guiomard/AC Serrania/MG Sinop/MT
+Senador José Bento/MG Serrano do Maranhão/MA Siqueira Campos/PR
+Senador José Porfírio/PA Serranópolis de Sirinhaém/PE
+
+é Senador La Rocque/MA Minas/MG Siriri/SE
+Senador Modestino Serranópolis do Sítio dVAbadia/GO
+Gonçalves/MG Iguaçu/PR Sítio do Mato/BA
+Senador Pompeu/CE Serranópolis/GO Sítio do Quinto/BA
+Senador Rui Palmeira/AL Serranos/MG Sítio Novo do
+Senador Sá/CE Serraria/PB Tocantins/TO
+Senador Salgado Filho/RS Serrinha dos Pintos/RN Sítio Novo/MA
+Sengés/PR Serrinha/BA Sítio Novo/RN
+Senhor do Bonfim/BA Serrinha/RN Sobradinho/BA
+Senhora de Oliveira/MG Serrita/PE Sobradinho/RS
+Senhora do Porto/MG Serro/MG Sobrado/PB
+Senhora dos Serrolândia/BA Sobral/CE
+Remédios/MG Sertaneja/PR Sobrália/MG
+Sentinela do Sul/RS Sertânia/PE Socorro do Piauí/PI
+Sento Sé/BA Sertanópolis/PR Socorro/SP
+Serafina Corrêa/RS Sertão Santana/RS Solânea/PB
+
+58 - 69
+
+Proc. No dão 00 algo
+ii Data My DE A Fis; 213 |
+q = | Consórcio de Informática Rubrica; 4 mA qqo8º]
+“A | q à | na Gestão Pública Municipal , 5
+Ly j
+Soledade de Minas/MG Taiobeiras/MG Tarauacá/AC
+Soledade/PB Taipas do Tocantins/TO Tarrafas/CE
+Soledade/RS Taipu/RN Tartarugalzinho/AP
+Solidão/PE Taiuva/SP Tarumã/SP
+Solonópole/CE Talismã/TO Tarumirim/MG
+Sonora/MS Tamandaré/PE Tasso Fragoso/MA
+Sooretama/ES Tamarana/PR Tatuí/SP
+Sorocaba/SP Tambaú/SP Tauá/CE
+Sorriso/MT Tamboara/PR Taubaté/SP
+Sossêgo/PB Tamboril do Piauí/PI Tavares/PB
+Soure/PA Tamboril/CE Tavares/RS
+Sousa/PB Tanabi/SP Tefé/AM
+Souto Soares/BA Tangará da Serra/MT Teixeira de Freitas/BA
+= Sucupira do Norte/MA Tangará/RN Teixeira Soares/PR
+Sucupira do Riachão/MA Tanguá/RJ Teixeira/PB
+Sucupira/TO Tanhaçu/BA Teixeiras/MG
+Sud Mennucci/SP Tanque dVArca/AL Teixeirópolis/RO
+Sulina/PR Tanque do Piauí/P| Tejuçuoca/CE
+Sumaré/SP Tanque Novo/BA Tejupá/SP
+Sumé/PB Tanquinho/BA Telêmaco Borba/PR
+Sumidouro/R)J Taparuba/MG Telha/SE
+Surubim/PE Tapauá/AM Tenente Ananias/RN
+Sussuapara/P!| Tapejara/PR Tenente Laurentino
+Suzanápolis/SP Tapejara/RS Cruz/RN
+Suzano/SP Tapera/RS Tenente Portela/RS
+Tabaí/RS Taperoá/BA Tenório/PB
+Tabaporã/MT Taperoá/PB Teodoro Sampaio/BA
+Tabapuã/SP Tapes/RS Teodoro Sampaio/SP
+Tabatinga/AM Tapira/MG Teofilândia/BA
+Tabatinga/SP Tapira/PR Teófilo Otoni/MG
+Tabira/PE Tapiraí/MG Teolândia/BA
+E Taboão da Serra/SP Tapiraí/SP Teotônio Vilela/AL
+Tabocas do Brejo Tapiramutá/BA Terenos/MS
+Velho/BA Tapiratiba/SP Teresina de Goiás/GO
+Taboleiro Grande/RN Tapurah/MT Teresina/PI
+Tabuleiro do Norte/CE Taquaraçu de Minas/MG Teresópolis/RJ
+Tabuleiro/MG Taquaral de Goiás/GO Terezinha/PE
+Tacaimbó/PE Taquaral/SP Terezópolis de Goiás/GO
+Tacaratu/PE Taquarana/AL Terra Alta/PA
+Taciba/SP Taquari/RS Terra Boa/PR
+Tacima/PB Taquaritinga do Norte/PE Terra de Areia/RS
+Tacuru/MS Taquaritinga/SP Terra Nova do Norte/MT
+Tagual/SP Taquarituba/SP Terra Nova/BA
+Taguatinga/TO Taquarivai/SP Terra Nova/PE
+Taiaçu/SP Taquaruçu do Sul/RS Terra Rica/PR
+Tailândia/PA Taquarussu/MS Terra Roxa/PR
+Taió/SC Tarabai/SP Terra Roxa/SP
+59-69
+
+Proc. Nº J4D 0do UA 729;
+Data: My OE DA ris SA
+“a ka ani Rubrica: ru (1 dn
+js | Consórcio de Informática Esse cata da !
+| na Gestão Pública Municipal » 4 O
+Terra Santa/PA Tramandaíi/RS Tupássi/PR É
+Tesouro/MT Travesseiro/RS Tupi Paulista/SP
+Teutônia/RS Tremedal/BA Tupirama/TO
+Theobroma/RO Tremembé/SP Tupiratins/TO
+Tianguá/CE Três Arroios/RS Turiaçu/MA
+Tibagi/PR Três Barras do Paraná/PR Turilândia/MA
+Tibau do Sul/RN Três Cachoeiras/RS Turiúba/SP
+Tibau/RN Três Corações/MG Turmalina/MG
+Tieté/SP Três Coroas/RS Turmalina/SP
+Tijucas do Sul/PR Três de Maio/RS Turuçu/RS
+Timbaúba dos Três Forquilhas/RS Tururu/CE
+Batistas/RN Três Fronteiras/SP Turvânia/GO
+Timbaúba/PE Três Lagoas/MS Turvelândia/GO
+- Timbiras/MA Três Marias/MG Turvo/PR
+Timburi/SP Três Palmeiras/RS Turvolândia/MG
+Timon/MA Três Passos/RS Tutóia/MA
+Timóteo/MG Três Pontas/MG Uarini/AM
+Tio Hugo/RS Três Ranchos/GO Uauá/BA
+Tiradentes do Sul/RS Três Rios/RJ Ubá/MG
+Tiradentes/MG Trindade do Sul/RS Ubai/MG
+Tiros/MG Trindade/GO Ubaíra/BA
+Tobias Barreto/SE Trindade/PE Ubaitaba/BA
+Tocantínia/TO Triunfo Potiguar/RN Ubajara/CE
+Tocantinópolis/TO Triunfo/PB Ubaporanga/MG
+Tocantins/MG Triunfo/PE Ubarana/SP
+Tocos do Moji/MG Triunfo/RS Ubatã/BA
+Toledo/MG Trizidela do Vale/MA Ubatuba/SP
+Toledo/PR Trombas/GO Uberaba/MG
+Tomar do Geru/SE Tucano/BA Uberlândia/MG
+Tomazina/PR Tucumã/PA Ubirajara/SP
+Tombos/MG Tucunduva/RS Ubirata/PR
+» Tomé/Açu/PA Tucuruí/PA Ubiretama/RS
+Tonantins/AM Tufilândia/MA Uchoa/SP
+Toritama/PE Tuiuti/SP Uibal/BA
+Torixoréu/MT Tumiritinga/MG Uiramutã/RR
+Toropi/RS Tunas do Paraná/PR Uirapuru/GO
+Torre de Pedra/SP Tunas/RS Uiraúna/PB
+Torres/RS Tuneiras do Oeste/PR Ulianópolis/PA
+Torrinha/SP Tuntum/MA Umari/CE
+Touros/RN Tupá/SP Umarizal/RN
+Trabiju/SP Tupaciguara/MG Umbaúba/SE
+Tracuateua/PA Tupanatinga/PE Umburanas/BA
+Tracunhaém/PE Tupanci do Sul/RS Umburatiba/MG
+Traipu/AL Tupanciretã/RS Umbuzeiro/PB
+Trairão/PA Tupandi/RS Umirim/CE
+Trairi/CE Tuparendi/RS Umuarama/PR
+Trajano de Moraes/RJ Tuparetama/PE Una/BA
+60 - 69
+
+Proc.Nº 4Ao 000 LUX / do
+( Ê H | Consórcio de Informatica úicos LÉIO //) Lo
+Cmasor iga | na Gestão Pública Municipal á . q 7?
+Unaí/MG Valparaíso de Goiás/GO Verdejante/PE
+União da Serra/RS Valparaíso/SP Verdelândia/MG
+União da Vitória/PR Vanini/RS Verê&/PR
+União de Minas/MG Vargem Alegre/MG Vereda/BA
+União do Sul/MT Vargem Alta/ES Veredinha/MG
+União dos Palmares/AL Vargem Bonita/MG Veríssimo/MG
+União Paulista/SP Vargem Grande do Rio Vermelho Novo/MG
+União/PI Pardo/MG Vertente do Lério/PE
+Uniflor/PR Vargem Grande do Sul/SP Vertentes/PE
+Unistalda/RS Vargem Grande Vespasiano Corrêa/RS
+Upanema/RN Paulista/SP Vespasiano/MG
+Uraí/PR Vargem Grande/MA Viadutos/RS
+Urandi/BA Vargem/SP Viamão/RS
+m Urânia/SP Varginha/MG Viana/ES
+Urbano Santos/MA Varjão de Minas/MG Viana/MA
+Uru/SP Varjão/GO Vianópolis/GO
+Uruaçu/GO Varjota/CE Vicência/PE
+Uruana de Minas/MG Varre-Sai/R) Vicente Dutra/RS
+Uruana/GO Várzea Alegre/CE Vicentina/MS
+Uruará/PA Várzea Branca/P| Vicentinópolis/GO
+Uruburetama/CE Várzea da Palma/MG Viçosa do Ceará/CE
+Urucânia/MG Várzea da Roça/BA Viçosa/AL
+Urucará/AM Várzea do Poço/BA Viçosa/MG
+Uruçuca/BA Várzea Grande/MT Viçosa/RN
+Uruçui/PI Várzea Grande/P! Victor Graeff/RS
+Urucuia/MG Várzea Nova/BA Vieiras/MG
+Urucurituba/AM Várzea Paulista/SP Vieirópolis/PB
+Uruguaiana/RS Várzea/PB Vigia/PA
+Uruoca/CE Várzea/RN Vila Bela da Santíssima
+Urupá/RO Varzedo/BA Trindade/MT
+Urupês/SP Varzelândia/MG Vila Boa/GO
+Urutaí/GO Vassouras/RJ Vila Flor/RN
+Utinga/BA Vazante/MG Vila Flores/RS
+Vacaria/RS Venâncio Aires/RS Vila Lângaro/RS
+Vale de São Venda Nova do Vila Maria/RS
+Domingos/MT Imigrante/ES Vila Nova do Piauí/PI
+Vale do Anari/RO Venha-Ver/RN Vila Nova do Sul/RS
+Vale do Paraíso/RO Ventania/PR Vila Nova dos
+Vale do Sol/RS Venturosa/PE Martírios/MA
+Vale Real/RS Vera Cruz do Oeste/PR Vila Pavão/ES
+Vale Verde/RS Vera Cruz/BA Vila Propício/GO
+Valença do Piauí/PI Vera Cruz/RN Vila Rica/MT
+Valença/BA Vera Cruz/RS Vila Valério/ES
+Valença/RJ Vera Cruz/SP Vila Velha/ES
+Valente/BA Vera Mendes/PI Vilhena/RO
+Valentim Gentil/SP Vera/MT Vinhedo/SP
+Valinhos/SP Veranópolis/RS Viradouro/SP
+61-69
+
+Da MO re DG |
+Rubrica; «O
+am A | Consórcio de Informática ME
+iga | naGe tão Pública p 2a
+Virgem da Lapa/MG
+Virgínia/MG
+Virginópolis/MG
+Virgolândia/MG
+Virmond/PR
+Visconde do Rio
+Branco/MG
+Viseu/PA
+Vista Alegre do Alto/SP
+Vista Alegre do Prata/RS
+Vista Alegre/RS
+Vista Gaúcha/RS
+Vista Serrana/PB
+Vitória Brasil/SP
+Vitória da Conquista/BA
+Vitória das Missões/RS
+Vitória de Santo Antão/PE
+Vitória do Jari/AP
+Vitória do Mearim/MA
+Vitória do Xingu/PA
+Vitória/ES
+Vitorino Freire/MA
+Vitorino/PR
+Volta Grande/MG
+Volta Redonda/RJ
+Votorantim/SP
+Votuporanga/SP
+Wagner/BA
+Wall Ferraz/Pl
+Wanderlândia/TO
+Wanderley/BA
+bi Wenceslau Braz/MG
+Wenceslau Braz/PR
+Wenceslau Guimarães/BA
+Westfália/RS
+Xambioá/TO
+Xambrê/PR
+Xangri/lá/RS
+Xapuri/AC
+Xexéu/PE
+Xinguara/PA
+Xique-Xique/BA
+Zabelê/PB
+Zacarias/SP
+Zé Doca/MA
+62 - 69
+
+Data: Ay Db 4 DA Fi DI ei
+| 9 a | no Gestão Pública Municipal vo
+| Le
+ANEXO II
+(Redação dada pela Emenda ao Contrato de Consórcio Público n.º 05, de 2017)
+Empregos públicos do Consórcio de Informática na Gestão Pública Municipal - CIGA:
+Nome do idas Forma de Referência Carga PR
+emprego 9 contratação | salarial inicial - Horária q
+Valores em R$
+: Livre : :
+Diretor Ensino superior
+i 01 dmissã 40h
+Executivo aspissao-8 completo
+demissão 12.173 á
+- Gerente 01 Livre 40h Ensino superior
+Administrativo admissão e completo
+demissão 7.940
+Tecnologias da | 01 admissão e 40h completo
+Informação demissão 7.940
+Sistemas público 5.882 completo
+público 3.866 completo
+hi fi EC oii
+público 2.574 completo
+Concurso Ensino superior
+Contador 01 público 5.882 40h — completo e registro no
+Órgão competente
+Assistente 03 Concurso 40h — Ensino médio
+Administrativo público 2.574 completo
+É Ensino superior
+completo e registro no
+Controlador é Concurso Ssae 40h órgão competente
+Interno público (Emprego criado pela
+Emenda ao Contrato
+de Consórcio Público
+n.º 02, de 2013)
+Ensino superior
+completo e registro no
+5.882 órgão competente
+psRaEa DS ca 40h (OAB) (Emprego criado
+Jurídico público pela Emenda ao
+Contrato de Consórcio
+Público n.º 02, de
+2013)
+63-69
+
+Proc, Nº. 149 000 Ma /9091 Ra
+aii = | Consórcio de Informática Rubrica: PR quo
+| 9 a | ao Gestão Pública Municipal ) n65
+Tabela de Referências Salariais para Empregos Públicos Permanentes:
+Emprego Classe! Nível de Níveis de Referências Salariais (Valores em R$)
+Público A
+Senioridade
+[número omitido]
+Analistã de É [número omitido]
+SiBiRnas 7.460 | 7609 | 7761 | 7.916 | 8075 | 8236
+[número omitido]
+di [número omitido]
+| Pero | [número omitido]
+Contador 5
+[número omitido]
+[número omitido]
+[número omitido]
+Controlador | | Pleno | 6624 | 6757 | 6892 | 7030 | 7170 | 7314
+Iriterio 7460 | 7.609 | 7.761 | 7.916 | 8075 | 8.236
+[número omitido]
+[número omitido]
+Jurídico 7460 | 7.609 | 7.761 | 7.916 | 8075 | 8.236
+Master [número omitido]
+Júnior [número omitido]
+Pleno [número omitido]
+Programador 3
+[número omitido]
+SiSo [número omitido]
+64 - 69
+
+Proc. Nº ÃO Doo UA JDM
+Data: 14) 06 A Fis: OR 14 “oa
+ame pf
+| Consórcio de Informática Ms;
+| g a | so Gestão Poblica Municipal E) í quo
+pac e
+Emprego Nível de Níveis de Referências Salariais (Valores em R$)
+257 | 2605 | 2678 | 2732 | 2.786 |
+| Pero | [número omitido]
+Técnico em TI 2 ER TARTE a ;
+[número omitido]
+E" 2574 | 2625 | 2678 | 2732 | 2786
+Assistente : Pleno [número omitido] | [número omitido]
+[número omitido]
+Tabela de Referências Salariais para Empregos Públicos em Comissão:
+Emprego Níveis de Referências Salariais (Valores em R$)
+Diretor [número omitido]
+[número omitido]
+Administrativo RA O o
+[número omitido]
+65-69
+
+Proc. Nº 14o Ono NUA / doa |
+Data; My DG) dl Fis AD ;
+aa Rubrica;
+| Consórcio de Informal
+om iga | Nela a ic A ; Br A |
+AA, 238
+ba pat
+ATRIBUIÇÕES DOS EMPREGOS:
+Diretor Executivo: promover a execução das atividades e gestão do CIGA, realizar concursos
+públicos e promover a contratação, demissão e aplicação de sanções aos empregados
+públicos, bem como praticar todos os atos relativos à gestão dos recursos humanos,
+mediante homologação do Presidente do CIGA, elaborar a Proposta Orçamentária Anual e o
+Plano de Trabalho a serem submetidos à apreciação da Assembleia Geral do CIGA; elaborar
+a Prestação de Contas e o Relatório de Atividades a serem submetidos ao Presidente do
+Conselho de Administração, ao Conselho Fiscal e à Assembleia Geral do CIGA; elaborar as
+prestações de contas dos auxílios e subvenções concedidas ao CIGA para ser apresentada
+pelo Presidente ao órgão concedente; movimentar, quando a este delegado, as contas
+bancárias e os recursos financeiros do CIGA; executar a gestão administrativa e financeira do
+jo CIGA dentro dos limites do orçamento aprovado pela Assembleia Geral, e observada a
+legislação em vigor, em especial as normas da administração pública; designar seu substituto,
+em caso de impedimento ou ausência para responder pelo expediente e pelas atividades do
+CIGA; providenciar as convocações, agendas e locais para as reuniões da Assembleia Geral,
+Conselho de Administração e Conselho Fiscal; providenciar e solucionar todas as diligências
+solicitadas pelo Conselho Fiscal; autorizar as compras e elaborar os processos de licitação
+para contratação de bens e serviços; propor ao Conselho de Administração a requisição de
+servidores públicos para servir ao CIGA.
+Gerente Administrativo: Organizar e executar a gestão administrativa do consórcio, em
+especial a relativa a recursos humanos e aos processos burocráticos do consórcio, executar
+os processos de licitação pública e os contratos administrativos, supervisionar os aspectos
+contábeis e financeiros do consórcio, auxiliar o Diretor Executivo em suas atribuições.
+Gerente de Tecnologias da Informação: Elaborar, Coordenar e supervisionar os projetos
+relacionados aos objetivos do consórcio, gerenciar a equipe de analistas, programadores e
+À técnicos em informática, prestar contas sobre os andamentos dos projetos ao Diretor
+Executivo e apoiar a execução das atribuições deste.
+Analista de Sistemas: Atividades relacionadas com a análise dos sistemas, coordenando a
+implantação, propondo alterações, efetuando a manutenção necessária, com a finalidade de
+otimizar a área de Processamento de Dados.
+Programador: Codificar programas de computação, conforme especificado, em qualquer
+linguagem; elaborar diagramas/fluxogramas de lógica para fins de documentação e/ou
+construção de programas, prestar assistência técnica na utilização de recursos de informática,
+atuar na causa básica de problemas e na padronização de soluções, conhecer e aplicar os
+requisitos de segurança das informações e dos sistemas de informação; e executar outras
+atribuições da mesma natureza e nível de complexidade correspondente ao cargo.
+Desempenhar atividades especializada de caráter técnico-científico, criativo e artístico, com
+vistas à concepção e desenvolvimento de projetos de objetos e mensagens visuais que
+66 - 69
+
+Data; LM p of) di mmdal /
+a à | Consórcio de Informática Rubrica: |
+| g a | no Gestão Pública Municipal o
+1 PN e B23O
+
+equacionam sistematicamente dados ergonômicos, tecnológicos, econômicos, sociais,
+culturais e estéticos que atendam concretamente às necessidades humanas.
+Técnico em TI: Participar do desenvolvimento de projetos, elaboração, implantação,
+manutenção, documentação e suporte de sistemas e hardware, bem como de executar
+serviços programados.
+Contador: Supervisionar, coordenar e orientar e realizar a escrituração dos atos ou fatos
+contáveis; examinar e elaborar processos de prestação de contas; auxiliar na elaboração da
+proposta orçamentária; examinar e realizar empenhos de despesas, verificando sua
+
+es classificação e a existência de saldo nas dotações orçamentárias; informar, através de
+relatórios sobre a situação financeira e Patrimonial do Consórcio, elaborar os balanços e
+balancetes patrimoniais e financeiros; executar outras tarefas afins.
+Controlador Interno: acompanhar, controlar, analisar e avaliar, quanto à legalidade,
+eficiência, eficácia e economicidade, os registros contábeis, os atos de gestão, entre eles: os
+processos licitatórios, a execução de contratos, convênios e similares, o controle e guarda de
+bens patrimoniais do Consórcio, o almoxarifado, os atos de pessoal, incluídos os
+procedimentos de controle de frequência, concessão e pagamento de diárias e vantagens,
+elaboração das folhas de pagamento dos servidores, controle de uso, abastecimento e
+manutenção do(s) veículo(s) oficial(is); uso de telefone fixo e móvel (celular); execução da
+despesa pública em todas suas fases (empenhamento, liquidação e pagamento); a assinatura
+de Relatórios de Gestão Fiscal, junto com o Presidente do Consórcio, assim como, a
+fiscalização prevista no art. 59 da LRF; alertar a autoridade administrativa sobre imprecisões
+e erros de procedimentos, assim como sobre a necessidade de medidas corretivas, a
+instauração de tomada de contas especial e/ou de processo administrativo; executar as
+tomadas de contas especiais determinadas pelo Tribunal de Contas do Estado; comunicar ao
+
+il Tribunal de Contas do Estado irregularidades ou ilegalidades de que tenha conhecimento,
+acerca das quais não foram adotadas quaisquer providências pela Autoridade Administrativa,
+sob pena de responsabilidade solidária (art. 74, 8 1º, CF, art. 113 da CE e arts. 60 a 64 da Lei
+Complementar (estadual) n. 202/2000); fazer a remessa ao Presidente e Diretor Executivo das
+informações necessárias à consolidação das contas, na forma, prazo e condições
+estabelecidas pela legislação vigente. O Controlador Interno exercerá ainda funções de apoio
+à administração do CIGA, aos municípios consorciados, ou consórcios e associações e
+entidades parceiras do CIGA, bem como outras atividades afins. (Redação dada pela Emenda
+ao Contrato de Consórcio Público n.º 02, de 2013)
+Assessor Jurídico: Representar em juizo ou fora dele o Consórcio, nas ações em que for
+autor, réu ou interessado, acompanhando o andamento do processo, prestando assistência
+jurídica, apresentando recursos em qualquer instância, comparecendo a audiência em outros
+atos, para defender direitos ou interesses. Estudar a matéria jurídica e de outra natureza,
+consultando códigos, leis, jurisprudência e outros documentos, para adequar os fatos à
+legislação aplicável; complementar ou apurar as informações levantadas, inquirindo o cliente,
+
+67-69
+
+ProcNo |oopo Ma foot
+is Rubrica;
+Clsa)susteme BIQUO
+Letícia saga
+matt: 2
+
+as testemunhas e outras pessoas e tomando medidas, para obter os elementos necessários
+à defesa ou acusação; preparar a defesa ou acusação, arrolando e correlacionando os fatos e
+aplicando o procedimento adequado, para apresentá-lo em juízo; acompanha o processo em
+todas as suas fases, requerendo seu andamento por meio de petições específicas, para
+garantir seu trâmite legal até a decisão final do litígio; representar a parte de que é
+mandatário em juízo, comparecendo às audiências e tomando sua defesa, para pleitear uma
+decisão favorável; redigir ou elaborar documentos jurídicos, pronunciamentos, minutas e
+informações sobre questões de natureza administrativa, fiscal, civil, comercial, trabalhista,
+penal ou outras aplicando a legislação, forma e terminologia adequadas ao assunto em
+questão, para utilizá-los na defesa do Consórcio. Orientar o Consórcio com relação aos seus
+direitos e obrigações legais. Prestar consultoria e assessoria aos municípios consorciados em
+matérias relacionadas às publicações legais e ao Diário Oficial dos Municípios, ou outras
+
+s matérias solicitadas pela administração do CIGA. Prestar apoio aos demais setores do CIGA,
+incluindo licitações, controle interno e outras áreas da administração do Consórcio. (Redação
+dada pela Emenda ao Contrato de Consórcio Público n.º 02, de 2013)
+Assistente Administrativo: Auxiliar o Gerente Administrativo e o Diretor Executivo em suas
+atribuições, responsabilizar-se pelo almoxarifado, patrimônio, arquivo morto,
+correspondências, secretaria geral do consórcio, participar nos processos de licitação, realizar
+o controle de documentos de pessoal do consórcio, demais atividades administrativas do
+consórcio.
+
+68 — 69
+
+ema ESSE sua rmnaç as
+Proc.Nº 149002 (4X /2991
+nitá o ss Rubrica: t
+pn | Consórcio de Informática '
+Ê 6] a | no Gestão Póblica Municipal E
+À 63
+NC 23
+Organograma da estrutura administrativa do CIGA: (Redação dada pela Emenda ao
+Contrato de Consórcio Público n.º 04, de 2016)
+69-69

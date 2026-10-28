@@ -1,0 +1,85 @@
+                             MUNICIPIO DE NITEROI
+                                                                                                                     PREFEITURA MUNICIPAL DE NITERÓI
+                             RUA VISCONDE DE SEPETIBA,987, 987, 6º ANDAR                                             LIVRO DO ORÇAMENTO: 2021
+                             NITEROI - RJ
+                             21 26200403 - CNPJ : 28.521.748/0001-59
+                             prefeitura@niteroi.rj.gov.br
+                             www.niteroi.rj.gov.br
+
+                                                                                                              F         3         2        90         0   138      5.000,00
+
+ 0147.3189               Plano Municipal de Gestão Integrada de Resíduos Sólidos        18.541                                                                     5.000,00
+
+ 0147.3189.0001 NITERÓI                                                                                                                                            5.000,00
+
+                                                                                                              F         3         2        90         0   138      5.000,00
+
+ 0147.3193               Criar o Parque Natural Municipal no Morro da Boa Vista         18.541                                                                    10.000,00
+
+ 0147.3193.0001 NITERÓI                                                                                                                                           10.000,00
+
+                                                                                                              F         3         2        90         0   138     10.000,00
+
+ 0147.3317               Criar espaço para reciclagem                                   17.512                                                                     1.000,00
+
+ 0147.3317.0001 NITERÓI                                                                                                                                            1.000,00
+
+                                                                                                              F         3         2        90         0   138      1.000,00
+
+ 0147.3342               Identificação das Nascentes                                    18.541                                                                   300.000,00
+
+ 0147.3342.0001 NITERÓI                                                                                                                                          300.000,00
+
+                                                                                                              F         3         2        90         0   138    300.000,00
+
+ 0147.3388               Promover campanha para economia de água                        18.541                                                                    20.000,00
+
+ 0147.3388.0001 NITERÓI                                                                                                                                           20.000,00
+
+                                                                                                              F         3         2        90         0   138     20.000,00
+
+ 0147.3390               Criação de mapa com as trilhas ecológicas do município         18.541                                                                    20.000,00
+
+ 0147.3390.0001 NITERÓI                                                                                                                                           20.000,00
+
+                                                                                                              F         3         2        90         0   138     20.000,00
+
+ 0147.3532               Construção de casas para Famílias da Praia do Sossego          18.541                                                                   450.000,00
+
+ 0147.3532.0001 NITERÓI                                                                                                                                          450.000,00
+
+                                                                                                              F         3         2        90         0   138    450.000,00
+
+ 0147.3536               Criação de Programa de Monitoramento das Águas das Lago        18.541                                                                  1.000.000,00
+
+ 0147.3536.0001 NITERÓI                                                                                                                                         1.000.000,00
+
+                                                                                                              F         3         2        90         0   138   1.000.000,00
+
+ 0147.3396               Construção de um centro laboratorial de diagnóstico de         18.541                                                                   200.000,00
+
+ 0147.3396.0001 NITERÓI                                                                                                                                          200.000,00
+
+                                                                                                              F         4         2        90         0   138    200.000,00
+
+ 0147.3403               Criação de Reservatórios de captação de água da chuva e        18.541                                                                   200.000,00
+
+ 0147.3403.0001 NITERÓI                                                                                                                                          200.000,00
+
+                                                                                                              F         4         2        90         0   138    200.000,00
+
+                                  Atividades                                                                                                                    724.287,00
+
+ 0147.4086               Apoio À Reciclagem De Resíduos                                 17.512                                                                    47.287,00
+
+ 0147.4086.0001 NITERÓI                                                                                                                                           47.287,00
+
+                                                                                                              F         3         2        90         0   138     47.287,00
+
+ 0147.4087               Conservação E Recuperação De Parques Urbanos                   18.541                                                                     5.000,00
+
+ 0147.4087.0001 NITERÓI                                                                                                                                            5.000,00
+
+Base: niteroi_ecidade_prod
+
+ Orcamento>Relatórios>Livro do Orçamento 2020 orc2_livroorcamento002.php Emissor: Caroline Ribeiro De Souza Exerc: 2020 Data: 06-01-2021 - 08:27:14               Pág 297/362

@@ -1,0 +1,41 @@
+PROJETO DE LEI Nº       /2026
+EMENTA: Dispõe sobre a obrigatoriedade de transparência e publicidade da fila de espera por vagas na rede pública municipal de ensino de Niterói, com observância da Lei Geral de Proteção de Dados Pessoais (LGPD), e dá outras providências.
+Autor: VEREADOR DOUGLAS GOMES
+Art. 1º Fica assegurada a transparência ativa da fila de espera por vagas na rede pública municipal de ensino de Niterói, em todas as suas etapas e modalidades, como medida de garantia do direito à educação, da publicidade administrativa e do controle social.
+Art. 2º O Poder Executivo deverá disponibilizar, em meio eletrônico de fácil acesso ao público, informações atualizadas sobre a fila de espera por vagas na rede municipal de ensino, contendo, no mínimo:
+I – o número total de crianças e estudantes aguardando vaga, por unidade escolar;
+II – a etapa ou modalidade de ensino pretendida;
+III – a data do requerimento de inscrição ou solicitação da vaga;
+IV – os critérios objetivos utilizados para a ordenação da fila;
+V – a quantidade de vagas ofertadas e eventualmente abertas por período.
+§1º As informações disponibilizadas ao público em geral deverão ser apresentadas de forma anonimizada e agregada, sendo vedada a divulgação de dados pessoais ou dados pessoais sensíveis, nos termos da Lei Federal nº 13.709/2018 (Lei Geral de Proteção de Dados Pessoais – LGPD).
+§2º A atualização das informações deverá ocorrer, no mínimo, mensalmente, ou sempre que houver alteração relevante na fila de espera.
+Art. 3º O Poder Executivo deverá assegurar aos responsáveis legais pela criança ou estudante acesso individualizado à posição na fila de espera, por meio de sistema eletrônico com login e autenticação pessoal, permitindo a consulta segura das seguintes informações:
+I – a posição atual na fila de espera;
+II – a unidade escolar pretendida;
+III – a etapa ou modalidade de ensino;
+IV – a data de inscrição;
+V – eventuais atualizações ou movimentações na fila.
+Parágrafo único. O acesso individualizado de que trata este artigo deverá observar integralmente a Lei Geral de Proteção de Dados Pessoais (LGPD), garantindo a confidencialidade, a segurança da informação e a proteção dos dados da criança e de seus responsáveis legais.
+Art. 4º A divulgação e o acesso às informações previstas nesta Lei deverão observar os princípios da legalidade, impessoalidade, moralidade, publicidade, eficiência, proteção integral da criança e do adolescente e proteção de dados pessoais.
+Art. 5º A obrigatoriedade prevista nesta Lei não interfere na organização administrativa interna da Secretaria Municipal de Educação, limitando-se à exigência de transparência, publicidade e acesso à informação.
+Art. 6º O descumprimento das disposições desta Lei sujeitará o órgão responsável às sanções previstas na legislação vigente, especialmente na Lei de Acesso à Informação e na Lei Geral de Proteção de Dados Pessoais, sem prejuízo da apuração de responsabilidade administrativa.
+Art. 7º O Poder Executivo regulamentará esta Lei no que couber, no prazo de até 90 (noventa) dias contados da data de sua publicação.
+Art. 8º Esta Lei entra em vigor na data de sua publicação.
+
+Sala das Sessões, 09 de janeiro de 2026
+
+DOUGLAS DE SOUZA GOMES
+VEREADOR DO PL
+
+Justificativa
+O presente Projeto de Lei tem por objetivo assegurar a transparência e a publicidade da fila de espera por vagas na rede pública municipal de ensino de Niterói, garantindo aos responsáveis legais o acesso à posição ocupada na fila, sem exposição indevida de dados pessoais, em estrita observância à Constituição Federal, à Lei de Acesso à Informação e à Lei Geral de Proteção de Dados Pessoais (LGPD).
+A Constituição Federal, em seu artigo 37, estabelece como princípios basilares da Administração Pública a legalidade, a impessoalidade, a moralidade, a publicidade e a eficiência. A ausência de transparência quanto à fila de espera por vagas escolares compromete esses princípios, inviabiliza o controle social e fragiliza a confiança da população no Poder Público, especialmente em uma política pública sensível como a educação infantil.
+A educação é direito fundamental da criança e do adolescente, assegurado com prioridade absoluta pela Constituição Federal e pelo Estatuto da Criança e do Adolescente. A inexistência de informações claras e acessíveis sobre a fila de vagas impede que pais e responsáveis exerçam plenamente o direito à informação e à fiscalização da política educacional, criando ambiente propício à discricionariedade indevida e à quebra da isonomia.
+Do ponto de vista formal, a proposição não padece de vício de iniciativa, uma vez que não trata da organização interna da Administração Pública, não cria ou extingue cargos, não altera regime jurídico de servidores, nem impõe a criação de estruturas administrativas. O Projeto limita-se a estabelecer obrigação de transparência, matéria inserida no dever constitucional já imposto ao Poder Público, plenamente compatível com a iniciativa parlamentar.
+A Lei de Acesso à Informação (Lei Federal nº 12.527/2011) impõe aos entes federativos o dever de transparência ativa, permitindo ao legislador municipal estabelecer normas que ampliem e detalhem o acesso à informação no âmbito local. O presente Projeto atua exatamente nesse espaço normativo, sem inovar de forma incompatível com a legislação federal.
+No que se refere à proteção de dados pessoais, o Projeto observa rigorosamente a Lei Geral de Proteção de Dados Pessoais (Lei Federal nº 13.709/2018). A proposta veda expressamente a divulgação pública de dados pessoais e dados sensíveis, determinando que as informações disponibilizadas ao público em geral sejam apresentadas de forma anonimizada e agregada. O acesso a dados individualizados ocorrerá exclusivamente por meio de sistema eletrônico com login e autenticação pessoal, restrito aos responsáveis legais, garantindo confidencialidade, segurança da informação e proteção integral da criança e do adolescente.
+Ressalte-se que a exigência de acesso individualizado por login não configura ingerência indevida na atividade administrativa, mas sim condição mínima de conformidade com a LGPD, sendo medida necessária para assegurar o direito à informação sem violar a privacidade dos titulares de dados.
+Quanto ao aspecto orçamentário, o Projeto não cria despesa obrigatória nem fixa prazo ou valor específico de investimento, condicionando sua execução à regulamentação administrativa e às possibilidades técnicas do Poder Executivo. Trata-se de obrigação compatível com os sistemas já existentes de gestão educacional e transparência, sem afronta ao artigo 169 da Constituição Federal.
+A jurisprudência do Supremo Tribunal Federal é pacífica no sentido de que leis de iniciativa parlamentar que tratam de transparência, publicidade de atos administrativos e acesso à informação não configuram violação à separação dos poderes, por se inserirem no dever constitucional do Estado de dar publicidade a seus atos e políticas públicas.
+Dessa forma, o Projeto de Lei revela-se formal e materialmente constitucional, juridicamente adequado, compatível com a legislação federal vigente e com os princípios da Administração Pública, não havendo óbice para sua regular tramitação e aprovação pelas Comissões Permanentes desta Casa Legislativa.

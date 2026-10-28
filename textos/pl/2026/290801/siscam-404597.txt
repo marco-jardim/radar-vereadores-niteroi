@@ -1,0 +1,35 @@
+PROJETO DE LEI Nº ___/2026
+
+INSTITUI, NO MUNICÍPIO DE NITERÓI, A OBRIGATORIEDADE DE DISPOSITIVOS DE SEGURANÇA EM PISCINAS DE USO COLETIVO, ESTABELECE CONDIÇÕES PARA SEU FUNCIONAMENTO SEGURO E DÁ OUTRAS PROVIDÊNCIAS.
+Art. 1º - Esta Lei dispõe sobre requisitos mínimos de segurança para piscinas de uso coletivo localizadas em todo o território do Município de Niterói, com o objetivo de prevenir acidentes por aprisionamento de partes do corpo, cabelos ou objetos em sistemas de sucção e equipamentos similares.
+Art. 2º - Para os fins desta Lei, consideram-se:
+I – Piscina de uso coletivo: quaisquer piscinas, tanques ou similares, existentes em condomínios, clubes, academias, hotéis, pousadas, associações de moradores, casas de festas, praças esportivas ou estabelecimentos de uso público ou privado que permitam o uso por mais de uma unidade familiar ou público em geral;
+II – Dispositivo de segurança anti-sucção: mecanismos que impeçam ou interrompam automaticamente a sucção da água em bombonas, ralos, bocais ou quaisquer pontos de aspiração quando houver bloqueio ou risco de aprisionamento;
+III – Sistema de desligamento imediato: dispositivo que desative automaticamente bombas ou motores de sucção em caso de obstrução, mau funcionamento ou detecção de risco;
+IV – Grelha/tampa anti-aprisionamento não-bloqueável (tipo domo/convexa): componente instalado sobre o ponto de sucção que dificulte a vedação completa do ponto de aspiração e reduza o risco de aprisionamento por sucção, conforme especificação do fabricante e norma técnica aplicável;
+V – Dispositivo secundário de proteção anti-aprisionamento: sistema de liberação de vácuo/pressão, desligamento automático, ventilação ou tecnologia equivalente destinada a reduzir o risco de aprisionamento, especialmente em instalações com ralo único ou suscetível a bloqueio.
+Art. 3º - Fica vedado o funcionamento de bombas, motores ou sistemas de sucção em piscinas de uso coletivo enquanto a piscina estiver aberta ao uso de banhistas, exceto em períodos expressamente destinados à manutenção ou tratamento da água, devidamente sinalizados.
+Art. 4º - Os responsáveis pelos locais mencionados no art. 2º deverão, no prazo de 120 (cento e vinte) dias contados da publicação desta Lei, instalar dispositivos de segurança anti-sucção ou sistemas equivalentes de desligamento imediato em todo ponto de sucção das piscinas de uso coletivo.
+§1º A sinalização de aviso deverá ser claramente visível, indicando a presença de dispositivos de segurança e instruções de uso seguro da piscina.
+§2º Durante períodos de manutenção em que o uso por banhistas esteja suspenso e bombas ou motores de sucção sejam ativados, deverá ser afixado aviso no acesso à piscina informando que o local está fechado para manutenção e que sistemas de sucção estão em funcionamento.
+§3º Todo ponto de sucção deverá possuir grelha/tampa anti-aprisionamento não-bloqueável, preferencialmente em formato convexo (tipo domo), instalada e mantida conforme especificação do fabricante e norma técnica aplicável, vedada a utilização de grelhas planas que permitam bloqueio total do ponto de sucção.
+§4º Nos casos de ralo único, ou quando a configuração do sistema permitir bloqueio total do ponto de sucção, será obrigatória a instalação de dispositivo secundário de proteção ou solução equivalente, destinado a reduzir o risco de aprisionamento.
+§5º O responsável deverá manter disponível, para fins de fiscalização, documentação técnica mínima do dispositivo instalado (manual, especificação do fabricante ou documento equivalente).
+Art. 5º - Os responsáveis que descumprirem o disposto nesta Lei estarão sujeitos às seguintes sanções, cumulativas:
+I – advertência por escrito;
+II – multa administrativa, cujo valor será definido em regulamento específico, em patamar compatível com a gravidade da infração;
+III – interdição cautelar da piscina até a completa regularização das exigências de segurança;
+IV – em caso de reincidência, aplicação de multa majorada e nova interdição.
+Art. 6º - A fiscalização do cumprimento desta Lei ficará a cargo dos órgãos municipais competentes, que poderão estabelecer cronograma de vistorias periódicas e procedimentos de notificação e autuação.
+Art. 7º - Esta Lei entra em vigor na data de sua publicação, revogadas as disposições em contrário.
+Sala das Sessões, 26 de janeiro de 2026
+
+ALLAN PINHO LYRA
+
+JUSTIFICATIVA:
+O presente Projeto de Lei tem por finalidade estabelecer, no âmbito do Município de Niterói, requisitos mínimos e objetivamente fiscalizáveis de segurança para piscinas de uso coletivo, com foco na prevenção de acidentes decorrentes de sistemas de sucção, capazes de causar aprisionamento de partes do corpo, cabelos ou objetos, especialmente em situações de bloqueio de ralos e pontos de aspiração.
+No Município de Niterói foram notificados acidentes em piscinas coletivas ou de uso público/privado, nos quais crianças foram vítimas de sucção por bombas e canos de piscina, evidenciando a necessidade de aprimoramento das regras locais, com maior padronização de medidas preventivas e de controle.
+A experiência internacional demonstra que determinados formatos de grelhas e tampas de ralos podem aumentar o risco de bloqueio total, ao passo que soluções não-bloqueáveis, preferencialmente em formato convexo (tipo domo), contribuem para reduzir a vedação completa e a formação de sucção perigosa. A legislação norte-americana que ganhou notoriedade a partir de um caso real, conhecida como Virginia Graeme Baker Pool and Spa Safety Act, reforça essa linha de prevenção ao exigir soluções construtivas e dispositivos voltados à mitigação do risco de aprisionamento.
+No Brasil, a Lei Federal nº 14.327/2022 estabelece requisitos gerais de segurança para piscinas. Ocorre que, no plano municipal, mostra-se pertinente detalhar medidas diretamente relacionadas ao uso cotidiano de piscinas coletivas — inclusive quanto à vedação do funcionamento de sistemas de sucção durante a permanência de banhistas, salvo manutenção devidamente sinalizada — e assegurar a presença, em cada ponto de sucção, de grelha/tampa anti-aprisionamento não-bloqueável, além de solução adicional em situações específicas, como ralo único ou configuração suscetível a bloqueio total.
+A proposta mantém-se proporcional e necessária: não cria exigências excessivas, mas fixa um padrão mínimo de segurança, com prazo razoável para adequação, mecanismo de fiscalização e sanções progressivas. Trata-se de medida que busca reduzir riscos graves e evitáveis, conferindo maior proteção às famílias, frequentadores de clubes, condomínios, academias, hotéis e demais ambientes de uso coletivo no Município.
+Diante do exposto, solicita-se o apoio dos nobres Vereadores para a aprovação desta proposição, como resposta concreta e responsável à prevenção de acidentes em instalações aquáticas e à proteção da vida e da integridade física da população.

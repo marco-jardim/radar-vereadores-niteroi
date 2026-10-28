@@ -1,0 +1,239 @@
+                                   Gabinete da Vereadora Fernanda Louback
+
+PROJETO DE LEI Nº.              /2025
+
+                                                     ESTABELECE NORMAS DE TRANSPARÊNCIA
+                                                     NAS FILAS DE ESPERA PARA CONSULTAS,
+                                                     EXAMES E PROCEDIMENTOS MÉDICOS E
+                                                     DISPÕE SOBRE A FIXAÇÃO DE PRAZOS
+                                                     MÁXIMOS      RECOMENDADOS       PARA
+                                                     ATENDIMENTO NA REDE PÚBLICA DE SAÚDE
+                                                     DE NITERÓI.
+
+       A Câmara Municipal de Niterói decreta e eu sanciono e promulgo a seguinte Lei:
+
+Art. 1º O Município de Niterói, por meio do Executivo, é incentivado a adotar medidas para garantir
+a transparência nas filas de espera para consultas, exames e procedimentos médicos, priorizando
+medidas divididas entre especificações técnicas e ações educativas, conforme descrito abaixo:
+
+I. Disponibilização, em tempo real, das filas de espera em plataforma digital acessível ao público.
+As especificações técnicas incluem interface responsiva para acesso via dispositivos móveis,
+compatibilidade com navegadores populares, mecanismos de busca interna e conformidade com as
+normas de acessibilidade digital para garantir o acesso a pessoas com deficiência. A segurança e
+privacidade dos dados dos pacientes serão asseguradas conforme a legislação vigente. Além disso,
+a Prefeitura deverá promover campanhas informativas e disponibilizar materiais educativos, bem
+como oferecer suporte presencial em unidades de saúde para facilitar a inclusão digital da população.
+
+II. Informação detalhada sobre a previsão de atendimento para cada tipo de procedimento e
+unidade de saúde;
+
+III. Registro histórico das filas para análise de desempenho e planejamento da gestão;
+
+IV. Divulgação, também em tempo real, da quantidade de médicos e profissionais em atendimento
+em cada unidade de saúde.
+
+Art. 2º Esta lei também estabelece diretrizes recomendatórias para a definição de prazos máximos
+para a realização de consultas, exames, procedimentos e internações na rede pública de saúde do
+Município de Niterói, visando garantir agilidade e eficiência no atendimento aos usuários do Sistema
+Único de Saúde (SUS).
+
+Art. 3º Fica recomendada a implementação de prazos máximos para atendimento na rede pública
+municipal de saúde, com base em estudos de demanda, capacidade instalada e boas práticas já
+consolidadas em outras redes de saúde, conforme determinação da Agência Nacional de Saúde
+Suplementar (ANS) para o setor privado. Estes critérios visam orientar a otimização do uso dos
+recursos disponíveis:
+
+                                    Gabinete da Vereadora Fernanda Louback
+
+I. Consultas básicas (pediatria, clínica médica, cirurgia geral, ginecologia e obstetrícia): até 7 (sete)
+dias úteis;
+
+II. Consultas em demais especialidades médicas: até 14 (catorze) dias úteis;
+
+III. Consultas/sessões com fonoaudiólogo, nutricionista, psicólogo, terapeuta ocupacional e
+fisioterapeuta: até 10 (dez) dias úteis;
+
+IV. Serviços de diagnóstico por laboratório de análises clínicas em regime ambulatorial: até 3 (três)
+dias úteis;
+
+V. Demais serviços de diagnóstico e terapia em regime ambulatorial: até 10 (dez) dias úteis;
+
+VI. Procedimentos de alta complexidade (PAC): até 21 (vinte e um) dias úteis;
+
+VII. Atendimento em regime de hospital-dia: até 10 (dez) dias úteis;
+
+VIII. Atendimento em regime de internação eletiva: até 21 (vinte e um) dias úteis;
+
+IX. Atendimentos de urgência e emergência: imediatos.
+
+Art. 4º Recomenda-se a adoção de prontuário eletrônico em todas as unidades de saúde municipais,
+com implementação gradual em etapas, a ser concluída em até 24 meses, acompanhada de um
+programa de capacitação para os profissionais de saúde no uso das novas tecnologias, priorizando
+inicialmente as unidades de maior demanda e seguindo um cronograma definido pela Secretaria
+Municipal de Saúde, com integração a sistemas de transparência das filas de espera, garantindo a
+proteção de dados dos usuários conforme a Lei Geral de Proteção de Dados (LGPD).
+
+I. O sistema de prontuário eletrônico deverá permitir o monitoramento em tempo real do andamento
+do atendimento;
+
+II. Os usuários deverão ter a possibilidade de consultar o tempo estimado de atendimento antes de
+se dirigirem à unidade de saúde.
+
+Art. 5º A Secretaria Municipal de Saúde será responsável pela implementação das medidas previstas
+nesta Lei, devendo assegurar os recursos necessários para a modernização do sistema de gestão da
+saúde pública.
+
+Art. 6º O descumprimento dos prazos estabelecidos nesta Lei deverá ser justificado pela Secretaria
+Municipal de Saúde, com a devida comunicação ao usuário afetado no prazo máximo de 5 (cinco)
+dias úteis, por meio de relatório individual acessível via plataforma digital ou atendimento presencial.
+A justificativa deverá incluir os motivos do atraso e um plano de ação detalhado com novos prazos
+
+                                   Gabinete da Vereadora Fernanda Louback
+
+previstos, além de disponibilizar um canal direto para esclarecimentos, com a devida comunicação
+ao usuário afetado.
+
+Art. 7º A eficácia das recomendações será monitorada por meio de relatórios trimestrais, emitidos
+pela Secretaria Municipal de Saúde, que deverão assegurar a transparência e o acesso público aos
+relatórios de acompanhamento das medidas de transparência e eficiência na saúde. Os relatórios
+deverão ser publicados em uma plataforma digital acessível ao público.
+
+Art. 8º A Prefeitura de Niterói deverá disponibilizar indicadores básicos de saúde e dar acesso livre
+ao banco de dados de saúde pública, com dados atualizados mensalmente, assegurando que:
+
+I. Os indicadores básicos incluam, mas não se limitem a:
+    1. Tempo médio de espera para consultas, exames e procedimentos;
+    2. Taxa de cumprimento dos prazos recomendados;
+    3. Percentual de utilização da capacidade instalada das unidades de saúde;
+    4. Índice de satisfação dos usuários com o atendimento recebido;
+    5. Percentual de absenteísmo em consultas, exames e procedimentos;
+    6. Número total de atendimentos realizados por tipo e unidade de saúde;
+    7. Distribuição de profissionais de saúde por unidade e especialidade;
+    8. Indicadores de qualidade do atendimento.
+
+II. Os dados sejam anonimizados para proteger a privacidade dos pacientes, em conformidade com
+a Lei Geral de Proteção de Dados (LGPD);
+
+III. A qualidade e a atualização dos dados sejam mantidas para garantir a confiabilidade das
+análises;
+
+IV. A infraestrutura tecnológica suporte o acesso contínuo e seguro aos dados;
+
+V. Recursos educacionais e guias sejam disponibilizados para auxiliar cidadãos e organizações na
+análise e interpretação dos dados.
+
+Art. 9º Fica instituído um Comitê de Acompanhamento das Medidas de Transparência e Eficiência
+na Saúde, composto por representantes do governo municipal, profissionais de saúde, usuários do
+sistema de saúde, e da Câmara de Vereadores de Niterói, com a finalidade de monitorar a
+implementação das medidas previstas nesta Lei e promover a participação social.
+
+I. A escolha dos representantes será realizada da seguinte forma:
+
+   1. Os representantes do governo municipal serão indicados pelo Prefeito;
+   2. Os representantes dos profissionais de saúde serão escolhidos por meio de eleição direta
+      entre os profissionais atuantes na rede pública de saúde de Niterói;
+
+                                   Gabinete da Vereadora Fernanda Louback
+
+   3. Os representantes dos usuários do sistema de saúde serão selecionados através de um
+      processo de inscrição pública, seguido de sorteio, garantindo a diversidade e
+      representatividade da população;
+
+   4. O membro e o suplente que representarão a Câmara de Vereadores de Niterói serão
+      indicados pela Mesa Diretora da Câmara, assegurando a participação de diferentes partidos
+      políticos.
+
+Art. 10º A Secretaria Municipal de Saúde deverá elaborar uma análise de impacto financeiro das
+medidas previstas nesta Lei, assegurando que a implementação seja compatível com o orçamento
+municipal disponível.
+
+Art. 11º Esta Lei entra em vigor 90 (noventa) dias após a sua publicação.
+
+                          Plenário Brígido Tinoco, 12 de fevereiro de 2025.
+
+                                           Fernanda Louback
+
+                                   Gabinete da Vereadora Fernanda Louback
+
+JUSTIFICATIVA
+
+Excelentíssimos Senhores Vereadores,
+
+A presente proposição visa instituir estabelecer normas de transparência nas filas de espera para
+consultas, exames e procedimentos médicos e diretrizes recomendatórias para prazos máximos de
+atendimento na rede pública de saúde de Niterói. Este projeto de lei é um marco na busca por
+uma saúde pública mais eficiente, acessível e transparente.
+
+O direito à saúde, garantido pela Constituição Federal, requer eficiência no atendimento para ser
+efetivamente usufruído por todos. A Lei busca fortalecer valores democráticos, participação
+popular e controle social sobre os serviços de saúde municipais.
+
+Inspirada na regulação da ANS para o setor privado, a proposta adapta essas diretrizes ao SUS,
+respeitando especificidades locais como demanda e capacidade instalada, garantindo
+previsibilidade no atendimento sem comprometer os princípios do SUS.
+
+A proposta promove uma relação cooperativa entre gestão pública e sociedade civil, facilitando o
+acesso a dados sobre tempos de espera e disponibilidade de serviços médicos. Isso inclui
+plataformas digitais que asseguram transparência e proteção de dados pessoais, conforme a
+LGPD.
+
+Transparência e publicidade são cruciais no combate à ineficiência e má gestão dos recursos
+públicos. Com informações claras, a população poderá fiscalizar o sistema de saúde, contribuindo
+para o aprimoramento das políticas públicas e uso eficiente dos recursos municipais. A aprovação
+desta Lei representa um avanço na gestão pública em saúde, permitindo monitorar prazos,
+prevenir atrasos e adotar medidas corretivas.
+
+Contamos com o apoio dos nobres vereadores para aprovar este importante instrumento legal, em
+prol de um sistema de saúde mais justo e acessível para todos os cidadãos de Niterói.
+
+                          Plenário Brígido Tinoco, 12 de fevereiro de 2025.
+
+                                           Fernanda Louback
+
+                                   Gabinete da Vereadora Fernanda Louback
+
+ASPECTOS CONSTITUCIONAIS E LEGAIS:
+
+O Projeto de Lei que estabelece diretrizes para prazos máximos de atendimento na rede pública de
+saúde de Niterói e normas de transparência nas filas de espera fundamenta-se nos seguintes
+aspectos constitucionais e legais:
+
+Constituição Federal de 1988: A saúde é um direito de todos e dever do Estado, conforme o art.
+196 da Constituição Federal, que estabelece a garantia de acesso universal e igualitário às ações e
+serviços para sua promoção, proteção e recuperação. Além disso, o art. 37 da CF/88 preconiza os
+princípios da administração pública, incluindo a legalidade, impessoalidade, moralidade, publicidade
+e eficiência, que são fundamentais para a implementação das diretrizes propostas.
+
+Lei de Acesso à Informação (Lei nº 12.527/2011): Esta legislação assegura o direito de acesso
+às informações públicas, promovendo a transparência e o controle social. O projeto de lei alinha-se
+a esses princípios ao prever a disponibilização de informações sobre filas de espera e prazos de
+atendimento na rede pública de saúde.
+
+Lei Geral de Proteção de Dados (Lei nº 13.709/2018): A proteção dos dados pessoais dos
+usuários do sistema de saúde é garantida pela LGPD, que estabelece diretrizes para o tratamento
+de dados pessoais, assegurando a privacidade e a segurança das informações. O projeto de lei prevê
+medidas para garantir a conformidade com essa legislação.
+
+Princípio da Publicidade: Previsto no art. 37, caput, da Constituição Federal, o princípio da
+publicidade determina que os atos administrativos sejam transparentes e acessíveis à sociedade. A
+proposta de lei fortalece esse princípio ao garantir a transparência nas filas de espera e nos prazos
+de atendimento.
+
+Princípio da Eficiência: Também previsto no art. 37 da CF/88, o princípio da eficiência exige que
+a administração pública atue de forma racional e otimizada, buscando a prestação de serviços de
+qualidade. A definição de prazos máximos recomendados para atendimentos visa melhorar a gestão
+e a eficiência dos serviços de saúde.
+
+Princípio da Participação Popular e Controle Social: A Constituição Federal assegura a
+participação da população na gestão pública (art. 1º, parágrafo único) e a necessidade de controle
+social sobre a administração pública (art. 31). O projeto de lei fomenta a participação popular ao
+permitir que os cidadãos acompanhem e fiscalizem os serviços de saúde oferecidos pelo município.
+
+Prazos da ANS: Os prazos informados encontram-se no sítio https://www.ans.gov.br/planos-de-
+saude-e-operadoras/espaco-do-consumidor/prazos-maximos-de-atendimento
+
+Em resumo, o projeto de lei está fundamentado nos princípios constitucionais da saúde como direito
+fundamental, publicidade, eficiência e participação popular, além de estar alinhado à Lei de Acesso
+à Informação e à Lei Geral de Proteção de Dados. Sua aprovação representa um avanço para o
+fortalecimento da gestão pública em saúde, proporcionando maior transparência, controle social e
+participação ativa dos cidadãos na vida pública do município de Niterói.

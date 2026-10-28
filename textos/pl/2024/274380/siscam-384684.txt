@@ -1,0 +1,27 @@
+PROJETO DE LEI Nº        /2024
+
+Altera a Lei nº 3.756, de 22 de dezembro de 2022, para estender o direito à gratuidade no pagamento de tarifas nos transportes coletivos municipais aos responsáveis pelos alunos matriculados na etapa da educação infantil do Colégio Universitário Geraldo Reis - COLUNI/UFF.
+
+Art. 1º O Artigo 1º da Lei nº 3.756, de 22 de dezembro de 2022, passa a vigorar com a seguinte redação:
+"Art. 1º Fica instituído, no âmbito do município de Niterói, o direito a gratuidade no pagamento de tarifas nos transportes coletivos municipais ao acompanhante de crianças matriculadas e cadastradas no Censo Escolar, que sejam oriundas das creches conveniadas com a Rede Municipal de Educação de Niterói ou das instituições de ensino da rede federal que oferecem a etapa da educação infantil."
+Art. 2º O § 1º do Art. 1º da Lei nº 3.756, de 22 de dezembro de 2022, passa a vigorar com a seguinte redação:
+"§ 1º Equiparam-se aos alunos pertencentes à Rede Municipal de Educação de Niterói aqueles matriculados em entidade conveniada à Rede Municipal de Educação ou em instituição de ensino da rede federal que ofereça a etapa da educação infantil e seja cadastrada no Censo Escolar."
+Art. 3º Fica o Poder Executivo autorizado a firmar convênio com a Universidade Federal Fluminense (UFF) para viabilizar a concessão do benefício de gratuidade no pagamento de tarifas nos transportes coletivos municipais aos responsáveis pelos alunos do Colégio Universitário Geraldo Reis (COLUNI/UFF), conforme as disposições desta Lei.
+Art. 4º Esta Lei entra em vigor na data de sua publicação, revogadas as disposições em contrário.
+Plenário Brígido Tinoco, 12 de novembro de 2024
+
+Professor Tulio
+JUSTIFICATIVA
+
+A presente emenda tem como objetivo ampliar o acesso à gratuidade no transporte público municipal para os responsáveis pelos alunos da educação infantil do Colégio Universitário Geraldo Reis (COLUNI), da Universidade Federal Fluminense (UFF). O COLUNI é uma instituição pública vinculada à UFF que atende atualmente 58 crianças de 0 a 5 anos na etapa da educação infantil, com ensino de excelência e compromisso com a formação de qualidade.
+Considerando que o custo do transporte pode representar uma barreira significativa para famílias de baixa renda, especialmente em um contexto de inflação elevada e desafios econômicos enfrentados por muitos cidadãos de Niterói, esta emenda busca garantir equidade ao incluir também os responsáveis dos alunos da rede federal em situação semelhante à rede municipal.
+Utilizando os parâmetros já estabelecidos para a concessão de gratuidade aos responsáveis dos alunos da rede municipal (4 gratuidades diárias/20 semanais), estima-se que o custo anual do benefício para as 58 crianças matriculadas no COLUNI seria de apenas R$ 241.349,60 para os 202 dias letivos de 2025. Esse valor representa um investimento social que poderá gerar impactos positivos para as famílias e para a frequência das crianças, além de promover maior integração entre as redes de ensino municipal e federal.
+Dessa forma, a extensão do benefício reforça a política pública de inclusão social e de apoio ao desenvolvimento educacional e familiar, beneficiando tanto a rede municipal quanto a federal, respeitando o princípio de isonomia e de apoio à educação infantil.
+
+Impacto Orçamentário
+
+Responsáveis | Gratuidades diárias | Dias letivos | 2025 | 2026 | 2027
+58 | 4 | 202 | 241.349,60 | 251.244,93 | 260.415,37
+
+*Valor calculado considerando o preço da passagem de R$ 5,15
+** Variações anuais calculadas a partir das projeções de inflação do Relatório Focus do Banco Central.

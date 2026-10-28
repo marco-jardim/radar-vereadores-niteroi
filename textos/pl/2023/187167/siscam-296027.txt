@@ -1,0 +1,71 @@
+                ESTIMATIVA DE IMPACTO ORÇAMENTÁRIO - MEMÓRIA DE CÁLCULO
+
+                       Gratificação de Produtividade Agentes Fazendários
+                                                  A                          B                     C
+             Rubricas                            2023                       2024                  2025
+Gratificação                                       604.560,39                759.675,87            790.627,10
+Encargos                                           108.820,87                136.741,66            142.312,88
+Total                                              713.381,26                896.417,53            932.939,98
+* Considerado cenário com gratificação máxima para todos os servidores.
+
+                                                          2023
+             Descrição                       Gratificação                 Encargos              TOTAL
+               março                                  52.200,00                  9.396,00           61.596,00
+                abril                                 52.200,00                  9.396,00           61.596,00
+                maio                                  52.200,00                  9.396,00           61.596,00
+               junho                                  52.200,00                  9.396,00           61.596,00
+                julho                                 55.222,38                  9.940,03           65.162,41
+               agosto                                 55.222,38                  9.940,03           65.162,41
+             setembro                                 55.222,38                  9.940,03           65.162,41
+              outubro                                 55.222,38                  9.940,03           65.162,41
+             novembro                                 55.222,38                  9.940,03           65.162,41
+             dezembro                                 55.222,38                  9.940,03           65.162,41
+           SUBTOTAL                                  540.134,28                 97.224,17          637.358,45
+       13º Salário+1/3 Férias                         64.426,11                 11.596,70           76.022,81
+              TOTAL                                  604.560,39                108.820,87          713.381,26
+
+                                                          2024
+                 Mês                         Gratificação                 Encargos              TOTAL
+               janeiro                                55.222,38                  9.940,03           65.162,41
+             fevereiro                                55.222,38                  9.940,03           65.162,41
+               março                                  55.222,38                  9.940,03           65.162,41
+                 abril                                55.222,38                  9.940,03           65.162,41
+                 maio                                 55.222,38                  9.940,03           65.162,41
+                junho                                 58.027,68                 10.444,98           68.472,66
+                julho                                 58.027,68                 10.444,98           68.472,66
+               agosto                                 58.027,68                 10.444,98           68.472,66
+             setembro                                 58.027,68                 10.444,98           68.472,66
+              outubro                                 58.027,68                 10.444,98           68.472,66
+             novembro                                 58.027,68                 10.444,98           68.472,66
+             dezembro                                 58.027,68                 10.444,98           68.472,66
+           SUBTOTAL                                  682.305,64                122.815,01          805.120,65
+       13º Salário+1/3 Férias                         77.370,24                 13.926,64           91.296,88
+              TOTAL                                  759.675,87                136.741,66          896.417,53
+
+                                                          2025
+                 Mês                         Gratificação                 Encargos              TOTAL
+               janeiro                                58.027,68                 10.444,98           68.472,66
+             fevereiro                                58.027,68                 10.444,98           68.472,66
+               março                                  58.027,68                 10.444,98           68.472,66
+                 abril                                58.027,68                 10.444,98           68.472,66
+                 maio                                 58.027,68                 10.444,98           68.472,66
+                junho                                 60.058,65                 10.810,56           70.869,20
+                julho                                 60.058,65                 10.810,56           70.869,20
+               agosto                                 60.058,65                 10.810,56           70.869,20
+             setembro                                 60.058,65                 10.810,56           70.869,20
+              outubro                                 60.058,65                 10.810,56           70.869,20
+             novembro                                 60.058,65                 10.810,56           70.869,20
+             dezembro                                 60.058,65                 10.810,56           70.869,20
+           SUBTOTAL                                  710.548,90                127.898,80          838.447,71
+       13º Salário+1/3 Férias                         80.078,19                 14.414,07           94.492,27
+              TOTAL                                  790.627,10                142.312,88          932.939,98
+
+       Referências Mensais
+             Despesa                      JUN/23 A MAI/24            JUN/2024 A MAI/25      JUN/2025 A MAI/26
+             Reajuste                         5,79%                       5,08%                  3,50%
+
+Premissas:
+*Encargos de 18,00%
+** Os reajustes foram estimados conforme a previsão do IPCA no relatório Focus
+
+                                                    Página 1 de 1

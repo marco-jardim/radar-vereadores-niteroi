@@ -1,0 +1,357 @@
+           Anexo VII - Anexo de Alterações no Plano Plurianual 2022-2025
+
+     Anexo VII - Anexo de Alterações no Plano Plurianual 2022-2025
+
+I - ALTERAÇÕES NOS INDICADORES DE IMPACTO
+
+Tipo de alteração: correção do valor de referência
+Indicador: Índice de Serviços Digitais
+
+    Estabelecido no PPA 2022-2025                          Ajuste no PPA 2022-2025
+55,20 (2020)                                        11 (2021)
+
+Tipo de alteração: correção da fonte do indicador
+Indicador: Taxa de conclusão da Educação Básica para jovens de 17 a 19 anos
+     Estabelecido no PPA 2022-2025                 Ajuste no PPA 2022-2025
+SME/FME                                      INEP/MEC
+
+Tipo de alteração: correção do valor de referência
+Indicador: Taxa de conclusão da Educação Básica para jovens de 17 a 19 anos
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+53,1 (2018)                                  19,88 (2018)
+
+Tipo de alteração: correção do nome do indicador
+Indicador: Taxa de mortes violentas na cidade
+     Estabelecido no PPA 2022-2025                Ajuste no PPA 2022-2025
+Taxa de mortes violentas na cidade         Taxa de mortes violentas e de acidentes na
+                                           cidade
+
+Tipo de alteração: correção do valor de referência
+Indicador: Taxa de mortes violentas na cidade
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+36,9 (2019)                                  50,8 (2019)
+
+Tipo de alteração: correção do valor de referência
+Indicador: Taxa de população em extrema pobreza
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+6 (2021)                                     11,16 (2021)
+
+           Anexo VII - Anexo de Alterações no Plano Plurianual 2022-2025
+
+Tipo de alteração: correção da memória de cálculo
+Indicador: Índice de Serviços Digitais
+     Estabelecido no PPA 2022-2025                 Ajuste no PPA 2022-2025
+(Total de serviços disponibilizados em (Serviços ofertados pela prefeitura
+meio digitais / Total de serviços municipal de Niterói em meio digital /
+cadastrados na Carta de Serviços) x 100    Total de Serviços ofertados pela Prefeitura
+                                           Municipal de Niterói ) x100
+
+II - ALTERAÇÕES NOS INDICADORES DE RESULTADO
+
+PROGRAMA 0011 - MOBILIDADE URBANA
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Índice de congestionamento
+     Estabelecido no PPA 2022-2025                  Ajuste no PPA 2022-2025
+10,7 (2020)                                  7 (2021)
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Taxa de variação da malha cicloviária
+     Estabelecido no PPA 2022-2025                  Ajuste no PPA 2022-2025
+18,4 (2020)                                  50,83(2018)
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Tempo médio de deslocamento para o trabalho
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+35(2020)                                     23,4 (2021)
+
+PROGRAMA 0024 - PROTEÇÃO SOCIAL ESPECIAL DE MÉDIA COMPLEXIDADE
+
+Tipo de alteração: correção do valor de referência
+Indicador: Evolução do atendimento de pessoas em situação de vulnerabilidade que
+sofreram violação de direitos ou se encontram em situação de ameaça, cujos vínculos
+familiares e comunitários não foram rompidos, atendidas pelo CREAS
+     Estabelecido no PPA 2022-2025                  Ajuste no PPA 2022-2025
+5 (2020)                                     22 (2019)
+
+           Anexo VII - Anexo de Alterações no Plano Plurianual 2022-2025
+
+PROGRAMA 0027 - PROTEÇÃO SOCIAL ESPECIAL DE ALTA COMPLEXIDADE
+
+Tipo de alteração: correção do nome do indicador
+Indicador: Taxa de população em situação de rua em unidades de acolhimento
+     Estabelecido no PPA 2022-2025                 Ajuste no PPA 2022-2025
+Taxa de população em situação de rua em Taxa de pessoas em situação de rua
+unidades de acolhimento                    acolhidas
+
+Tipo de alteração: correção da memória de cálculo do indicador
+Indicador: Taxa de população em situação de rua em unidades de acolhimento
+     Estabelecido no PPA 2022-2025                 Ajuste no PPA 2022-2025
+(Número de pessoas em situação de rua (Número de pessoas em situação de rua
+abrigadas em unidades de acolhimento abrigadas em unidades de acolhimento
+municipais / População de rua total no municipais/Média mensal de pessoas
+município) x 100                           atendidas no CentroPop ) x 100
+
+Tipo de alteração: correção do valor de referência
+Indicador: Taxa de população em situação de rua em unidades de acolhimento
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+25,19 (2020)                                 18,4 (2020)
+
+PROGRAMA 0053 - SEGURANÇA NO TRÂNSITO
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Taxa de mortes no trânsito a cada 100 mil habitantes
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+3,2 (2020)                                   3,1 (2020)
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Taxa de acidentes de trânsito a cada 100 mil habitantes
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+161,2 (2020)                                 207,25 (2020)
+
+           Anexo VII - Anexo de Alterações no Plano Plurianual 2022-2025
+
+PROGRAMA 0098              -   PROMOÇÃO              DOS       DIREITOS    DAS   CRIANÇAS   E
+ADOLESCENTES
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Taxa de evolução de atividades destinadas à proteção de
+crianças e adolescentes
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+5(2020)                                      -67 (2020)
+
+Tipo de alteração: correção da memória de cálculo
+Indicador de resultado: Taxa de evolução de atividades destinadas à proteção de
+crianças e adolescentes
+     Estabelecido no PPA 2022-2025                 Ajuste no PPA 2022-2025
+[(Total de atividades realizadas nos [(Total de atividades realizadas no
+equipamentos da assistência social e CMDCA no ano + Número de ações no
+conselhos tutelares e conselhos de direito âmbito do PETI no ano) - (Total de
+no ano) - (Total de atividades realizadas atividades realizadas no CMDCA no ano
+nos equipamentos da assistência social e anterior + número de ações no âmbito do
+conselhos tutelares e conselhos de direito PETI no ano anterior) / Total de atividades
+no ano anterior) / (Total de atividades realizadas no CMDCA no ano anterior +
+realizadas    nos     equipamentos       da Número de ações no âmbito do PETI no
+assistência social e conselhos tutelares e ano anterior) x 100
+conselhos de direito no ano anterior) x 100
+
+Tipo de alteração: correção do valor de referência
+Indicador: Taxa de mortalidade de crianças e adolescentes (0-19 anos) por causas
+externas de residentes de Niterói, por 100 mil habitantes
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+120,8 (2019)                                 68,3 (2019)
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Taxa de evolução do atendimento de crianças e adolescentes
+nos serviços de convivência e fortalecimento de vínculos (SCFV)
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+5(2021)                                      -30 (2020)
+
+           Anexo VII - Anexo de Alterações no Plano Plurianual 2022-2025
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Taxa de Mortalidade neonatal precoce
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+4,2(2020)                                    5,6 (2020)
+
+PROGRAMA 0100 - PROTEÇÃO SOCIAL BÁSICA
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Grau de cobertura do Serviço de Proteção Social Básica
+     Estabelecido no PPA 2022-2025                  Ajuste no PPA 2022-2025
+46(2020)                                     32 (2020)
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Grau de cobertura dos Programas de Transferência de Renda
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+100(2020)                                    71,3 (2020)
+
+0131 - PROGRAMA NITERÓI MAIS SEGURA
+
+Tipo de alteração: correção da fórmula
+Indicador de resultado: Taxa de roubo de veículos
+     Estabelecido no PPA 2022-2025                Ajuste no PPA 2022-2025
+(Somatório de roubo e furto de veículos (Somatório de roubo de veículos ocorridos
+ocorridos no município / população no no município / população no ano) x
+ano) x 100.000 habitantes                  100.000 habitantes
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Taxa de homicídio de negros
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+121 (2012)                                   65,1 (2018)
+
+Tipo de alteração: correção da memória de cálculo
+Indicador de resultado: Taxa de homicídio de jovens
+     Estabelecido no PPA 2022-2025                 Ajuste no PPA 2022-2025
+(Número total de morte de jovens de 18 a (Número total de morte de jovens de 15 a
+29 anos por homicídio / Número total de 29 anos por homicídio / Número total de
+jovens de 18 a 29 anos da população) x jovens de 15 a 29 anos da população) x
+100 mil habitantes                         100 mil habitantes
+
+           Anexo VII - Anexo de Alterações no Plano Plurianual 2022-2025
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Taxa de homicídio de jovens
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+20,60 (2019)                                 119,6 (2020)
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Taxa de roubo de veículos
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+1122,3 (2019)                                449,03 (2020)
+
+0132 - PROGRAMA RESILIÊNCIA A DESASTRES
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Moradores retirados em áreas de risco
+     Estabelecido no PPA 2022-2025                  Ajuste no PPA 2022-2025
+600 (2021)                                   4074 (2021)
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Número de moradias em áreas de alto risco com risco
+eliminado por intervenções estruturais
+     Estabelecido no PPA 2022-2025                  Ajuste no PPA 2022-2025
+200 (2021)                                   1358 (2021)
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Voluntários capacitados pela Defesa Civil
+     Estabelecido no PPA 2022-2025                  Ajuste no PPA 2022-2025
+200 (2021)                                   293 (2021)
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Jovens do ensino fundamental atendidos pelo programa
+Defesa Civil nas escolas
+     Estabelecido no PPA 2022-2025                  Ajuste no PPA 2022-2025
+200 (2021)                                   240 (2019)
+
+           Anexo VII - Anexo de Alterações no Plano Plurianual 2022-2025
+
+0133 - PROGRAMA ATENÇÃO À SAÚDE
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Taxa de mortalidade materna (por 100 mil nascidos vivos)
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+37,9 (2020)                                  52,5 (2020)
+
+0134 - PROGRAMA 0134 - CIDADE CIENTÍFICA E TECNOLÓGICA
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Acesso aos conhecimentos científicos e tecnológicos
+divulgados
+     Estabelecido no PPA 2022-2025                  Ajuste no PPA 2022-2025
+415 (2020)                                   590 (2020)
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Orçamento municipal investido em fomento à pesquisa e
+inovação tecnológica
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+2028(2020)                                   512,4 (2021)
+
+0135 - PROGRAMA - EDUCAÇÃO PARA TODOS
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Taxa de crianças com até 8 anos que concluíram o 3º ano do
+Ensino Fundamental
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+81,6(2020)                                   90,70 (2019)
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Taxa de demanda atendida em creches
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+45,6 (2018)                                  17,84 (2018)
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Taxa de demanda atendida em pré-escolas
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+90,7 (2018)                                  51,91 (2018)
+
+           Anexo VII - Anexo de Alterações no Plano Plurianual 2022-2025
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Taxa de demanda atendida no Ensino Fundamental
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+97(2018)                                     106,15 (2018)
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Taxa de aprovação escolar nos anos finais do Ensino
+Fundamental
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+87 (2020)                                    86,1 (2019)
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Taxa de abandono escolar no ensino fundamental
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+2 (2019)                                     0,8 (2019)
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Taxa de conclusão escolar no Ensino Médio
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+68,5 (2020)                                  63,94 (2020)
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Número de jovens e adultos alfabetizados
+     Estabelecido no PPA 2022-2025                  Ajuste no PPA 2022-2025
+322 (2021)                                   119 (2021)
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Número de jovens e adultos com ensino fundamental
+completo
+     Estabelecido no PPA 2022-2025                  Ajuste no PPA 2022-2025
+409 (2021)                                   94 (2021)
+
+0137 - PROGRAMA - CIDADE DO ESPORTE
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Taxa de empregos formais no setor de Esporte e Recreação
+no município
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+2 (2020)                                     1,2 (2020)
+
+           Anexo VII - Anexo de Alterações no Plano Plurianual 2022-2025
+
+0141 - PROGRAMA HABITAÇÃO E REGULARIZAÇÃO FUNDIÁRIA
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Coeficiente de unidades habitacionais entregues por ano
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+27 (2019)                                    1,66 (2021)
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Coeficiente de unidades habitacionais regularizadas no ano
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+85 (2021)                                    31,4 (2019)
+
+0146 - PROGRAMA - DESENVOLVIMENTO ECONÔMICO
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Taxa de variação dos microempreendimentos no município
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+8,53 (2020)                                  -15,33 (2020)
+
+0147 - PROGRAMA 0147 - CIDADE VERDE E SUSTENTÁVEL
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Área verde recuperada
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+5,4 (2020)                                   2,88 (2020)
+
+0149 - PROGRAMA - GESTÃO PÚBLICA INOVADORA
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Formação e desenvolvimento de pessoas
+     Estabelecido no PPA 2022-2025                  Ajuste no PPA 2022-2025
+833 (2020)                                   831 (2020)
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Índice de investimento no Tesouro Municipal
+     Estabelecido no PPA 2022-2025                   Ajuste no PPA 2022-2025
+12 (2020)                                    10,52 (2020)
+
+          Anexo VII - Anexo de Alterações no Plano Plurianual 2022-2025
+
+0150 - PROGRAMA GESTÃO PÚBLICA TRANSPARENTE E PARTICIPATIVA
+
+Tipo de alteração: correção do valor de referência
+Indicador de resultado: Acesso ao Portal da Transparência da PMN
+     Estabelecido no PPA 2022-2025                  Ajuste no PPA 2022-2025
+60.000 (2020)                                323.918 (2021)

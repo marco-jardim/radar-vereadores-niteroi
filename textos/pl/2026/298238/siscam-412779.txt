@@ -1,0 +1,29 @@
+PROJETO DE LEI Nº ___/2026
+
+Dispõe sobre a divulgação do número de vagas, da demanda, da lista de espera, da posição dos inscritos e da atualização periódica das informações referentes às vagas em creches e unidades de Educação Infantil da Rede Municipal de Educação de Niterói, e dá outras providências.
+
+Art. 1º Fica o Poder Executivo Municipal, por intermédio da Secretaria Municipal de Educação (SME) e da Fundação Municipal de Educação (FME), obrigado a divulgar, de forma clara, pública e em formato eletrônico de acesso aberto, as informações referentes às vagas disponíveis, à demanda reprimida e à lista de espera para o atendimento em creches e unidades de Educação Infantil da Rede Municipal de Ensino e conveniadas.
+Art. 2º Para fins de cumprimento desta Lei, o Poder Executivo disponibilizará, no sítio oficial da Prefeitura e no Portal da Transparência, painel de dados e relatórios contendo, no mínimo:
+I – O número total de vagas existentes por unidade escolar e faixa etária (berçário, maternal e pré-escola);
+II – O quantitativo de vagas preenchidas e remanescentes em cada unidade;
+III – A listagem nominal com a ordem de classificação dos inscritos em lista de espera, com indicação do número do protocolo de inscrição gerado no ato do cadastro;
+IV – A data de realização da inscrição;
+V – A unidade escolar ou região pleiteada;
+VI – A especificação dos critérios de prioridade e desempate legais aplicados, tais como:
+a) Crianças em situação de vulnerabilidade social ou sob medida de proteção;
+b) Filhos de mulheres vítimas de violência doméstica (conforme legislação vigente);
+c) Crianças com deficiência ou necessidades educacionais especiais;
+d) Ordem cronológica da inscrição.
+Parágrafo único. Em observância à Lei Geral de Proteção de Dados Pessoais (Lei Federal nº 13.709/2018 - LGPD) e ao Estatuto da Criança e do Adolescente (Lei Federal nº 8.069/1990 - ECA), a divulgação das listas não exporá dados sensíveis, limitando a identificação do inscrito ao número do protocolo, às iniciais do nome da criança e ao nome abreviado do responsável legal.
+Art. 3º A atualização das informações previstas no art. 2º ocorrerá, no mínimo, mensalmente, sendo semanal durante os períodos oficiais de matrícula e rematrícula.
+Art. 4º Fica assegurado aos pais ou responsáveis legais o direito de consultar, presencialmente nas unidades de ensino ou por canal de atendimento digital oficial, a posição do inscrito e a estimativa de convocação.
+Art. 5º Sempre que houver desistência, cancelamento ou criação de novas vagas, a convocação dos candidatos deverá seguir rigorosamente a ordem da lista pública divulgada, com registro explícito da movimentação no sistema.
+Art. 6º As despesas decorrentes da execução desta Lei correrão por conta das dotações orçamentárias próprias, suplementadas se necessário.
+Art. 7º Esta Lei entra em vigor na data de sua publicação, revogadas as disposições em contrário.
+
+Leandro Portugal
+
+JUSTIFICATIVA
+O presente Projeto de Lei visa garantir a máxima transparência e controle social na gestão das vagas da Educação Infantil em Niterói, em consonância com o art. 208, inciso IV, da Constituição Federal, o Estatuto da Criança e do Adolescente (ECA) e a Lei de Diretrizes e Bases da Educação Nacional (LDB).
+O acesso à creche e à pré-escola é direito fundamental e dever do Estado. A publicação organizada e periódica da lista de espera (i) confere previsibilidade e segurança às famílias niteroienses no planejamento de suas rotinas e inserção no mercado de trabalho; (ii) assegura a isonomia e a fiscalização quanto aos critérios legais de prioridade no preenchimento de vagas; (iii) respeita rigorosamente a privacidade dos menores, adequando a publicidade dos atos administrativos às exigências da LGPD; e (iv) fornece subsídios técnicos precisos para que o Poder Público e os órgãos de controle identifiquem os bairros com maior déficit de vagas e planejem a expansão da rede.
+Diante do interesse público e da relevância social da matéria, submete-se a presente proposição à apreciação dos nobres pares desta Casa Legislativa.

@@ -1,0 +1,99 @@
+                                             ANEXO
+
+       Estimativa do Impacto Orçamentário-Financeiro
+
+Estimativa de impacto orçamentário-financeiro elaborada em cumprimento ao art. 113
+do Ato das Disposições Constitucionais Transitórias da Constituição Federal de 1988 e
+do art. 14 da Lei Complementar n° 101/2000.
+
+    Estimativa do impacto orçamentário-financeiro por exercício (R$)
+            2024                               2025                                2026
+         197.889,45                         411.293,44                          638.533,07
+
+I - Metodologia e Memorial de Cálculo:
+
+Item Descrição                                                                        Valor (R$)
+A    Em consulta à base de dados de inscrições imobiliárias municipais, aplicou-se os
+     seguintes filtros (dados do exercício 2023): unidades edificadas; unidades                        -
+     residenciais; unidades que não possuem isenção; unidades com valor venal
+     inferior à referência IS (R$265.487,78). Obteve-se, então, os seguintes totais:
+     Matrículas: 97.949
+     IPTU: R$108.765.698,24
+     TCIL: R$28.701.443,83
+     Valor venal: R$13.304.712.876,01
+B     Número de domicílios estimados em assentamentos precários
+                                                                                                 56.458
+
+C     Valor total do IPTU, considerando-se os filtros aplicados [valor descrito em A]     108.765.698,24
+
+D     Valor total da TCIL, considerando-se os filtros aplicados [valor descrito em A]      28.701.443,83
+E     Percentual de isenção do IPTU e da TCIL                                                       70%
+      Impacto orçamentário total do IPTU (considera a totalidade dos imóveis sujeitos
+      à regularização fundiária urbana de interesse social) - vide Nota 3 abaixo [C * E
+F     * 20% * 35%]                                                                          5.329.519,21
+      Impacto orçamentário total da TCIL (considera a totalidade dos imóveis sujeitos
+      à regularização fundiária urbana de interesse social) - vide Nota 3 abaixo
+G     [B * Referência L1 (R$294,73) * E * 35%]                                              4.076.767,25
+
+H     Impacto orçamentário total (IPTU + TCIL) [F + G]                                      9.406.286,47
+      Estimativa percentual dos domicílios em assentamentos precários que serão
+I     efetivamente contemplados com Reurb-S nos próximos 10 anos                                    20%
+      Impacto orçamentário (IPTU + TCIL) a ser incrementado anualmente nos
+      próximos 10 anos
+J     [H * I /10]                                                                            188.125,73
+      Atualização monetária prevista para o exercício 2024 (Resolução Nº
+K     082/SMF/2023, art. 8°)                                                                      5,19%
+
+L     Estimativa de impacto orçamentário no exercício 2024 [J * K]                         197.889,45
+M     Estimativa do IPCA no exercício 2024                                                      3,92%
+
+N     Estimativa de impacto orçamentário no exercício 2025 [2 * L * (1 + K)]               411.293,44
+O     Estimativa do IPCA no exercício 2025                                                      3,50%
+
+P     Estimativa de impacto orçamentário no exercício 2026 [3 / 2 * N * (1 + O)]           638.533,07
+
+Notas:
+1 - Os dados referentes ao cadastro imobiliário municipal têm como fonte o sistema e-Cidade (relatório
+emitido pelo DETEC em novembro de 2023).
+2 - O número de domicílios estimados em assentamos precários foi apresentado pela SMHRF na peça n°
+27 dos autos do processo n° 9900012683/2023.
+3 - O impacto orçamentário total do IPTU e da TCIL foi estimado tendo por base as seguintes premissas
+(formuladas a partir da análise dos dados do cadastro imobiliário municipal e do Censo 2022 - IBGE): I)
+80% do valor venal dos imóveis do Município estão localizados em áreas que não estão sujeitas a Reurb-
+S; II) 65% das unidades residenciais em assentamentos precários não constam no cadastro municipal).
+4 - Os cálculos acima não consideram um eventual impacto positivo que haveria em decorrência da
+redução dos índices de inadimplência (tanto em razão das regularizações fundiárias, como em razão da
+própria redução da carga tributária para os contribuintes beneficiados).
+5 - A estimativa do IPCA nos exercícios de 2024 e 2025 foram obtidas do Relatório Focus (BACEN),
+publicado em 04/12/2023.
+
+II - Da estimativa da receita da lei orçamentária e das metas de resultados fiscais
+previstas no anexo próprio da lei de diretrizes orçamentárias:
+
+        Em atendimento ao art. 14, inciso I, da Lei Complementar n° 101/2000,
+esclarece-se que o impacto orçamentário oriundo do Projeto de Lei a que este Anexo se
+refere deverá ser considerado na estimativa de receita da lei orçamentária e não afetará
+as metas de resultados fiscais previstas no anexo próprio da lei de diretrizes
+orçamentárias.
+        O impacto orçamentário anual estimado (considerando o impacto no exercício
+de 2026, que é o maior impacto dentre os três exercícios em análise) não é expressivo,
+correspondendo a cerca de 0,1% do total da receita de IPTU e TCIL prevista na LOA do
+exercício 2024. Dado que o impacto orçamentário não é significativo, sendo inferior até
+mesmo à margem de erro utilizada na projeção da receita dos tributos envolvidos, não
+haverá comprometimento das metas de resultados fiscais.
+
+III - Dos Resultados esperados:
+
+       Em cumprimento ao art. 2º, parágrafo segundo, do Decreto Municipal n°
+14.577/2022, apresenta-se a seguir o resultado pretendido com a instituição do
+benefício fiscal e o respectivo método de aferição.
+
+Resultado pretendido com a instituição do benefício fiscal: o presente projeto de lei
+visa a promover a igualdade social mediante tratamento diferenciado (isenção parcial
+
+do IPTU e da TCIL) a famílias de baixa renda. Não há previsão de retorno econômico
+direto para o Município.
+
+Meta proposta: não há.
+
+Indicador: quantidade de contribuintes contemplados com o benefício fiscal.

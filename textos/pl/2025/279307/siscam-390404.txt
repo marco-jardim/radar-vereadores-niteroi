@@ -1,0 +1,38 @@
+Projeto de Lei:         /2025
+
+Institui a utilização da tecnologia de biometria facial nas câmeras de monitoramento da cidade de Niterói a fim de otimizar a localização e prisão de criminosos.
+
+Art. 1º Esta lei tem por finalidade determinar, no âmbito da cidade de Niterói, a viabilidade da utilização do sistema de biometria facial junto as câmeras públicas de monitoramento, com o objetivo de reforçar a segurança e otimizar o combate à criminalidade.
+Art. 2º O sistema de biometria facial busca, por meio de tecnologia incorporada ao sistema de monitoramento, a identificação de indivíduos em tempo real com a interligação direta e instantânea da Polícia Militar e Polícia Civil.
+Art. 3º Tal aplicação deverá ser utilizada exclusivamente em desfavor de criminosos com Sentença penal transitada em julgado e/ou cidadãos indicados em decisão judicial com a decretação de prisão a qualquer título.
+Art. 4º Constituem fundamentos que deverão ser ponderados pelo chefe do poder executivo municipal:
+I - a criação de base de dados sigilosa e observância da LGPD;
+II - uso exclusivo da tecnologia para fins de segurança pública, prevenção de crimes e localização de crianças e idosos desaparecidos;
+III - a cooperação de esforços e a troca de informações com os demais entes federativos (União, Estados e DF);
+IV - integração com as forças de segurança do Estado, Ministério Público e Tribunal de Justiça do Estado do Rio de Janeiro;
+V - integração com o sistema do Tribunal de Justiça do Estado do Rio de Janeiro.
+
+Art. 5º Preferencialmente, deverá ser implementado sistema integrado às forças de segurança pública, de modo a acionar o agente mais próximo do identificado para realizar o cumprimento da ordem judicial e consequente prisão.
+Art. 6º A implementação do sistema deverá ser direcionada a quantitativo de câmeras e respectivas localidades em conformidade com estudo previamente elaborado pelo chefe do poder executivo municipal e órgãos auxiliares, sendo recomendado, preferencialmente, a instituição primária em locais públicos de grande aglomeração de pessoas, tais como: parques, praças, terminais de ônibus e unidades de saúde.
+Art. 7º Fica a cargo das autoridades competentes, em parceria com os órgãos de segurança pública, a gestão e operacionalização do sistema de reconhecimento facial.
+Art. 8º A implementação de tal sistema será regulamentada por ato normativo específico, estabelecendo os critérios de armazenamento, utilização e acesso das informações geradas, respeitando as disposições legais aplicáveis.
+Parágrafo único. A regulamentação desta lei deverá ser concluída no prazo de 180 (cento e oitenta) dias.
+Art. 9º Esta Lei entra em vigor na data de sua publicação.
+
+_____________________________________
+
+Dr. Emanuel Rocha
+
+Justificativa:
+       Conforme dados fornecidos pelo CNJ, até outubro de 2024, existiam 368 mil foragidos circulando em nosso país, sendo que desses, 10 mil são procurados pela justiça há mais de 10 anos.
+       Tal constatação reflete a falência do sistema penal brasileiro e a necessidade da adoção de mecanismos para prevenir a entrada dessas pessoas em nossa cidade, bem como prender aquelas que já se encontram nessa localidade.
+Sendo assim, o presente Projeto de Lei tem como objetivo reforçar a segurança pública de nossa cidade, utilizando recursos tecnológicos de reconhecimento facial integrados à estrutura já existente de câmeras de monitoramento.
+A iniciativa busca modernizar e otimizar as ferramentas disponíveis para combater à criminalidade, promovendo um ambiente mais seguro para os cidadãos.
+
+Outrossim, informo que a tecnologia em comento já foi implementada e validada na cidade de São Paulo sob a nomenclatura "Smart Sampa", a ferramenta gerou, no período de apenas 6 meses, a prisão de 380 foragidos e 1.532 criminosos em flagrante.
+É importante destacar que esta proposta não implica a criação de uma nova estrutura física ou tecnológica robusta, o que seria dispendioso aos cofres públicos.
+Pelo contrário, a implantação do sistema de reconhecimento facial aproveitará o parque tecnológico já instalado, ou seja, as câmeras de monitoramento público existentes, bem como futuras ampliações, otimizando os investimentos já realizados pela administração pública.
+A integração da tecnologia com as bases de dados de procurados pelas autoridades policiais permitirá uma atuação mais ágil e precisa na identificação de indivíduos com mandados de prisão em aberto.
+Essa automatização aumentará a eficiência das ações de segurança pública, bem como a redução do tempo de resposta, a fim de contribuir para a diminuição da sensação de insegurança na cidade.
+Além disso, o custo da implementação se limita à aquisição ou licenciamento do software de reconhecimento facial e à integração com os sistemas já operacionais, o que representa uma alternativa financeiramente viável e de alto impacto positivo para a população.
+Portanto, diante da necessidade de fortalecer a segurança pública, da viabilidade financeira do projeto e do potencial impacto positivo para o município, submetemos este Projeto de Lei para apreciação e aprovação pelos Nobres Vereadores.

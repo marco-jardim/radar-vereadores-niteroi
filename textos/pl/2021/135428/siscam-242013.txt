@@ -1,0 +1,118 @@
+                              696000,000000                                                                       697000,000000                         698000,000000                                                        699000,000000                                              700000,000000
+
+                                                                                                                                                                                                                                                                                                                                      LEI URBANÍSTICA
+                                                                                                                                                                                                                                                                                                                                      MAPA 1B - ZONEAMENTO
+
+                                                                                                                                                                                                                                                                                                                                                                    SÃO GONÇALO
+
+                                                                                                                                                                                                                                                                                                                                                   1A     1B
+                                                                                                                                                                                                                                                                                                                                                                    1C
+7470400,000000
+
+                  ZEU+11             ZEU+11
+                                                                                                                                                                                                                                                                                                                                                   1D     1E        1F          1G
+                                                           ZEU+11
+                                                                                     Rua
+                  ZRU                                                                       Do u
+                                                                                                to r M
+                                                                                                      ar ch
+                                                                                                                                                                                                                                                                                                                                                   1H    1I      1J       1K
+                                                                                        ZEU+11                                                                                                                                                                                                                                                                                    MARICÁ
+
+                                                                                                                                                                                                                                                                                                                                                               1L
+
+                                 ZEU+11                                                                            ZRU
+
+                                                                                                                                               ZEU+11
+
+                 ZRU
+                                                                                                                                                                                                                                                                                                                                      LEGENDA
+                                                                                                                                                                                                                                                                                                                                      Nome da zona
+                        ZRU
+7469600,000000
+
+                                                                                                                                                                                                                                                                                                                                             ZCM                         ZEPAC - APAP
+                                                                                                                                                             ZRU                                                                                                                                                                                                         ZEPAC
+                                                                                                                                                                                                                                                                                                                                             ZEU
+                                                                                                                                                                                                                                                                                                                                             ZC                          ZRU
+                                                                                                                                                                                                                                                                                                                                             ZC-ZEIS                     ZRM
+                                                                                                                                                                                                                                                                                                                                             ZDE                         ZRA
+                                                                                                                                                                                                                                                                                                                 to
+                                                                                                                                                                                                                                                                                                      e   i xo
+                                                                                                                                                                                                                                                                                                 al P
+                                                                                                                                                                                                                                                                                       Am
+                                                                                                                                                                                                                                                                                            ar                                               ZCL                         AEIT
+                 ZRU                                                                                                                                                                                                                                                       do
+                                                                                                                                                                                                                                                                              v   ia
+                                                                                                                                                                                                                                                                         Ro
+                                                                                                                                                                                                                                                      ZRU                                                                                    ZUM < 6*                    Parque
+                                                                                                                               ZRU
+                                                                                                                                                                                                                                                                                                                                             ZUM >= 6*                   Parque
+                                          ZRU                                                                                                                                                                                                ZUM+5
+7468800,000000
+
+                                                                                                                                                                                                                                                                                                                                             ZC-ZEIS                     ZPA
+                                                                                                                                                                                                                                                                                                                      ZC-ZEIS+4 ZRU
+                                                                                      ZUM+11                                                                                                                                                                                                                                                 ZEIS                        ZCA
+                                                                               ZRU                                                       ZRU                                                                                                                                                                      ZRU
+                                                                                                                         ZUM+11
+                                     ZUM+5
+                                                                                                                           a
+                                                                                                                        lv
+                                                                                                                     Si
+                                                                                                                     o
+                                                                                                                   si
+                                                                                                                  ilá
+                                                                                                               Ev
+
+                        ZEU+11
+                                                                                                              ua
+
+                                                                                                                                                                                                                                               ZUM+11
+                                                                                                              R
+
+                                                         Alameda São Boaven
+                                                                                                                                                                                                              ZRU
+                                                                                     tura
+
+                 ZRU                                                                           ZEU+11                                                                                                               ZUM+11                                                                                                    ZRU
+                                                                                                                                                                         ZC+7                 l Pe   ixoto
+                                                                                                                                                                                       m a ra
+                                 ZRU                                                                                                                                       ov   ia A                               ZRU                               ZRU
+                                                                                                                         ZRU                                            Rod
+7468000,000000
+
+                                                                                       ZRU
+                                            ZUM+5
+
+                   Parque
+                                                                                                                   ZUM+11                                                                        ZRU          ZC-ZEIS+4
+
+                                                                                                                                                                                                             ZRU
+
+                                                                                                                                          sé                                                                                                                            ZRU
+                                                                                                                                        Jo
+                                                                                                                                    o
+                                                                                                                               Sã
+                 ZRU                                                                                                ZRU Rua
+                                   Ru                                                                                                                                                                                                                               ZRU                                                                                   1
+                  ZEU+11             a
+                                         P re                                                                                                                                                                        ZRU
+                                                fei
+                                                   t   oV                                                                                                                                                                                                                               ZRU                                                                                          Km
+                                                         i ço
+7467200,000000
+
+                                                             so
+                                                                                                                                                                                                                                                                                                                                      Referências Cartográficas
+                                                                  Ja
+                                                                       rd i
+
+                                                                                                                                                                                                                                                                                                                                                                                  ¯
+                                                                           m
+                 ZRU                            ZRU
+                                                                                                                                                                                                                                                                                                                                      Sistema de Coordenadas: UTM Fuso 23K
+                                                                                                                                                                                                                                                                    ZUM+3                                                             Sistema Geodésico: SIRGAS 2000
+                                                                                                                                                                                                                                                                                                                                      Datum Vertical: Marégrafo de Imbituba
+                                                                                                                                                                                                                                                           ZRU          ZC+7
+                                                                                                                                                                                                                                              ZRU ZRU            ZC+7                                                                 Escala: 1:15.000            Novembro 2021

@@ -1,0 +1,83 @@
+                                                     ANEXO
+
+                 Estimativa do Impacto Orçamentário-Financeiro
+
+                                                                         PROCESSO N° 9900091362/2024
+
+        Estimativa de impacto orçamentário-financeiro elaborada em cumprimento ao art. 113
+        do Ato das Disposições Constitucionais Transitórias da Constituição Federal de 1988 e
+        ao art. 14 da Lei Complementar n° 101/2000.
+
+            Estimativa do impacto orçamentário-financeiro por exercício (R$)
+                     2024                                 2025                             2026
+                 1.286.598,34                             0,00                             0,00
+
+        Metodologia e Memorial de Cálculo:
+
+Item Descrição                                                                                       Valor (R$)
+     Somatório dos débitos de IPTU que apresentam fato gerador do exercício de 2019 até
+     o exercício de 2024, referentes às matrículas imobiliárias localizadas no endereço Av. Amaral
+A    Peixoto n°s 327 e 359, Centro, Niterói.                                                                 1.000.646,96
+     Fator redutor de 20%, para desconsiderar eventuais unidades que estão localizadas no
+     endereço descrito acima, mas não consistem em unidades imobiliárias envolvidas no
+     Termo de Ajustamento de Conduta homologado pelo juízo da sétima vara cível da Comarca
+B    de Niterói (processo judicial nº 0075994-72.2013.8.19.0002). [B = A - 20%]                                   800.517,57
+     Somatório dos débitos de TCIL que apresentam fato gerador do exercício de 2019 até
+     o exercício de 2024, referentes às matrículas imobiliárias localizadas no endereço Av. Amaral
+C    Peixoto n°s 327 e 359, Centro, Niterói.                                                                      607.600,96
+     Fator redutor de 20%, para desconsiderar eventuais unidades que estão localizadas no
+     endereço descrito acima, mas não consistem em unidades imobiliárias envolvidas no
+     Termo de Ajustamento de Conduta homologado pelo juízo da sétima vara cível da Comarca
+D    de Niterói (processo judicial nº 0075994-72.2013.8.19.0002). [D = C - 20%]                                   486.080,77
+
+E    Impacto orçamentário-financeiro total. [E = B + D]                                                      1.286.598,34
+
+        Notas:
+        1: Fonte: sistema e-Cidade.
+        2: Os valores apresentados nos itens "A" e "C" abrangem o valor principal dos débitos, bem como juros,
+        multas e correção monetária (valores corrigidos monetariamente até a data de 25/11/2024).
+        3: Os percentuais indicados nos itens "B" e "D" são estimativas.
+
+Da estimativa da receita da lei orçamentária e das metas de resultados fiscais previstas
+no anexo próprio da lei de diretrizes orçamentárias:
+
+       Em atendimento ao art. 14, inciso I, da Lei Complementar n° 101/2000, destaca-
+se que a renúncia de receita decorrente do Projeto de Lei a que este Anexo se refere:
+       i)     Deverá ser considerada na estimativa de receita da lei orçamentária
+              (deverá, inclusive, ser contemplada no quadro de estimativa de renúncia
+              de receitas da LOA previsto no art. 165, parágrafo sexto, da CF/88);
+       ii)    Não afetará as metas de resultados fiscais previstas no anexo próprio da
+              lei de diretrizes orçamentárias, visto que o valor estimado da renúncia de
+              receita não é tão expressivo do ponto de vista do orçamento municipal
+              (correspondendo a menos de 0,02% da receita orçamentária anual
+              auferida pelo Município nos últimos dois exercícios). Destaca-se, ainda,
+              que o impacto orçamentário-financeiro efetivo será substancialmente
+              inferior ao calculado acima, dado que, em razão da precariedade das
+              unidades imobiliárias objeto da remissão de IPTU/TCIL, certamente
+              haveria uma expressiva inadimplência dos débitos e uma baixa taxa de
+              recuperabilidade - o que não foi levado em conta no cálculo do impacto
+              orçamentário-financeiro.
+
+Dos Resultados esperados:
+
+       Em cumprimento ao art. 2º, parágrafo segundo, do Decreto Municipal n°
+14.577/2022, apresenta-se a seguir o resultado pretendido com a instituição do
+benefício fiscal e os respectivos métodos de aferição desse resultado.
+
+Resultado pretendido com a instituição do benefício fiscal: dar cumprimento à cláusula
+10 do Termo de Ajustamento de Conduta (TAC) celebrado entre o Município de Niterói,
+Ministério Público do Estado do Rio de Janeiro e Defensoria Pública do Estado do Rio de
+Janeiro os beneficiários do Condomínio do Edifício Nossa Senhora da Conceição
+processo judicial nº 0075994-72.2013.8.19.0002).
+
+Meta proposta: não há.
+
+Indicadores sugeridos: não há.
+
+Reginaldo
+Barreiros De
+Ci Almeida Filho
+E Ciga see 553.285-.
+Data: 25/11/2024
+15:12
+( Ciga

@@ -1,0 +1,35 @@
+                                                        ESTIMATIVA DO IMPACTO ORÇAMENTÁRIO-FINANCEIRO
+                                                          (Arts. 16 e 17 da Lei Complementar Federal nº 101, de 4 de maio de 2000)
+
+Objeto:                                   Processo 070002637/2021 - Autoridade de Trânsito - NITTRANS
+
+                                                                                                                                                               Jan 2025 a         Jan 2026 a
+                                                                                                                                     Jan 2024 a Dez/2024
+                                                                                                                                                              Dez/2025 c/        Dez/2026 c/
+                                                                                                                                          c/ Acrésc.
+                                                                                                                                                                 Acrésc.            Acrésc.
+DESPESA LÍQUIDA COM PESSOAL ( I )                                                                                                          2.083.237.218,4    2.212.980.552,4     2.272.490.975,3
+               Pessoal Ativo (i + ii + iii)                                                                                                1.683.753.768,4    1.801.512.598,9     1.848.678.983,1
+                    (i) Pessoal Ativo (RGF) *                                                                                              1.570.618.220,0    1.617.736.766,6     1.666.268.869,6
+                    (ii) Potenciais aumentos**                                                                                              111.876.495,23     178.624.798,80     177.079.956,23
+                    (iii) Aumento relativo à proposta em questão                                                                               1.259.053,1        5.151.033,5         5.330.157,3
+               Pessoal Inativo e Pensionista****                                                                                             395.963.473,1      407.842.377,3      420.077.648,6
+               OUTRAS DESP. PESSOAL DECORRENTES CONTRATOS TERCEIRIZAÇÃO (art. 18, § 1º da LRF)                                                 3.519.977,0        3.625.576,3         3.734.343,6
+Despesas não Computadas (art. 19, § 1º da LRF) (II)                                                                                           94.627.220,5       97.463.565,0      100.387.471,9
+               ( - ) Decorrentes de Decisão Judicial                                                                                          22.079.219,0       22.741.595,5       23.423.843,4
+               ( - ) Inativos e Pensionistas com Recursos Vinculados****                                                                      66.419.985,2       68.412.584,8       70.464.962,3
+               ( - ) Indenizações por Demissão e Incentivos à Demissão Voluntária                                                              6.125.616,2        6.309.384,7         6.498.666,2
+               ( - ) Despesas de Exercícios Anteriores                                                                                             2.400,1                -                   -
+               ( - ) Convocação Extraordinária (inciso II, § 6º, art. 57 da CF)                                                                        -                  -                   -
+REPASSES PREVIDENCIÁRIOS AO RPPS ( III )
+
+TOTAL DA DESPESA COM PESSOAL PARA FINS DE APURAÇÃO DO LIMITE - TDP (IV) = (I - II + III)                                                    1.988.609.998,0    2.115.516.987,5    2.172.103.503,4
+RECEITA CORRENTE LÍQUIDA - RCL (V)***                                                                                                      4.986.828.625,9    4.680.544.148,58   4.749.836.173,77
+% do TOTAL DA DESPESA LÍQUIDA COM PESSOAL P/FINS APUR. DO LIMITE - TDP SOBRE A RCL (VI) = (IV/V)*100                                               39,88%              45,20%             45,73%
+LIMITE LEGAL (inciso III, art. 20 da LRF) - <54,00%>                                                                                        2.692.887.458,0    2.527.493.840,2    2.564.911.533,8
+LIMITE PRUDENCIAL 95% (§ único, art. 22 da LRF) - <51,30%>                                                                                  2.558.243.085,1    2.401.119.148,2    2.436.665.957,1
+LIMITE DE ALERTA 90% (Inciso II do § 1º do art.59 da LRF) <48,60%>                                                                          2.423.598.712,2    2.274.744.456,2    2.308.420.380,5
+Fonte: RGF 1º quadrimestre de 2023
+*Foi considerado um aumento vegetativo de 3%
+**Valores que potencialmente aumentarão o Pessoal Ativo (RGF)
+***Receita Corrente Líquida - RCL conforme projeção da Secretaria Municipal de Fazenda

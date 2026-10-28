@@ -1,0 +1,69 @@
+                                                    ANEXO
+
+                 Estimativa do Impacto Orçamentário-Financeiro
+
+       Estimativa de impacto orçamentário-financeiro elaborada em cumprimento ao art. 113
+       do Ato das Disposições Constitucionais Transitórias da Constituição Federal de 1988 e
+       do art. 14 da Lei Complementar n° 101/2000.
+
+           Estimativa do impacto orçamentário-financeiro por exercício (R$)
+                     2026                           2027                                2028
+                 19.219.560,82                  20.030.626,29                           0,00
+
+       Metodologia e Memorial de Cálculo:
+
+Item Descrição                                                                                     Valor
+
+A    Número de matrículas beneficiadas com o desconto do "Bom Pagador" no exercício de 2025                      101.598
+                                                                                                                  R$
+B    Valor total do lançamento do IPTU no exercício de 2025                                          639.584.292,65
+C    Renúncia de receita decorrente do desconto do "Bom Pagador" no exercício de 2025                R$ 9.748.380,89
+D    Percentual de desconto do "Bom Pagador" no exercício de 2025                                                    3%
+     Renúncia de receita do IPTU decorrente do desconto do "Bom Pagador" no exercício de 2025
+E    caso o percentual de desconto do benefício fiscal fosse de 6% = [C * 6% / 3%]                         19.496.761,78
+     Renúncia de receita do IPTU decorrente do desconto do "Bom Pagador" no exercício de 2025
+     caso o percentual de desconto do benefício fiscal fosse de 6% e houvesse um aumento de
+F    0,2% no índice de adimplência do imposto = [E - 0,2% * B]                                             18.217.593,19
+G    Estimativa do IPCA 2025                                                                                      5,50%
+     Estimativa da Renúncia de receita do IPTU decorrente do desconto do "Bom Pagador" no
+H    exercício de 2026 = [F * (1 + G)]                                                                R$ 19.219.560,82
+I    Estimativa do IPCA 2026                                                                                      4,22%
+     Estimativa da Renúncia de receita do IPTU decorrente do desconto do "Bom Pagador" no
+J    exercício de 2027 = [H * (1 + I)]                                                                R$ 20.030.626,29
+
+       Notas:
+       1 - Fonte: sistema e-Cidade;
+       2 - A estimativa da atualização monetária do IPTU foi obtida a partir da estimativa do IPCA prevista no
+       Relatório de Mercado - Focus publicado pelo Banco Central em 27/01/2025;
+
+Da estimativa de receita da lei orçamentária e das metas de resultados fiscais previstas
+no anexo próprio da lei de diretrizes orçamentárias:
+
+       Em atendimento ao art. 14, inciso I, da Lei Complementar n° 101/2000, a
+renúncia de receita oriunda do Projeto de Lei a que este Anexo se refere deverá ser
+considerada na estimativa de receita da lei orçamentária, bem como no cumprimento
+das metas de resultados fiscais previstas no anexo próprio da lei de diretrizes
+orçamentárias.
+
+Dos Resultados Esperados:
+
+       Em cumprimento ao art. 2º, parágrafo segundo, do Decreto Municipal n°
+14.577/2022, apresenta-se a seguir o resultado pretendido com a instituição do
+benefício fiscal e o respectivo método de aferição.
+
+Resultado pretendido com a instituição do benefício fiscal: induzir o adimplemento do
+IPTU.
+
+Meta proposta: manter ou superar o índice de adimplência do IPTU verificado no ano
+de 2025, quando estava em vigor o benefício do “Bom Pagador” previsto na Lei n°
+3.820/2023.
+
+Indicador: índice de adimplência do IPTU, calculado pelo quociente entre o valor total
+pago e o valor total lançado do imposto.
+
+Juan Rodrigues
+Penna Da Costa
+o se 465.147-+»
+E Ciga Data: 29/01/2025
+14:26
+A Ciga

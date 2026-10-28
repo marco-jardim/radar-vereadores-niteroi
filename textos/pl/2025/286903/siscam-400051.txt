@@ -1,0 +1,57 @@
+PROJETO DE LEI Nº              /2025
+
+FICA O PODER EXECUTIVO MUNICIPAL AUTORIZADO A CONCEDER DESCONTO NO IPTU PARA IMÓVEIS RESIDENCIAIS QUE INSTALAREM E MANTIVEREM HOLOFOTES DE ILUMINAÇÃO DIRECIONADOS ÀS VIAS PÚBLICAS, OBSERVADAS CONDIÇÕES TÉCNICAS E AMBIENTAIS, E DÁ OUTRAS PROVIDÊNCIAS.
+
+Art. 1º Fica o Poder Executivo Municipal autorizado a conceder desconto no Imposto Predial e Territorial Urbano (IPTU) aos imóveis residenciais cujos proprietários instalem e mantenham holofotes de iluminação direcionados exclusivamente às vias públicas adjacentes, nos termos desta Lei e de seu regulamento.
+
+§ 1º O desconto será de até 15% (quinze por cento) do valor do IPTU devido para o exercício, observado o escalonamento e as condições técnicas a serem definidas em regulamento.
+§ 2º A concessão, manutenção, suspensão e perda do benefício observarão o art. 14 da Lei Complementar nº 101/2000 (LRF) e o disposto nesta Lei.
+
+Art. 2° São condições gerais para habilitação ao benefício:
+direcionamento exclusivo ao logradouro público, vedada a incidência luminosa sobre janelas, áreas internas de terceiros ou ambientes com expectativa de privacidade;
+controle de ofuscamento por meio de anteparos/visores, distribuição fotométrica adequada e regulagem do facho, prevenindo desconforto visual e desperdício de luz;
+característica cromática compatível com áreas residenciais e sensíveis, evitando tonalidades excessivamente brancas/azuladas e priorizando luz mais quente (parâmetros definidos no regulamento), conforme NBR 5101/2024 ou outra que vem a substitui-la;
+conformidade com o Código de Posturas, normas técnicas aplicáveis e demais regulamentos municipais;
+adimplência do imóvel com as obrigações tributárias municipais;
+revalidação anual do credenciamento, com comprovação de manutenção e atendimento contínuo aos requisitos.
+
+Art. 3º O pedido de concessão do benefício será dirigido ao órgão competente do Poder Executivo, instruído com:
+
+comprovante de propriedade/posse legítima e de regularidade cadastral;
+laudo/atestado técnico de instalação e de ajuste do facho, emitido por profissional ou empresa habilitada, atestando o atendimento aos requisitos desta Lei e do regulamento;
+termo de compromisso do contribuinte quanto à observância dos padrões técnicos e ambientais, inclusive atualização de regulagens quando exigido por fiscalização.
+
+Art. 4º O benefício será revalidado anualmente, mediante comprovação de manutenção dos equipamentos, regulagens, controles automáticos e adimplência fiscal do imóvel.
+
+Art. 5º Implicam suspensão ou perda do benefício, sem prejuízo da cobrança do crédito tributário correspondente:
+produção de ofuscamento relevante ou poluição luminosa por inadequação do facho ou ausência de anteparos;
+extrapolação dos limites de iluminância/luminância;
+incidência luminosa indevida em imóveis vizinhos, corpos d’água, unidades de conservação ou outras áreas sensíveis definidas em regulamento;
+alteração de especificações técnicas sem comunicação prévia;
+fraude, simulação ou falsidade nas informações prestadas.
+
+§ 1º Na hipótese de perda do benefício por descumprimento, o contribuinte ficará sujeito à revogação retroativa do desconto e ao recolhimento das diferenças de IPTU com os acréscimos legais.
+§ 2º O benefício não é cumulativo com outros abatimentos de mesma natureza concedidos ao mesmo imóvel.
+
+Art. 6° O Poder Executivo regulamentará esta Lei no prazo de 90 (noventa) dias, dispondo, no mínimo, sobre:
+percentuais escalonados do desconto conforme níveis de desempenho (controle de ofuscamento, ajuste de nível em horários de menor movimento, conformidade cromática e fotométrica);
+padrões técnicos para holofotes (limites de iluminância/luminância no logradouro, controle de ofuscamento, critérios de altura e posicionamento, e temperatura de cor);
+mapa de áreas sensíveis (orlas, margens de lagoas/rios, unidades de conservação e zonas ambientalmente protegidas), com diretrizes específicas de mitigação;
+fluxo de adesão, vistoria, homologação, fiscalização e revalidação anual;
+modelo de laudo/atestado técnico;
+mecanismos de auditoria, sanções administrativas e defesa do contribuinte.
+
+           Art. 7° A fiscalização caberá ao órgão competente, assegurados o contraditório e a ampla defesa.
+
+           Art. 8° Esta Lei entra em vigor na data de sua publicação, produzindo efeitos a partir do exercício financeiro seguinte.
+
+_____________________________
+Daniel Marques
+
+JUSTIFICATIVA
+
+O objetivo desta proposta é aumentar a segurança no entorno dos imóveis por meio de iluminação privada tecnicamente correta, direcionada apenas ao logradouro e ajustada às necessidades reais do período noturno. Estudos e diretrizes apontam que mais luz não significa necessariamente mais segurança. O que efetivamente reduz riscos é a luz certa, no lugar certo e na quantidade adequada. Por isso, o projeto incentiva holofotes com controle de ofuscamento e regulagem do facho, evitando brilho direto nos olhos e desperdício de luz, fatores que criam zonas cegas e contrastes duros onde condutas ilícitas podem se ocultar nas franjas de sombra. Exigir equipamentos com anteparos e distribuição fotométrica adequada, além de orientar a luz estritamente para o alvo, promove visibilidade útil sem agravar riscos.
+A proposta também determina parâmetros mensuráveis para o facho luminoso e para a qualidade espectral. Limitar o ângulo de abertura até cento e vinte graus e exigir corte superior do feixe ajuda a conter o espalhamento e a luz ascendente, reduzindo sombras indesejadas e melhorando a leitura das cenas de segurança. Evitar temperaturas de cor acima de três mil kelvin, sobretudo em áreas sensíveis como orlas, margens de lagoas e zonas de conservação, diminui ofuscamento, reflexos e impactos sobre a fauna, sem prejuízo da identificação de pessoas e objetos. Essas medidas dialogam com evidências sobre os efeitos da luz artificial à noite nos ritmos biológicos e na produção de melatonina, razão pela qual políticas modernas recomendam limitar intensidade e tonalidade no período noturno profundo para preservar a capacidade visual e reduzir riscos.
+Outro eixo essencial para a efetividade securitária é o controle por demanda. Adoção de fotocélula, temporizador ou sensores de presença para dimerização e desligamento programado em horas de baixo movimento mantém a área visível quando necessário e evita o brilho excessivo que satura a visão, reduz a eficiência perceptiva e gera reflexos. Esse ajuste dinâmico reduz custos e a pegada ambiental sem comprometer a segurança, desde que o foco permaneça na direcionalidade e na uniformidade sobre o piso.
+Para assegurar padronização e fiscalização eficaz, a regulamentação municipal poderá ancorar as especificações em normas brasileiras aplicáveis à iluminação pública, como a ABNT NBR 5101 de dois mil e vinte e quatro e a NBR 15129 de dois mil e doze, ou suas versões atualizadas que vieram a substitui-las, definindo limites de iluminância e luminância, critérios de fotometria, proteção contra surtos e requisitos de instalação. Tal abordagem dá segurança técnica ao concessionário do benefício e ao poder público, permitindo vistoria objetiva, revalidação anual e sanções em caso de descumprimento.
+Em síntese, o desconto no IPTU proposto não premia a mera presença de luz, mas sim um padrão de iluminação que melhora a visibilidade operacional, reduz ofuscamento e zonas de sombra, protege a saúde e o ambiente noturno e fornece parâmetros auditáveis para a administração, criando um círculo virtuoso em que segurança e responsabilidade técnica caminham juntas.

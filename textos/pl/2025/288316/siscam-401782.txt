@@ -1,0 +1,25 @@
+PROJETO DE LEI Nº     /2025
+
+Altera a redação dos art. 3º e 4º da lei 3.572 de 21 de janeiro de 2021.
+
+Art. 1º – O art. 3º da Lei nº 3.572, de 21 de janeiro de 2021, passa a vigorar com a seguinte redação:
+Art. 3º – A sinalização sonora mencionada no inciso II do art. 2º desta Lei deverá obedecer aos limites máximos de ruído estabelecidos pela Associação Brasileira de Normas Técnicas (ABNT), conforme a NBR 10.151 – Avaliação do Ruído em Áreas Habitadas, não podendo ultrapassar 45 (quarenta e cinco) decibéis no período compreendido entre 22h00min e 07h00min, devendo ser totalmente desligada neste intervalo de tempo.
+Art. 2º – O art. 4º da Lei nº 3.572, de 21 de janeiro de 2021, passa a vigorar com a seguinte redação:
+Art. 4º – Altera o inciso III do artigo 187 da Lei nº 2.602, de 14 de outubro de 2008, que passará a ter a seguinte redação:
+“Art. 187. São permitidos, observados o disposto no artigo 185 deste Código, os sons e/ou ruídos que provenham:
+III – de sinaleiras ou aparelhos semelhantes, que assinalem a entrada e saída de veículos, desde que funcionem dentro dos limites permitidos e que o sinal sonoro não se alongue por mais de 30 (trinta) segundos, não podendo ultrapassar os 45 (quarenta e cinco) decibéis, observando que o dispositivo emissor de som e/ou ruído deverá ser desligado diariamente entre 22h00min e 07h00min, mantendo nesse período somente um piscar luminoso contínuo e silencioso, aplicando-se em caso de descumprimento a multa de MA2, do Anexo III desta Lei, que deverá ser reaplicada a cada nova notificação referente ao descumprimento.”
+Art. 3º – Ficam revogadas as disposições em contrário.
+Art. 4º – Esta Lei entra em vigor na data de sua publicação.
+
+Sala de Sessões, 03 de novembro de 2025.
+
+BINHO GUIMARÃES
+
+JUSTIFICATIVA
+O presente Projeto de Lei tem por objetivo atualizar os dispositivos da Lei nº 3.572/2021, adequando-os aos parâmetros técnicos da ABNT NBR 10.151 – Avaliação do Ruído em Áreas Habitadas, que estabelece limites máximos de emissão sonora de 45 decibéis no período noturno (das 22h às 7h).
+A legislação vigente menciona o limite de 75 decibéis, valor excessivo e incompatível com os padrões de conforto acústico e de saúde pública recomendados pela Associação Brasileira de Normas Técnicas (ABNT) e pela Organização Mundial da Saúde (OMS).
+Níveis de ruído acima de 50 decibéis durante o descanso noturno são considerados nocivos ao sono, à concentração e ao bem-estar físico e mental, podendo causar estresse, irritabilidade, distúrbios cardiovasculares e prejuízos à saúde auditiva.
+Com a alteração proposta, o Município de Niterói alinha sua legislação às boas práticas ambientais e urbanas, promovendo a redução da poluição sonora e reforçando o direito dos cidadãos ao sossego, à saúde e à qualidade de vida.
+A proposta também harmoniza a Lei nº 3.572/2021 com o Código Municipal Ambiental (Lei nº 2.602/2008), garantindo coerência técnica entre as normas municipais.
+Dessa forma, esta atualização legislativa representa um avanço na política pública de proteção ambiental e urbana, ajustando a lei local às diretrizes nacionais e internacionais sobre controle de ruído.
+Pelas razões expostas, solicita-se o apoio dos nobres vereadores para aprovação deste Projeto de Lei, que moderniza a legislação e reafirma o compromisso de Niterói com a sustentabilidade e o bem-estar coletivo.

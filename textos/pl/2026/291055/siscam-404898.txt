@@ -1,0 +1,110 @@
+                                                       ANEXO
+
+                 Estimativa do Impacto Orçamentário-Financeiro
+
+        Estimativa de impacto orçamentário-financeiro elaborada em cumprimento ao art. 113
+        do Ato das Disposições Constitucionais Transitórias da Constituição Federal de 1988 e
+        do art. 14 da Lei Complementar n° 101/2000.
+
+             Estimativa do impacto orçamentário-financeiro por exercício (R$)
+                    2026                                2027                                2028
+                  223.875,42                          232.382,69                          240.516,08
+
+        Metodologia e Memorial de Cálculo:
+
+Item Descrição                                                                                          Valor (R$)
+     Renúncia fiscal do IPTU decorrente da legislação atualmente em vigor:
+     Valor total da isenção do IPTU concedida no exercício 2025 aos 372 imóveis que foram
+     contemplados com o benefício fiscal previsto no art. 1°, inciso IV, da Lei Municipal n°
+     2.754/2010 (imóveis incluídos no Programa Minha Casa, Minha Vida para família com renda
+A    de até 3 salários mínimos, beneficiados com 100% de isenção do IPTU)                                            221.835,24
+
+     Estimativa da renúncia fiscal do IPTU caso os imóveis deixassem de ser contemplados com o
+     benefício fiscal previsto no item anterior e passassem a ser beneficiados com a nova regra
+     prevista no Projeto de Lei:
+     Valor total do IPTU caso os imóveis não fossem isentos subtraído do valor total do IPTU caso
+     os imóveis fossem tributados com a referência A10 (valores referentes ao exercício 2025)
+B    [B = A - (372 * R$ 217,38)]                                                                                     140.969,88
+
+     Estimativa da renúncia fiscal da TCIL caso os imóveis passassem a ser contemplados com o
+     novo benefício fiscal previsto Projeto de Lei:
+     Valor total da TCIL caso os imóveis não fossem isentos subtraído do valor total da TCIL caso os
+     imóveis fossem tributados com a referência A6 (valores referentes ao exercício 2025)
+C    [C = (372 * 323,71) - (372 * R$ 130,43)]                                                                           71.900,16
+D    Renúncia fiscal total (IPTU + TCIL) tendo como referência o exercício de 2025 [D = B+C]                         212.870,04
+     Correção monetária da renúncia fiscal descrita no item anterior para o exercício de 2026
+E    [E = D * (1+5,17%)]                                                                                             223.875,42
+     Correção monetária da renúncia fiscal descrita no item anterior para o exercício de 2027
+F    [F = E * (1+3,8%)]                                                                                              232.382,69
+     Correção monetária da renúncia fiscal descrita no item anterior para o exercício de 2028
+G    [G = F * (1+3,5%)]                                                                                              240.516,08
+
+        Notas:
+        1 - A estimativa da renúncia fiscal foi calculada tendo por base os benefícios fiscais registrados no sistema
+        e-Cidade com o código 63 (isenção de IPTU para imóveis incluídos no Programa Minha Casa, Minha Vida
+        para família com renda de até 3 salários mínimos);
+        2 - Consta no sistema e-Cidade o registro de 372 imóveis com a isenção prevista no art. 1°, inciso IV, da
+        Lei Municipal n° 2.754/2010, com data de término da isenção prevista para 31/12/2025; os demais
+
+imóveis cadastrados com a referida isenção possuem data de término superior a 01/01/2028; não há
+imóveis cuja a referida isenção possui data de término anterior a 31/12/2025;
+3 - A correção monetária foi realizada tendo como referência o valor indicado no CARTRIM (para o
+exercício 2026) e no Boletim Focus de 5 de dezembro de 2025 (para os exercícios 2027 e 2028);
+4 - A renúncia fiscal pode ser considerada incorporada à estimativa de receita da Lei Orçamentária e não
+comprometerá as metas fiscais. Isso porque os orçamentos anuais já são elaborados considerando os
+efeitos das renúncias de receita vigentes, sendo que a renúncia fiscal atualmente em vigor é superior à
+nova renúncia fiscal proposta no Projeto de Lei.
+
+Da estimativa de receita da lei orçamentária e das metas de resultados fiscais previstas
+no anexo próprio da lei de diretrizes orçamentárias:
+
+       O art. 14 da Lei Complementar nº 101/2000 (Lei de Responsabilidade Fiscal)
+estabelece que a concessão de benefícios tributários deve estar contemplada na
+estimativa de receita da Lei Orçamentária Anual e não pode comprometer as metas de
+resultado fiscal fixadas na Lei de Diretrizes Orçamentárias, devendo, caso contrário, ser
+acompanhada de medidas de compensação:
+
+                         “Art. 14. A concessão ou ampliação de incentivo ou benefício de natureza
+                         tributária da qual decorra renúncia de receita deverá estar acompanhada de
+                         estimativa do impacto orçamentário-financeiro no exercício em que deva
+                         iniciar sua vigência e nos dois seguintes, atender ao disposto na lei de diretrizes
+                         orçamentárias e a pelo menos uma das seguintes condições:
+
+                         I - demonstração pelo proponente de que a renúncia foi considerada na
+                         estimativa de receita da lei orçamentária, na forma do art. 12, e de que não
+                         afetará as metas de resultados fiscais previstas no anexo próprio da lei de
+                         diretrizes orçamentárias;
+
+                         II - estar acompanhada de medidas de compensação, no período mencionado
+                         no caput, por meio do aumento de receita, proveniente da elevação de
+                         alíquotas, ampliação da base de cálculo, majoração ou criação de tributo ou
+                         contribuição.”
+
+        O benefício tributário a que se refere este Anexo não acarreta impacto negativo
+na estimativa de receita prevista na LOA, nem compromete o cumprimento das metas
+de resultado fiscal estabelecidas na LDO, uma vez que os orçamentos anuais e as metas
+fiscais são elaborados considerando os efeitos das renúncias de receita vigentes em
+exercícios anteriores.
+        Nesse sentido, a isenção prevista no art. 1º, inciso IV, da Lei Municipal nº
+2.754/2010, por ter produzido efeitos em exercícios pretéritos e impactado as
+respectivas receitas orçamentárias, teve seus efeitos devidamente incorporados às
+estimativas de receita dos exercícios subsequentes. Considerando que a nova renúncia
+fiscal prevista no Projeto de Lei a que se refere este Anexo apresenta impacto
+orçamentário inferior àquela estabelecida no art. 1º, inciso IV, da Lei Municipal nº
+2.754/2010, e que tais renúncias não são cumulativas, conclui-se que a renúncia ora
+proposta não comprometerá a estimativa de receita consignada na LOA nem as metas
+de resultado fiscal fixadas na LDO.
+
+Dos Resultados Esperados:
+
+       Em cumprimento ao art. 2º, parágrafo segundo, do Decreto Municipal n°
+14.577/2022, apresenta-se a seguir o resultado pretendido com a instituição do
+benefício fiscal e o respectivo método de aferição.
+
+Resultado pretendido com a instituição do benefício fiscal: assegurar justiça social, com
+o objetivo de reduzir desigualdades, de atender à função social da propriedade e de
+diminuir os custos de habitação e moradia.
+
+Meta proposta: não há.
+
+Indicador proposto: não há.

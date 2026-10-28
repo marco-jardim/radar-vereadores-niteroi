@@ -1,0 +1,40 @@
+                                                                     ESTIMATIVA DO IMPACTO ORÇAMENTÁRIO
+                                                             (Arts. 16 e 17 da Lei Complementar Federal nº 101, de 4 de maio de 2000)
+
+Objeto:                                                Processo 9900068212/2026 - Revisão Geral Anual de 5%
+
+                                                                                                                                                                  Jan 2027 a          Jan 2028 a
+                                                                                                                                            Jan 2026 a
+                                                                                                                                                                 Dez/2027 c/         Dez/2028 c/
+                                                                                                                                        Dez/2026 c/ Acrésc.
+                                                                                                                                                                    Acrésc.             Acrésc.
+DESPESA LÍQUIDA COM PESSOAL ( I )                                                                                                            2.809.778.182,39    3.056.146.024,59    3.149.183.764,69
+               Pessoal Ativo (i + ii + iii)                                                                                                  2.313.780.887,08    2.545.268.810,42    2.622.980.234,10
+                   (i) Pessoal Ativo (RGF) *                                                                                                 1.974.510.612,74    2.033.745.931,12    2.094.758.309,06
+                   (ii) Potenciais aumentos**                                                                                                  256.067.871,69      382.778.130,18      395.184.286,08
+                   (iii) Aumento relativo à proposta em questão                                                                                 71.052.891,36      116.230.752,48      120.148.222,43
+               Pessoal Inativo e Pensionista                                                                                                   495.997.295,31      510.877.214,17      526.203.530,59
+               OUTRAS DESP. PESSOAL DECORRENTES CONTRATOS TERCEIRIZAÇÃO (art. 18, § 1º da LRF)                                                            -                    -                   -
+               Despesa com Pessoal não Executada Orçamentariamente                                                                              12.149.511,29       12.513.996,63       12.889.416,53
+Despesas não Computadas (art. 19, § 1º da LRF) (II)                                                                                            262.000.766,92      269.860.789,93      277.956.613,63
+               ( - ) Decorrentes de Decisão Judicial de Período Anterior ao da Apuração                                                        126.609.055,07      130.407.326,72      134.319.546,52
+               ( - ) Inativos e Pensionistas com Recursos Vinculados                                                                           109.661.121,96      112.950.955,62      116.339.484,29
+               ( - ) Indenizações por Demissão e Incentivos à Demissão Voluntária                                                                3.145.409,28        3.239.771,56        3.336.964,71
+               ( - ) Despesas de Exercícios Anteriores                                                                                             843.306,51          868.605,71          894.663,88
+               ( - ) Parcela dedutível referente ao piso salarial do Enfermeiro, Técnico de Enfermagem, Auxiliar de
+                                                                                                                                                15.178.914,10       15.634.281,52       16.103.309,97
+               Enfermagem e Parteira (ADCT, art. 38, §2º)
+               ( - ) Agentes Comunitários deSaúde e deCombate àsEndemias comRecursosVinculados (CF, art.198, §11)                                6.562.960,00        6.759.848,80        6.962.644,26
+
+               ( - ) Convocação Extraordinária (inciso II, § 6º, art. 57 da CF)                                                                           -                    -                   -
+REPASSES PREVIDENCIÁRIOS AO RPPS ( III )
+
+TOTAL DA DESPESA COM PESSOAL PARA FINS DE APURAÇÃO DO LIMITE - TDP (IV) = (I - II + III)                                                      2.547.777.415,47    2.786.285.234,66    2.871.227.151,07
+RECEITA CORRENTE LÍQUIDA - RCL                                                                                                               6.307.949.157,83     6.560.267.124,14    6.809.557.274,86
+% do TOTAL DA DESPESA LÍQUIDA COM PESSOAL P/FINS APUR. DO LIMITE - TDP SOBRE A RCL (VI) = (IV/V)*100                                                   40,39%              42,47%              42,16%
+LIMITE LEGAL (inciso III, art. 20 da LRF) - <54,00%>                                                                                          3.406.292.545,23    3.542.544.247,04    3.677.160.928,42
+LIMITE PRUDENCIAL 95% (§ único, art. 22 da LRF) - <51,30%>                                                                                    3.235.977.917,97    3.365.417.034,69    3.493.302.882,00
+LIMITE DE ALERTA 90% (Inciso II do § 1º do art.59 da LRF) <48,60%>                                                                            3.065.663.290,71    3.188.289.822,33    3.309.444.835,58
+Fonte: RGF 3º quadrimestre de 2025
+*Foi considerado um aumento vegetativo de 3%
+**Valores que potencialmente aumentarão o Pessoal Ativo (RGF)

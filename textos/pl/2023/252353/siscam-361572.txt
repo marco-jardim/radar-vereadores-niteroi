@@ -1,0 +1,99 @@
+                 696000,000000                                                697000,000000                                     698000,000000                                                                   699000,000000                               700000,000000
+
+                                                                                                                                                                                                                                                                            LEI URBANÍSTICA DE NITERÓI
+                                                                                                                                                                                                                                                                            MAPA 1E - ZONEAMENTO
+                          a
+                              Pre
+                                  fei
+                                      to
+                                         Viç
+7467200,000000
+
+                                             os
+                                                o   Ja
+                                                         rdi
+                                                               m
+                                                                                                                                                                                                                                                                                                             SÃO GONÇALO
+
+                                                                                                                                                                                                                                                                                         1A      1B
+                                                                                                                                                                                                                                                                                                             1C
+                                                                                                                                                                                                                                                                                         1D      1E          1F         1G
+
+                                                                                                                                                                                                                                                                                         1H     1I        1J       1K    MARICÁ
+
+                                                                                                                                                                                                                                                                                                        1L
+7466400,000000
+
+                                                                                                                                                                                                                                                                            LEGENDA
+                                                                                                                                                                                                                                                                            Nome da zona
+
+                                                                                                                                                                                                                                                                                   ZCM                            ZEPAC
+                                                                                                                                                                                                                                                                                   ZEU                            ZRU
+
+                                                                                                         Es                                                                                                                                                                        ZC                             ZRM
+                                                                                                            tr   ad
+                                                                                                                   a
+                                                                                                                       Al
+                                                                                                                          ar
+                                                                                                                               ic o                                                                                                                                                ZDE                            ZRA
+                                                                                                                                      de
+                                                                                                                                                                                                                                                                 ir o
+                 Rua Dou
+                                                                                                                                         S   ou
+                                                                                                                                               za                                                                                                         on
+                                                                                                                                                                                                                                                            te
+                                                                                                                                                                                                                                                                                   ZCL                            AEIT
+7465600,000000
+
+                        tor Mário
+                                  Vi                                                                                                                                                                                                                   noM
+                                         ana                                                                                                                                                                                                       eta
+                                                                                                                                                    Rua
+                                                                                                                                                        Leo
+                                                                                                                                                           nor                                                                          ad
+                                                                                                                                                                                                                                          a
+                                                                                                                                                                                                                                              Ca
+                                                                                                                                                                                                                                                                                   ZUM < 6*                       Parque
+                                                                                                                                                               da G                                                                tr
+                                                                                                                                                                    l                                                           Es
+                                                                                                                                                                                ória
+                                                                                                                                                                                                                                                                                                                  Parque Urbano
+                                                                                                                                                                                                                                                                                   ZUM >= 6*
+                                                                                                                                                                                                                                                                                   ZC-ZEIS                        ZDS
+                                                                                                                                                           Es
+                                                                                                                                                              tra                                                                                                                  ZEIS                           ZCA
+                                                                                                                                                                    da
+                                                                                                                                                                         Fr
+                                                                                                                                                                            a                                                                                                      ZEPAC - APAP                   ZPA
+                                                                                                                                                                                nc
+                                                                                                                                                                                   i   sc
+                                                                                                                                                                                            o
+                                                                                                                                                                                                da
+                                                                                                                                                                                                     Cr
+                                                                                                                                                                                                        uz
+                                                                                                                  osa
+                                                                                                              ar b                                                                                           Nu
+                                                                                                          ui B                                                                                                 ne
+                                                                                                    i da R                                                                                                        s
+                                                                                                  n
+                                                                                               Ave
+7464800,000000
+
+                                                                                          sa
+                                                                                   a   rbo
+                                                                               ui B
+                                                                            a R
+                                                                   Av   enid
+                                    Roosevelt
+                 Avenida Presidente
+7464000,000000
+
+                                                                                                                                                                                                                                                                                               0,95
+                                                                                                                                                                                                                                                                                                                             Km
+
+                                                                                                                                                                                                                                                                            Referências Cartográficas
+                                                                                                                                                                                                                                                                            Sistema de Coordenadas: UTM Fuso 23K
+                                                                                                                                                                                                                                                                            Sistema Geodésico: SIRGAS 2000
+                                                                                                                                                                                                                                                                            Datum Vertical: Marégrafo de Imbituba
+
+                                                                                                                                                                                                                                                                            Escala: 1:15.000         14 de Setembro de 2023
