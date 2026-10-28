@@ -40,7 +40,12 @@ Este documento acompanha o plano `D:\git\radar-vereadores-niteroi\docs\plans\202
 
 Uma requisição S3 sem assinatura recebe HTTP 400, mas isso acontece em qualquer bucket e não prova, sozinho, que ele é privado. No staging, gravar, ler e apagar um objeto de teste funcionou.
 
-**Endereço da API.** `api_url` em `D:\git\radar-vereadores-niteroi\config\backend.json` continua `null` até o primeiro deploy (Phase 3.2), quando o Cloudflare informa o endereço `workers.dev`. Ele é preenchido depois da QA da Wave 3.
+**Endereço da API — pré-requisitos de publicação.** `api_url` em `D:\git\radar-vereadores-niteroi\config\backend.json` continua `null` até a QA da Wave 3, a configuração de uma **rota em domínio próprio** e a publicação da nota pública `metodologia.html#privacidade`. O endereço `workers.dev` do primeiro deploy não basta: a Cache API nele é um **no-op**, então não protege o orçamento de D1/AI/Vectorize. A rota em domínio próprio deve existir antes de preencher `api_url` (não é criada nesta etapa).
+
+`/api/original` serve o **original sem mascaramento, tal como publicado pelo SISCAM**, como registro público.
+Só os textos extraídos, inclusive ementas da busca, são mascarados; os bytes do original não são alterados.
+A nota pública de privacidade deve explicar essa distinção antes da ativação de `api_url`. O link nas respostas
+410 vem de `URL_SITE`, definido nos dois ambientes do Worker, para `${URL_SITE}/metodologia.html#privacidade`.
 
 **Configuração do Worker:** `D:\git\radar-vereadores-niteroi\worker\wrangler.jsonc`. A **produção fica no nível superior**, então `npx wrangler deploy` sem `--env` publica a produção completa. O staging fica em `env.staging` e é publicado com `--env staging`. O wrangler fixado no `D:\git\radar-vereadores-niteroi\worker\package.json` (Phase 3.2) precisa suportar `ratelimits`, versão 4.36 ou posterior, e a `compatibility_date` 2026-10-01.
 - Observabilidade e Logpush ficam desligados.
@@ -54,6 +59,10 @@ Uma requisição S3 sem assinatura recebe HTTP 400, mas isso acontece em qualque
 - atestação do GitHub (`actions/attest@v4`).
 
 **Cache das respostas.** O Worker usa a Cache API e não o produto Workers Cache. O Workers Cache responde antes de o código rodar, o que impediria a consulta à tabela de remoções antes de servir um original já em cache.
+No domínio próprio, rankings de busca são guardados por consulta normalizada/modo/filtros/estado/remoções, sem
+`pagina`, por 60 s; páginas só hidratam seu recorte. Embeddings são guardados por consulta normalizada/modelo
+por uma hora. Objetos R2 só são clonados para a Cache API até 10 MiB; acima disso, o stream vai direto ao cliente.
+GET e HEAD de originais informam o tamanho do R2, e ambos usam `no-store` para o cliente.
 
 ## Credenciais para o GitHub Actions (o humano cria no painel)
 
@@ -146,6 +155,12 @@ s.normalize("NFD").replace(/\p{Mn}/gu, "").normalize("NFC").toLowerCase()
 ```
 
 e junta por `trechos_fts.id = trechos.id`. Os pares de `tests\fixtures\contratos\normalizacao.json` valem para as duas implementações (o teste Python já os confere; o do Worker entra com ele).
+O FTS5 ordena e limita os primeiros 5.000 trechos **antes** das junções e dos filtros no D1. Depois o SQL agrupa
+por documento (menor `rank`, melhor trecho) e limita a 500 documentos; `total` conta documentos, não trechos.
+`limitado` avisa ao atingir qualquer teto; filtros seletivos podem deixar resultados além do teto de candidatos.
+Consultas só com termos menores que três caracteres ou só palavras vazias comuns do português recebem
+400 `consulta_muito_generica`. O destaque usa **`destacar` sobre o original acentuado**, escapando HTML,
+em vez de `snippet()` do FTS, que só conhece o texto normalizado sem acentos.
 
 ## API do Worker
 
@@ -154,13 +169,25 @@ Código em `worker\src\`, detalhes em `worker\README.md`. Só leitura, `GET`/`HE
 | Rota | Conteúdo | Cache API |
 |---|---|---|
 | `/api/busca?q=&modo=palavras\|semantica\|hibrida&tipo=&ano=&autor=&legislatura=&pagina=` | FTS5 (`bm25`, termos entre aspas), Vectorize (`topK` 50, `returnMetadata: "indexed"`, filtros `tipo`/`ano`/`legislatura`) e RRF k = 60; autor no D1; 10 por página, até a página 50 | 60 s |
-| `/api/documento/:id` | metadados, autoria, arquivos não removidos e substitutivos | 1 dia |
-| `/api/original/:sha256` | download do R2 privado; `remocoes` consultada antes da Cache API (410) | 1 dia, `no-store` para o cliente |
+| `/api/documento/:id` | metadados, autoria, arquivos não removidos e substitutivos | 60 s |
+| `/api/original/:sha256` | download do R2 privado; `remocoes` consultada antes da Cache API (410) | 1 dia até 10 MiB, `no-store` para o cliente |
 | `/api/versao`, `/api/saude` | `COMMIT`, `CF_VERSION_METADATA` e `estado_indice`; D1 e última verificação | não |
 
-As chaves de cache da busca e do documento incluem um resumo de `estado_indice`. CORS só para `ORIGENS_CORS` e
-`localhost`; Rate Limiting de 60 por minuto com o IP resumido por SHA-256; `METRICAS` só com o modo e a contagem.
+As chaves de cache incluem um resumo de `estado_indice` e da lista ordenada de `remocoes`, lidos no mesmo lote
+D1: uma remoção invalida o cache mesmo sem atualizar o estado numa sincronização parcial. Busca e documento
+permitem no máximo 60 s de cache no cliente; erros e respostas com `aviso` sempre usam `no-store`.
+CORS só para `ORIGENS_CORS` (igual a `config/backend.json` nos dois ambientes) e
+`localhost`; Rate Limiting de 60 por minuto com IPv4 ou prefixo IPv6 /64 resumido por SHA-256; `METRICAS` só com o modo e a contagem.
 A Cache API não opera em `*.workers.dev`. Testes: `npm test` e `npm run typecheck` em `worker\`.
+
+**Limitação semântica com autor.** Sem autor, Vectorize usa `topK = 50`; com autor, usa `topK = 100`, máximo
+permitido com `returnMetadata: "indexed"`. A autoria é filtrada depois no D1 (inclusive dos documentos que
+citam o mesmo arquivo). Portanto ainda podem faltar resultados de um autor cujos vetores estejam fora dos
+100 primeiros; não há garantia de recuperação exaustiva por autor. Consultas D1 de candidatos são divididas
+em lotes para respeitar os 100 parâmetros por instrução.
+
+`HEAD /api/busca` responde 200 só com cabeçalhos, sem executar a busca. O cron diário continua declarado;
+o handler `scheduled` atual só registra uma mensagem fixa e retorna. T4.2.3 implementará a auditoria por amostragem.
 
 **Carga em staging com o login OAuth** (sem chaves S3; na raiz do repositório, com `RADAR_CACHE` e `RADAR_TEXTOS` definidos ou `--cache`/`--textos`):
 

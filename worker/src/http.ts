@@ -24,7 +24,7 @@ export function json(dados: unknown, status = 200, cabecalhos: Record<string, st
 }
 
 export function respostaErro(e: ErroHttp): Response {
-  return json({ erro: e.message, codigo: e.codigo }, e.status, { "Cache-Control": "no-store", ...e.cabecalhos });
+  return json({ erro: e.message, codigo: e.codigo }, e.status, { ...e.cabecalhos, "Cache-Control": "no-store" });
 }
 
 /** Erro inesperado: mensagem genérica, sem a mensagem nem a pilha originais. */

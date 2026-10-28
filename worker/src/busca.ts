@@ -1,6 +1,6 @@
 // GET /api/busca: palavras (D1 FTS5), significado (Workers AI + Vectorize) e fusão RRF.
 import type { ContextoExecucao, D1Instrucao, Env, OpcoesConsultaVetor } from "./ambiente";
-import { ErroHttp, guardarCache, json, lerCache } from "./http";
+import { ErroHttp, guardarCache, json, lerCache, sha256Hex } from "./http";
 import { consultaFts, destacar, palavrasAlvo, termos } from "./texto";
 
 export const MODOS = ["palavras", "semantica", "hibrida"] as const;
@@ -11,21 +11,26 @@ export const MIN_CONSULTA = 2;
 export const MAX_CONSULTA = 200;
 export const POR_PAGINA = 10;
 export const MAX_PAGINA = 50;
-/** Trechos lidos do FTS5 (melhor por documento); acima disso a resposta sai com `limitado: true`. */
+/** Documentos por palavras; a seleção de trechos anterior também tem teto próprio. */
 export const LIMITE_TRECHOS = 500;
+export const LIMITE_CANDIDATOS_FTS = 5000;
 /** Documentos de cada lista que entram na fusão híbrida. */
 export const CANDIDATOS_FUSAO = 50;
 export const TOPK = 50;
+/** Máximo do Vectorize com returnMetadata: indexed (sem returnValues). */
+export const TOPK_AUTOR = 100;
 export const K_RRF = 60;
 export const MODELO = "@cf/baai/bge-m3";
 export const DIMENSOES = 1024;
 export const CACHE_BUSCA = 60;
+export const CACHE_EMBEDDING = 3600;
 export const PREFIXO_SISCAM = "https://consultaniteroi.siscam.com.br/";
 
 const RE_TRECHO = /^[0-9a-f]{16}$/;
 const RE_EMENTA = /^ementa:(doc:[1-9][0-9]*)$/;
 const RE_AUTOR = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const RE_LEGISLATURA = /^[0-9]{4}-[0-9]{4}$/;
+const PALAVRAS_VAZIAS = new Set("de da do das dos a o as os e em no na nos nas para por com que um uma uns umas ao aos ou se".split(" "));
 
 export interface Parametros {
   q: string;
@@ -72,21 +77,25 @@ export function lerParametros(url: URL): Parametros {
   if (legislatura !== null && !RE_LEGISLATURA.test(legislatura)) throw invalido("legislatura");
   const paginaTexto = um("pagina") ?? "1";
   if (!/^[0-9]{1,3}$/.test(paginaTexto) || Number(paginaTexto) < 1 || Number(paginaTexto) > MAX_PAGINA) throw invalido("pagina");
+  const palavras = [...palavrasAlvo(lista)];
+  if (palavras.every((t) => [...t].length < 3) || palavras.every((t) => PALAVRAS_VAZIAS.has(t))) {
+    throw new ErroHttp(400, "consulta_muito_generica", "Use ao menos um termo mais específico na consulta.");
+  }
   return { q, modo: modo as Modo, tipo, ano, autor, legislatura, pagina: Number(paginaTexto), termos: lista };
 }
 
 /** URL canônica da Cache API: só os parâmetros conhecidos, em ordem fixa, e a versão do índice. */
-export function chaveBusca(origem: string, p: Parametros, indice: string): string {
+export function chaveBusca(origem: string, p: Parametros, indice: string, lista = false): string {
   const s = new URLSearchParams();
-  s.set("q", p.q);
+  s.set("q", p.termos.join(" "));
   s.set("modo", p.modo);
   if (p.tipo !== null) s.set("tipo", p.tipo);
   if (p.ano !== null) s.set("ano", String(p.ano));
   if (p.autor !== null) s.set("autor", p.autor);
   if (p.legislatura !== null) s.set("legislatura", p.legislatura);
-  s.set("pagina", String(p.pagina));
+  if (!lista) s.set("pagina", String(p.pagina));
   s.set("_indice", indice);
-  return `${origem}/api/busca?${s.toString()}`;
+  return `${origem}/api/${lista ? "_lista" : "busca"}?${s.toString()}`;
 }
 
 // ---- filtros (SQL só com parâmetros; as expressões vêm do código, nunca da consulta)
@@ -116,6 +125,12 @@ function filtrar(p: Parametros, documento: string, arquivo: string | null, onde:
 }
 
 const marcadores = (n: number): string => Array(n).fill("?").join(", ");
+const lotesIds = (ids: string[]): string[][] => {
+  const lotes: string[][] = [];
+  // D1 aceita até 100 parâmetros por instrução; reservar espaço para os filtros.
+  for (let i = 0; i < ids.length; i += 90) lotes.push(ids.slice(i, i + 90));
+  return lotes;
+};
 
 // ---- candidatos
 
@@ -127,26 +142,29 @@ export interface Candidato {
 }
 
 export async function porPalavras(env: Env, p: Parametros): Promise<{ itens: Candidato[]; limitado: boolean }> {
-  const onde = ["trechos_fts MATCH ?"];
-  const valores: unknown[] = [consultaFts(p.termos)];
+  const onde: string[] = [];
+  const valores: unknown[] = [consultaFts(p.termos), LIMITE_CANDIDATOS_FTS];
   filtrar(p, "t.documento", "t.arquivo", onde, valores);
   onde.push(SEM_REMOCAO);
   valores.push(LIMITE_TRECHOS);
   const sql =
-    "SELECT t.id AS trecho, t.documento AS documento, bm25(trechos_fts) AS r " +
-    "FROM trechos_fts JOIN trechos AS t ON t.id = trechos_fts.id " +
+    "WITH classificados AS MATERIALIZED (" +
+    "SELECT id, rank FROM trechos_fts WHERE trechos_fts MATCH ? ORDER BY rank LIMIT ?), " +
+    "filtrados AS MATERIALIZED (SELECT t.id, t.documento, c.rank FROM classificados AS c " +
+    "JOIN trechos AS t ON t.id = c.id " +
     "JOIN documentos AS d ON d.id = t.documento LEFT JOIN arquivos AS a ON a.id = t.arquivo " +
-    `WHERE ${onde.join(" AND ")} ORDER BY r, t.id LIMIT ?`;
-  const { results } = await env.DB.prepare(sql).bind(...valores).all<{ trecho: string; documento: string; r: number }>();
-  const vistos = new Set<string>();
+    `WHERE ${onde.join(" AND ")}), melhores AS (` +
+    "SELECT documento, MIN(rank) AS r FROM filtrados GROUP BY documento) " +
+    "SELECT m.documento, m.r, (SELECT MIN(f.id) FROM filtrados AS f " +
+    "WHERE f.documento = m.documento AND f.rank = m.r) AS trecho, " +
+    "(SELECT COUNT(*) FROM classificados) AS candidatos FROM melhores AS m ORDER BY m.r, trecho LIMIT ?";
+  const { results } = await env.DB.prepare(sql).bind(...valores).all<{ trecho: string; documento: string; r: number; candidatos: number }>();
   const itens: Candidato[] = [];
   for (const linha of results) {
-    if (vistos.has(linha.documento)) continue;
-    vistos.add(linha.documento);
     // bm25 é negativo (mais negativo, mais relevante): a pontuação publicada é o oposto.
     itens.push({ documento: linha.documento, trecho: linha.trecho, pontuacao: -linha.r });
   }
-  return { itens, limitado: results.length >= LIMITE_TRECHOS };
+  return { itens, limitado: results.length >= LIMITE_TRECHOS || (results[0]?.candidatos ?? 0) >= LIMITE_CANDIDATOS_FTS };
 }
 
 function vetorDe(saida: unknown): number[] {
@@ -158,14 +176,18 @@ function vetorDe(saida: unknown): number[] {
   return vetor as number[];
 }
 
-export async function porSignificado(env: Env, p: Parametros): Promise<Candidato[]> {
+export async function porSignificado(env: Env, p: Parametros, ctx: ContextoExecucao, origem: string): Promise<Candidato[]> {
   if (!env.AI || !env.VETORES) throw new Error("bindings ausentes");
-  const vetor = vetorDe(await env.AI.run(MODELO, { text: [p.q] }));
+  const consulta = p.termos.join(" ");
+  const chave = `${origem}/api/_embedding/${await sha256Hex(`${MODELO}|${consulta}`)}`;
+  const guardado = await lerCache(chave);
+  const vetor = guardado ? vetorDe(await guardado.json()) : vetorDe(await env.AI.run(MODELO, { text: [consulta] }));
+  if (!guardado) guardarCache(ctx, chave, json({ data: [vetor] }), CACHE_EMBEDDING);
   const filtro: Record<string, unknown> = {};
   if (p.tipo !== null) filtro.tipo = { $eq: p.tipo };
   if (p.ano !== null) filtro.ano = { $eq: p.ano };
   if (p.legislatura !== null) filtro.legislatura = { $eq: p.legislatura };
-  const opcoes: OpcoesConsultaVetor = { topK: TOPK, returnMetadata: "indexed" };
+  const opcoes: OpcoesConsultaVetor = { topK: p.autor === null ? TOPK : TOPK_AUTOR, returnMetadata: "indexed" };
   if (Object.keys(filtro).length > 0) opcoes.filter = filtro;
   const resposta = await env.VETORES.query(vetor, opcoes);
   const correspondencias = (Array.isArray(resposta?.matches) ? resposta.matches : [])
@@ -181,9 +203,9 @@ export async function porSignificado(env: Env, p: Parametros): Promise<Candidato
   }
   // Os metadados completos (e os filtros de autor) vêm do D1; vetor sem linha no D1 é descartado.
   const instrucoes: D1Instrucao[] = [];
-  if (idsTrechos.length > 0) {
-    const onde = [`t.id IN (${marcadores(idsTrechos.length)})`];
-    const valores: unknown[] = [...idsTrechos];
+  for (const ids of lotesIds(idsTrechos)) {
+    const onde = [`t.id IN (${marcadores(ids.length)})`];
+    const valores: unknown[] = [...ids];
     filtrar(p, "t.documento", "t.arquivo", onde, valores);
     onde.push(SEM_REMOCAO);
     instrucoes.push(env.DB.prepare(
@@ -192,9 +214,9 @@ export async function porSignificado(env: Env, p: Parametros): Promise<Candidato
         `WHERE ${onde.join(" AND ")}`,
     ).bind(...valores));
   }
-  if (idsEmentas.length > 0) {
-    const onde = [`d.id IN (${marcadores(idsEmentas.length)})`, "d.tipo IN ('indicacao', 'mocao')"];
-    const valores: unknown[] = [...idsEmentas];
+  for (const ids of lotesIds(idsEmentas)) {
+    const onde = [`d.id IN (${marcadores(ids.length)})`, "d.tipo IN ('indicacao', 'mocao')"];
+    const valores: unknown[] = [...ids];
     filtrar(p, "d.id", null, onde, valores);
     instrucoes.push(env.DB.prepare(
       `SELECT 'ementa:' || d.id AS id, d.id AS documento FROM documentos AS d WHERE ${onde.join(" AND ")}`,
@@ -389,12 +411,19 @@ export interface RespostaBusca {
 
 export const AVISO_SEMANTICA = "A busca por significado está indisponível; os resultados vêm só da busca por palavras.";
 
-export async function buscar(env: Env, p: Parametros): Promise<RespostaBusca> {
+interface ListaBusca {
+  lista: Fundido[];
+  modo: Modo;
+  limitado: boolean;
+  aviso?: string;
+}
+
+async function classificar(env: Env, p: Parametros, ctx: ContextoExecucao, origem: string): Promise<ListaBusca> {
   let modo: Modo = p.modo;
   let aviso: string | undefined;
   const [palavras, semantica] = await Promise.all([
     p.modo === "semantica" ? Promise.resolve<{ itens: Candidato[]; limitado: boolean }>({ itens: [], limitado: false }) : porPalavras(env, p),
-    p.modo === "palavras" ? Promise.resolve<Candidato[] | null>([]) : porSignificado(env, p).catch((): null => null),
+    p.modo === "palavras" ? Promise.resolve<Candidato[] | null>([]) : porSignificado(env, p, ctx, origem).catch((): null => null),
   ]);
   if (semantica === null) {
     if (p.modo === "semantica") {
@@ -411,6 +440,16 @@ export async function buscar(env: Env, p: Parametros): Promise<RespostaBusca> {
   } else {
     lista = palavras.itens.map((c) => ({ ...c, origem: "palavras" as const }));
   }
+  return { lista, modo, limitado: modo !== "semantica" && palavras.limitado, ...(aviso === undefined ? {} : { aviso }) };
+}
+
+export async function buscar(env: Env, p: Parametros, ctx: ContextoExecucao, origem: string, indice: string): Promise<RespostaBusca> {
+  // Ranking caro compartilhado entre páginas; só a hidratação depende da página.
+  const chave = chaveBusca(origem, p, indice, true);
+  const guardada = await lerCache(chave);
+  const ranking: ListaBusca = guardada ? await guardada.json() : await classificar(env, p, ctx, origem);
+  if (!guardada && ranking.aviso === undefined) guardarCache(ctx, chave, json(ranking), CACHE_BUSCA);
+  const { lista, modo, limitado, aviso } = ranking;
   const pagina = lista.slice((p.pagina - 1) * POR_PAGINA, p.pagina * POR_PAGINA);
   const resultados = await hidratar(env, pagina, palavrasAlvo(p.termos));
   const corpo: RespostaBusca = {
@@ -420,7 +459,7 @@ export async function buscar(env: Env, p: Parametros): Promise<RespostaBusca> {
     pagina: p.pagina,
     por_pagina: POR_PAGINA,
     total: lista.length,
-    limitado: modo !== "semantica" && palavras.limitado,
+    limitado,
     resultados,
   };
   if (aviso !== undefined) corpo.aviso = aviso;
@@ -432,14 +471,19 @@ export async function rotaBusca(url: URL, env: Env, ctx: ContextoExecucao, indic
   const p = lerParametros(url);
   const chave = chaveBusca(url.origin, p, indice);
   const guardada = await lerCache(chave);
-  if (guardada) return guardada;
-  const corpo = await buscar(env, p);
+  if (guardada) {
+    const corpo: RespostaBusca = await guardada.json();
+    const headers = new Headers(guardada.headers);
+    headers.delete("Content-Length");
+    return new Response(JSON.stringify({ ...corpo, consulta: p.q }), { status: 200, headers });
+  }
+  const corpo = await buscar(env, p, ctx, url.origin, indice);
   try {
     env.METRICAS?.writeDataPoint({ blobs: [corpo.modo], doubles: [corpo.total] });
   } catch {
     // métricas nunca derrubam a busca
   }
-  const resposta = json(corpo, 200, { "Cache-Control": `public, max-age=${CACHE_BUSCA}` });
+  const resposta = json(corpo, 200, { "Cache-Control": corpo.aviso === undefined ? `public, max-age=${CACHE_BUSCA}` : "no-store" });
   // Resposta degradada (sem a busca por significado) não fica guardada.
   if (corpo.aviso === undefined) guardarCache(ctx, chave, resposta, CACHE_BUSCA);
   return resposta;

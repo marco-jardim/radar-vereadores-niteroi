@@ -4,7 +4,7 @@ import { urlOriginal, urlSiscam } from "./busca";
 import { ErroHttp, guardarCache, json, lerCache } from "./http";
 
 export const RE_DOCUMENTO = /^(doc|sessao):[1-9][0-9]*$/;
-export const CACHE_DOCUMENTO = 86400;
+export const CACHE_DOCUMENTO = 60;
 
 interface LinhaDocumento {
   id: string;
@@ -66,7 +66,7 @@ export async function rotaDocumento(segmento: string, url: URL, env: Env, ctx: C
     env.DB.prepare("SELECT id, numero FROM documentos WHERE pl = ?").bind(id),
   ]);
   const doc = (rd!.results as unknown as LinhaDocumento[])[0];
-  if (!doc) throw new ErroHttp(404, "documento_inexistente", "Documento não encontrado.", { "Cache-Control": "public, max-age=60" });
+  if (!doc) throw new ErroHttp(404, "documento_inexistente", "Documento não encontrado.");
 
   const arquivos = (rarq!.results as unknown as LinhaArquivo[])
     .sort((a, b) => ordemArquivo(a.id, b.id))

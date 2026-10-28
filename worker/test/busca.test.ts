@@ -1,7 +1,8 @@
 import { env } from "cloudflare:test";
 import { beforeEach, describe, expect, it } from "vitest";
-import { AVISO_SEMANTICA, compararIds, fundir, lerParametros } from "../src/busca";
-import { AiFalsa, MetricasFalsas, VetoresFalsos, buscarJson, carregar, criarEnv, sha, trechoDe } from "./dados";
+import type { D1Database } from "../src/ambiente";
+import { AVISO_SEMANTICA, TOPK_AUTOR, compararIds, fundir, lerParametros } from "../src/busca";
+import { AiFalsa, MetricasFalsas, VetoresFalsos, buscarJson, carregar, criarEnv, idTrecho, sha, trechoDe } from "./dados";
 
 beforeEach(async () => {
   await carregar();
@@ -86,7 +87,8 @@ describe("busca por palavras (FTS5)", () => {
     expect((await buscarJson({ q: `${"á".repeat(199)} b`, modo: "palavras" })).r.status).toBe(400);
     expect((await buscarJson({ q: `${"á".repeat(198)} b`, modo: "palavras" })).r.status).toBe(200);
     const repetido = await buscarJson({ q: "ab" }, criarEnv());
-    expect(repetido.r.status).toBe(200);
+    expect(repetido.r.status).toBe(400);
+    expect(repetido.corpo.codigo).toBe("consulta_muito_generica");
     const url = new URL("https://x/api/busca?q=ab&q=cd");
     expect(() => lerParametros(url)).toThrow(/repetido/);
   });
@@ -174,7 +176,7 @@ describe("busca por significado (Workers AI + Vectorize simulados)", () => {
     const { r, corpo } = await buscarJson({ q: "poda de árvores", modo: "semantica", tipo: "indicacao", ano: "2025",
       legislatura: "2025-2028" }, e);
     expect(r.status).toBe(200);
-    expect(ai.chamadas).toEqual([{ modelo: "@cf/baai/bge-m3", entrada: { text: ["poda de árvores"] } }]);
+    expect(ai.chamadas).toEqual([{ modelo: "@cf/baai/bge-m3", entrada: { text: ["poda de arvores"] } }]);
     expect(vetores.chamadas[0]!.opcoes).toEqual({ topK: 50, returnMetadata: "indexed",
       filter: { tipo: { $eq: "indicacao" }, ano: { $eq: 2025 }, legislatura: { $eq: "2025-2028" } } });
     expect(vetores.chamadas[0]!.vetor).toHaveLength(1024);
@@ -192,6 +194,7 @@ describe("busca por significado (Workers AI + Vectorize simulados)", () => {
     expect(docs(corpo)).toEqual(["doc:401", "doc:301"]);
     const autor = await buscarJson({ q: "pedidos", modo: "semantica", autor: "davi-rocha" }, criarEnv({ VETORES: vetores }));
     expect(docs(autor.corpo)).toEqual(["doc:301"]);
+    expect(vetores.chamadas[1]!.opcoes.topK).toBe(TOPK_AUTOR);
     // Mesma consulta e mesmo índice dariam a resposta guardada na Cache API (as simulações não fazem parte da
     // chave): outra consulta para um Vectorize sem correspondências.
     const nada = await buscarJson({ q: "pedidos vazios", modo: "semantica" }, criarEnv({ VETORES: new VetoresFalsos([]) }));
@@ -215,18 +218,115 @@ describe("busca por significado (Workers AI + Vectorize simulados)", () => {
   });
 
   it("Vectorize indisponível: híbrida cai para palavras com aviso (sem cache); semântica responde 503", async () => {
+    let caso = 0;
     for (const extra of [{ VETORES: new VetoresFalsos([], true) }, { AI: new AiFalsa({ data: [[1, 2]] }) },
       { AI: undefined }, { AI: new AiFalsa(null) }]) {
+      const q = `calendario${"?".repeat(++caso)}`;
       const e = criarEnv(extra);
-      const { r, corpo } = await buscarJson({ q: "calendario", modo: "hibrida" }, e);
+      const { r, corpo } = await buscarJson({ q, modo: "hibrida" }, e);
       expect(r.status).toBe(200);
+      expect(r.headers.get("Cache-Control")).toBe("no-store");
       expect(corpo).toMatchObject({ modo: "palavras", aviso: AVISO_SEMANTICA, total: 13 });
-      const de_novo = await buscarJson({ q: "calendario", modo: "hibrida" }, e);
+      const de_novo = await buscarJson({ q, modo: "hibrida" }, e);
       expect(de_novo.r.headers.get("X-Radar-Cache")).toBe("MISS");
-      const s = await buscarJson({ q: "calendario", modo: "semantica" }, e);
+      const s = await buscarJson({ q, modo: "semantica" }, e);
       expect(s.r.status).toBe(503);
       expect(s.corpo).toEqual({ erro: expect.any(String), codigo: "semantica_indisponivel" });
     }
+  });
+});
+
+describe("regressões da revisão de busca", () => {
+  it("recusa consultas genéricas antes de FTS ou AI, sem mudar o escape dos demais termos", async () => {
+    const ai = new AiFalsa();
+    const vetores = new VetoresFalsos([]);
+    for (const q of ["de", "da do das dos", "a o e em no na", "para por com que um uma", '"para"', "ab xy 12"]) {
+      const { r, corpo } = await buscarJson({ q }, criarEnv({ AI: ai, VETORES: vetores }));
+      expect(r.status, q).toBe(400);
+      expect(corpo.codigo).toBe("consulta_muito_generica");
+      expect(r.headers.get("Cache-Control")).toBe("no-store");
+    }
+    expect(ai.chamadas).toHaveLength(0);
+    expect(vetores.chamadas).toHaveLength(0);
+    for (const q of ["licenca\u00adambiental", "licenca\u200dambiental"]) {
+      const { r, corpo } = await buscarJson({ q, modo: "palavras" });
+      expect(r.status).toBe(200);
+      expect(docs(corpo)).toEqual(["doc:102"]);
+    }
+  });
+
+  it("conta documentos, não trechos, antes do LIMIT", async () => {
+    const instrucoes = [];
+    for (let i = 1000; i < 1510; i++) {
+      const id = idTrecho(i);
+      instrucoes.push(env.DB.prepare("INSERT INTO trechos (id, documento, arquivo, posicao, texto, sha256) VALUES (?, ?, ?, ?, ?, ?)")
+        .bind(id, "doc:104", "siscam:1004", i, "Calendário", sha(4)));
+      instrucoes.push(env.DB.prepare("INSERT INTO trechos_fts (id, texto_norm) VALUES (?, ?)").bind(id, "calendario"));
+    }
+    await env.DB.batch(instrucoes);
+    const { corpo } = await buscarJson({ q: "calendario", modo: "palavras" });
+    expect(corpo.total).toBe(13);
+    expect(corpo.limitado).toBe(false);
+    expect(new Set(docs(corpo)).size).toBe(10);
+  });
+
+  it("remoção sem novo estado invalida a busca guardada, inclusive híbrida e por hash somente", async () => {
+    for (const modo of ["palavras", "semantica", "hibrida"]) {
+      const e = criarEnv({ VETORES: new VetoresFalsos([trechoDe("siscam:1002").id]) });
+      const a = await buscarJson({ q: "licenca", modo }, e);
+      expect(docs(a.corpo)).toEqual(["doc:102"]);
+      expect((await buscarJson({ q: "licenca", modo }, e)).r.headers.get("X-Radar-Cache")).toBe("HIT");
+    }
+    await env.DB.prepare("INSERT INTO remocoes (chave, sha256, motivo, data) VALUES (?, ?, ?, ?)")
+      .bind("siscam:9999", sha(2), "Pedido do titular.", "2026-10-01").run();
+    for (const modo of ["palavras", "semantica", "hibrida"]) {
+      const e = criarEnv({ VETORES: new VetoresFalsos([trechoDe("siscam:1002").id]) });
+      const b = await buscarJson({ q: "licenca", modo }, e);
+      expect(b.r.headers.get("X-Radar-Cache")).toBe("MISS");
+      expect(docs(b.corpo)).toEqual([]);
+      expect(b.corpo.total).toBe(0);
+    }
+  });
+
+  it("compartilha o ranking entre páginas e o embedding entre modos e filtros", async () => {
+    const ai = new AiFalsa();
+    const vetores = new VetoresFalsos([trechoDe("siscam:1301").id]);
+    const real = env.DB as unknown as D1Database;
+    let consultasFts = 0;
+    const db: D1Database = {
+      prepare(sql) {
+        if (sql.includes("MATCH")) consultasFts++;
+        return real.prepare(sql);
+      },
+      batch: (instrucoes) => real.batch(instrucoes),
+    };
+    const e = criarEnv({ DB: db, AI: ai, VETORES: vetores });
+    await buscarJson({ q: "CALENDÁRIO!!!", modo: "hibrida" }, e);
+    await buscarJson({ q: "calendario!!!", modo: "hibrida", pagina: "2" }, e);
+    expect(ai.chamadas).toHaveLength(1);
+    expect(vetores.chamadas).toHaveLength(1);
+    expect(consultasFts).toBe(1);
+    await buscarJson({ q: "calendario!!!", modo: "semantica", autor: "davi-rocha" }, e);
+    expect(ai.chamadas).toHaveLength(1);
+    expect(vetores.chamadas).toHaveLength(2);
+    expect(vetores.chamadas[1]!.opcoes.topK).toBe(100);
+  });
+
+  it("hidrata 100 vetores com autor sem ultrapassar os parâmetros do D1", async () => {
+    const real = env.DB as unknown as D1Database;
+    const db: D1Database = {
+      prepare(sql) {
+        expect((sql.match(/\?/g) ?? []).length).toBeLessThanOrEqual(100);
+        return real.prepare(sql);
+      },
+      batch: (instrucoes) => real.batch(instrucoes),
+    };
+    const vetores = new VetoresFalsos(Array.from({ length: 100 }, (_, i) => idTrecho(10000 + i)));
+    const { r, corpo } = await buscarJson({ q: "cem candidatos", modo: "semantica", autor: "davi-rocha" },
+      criarEnv({ DB: db, VETORES: vetores }));
+    expect(r.status).toBe(200);
+    expect(corpo.total).toBe(0);
+    expect(vetores.chamadas[0]!.opcoes.topK).toBe(100);
   });
 });
 

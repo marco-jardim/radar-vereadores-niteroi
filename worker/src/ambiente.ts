@@ -83,6 +83,8 @@ export interface Env {
   AMBIENTE?: string;
   /** Origens CORS separadas por vírgula (config/backend.json → origens_cors, injetadas no deploy). */
   ORIGENS_CORS?: string;
+  /** Raiz pública do site, usada no link da política de privacidade. */
+  URL_SITE: string;
   /** Commit do código publicado (`wrangler deploy --var COMMIT:<sha>`). */
   COMMIT?: string;
 }

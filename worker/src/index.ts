@@ -14,10 +14,25 @@ interface Contexto {
   indice: string;
 }
 
+/** IPv6 usa a rede /64: alternar o identificador de interface não renova a cota. */
+export function clienteLimite(ip: string): string {
+  if (!ip.includes(":")) return ip;
+  try {
+    const canonico = new URL(`http://[${ip}]/`).hostname.slice(1, -1);
+    const [esquerda = "", direita] = canonico.split("::");
+    const inicio = esquerda === "" ? [] : esquerda.split(":");
+    const fim = direita ? direita.split(":") : [];
+    const partes = direita === undefined ? inicio : [...inicio, ...Array(8 - inicio.length - fim.length).fill("0"), ...fim];
+    return `${partes.slice(0, 4).map((p) => p.padStart(4, "0")).join(":")}::/64`;
+  } catch {
+    return "anonimo";
+  }
+}
+
 async function limitar(request: Request, env: Env): Promise<void> {
   if (!env.LIMITE) return;
   // A chave é um resumo do IP, que não é guardado nem registrado.
-  const ip = request.headers.get("CF-Connecting-IP") ?? "anonimo";
+  const ip = clienteLimite(request.headers.get("CF-Connecting-IP") ?? "anonimo");
   const { success } = await env.LIMITE.limit({ key: (await sha256Hex(`radar|${ip}`)).slice(0, 32) });
   if (!success) {
     throw new ErroHttp(429, "limite", "Muitas consultas em pouco tempo; tente de novo em um minuto.", { "Retry-After": "60" });
@@ -55,13 +70,17 @@ async function rotear(request: Request, url: URL, env: Env, ctx: ContextoExecuca
   const semArgumento = argumento === undefined;
   const comArgumento = argumento !== undefined && argumento !== "" && resto.length === 0;
   if (rota === "saude" && semArgumento) return saude(env);
+  // HEAD tem os cabeçalhos da rota, sem FTS, embedding, Vectorize nem hidratação.
+  if (rota === "busca" && semArgumento && request.method === "HEAD") {
+    return new Response(null, { status: 200, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } });
+  }
 
-  const estado = await lerEstado(env);
+  const { estado, remocoes } = await lerEstado(env);
   contexto.indice = estado?.versao ?? "vazio";
-  const indice = await chaveIndice(estado);
+  const indice = await chaveIndice(estado, remocoes);
   if (rota === "busca" && semArgumento) return rotaBusca(url, env, ctx, indice);
   if (rota === "documento" && comArgumento) return rotaDocumento(argumento, url, env, ctx, indice);
-  if (rota === "original" && comArgumento) return rotaOriginal(argumento, url, request.method, env, ctx);
+  if (rota === "original" && comArgumento) return rotaOriginal(argumento, url, request.method, env, ctx, indice);
   if (rota === "versao" && semArgumento) {
     const meta = env.CF_VERSION_METADATA;
     return json({
@@ -108,6 +127,10 @@ export async function tratar(request: Request, env: Env, ctx: ContextoExecucao):
 }
 
 export default {
+  scheduled(): void {
+    // T4.2.3 implementará a verificação por amostragem; não lê nem altera dados por enquanto.
+    console.info("Verificação agendada ainda não implementada (T4.2.3).");
+  },
   fetch(request: Request, env: Env, ctx: ContextoExecucao): Promise<Response> {
     return tratar(request, env, ctx);
   },

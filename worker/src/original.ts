@@ -3,6 +3,8 @@ import type { ContextoExecucao, Env } from "./ambiente";
 import { ErroHttp, guardarCache, lerCache } from "./http";
 
 export const CACHE_ORIGINAL = 86400;
+/** Clonar streams maiores pode acumular o corpo inteiro na memória do isolate. */
+export const MAX_CACHE_ORIGINAL = 10 * 1024 * 1024;
 const RE_SHA256 = /^[0-9a-f]{64}$/;
 
 const FORMATOS: Record<string, [string, string]> = {
@@ -35,8 +37,8 @@ export function nomeArquivo(chave: string, formato: string | null): string {
   return `${chave.replace(":", "-").replace(/[^a-z0-9-]/g, "")}.${extensao}`;
 }
 
-function removido(): ErroHttp {
-  return new ErroHttp(410, "removido", "Arquivo removido a pedido; ver metodologia.html#privacidade.");
+function removido(env: Env): ErroHttp {
+  return new ErroHttp(410, "removido", `Arquivo removido a pedido; ver ${env.URL_SITE.replace(/\/$/, "")}/metodologia.html#privacidade.`);
 }
 
 /** Para o cliente, o original nunca fica em cache compartilhado: uma remoção vale na hora. */
@@ -46,7 +48,7 @@ function paraCliente(r: Response): Response {
   return new Response(r.body, { status: r.status, headers: h });
 }
 
-export async function rotaOriginal(segmento: string, url: URL, metodo: string, env: Env, ctx: ContextoExecucao): Promise<Response> {
+export async function rotaOriginal(segmento: string, url: URL, metodo: string, env: Env, ctx: ContextoExecucao, indice: string): Promise<Response> {
   const sha256 = segmento.toLowerCase();
   if (!RE_SHA256.test(sha256)) throw new ErroHttp(400, "sha256_invalido", "SHA-256 inválido.");
 
@@ -54,10 +56,10 @@ export async function rotaOriginal(segmento: string, url: URL, metodo: string, e
   const marca = await env.DB.prepare(
     "SELECT 1 AS removido FROM remocoes WHERE sha256 = ? OR chave IN (SELECT id FROM arquivos WHERE sha256 = ?) LIMIT 1",
   ).bind(sha256, sha256).first();
-  if (marca) throw removido();
+  if (marca) throw removido(env);
 
   // 2. Cache API (só GET; HEAD consulta o R2 para informar o tamanho).
-  const chave = `${url.origin}/api/original/${sha256}`;
+  const chave = `${url.origin}/api/original/${sha256}?_indice=${encodeURIComponent(indice)}`;
   const guardada = metodo === "GET" ? await lerCache(chave) : null;
   if (guardada) return paraCliente(guardada);
 
@@ -83,7 +85,8 @@ export async function rotaOriginal(segmento: string, url: URL, metodo: string, e
   }
   const objeto = await env.ARQUIVOS.get(arquivo.r2_chave);
   if (!objeto) throw new ErroHttp(404, "original_inexistente", "Original não encontrado.");
+  h.set("Content-Length", String(objeto.size));
   const resposta = new Response(objeto.body, { status: 200, headers: h });
-  guardarCache(ctx, chave, resposta, CACHE_ORIGINAL);
+  if (objeto.size <= MAX_CACHE_ORIGINAL) guardarCache(ctx, chave, resposta, CACHE_ORIGINAL);
   return resposta;
 }

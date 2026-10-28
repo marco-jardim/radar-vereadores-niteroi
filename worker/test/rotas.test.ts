@@ -1,9 +1,10 @@
 import { env } from "cloudflare:test";
-import { beforeEach, describe, expect, it } from "vitest";
-import type { D1Database, Env } from "../src/ambiente";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { D1Database, D1Instrucao, Env } from "../src/ambiente";
 import { ordemArquivo } from "../src/documento";
-import { nomeArquivo } from "../src/original";
-import { LimiteFalso, carregar, criarEnv, pedir, sha } from "./dados";
+import worker, { clienteLimite } from "../src/index";
+import { MAX_CACHE_ORIGINAL, chaveR2, nomeArquivo } from "../src/original";
+import { AiFalsa, LimiteFalso, VetoresFalsos, buscarJson, carregar, criarEnv, pedir, sha, trechoDe } from "./dados";
 
 beforeEach(async () => {
   await carregar();
@@ -128,6 +129,33 @@ describe("limites, cabeçalhos e erros", () => {
     expect(r.status).toBe(200);
     expect(await r.text()).toBe("");
   });
+
+  it("HEAD /api/busca não consulta o banco, AI nem Vectorize", async () => {
+    const ai = new AiFalsa();
+    const vetores = new VetoresFalsos([]);
+    const db: D1Database = {
+      prepare() { throw new Error("HEAD não deve ler D1"); },
+      batch() { throw new Error("HEAD não deve ler D1"); },
+    };
+    const r = await pedir("/api/busca?q=calendario", { method: "HEAD" }, criarEnv({ DB: db, AI: ai, VETORES: vetores }));
+    expect(r.status).toBe(200);
+    expect(r.headers.get("Cache-Control")).toBe("no-store");
+    expect(await r.text()).toBe("");
+    expect(ai.chamadas).toHaveLength(0);
+    expect(vetores.chamadas).toHaveLength(0);
+  });
+
+  it("agrupa IPv6 por /64, inclusive grafias equivalentes", async () => {
+    const limite = new LimiteFalso();
+    for (const ip of ["2001:db8:abcd:12::1", "2001:0db8:abcd:0012:ffff::2", "2001:db8:abcd:13::1"]) {
+      await pedir("/api/versao", { headers: { "CF-Connecting-IP": ip } }, criarEnv({ LIMITE: limite }));
+    }
+    expect(limite.chaves[0]).toBe(limite.chaves[1]);
+    expect(limite.chaves[0]).not.toBe(limite.chaves[2]);
+    expect(clienteLimite("::1")).toBe("0000:0000:0000:0000::/64");
+    expect(clienteLimite("2001:db8:abcd:12:1:2:3:4")).toBe("2001:0db8:abcd:0012::/64");
+    expect(clienteLimite("invalido:ip")).toBe("anonimo");
+  });
 });
 
 describe("/api/documento/:id", () => {
@@ -135,7 +163,7 @@ describe("/api/documento/:id", () => {
     for (const caminho of ["/api/documento/doc:101", "/api/documento/doc%3A101"]) {
       const r = await pedir(caminho);
       expect(r.status).toBe(200);
-      expect(r.headers.get("Cache-Control")).toBe("public, max-age=86400");
+      expect(r.headers.get("Cache-Control")).toBe("public, max-age=60");
       const corpo = await r.json() as Record<string, any>;
       expect(corpo.documento).toEqual({
         id: "doc:101", tipo: "pl", numero: "1/2021", ano: 2021, data: "2021-03-01",
@@ -159,15 +187,20 @@ describe("/api/documento/:id", () => {
   });
 
   it("omite arquivos removidos", async () => {
+    await pedir("/api/documento/doc:101");
+    expect((await pedir("/api/documento/doc:101")).headers.get("X-Radar-Cache")).toBe("HIT");
     await env.DB.prepare("INSERT INTO remocoes (chave, sha256, motivo, data) VALUES (?, ?, ?, ?)")
-      .bind("siscam:1001", sha(1), "Pedido do titular.", "2026-10-01").run();
-    const corpo = await (await pedir("/api/documento/doc:101")).json() as Record<string, any>;
+      .bind("siscam:9999", sha(1), "Pedido do titular.", "2026-10-01").run();
+    const r = await pedir("/api/documento/doc:101");
+    expect(r.headers.get("X-Radar-Cache")).toBe("MISS");
+    const corpo = await r.json() as Record<string, any>;
     expect(corpo.arquivos.map((a: { arquivo: string }) => a.arquivo)).toEqual(["siscam:1201"]);
   });
 
   it("404 para documento inexistente e 400 para id inválido", async () => {
     const r = await pedir("/api/documento/doc:999");
     expect(r.status).toBe(404);
+    expect(r.headers.get("Cache-Control")).toBe("no-store");
     expect(await r.json()).toEqual({ erro: "Documento não encontrado.", codigo: "documento_inexistente" });
     for (const id of ["xyz", "doc:0", "doc:01", "doc:1%27%20OR%201=1", "%E0%A4%A", "pl:1"]) {
       const e = await pedir(`/api/documento/${id}`);
@@ -197,6 +230,7 @@ describe("/api/original/:sha256", () => {
     expect(r.headers.get("Content-Security-Policy")).toBe("sandbox");
     expect(r.headers.get("Cache-Control")).toBe("no-store");
     expect(r.headers.get("ETag")).toBe(`"${sha(1)}"`);
+    expect(r.headers.get("Content-Length")).toBe(String(new TextEncoder().encode("conteúdo do original siscam:1001").length));
     const docx = await pedir(`/api/original/${sha(2).toUpperCase()}`);
     expect(docx.headers.get("Content-Disposition")).toBe('attachment; filename="siscam-1002.docx"');
   });
@@ -211,7 +245,7 @@ describe("/api/original/:sha256", () => {
       .bind("siscam:1001", sha(1), "Pedido do titular.", "2026-10-01").run();
     const r = await pedir(caminho);
     expect(r.status).toBe(410);
-    expect(await r.json()).toEqual({ erro: expect.any(String), codigo: "removido" });
+    expect(await r.json()).toEqual({ erro: expect.stringContaining(`${criarEnv().URL_SITE}/metodologia.html#privacidade`), codigo: "removido" });
     expect(r.headers.get("Cache-Control")).toBe("no-store");
   });
 
@@ -243,6 +277,52 @@ describe("/api/original/:sha256", () => {
     expect(nomeArquivo("siscam:7", null)).toBe("siscam-7.bin");
     expect(nomeArquivo("siscam:7", "html")).toBe("siscam-7.html");
   });
+
+  it("HEAD de um original já guardado mantém tamanho e segurança, sem corpo", async () => {
+    await (await pedir(caminho)).arrayBuffer();
+    const get = await pedir(caminho);
+    expect(get.headers.get("X-Radar-Cache")).toBe("HIT");
+    const head = await pedir(caminho, { method: "HEAD" });
+    expect(head.status).toBe(200);
+    for (const nome of ["Content-Length", "Content-Type", "Content-Disposition", "ETag", "Cache-Control", "Content-Security-Policy"]) {
+      expect(head.headers.get(nome), nome).toBe(get.headers.get(nome));
+    }
+    expect(await head.text()).toBe("");
+    await get.arrayBuffer();
+  });
+
+  it("transmite originais maiores que 10 MiB sem clonar para a Cache API", async () => {
+    const tamanho = MAX_CACHE_ORIGINAL + 1;
+    await env.ARQUIVOS.put(chaveR2(sha(1)), new Uint8Array(tamanho));
+    for (let i = 0; i < 2; i++) {
+      const r = await pedir(caminho);
+      expect(r.headers.get("X-Radar-Cache")).toBe("MISS");
+      expect(r.headers.get("Content-Length")).toBe(String(tamanho));
+      expect(r.headers.get("Cache-Control")).toBe("no-store");
+      expect((await r.arrayBuffer()).byteLength).toBe(tamanho);
+    }
+  });
+});
+
+it("a hidratação semântica descarta remoção por SHA-256 ocorrida depois da seleção", async () => {
+  const real = env.DB as unknown as D1Database;
+  let lotes = 0;
+  const db: D1Database = {
+    prepare: (sql) => real.prepare(sql),
+    async batch<T>(instrucoes: D1Instrucao[]) {
+      const linhas = await real.batch<T>(instrucoes);
+      // Primeiro lote: estado+remoções; segundo: seleção dos candidatos semânticos.
+      if (++lotes === 2) {
+        await env.DB.prepare("INSERT INTO remocoes (chave, sha256, motivo, data) VALUES (?, ?, ?, ?)")
+          .bind("siscam:9999", sha(2), "Pedido do titular.", "2026-10-01").run();
+      }
+      return linhas;
+    },
+  };
+  const { corpo } = await buscarJson({ q: "hidratação posterior", modo: "semantica" }, criarEnv({ DB: db,
+    VETORES: new VetoresFalsos([trechoDe("siscam:1002").id]) }));
+  expect(corpo.resultados).toEqual([]);
+  expect(lotes).toBe(3);
 });
 
 describe("/api/versao e /api/saude", () => {
@@ -271,6 +351,28 @@ describe("/api/versao e /api/saude", () => {
 
 describe("wrangler.jsonc", () => {
   const config = JSON.parse((env.WRANGLER_JSONC as string).split("\n").filter((l) => !l.trim().startsWith("//")).join("\n"));
+
+  it("ORIGENS_CORS acompanha exatamente config/backend.json nos dois ambientes", () => {
+    const backend = JSON.parse(env.BACKEND_JSON as string) as { origens_cors: string[] };
+    for (const ambiente of [config, config.env.staging]) {
+      expect(ambiente.vars.ORIGENS_CORS.split(",").sort()).toEqual([...backend.origens_cors].sort());
+      expect(ambiente.vars.URL_SITE).toBe(criarEnv().URL_SITE);
+    }
+  });
+
+  it("todo cron declarado tem handler scheduled seguro até T4.2.3", () => {
+    const log = vi.spyOn(console, "info").mockImplementation(() => undefined);
+    try {
+      for (const ambiente of [config, config.env.staging]) {
+        expect(ambiente.triggers.crons.length).toBeGreaterThan(0);
+        expect(worker.scheduled).toBeTypeOf("function");
+      }
+      expect(worker.scheduled()).toBeUndefined();
+      expect(log).toHaveBeenCalledWith("Verificação agendada ainda não implementada (T4.2.3).");
+    } finally {
+      log.mockRestore();
+    }
+  });
 
   it("observabilidade desligada e sem Logpush, na produção e no staging", () => {
     for (const ambiente of [config, config.env.staging]) {
