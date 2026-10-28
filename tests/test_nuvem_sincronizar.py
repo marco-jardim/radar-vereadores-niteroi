@@ -13,13 +13,14 @@ import tempfile
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
+from unittest import mock
 
-from coletor import remocoes
+from coletor import mascara, remocoes
 from coletor.arquivos import salvar_mapa
 from coletor.nuvem import __main__ as cli
 from coletor.nuvem import banco
 from coletor.nuvem.ambientes import BUCKET_ARQUIVOS_LOCAL, BUCKET_EXPORTACOES_LOCAL, ambiente_local
-from coletor.nuvem.fonte import normalizar_busca
+from coletor.nuvem.fonte import ErroFonte, Fonte, Trecho, carregar_fonte, normalizar_busca, varrer_fonte
 from coletor.nuvem.local import MODELO_LOCAL, desempacotar
 from coletor.nuvem.r2 import chave_r2
 from coletor.nuvem.sincronizar import ErroBarreira, sincronizar
@@ -125,6 +126,69 @@ class Base(unittest.TestCase):
                  trechos_vetorizaveis=1)
         salvar_mapa(caminho_man, manifesto)
         return ident
+
+
+class TestBarreiraContextual(unittest.TestCase):
+    def _fonte(self, texto: str, intervalos: list[tuple[int, int]]) -> Fonte:
+        trechos = {}
+        for i, (inicio, fim) in enumerate(intervalos):
+            ident = f"{i:016x}"
+            pedaco = texto[inicio:fim]
+            trechos[ident] = Trecho(id=ident, documento="doc:1", arquivo="siscam:1", posicao=i,
+                                    texto=pedaco, sha256=hashlib.sha256(pedaco.encode()).hexdigest(),
+                                    vetorizavel=True, tipo="requerimento", ano=2026, inicio=inicio, fim=fim)
+        return Fonte(linhas={"remocoes": {}}, trechos=trechos, vetores={}, ementas={}, originais={},
+                     remover_r2=set(), sha256_manifestos="", textos_arquivos={"siscam:1": texto})
+
+    def test_protocolo_nao_vira_telefone_forte_no_corte(self):
+        for numero in ("001189202514", "2620-1234", "02126201234"):
+            with self.subTest(numero=numero):
+                texto = f"E-SIC Protocolo nº {numero}, datada de hoje."
+                inicio = texto.index("nº")
+                fonte = self._fonte(texto, [(inicio, len(texto)), (inicio + 3, len(texto))])
+                if numero != "001189202514":
+                    self.assertTrue(any(o["forte"] for o in mascara.varrer(texto[inicio:])))
+                with mock.patch("coletor.nuvem.fonte.mascara.varrer", wraps=mascara.varrer) as espiao:
+                    fortes, fracas = varrer_fonte(fonte, ())
+                espiao.assert_called_once_with(texto, frozenset())
+                self.assertEqual(fortes, [])
+                self.assertEqual(fracas, sum(not o["forte"] for o in mascara.varrer(texto)))
+
+    def test_forte_atribuido_somente_aos_trechos_sobrepostos(self):
+        email = "fulano@exemplo.org"
+        texto = "Antes " + email + " depois"
+        inicio, fim = 6, 6 + len(email)
+        fonte = self._fonte(texto, [(0, inicio), (inicio, inicio + 5),
+                                   (inicio + 5, len(texto)), (fim, len(texto))])
+        with mock.patch("coletor.nuvem.fonte.mascara.varrer", wraps=mascara.varrer) as espiao:
+            fortes, fracas = varrer_fonte(fonte, ())
+        espiao.assert_called_once_with(texto, frozenset())
+        self.assertEqual(fortes, [
+            {"origem": "trecho 0000000000000001 (siscam:1)", "tipo": "email", "inicio": 0, "fim": 5},
+            {"origem": "trecho 0000000000000002 (siscam:1)", "tipo": "email", "inicio": 0, "fim": len(email) - 5},
+        ])
+        self.assertEqual(fracas, 0)
+        self.assertNotIn(email, json.dumps(fortes))
+
+    def test_forte_fora_dos_trechos_nao_e_enviado(self):
+        texto = "fulano@exemplo.org\nTexto público sem contato."
+        fonte = self._fonte(texto, [(texto.index("Texto"), len(texto))])
+        self.assertEqual(varrer_fonte(fonte, ()), ([], 0))
+
+    def test_ementas_e_motivos_continuam_isolados(self):
+        fonte = self._fonte("Texto público.", [(0, 14)])
+        fonte.ementas["doc:2"] = "Contato fulano@exemplo.org"
+        fonte.linhas["remocoes"][("siscam:2", "a" * 64)] = (
+            "siscam:2", "a" * 64, "Pedido de pessoa@exemplo.org", "2026-01-01")
+        fortes, fracas = varrer_fonte(fonte, ())
+        self.assertEqual([o["origem"] for o in fortes], ["ementa doc:2", "remocao siscam:2"])
+        self.assertEqual(fracas, 0)
+
+    def test_sem_texto_completo_falha_fechado(self):
+        fonte = self._fonte("Texto público.", [(0, 14)])
+        fonte.textos_arquivos.clear()
+        with self.assertRaises(ErroFonte):
+            varrer_fonte(fonte, ())
 
 
 class TestSincronizacaoCompleta(Base):
@@ -272,6 +336,14 @@ class TestDiferenca(Base):
 
 
 class TestSegurancaEFalhas(Base):
+    def test_fonte_conserva_texto_completo_e_intervalos(self):
+        texto = "Introdução\nE-SIC Protocolo nº 001189202514, datada de hoje.\n"
+        ident = self.reescrever("siscam:900003", texto)
+        fonte = carregar_fonte(self.raiz, self.textos, G.LIBERADOS)
+        self.assertEqual(fonte.textos_arquivos["siscam:900003"], texto)
+        trecho = fonte.trechos[ident]
+        self.assertEqual((trecho.inicio, trecho.fim, trecho.texto), (0, len(texto), texto))
+
     def test_barreira_de_pii_aborta_sem_gravar(self):
         with self.assertRaises(ErroBarreira) as ctx:
             self.sincronizar(liberados=frozenset())  # o telefone do gabinete deixa de ser liberado

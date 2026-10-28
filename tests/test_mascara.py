@@ -312,7 +312,7 @@ class TestEmail(unittest.TestCase):
 
 class TestEmailAuditoriaV5(unittest.TestCase):
     def test_versao(self) -> None:
-        self.assertEqual(mascara.VERSAO_MASCARA, "6")
+        self.assertEqual(mascara.VERSAO_MASCARA, "7")
 
     def _email_mascarado(self, texto: str, esperado: str) -> None:
         for paginas in (None, {1}, {2}):
@@ -356,6 +356,35 @@ class TestEmailAuditoriaV5(unittest.TestCase):
             self._email_mascarado(f"<{email}>", "<[e-mail omitido]>")
             achado = varrer(f"<{email}>")[0]
             self.assertEqual((achado["inicio"], achado["fim"]), (1, len(email) + 1))
+
+    def test_prosa_ocr_entre_sinais_nao_e_tag(self) -> None:
+        # Reprodução reduzida da supressão por uma zona <…> ampla: o trecho sem
+        # o sinal inicial detectava o e-mail, mas o documento completo não.
+        trecho = "AS 2 Site: www.Iwerj.com E-mail: IwerjDhotmail.com 485 4,"
+        texto = "<Relatorio digitalizado\n" + "Texto do relatório. " * 10 + trecho + "\nFim >"
+        esperado = texto.replace("IwerjDhotmail.com", "[e-mail omitido]")
+        self._email_mascarado(texto, esperado)
+        self._email_mascarado(trecho, trecho.replace("IwerjDhotmail.com", "[e-mail omitido]"))
+
+    def test_email_forte_nao_desaparece_ao_adicionar_contexto(self) -> None:
+        contextos = (
+            ("<Relatorio digitalizado\n", "\nProsa de OCR >"),
+            ("<rastro 1 " + "Prosa " * 200, " 2 fim>"),
+            ('<registro origem="digitalizacao">\n', "\n</registro>"),
+            ("Site: https://exemplo.org/relatorio\n", "\nFim."),
+            ("www.exemplo.org <Prosa 2 Site: ", " 3 fim>"),
+            ("Linha longa " + " " * 1000, " " * 1000 + " fim"),
+        )
+        for email in ("IwerjDhotmail.com", "frederico.andradeQoutlook.com",
+                      "guilherme.giesta)gmail.com", "instituto(altresromas.org", "fulano@exemplo.org"):
+            self.assertTrue(any(o["tipo"] == "email" and o["forte"] for o in varrer(email)))
+            for antes, depois in contextos:
+                with self.subTest(email=email, antes=antes[:40]):
+                    texto = antes + email + depois
+                    fortes = [o for o in varrer(texto) if o["tipo"] == "email" and o["forte"]]
+                    self.assertEqual([(o["inicio"], o["fim"]) for o in fortes],
+                                     [(len(antes), len(antes) + len(email))])
+                    self.assertEqual(mascarar(texto)[0], antes + "[e-mail omitido]" + depois)
 
     def test_emails_entre_angulos_liberados(self) -> None:
         for email, lib in (("gabinetemichelsaad@gmail.com", {"gabinetemichelsaad@gmail.com"}),
@@ -465,6 +494,36 @@ class TestEmailAuditoriaV5(unittest.TestCase):
 
 
 class TestFalsosPositivos(unittest.TestCase):
+    def test_cep_malformado_cinco_quatro_nao_e_telefone(self) -> None:
+        for numero in ("24320-5902", "24320-5700", "24358-3800"):
+            texto = f"NITERÓI - RJ, {numero}."
+            with self.subTest(texto=texto):
+                _sem_mudanca(self, texto)
+                self.assertEqual(varrer(texto), [])
+                _sem_mudanca(self, "Tel: " + numero)
+                self.assertEqual(varrer("Tel: " + numero), [])
+        for numero in ("2620-1234", "(21) 98765-4321", "98765-4321"):
+            texto = "Tel: " + numero
+            self.assertEqual(mascarar(texto)[0], "Tel: [telefone omitido]")
+            self.assertEqual([(o["tipo"], o["forte"]) for o in varrer(numero)], [("telefone", True)])
+
+    def test_faixas_de_numeracao_predial(self) -> None:
+        for texto in ("NA ALTURA DOS NÚMEROS 1109-1203 – CHARITAS.",
+                      "número 2620-2630", "números 2620-2630", "nºs 2620-2630",
+                      "n.ºs 2620-2630", "nos 2620-2630", "altura do 2620-2630",
+                      "altura dos 2620-2630"):
+            with self.subTest(texto=texto):
+                _sem_mudanca(self, texto)
+                self.assertEqual(varrer(texto), [])
+                self.assertEqual(mascarar(texto, ocr_paginas={1})[0], texto)
+                self.assertEqual(varrer(texto, ocr_paginas={1}), [])
+        texto = "Números de telefone 2620-1234"
+        self.assertEqual(mascarar(texto)[0], "Números de telefone [telefone omitido]")
+        self.assertEqual([(o["tipo"], o["forte"]) for o in varrer(texto)], [("telefone", True)])
+        texto = "Números " + "distante" * 4 + " 2620-1234"
+        self.assertEqual(mascarar(texto)[0], texto.replace("2620-1234", "[telefone omitido]"))
+        self.assertEqual([(o["tipo"], o["forte"]) for o in varrer(texto)], [("telefone", True)])
+
     def test_listas_de_numeros_de_documentos(self) -> None:
         for texto in ("4406, 4407", "4404, 4405, 4406, 4407, 4408",
                       "4404, 4405, 4406 4407, 4408", "4404, 4405 4406 e 4407",

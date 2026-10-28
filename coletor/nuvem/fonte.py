@@ -1,5 +1,8 @@
 """Estado desejado da nuvem, lido só do Git (contrato `docs/contratos/textos.md`).
 
+Conserva texto completo e intervalos dos trechos para a barreira de PII não perder
+rótulos/contexto nos cortes; cada arquivo é varrido uma única vez.
+
 Fontes: os registros de `data/proposicoes/`, `data/documentos/<tipo>/` e
 `data/sessoes/`, `config/vereadores.json`, `config/perfis.json`,
 `config/remocoes.json`, os manifestos `data/textos/manifesto-<ano>.json` e a árvore
@@ -43,6 +46,8 @@ class Trecho:
     vetorizavel: bool
     tipo: str
     ano: int
+    inicio: int
+    fim: int
 
 
 @dataclass
@@ -64,6 +69,7 @@ class Fonte:
     remover_r2: set[str]
     sha256_manifestos: str
     avisos: list[str] = field(default_factory=list)
+    textos_arquivos: dict[str, str] = field(default_factory=dict)
 
 
 # ---------------------------------------------------------------- utilidades
@@ -286,7 +292,8 @@ def carregar_fonte(raiz: str | Path, textos: str | Path | None, liberados) -> Fo
         if (e.get("trechos") or 0) > 0:
             com_texto[chave] = (ano, e)
 
-    trechos = _trechos(textos, com_texto, removidas, avisos)
+    textos_arquivos: dict[str, str] = {}
+    trechos = _trechos(textos, com_texto, removidas, avisos, textos_arquivos)
 
     vetores: dict[str, tuple[str, dict, str]] = {}
     for t in trechos.values():
@@ -316,11 +323,11 @@ def carregar_fonte(raiz: str | Path, textos: str | Path | None, liberados) -> Fo
         "remocoes": linhas_remocoes,
         "trechos_indexados": {(i,): (i, sha_indexado(v[0], v[1])) for i, v in vetores.items()},
     }
-    return Fonte(linhas, trechos, vetores, ementas, originais, remover_r2, sha_manifestos, avisos)
+    return Fonte(linhas, trechos, vetores, ementas, originais, remover_r2, sha_manifestos, avisos, textos_arquivos)
 
 
 def _trechos(textos: Path | None, com_texto: dict[str, tuple[int, dict]], removidas: set[str],
-             avisos: list[str]) -> dict[str, Trecho]:
+             avisos: list[str], textos_arquivos: dict[str, str]) -> dict[str, Trecho]:
     por_arquivo: dict[str, list[dict]] = defaultdict(list)
     pasta = textos / "trechos" if textos else None
     if pasta is not None and pasta.is_dir():
@@ -358,6 +365,7 @@ def _trechos(textos: Path | None, com_texto: dict[str, tuple[int, dict]], removi
         if not dados.endswith(b"\n"):
             raise ErroFonte(f"{chave}: .txt sem a quebra final")
         texto = dados.decode("utf-8")[:-1]  # remove exatamente uma quebra final (contrato, seção 7.1)
+        textos_arquivos[chave] = texto
         for t in lista:
             if t["documento"] != e["documento"]:
                 raise ErroFonte(f"{chave}: trecho {t['id']} com documento diferente do principal")
@@ -367,18 +375,40 @@ def _trechos(textos: Path | None, com_texto: dict[str, tuple[int, dict]], removi
             if t["id"] in trechos:
                 raise ErroFonte(f"trecho {t['id']} repetido")
             trechos[t["id"]] = Trecho(t["id"], t["documento"], chave, t["posicao"], pedaco, t["sha256"],
-                                      bool(t.get("vetorizavel")), e["tipo"], ano)
+                                      bool(t.get("vetorizavel")), e["tipo"], ano, t["inicio"], t["fim"])
     return trechos
 
 
 # ---------------------------------------------------------------- barreira de PII
 def varrer_fonte(fonte: Fonte, liberados) -> tuple[list[dict], int]:
-    """Ocorrências fortes de `mascara.varrer` em todo trecho, ementa e motivo de remoção a enviar
-    (sem o valor) e o total de fracas."""
+    """Varre cada arquivo completo uma vez e atribui fortes aos trechos sobrepostos.
+
+    As posições relatadas são relativas ao trecho, recortadas aos seus limites,
+    sem o valor pessoal. Fracas são contadas uma vez por ocorrência do arquivo
+    com trecho sobreposto. Ementas e motivos de remoção são varridos isoladamente.
+    """
+    liberados = frozenset(liberados)
     fortes: list[dict] = []
     fracas = 0
-    alvos = [(f"trecho {t.id} ({t.arquivo})", t.texto) for _, t in sorted(fonte.trechos.items())]
-    alvos += [(f"ementa {d}", texto) for d, texto in sorted(fonte.ementas.items())]
+    por_arquivo: dict[str, list[Trecho]] = defaultdict(list)
+    for _, t in sorted(fonte.trechos.items()):
+        por_arquivo[t.arquivo].append(t)
+    for arquivo, trechos in sorted(por_arquivo.items()):
+        if arquivo not in fonte.textos_arquivos:
+            raise ErroFonte(f"{arquivo}: texto completo ausente para a barreira de PII")
+        texto = fonte.textos_arquivos[arquivo]
+        for o in mascara.varrer(texto, liberados):
+            sobrepostos = [t for t in trechos if o["inicio"] < t.fim and o["fim"] > t.inicio]
+            if not sobrepostos:
+                continue
+            if not o["forte"]:
+                fracas += 1
+                continue
+            for t in sobrepostos:
+                fortes.append({"origem": f"trecho {t.id} ({t.arquivo})", "tipo": o["tipo"],
+                               "inicio": max(o["inicio"], t.inicio) - t.inicio,
+                               "fim": min(o["fim"], t.fim) - t.inicio})
+    alvos = [(f"ementa {d}", texto) for d, texto in sorted(fonte.ementas.items())]
     alvos += [(f"remocao {chave[0]}", linha[2] or "") for chave, linha in sorted(fonte.linhas["remocoes"].items())]
     for origem, texto in alvos:
         for o in mascara.varrer(texto, liberados):
