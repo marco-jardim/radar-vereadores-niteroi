@@ -87,4 +87,8 @@ export interface Env {
   URL_SITE: string;
   /** Commit do código publicado (`wrangler deploy --var COMMIT:<sha>`). */
   COMMIT?: string;
+  /** Fonte pública da auditoria agendada (branches separadas para manifesto e trechos). */
+  CRON_RAW_BASE?: string;
+  CRON_MANIFESTOS_BRANCH?: string;
+  CRON_TEXTOS_BRANCH?: string;
 }

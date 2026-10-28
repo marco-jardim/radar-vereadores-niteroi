@@ -12,7 +12,7 @@
   "observability": { "enabled": false },
   "limits": { "cpu_ms": 1000 },
   "version_metadata": { "binding": "CF_VERSION_METADATA" },
-  "vars": { "AMBIENTE": "production", "ORIGENS_CORS": "https://marco-jardim.github.io", "URL_SITE": "https://marco-jardim.github.io/radar-vereadores-niteroi" },
+  "vars": { "AMBIENTE": "production", "ORIGENS_CORS": "https://marco-jardim.github.io", "URL_SITE": "https://marco-jardim.github.io/radar-vereadores-niteroi", "CRON_RAW_BASE": "https://raw.githubusercontent.com/marco-jardim/radar-vereadores-niteroi", "CRON_MANIFESTOS_BRANCH": "main", "CRON_TEXTOS_BRANCH": "dados-textos" },
   "d1_databases": [
     { "binding": "DB", "database_name": "radar-niteroi", "database_id": "8750fe41-d702-407f-9373-414529504ced", "migrations_dir": "migrations" }
   ],
@@ -28,7 +28,7 @@
   "env": {
     "staging": {
       "name": "radar-niteroi-api-staging",
-      "vars": { "AMBIENTE": "staging", "ORIGENS_CORS": "https://marco-jardim.github.io,http://localhost:8000,http://127.0.0.1:8000", "URL_SITE": "https://marco-jardim.github.io/radar-vereadores-niteroi" },
+      "vars": { "AMBIENTE": "staging", "ORIGENS_CORS": "https://marco-jardim.github.io,http://localhost:8000,http://127.0.0.1:8000", "URL_SITE": "https://marco-jardim.github.io/radar-vereadores-niteroi", "CRON_RAW_BASE": "https://raw.githubusercontent.com/marco-jardim/radar-vereadores-niteroi", "CRON_MANIFESTOS_BRANCH": "main", "CRON_TEXTOS_BRANCH": "dados-textos" },
       "observability": { "enabled": false },
       "limits": { "cpu_ms": 1000 },
       "version_metadata": { "binding": "CF_VERSION_METADATA" },

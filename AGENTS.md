@@ -68,7 +68,7 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `site_src/fontes/` | WOFF2 auto-hospedadas Barlow Condensed, Public Sans e Fraunces; licenças `OFL-*.txt`; `FONTES.md` não publicado. |
 | `tests/` | Testes Python, JS em `tests/js/` e HTML real em `tests/fixtures/siscam/`. |
 | `tests/js/fixtures/cartao_sessoes.html` | Paridade Python/JavaScript do cartão de votação. |
-| `worker/` | Worker de busca TypeScript (`src/`: `/api/busca`, `/api/documento`, `/api/original`, `/api/versao`, `/api/saude`; testes vitest no pool dos Workers em `test/`); `wrangler.jsonc` com produção no nível superior e staging em `env.staging`. |
+| `worker/` | Worker de busca TypeScript (`src/`: `/api/busca`, `/api/documento`, `/api/original`, `/api/versao`, `/api/saude`; `cron.ts`: auditoria diária de até 50 originais em streaming e hashes dos trechos, única escrita em `verificacoes`; testes vitest no pool dos Workers em `test/`); `wrangler.jsonc` com produção no nível superior e staging em `env.staging`. |
 | `scripts/testes.ps1` | Executor paralelo local equivalente ao discover; o CI segue sequencial. |
 | `docs/backend.md` | Recursos Cloudflare, ferramentas, credenciais e rollback. |
 | `docs/contratos/textos.md` | Contrato congelado de chaves, documento principal, manifesto `data/textos/manifesto-<ano>.json`, remoções, duplicatas, `dados-textos`, D1 e Vectorize; fixtures em `tests/fixtures/contratos/` (raiz em miniatura gerada por `gerar_fixtures.py`). |

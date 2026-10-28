@@ -400,17 +400,13 @@ describe("wrangler.jsonc", () => {
     for (const ambiente of [config, config.env.staging]) expect(ambiente.vars.URL_SITE).toBe(criarEnv().URL_SITE);
   });
 
-  it("todo cron declarado tem handler scheduled seguro até T4.2.3", () => {
-    const log = vi.spyOn(console, "info").mockImplementation(() => undefined);
-    try {
-      for (const ambiente of [config, config.env.staging]) {
-        expect(ambiente.triggers.crons.length).toBeGreaterThan(0);
-        expect(worker.scheduled).toBeTypeOf("function");
-      }
-      expect(worker.scheduled()).toBeUndefined();
-      expect(log).toHaveBeenCalledWith("Verificação agendada ainda não implementada (T4.2.3).");
-    } finally {
-      log.mockRestore();
+  it("todo cron declarado tem handler e fontes públicas configuradas", () => {
+    for (const ambiente of [config, config.env.staging]) {
+      expect(ambiente.triggers.crons).toEqual(["17 7 * * *"]);
+      expect(worker.scheduled).toBeTypeOf("function");
+      expect(ambiente.vars.CRON_RAW_BASE).toBe("https://raw.githubusercontent.com/marco-jardim/radar-vereadores-niteroi");
+      expect(ambiente.vars.CRON_MANIFESTOS_BRANCH).toBe("main");
+      expect(ambiente.vars.CRON_TEXTOS_BRANCH).toBe("dados-textos");
     }
   });
 

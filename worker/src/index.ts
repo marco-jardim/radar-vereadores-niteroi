@@ -4,6 +4,7 @@
 // METRICAS recebe só o modo e a contagem de resultados.
 import type { ContextoExecucao, Env } from "./ambiente";
 import { rotaBusca } from "./busca";
+import { verificar } from "./cron";
 import { rotaDocumento } from "./documento";
 import { chaveIndice, lerEstado } from "./estado";
 import { ErroHttp, METODOS, erroInterno, json, origemPermitida, preflight, respostaErro, sha256Hex, valorCabecalho } from "./http";
@@ -127,9 +128,8 @@ export async function tratar(request: Request, env: Env, ctx: ContextoExecucao):
 }
 
 export default {
-  scheduled(): void {
-    // T4.2.3 implementará a verificação por amostragem; não lê nem altera dados por enquanto.
-    console.info("Verificação agendada ainda não implementada (T4.2.3).");
+  scheduled(evento: { scheduledTime: number }, env: Env, ctx: ContextoExecucao): void {
+    ctx.waitUntil(verificar(env, new Date(evento.scheduledTime)));
   },
   fetch(request: Request, env: Env, ctx: ContextoExecucao): Promise<Response> {
     return tratar(request, env, ctx);
