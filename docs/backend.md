@@ -281,27 +281,41 @@ em lotes para respeitar os 100 parâmetros por instrução.
 
 ### Cron diário de verificação
 
-`worker/src/cron.ts`, ligado ao `scheduled`, roda às **07:17 UTC** nos dois ambientes. Lê todos os manifestos
+`worker/src/cron.ts`, ligado ao `scheduled`, roda às **07:17 UTC** somente em produção; staging não tem gatilho,
+para não comparar seus recursos com os dados de produção. Lê todos os manifestos
 de 2021 até o ano UTC do evento (`data/textos/manifesto-<ano>.json`); 404 de ano sem manifesto é normal.
 `CRON_RAW_BASE`, `CRON_MANIFESTOS_BRANCH` e `CRON_TEXTOS_BRANCH`, definidos nos dois ambientes do wrangler,
 apontam para `https://raw.githubusercontent.com/marco-jardim/radar-vereadores-niteroi`, `main` e `dados-textos`.
+Manifestos e JSONL são buscados no `estado_indice.commit` do D1, não na ponta das branches, evitando
+divergências na janela entre publicação no Git e sincronização. Só sem commit usa as branches configuradas.
 Só aceita o host raw do GitHub, sem seguir redirecionamentos.
 
-A amostra tem até **50 arquivos**, por Fisher–Yates com semente da data UTC e ordenação inicial por chave;
-mesma data e mesmo conjunto elegível dão a mesma amostra. Exclui removidos, duplicatas, downloads pendentes,
+A amostra tem até **50 arquivos** de no máximo **três grupos (tipo, ano)** por dia. Os grupos são ordenados
+e percorridos numa janela circular, com início no número do dia UTC × 3, cobrindo todos em até
+`ceil(grupos / 3)` dias com conjunto estável. Dentro de cada grupo, Fisher–Yates usa a data UTC e ordenação
+inicial por chave; os candidatos são intercalados entre grupos. Mesma data e mesmo conjunto elegível dão
+a mesma amostra. Exclui removidos, duplicatas, downloads pendentes,
 originais acima de 98.951.424 bytes e `r2_chave` NULL no manifesto ou D1. Cada original é lido diretamente do R2
 por `crypto.DigestStream` (SHA-256), sem bufferizar o corpo, e comparado com `sha256_original` do manifesto.
 Compara também o conjunto completo de ids/hashes em `trechos.sha256` do D1 com `trechos/<tipo>/<ano>.jsonl`
-da branch de textos e a contagem do manifesto; cada JSONL necessário é buscado uma única vez.
+do Git e a contagem do manifesto; cada JSONL necessário é buscado uma única vez, em streaming com
+`TextDecoderStream` e separação por linhas (limite de 1 Mi de caracteres por linha), retendo só ids/hashes
+dos arquivos amostrados, nunca o arquivo inteiro. O total de bytes originais enviados ao hash tem teto de
+**300 MB decimais** por execução, inclusive leituras que falhem. Ao faltar saldo, cancela o corpo e marca
+esse arquivo e os restantes como `r2/adiado`, sem contá-los em `ok`. O limite de CPU permanece em 1.000 ms,
+também para preservar o teto do handler público; a auditoria não amplia os limites das consultas.
 
-A única escrita do Worker é a linha de `verificacoes`: `data` ISO UTC do evento, `amostra` examinada, `ok`
+A única tabela escrita pelo Worker é `verificacoes`: antes das leituras insere a linha com contagens zeradas
+e `falhas_json = [{"etapa":"cron","codigo":"iniciado"}]`; ao terminar faz UPDATE da mesma linha.
+Uma execução morta por CPU/memória ou sem conseguir concluir a gravação fica visível como `cron/iniciado`,
+sem exigir coluna nova. Os campos são `data` ISO UTC do evento, `amostra` examinada (inclui adiados), `ok`
 (contagem de arquivos íntegros nos dois testes) e `falhas_json` com etapa/código fixos, chave válida e/ou ano.
 Não guarda texto, valores de dados pessoais, mensagens de exceção ou pilhas. Falhas de rede, formato, D1 e R2
 são registradas sem interromper o handler; se o próprio D1 não aceitar a gravação, não é possível persistir
 o diagnóstico. `/api/saude` mostra as contagens da última verificação; os detalhes estão em `falhas_json`.
 `ok = amostra` não dispensa examinar `falhas_json` (por exemplo, pode faltar a leitura de um manifesto).
 
-Há teto de **240 subrequisições** (incluindo a escrita), sem retentativas, prazo global de 240 s para as leituras
+Há teto de **240 subrequisições** (incluindo inserção inicial, leitura do estado e atualização final), sem retentativas, prazo global de 240 s para as leituras
 e de até 10 s por operação, inclusive consumo dos corpos; a gravação tem mais 10 s reservados.
 Uma base vazia gera `amostra = ok = 0`. A verificação não repara nem publica dados: em divergência, confira
 o Git e execute a sincronização/reconstrução apropriada. Testes offline em `worker/test/cron.test.ts`.

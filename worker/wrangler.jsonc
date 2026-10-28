@@ -43,7 +43,7 @@
       "ai": { "binding": "AI" },
       "ratelimits": [{ "name": "LIMITE", "namespace_id": "7302", "simple": { "limit": 60, "period": 60 } }],
       "analytics_engine_datasets": [{ "binding": "METRICAS", "dataset": "radar_niteroi_busca_staging" }],
-      "triggers": { "crons": ["17 7 * * *"] }
+      "triggers": { "crons": [] }
     }
   }
 }

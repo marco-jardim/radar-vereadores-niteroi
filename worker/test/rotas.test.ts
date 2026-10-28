@@ -401,8 +401,9 @@ describe("wrangler.jsonc", () => {
   });
 
   it("todo cron declarado tem handler e fontes públicas configuradas", () => {
+    expect(config.triggers.crons).toEqual(["17 7 * * *"]);
+    expect(config.env.staging.triggers.crons).toEqual([]);
     for (const ambiente of [config, config.env.staging]) {
-      expect(ambiente.triggers.crons).toEqual(["17 7 * * *"]);
       expect(worker.scheduled).toBeTypeOf("function");
       expect(ambiente.vars.CRON_RAW_BASE).toBe("https://raw.githubusercontent.com/marco-jardim/radar-vereadores-niteroi");
       expect(ambiente.vars.CRON_MANIFESTOS_BRANCH).toBe("main");

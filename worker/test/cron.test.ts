@@ -2,7 +2,7 @@
 import { createExecutionContext, env, waitOnExecutionContext } from "cloudflare:test";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { D1Database, Env, R2ObjetoCorpo } from "../src/ambiente";
-import { MAX_ORIGINAL, amostraDeterministica, hashOriginal, verificar } from "../src/cron";
+import { MAX_BYTES_EXECUCAO, MAX_ORIGINAL, amostraDeterministica, candidatosDoDia, hashOriginal, verificar } from "../src/cron";
 import { sha256Hex } from "../src/http";
 import worker from "../src/index";
 import { chaveR2 } from "../src/original";
@@ -24,6 +24,7 @@ let hash: string;
 
 beforeEach(async () => {
   await carregar();
+  await env.DB.prepare('UPDATE estado_indice SET "commit" = NULL').run();
   await env.DB.batch(["arquivos", "trechos", "verificacoes"].map((t) => env.DB.prepare(`DELETE FROM ${t}`)));
   hash = await sha256Hex(ORIGINAL);
   await env.ARQUIVOS.put(chaveR2(hash), ORIGINAL);
@@ -87,8 +88,9 @@ describe("cron de verificação", () => {
     };
     const resultado = await verificar(criarEnv({ DB }), DATA);
     expect(resultado).toEqual({ data: DATA.toISOString(), amostra: 3, ok: 3, falhas: [] });
-    expect(escritas).toHaveLength(1);
+    expect(escritas).toHaveLength(2);
     expect(escritas[0]).toContain("INTO verificacoes");
+    expect(escritas[1]).toContain("UPDATE verificacoes");
     expect(await env.DB.prepare("SELECT * FROM verificacoes").first()).toEqual({
       data: DATA.toISOString(), amostra: 3, ok: 3, falhas_json: "[]",
     });
@@ -104,6 +106,47 @@ describe("cron de verificação", () => {
     await waitOnExecutionContext(ctx);
     expect(await env.DB.prepare("SELECT data, amostra, ok FROM verificacoes").first())
       .toEqual({ data: DATA.toISOString(), amostra: 1, ok: 1 });
+  });
+
+  it("persiste iniciado antes de qualquer leitura e só conclui por UPDATE", async () => {
+    await incluir(1);
+    const anterior = fetch;
+    let conferiu = false;
+    vi.stubGlobal("fetch", vi.fn(async (input: RequestInfo | URL) => {
+      if (!conferiu) {
+        expect(await env.DB.prepare("SELECT * FROM verificacoes").first()).toEqual({
+          data: DATA.toISOString(), amostra: 0, ok: 0,
+          falhas_json: JSON.stringify([{ etapa: "cron", codigo: "iniciado" }]),
+        });
+        conferiu = true;
+      }
+      return anterior(input);
+    }));
+    const resultado = await verificar(criarEnv({ DB: bancoComFalha((sql) => sql.startsWith("UPDATE verificacoes")) }), DATA);
+    expect(conferiu).toBe(true);
+    expect(resultado.falhas).toContainEqual({ etapa: "verificacoes", codigo: "gravacao" });
+    expect(await env.DB.prepare("SELECT falhas_json FROM verificacoes").first()).toEqual({
+      falhas_json: JSON.stringify([{ etapa: "cron", codigo: "iniciado" }]),
+    });
+  });
+
+  it("fixa manifesto e JSONL no commit do índice, sem consultar as branches", async () => {
+    await incluir(1);
+    const commit = "a".repeat(40);
+    await env.DB.prepare('UPDATE estado_indice SET "commit" = ?').bind(commit).run();
+    respostas.set(`${BASE}/${commit}/data/textos/manifesto-2021.json`, JSON.stringify(manifestos.get(2021)));
+    respostas.set(`${BASE}/${commit}/trechos/pl/2021.jsonl`, trechos.get("trechos/pl/2021.jsonl")!.map((t) => JSON.stringify(t)).join("\n"));
+    expect(await verificar(criarEnv(), DATA)).toMatchObject({ amostra: 1, ok: 1, falhas: [] });
+    expect(pedidos).toHaveLength(7);
+    expect(pedidos.every((url) => url.startsWith(`${BASE}/${commit}/`))).toBe(true);
+  });
+
+  it.each(["nulo", "ausente"])("usa branches quando o commit está %s", async (caso) => {
+    if (caso === "ausente") await env.DB.prepare("DELETE FROM estado_indice").run();
+    await incluir(1);
+    expect(await verificar(criarEnv(), DATA)).toMatchObject({ ok: 1, falhas: [] });
+    expect(pedidos).toContain(`${BASE}/main/data/textos/manifesto-2021.json`);
+    expect(pedidos).toContain(`${BASE}/dados-textos/trechos/pl/2021.jsonl`);
   });
 
   it("registra objeto R2 ausente, sem mensagem interna nem texto", async () => {
@@ -140,6 +183,31 @@ describe("cron de verificação", () => {
     expect(pedidos.length).toBe(7);
   });
 
+  it("rotaciona até três grupos determinísticos e cobre todos em dias consecutivos", async () => {
+    const lista = [];
+    let n = 0;
+    for (const ano of [2021, 2022]) {
+      for (const tipo of ["pl", "ata", "pdl", "resolucao", "requerimento"]) {
+        await incluir(++n, ano, tipo);
+        lista.push({ chave: `siscam:${n}`, ano, tipo });
+      }
+    }
+    const cobertos = new Set<string>();
+    for (let dia = 28; dia <= 31; dia++) {
+      const data = `2026-10-${dia}`;
+      const candidatos = candidatosDoDia(lista, data);
+      expect(candidatosDoDia([...lista].reverse(), data)).toEqual(candidatos);
+      expect(new Set(candidatos.map((a) => `${a.tipo}/${a.ano}`)).size).toBe(3);
+      for (const a of candidatos) cobertos.add(`${a.tipo}/${a.ano}`);
+      pedidos.length = 0;
+      const resultado = await verificar(criarEnv(), new Date(`${data}T07:17:00Z`));
+      expect(resultado).toMatchObject({ amostra: 3, ok: 3, falhas: [] });
+      expect(pedidos.filter((url) => url.endsWith(".jsonl"))).toHaveLength(3);
+    }
+    expect(cobertos.size).toBe(10);
+    expect(candidatosDoDia([], "2026-10-28")).toEqual([]);
+  });
+
   it("exclui removido, duplicata, pendente, R2 NULL no manifesto/D1 e original grande demais", async () => {
     for (let i = 1; i <= 8; i++) {
       const entrada = await incluir(i);
@@ -172,6 +240,74 @@ describe("cron de verificação", () => {
     trechos.clear();
     await env.DB.prepare("DELETE FROM trechos").run();
     expect(await verificar(criarEnv(), DATA)).toMatchObject({ amostra: 1, ok: 1, falhas: [] });
+  });
+
+  it("lê JSONL em blocos, ignora hashes alheios e aceita UTF-8 dividido e última linha sem LF", async () => {
+    await incluir(1);
+    const texto = JSON.stringify({ arquivo: "siscam:999", texto: "ação", id: "inválido" }) + "\r\n" +
+      JSON.stringify(trechos.get("trechos/pl/2021.jsonl")![0]);
+    const bytes = new TextEncoder().encode(texto);
+    const anterior = fetch;
+    const text = vi.fn(() => { throw new Error("não deve bufferizar JSONL"); });
+    vi.stubGlobal("fetch", vi.fn(async (input: RequestInfo | URL) => {
+      if (!String(input).endsWith(".jsonl")) return anterior(input);
+      let posicao = 0;
+      return Object.assign(new Response(new ReadableStream<Uint8Array>({
+        pull(controle) {
+          if (posicao >= bytes.length) controle.close();
+          else { controle.enqueue(bytes.slice(posicao, posicao + 1)); posicao++; }
+        },
+      })), { text });
+    }));
+    expect(await verificar(criarEnv(), DATA)).toMatchObject({ amostra: 1, ok: 1, falhas: [] });
+    expect(text).not.toHaveBeenCalled();
+  });
+
+  it("limita bytes totais, cancela o primeiro original sem saldo e adia os restantes", async () => {
+    for (let n = 1; n <= 6; n++) await incluir(n);
+    const bytes = new TextEncoder().encode(ORIGINAL);
+    const limite = bytes.length * 3;
+    expect(MAX_BYTES_EXECUCAO).toBe(300_000_000);
+    let gets = 0;
+    const cancel = vi.fn();
+    const ARQUIVOS: Env["ARQUIVOS"] = {
+      head: async () => null,
+      get: async (key) => {
+        gets++;
+        return { key, size: bytes.length, body: new ReadableStream<Uint8Array>({
+          start(controle) { controle.enqueue(bytes); },
+          pull(controle) { controle.close(); }, cancel,
+        }) };
+      },
+    };
+    // Deixa saldo positivo menor que um original para exercitar o cancelamento no GET.
+    const resultado = await verificar(criarEnv({ ARQUIVOS }), DATA, { limiteBytesOriginais: limite + 1 });
+    expect(resultado.amostra).toBe(6);
+    expect(resultado.ok).toBe(3);
+    expect(gets).toBe(4);
+    expect(resultado.falhas.filter((f) => f.codigo === "adiado")).toHaveLength(3);
+    expect(cancel).toHaveBeenCalledOnce();
+  });
+
+  it("conta bytes reais no teto mesmo se o tamanho R2 estiver incorreto", async () => {
+    await incluir(1);
+    await incluir(2);
+    const cancel = vi.fn();
+    let gets = 0;
+    const ARQUIVOS: Env["ARQUIVOS"] = {
+      head: async () => null,
+      get: async (key) => {
+        gets++;
+        return { key, size: 1, body: new ReadableStream<Uint8Array>({
+          pull(controle) { controle.enqueue(new Uint8Array(10)); }, cancel,
+        }) };
+      },
+    };
+    const resultado = await verificar(criarEnv({ ARQUIVOS }), DATA, { limiteBytesOriginais: 15 });
+    expect(resultado).toMatchObject({ amostra: 2, ok: 0 });
+    expect(resultado.falhas.map((f) => f.codigo)).toEqual(["adiado", "adiado"]);
+    expect(gets).toBe(1);
+    expect(cancel).toHaveBeenCalledOnce();
   });
 
   it("faz streaming de múltiplos blocos sem arrayBuffer() no objeto ou corpo R2", async () => {
@@ -289,14 +425,18 @@ describe("cron de verificação", () => {
 
   it("timeout aborta raw, registra a falha e permite concluir a gravação", async () => {
     let abortou = false;
+    let avisar = (): void => {};
+    const iniciouLeitura = new Promise<void>((resolve) => { avisar = resolve; });
     vi.stubGlobal("fetch", vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
       if (!String(input).endsWith("manifesto-2021.json")) return new Response(null, { status: 404 });
       return new Promise<Response>((_, rejeitar) => {
         init?.signal?.addEventListener("abort", () => { abortou = true; rejeitar(new Error("segredo")); });
+        avisar();
       });
     }));
     vi.useFakeTimers();
     const promessa = verificar(criarEnv(), DATA);
+    await iniciouLeitura;
     await vi.advanceTimersByTimeAsync(10_001);
     vi.useRealTimers();
     const resultado = await promessa;
@@ -313,7 +453,7 @@ describe("cron de verificação", () => {
     let gravacoes = 0;
     const DB: D1Database = {
       prepare(sql) {
-        if (sql.startsWith("INSERT")) { gravacoes++; return real.prepare(sql); }
+        if (sql.startsWith("INSERT") || sql.startsWith("UPDATE")) { gravacoes++; return real.prepare(sql); }
         consultas++;
         return {
           bind() { return this; },
