@@ -127,11 +127,15 @@ class TestWorkflows(unittest.TestCase):
     def test_textos_pr_somente_simula_e_aceita_secret_ausente(self):
         job = self.job(self.textos, "verificar")
         self.assertEqual(valor(job, "if", 4), "github.event_name == 'pull_request'")
-        self.assertEqual(valor(job, "environment", 4), "staging")
+        self.assertEqual(valor(job, "environment", 4), "pr-simulacao")
         self.assertIn("persist-credentials: false", passo_contendo(job, "actions/checkout@"))
         simulacao = passo_contendo(job, "python -m coletor.nuvem")
         self.assertIn("--ambiente staging --simular", simulacao)
-        self.assertIn("secrets.CLOUDFLARE_API_TOKEN_DADOS", simulacao)
+        self.assertIn("secrets.CLOUDFLARE_API_TOKEN_LEITURA", simulacao)
+        self.assertEqual(set(re.findall(r"secrets\.([A-Z_]+)", job)),
+                         {"CLOUDFLARE_API_TOKEN_LEITURA"})
+        self.assertNotIn("actions/cache", job)
+        self.assertNotRegex(job, r"(?m)^\s+cache:")
         self.assertIn('[ -z "$CLOUDFLARE_API_TOKEN" ]', simulacao)
         self.assertIn('[ "$PR_REPOSITORY" != "$GITHUB_REPOSITORY" ]', simulacao)
         self.assertLess(simulacao.index("::notice::"), simulacao.index("exit 0"))
@@ -178,11 +182,64 @@ class TestWorkflows(unittest.TestCase):
         self.assertRegex(ferramentas, r"apt-get install[^\n]*poppler-utils tesseract-ocr tesseract-ocr-por")
         for comando in ("pdftotext -v", "pdftoppm -v", "tesseract --version", "tesseract --list-langs"):
             self.assertIn(comando, ferramentas)
-        cache = passo_contendo(job, "actions/cache@")
-        self.assertIn("path: ${{ env.RADAR_CACHE }}", cache)
-        self.assertIn("github.run_id", cache)
-        self.assertIn("restore-keys:", cache)
+        self.assertIn("dpkg-query -W poppler-utils tesseract-ocr tesseract-ocr-por", ferramentas)
+        self.assertIn("dpkg-query -L tesseract-ocr-por", ferramentas)
+        self.assertIn("/por.traineddata$", ferramentas)
+        self.assertIn("sha256sum", ferramentas)
         self.assertIn("RADAR_CACHE:", job)
+
+    def test_textos_cache_so_originais_com_chave_semanal_e_reserva_em_falha(self):
+        job = self.job(self.textos, "publicar")
+        restaurar = passo_contendo(job, "actions/cache/restore@v4")
+        salvar = passo_contendo(job, "actions/cache/save@v4")
+        self.assertNotIn("actions/cache@", self.textos)
+        self.assertEqual(sum("uses: actions/cache" in p for p in passos(job)), 2)
+        permitidos = {
+            "${{ env.RADAR_CACHE }}/arquivos/",
+            "${{ env.RADAR_CACHE }}/textos_sha256.json",
+            "${{ env.RADAR_CACHE }}/siscam_arquivos_sha256.json",
+            "${{ env.RADAR_CACHE }}/atas_cache_sha256.json",
+        }
+        for passo in (restaurar, salvar):
+            caminhos = secao(passo, "path", 10)
+            self.assertEqual({linha.strip() for linha in caminhos.splitlines() if linha.strip()}, permitidos)
+            for proibido in ("/ocr", "/texto_bruto", "/extracoes", "/textos_ementas.json"):
+                self.assertNotIn(proibido, caminhos)
+            self.assertIn("always()", valor(passo, "if", 8))
+            chave = valor(passo, "key", 10)
+            self.assertIn("originais-publicos-v1-", chave)
+            self.assertIn("steps.chave-cache.outputs.semana", chave)
+            self.assertNotIn("github.run_id", chave)
+            self.assertNotIn("github.run_attempt", chave)
+        self.assertEqual(valor(restaurar, "key", 10), valor(salvar, "key", 10))
+        self.assertEqual(valor(restaurar, "restore-keys", 10),
+                         "textos-${{ runner.os }}-originais-publicos-v1-")
+        self.assertIn("steps.cache-originais.outputs.cache-hit != 'true'", valor(salvar, "if", 8))
+        self.assertIn("date -u +%G-%V", passo_contendo(job, "id: chave-cache"))
+        self.assertLess(job.index(restaurar), job.index("python -m coletor.textos"))
+        self.assertLess(job.index("python -m coletor.nuvem"), job.index(salvar))
+
+    def test_textos_npm_preserva_binarios_sem_credenciais_git_persistidas(self):
+        for nome in ("verificar", "publicar"):
+            job = self.job(self.textos, nome)
+            self.assertEqual(valor(passo_contendo(job, "actions/checkout@"), "persist-credentials", 10),
+                             "false")
+            npm = passo_contendo(job, "run: npm ci")
+            self.assertIn("run: npm ci", npm)
+            self.assertNotIn("GH_TOKEN", npm)
+            self.assertNotIn("secrets.", npm)
+        job = self.job(self.textos, "publicar")
+        for passo in passos(job):
+            if re.search(r"\bgit\b[^\n]*\bpush\b", passo):
+                self.assertEqual(valor(passo, "GH_TOKEN", 10), "${{ github.token }}")
+                self.assertIn("GIT_CONFIG_KEY_0=http.https://github.com/.extraheader", passo)
+                self.assertIn('"$GH_TOKEN" | base64 -w0', passo)
+                self.assertNotRegex(passo, r"git config[^\n]*extraheader")
+            else:
+                self.assertNotIn("GH_TOKEN", passo)
+                self.assertNotIn("github.token", passo)
+                self.assertNotIn("secrets.GITHUB_TOKEN", passo)
+        self.assertNotIn("secrets.CLOUDFLARE_API_TOKEN_DEPLOY", self.textos)
 
     def test_textos_atestacao_e_reserva_sem_textos_brutos(self):
         job = self.job(self.textos, "publicar")

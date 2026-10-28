@@ -20,7 +20,7 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-24.04
     timeout-minutes: 30
-    environment: staging
+    environment: pr-simulacao
     permissions:
       contents: read
     env:
@@ -49,12 +49,12 @@ jobs:
 
       - name: Verificar sincronização sem escrita
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN_DADOS }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN_LEITURA }}
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           PR_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
         run: |
           if [ "$PR_REPOSITORY" != "$GITHUB_REPOSITORY" ] || [ -z "$CLOUDFLARE_API_TOKEN" ]; then
-            echo "::notice::simulação staging ignorada: PR de fork ou token de dados indisponível"
+            echo "::notice::simulação staging ignorada: PR de fork ou token somente leitura indisponível"
             exit 0
           fi
           python -m coletor.nuvem --ambiente staging --simular --textos "$RADAR_TEXTOS"
@@ -80,6 +80,7 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Preparar worktree e identidade dos commits
         run: |
@@ -91,21 +92,34 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Definir chave semanal dos originais públicos
+        id: chave-cache
+        run: echo "semana=$(date -u +%G-%V)" >> "$GITHUB_OUTPUT"
+
+      # Nunca restaurar o prefixo antigo ocr-v1: ele incluía texto sem mascaramento.
+      - uses: actions/cache/restore@v4
+        id: cache-originais
+        if: always() && steps.chave-cache.outputs.semana != ''
+        with:
+          path: |
+            ${{ env.RADAR_CACHE }}/arquivos/
+            ${{ env.RADAR_CACHE }}/textos_sha256.json
+            ${{ env.RADAR_CACHE }}/siscam_arquivos_sha256.json
+            ${{ env.RADAR_CACHE }}/atas_cache_sha256.json
+          key: textos-${{ runner.os }}-originais-publicos-v1-${{ steps.chave-cache.outputs.semana }}
+          restore-keys: |
+            textos-${{ runner.os }}-originais-publicos-v1-
+
       - name: Instalar ferramentas de extração e registrar versões
         run: |
           sudo apt-get update -q
           sudo apt-get install -y -q poppler-utils tesseract-ocr tesseract-ocr-por
+          dpkg-query -W poppler-utils tesseract-ocr tesseract-ocr-por
           pdftotext -v 2>&1 | head -1
           pdftoppm -v 2>&1 | head -1
           tesseract --version 2>&1 | head -1
           tesseract --list-langs
-
-      - uses: actions/cache@v4
-        with:
-          path: ${{ env.RADAR_CACHE }}
-          key: textos-${{ runner.os }}-ocr-v1-${{ github.run_id }}-${{ github.run_attempt }}
-          restore-keys: |
-            textos-${{ runner.os }}-ocr-v1-
+          dpkg-query -L tesseract-ocr-por | grep '/por.traineddata$' | xargs sha256sum
 
       - name: Extrair textos e commitar após a barreira de PII
         timeout-minutes: 130
@@ -120,10 +134,19 @@ jobs:
 
       # O manifesto só pode ser publicado depois que seus textos estiverem no remoto.
       - name: Publicar dados-textos antes do manifesto
-        run: git -C "$RADAR_TEXTOS" push origin HEAD:dados-textos
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          export GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=http.https://github.com/.extraheader
+          export GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          git -C "$RADAR_TEXTOS" push origin HEAD:dados-textos
 
       - name: Commitar manifestos em main e publicar com até três tentativas
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
+          export GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=http.https://github.com/.extraheader
+          export GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
           git add data/textos
           if ! git diff --cached --quiet; then
             git commit -m "Atualiza manifestos de inteiro teor ($(date -u +%Y-%m-%d))"
@@ -144,6 +167,7 @@ jobs:
 
       - name: Instalar Wrangler fixado
         working-directory: worker
+        # Mantém os scripts dos binários do Wrangler; checkout não persiste token Git.
         run: npm ci
 
       - name: Sincronizar produção e exportar projeções
@@ -160,6 +184,17 @@ jobs:
           subject-path: |
             data/textos/manifesto-*.json
             .exportacoes/**/SHA256SUMS
+
+      - name: Salvar somente originais públicos mesmo em falha
+        if: always() && steps.chave-cache.outputs.semana != '' && steps.cache-originais.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            ${{ env.RADAR_CACHE }}/arquivos/
+            ${{ env.RADAR_CACHE }}/textos_sha256.json
+            ${{ env.RADAR_CACHE }}/siscam_arquivos_sha256.json
+            ${{ env.RADAR_CACHE }}/atas_cache_sha256.json
+          key: textos-${{ runner.os }}-originais-publicos-v1-${{ steps.chave-cache.outputs.semana }}
 
       - name: Preservar manifestos não publicados e exportações em falha
         if: failure()
