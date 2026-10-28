@@ -86,12 +86,28 @@ class TestGerarSite(unittest.TestCase):
         for nome in ("leis.html", "projetos.html", "atividades.html"):
             html = (self.saida / nome).read_text(encoding="utf-8")
             self.assertIn('href="busca.html', html)
+            self.assertEqual("Pesquisar no inteiro teor" in html or "Pesquisar nos textos" in html, bool(api))
             self.assertNotIn('src="busca.js', html)
             self.assertNotIn('href="busca.css', html)
-        for s in self.modelo["pessoas"]:
+        for s, pessoa in self.modelo["pessoas"].items():
             html = (self.saida / "vereadores" / f"{s}.html").read_text(encoding="utf-8")
-            self.assertIn(f'href="../busca.html?autor={P.esc(s)}"', html)
-            self.assertEqual(html.count("Pesquisar textos deste autor"), 1)
+            link = f'href="../busca.html?autor={P.esc(P.slug_autor_busca(self.modelo, pessoa))}"'
+            self.assertEqual(link in html, bool(api))
+            self.assertEqual(html.count("Pesquisar textos deste autor"), int(bool(api)))
+
+    def test_links_de_pesquisa_so_aparecem_com_api_disponivel(self):
+        pessoa = next(iter(self.modelo["pessoas"].values()))
+        for disponivel in (False, True):
+            for gerar in (P.gerar_leis, P.gerar_projetos):
+                html = gerar(api_disponivel=disponivel)
+                self.assertEqual('href="busca.html?tipo=pl"' in html, disponivel)
+                self.assertIn('href="busca.html">Busca</a>', html)
+            html = P.gerar_atividades(self.modelo, api_disponivel=disponivel)
+            self.assertEqual("Pesquisar nos textos e nas ementas" in html, disponivel)
+            html = P.gerar_vereador(self.modelo, pessoa, api_disponivel=disponivel)
+            self.assertEqual("Pesquisar textos deste autor" in html, disponivel)
+            link = f'href="../busca.html?autor={P.esc(P.slug_autor_busca(self.modelo, pessoa))}"'
+            self.assertEqual(link in html, disponivel)
 
     def test_resumo_neutro_e_numeros_de_todas_as_pessoas_reais(self):
         self.assertTrue(self.modelo["pessoas"])

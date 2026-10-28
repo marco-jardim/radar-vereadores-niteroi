@@ -17,7 +17,8 @@ function ambiente(api = "https://api.example.test", consulta = "") {
   const campos = Object.fromEntries(["q", "modo", "tipo", "ano", "autor", "legislatura"].map((k) => [k, campo()]));
   const nos = {
     "busca-form": { elements: { namedItem: (k) => campos[k] }, reportValidity: () => true },
-    "busca-campos": { disabled: true }, "busca-alternativa": {}, "busca-estado": {}, "busca-aviso": {},
+    "busca-campos": { disabled: true }, "busca-alternativa": {},
+    "busca-estado": { focus() { foco = "busca-estado"; } }, "busca-aviso": {},
     "busca-mais": { hidden: true, disabled: false },
     "busca-resultados": {
       children: [], html: "", attrs: {},
@@ -89,6 +90,36 @@ test("cartões escapam todos os campos, restringem links e mostram fonte, hash, 
   assert.doesNotMatch(ruim, /<img|<script|javascript:|evil\.test/);
   assert.match(B.cartao({ ...r, status: "ok_ocr" }, "https://api.example.test"), />OCR ·/);
   assert.match(B.cartao({ tipo: "indicacao", trecho: "ementa", origem: "palavras" }, "https://api.example.test"), /Somente ementa/);
+  for (const tipo of ["constructor", "toString", "__proto__"]) {
+    assert.match(B.cartao({ tipo }, "https://api.example.test"), /<h3>Documento<\/h3>/);
+    assert.equal(B.lerUrl("?tipo=" + tipo).tipo, "");
+  }
+});
+
+test("extração parcial tem selo, inclusive quando também recebeu OCR", () => {
+  for (const ocr of [false, true]) {
+    const html = B.cartao({ ...fixture.resultados[0], status: "ok_parcial", ocr }, "https://api.example.test");
+    assert.match(html, /class="busca-selo">Extração parcial/);
+    assert.equal(html.includes(" · OCR"), ocr);
+  }
+});
+
+test("resultados sem arquivo mostram a ementa apenas no trecho com destaque", () => {
+  for (const tipo of ["indicacao", "mocao"]) {
+    const html = B.cartao({ tipo, ementa: "ementa única", trecho: "<mark>ementa</mark> única", arquivo: null }, "https://api.example.test");
+    assert.match(html, /<p><mark>ementa<\/mark> única<\/p>/);
+    assert.doesNotMatch(html, /<p>ementa única<\/p>/);
+    assert.match(html, /Somente ementa/);
+  }
+});
+
+test("ata aceita o link real de sessão do SISCAM com IdDocumento", () => {
+  const url = "https://consultaniteroi.siscam.com.br/DetalhesSessao.aspx?IdDocumento=123";
+  const html = B.cartao({ ...fixture.resultados[0], tipo: "ata", url_siscam: url }, "https://api.example.test");
+  assert.ok(html.includes('href="' + url + '"'));
+  for (const ruim of [url.replace("https:", "http:"), url.replace(".com.br/", ".com.br.evil.test/"), url + "&x=1"]) {
+    assert.doesNotMatch(B.cartao({ tipo: "ata", url_siscam: ruim }, "https://api.example.test"), /Ver no SISCAM/);
+  }
 });
 
 test("sem API, API inválida ou fetch não habilita o formulário nem busca", () => {
@@ -137,11 +168,38 @@ test("URL inicial preenche formulário e consulta, sem roubar foco", async () =>
   assert.equal(a.requisicoes.length, 1);
 });
 
+test("Mostrar mais vazio esconde botão, anuncia contagem real e foca o estado", async () => {
+  const a = ambiente();
+  const c = B.iniciar(a.doc, a.janela);
+  a.campos.q.value = "saúde";
+  await c.buscar(false, true);
+  assert.equal(a.nos["busca-mais"].hidden, false);
+  a.respostas.push({ dados: { ...fixture, pagina: 2, resultados: [] } });
+  await c.buscar(true, true);
+  assert.equal(a.nos["busca-resultados"].children.length, 1);
+  assert.equal(a.nos["busca-mais"].hidden, true);
+  assert.equal(a.foco(), "busca-estado");
+  assert.equal(a.nos["busca-estado"].textContent, "0 resultados adicionados. 1 resultado exibido de 2.");
+});
+
+test("páginas curtas contam itens renderizados, não tamanho teórico da página", async () => {
+  const a = ambiente();
+  a.respostas.push({ dados: { ...fixture, por_pagina: 2, total: 3 } });
+  const c = B.iniciar(a.doc, a.janela);
+  a.campos.q.value = "saúde";
+  await c.buscar(false, false);
+  a.respostas.push({ dados: { ...fixture, por_pagina: 2, total: 3, pagina: 2 } });
+  await c.buscar(true, true);
+  assert.equal(a.nos["busca-mais"].hidden, false);
+  assert.match(a.nos["busca-estado"].textContent, /2 resultados exibidos de 3/);
+});
+
 test("estados vazio, 400 genérico, 429, JSON inválido e rede sem apagar alternativas", async () => {
   for (const [resposta, mensagem] of [
     [{ dados: { ...fixture, resultados: [], total: 0 } }, /Nenhum resultado/],
     [{ status: 400, dados: { erro: "genérica", codigo: "consulta_muito_generica" } }, /mais específico/],
     [{ status: 429, dados: { erro: "limite", codigo: "limite" } }, /Aguarde um minuto/],
+    [{ status: 503, dados: { codigo: "semantica_indisponivel" } }, /A busca por significado está indisponível; tente o modo Palavras\./],
     [{ status: 503, dados: {} }, /indisponível/],
     [{ dados: {} }, /indisponível/],
     [new Error("offline"), /indisponível/]
@@ -156,6 +214,23 @@ test("estados vazio, 400 genérico, 429, JSON inválido e rede sem apagar altern
     assert.match(a.nos["busca-alternativa"].textContent, /listas e o SISCAM/);
   }
   assert.equal(B.mensagemErro(400, { erro: "<img onerror=x>" }), "<img onerror=x>"); // vai a textContent
+});
+
+test("erros HTTP preservam mensagem mesmo quando corpo não é JSON", async () => {
+  for (const [status, mensagem] of [[429, /Aguarde um minuto/], [500, /indisponível/], [502, /indisponível/], [503, /indisponível/]]) {
+    const a = ambiente();
+    let statusLido = false;
+    a.respostas.push(() => ({
+      get ok() { statusLido = true; return false; }, status,
+      async json() { assert.equal(statusLido, true); throw new SyntaxError("<html>erro</html>"); }
+    }));
+    const c = B.iniciar(a.doc, a.janela);
+    a.campos.q.value = "saúde";
+    await c.buscar(false, true);
+    assert.equal(statusLido, true);
+    assert.match(a.nos["busca-estado"].textContent, mensagem);
+    assert.equal(a.nos["busca-resultados"].children.length, 0);
+  }
 });
 
 test("aviso de fallback e teto ficam visíveis como texto; erro de página permite tentar de novo", async () => {

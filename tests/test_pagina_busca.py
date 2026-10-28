@@ -9,13 +9,15 @@ import unittest
 from html.parser import HTMLParser
 from pathlib import Path
 
+from coletor import mascara
+from coletor.nuvem import fonte
 from coletor.site import pagina_busca as B
 from coletor.site import paginas as P
 from tests.test_acessibilidade_html import analisar
 from tests.test_glossario import PaginaGlossario
 
 
-MODELO = {"pessoas": {"ana": {"nome": "Ana <Teste> & Cia"}},
+MODELO = {"pessoas": {"ana": {"nome": "Ana <Teste> & Cia", "nome_siscam": "ANA"}},
           "legislaturas": [{"id": "2025-2028"}, {"id": "2021-2024"}]}
 
 
@@ -56,6 +58,44 @@ class TestPaginaBusca(unittest.TestCase):
         self.assertIn('role="status" aria-live="polite" aria-atomic="true"', texto)
         self.assertIn('id="busca-mais" type="button" hidden', texto)
         self.assertIn("Ana &lt;Teste&gt; &amp; Cia", texto)
+
+    def test_todos_ids_lidos_pelo_javascript_existem_no_html(self):
+        script = (P.FONTE_ESTATICA / "busca.js").read_text(encoding="utf-8")
+        ids = set(re.findall(r'''getElementById\(["']([^"']+)["']\)''', script))
+        ids.update(re.findall(r'''querySelector\(["']#([\w-]+)["']\)''', script))
+        self.assertTrue(ids)
+        for api in (None, "https://api.example.test"):
+            arvore = analisar(B.gerar_busca(MODELO, api))
+            self.assertTrue(ids <= arvore.ids.keys(), ids - arvore.ids.keys())
+            self.assertEqual(arvore.ids["busca-estado"]["tabindex"], "-1")
+
+    def test_autor_da_ficha_e_do_select_resolvem_variante_como_d1(self):
+        nome = "ANA MARIA - ANA"
+        canonico = "ana-maria-ana"
+        pessoa = {"slug": "ana-maria", "nome_siscam": "Ana Maria", "nome": "Ana", "mandatos": {}}
+        leg = {"id": "2025-2028", "inicio": "2025-01-01", "fim": "2028-12-31",
+               "eleitos": [{"siscam": nome, "nome": "Ana", "partido": "TESTE"}]}
+        modelo = {"legislaturas": [leg], "pessoas": {pessoa["slug"]: pessoa, canonico: {
+            "slug": canonico, "nome_siscam": nome, "nome": "Ana"}}}
+        with tempfile.TemporaryDirectory() as tmp:
+            raiz = Path(tmp)
+            (raiz / "config").mkdir()
+            (raiz / "config/vereadores.json").write_text(json.dumps({"legislaturas": [leg]}), encoding="utf-8")
+            (raiz / "data/proposicoes").mkdir(parents=True)
+            (raiz / "data/proposicoes/2025.json").write_text(json.dumps([{
+                "id": 1, "ano": 2025, "autoria": [{"nome": pessoa["nome_siscam"]}]
+            }]), encoding="utf-8")
+            _, autoria, _, _ = fonte._documentos(raiz, ())
+        self.assertEqual(set(autoria), {("doc:1", canonico, "autor")})
+        self.assertEqual(P.slug_autor_busca(modelo, pessoa), canonico)
+        self.assertNotEqual(pessoa["slug"], canonico)
+        texto = B.gerar_busca(modelo, "https://api.example.test")
+        self.assertEqual(texto.count(f'<option value="{canonico}">'), 1)
+        self.assertNotIn('<option value="ana-maria">', texto)
+        for disponivel in (False, True):
+            ficha = P.gerar_vereador(modelo, pessoa, api_disponivel=disponivel)
+            self.assertEqual(f'href="../busca.html?autor={canonico}"' in ficha, disponivel)
+            self.assertNotIn('href="../busca.html?autor=ana-maria"', ficha)
 
     def test_configuracao_opcional_versionada_e_escape_de_atributo(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -98,12 +138,20 @@ class TestPaginaBusca(unittest.TestCase):
         texto = B.metodologia_busca()
         for secao in ("inteiro-teor", "busca", "privacidade", "auditoria"):
             self.assertIn(f'id="{secao}"', texto)
-        for termo in ("CPF e RG", "sempre mascarados", "Telefones e e-mails", "contatos públicos", "sem máscara",
+        for termo in ("CPF com dígitos verificadores válidos", "identificado por rótulo", "Telefones e e-mails", "contatos públicos", "sem máscara",
                       "exatamente como publicados pelo SISCAM", "config/remocoes.json", "/issues/new", "Cloudflare",
                       "não registra a consulta nem o IP", "RRF", "k = 60", "Não há resposta", "SHA-256",
-                      "--verificar", "OCR", "inferior a 60", "atestação"):
+                      "--verificar", "OCR", "inferior a 60", "atestação", "Extração parcial",
+                      "[documento omitido]", "[número omitido]", "e-mails com erros de OCR",
+                      "Nomes e endereços não são mascarados", "todas as pessoas", "60 segundos", "uma hora",
+                      "consulta normalizada", "chave de hash", "config/perfis.json", "contatos_institucionais"):
             self.assertIn(termo, texto)
+        self.assertNotIn("sempre mascarados", texto)
         self.assertEqual(analisar(texto).problemas, [])
+
+    def test_dominios_publicados_sao_exatamente_os_liberados_pela_mascara(self):
+        texto = B.metodologia_busca().split("além de e-mails dos domínios", 1)[1].split("e seus subdomínios", 1)[0]
+        self.assertEqual(tuple(re.findall(r"<code>([^<]+)</code>", texto)), mascara.DOMINIOS_LIBERADOS)
 
 
 if __name__ == "__main__":

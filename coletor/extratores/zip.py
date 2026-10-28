@@ -1,5 +1,10 @@
 """Texto de arquivos zip: cada membro passa por `extrair`, até 2 níveis de zip.
 
+Pacotes OpenDocument (ODT/ODS/ODP) são reconhecidos pelo membro mimetype e só
+content.xml é extraído como texto, sem OCR de imagens embutidas. Mantêm formato e
+extrator `zip` para compatibilidade com o cache. Nos demais zips, mimetype,
+META-INF, relacionamentos, propriedades e XMLs de empacotamento ficam fora.
+
 Proteção contra zip bomb: a soma dos tamanhos descompactados declarados no
 diretório central é conferida antes de ler qualquer membro, e a leitura conta os
 bytes realmente descompactados, com um orçamento único de
@@ -14,6 +19,7 @@ import io
 import zipfile
 from collections.abc import Callable
 
+from . import odt
 from .base import VERSAO_EXTRATORES, ErroFormato, ErroLimite, Resultado, ler_membro_zip
 
 PROFUNDIDADE_MAXIMA = 2
@@ -26,6 +32,13 @@ _COM_TEXTO = ("ok_parcial", "ocr_baixa_confianca", "ok_ocr", "ok")
 
 def _nome_seguro(nome: str) -> str:
     return "".join(c for c in nome if c.isprintable()) or "(sem nome)"
+
+
+def _metadado(nome: str) -> bool:
+    nome = nome.replace("\\", "/").lower()
+    return (nome == "mimetype" or nome.startswith(("meta-inf/", "_rels/", "docprops/"))
+            or "/_rels/" in nome or nome.endswith(".rels")
+            or nome in {"[content_types].xml", "manifest.xml", "meta.xml", "settings.xml", "styles.xml"})
 
 
 def extrair_zip(dados: bytes, ocr: bool, ferramentas, profundidade: int, orcamento: list[int],
@@ -42,11 +55,21 @@ def extrair_zip(dados: bytes, ocr: bool, ferramentas, profundidade: int, orcamen
         infos = [i for i in zf.infolist() if not i.is_dir()]
         if sum(i.file_size for i in infos) > orcamento[0]:
             raise ErroLimite("zip recusado: tamanho descompactado acima do limite")
+        nomes = {i.filename: i for i in infos}
+        if "mimetype" in nomes:
+            mime = ler_membro_zip(zf, nomes["mimetype"], orcamento).strip()
+            if mime in odt.MIMETYPES:
+                if "content.xml" not in nomes:
+                    raise ErroFormato("OpenDocument sem content.xml")
+                resultado.texto = odt.extrair_conteudo(ler_membro_zip(zf, nomes["content.xml"], orcamento))
+                return resultado
         secoes: list[str] = []
         status_membros: list[str] = []
         detalhes: list[str] = []
         confiancas: list[float] = []
         for info in infos:
+            if _metadado(info.filename):
+                continue
             nome = _nome_seguro(info.filename)
             try:
                 conteudo = ler_membro_zip(zf, info, orcamento)

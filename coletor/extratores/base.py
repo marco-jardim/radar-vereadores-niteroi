@@ -9,9 +9,9 @@ import zipfile
 import zlib
 from dataclasses import dataclass, field
 
-# Versão dos extratores escritos em Python puro (docx, doc, rtf, html, zip, texto).
+# Versão dos extratores escritos em Python puro (docx, doc, rtf, html, zip/ODF, texto).
 # Mudar a saída de qualquer um deles exige subir esta versão, para reprocessar.
-VERSAO_EXTRATORES = "3"
+VERSAO_EXTRATORES = "4"
 
 # Limite de bytes descompactados por arquivo zip/docx (proteção contra zip bomb).
 LIMITE_DESCOMPACTADO = 100 * 1024 * 1024

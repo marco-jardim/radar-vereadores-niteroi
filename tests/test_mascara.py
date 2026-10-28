@@ -187,6 +187,27 @@ class TestTelefoneColado(unittest.TestCase):
 
 
 class TestTelefone(unittest.TestCase):
+    def test_celular_com_ponto_depois_do_nove(self) -> None:
+        for telefone in ("21-9.8115-0243", "(21) 9.8115-0243", "21 9 8115 0243",
+                         "9.8115-0243", "9 8115-0243", "(21) 9.8115.0243"):
+            with self.subTest(telefone=telefone):
+                texto = "Telefones: " + telefone + " (celular)"
+                saida, contagens = mascarar(texto)
+                self.assertEqual(saida, "Telefones: [telefone omitido] (celular)")
+                self.assertEqual(contagens["telefone"], 1)
+                self.assertEqual([(a["tipo"], a["forte"]) for a in varrer(texto)], [("telefone", True)])
+                self.assertEqual(varrer(saida), [])
+                self.assertEqual(mascarar(saida)[0], saida)
+                _sem_mudanca(self, texto, {"21981150243"})
+                self.assertEqual(varrer(texto, {"21981150243"}), [])
+        self.assertEqual([(a["tipo"], a["forte"]) for a in varrer("21-9.8115-0243")],
+                         [("telefone", True)])
+        _sem_mudanca(self, "Código 9.811 e valor 9.81150243")
+        self.assertEqual(varrer("Código 9.811 e valor 9.81150243"), [])
+        for data in ("21-09-2024", "21.09.2024", "21/09/2024"):
+            _sem_mudanca(self, "Data " + data)
+            self.assertEqual(varrer("Data " + data), [])
+
     def test_formatos_mascarados(self) -> None:
         casos = [
             "(21) 99999-9999",
@@ -220,6 +241,52 @@ class TestTelefone(unittest.TestCase):
 
 
 class TestEmail(unittest.TestCase):
+    def test_separadores_ocr_em_qualquer_pagina(self) -> None:
+        for separador in ("(D", "(OD", "(Q", "(0D", "(@", "©", "@ ", "O"):
+            for dominio in ("gmail.com", "yahoo.com.br"):
+                with self.subTest(separador=separador, dominio=dominio):
+                    email = "pessoa.teste" + separador + dominio
+                    texto = f"Escreva para {email}."
+                    for paginas in (None, {1}, {2}):
+                        saida, contagens = mascarar(texto, ocr_paginas=paginas)
+                        self.assertEqual(saida, "Escreva para [e-mail omitido].")
+                        self.assertEqual(contagens["email"], 1)
+                        self.assertEqual(mascarar(saida, ocr_paginas=paginas)[0], saida)
+                        self.assertEqual(varrer(saida, ocr_paginas=paginas), [])
+                    achados = varrer(texto)
+                    self.assertEqual([(a["tipo"], a["forte"]) for a in achados], [("email", True)])
+                    self.assertEqual(texto[achados[0]["inicio"]:achados[0]["fim"]], email)
+
+    def test_ocr_dominio_proprio_e_provedores(self) -> None:
+        for email in ("contato(Dcartorio.exemplo.com", "contato(Qrefugio.exemplo.org",
+                      "pessoaOhotmail.com", "pessoaOoutlook.com", "pessoaOlive.com",
+                      "pessoaOuol.com.br", "pessoaObol.com.br", "pessoaOterra.com.br",
+                      "pessoaOicloud.com", "pessoaOglobo.com", "pessoaOig.com.br"):
+            with self.subTest(email=email):
+                self.assertEqual(mascarar(email)[0], "[e-mail omitido]")
+                self.assertEqual([(a["tipo"], a["forte"]) for a in varrer(email)], [("email", True)])
+        self.assertEqual(mascarar("vereador pessoaOgmail.com")[0], "vereador [e-mail omitido]")
+
+    def test_ocr_liberado_pelo_endereco_reconstruido(self) -> None:
+        for email, lib in (("servidor(Dtjrj.jus.br", set()),
+                           ("12345678(ODorgao.gov.br", set()),
+                           ("Pessoa.Teste(Qexemplo.org", {"pessoa.teste@exemplo.org"}),
+                           ("12345678(@gmail.com", {"12345678@gmail.com"}),
+                           ("pessoaOgmail.com", {"pessoa@gmail.com"}),
+                           ("pessoa@ gmail.com", {"pessoa@gmail.com"})):
+            with self.subTest(email=email):
+                _sem_mudanca(self, email, lib)
+                self.assertEqual(mascarar(email, lib, ocr_paginas={1})[0], email)
+                self.assertEqual(varrer(email, lib, ocr_paginas={1}), [])
+        self.assertEqual(mascarar("pessoa(Dorgao.gov.br.exemplo.com")[0], "[e-mail omitido]")
+
+    def test_ocr_exige_dominio_e_o_so_antes_de_provedor(self) -> None:
+        for texto in ("contato(Dgmail", "contato(Qexemplo.invalido", "pessoaOgmail",
+                      "pessoaOexemplo.com", "documento(D artigo", "pessoaOgmail.composto"):
+            with self.subTest(texto=texto):
+                _sem_mudanca(self, texto)
+                self.assertEqual(varrer(texto), [])
+
     def test_email_pessoal_mascarado(self) -> None:
         for email in ("fulano.tal@exemplo.com.br", "a+b@x.io", "c@camaraniteroi.rj.gov.br.exemplo.com",
                       "fulano@gmail.com", "x@gov.br.exemplo.com", "x@naogov.br"):
@@ -243,6 +310,25 @@ class TestEmail(unittest.TestCase):
 
 
 class TestFalsosPositivos(unittest.TestCase):
+    def test_listas_de_numeros_de_documentos(self) -> None:
+        for texto in ("4406, 4407", "4404, 4405, 4406, 4407, 4408",
+                      "4404, 4405, 4406 4407, 4408", "4404, 4405 4406 e 4407",
+                      "4404 e 4405 e 4406", "4404,\n4405, 4406 4407, 4408",
+                      "4404, 4405 4406.", "4404, 4405 E 4406."):
+            with self.subTest(texto=texto):
+                _sem_mudanca(self, texto)
+                self.assertEqual(varrer(texto), [])
+                self.assertEqual(mascarar(texto, ocr_paginas={1})[0], texto)
+                self.assertEqual(varrer(texto, ocr_paginas={1}), [])
+        # A proteção não se estende a telefones seguintes nem a pares isolados com espaço.
+        for telefone in ("2620-1234", "(21) 2620 1234", "2620 1234"):
+            texto = "4404, 4405, 4406; ligue " + telefone
+            self.assertEqual(mascarar(texto)[0], "4404, 4405, 4406; ligue [telefone omitido]")
+            self.assertEqual(len(varrer(texto)), 1)
+        texto = "Telefone (21) 2620 1234, 4404"
+        self.assertEqual(mascarar(texto)[0], "Telefone [telefone omitido], 4404")
+        self.assertEqual([(a["tipo"], a["forte"]) for a in varrer(texto)], [("telefone", True)])
+
     def test_nao_mascarados(self) -> None:
         casos = [
             "CEP 24020-000",

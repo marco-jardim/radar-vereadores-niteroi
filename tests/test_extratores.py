@@ -456,8 +456,124 @@ class TestVazioDesconhecido(unittest.TestCase):
                 self.assertIn(r.status, base.STATUS)
 
 
+# ------------------------------------------------------------------- OpenDocument (mantém o contrato zip)
+class TestOpenDocument(unittest.TestCase):
+    _NS = ('xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" '
+           'xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" '
+           'xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"')
+
+    def _xml(self, corpo: str, tipo: str = "text") -> bytes:
+        return (f'<office:document-content {self._NS}>'
+                '<office:automatic-styles>ESTILO OCULTO</office:automatic-styles>'
+                f'<office:body><office:{tipo}>{corpo}</office:{tipo}></office:body>'
+                '</office:document-content>').encode()
+
+    def _pacote(self, conteudo: bytes | None, mime: str = "text") -> bytes:
+        membros = {
+            "mimetype": ("application/vnd.oasis.opendocument." + mime).encode(),
+            "META-INF/manifest.xml": b"<manifest>METADADO OCULTO</manifest>",
+            "meta.xml": b"<meta>AUTOR OCULTO</meta>",
+            "styles.xml": b"<styles>ESTILO OCULTO</styles>",
+            # Não deve tentar OCR das imagens embutidas, mesmo com --ocr.
+            "Pictures/figura.png": fx.png_escaneado(),
+        }
+        if conteudo is not None:
+            membros["content.xml"] = conteudo
+        return fx.zip_bytes(membros)
+
+    def test_odt_so_conteudo_sem_xml_metadados_ou_ocr(self) -> None:
+        xml = self._xml('<text:h>Título sintético</text:h>'
+                        '<text:p>Antes <text:span>do span</text:span> depois'
+                        '<text:s text:c="3"/>espaços<text:tab/>tab'
+                        '<text:line-break/>outra linha &amp; fim.</text:p>'
+                        '<table:table><table:table-row>'
+                        '<table:table-cell><text:p>Célula A</text:p></table:table-cell>'
+                        '<table:table-cell><text:p>Célula B</text:p></table:table-cell>'
+                        '</table:table-row></table:table>'
+                        '<text:p>Final.</text:p>')
+        dados = self._pacote(xml)
+        with mock.patch.object(extratores._ocr, "extrair_imagem", side_effect=AssertionError("OCR indevido")):
+            r = extratores.extrair(dados, ocr=True, ferramentas={"tesseract": None})
+        self.assertEqual(extratores.detectar(dados), "zip")
+        self.assertEqual((r.formato, r.extrator, r.status, r.versao_extrator),
+                         ("zip", "zip", "ok", base.VERSAO_EXTRATORES))
+        self.assertEqual(r.texto, "Título sintético\nAntes do span depois   espaços\ttab\n"
+                         "outra linha & fim.\nCélula A\tCélula B\nFinal.")
+        self.assertEqual((r.paginas_ocr, r.confianca, r.detalhe), (0, None, ""))
+
+    def test_ods_e_odp(self) -> None:
+        for mime in ("spreadsheet", "presentation"):
+            with self.subTest(mime=mime):
+                xml = self._xml('<text:p>Texto da célula ou slide.</text:p>', mime)
+                r = extratores.extrair(self._pacote(xml, mime))
+                self.assertEqual((r.status, r.texto), ("ok", "Texto da célula ou slide."))
+
+    def test_vazio_e_xml_ausente_ou_invalido(self) -> None:
+        self.assertEqual(extratores.extrair(self._pacote(self._xml(""))).status, "vazio_legitimo")
+        for xml in (None, b"<xml", b"<document/>"):
+            with self.subTest(xml=xml):
+                r = extratores.extrair(self._pacote(xml))
+                self.assertEqual((r.status, r.texto), ("erro_formato", ""))
+                self.assertNotIn("METADADO", r.texto)
+
+    def test_dtd_e_entidades_recusados_inclusive_utf16(self) -> None:
+        for entidade in ('<!ENTITY x SYSTEM "file:///arquivo-inexistente">', '<!ENTITY x "expansão">'):
+            xml = '<!DOCTYPE office:document-content [' + entidade + ']>' + self._xml('<text:p>&x;</text:p>').decode()
+            for codificacao in ("utf-8", "utf-16"):
+                with self.subTest(entidade=entidade, codificacao=codificacao):
+                    r = extratores.extrair(self._pacote(xml.encode(codificacao)))
+                    self.assertEqual((r.status, r.texto), ("erro_formato", ""))
+                    self.assertIn("DTD", r.detalhe)
+
+    def test_limites_de_zip_espacos_e_aninhamento(self) -> None:
+        dados = self._pacote(self._xml('<text:p>Texto</text:p>'))
+        with mock.patch.object(base, "LIMITE_DESCOMPACTADO", 100):
+            r = extratores.extrair(dados)
+        self.assertEqual(r.status, "erro_formato")
+        self.assertIn("limite", r.detalhe)
+        xml = self._xml('<text:p>Antes<text:s text:c="1000000000"/>depois</text:p>')
+        r = extratores.extrair(self._pacote(xml))
+        self.assertEqual((r.status, r.texto), ("erro_formato", ""))
+        self.assertIn("limite", r.detalhe)
+        xml = self._xml('<text:span>' * 210 + '<text:p>Texto</text:p>' + '</text:span>' * 210)
+        r = extratores.extrair(self._pacote(xml))
+        self.assertEqual(r.status, "erro_formato")
+        self.assertIn("aninhamento", r.detalhe)
+
+    def test_odt_dentro_de_zip_compartilha_orcamento(self) -> None:
+        interno = self._pacote(self._xml('<text:p>Texto interno.</text:p>'))
+        externo = fx.zip_bytes({"anexo.odt": interno})
+        self.assertEqual(extratores.extrair(externo).texto, "=== anexo.odt ===\nTexto interno.")
+        with mock.patch.object(base, "LIMITE_DESCOMPACTADO", len(interno) + 100):
+            r = extratores.extrair(externo)
+        self.assertNotEqual(r.status, "ok")
+        self.assertEqual(r.texto, "")
+        self.assertIn("limite", r.detalhe)
+
+
 # ------------------------------------------------------------------- zip
 class TestZip(ComFerramentasFalsas):
+    def test_metadados_de_empacotamento_ficam_fora(self) -> None:
+        dados = fx.zip_bytes({
+            "mimetype": b"application/x-outro-pacote",
+            "META-INF/manifest.xml": b"<manifest>OCULTO</manifest>",
+            "META-INF/assinatura.xml": b"<signature>OCULTO</signature>",
+            "[Content_Types].xml": b"<Types>OCULTO</Types>",
+            "_rels/.rels": b"<Relationships>OCULTO</Relationships>",
+            "docProps/core.xml": b"<core>OCULTO</core>",
+            "meta.xml": b"<meta>OCULTO</meta>",
+            "styles.xml": b"<styles>OCULTO</styles>",
+            "settings.xml": b"<settings>OCULTO</settings>",
+            "anexo.txt": b"Texto do anexo.",
+            # Um XML de dados, não metadados de pacote, continua sendo extraído.
+            "dados.xml": b"<dados>Conteudo do anexo XML.</dados>",
+        })
+        r = extratores.extrair(dados)
+        self.assertEqual(r.status, "ok")
+        self.assertEqual(r.texto, "=== anexo.txt ===\nTexto do anexo.\n\n"
+                         "=== dados.xml ===\n<dados>Conteudo do anexo XML.</dados>")
+        self.assertNotIn("OCULTO", r.texto)
+
     def test_zip_com_docx_e_pdf(self) -> None:
         r = extratores.extrair(fx.zip_docx_pdf(), ferramentas=self.ferr)
         self.assertEqual((r.formato, r.status, r.extrator), ("zip", "ok", "zip"))

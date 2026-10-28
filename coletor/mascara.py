@@ -23,6 +23,13 @@ Regras de `mascarar`:
   (`contatos` em `config/perfis.json`), contatos institucionais
   (`contatos_institucionais` em `config/backend.json`) e os domínios
    públicos `gov.br`, `jus.br`, `leg.br`, `mp.br`, `def.br` e `mil.br`, com subdomínios.
+   E-mails com separador corrompido pelo OCR (`(D`, `(OD`, `(Q`, `(0D`, `(@`, `©`,
+   `@ ` e `O` antes de provedor conhecido) também são mascarados em qualquer página;
+   a liberação compara o endereço reconstruído com `@`, sem alterar o texto visível.
+   Celulares admitem ponto ou espaço depois do 9 (`21-9.8115-0243`). Listas de três
+   ou mais números de quatro dígitos separados por vírgula/`e` não são telefones,
+   inclusive quando falta uma vírgula entre dois itens. Dois itens com vírgula
+   também não são telefone.
   Números de 8 dígitos começando por 6–9 (celulares antigos) exigem hífen, DDD ou
   rótulo; separados por ponto (9999.9999, como códigos de programa orçamentário) e
   dígitos corridos (mesmo com um "DDD" colado, como em números de tabela) só com rótulo
@@ -48,16 +55,18 @@ dentro dessas proteções.
 Com `ocr_paginas` (base 1; linha só com \\f separa páginas), aplica depois das regras
 normais uma máscara de números de 8+ dígitos, inclusive com separadores e uma letra
 de ruído entre grupos. Preserva datas, moeda, CEP rotulado, atos com número/ano,
-intervalos de anos e contatos liberados. A barreira recebe as mesmas páginas e
-aponta resíduos numéricos como `numero` forte.
+intervalos de anos, listas de documentos de quatro dígitos e contatos liberados.
+A barreira recebe as mesmas páginas e aponta resíduos numéricos como `numero` forte.
 
 `varrer` é a barreira antes de gravar ou carregar textos: um detector independente e
 mais amplo, que não usa as regras de `mascarar`. Procura qualquer sequência de 11
 dígitos (com separadores) com DV de CPF válido, qualquer número com forma de telefone
-(`\\d{4,5}[ .-]?\\d{4}`, com DDD/+55 opcionais) e qualquer endereço com "@", além do
+(`\\d{4,5}[ .-]?\\d{4}`, inclusive 9 separado por ponto/espaço, com DDD/+55
+opcionais) e qualquer endereço com "@" ou os separadores OCR acima, além do
 RG rotulado. Ignora só o que casa com as proteções explícitas de datas (inclusive
-intervalos de anos), CEP, CNPJ com DV válido, processo CNJ, "Lei nº …" e valores em
-R$. Pode apontar falsos positivos (por exemplo, protocolos com forma de telefone):
+intervalos de anos), listas de documentos de quatro dígitos, CEP, CNPJ com DV válido,
+processo CNJ, "Lei nº …" e valores em R$. Pode apontar falsos positivos (por exemplo,
+protocolos com forma de telefone):
 quem chama decide. Passe a `varrer` o mesmo conjunto `liberados` usado em `mascarar`.
 Devolve só tipo, posição e força (`forte`, critérios em `varrer`), nunca o valor; a
 barreira bloqueia nas ocorrências fortes.
@@ -82,7 +91,7 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parent.parent
 
 # Mudar qualquer regra de `mascarar` muda os textos gravados: suba esta versão.
-VERSAO_MASCARA = "3"
+VERSAO_MASCARA = "4"
 TIPOS = ("cpf", "rg", "telefone", "email", "documento", "numero")
 SUBSTITUICOES = {
     "cpf": "[CPF omitido]",
@@ -125,6 +134,16 @@ _RE_EMAIL = re.compile(
     r"(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z]{2,}(?![\w-])"
 )
 _RE_EMAIL_COMPLETO = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+# Separadores OCR inequívocos; O solto só diante de provedores conhecidos. O TLD
+# precisa ser reconhecível (ccTLD de duas letras ou um dos genéricos abaixo).
+_PROVEDORES_EMAIL = r"gmail|hotmail|yahoo|outlook|live|uol|bol|terra|icloud|globo|ig"
+_RE_EMAIL_OCR = re.compile(
+    r"(?<![\w.%+-])(?P<local>[A-Za-z0-9][A-Za-z0-9._%+-]*?)"
+    rf"(?:\((?:0?[Dd]|[Oo][Dd]|[Qq]|@)|©|@[ \t]+|O(?=(?i:{_PROVEDORES_EMAIL})\.))[ \t]*"
+    r"(?P<dominio>(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+"
+    r"(?i:com|org|net|edu|gov|mil|int|info|biz|name|pro|coop|aero|museum|"
+    r"app|dev|tech|online|site|xyz|[a-z]{2}))(?![\w-]|\.[A-Za-z0-9])"
+)
 # Um separador por intervalo entre os grupos 3-3-3-2: ".", " ", "/", "-" (com espaço
 # opcional de cada lado) ou nenhum.
 _SEP_CPF = r"(?: ?- ?|[. /])?"
@@ -223,12 +242,17 @@ _RE_MARCA_CORTADA = re.compile(r"^[^\[\]]*omitido\]")
 # Onde um telefone pode começar: "+", "(" ou o início de uma sequência de dígitos.
 _RE_CANDIDATO_TELEFONE = re.compile(r"[+(\d]\d*")
 
-_DATA = r"\d(?<!\d\d)\d?[/.-]\d{1,2}[/.-]\d{2,4}(?!\d)"
+# O separador precisa se repetir: 21-9.8115 de um celular não é uma data.
+_DATA = r"\d(?<!\d\d)\d?(?P<separador_data>[/.-])\d{1,2}(?P=separador_data)\d{2,4}(?!\d)"
 _DATA_ISO = r"\d(?<!\d\d)\d{3}-\d{2}-\d{2}(?!\d)"
 _ANOS = r"(?:19|20)(?<!\d19)(?<!\d20)\d{2} ?[-–/] ?(?:19|20)\d{2}(?!\d)"
 # Intervalo de anos com hífen ou travessão, como "(1865-1950)": nunca é telefone se os
 # dois forem anos plausíveis (1500–2100) e o segundo não for menor (`_anos_validos`).
 _RE_INTERVALO_ANOS = re.compile(r"\d(?<!\d\d)\d{3}[ \t]*[-–][ \t]*\d{4}(?!\d)")
+# Não inclui hífen/ponto: 2620-1234 e (21) 2620 1234 continuam telefones.
+_RE_LISTA_NUMEROS = re.compile(
+    r"(?<![\w.\-/])\d{4}(?!\d)"
+    r"(?:(?:\s*,\s*(?:[eE]\s+)?|\s+[eE]\s+|[ \t]+)\d{4}(?![\w/-]|\.\d)){2,}")
 ANO_MINIMO, ANO_MAXIMO = 1500, 2100
 _CEP = r"\d(?<!\d\d)\d\.?\d{3}-\d{3}(?!\d)"
 _CNPJ = r"\d(?<!\d\d)\d\.?\d{3}\.?\d{3}/?\d{4}-?\d{2}(?!\d)"
@@ -292,7 +316,7 @@ _RE_PAGINA = re.compile(r"(?m)^\f\r?$")
 _V_CPF = re.compile(r"\d(?<!\d\d)(?<!\d[ .\-/]\d)(?:[ .\-/]?\d){10}(?![ .\-/]?\d)")
 _V_TELEFONE = re.compile(
     r"(?<!\d)(?P<pais>\+\s?55[ .-]?)?(?:(?P<parenteses>\(\s?0?\d{2}\s?\)?\s?)|(?P<zero>0)?\d{2}[ .-]?)?"
-    r"\d{4,5}(?P<sep>[ .-]?)\d{4}(?!\d)"
+    r"(?:9[ .]?\d{4}|\d{4,5})(?P<sep>[ .-]?)\d{4}(?!\d)"
 )
 _V_EMAIL = re.compile(r"[^\s@<>()\[\]{},;:\"']+@[^\s@<>()\[\]{},;:\"']+\.\w{2,}")
 _V_RG = re.compile(
@@ -417,6 +441,11 @@ class _Intervalos:
         k = bisect.bisect_left(self.inicios, fim)
         return k > 0 and self.max_fim[k - 1] > ini
 
+    def contem(self, ini: int, fim: int) -> bool:
+        """Se um dos intervalos contém o candidato inteiro, não só parte dele."""
+        k = bisect.bisect_right(self.inicios, ini)
+        return k > 0 and self.max_fim[k - 1] >= fim
+
 
 class _Aceitos:
     """Intervalos aceitos, sem sobreposição entre si."""
@@ -474,6 +503,12 @@ def _intervalos_de_anos(texto: str) -> list[tuple[int, int]]:
 def _protegidos(texto: str, padroes) -> _Intervalos:
     return _Intervalos([m.span() for p in padroes for m in p.finditer(texto)]
                        + _intervalos_de_anos(texto))
+
+
+def _listas_de_numeros(texto: str) -> list[tuple[int, int]]:
+    """Listas de 3+ itens de quatro dígitos, com ao menos uma vírgula ou conjunção."""
+    return [m.span() for m in _RE_LISTA_NUMEROS.finditer(texto)
+            if "," in m.group() or re.search(r"\s+[eE]\s+", m.group())]
 
 
 def _a_partir(candidatos: re.Pattern, padrao: re.Pattern, texto: str):
@@ -619,11 +654,14 @@ def _numeros_ocr(texto: str, liberados_: Iterable[str],
             pagina = texto[inicio:fim]
             protegidos = [m.span() for p in _OCR_PROTECOES for m in p.finditer(pagina)]
             protegidos += _intervalos_de_anos(pagina)
+            protegidos += _listas_de_numeros(pagina)
             protegidos += [m.span() for m in _RE_CEP.finditer(pagina)
                            if _RE_ROTULO_CEP.search(pagina[max(0, m.start() - 20):m.start()])
                            or _RE_ROTULO_CEP.search(pagina[m.end():m.end() + 20])]
             protegidos += [m.span() for m in _RE_EMAIL.finditer(pagina)
                            if _email_liberado(m.group(), conjunto, dominios)]
+            protegidos += [m.span() for m in _RE_EMAIL_OCR.finditer(pagina)
+                           if _email_liberado(m.group("local") + "@" + m.group("dominio"), conjunto, dominios)]
             protegidos += [m.span() for m in _a_partir(_RE_CANDIDATO_TELEFONE, _RE_TELEFONE, pagina)
                            if telefone_canonico(m.group()) in conjunto]
             # Um caractere não numérico e não separador impede juntar grupos através
@@ -654,7 +692,12 @@ def _detectar(texto: str, liberados_: Iterable[str]) -> list[tuple[int, int, str
     gerais = _protegidos(texto, _PROTECOES_GERAIS)
     marcacao = _zonas(texto, urls=False)  # XML/HTML, GUID, carimbos de data e hora
     web = _Intervalos(_zonas_url(texto))
+    listas = _Intervalos(_listas_de_numeros(texto))
 
+    for m in _RE_EMAIL_OCR.finditer(texto):
+        email = m.group("local") + "@" + m.group("dominio")
+        tipo = "_liberado" if _email_liberado(email, conjunto, dominios) else "email"
+        aceitos.incluir(m.start(), m.end(), tipo)
     if "@" in texto:
         for m in _RE_EMAIL.finditer(texto):
             tipo = "_liberado" if _email_liberado(m.group(), conjunto, dominios) else "email"
@@ -700,7 +743,7 @@ def _detectar(texto: str, liberados_: Iterable[str]) -> list[tuple[int, int, str
 
     for m in _a_partir(_RE_CANDIDATO_TELEFONE, _RE_TELEFONE, texto):
         ini, fim = m.span()
-        if marcacao.sobrepoe(ini, fim) or web.sobrepoe(ini, fim):
+        if marcacao.sobrepoe(ini, fim) or web.sobrepoe(ini, fim) or listas.contem(ini, fim):
             continue  # número de link, metadado ou marcação: mascarar corromperia o link
         rotulado = bool(_RE_ROTULO_TELEFONE.search(_antes(texto, ini))) or _telefone_em_serie(texto, ini)
         anterior = bisect.bisect_left(aceitos.lista, (ini, -1, "")) - 1
@@ -751,7 +794,8 @@ def mascarar(texto: str, liberados: Iterable[str] = frozenset(),
              ocr_paginas: set[int] | None = None) -> tuple[str, dict[str, int]]:
     """Texto mascarado e contagens; idempotente. Páginas OCR (base 1) têm regra extra
     de números de 8+ dígitos, depois das regras normais, preservando só as proteções
-    explícitas de datas, moeda, CEP rotulado, atos, intervalos de anos e contatos.
+    explícitas de datas, moeda, CEP rotulado, atos, intervalos de anos, listas de
+    documentos de quatro dígitos e contatos.
     """
     liberados = frozenset(liberados)
     contagens = {tipo: 0 for tipo in TIPOS}
@@ -782,7 +826,8 @@ def varrer(texto: str, liberados: Iterable[str] = frozenset(),
     Mais ampla que `mascarar` (veja o docstring do módulo); use o mesmo `liberados`.
     `forte` é verdadeiro para CPF com DV válido, e-mail, RG com rótulo e número de
     documento pessoal rotulado (`documento`: CNH, título de eleitor, PIS…). Intervalos de
-    anos ("1865-1950") nunca são telefone. Telefone é forte
+    anos ("1865-1950") e listas de documentos de quatro dígitos nunca são telefone.
+    Telefone é forte
     com rótulo (tel, fone, cel, celular, whatsapp, contato, fax) até `JANELA_CONTEXTO`
     caracteres antes; fraco logo depois de protocolo, processo, decreto, lei, SEI,
     e-SIC/SIC, ouvidoria, matrícula, inscrição, CNPJ ou CEP; nos demais casos, forte com DDD entre parênteses,
@@ -802,9 +847,20 @@ def varrer(texto: str, liberados: Iterable[str] = frozenset(),
     )
     marcacao = _zonas(texto, urls=False)
     web = _Intervalos(_zonas_url(texto))
+    listas = _Intervalos(_listas_de_numeros(texto))
     achados: list[tuple[int, int, str]] = []
     emails_liberados: list[tuple[int, int]] = []
+    emails_ocr = list(_RE_EMAIL_OCR.finditer(texto))
+    zonas_email_ocr = _Intervalos(m.span() for m in emails_ocr)
+    for m in emails_ocr:
+        email = m.group("local") + "@" + m.group("dominio")
+        if _email_liberado(email, conjunto, dominios):
+            emails_liberados.append(m.span())
+        else:
+            achados.append((m.start(), m.end(), "email"))
     for m in (_V_EMAIL.finditer(texto) if "@" in texto else ()):
+        if zonas_email_ocr.sobrepoe(*m.span()):
+            continue
         email = m.group().strip(".")
         if "@" not in email:
             continue
@@ -835,7 +891,7 @@ def varrer(texto: str, liberados: Iterable[str] = frozenset(),
         ini, fim = m.span()
         if (ignorar.sobrepoe(ini, fim) or fortes.sobrepoe(ini, fim) or _fracionario(texto, ini)
                 or marcacao.sobrepoe(ini, fim) or web.sobrepoe(ini, fim)
-                or ignorar_email.sobrepoe(ini, fim)):
+                or ignorar_email.sobrepoe(ini, fim) or listas.contem(ini, fim)):
             continue
         digitos = re.sub(r"\D", "", m.group())
         candidatos = {telefone_canonico(m.group()), telefone_canonico(digitos[-9:]),

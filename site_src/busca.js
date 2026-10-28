@@ -52,17 +52,18 @@
     return /^https:\/\/consultaniteroi\.siscam\.com\.br\/Detalhes(?:Documentos|Sessao)\.aspx\?Id(?:Documento|Sessao)=[1-9]\d*$/.test(url || "") ? url : "";
   }
   function cartao(r, api) {
-    var titulo = (TIPOS[r.tipo] || "Documento") + (r.numero ? " " + r.numero : "") + (r.ano ? "/" + r.ano : "");
+    var titulo = (Object.prototype.hasOwnProperty.call(TIPOS, r.tipo) ? TIPOS[r.tipo] : "Documento") + (r.numero ? " " + r.numero : "") + (r.ano ? "/" + r.ano : "");
     var fonte = siscam(r.url_siscam), links = fonte ? '<a href="' + esc(fonte) + '" target="_blank" rel="noopener">Ver no SISCAM<span class="so-leitor"> (abre em nova aba)</span></a>' : "";
     var hash = /^[0-9a-f]{64}$/.test(r.sha256 || "") ? r.sha256 : "";
     if (hash && r.url_original === "/api/original/" + hash) {
       links += (links ? " · " : "") + '<a href="' + esc(api + r.url_original) + '">Baixar original (sem máscara)</a>';
     }
     var selo = r.status === "ocr_baixa_confianca" ? "OCR de baixa confiança" : r.ocr ? "OCR" : "";
+    if (r.status === "ok_parcial") selo = "Extração parcial" + (selo ? " · " + selo : "");
     var confianca = typeof r.confianca === "number" && r.confianca >= 0 && r.confianca <= 100 ? " · confiança média: " + r.confianca : "";
     var origens = { palavras: "palavras", semantica: "significado", ambas: "palavras e significado" };
     var origem = Object.prototype.hasOwnProperty.call(origens, r.origem) ? origens[r.origem] : "não informada";
-    return '<li tabindex="-1"><h3>' + esc(titulo) + '</h3><p>' + esc(r.ementa) + '</p>' +
+    return '<li tabindex="-1"><h3>' + esc(titulo) + '</h3>' + (r.arquivo ? '<p>' + esc(r.ementa) + '</p>' : "") +
       (selo ? '<p class="busca-selo">' + selo + esc(confianca) + '</p>' : "") +
       '<p>' + destaque(r.trecho) + '</p><p>Origem do resultado: ' + origem +
       (r.arquivo ? " · Arquivo: " + esc(r.arquivo) : " · Somente ementa") + '</p><p>' + links + '</p>' +
@@ -70,6 +71,7 @@
   }
   function mensagemErro(status, dados) {
     if (status === 429) return "Muitas consultas em pouco tempo. Aguarde um minuto e tente novamente.";
+    if (status === 503 && dados && dados.codigo === "semantica_indisponivel") return "A busca por significado está indisponível; tente o modo Palavras.";
     if (dados && dados.codigo === "consulta_muito_generica") return "Consulta muito genérica. Use ao menos um termo mais específico.";
     if (status === 400) return dados && typeof dados.erro === "string" ? dados.erro : "Confira a consulta e os filtros.";
     return "A busca está indisponível no momento. Tente novamente ou use as listas e o SISCAM.";
@@ -111,20 +113,27 @@
       var prazo = controle ? janela.setTimeout(function () { if (atual === pedido) controle.abort(); }, 20000) : null;
       try {
         var resposta = await janela.fetch(urlBusca(api, st, proxima), { credentials: "omit", referrerPolicy: "no-referrer", signal: controle ? controle.signal : undefined });
-        var dados = await resposta.json();
         if (atual !== pedido) return;
-        if (!resposta.ok) { estado.textContent = mensagemErro(resposta.status, dados); return; }
+        var dados;
+        if (!resposta.ok) {
+          try { dados = await resposta.json(); } catch (_) { dados = null; }
+          if (atual === pedido) estado.textContent = mensagemErro(resposta.status, dados);
+          return;
+        }
+        try { dados = await resposta.json(); } catch (_) { throw new Error("Resposta inválida"); }
+        if (atual !== pedido) return;
         if (!Array.isArray(dados.resultados) || !Number.isInteger(dados.total) || dados.total < 0 || dados.pagina !== proxima || !Number.isInteger(dados.por_pagina) || dados.por_pagina < 1) throw new Error("Resposta inválida");
         lista.insertAdjacentHTML("beforeend", dados.resultados.map(function (r) { return cartao(r, api); }).join(""));
         pagina = proxima;
-        mais.hidden = pagina >= 50 || pagina * dados.por_pagina >= dados.total;
+        var quantidade = lista.children.length, incluidos = quantidade - antes;
+        mais.hidden = incluidos === 0 || pagina >= 50 || quantidade >= dados.total;
         aviso.textContent = (typeof dados.aviso === "string" ? dados.aviso : "") +
           (dados.limitado ? " O limite de candidatos foi atingido; refine a consulta ou os filtros." : "");
-        var quantidade = lista.children.length;
-        estado.textContent = quantidade ? (adicionar ? dados.resultados.length + (dados.resultados.length === 1 ? " resultado adicionado. " : " resultados adicionados. ") : "") +
+        estado.textContent = quantidade ? (adicionar ? incluidos + (incluidos === 1 ? " resultado adicionado. " : " resultados adicionados. ") : "") +
           quantidade + (quantidade === 1 ? " resultado exibido de " : " resultados exibidos de ") + dados.total +
           (dados.limitado ? " candidatos encontrados." : ".") : "Nenhum resultado encontrado. Tente outros termos ou filtros.";
         if (focar && lista.children[antes]) lista.children[antes].focus();
+        else if (focar && adicionar && mais.hidden) estado.focus();
       } catch (_) {
         if (atual === pedido) estado.textContent = mensagemErro(503);
       } finally {

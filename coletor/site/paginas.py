@@ -25,7 +25,7 @@ from coletor.site.modelo import (
     NOME_IMPACTO, NOME_SINAL, NOME_SUBCATEGORIA_DOC, NOME_TEMA, NOME_TIPO_DOC, TIPOS_DOC, com_efeito, mediana_legislatura,
     partido_atual, partido_em, sem_efeito, situacao_lei, url_lei,
     anos_documentos, coleta_do_modelo, documentos_por_legislatura, homenagens_do_autor, homenagens_por_ano,
-    indicacoes_por_bairro, menos_citados, ranking_orgaos, resumo_bairros, resumo_informacao,
+    indicacoes_por_bairro, menos_citados, ranking_orgaos, resumo_bairros, resumo_informacao, indice_pessoas, slug,
 )
 
 REPO = "https://github.com/marco-jardim/radar-vereadores-niteroi"
@@ -941,7 +941,7 @@ def contagem_projetos(r: dict) -> str:
     return f'<p class="contagem inicial"><b>{n}</b> {"projeto" if n == 1 else "projetos"}{detalhe}</p>'
 
 
-def filtros_lista(modo: str, cliente: dict | None = None) -> str:
+def filtros_lista(modo: str, cliente: dict | None = None, *, api_disponivel: bool = False) -> str:
     resumo = resumo_projetos(cliente) if modo == "projetos" and cliente is not None else None
     cliente = cliente or {"projetos": [], "pessoas": {}, "temas": {}, "legislaturas": []}
     base = [p for p in cliente["projetos"] if modo != "leis" or p["g"] == "lei"]
@@ -979,7 +979,8 @@ def filtros_lista(modo: str, cliente: dict | None = None) -> str:
         extra = """
   <label>Desfecho <select id="f-desfecho"><option value="">Todos</option><option value="lei">Virou lei</option><option value="andamento">Em andamento</option><option value="sem_exito">Sem êxito</option></select></label>
   <label>Sinal <select id="f-sinal"><option value="">Qualquer</option><option value="alerta">Com alerta de polêmica</option><option value="curadoria">Revisado por curadoria</option><option value="alerta_ia">Alerta de IA (sem curadoria)</option><option value="autorizativa">Lei autorizativa</option><option value="repete_projeto">Repete projeto anterior</option><option value="veto">Vetado ou com veto</option><option value="parecer_contrario_ccj">Parecer contrário da CCJ</option></select></label>"""
-    return f"""<p><a href="busca.html?tipo=pl">Pesquisar no inteiro teor dos projetos</a></p>
+    link_busca = '<p><a href="busca.html?tipo=pl">Pesquisar no inteiro teor dos projetos</a></p>' if api_disponivel else ""
+    return f"""{link_busca}
 <form class="filtros" role="search" onsubmit="return false" data-modo="{modo}">
  <div class="linha-busca"><label class="busca-q">Buscar <input type="search" id="q" placeholder="tema, número, nome de vereador…" autocomplete="off"></label>
   <label>Ordenar <select id="f-ordem"><option value="recente">Mais recentes</option><option value="impacto">Maior impacto</option>{'<option value="rapida">Aprovadas mais rápido</option>' if modo == 'leis' else ''}</select></label></div>
@@ -1006,25 +1007,25 @@ def filtros_lista(modo: str, cliente: dict | None = None) -> str:
 <noscript><p class="vazio">{esc(sem_js[modo])}</p></noscript>"""
 
 
-def gerar_leis(cliente: dict | None = None, manifesto: dict | None = None) -> str:
+def gerar_leis(cliente: dict | None = None, manifesto: dict | None = None, *, api_disponivel: bool = False) -> str:
     glossario = ColetorGlossario()
     corpo = f"""<section class="abertura">
  <h1>Leis aprovadas</h1>
  <p>Todas as leis que saíram de projetos apresentados desde 2021, com o impacto estimado e um resumo em linguagem simples. Filtre por impacto, tema, vereador ou partido; o quadro abaixo dos filtros mostra quem mais aprovou leis no recorte escolhido.</p>
  <p class="explica">Leis de categoria {glossario.termo('simbolica', 'simbólica')} e leis {glossario.termo('autorizativa', 'autorizativas')} entram no grupo {glossario.termo('sem-efeito', 'sem efeito prático')}. Quando a lei vem de um {glossario.termo('substitutivo', 'substitutivo')}, ela conta para o projeto original.</p>
 </section>
-{filtros_lista('leis', cliente)}{glossario.definicoes()}"""
+{filtros_lista('leis', cliente, api_disponivel=api_disponivel)}{glossario.definicoes()}"""
     return pagina("Leis aprovadas · Radar dos Vereadores de Niterói", corpo, "leis.html", manifesto=manifesto, dialogo=True, caminho="leis.html")
 
 
-def gerar_projetos(cliente: dict | None = None, manifesto: dict | None = None) -> str:
+def gerar_projetos(cliente: dict | None = None, manifesto: dict | None = None, *, api_disponivel: bool = False) -> str:
     glossario = ColetorGlossario()
     corpo = f"""<section class="abertura">
  <h1>Todos os projetos de lei</h1>
  <p>Os projetos apresentados desde 2021, incluindo os arquivados, {glossario.termo('veto', 'vetados')} e em tramitação. Os filtros ficam no endereço da página, então dá para compartilhar uma busca.</p>
  <p class="explica">A {glossario.termo('derrubada', 'derrubada de veto')} pode levar à promulgação da lei. Um {glossario.termo('substitutivo', 'substitutivo')} é um texto novo que substitui o do projeto.</p>
 </section>
-{filtros_lista('projetos', cliente)}{glossario.definicoes()}"""
+{filtros_lista('projetos', cliente, api_disponivel=api_disponivel)}{glossario.definicoes()}"""
     return pagina("Projetos de lei · Radar dos Vereadores de Niterói", corpo, "projetos.html", manifesto=manifesto, dialogo=True, caminho="projetos.html")
 
 
@@ -1104,14 +1105,15 @@ def mapa_indicacoes(modelo: dict, docs: list[dict], titulo: str, *, limite_gzip:
     return mapa
 
 
-def gerar_atividades(modelo: dict, manifesto: dict | None = None) -> str:
+def gerar_atividades(modelo: dict, manifesto: dict | None = None, *, api_disponivel: bool = False) -> str:
     glossario = ColetorGlossario()
     docs = modelo.get("documentos") or []
+    link_busca = '<p><a href="busca.html">Pesquisar nos textos e nas ementas</a></p>' if api_disponivel else ""
     abertura = f"""<section class="abertura">
  <h1>Atividades na Câmara</h1>
  <p>{glossario.termo('indicacao', 'Indicações')}, {glossario.termo('mocao', 'moções')}, {glossario.termo('requerimento', 'requerimentos')}, {glossario.termo('pdl', 'projetos de decreto legislativo')} e {glossario.termo('projeto-de-resolucao', 'projetos de resolução')} apresentados desde 2021, separados dos projetos de lei. Filtre por tipo, ano, vereador, categoria ou bairro; cada item leva ao documento oficial no SISCAM. Os filtros ficam no endereço da página.</p>
  <p class="atualizacao">Classificação por regras sobre a ementa · <a href="metodologia.html#atividades">como classificamos</a></p>
- <p><a href="busca.html">Pesquisar nos textos e nas ementas</a></p>
+ {link_busca}
 </section>"""
     titulo = "Atividades · Radar dos Vereadores de Niterói"
     descricao = "Indicações, moções, requerimentos, PDLs e resoluções da Câmara de Niterói, por vereador, tipo, categoria e bairro."
@@ -1515,7 +1517,19 @@ def comparacao(valor, mediana, maior_melhor: bool = True, sufixo: str = "") -> s
     return f"{'acima' if acima else 'abaixo'} da mediana dos eleitos ({G._fmt(mediana)}{sufixo})"
 
 
-def gerar_vereador(modelo: dict, pessoa: dict) -> str:
+def slug_autor_busca(modelo: dict, pessoa: dict) -> str:
+    """Resolve variantes como a autoria em nuvem.fonte, pelo índice dos eleitos.
+
+    A ficha pode ter sido criada pelo nome de um PL sem o apelido depois de " - ".
+    Reusa as mesmas funções importadas por fonte, sem confundir slug da ficha com o de D1.
+    """
+    eleitos = {slug(e["siscam"]): {"nome_siscam": e["siscam"]}
+               for leg in modelo["legislaturas"] for e in leg.get("eleitos", [])}
+    s = slug(pessoa["nome_siscam"])
+    return indice_pessoas(eleitos).get(s, s)
+
+
+def gerar_vereador(modelo: dict, pessoa: dict, *, api_disponivel: bool = False) -> str:
     from coletor.site import pagina_sessoes, resumo
 
     secoes = []
@@ -1578,11 +1592,13 @@ def gerar_vereador(modelo: dict, pessoa: dict) -> str:
 </section>""")
     tem_docs = bool(modelo.get("documentos"))
     perfil = secao_perfil(modelo, pessoa)
+    link_busca = (f'<p><a href="../busca.html?autor={esc(slug_autor_busca(modelo, pessoa))}">Pesquisar textos deste autor</a></p>'
+                  if api_disponivel else "")
     corpo = f"""<section class="abertura ficha">
  <p><a href="../index.html">Todos os vereadores</a></p>
  <h1>{esc(pessoa['nome'])}{partido_html(partido_atual(modelo, pessoa['slug']))}</h1>
  <p class="siscam">Nome no SISCAM: {esc(pessoa['nome_siscam'])}</p>
- <p><a href="../busca.html?autor={esc(pessoa['slug'])}">Pesquisar textos deste autor</a></p>
+ {link_busca}
 </section>
 {perfil + chr(10) if perfil else ''}{resumo.secao_resumo(modelo, pessoa, '../')}
 {LEGENDA_BARRA}
