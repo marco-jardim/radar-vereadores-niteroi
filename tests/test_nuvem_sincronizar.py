@@ -17,6 +17,7 @@ from pathlib import Path
 from coletor import remocoes
 from coletor.arquivos import salvar_mapa
 from coletor.nuvem import __main__ as cli
+from coletor.nuvem import banco
 from coletor.nuvem.ambientes import BUCKET_ARQUIVOS_LOCAL, BUCKET_EXPORTACOES_LOCAL, ambiente_local
 from coletor.nuvem.fonte import normalizar_busca
 from coletor.nuvem.local import MODELO_LOCAL, desempacotar
@@ -195,9 +196,9 @@ class TestSincronizacaoCompleta(Base):
         self.assertEqual(segunda.versao, primeira.versao)
 
     def test_migracao_aplicada_uma_vez(self):
-        self.assertEqual(self.sincronizar().feitas["migracoes"], 1)
+        self.assertEqual(self.sincronizar().feitas["migracoes"], len(banco.nomes_migracoes()))
         self.assertEqual(self.sincronizar().feitas["migracoes"], 0)
-        self.assertEqual(self.consultar("SELECT name FROM d1_migrations"), [("0001_inicial.sql",)])
+        self.assertEqual(self.consultar("SELECT name FROM d1_migrations"), [(n,) for n in banco.nomes_migracoes()])
 
     def test_fts_sem_acento(self):
         ident = self.reescrever("siscam:900003", TEXTO_LICENCA)
@@ -295,7 +296,7 @@ class TestSegurancaEFalhas(Base):
     def test_simular_nao_grava(self):
         rel = self.sincronizar(simular=True, exportar=self.tmp / "exp")
         self.assertEqual(rel.escritas, 0)
-        self.assertEqual(rel.plano["migracoes"], 1)
+        self.assertEqual(rel.plano["migracoes"], len(banco.nomes_migracoes()))
         self.assertEqual(rel.plano["r2_enviar"], 6)
         self.assertEqual(rel.plano["d1_documentos_gravar"], 9)
         self.assertEqual(rel.plano["d1_trechos_gravar"], 6)

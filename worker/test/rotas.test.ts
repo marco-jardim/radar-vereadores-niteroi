@@ -354,10 +354,11 @@ describe("wrangler.jsonc", () => {
 
   it("ORIGENS_CORS acompanha exatamente config/backend.json nos dois ambientes", () => {
     const backend = JSON.parse(env.BACKEND_JSON as string) as { origens_cors: string[] };
-    for (const ambiente of [config, config.env.staging]) {
-      expect(ambiente.vars.ORIGENS_CORS.split(",").sort()).toEqual([...backend.origens_cors].sort());
-      expect(ambiente.vars.URL_SITE).toBe(criarEnv().URL_SITE);
-    }
+    // Produção: exatamente as origens do site; staging acrescenta só os servidores locais de desenvolvimento.
+    const locais = ["http://127.0.0.1:8000", "http://localhost:8000"];
+    expect(config.vars.ORIGENS_CORS.split(",").sort()).toEqual([...backend.origens_cors].sort());
+    expect(config.env.staging.vars.ORIGENS_CORS.split(",").sort()).toEqual([...backend.origens_cors, ...locais].sort());
+    for (const ambiente of [config, config.env.staging]) expect(ambiente.vars.URL_SITE).toBe(criarEnv().URL_SITE);
   });
 
   it("todo cron declarado tem handler scheduled seguro até T4.2.3", () => {

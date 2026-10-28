@@ -35,6 +35,7 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `coletor/site/modelo.py` | Enriquecimento, pessoas, mandatos, métricas, repetidos e documentos por autor. |
 | `coletor/site/modelo_sessoes.py` | Agregação de sessões, cobertura e métricas da Câmara e das pessoas. |
 | `coletor/site/pagina_sessoes.py` | Página de sessões, seção individual e metodologia `#sessoes`. |
+| `coletor/site/pagina_busca.py` | Página `busca.html`, configuração `radar-api` e metodologia de inteiro teor, busca, privacidade e auditoria. |
 | `coletor/site/inicio.py` | Blocos da home: hero com camadas, “Quem é meu vereador?”, mapa de indicações da legislatura atual e linha do tempo de `config/memoria.json`. |
 | `coletor/site/pagina_memoria.py` | Página de memória `memoria.html`, gerada por `coletor.gerar_site` quando há `config/memoria.json`; link no rodapé e faixa na home só quando publicada. |
 | `coletor/site/glossario.py` | Glossário: links `a.glossario` para `metodologia.html#g-*` na prosa, definições num `<template>` por página e popover progressivo em `navegacao.js`. |
@@ -53,6 +54,7 @@ regras e cache da IA via OpenCode Go; demais documentos e sessões usam só regr
 | `site_src/navegacao.js` | Menu móvel e tema, até 4 KiB gzip; um listener por tipo no documento em cada script, sem alterar `app.js` para essas funções. |
 | `site_src/dados.js` | Hidratação das colunas e planejamento das partes de PLs/documentos. |
 | `site_src/sessoes.js` | Filtros, mapa de votos, paginação e CSV de sessões. |
+| `site_src/busca.js` e `busca.css` | Só em `busca.html`: consulta ao Worker, filtros na URL, trechos escapados com destaque seguro, fontes e paginação acessível; JS até 6 KiB gzip. Sem `api_url` ou JavaScript, mantém aviso e links para listas/SISCAM. |
 | `site_src/inicio.js` | Só na home: céu vivo pelo fuso `America/Sao_Paulo` com fallback UTC−3, contagem dos números e combobox APG; até 6 KiB gzip. |
 | `site_src/inicio.css` | Só na home: fases do céu por `[data-ceu]`, com hexadecimais apenas nesses blocos; paralaxe sob `@supports (animation-timeline: scroll())` e sem movimento reduzido. |
 | `site_src/memoria.css` | Estilos da página de memória (só nela, com a Fraunces). |
@@ -117,7 +119,7 @@ Os três primeiros e a classificação rodam na coleta; a geração fica no work
    (pastas opcionais), geometria e temporários. Não grava; retorna código 1 se houver problemas.
 6. `gerar_site` combina curadoria, regras e cache, calcula métricas e recria `site/`. As páginas principais
    seguem `paginas.NAV`: início, novidades, leis, projetos, atividades, sessões, sem efeito e polêmicas
-   (`ruido.html`), análises e metodologia. Também gera `vereadores/*.html`, `feed.xml`, o redirect
+   (`ruido.html`), análises, busca e metodologia. Também gera `vereadores/*.html`, `feed.xml`, o redirect
    `alertas.html` → `ruido.html`, `404.html`, `dados/*`, estáticos e `.nojekyll`. A 404 usa o template comum,
    prefixo de caminho absoluto extraído de `URL_SITE`, `noindex`, sem canônica, e lista de vereadores da
    legislatura atual.
@@ -456,6 +458,7 @@ Não há carregamento automático de `.env`. A IA usa `POST /chat/completions`, 
 | `sessoes.js` | Até 12 KiB, testado offline. |
 | `navegacao.js` | Até 4 KiB. |
 | `inicio.js` | Até 6 KiB. |
+| `busca.js` | Até 6 KiB; carregado só em `busca.html`. |
 | CSS global (`estilo.css` publicado) | Até 16 KiB, testado em `tests/test_responsivo_css.py`. |
 | Script inline `paginas.SCRIPT_CABECA` | Até 400 bytes **brutos**. |
 | `favicon.svg` e `marca.svg` | Até 2 KiB **brutos** cada. |

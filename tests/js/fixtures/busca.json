@@ -1,0 +1,26 @@
+{
+  "consulta": "saúde",
+  "modo": "hibrida",
+  "filtros": {"tipo": null, "ano": null, "autor": null, "legislatura": null},
+  "pagina": 1,
+  "por_pagina": 1,
+  "total": 2,
+  "limitado": false,
+  "resultados": [{
+    "documento": "doc:101",
+    "tipo": "pl",
+    "numero": "1",
+    "ano": 2025,
+    "ementa": "Saúde & educação <teste>",
+    "trecho": "A <mark>saúde</mark> &amp; a educação. &lt;script&gt;texto&lt;/script&gt;",
+    "arquivo": "siscam:901",
+    "status": "ocr_baixa_confianca",
+    "ocr": true,
+    "confianca": 52.3,
+    "url_siscam": "https://consultaniteroi.siscam.com.br/DetalhesDocumentos.aspx?IdDocumento=101",
+    "url_original": "/api/original/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "pontuacao": 0.02,
+    "origem": "ambas"
+  }]
+}

@@ -87,10 +87,11 @@ class TestFtsAtomico(BaseSincronizacao):
         pasta = self.tmp / nome
         pasta.mkdir()
         d1 = D1Sqlite(pasta / "d1.sqlite")
-        d1.con.executescript((banco.PASTA_MIGRACOES / "0001_inicial.sql").read_text(encoding="utf-8"))
         d1.con.executescript("CREATE TABLE d1_migrations (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE, "
-                             "applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL);"
-                             "INSERT INTO d1_migrations (name) VALUES ('0001_inicial.sql');")
+                             "applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL);")
+        for nome in banco.nomes_migracoes():
+            d1.con.executescript((banco.PASTA_MIGRACOES / nome).read_text(encoding="utf-8"))
+            d1.con.execute("INSERT INTO d1_migrations (name) VALUES (?)", (nome,))
         self.addCleanup(d1.con.close)
         d1.pasta = pasta
         return d1

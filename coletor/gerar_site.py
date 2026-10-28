@@ -17,7 +17,7 @@ from urllib.parse import urlsplit
 from coletor import novidades as N
 from coletor import regras_documentos as RD
 from coletor import regras_sessoes as RS
-from coletor.site import inicio, modelo_sessoes, pagina_memoria, pagina_sessoes
+from coletor.site import inicio, modelo_sessoes, pagina_busca, pagina_memoria, pagina_sessoes
 from coletor.site import paginas as P
 from coletor.site.modelo import (
     DESFECHO_GRUPO, NOME_ALERTA, NOME_CATEGORIA, NOME_CATEGORIA_DOC, NOME_DESFECHO, NOME_SINAL, NOME_SUBCATEGORIA_DOC,
@@ -662,6 +662,7 @@ def main() -> None:
     escrever("ruido.html", P.gerar_ruido(modelo))
     escrever("analises.html", P.gerar_analises(modelo))
     escrever("metodologia.html", P.gerar_metodologia(modelo))
+    escrever("busca.html", pagina_busca.gerar_busca(modelo, pagina_busca.carregar_api(RAIZ)))
     # Eventos derivados das datas já coletadas; nada é gravado em data/.
     eventos = N.eventos_do_modelo(modelo)
     escrever(N.PAGINA, P.gerar_novidades(eventos))

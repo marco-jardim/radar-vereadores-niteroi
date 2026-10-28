@@ -19,7 +19,7 @@ from xml.etree import ElementTree
 
 from coletor import gerar_site
 from coletor import novidades as N
-from coletor.site import inicio, resumo
+from coletor.site import inicio, pagina_busca, resumo
 from coletor.site import paginas as P
 from coletor.site.modelo import TIPOS_DOC
 from tests import test_tabelas_empilhaveis, test_tabelas_rolaveis
@@ -27,7 +27,7 @@ from tests.test_acessibilidade_html import analisar
 from tests.test_glossario import PaginaGlossario, TERMOS
 from tests.test_resumo import conferir_resumo
 
-PAGINAS = ("index.html", "novidades.html", "leis.html", "projetos.html", "atividades.html", "sessoes.html", "ruido.html", "analises.html",
+PAGINAS = ("index.html", "novidades.html", "leis.html", "projetos.html", "atividades.html", "sessoes.html", "ruido.html", "analises.html", "busca.html",
            "metodologia.html")
 if (inicio.carregar_memoria(gerar_site.RAIZ) or {}).get("homenageados"):
     PAGINAS += ("memoria.html",)
@@ -69,6 +69,29 @@ class TestGerarSite(unittest.TestCase):
         self.assertIn('data-ocultar-cargos', texto)
         self.assertIn('estimativa pelas listas de frequência', texto)
         # O teto de 100 KiB gzip para esta página também é verificado no teste geral de orçamento.
+
+    def test_busca_integrada_configuracao_privacidade_e_links(self):
+        texto = (self.saida / "busca.html").read_text(encoding="utf-8")
+        api = pagina_busca.carregar_api(gerar_site.RAIZ)
+        self.assertIn(f'<meta name="radar-api" content="{P.esc(api or "")}">', texto)
+        self.assertIn('href="busca.html" aria-current="page">Busca</a>', texto)
+        self.assertIn('id="busca-campos" disabled', texto)
+        self.assertIn('id="busca-estado" role="status" aria-live="polite"', texto)
+        if api is None:
+            self.assertIn("ainda não está disponível", texto)
+        metodo = (self.saida / "metodologia.html").read_text(encoding="utf-8")
+        self.assertIn(pagina_busca.metodologia_busca(), metodo)
+        for secao in ("inteiro-teor", "busca", "privacidade", "auditoria"):
+            self.assertIn(f'href="#{secao}"', metodo)
+        for nome in ("leis.html", "projetos.html", "atividades.html"):
+            html = (self.saida / nome).read_text(encoding="utf-8")
+            self.assertIn('href="busca.html', html)
+            self.assertNotIn('src="busca.js', html)
+            self.assertNotIn('href="busca.css', html)
+        for s in self.modelo["pessoas"]:
+            html = (self.saida / "vereadores" / f"{s}.html").read_text(encoding="utf-8")
+            self.assertIn(f'href="../busca.html?autor={P.esc(s)}"', html)
+            self.assertEqual(html.count("Pesquisar textos deste autor"), 1)
 
     def test_resumo_neutro_e_numeros_de_todas_as_pessoas_reais(self):
         self.assertTrue(self.modelo["pessoas"])
@@ -121,7 +144,7 @@ class TestGerarSite(unittest.TestCase):
                 self.assertLessEqual(doc.templates, 1)
                 self.assertTrue(doc.usados <= doc.definidos, doc.usados - doc.definidos)
                 self.assertTrue(doc.usados <= TERMOS.keys())
-        for nome in ("leis.html", "projetos.html", "atividades.html", "ruido.html", "sessoes.html"):
+        for nome in ("leis.html", "projetos.html", "atividades.html", "ruido.html", "sessoes.html", "busca.html"):
             with self.subTest(pagina=nome):
                 self.assertIn(nome, documentos)
                 self.assertTrue(documentos[nome].usados)
