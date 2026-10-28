@@ -19,7 +19,8 @@ from xml.etree import ElementTree
 
 from coletor import gerar_site
 from coletor import novidades as N
-from coletor.site import inicio, pagina_busca, resumo
+from coletor import temas as T
+from coletor.site import inicio, pagina_busca, resumo, temas_html
 from coletor.site import paginas as P
 from coletor.site.modelo import TIPOS_DOC
 from tests import test_tabelas_empilhaveis, test_tabelas_rolaveis
@@ -47,9 +48,11 @@ class TestGerarSite(unittest.TestCase):
         with (mock.patch.object(sys, "argv", ["coletor.gerar_site"]),
               mock.patch.object(gerar_site, "montar_modelo", side_effect=guardar_modelo),
               mock.patch.object(inicio, "carregar_memoria", wraps=inicio.carregar_memoria) as carregar,
+              mock.patch.object(T, "carregar_cache", wraps=T.carregar_cache) as carregar_temas,
               contextlib.redirect_stdout(saida)):
             gerar_site.main()
         cls.carregamentos_memoria = carregar.call_count
+        cls.carregamentos_temas = carregar_temas.call_args_list
         cls.mensagem = saida.getvalue()
         cls.saida = gerar_site.SAIDA
 
@@ -126,6 +129,74 @@ class TestGerarSite(unittest.TestCase):
         self.assertIn('id="resumo"', metodologia)
         self.assertIn('href="#resumo"', metodologia)
         self.assertIn("Este resumo não usa IA", metodologia)
+
+    def test_gerador_carrega_cache_de_temas_uma_vez_e_repassa_as_fichas(self):
+        caminho = gerar_site.RAIZ / "data" / "temas_ia.json"
+        self.assertEqual(self.carregamentos_temas, [mock.call(caminho)])
+        cache = T.carregar_cache(caminho)
+        for s, pessoa in self.modelo["pessoas"].items():
+            with self.subTest(vereador=s):
+                ficha = (self.saida / "vereadores" / f"{s}.html").read_text(encoding="utf-8")
+                bloco = temas_html.bloco_temas(self.modelo, pessoa, cache)
+                self.assertEqual('class="temas-ia"' in ficha, bool(bloco))
+                self.assertIn(resumo.secao_resumo(self.modelo, pessoa) + "\n" + bloco, ficha)
+
+    def test_ficha_com_temas_validados_apos_resumo_acessivel_e_no_orcamento(self):
+        # Exercita a ficha mais pesada da base com até cinco temas em cada legislatura.
+        pessoa = max(self.modelo["pessoas"].values(), key=lambda p: gerar_site.tamanho_gzip(
+            (self.saida / "vereadores" / f"{p['slug']}.html").read_bytes()))
+        rotulos = ["Transporte coletivo", "Educação municipal", "Saúde municipal",
+                   "Serviços urbanos", "Cultura municipal"]
+        cache = {}
+        for leg in self.modelo["legislaturas"]:
+            docs = T.documentos_da_pessoa(self.modelo, pessoa, leg["id"], ())
+            cache[f"pessoa:{pessoa['slug']}:{leg['id']}"] = {
+                "rotulos": rotulos, "versao": T.VERSAO_TEMAS, "modelo": T.MODELO,
+                "total_base": len(docs)}
+            cache.update({"doc:" + T._hash(d["ementa"], rotulos): rotulos[i % len(rotulos)]
+                          for i, d in enumerate(docs)})
+        with mock.patch("coletor.mascara.liberados", return_value=()), \
+                mock.patch.object(T, "chamar_ia", side_effect=AssertionError("IA")), \
+                mock.patch("urllib.request.urlopen", side_effect=AssertionError("rede")):
+            bloco = temas_html.bloco_temas(self.modelo, pessoa, cache)
+            ficha = P.gerar_vereador(self.modelo, pessoa, cache_temas=cache)
+            self.assertTrue(bloco)
+            self.assertIn(resumo.secao_resumo(self.modelo, pessoa) + "\n" + bloco, ficha)
+            self.assertEqual(ficha.count('class="temas-ia"'), 1)
+            for vazio in (None, {}):
+                self.assertNotIn('class="temas-ia"', P.gerar_vereador(
+                    self.modelo, pessoa, cache_temas=vazio))
+            for reg in cache.values():
+                if isinstance(reg, dict):
+                    reg.update(rotulos=["Gestão produtiva"], validado=True)
+            self.assertNotIn('class="temas-ia"', P.gerar_vereador(
+                self.modelo, pessoa, cache_temas=cache))
+        self.assertIn('href="../metodologia.html#temas"', ficha)
+        metodo = (self.saida / "metodologia.html").read_text(encoding="utf-8")
+        self.assertIn("temas", PaginaGlossario(metodo).ids)
+        doc = PaginaGlossario(ficha)
+        self.assertFalse(doc.invalidos)
+        self.assertTrue(doc.usados <= doc.definidos)
+        self.assertEqual(analisar(ficha).problemas, [])
+        self.assertLessEqual(gerar_site.tamanho_gzip(ficha.encode("utf-8")), gerar_site.LIMITE_HTML_GZIP)
+
+    def test_metodologia_temas_publica_prompts_do_modulo_e_regras(self):
+        texto = (self.saida / "metodologia.html").read_text(encoding="utf-8")
+        secao = texto.split('<section id="temas"', 1)[1].split("</section>", 1)[0]
+        self.assertIn('href="#temas"', texto)
+        for prompt in (T.PROMPT_ROTULOS, T.PROMPT_CLASSIFICAR):
+            self.assertIn(f"<pre>{P.esc(prompt)}</pre>", secao)
+        for termo in (T.MODELO, T.VERSAO_TEMAS, "ementas mascaradas", "40 documentos",
+                      "cinco rótulos", "duas a quatro palavras", f"lotes de até {T.LOTE}",
+                      "pelo menos dois documentos", "calculados pelo código",
+                      "Agrupar não é avaliar", "mesmos critérios", "classificação completa"):
+            self.assertIn(termo, secao)
+        # Não basta coincidir com os valores atuais: a página deve usar as constantes importadas.
+        with mock.patch.object(T, "PROMPT_ROTULOS", "Rótulos <novos> & seguros"), \
+                mock.patch.object(T, "PROMPT_CLASSIFICAR", "Classificação <nova> & segura"):
+            atualizado = P.gerar_metodologia(self.modelo)
+            self.assertIn(P.esc(T.PROMPT_ROTULOS), atualizado)
+            self.assertIn(P.esc(T.PROMPT_CLASSIFICAR), atualizado)
 
     def test_todas_as_tabelas_em_todas_as_paginas(self):
         paginas = sorted(self.saida.rglob("*.html"))

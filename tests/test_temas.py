@@ -169,6 +169,17 @@ class TestFontePrompt(unittest.TestCase):
 
 
 class TestCacheExecucao(unittest.TestCase):
+    def test_carregar_cache_ausente_ou_presente_apenas_leitura(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            caminho = Path(tmp) / "temas_ia.json"
+            self.assertEqual(T.carregar_cache(caminho), {})
+            self.assertFalse(caminho.exists())
+            _, cache = cache_completo(modelo())
+            caminho.write_text(json.dumps(cache, ensure_ascii=False), encoding="utf-8")
+            antes = caminho.read_bytes()
+            self.assertEqual(T.carregar_cache(caminho), cache)
+            self.assertEqual(caminho.read_bytes(), antes)
+
     def rodar(self, m, cache, **kwargs):
         with mock.patch.dict(os.environ, {"OPENCODE_API_KEY": "falsa"}), \
                 mock.patch.object(T, "chamar_ia", side_effect=ia_falsa) as chamar:

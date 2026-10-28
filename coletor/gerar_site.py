@@ -628,7 +628,10 @@ def gerar_404(modelo: dict) -> str:
 
 
 def main() -> None:
+    from coletor.temas import carregar_cache
+
     modelo = montar_modelo()
+    cache_temas = carregar_cache(RAIZ / "data" / "temas_ia.json")
     api_url = pagina_busca.carregar_api(RAIZ)
     api_disponivel = bool(api_url)
     modelo["sessoes"] = modelo_sessoes.montar_sessoes(modelo) if (RAIZ / "data" / "sessoes").is_dir() else None
@@ -672,7 +675,8 @@ def main() -> None:
     escrever("alertas.html", P.redirecionar("ruido.html"))
     escrever("404.html", gerar_404(modelo))
     for pessoa in modelo["pessoas"].values():
-        escrever(f"vereadores/{pessoa['slug']}.html", P.gerar_vereador(modelo, pessoa, api_disponivel=api_disponivel))
+        escrever(f"vereadores/{pessoa['slug']}.html", P.gerar_vereador(
+            modelo, pessoa, api_disponivel=api_disponivel, cache_temas=cache_temas))
     resumo = {
         leg["id"]: {
             p["nome"]: {"partido": p["mandatos"][leg["id"]]["partido"], "eleito": p["mandatos"][leg["id"]]["eleito"], **p["mandatos"][leg["id"]]["metricas"]}

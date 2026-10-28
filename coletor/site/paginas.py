@@ -1529,8 +1529,9 @@ def slug_autor_busca(modelo: dict, pessoa: dict) -> str:
     return indice_pessoas(eleitos).get(s, s)
 
 
-def gerar_vereador(modelo: dict, pessoa: dict, *, api_disponivel: bool = False) -> str:
-    from coletor.site import pagina_sessoes, resumo
+def gerar_vereador(modelo: dict, pessoa: dict, *, api_disponivel: bool = False,
+                    cache_temas: dict | None = None) -> str:
+    from coletor.site import pagina_sessoes, resumo, temas_html
 
     secoes = []
     for leg in reversed(modelo["legislaturas"]):
@@ -1601,6 +1602,7 @@ def gerar_vereador(modelo: dict, pessoa: dict, *, api_disponivel: bool = False) 
  {link_busca}
 </section>
 {perfil + chr(10) if perfil else ''}{resumo.secao_resumo(modelo, pessoa, '../')}
+{temas_html.bloco_temas(modelo, pessoa, cache_temas or {}, '../')}
 {LEGENDA_BARRA}
 {''.join(secoes)}{pagina_sessoes.secao_sessoes_vereador(modelo, pessoa)}{secao_atividade(modelo, pessoa) if tem_docs else ''}"""
     return pagina(f"{pessoa['nome']} · Radar dos Vereadores de Niterói", corpo, "", "../",
@@ -1805,6 +1807,7 @@ def metricas_atividade(modelo: dict, pessoa: dict) -> str:
 
 # -------------------------------------------------------------------- metodologia
 def gerar_metodologia(modelo: dict) -> str:
+    from coletor import temas as T
     from coletor.site import pagina_busca, pagina_sessoes
 
     glossario = ColetorGlossario()
@@ -1815,7 +1818,7 @@ def gerar_metodologia(modelo: dict) -> str:
     defs_doc = "".join(f"<dt>{esc(v)}</dt><dd>{esc(DESC_CATEGORIA_DOC.get(k, ''))}</dd>" for k, v in NOME_CATEGORIA_DOC.items())
     corpo = f"""<section class="abertura texto">
 <h1>Metodologia</h1>
-<nav class="indice" aria-label="Nesta página"><a href="#glossario">Glossário</a><a href="#resumo">Resumo em números</a><a href="#impacto">Impacto e efeito</a><a href="#atividades">Atividades</a><a href="#sessoes">Sessões</a><a href="#inteiro-teor">Inteiro teor</a><a href="#busca">Busca</a><a href="#privacidade">Privacidade</a><a href="#auditoria">Auditoria</a></nav>
+<nav class="indice" aria-label="Nesta página"><a href="#glossario">Glossário</a><a href="#resumo">Resumo em números</a><a href="#temas">Temas por IA</a><a href="#impacto">Impacto e efeito</a><a href="#atividades">Atividades</a><a href="#sessoes">Sessões</a><a href="#inteiro-teor">Inteiro teor</a><a href="#busca">Busca</a><a href="#privacidade">Privacidade</a><a href="#auditoria">Auditoria</a></nav>
 <p>Este site mede a produção de cada vereador em projetos de lei, não seu trabalho inteiro. Indicações, moções, requerimentos, projetos de decreto legislativo e de resolução aparecem à parte, na página <a href="atividades.html">Atividades</a>, e não entram nos números de projetos e leis. A página <a href="sessoes.html">Sessões e votações</a> e a seção "Presença e votos" de cada vereador mostram os registros plenários, com as <a href="#sessoes">regras de contagem e limitações</a>. Comissões, fiscalização fora do SISCAM e atendimento à população não aparecem no site.</p>
 
 <h2>De onde vêm os dados</h2>
@@ -1825,6 +1828,24 @@ def gerar_metodologia(modelo: dict) -> str:
 <p>Este resumo não usa IA: um template determinístico aplica as mesmas frases, na mesma ordem, a todas as pessoas, por legislatura, da mais recente para a mais antiga. Os números vêm do modelo usado nas demais seções da ficha: listas de presença e votações do SISCAM, projetos de lei como autor principal (incluindo leis via substitutivo) e documentos de qualquer autoria. Cargos na Mesa Diretora, exercício de outro cargo e licenças vêm da configuração pública, com links para as fontes; a lista não é exaustiva.</p>
 <p>Sessões em exercício conta as listas deliberativas em que a pessoa consta, sobre o total incluído na legislatura. Meses são estimados pelos dias entre a primeira e a última deliberativa ÷ (365,25/12) × (sessões listadas ÷ total), não por datas de posse. Presença efetiva usa P/C/V ÷ (P/C/V + A): justificadas, outro cargo e licenças ficam fora da base. Participação nominal usa votou ÷ (possíveis − presidindo). Os dois percentuais exigem base de dez; meses e participação nominal são arredondados a uma casa decimal. Os três bairros mais citados vêm das indicações pela regra da ementa, com desempate alfabético; não representam pedidos atendidos. Divergências usam as votações divididas com sentido conhecido, como em <a href="#sessoes">Sessões</a>.</p>
 <p>Não há comparação entre vereadores, médias ou avaliação de qualidade no resumo. Sem registro não significa ausência de trabalho: a cobertura da coleta é limitada, listas não medem permanência e os dados não cobrem todo o exercício do mandato.</p>
+
+<section id="temas" aria-labelledby="t-metodo-temas">
+<h2 id="t-metodo-temas">Temas (agrupados por IA)</h2>
+<p>Este bloco é separado do Resumo em números, que continua sem IA. Agrupar não é avaliar: os temas descrevem assuntos explícitos das ementas, não qualidade, impacto, produtividade ou posicionamento político. Os mesmos critérios se aplicam a todas as pessoas, por legislatura. A IA pode errar; confira os documentos nos links dos exemplos.</p>
+<p>O agrupamento usa projetos de lei como autor principal e os demais documentos de qualquer autoria, sem duplicar ids. Somente ementas mascaradas pelas <a href="#privacidade">regras de privacidade</a> são enviadas, acompanhadas de ids e tipos locais; não são enviados o inteiro teor, o nome ou o partido da pessoa como campos de identificação. O mascaramento não remove nomes e pode falhar.</p>
+<p>O modelo é <code>{esc(T.MODELO)}</code>, via OpenCode Go, com versão de regras e prompts <code>{esc(T.VERSAO_TEMAS)}</code>. Uma amostra dos 40 documentos mais recentes de cada tipo propõe até cinco rótulos de duas a quatro palavras. Depois, os documentos são classificados nesses rótulos ou em “outros”, em lotes de até {T.LOTE}. A amostra serve para propor rótulos, não para calcular os totais.</p>
+<ul>
+ <li>Os rótulos precisam ser textos de duas a quatro palavras, só com letras e separadores de espaço ou hífen, sem repetições após normalização, sem usar o termo reservado “outros” e sem termos de avaliação, ideológicos ou nomes e siglas de partidos das listas de validação.</li>
+ <li>Cada resposta de classificação precisa conter todos os ids do lote exatamente uma vez, sem ids alheios ou rótulos desconhecidos. Respostas inválidas são descartadas com registro do motivo.</li>
+ <li>Na publicação, o cache é revalidado contra os documentos locais, o modelo e a versão. Sem classificação completa, não se publicam contagens parciais. Cada tema precisa ter pelo menos dois documentos; “outros” não aparece como tema.</li>
+ <li>As contagens e os dois exemplos mais recentes são calculados pelo código sobre os documentos locais, nunca aceitos da IA. Sem cache ou sem temas válidos, o bloco não aparece.</li>
+</ul>
+<p>O cache não guarda ementas: as classificações são reutilizadas por hash da versão, modelo, ementa mascarada e conjunto de rótulos. Em legislaturas encerradas, os rótulos permanecem estáveis; na atual, são recalculados quando a base cresce pelo menos 10%. Alterar modelo ou versão exige revalidação.</p>
+<details class="bloco"><summary>Prompts completos dos temas</summary>
+<h3>Proposição dos rótulos</h3><pre>{esc(T.PROMPT_ROTULOS)}</pre>
+<h3>Classificação dos documentos</h3><pre>{esc(T.PROMPT_CLASSIFICAR)}</pre>
+</details>
+</section>
 
 <h2 id="novidades">Novidades da semana</h2>
 <p>A página <a href="novidades.html">Novidades</a> e o <a href="{N.FEED}">feed RSS</a> não comparam uma coleta com a anterior nem guardam estado entre coletas: cada evento sai de uma data já registrada no SISCAM.</p>
