@@ -4,20 +4,24 @@ Confere, sem alterar nada, a forma de data/proposicoes/<ano>.json (inclusive os
 substitutivos e a coerência de lei_substitutivo), de
 data/documentos/<tipo>/<ano>.json e de data/sessoes/<ano>.json (inclusive o formato
 byte a byte gravado por coletor.arquivos; as duas pastas são opcionais), da geometria
-opcional (data/geo/bairros.json), do cache da IA (data/classificacao_ia.json), de
+opcional (data/geo/bairros.json), dos manifestos opcionais de inteiro teor
+(data/textos/manifesto-<ano>.json), do cache da IA (data/classificacao_ia.json), de
 data/meta.json e dos arquivos
 config/curadoria.json, config/vereadores.json, config/memoria.json, config/perfis.json,
 config/backend.json e config/remocoes.json (opcionais os quatro últimos), e acusa temporários de gravação
-interrompida em data/. Cada verificação é uma função que recebe os dados já
+interrompida em data/. Com --textos DIR, confere também os textos, trechos e a barreira
+de PII do worktree dados-textos. Cada verificação é uma função que recebe os dados já
 carregados e devolve a lista de problemas encontrados (vazia quando está tudo certo).
 
-Uso: python -m coletor.validar
+Uso: python -m coletor.validar [--textos DIR]
 Sai com código 0 sem problemas e 1 com problemas. As mensagens vão para stderr;
 no GitHub Actions (variável GITHUB_ACTIONS definida) saem como anotações ::error::.
 Somente biblioteca padrão do Python.
 """
 from __future__ import annotations
 
+import argparse
+import hashlib
 import json
 import os
 import re
@@ -29,7 +33,8 @@ from urllib.parse import urlsplit
 
 from coletor import documentos as D
 from coletor import sessoes as S
-from coletor.arquivos import texto_lista
+from coletor import mascara, remocoes, textos, trechos
+from coletor.arquivos import texto_lista, texto_mapa
 from coletor.regras_documentos import BAIRROS_NITEROI
 from coletor.site.modelo import DESFECHO_GRUPO
 
@@ -1477,6 +1482,367 @@ def validar_remocoes(raiz: Path | None = None) -> list[str]:
     return problemas
 
 
+# ---------------------------------------------------------------------- inteiro teor
+RE_DOCUMENTO_TEXTO = re.compile(r"(?:doc|sessao):[1-9][0-9]*")
+STATUS_TEXTOS = (*textos.STATUS_COM_TEXTO, "vazio_legitimo", "escaneado_sem_ocr",
+                 "pendente_ferramenta", "erro_formato", *textos.SEM_PROCESSAMENTO)
+CAMPOS_ENTRADA_TEXTO = frozenset(textos.entrada_vazia([], "", "", "", "", ""))
+CONTAGENS_TEXTO = ("paginas", "paginas_ocr", "cabecalhos_omitidos", "chars", "trechos", "trechos_vetorizaveis")
+VERSOES_TEXTO = ("versao_extrator", "versao_extratores", "versao_limpeza", "versao_mascara", "versao_trechos")
+CAMPOS_TRECHO = frozenset({"id", "documento", "arquivo", "posicao", "inicio", "fim",
+                           "inicio_utf16", "fim_utf16", "sha256", "vetorizavel"})
+
+
+def _hash_texto(valor: object, tamanho: int = 64) -> bool:
+    return isinstance(valor, str) and re.fullmatch(rf"[0-9a-f]{{{tamanho}}}", valor) is not None
+
+
+def _documento_texto(valor: object) -> bool:
+    return isinstance(valor, str) and RE_DOCUMENTO_TEXTO.fullmatch(valor) is not None
+
+
+def validar_entrada_texto(entrada: object, chave: str, rotulo: str) -> list[str]:
+    """Esquema e campos por situação, conforme §§4–5 do contrato congelado."""
+    if not isinstance(entrada, dict):
+        return [f"{rotulo}: entrada deveria ser um objeto"]
+    e, problemas = entrada, []
+
+    def erro(campo: str) -> None:
+        problemas.append(f"{rotulo}: '{campo}' inválido para o contrato de textos")
+
+    if set(e) != CAMPOS_ENTRADA_TEXTO:
+        problemas.append(f"{rotulo}: campos do manifesto diferem do contrato (sem extras)")
+    status = e.get("status")
+    if status not in STATUS_TEXTOS:
+        erro("status")
+    if e.get("tipo") not in textos.TIPOS:
+        erro("tipo")
+    if not _documento_texto(e.get("documento")):
+        erro("documento")
+    elif e.get("tipo") in textos.TIPOS and e["documento"].startswith("sessao:") != (e["tipo"] == "ata"):
+        erro("documento")
+    docs = e.get("documentos")
+    if (not isinstance(docs, list) or not docs or not all(_documento_texto(d) for d in docs)
+            or docs != sorted(set(docs))):
+        erro("documentos")
+    if not _https_backend(e.get("url_origem")):
+        erro("url_origem")
+    elif chave.startswith("siscam:"):
+        if e["url_origem"] != textos.URL_DOWNLOAD.format(id=chave.split(":", 1)[1]):
+            erro("url_origem")
+    elif (textos.chave_ata(e["url_origem"]) != chave or not re.fullmatch(
+            r"https://consultaniteroi\.siscam\.com\.br/Arquivos/Sessoes/[0-9A-Fa-f-]+\.(?:doc|docx|pdf)",
+            e["url_origem"])):
+        erro("url_origem")
+    for campo in ("sha256_original", "sha256_config", "sha256_bruto", "sha256_texto", "blob_texto"):
+        if e.get(campo) is not None and not _hash_texto(e[campo], 40 if campo == "blob_texto" else 64):
+            erro(campo)
+    for campo in CONTAGENS_TEXTO:
+        if not _e_inteiro(e.get(campo)) or e[campo] < 0:
+            erro(campo)
+    for campo, limite in (("paginas_ocr", "paginas"), ("trechos_vetorizaveis", "trechos")):
+        if (_e_inteiro(e.get(campo)) and _e_inteiro(e.get(limite)) and e[campo] > e[limite]):
+            erro(campo)
+    original = e.get("sha256_original")
+    tamanho = e.get("bytes")
+    if ((original is None and tamanho is not None) or
+            (original is not None and (not _e_inteiro(tamanho) or tamanho < 0))):
+        erro("bytes")
+    if original is None and status not in ("pendente_download", "removido"):
+        erro("sha256_original")
+    if status == "pendente_download" and original is not None:
+        erro("sha256_original")
+    for campo in ("formato", "extrator", *VERSOES_TEXTO):
+        if e.get(campo) is not None and (not isinstance(e[campo], str) or not e[campo]):
+            erro(campo)
+    if e.get("formato") is not None and e["formato"] not in (
+            "docx", "doc", "rtf", "html", "texto", "pdf", "jpeg", "png", "tiff", "zip", "vazio", "desconhecido"):
+        erro("formato")
+    confianca = e.get("confianca")
+    if confianca is not None and (type(confianca) not in (float, int) or not 0 <= confianca <= 100
+                                  or round(confianca, 1) != confianca):
+        erro("confianca")
+    if not isinstance(e.get("detalhe"), str) or len(e["detalhe"]) > 300:
+        erro("detalhe")
+    if not isinstance(e.get("processado_em"), str) or not data_valida(e["processado_em"]):
+        erro("processado_em")
+    com_texto = status in textos.STATUS_COM_TEXTO or (
+        status == "vazio_legitimo" and e.get("detalhe") == textos.ESVAZIADO)
+    for campo in ("limpeza", "mascarados", "sha256_bruto", "sha256_texto", "blob_texto"):
+        if (e.get(campo) is not None) != com_texto:
+            erro(campo)
+    if (not com_texto or status == "vazio_legitimo") and any(
+            e.get(c) != 0 for c in ("chars", "trechos", "trechos_vetorizaveis")):
+        erro("contagens sem texto ou de vazio_legitimo")
+    limpeza = e.get("limpeza")
+    if limpeza is not None:
+        regras = limpeza.get("por_regra") if isinstance(limpeza, dict) else None
+        if (not isinstance(limpeza, dict) or set(limpeza) != {"linhas_removidas", "por_regra"}
+                or not isinstance(regras, dict)
+                or set(regras) != {"cabecalho_rodape", "numeracao", "ruido_ocr", "cliche"}
+                or any(not _e_inteiro(v) or v < 0 for v in regras.values())
+                or not _e_inteiro(limpeza.get("linhas_removidas"))
+                or limpeza["linhas_removidas"] != sum(regras.values())):
+            erro("limpeza")
+    mascarados = e.get("mascarados")
+    if mascarados is not None and (not isinstance(mascarados, dict) or set(mascarados) != set(mascara.TIPOS)
+                                  or any(not _e_inteiro(v) or v < 0 for v in mascarados.values())):
+        erro("mascarados")
+    if status in textos.SEM_PROCESSAMENTO:
+        for campo in ("formato", "extrator", *VERSOES_TEXTO, "sha256_config", "confianca", "r2_chave"):
+            if e.get(campo) is not None:
+                erro(campo)
+        if any(e.get(c) != 0 for c in ("paginas", "paginas_ocr", "cabecalhos_omitidos")) or e.get("detalhe") != "":
+            erro("extração sem processamento")
+    else:
+        for campo in ("formato", "versao_extratores", "versao_limpeza", "versao_mascara", "versao_trechos", "sha256_config"):
+            if e.get(campo) is None:
+                erro(campo)
+        if _hash_texto(original) and e.get("r2_chave") != textos.r2_chave(original):
+            erro("r2_chave")
+    if status == "duplicata":
+        if not isinstance(e.get("duplicata_de"), str) or not textos.RE_CHAVE.fullmatch(e["duplicata_de"]):
+            erro("duplicata_de")
+    elif e.get("duplicata_de") is not None:
+        erro("duplicata_de")
+    return problemas
+
+
+def _principais_textos(raiz: Path) -> tuple[dict[str, tuple[str, str, int]], list[str]]:
+    """Documento citante → principal, tipo e ano do registro (inclusive substitutivos)."""
+    problemas, catalogo = [], {}
+    try:
+        pls, documentos, sessoes = textos.carregar_registros(raiz)
+    except (OSError, ValueError) as erro:
+        return {}, [f"data: não foi possível resolver documentos dos textos ({type(erro).__name__})"]
+    grupos = [("pl", pls), *documentos.items(), ("ata", sessoes)]
+    for tipo, registros in grupos:
+        for registro in registros:
+            if (not isinstance(registro, dict) or not _e_inteiro(registro.get("id"))
+                    or not _e_inteiro(registro.get("ano"))):
+                continue  # a validação de cada coletor informa o registro malformado
+            doc = f"{'sessao' if tipo == 'ata' else 'doc'}:{registro['id']}"
+            catalogo[doc] = (doc, tipo, registro["ano"])
+            subs = registro.get("substitutivos")
+            for sub in subs if isinstance(subs, list) else []:
+                if isinstance(sub, dict) and _e_inteiro(sub.get("id")):
+                    catalogo[f"doc:{sub['id']}"] = catalogo[doc]
+    return catalogo, problemas
+
+
+def validar_textos(raiz: Path | None = None, pasta_textos: Path | None = None) -> list[str]:
+    """Confere manifestos sempre; com worktree, confere também bytes, trechos e PII, sem gravar."""
+    raiz = Path(raiz or RAIZ)
+    pasta = raiz / "data" / "textos"
+    problemas, entradas = [], {}
+    for caminho in sorted(pasta.glob("manifesto-*.json")):
+        rotulo = f"data/textos/{caminho.name}"
+        nome = textos.RE_MANIFESTO.fullmatch(caminho.name)
+        if not nome:
+            problemas.append(f"{rotulo}: nome deveria ser manifesto-<ano>.json")
+            continue
+        try:
+            bruto = caminho.read_bytes()
+            mapa = json.loads(bruto.decode("utf-8"))
+        except (OSError, ValueError) as erro:
+            problemas.append(f"{rotulo}: não foi possível ler o manifesto ({type(erro).__name__})")
+            continue
+        if not isinstance(mapa, dict):
+            problemas.append(f"{rotulo}: manifesto deveria ser um objeto")
+            continue
+        # salvar_mapa ordena fisicamente por texto; ordem_chave rege o processamento
+        # e a escolha da canônica, não a serialização (§§4 e 6.2 do contrato).
+        if bruto != texto_mapa(mapa).encode("utf-8"):
+            problemas.append(f"{rotulo}: formato de bytes difere de coletor.arquivos.salvar_mapa (ordem, UTF-8 e LF)")
+        for chave, entrada in mapa.items():
+            if not textos.RE_CHAVE.fullmatch(chave):
+                problemas.append(f"{rotulo}: chave de arquivo fora do padrão do contrato")
+                continue
+            r = f"{rotulo}: {chave}"
+            problemas += validar_entrada_texto(entrada, chave, r)
+            if chave in entradas:
+                problemas.append(f"{r}: chave repetida entre manifestos")
+            elif isinstance(entrada, dict):
+                entradas[chave] = (entrada, int(nome[1]))
+    catalogo, erros = _principais_textos(raiz) if entradas else ({}, [])
+    problemas += erros
+    try:
+        removidos = remocoes.indice(raiz)
+    except (OSError, ValueError) as erro:
+        problemas.append(f"config/remocoes.json: não foi possível conferir textos ({type(erro).__name__})")
+        removidos = remocoes.indice([])
+    grupos = {}
+    for chave in sorted(entradas, key=textos.ordem_chave):
+        e, ano = entradas[chave]
+        r = f"data/textos/manifesto-{ano}.json: {chave}"
+        sha = e.get("sha256_original")
+        if remocoes.esta_removido(removidos, chave, sha if isinstance(sha, str) else None) and e.get("status") != "removido":
+            problemas.append(f"{r}: arquivo removido por chave ou SHA-256 sem status removido")
+        if _hash_texto(sha) and e.get("status") != "removido":
+            grupos.setdefault(sha, []).append(chave)
+        doc, tipo = e.get("documento"), e.get("tipo")
+        if _documento_texto(doc) and tipo in textos.TIPOS:
+            conhecido = catalogo.get(doc)
+            familia = "sessoes" if tipo == "ata" else "proposicoes" if tipo == "pl" else f"documentos/{tipo}"
+            if conhecido is None and (raiz / "data" / familia).is_dir():
+                problemas.append(f"{r}: documento principal não existe em data/")
+            elif conhecido is not None and conhecido != (doc, tipo, ano):
+                problemas.append(f"{r}: documento principal, tipo ou ano diverge do registro em data/")
+            docs = e.get("documentos")
+            if isinstance(docs, list) and docs and all(_documento_texto(d) and d in catalogo for d in docs):
+                principal = min((catalogo[d] for d in docs),
+                                key=lambda p: (textos.PRIORIDADE_TIPO[p[1]], int(p[0].split(":")[1])))
+                if principal != (doc, tipo, ano):
+                    problemas.append(f"{r}: documento principal não segue a prioridade dos citantes ou o ano do registro")
+        if e.get("status") == "duplicata":
+            canonica = e.get("duplicata_de")
+            alvo = entradas.get(canonica) if isinstance(canonica, str) else None
+            if (alvo is None or alvo[0].get("status") in ("duplicata", "removido")
+                    or alvo[0].get("sha256_original") != sha
+                    or alvo[0].get("bytes") != e.get("bytes")
+                    or textos.ordem_chave(canonica) >= textos.ordem_chave(chave)):
+                problemas.append(f"{r}: duplicata_de não aponta para uma canônica existente com o mesmo original e menor chave")
+            elif isinstance(e.get("documentos"), list) and isinstance(alvo[0].get("documentos"), list):
+                if any(d not in alvo[0]["documentos"] for d in e["documentos"]):
+                    problemas.append(f"{r}: documentos da duplicata ausentes na canônica")
+    for chaves in grupos.values():
+        for chave in chaves[1:]:
+            e = entradas[chave][0]
+            if e.get("status") != "duplicata" or e.get("duplicata_de") != chaves[0]:
+                problemas.append(f"{chave}: mesmo original sem duplicata da menor chave canônica")
+    if pasta_textos is not None:
+        problemas += _validar_arquivos_textos(raiz, Path(pasta_textos), entradas)
+    return problemas
+
+
+def _validar_trecho_texto(t: object, texto: str, documento: str, chave: str, posicao: int) -> bool:
+    """Offsets, hash, id e vetor: independe da versão do algoritmo de divisão."""
+    if not isinstance(t, dict) or set(t) != CAMPOS_TRECHO:
+        return False
+    for campo in ("posicao", "inicio", "fim", "inicio_utf16", "fim_utf16"):
+        if not _e_inteiro(t[campo]) or t[campo] < 0:
+            return False
+    if (t["documento"] != documento or t["arquivo"] != chave or t["posicao"] != posicao
+            or not 0 <= t["inicio"] < t["fim"] <= len(texto) or type(t["vetorizavel"]) is not bool):
+        return False
+    inicio, fim = t["inicio"], t["fim"]
+    parte = texto[inicio:fim]
+    sha = textos.sha256(parte.encode("utf-8"))
+    ident = hashlib.sha1(f"{documento}|{chave}|{posicao}|{sha}".encode("utf-8")).hexdigest()[:16]
+    return (t["sha256"] == sha and t["id"] == ident
+            and t["inicio_utf16"] == len(texto[:inicio].encode("utf-16-le")) // 2
+            and t["fim_utf16"] == len(texto[:fim].encode("utf-16-le")) // 2
+            and t["vetorizavel"] == trechos.vetorizavel(parte))
+
+
+def _validar_arquivos_textos(raiz: Path, pasta: Path, entradas: dict[str, tuple[dict, int]]) -> list[str]:
+    """Lê somente o worktree indicado; não extrai, não usa cache e não acessa a rede."""
+    if not pasta.is_dir():
+        return ["dados-textos: diretório não encontrado"]
+    problemas, esperados, grupos = [], set(), {}
+    try:
+        liberados = mascara.liberados(raiz)
+    except (OSError, ValueError) as erro:
+        problemas.append(f"dados-textos: falha ao ler contatos liberados ({type(erro).__name__})")
+        liberados = frozenset()
+
+    def ler_texto(caminho: Path, chave: str) -> tuple[bytes, str] | None:
+        try:
+            dados = caminho.read_bytes()
+            conteudo = dados.decode("utf-8")
+        except (OSError, ValueError) as erro:
+            problemas.append(f"{chave}: texto ausente, ilegível ou fora de UTF-8 ({type(erro).__name__})")
+            return None
+        texto = conteudo[:-1] if conteudo.endswith("\n") else conteudo
+        # O contrato não grava confianca_paginas/ocr_paginas nem liberados por entrada.
+        # Sem os metadados do cache, aplica a mesma barreira normal de textos.barreira.
+        fortes = sorted({o["tipo"] for o in mascara.varrer(texto, liberados) if o["forte"]})
+        if fortes:
+            problemas.append(f"{chave}: ocorrência forte de mascara.varrer ({', '.join(fortes)})")
+        if not conteudo.endswith("\n") or trechos.normalizar(texto) != texto:
+            problemas.append(f"{chave}: formato do .txt inválido (UTF-8 sem BOM, NFC, LF e quebra final)")
+        return dados, texto
+
+    for chave in sorted(entradas, key=textos.ordem_chave):
+        e, ano = entradas[chave]
+        if not textos.tem_texto(e) or e.get("tipo") not in textos.TIPOS or not _documento_texto(e.get("documento")):
+            continue
+        rel = textos.caminho_texto(e["tipo"], ano, e["documento"], chave)
+        esperados.add(rel)
+        grupo = textos.caminho_trechos(e["tipo"], ano)
+        # O esvaziado pela limpeza tem .txt mas zero trechos; o pipeline não cria
+        # um .jsonl vazio só por ele (a fixture congelada também não tem esse arquivo).
+        grupos.setdefault(grupo, {})[chave] = (e, None)
+        lido = ler_texto(pasta / rel, chave)
+        if lido is None:
+            continue
+        dados, texto = lido
+        grupos[grupo][chave] = (e, texto)
+        if textos.sha256(dados) != e.get("sha256_texto"):
+            problemas.append(f"{chave}: sha256_texto não confere")
+        if textos.blob_git(dados) != e.get("blob_texto"):
+            problemas.append(f"{chave}: blob_texto não confere")
+        if len(texto) != e.get("chars"):
+            problemas.append(f"{chave}: chars não confere")
+    for caminho in sorted((pasta / "textos").rglob("*.txt")):
+        if caminho.relative_to(pasta).as_posix() not in esperados:
+            chave = textos.chave_do_caminho(caminho.name)
+            rotulo = chave if textos.RE_CHAVE.fullmatch(chave) else "dados-textos"
+            problemas.append(f"{rotulo}: .txt órfão sem entrada com texto no manifesto")
+            ler_texto(caminho, rotulo)
+    presentes = {p.relative_to(pasta).as_posix(): p for p in (pasta / "trechos").rglob("*.jsonl")}
+    for rel in sorted(set(grupos) | set(presentes)):
+        grupo = grupos.get(rel, {})
+        caminho = presentes.get(rel)
+        if not grupo:
+            problemas.append("dados-textos: .jsonl órfão sem entrada com texto no manifesto")
+            continue
+        if caminho is None:
+            if any(e.get("trechos") != 0 for e, _ in grupo.values()):
+                problemas.append(f"{rel}: arquivo de trechos ausente")
+            continue
+        try:
+            bruto = caminho.read_bytes()
+            linhas = bruto.decode("utf-8").split("\n")
+            lista = [json.loads(linha) for linha in linhas if linha]
+        except (OSError, ValueError) as erro:
+            problemas.append(f"{rel}: trechos ilegíveis ({type(erro).__name__})")
+            continue
+        if any(not isinstance(t, dict) for t in lista):
+            problemas.append(f"{rel}: trecho deveria ser objeto")
+            continue
+        campos_ordem_validos = all(isinstance(t.get("documento"), str) and isinstance(t.get("arquivo"), str)
+                                   and _e_inteiro(t.get("posicao")) for t in lista)
+        if not campos_ordem_validos:
+            problemas.append(f"{rel}: campos de ordenação dos trechos inválidos")
+            continue
+        ordenados = sorted(lista, key=lambda t: (t["documento"], t["arquivo"], t["posicao"]))
+        canonico = "".join(textos.linha_trecho(t) + "\n" for t in ordenados).encode("utf-8")
+        if bruto != canonico:
+            problemas.append(f"{rel}: formato de bytes ou ordem dos trechos inválido")
+        por_chave = {}
+        for t in lista:
+            chave = t["arquivo"]
+            if chave not in grupo:
+                # Não reproduzir valores desconhecidos vindos do JSONL nas mensagens.
+                problemas.append(f"{rel}: trecho órfão sem entrada correspondente no manifesto")
+            else:
+                por_chave.setdefault(chave, []).append(t)
+        for chave, (e, texto) in grupo.items():
+            itens = por_chave.get(chave, [])
+            if (len(itens) != e.get("trechos")
+                    or sum(t.get("vetorizavel") is True for t in itens) != e.get("trechos_vetorizaveis")):
+                problemas.append(f"{chave}: contagem de trechos não confere")
+            if texto is None:
+                continue
+            if any(not _validar_trecho_texto(t, texto, e["documento"], chave, i) for i, t in enumerate(itens)):
+                problemas.append(f"{chave}: campos, offsets, id ou hash dos trechos não conferem com o texto")
+            elif trechos.normalizar(texto) == texto and e.get("versao_trechos") == trechos.VERSAO_TRECHOS:
+                if itens != trechos.dividir(texto, e["documento"], chave):
+                    problemas.append(f"{chave}: trechos não conferem com a divisão do texto")
+    return problemas
+
+
 def _ler_json(arq: Path, rotulo: str) -> tuple[object, list[str]]:
     try:
         return json.loads(arq.read_text(encoding="utf-8")), []
@@ -1504,7 +1870,7 @@ def carregar_arquivos_anuais(diretorio: Path) -> tuple[dict[int, object], list[s
     return arquivos, problemas
 
 
-def validar_tudo(raiz: Path | None = None) -> list[str]:
+def validar_tudo(raiz: Path | None = None, pasta_textos: Path | None = None) -> list[str]:
     """Roda todas as verificações sobre os arquivos de `raiz` (padrão: o repositório)."""
     raiz = raiz or RAIZ
     arquivos, problemas = carregar_arquivos_anuais(raiz / "data" / "proposicoes")
@@ -1542,6 +1908,7 @@ def validar_tudo(raiz: Path | None = None) -> list[str]:
     problemas += validar_perfis(raiz / "config" / "perfis.json", cfg if not erros else None)
     problemas += validar_backend(raiz)
     problemas += validar_remocoes(raiz)
+    problemas += validar_textos(raiz, pasta_textos)
     return problemas
 
 
@@ -1550,8 +1917,14 @@ def _anotacao(texto: str) -> str:
     return texto.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
 
 
-def main() -> int:
-    problemas = validar_tudo()
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--textos", type=Path, metavar="DIR",
+                        help="confere também os textos e trechos do worktree dados-textos")
+    # A entrada do módulo passa sys.argv; chamadas programáticas legadas de main()
+    # não devem interpretar argumentos do executor de testes.
+    opcoes = parser.parse_args(argv if argv is not None else [])
+    problemas = validar_tudo(pasta_textos=opcoes.textos)
     no_ci = bool(os.environ.get("GITHUB_ACTIONS"))
     for problema in problemas:
         print(f"::error::{_anotacao(problema)}" if no_ci else problema, file=sys.stderr)
@@ -1563,4 +1936,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv[1:]))

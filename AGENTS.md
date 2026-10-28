@@ -135,6 +135,7 @@ python -m http.server -d site 8000
 ```
 
 Para usar só os dados versionados, comece por `validar` e `gerar_site`, sem rede nem chave.
+`python -m coletor.validar --textos DIR` confere também hashes, trechos e a barreira de PII do worktree `dados-textos`; os manifestos são sempre validados.
 
 Para regenerar a marca e o favicon após mudar sua geometria, execute separadamente, offline:
 
