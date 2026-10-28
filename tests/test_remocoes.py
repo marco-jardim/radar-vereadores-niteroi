@@ -18,7 +18,7 @@ from coletor.arquivos import salvar_mapa
 from coletor.nuvem.ambientes import BUCKET_EXPORTACOES_LOCAL
 from coletor.nuvem.local import R2Local
 from coletor.nuvem.rede import ErroNuvem
-from coletor.nuvem.sincronizar import _ler_dump
+from coletor.nuvem.sincronizar import _ler_dump, _ler_somas_exportacao, _nomes_exportacao
 from coletor.validar import validar_remocoes
 from tests.test_nuvem_sincronizar import Base as _BaseNuvem, FIXTURES, G, SHA_900002
 
@@ -328,6 +328,13 @@ class TestPropagacao(_BaseNuvem):
     def test_exportacoes_historicas_novas_somas_e_exclusao_da_versao_antiga(self):
         pasta = self.cache / "exportacoes"
         primeira = self.sincronizar(exportar=pasta).versao
+        # O passado pode usar o formato anterior (um único gzip sem número).
+        bucket = self.pasta / "r2" / BUCKET_EXPORTACOES_LOCAL
+        for destino in (pasta / primeira, bucket / primeira):
+            (destino / f"vetores-{primeira}-001.jsonl.gz").rename(destino / f"vetores-{primeira}.jsonl.gz")
+            arquivos = {p.name: p.read_bytes() for p in destino.iterdir() if p.name != "SHA256SUMS"}
+            (destino / "SHA256SUMS").write_bytes("".join(
+                f"{hashlib.sha256(b).hexdigest()}  {n}\n" for n, b in sorted(arquivos.items())).encode("ascii"))
         historico = _ler_dump((pasta / primeira / f"d1-{primeira}.sql").read_bytes())
         ids = {k[0] for k, row in historico["trechos"].items() if row[2] == "siscam:900002"}
         # Segunda exportação tem conteúdo alheio diferente: não substituir o passado pelo estado atual.
@@ -359,12 +366,63 @@ class TestPropagacao(_BaseNuvem):
             if antiga == primeira:
                 self.assertEqual(dump["trechos"], {k: row for k, row in historico["trechos"].items()
                                                   if k[0] not in ids})
-            vetores = [json.loads(l) for l in gzip.decompress((bucket / nova / f"vetores-{nova}.jsonl.gz").read_bytes()).splitlines()]
+            vetores = [json.loads(l) for l in gzip.decompress((bucket / nova / f"vetores-{nova}-001.jsonl.gz").read_bytes()).splitlines()]
             self.assertFalse(ids & {v["id"] for v in vetores})
             self.assertIn("ementa:doc:290006", {v["id"] for v in vetores})
             registro = (self.raiz / "docs/backend.md").read_text(encoding="utf-8")
             self.assertIn(f"`{antiga}` regravada como `{nova}`", registro)
         self.assertEqual(self.sincronizar().escritas, 0)
+
+    def test_expurgo_de_partes_remotas_confere_destino_e_apaga_todas_as_antigas(self):
+        pasta = self.cache / "exportacoes"
+        limite = 6_000
+        with mock.patch("coletor.nuvem.sincronizar.LIMITE_PARTE_EXPORTACAO", limite):
+            antiga = self.sincronizar(exportar=pasta).versao
+            bucket = self.pasta / "r2" / BUCKET_EXPORTACOES_LOCAL
+            sqls, vetores = _nomes_exportacao(antiga, _ler_somas_exportacao(
+                antiga, (bucket / antiga / "SHA256SUMS").read_bytes()))
+            self.assertGreater(len(sqls), 1)
+            self.assertGreater(len(vetores), 1)
+            historico = _ler_dump(b"".join((bucket / antiga / n).read_bytes() for n in sqls))
+            ids = {k[0] for k, row in historico["trechos"].items() if row[2] == "siscam:900002"}
+            self.remover("siscam:900002", SHA_900002)
+            self.processar_textos()
+            shutil.rmtree(pasta)  # reconstituição só do histórico remoto, incluindo as partes SQL
+            apagar = R2Local.apagar
+
+            def conferir_destino(r2, nome_bucket, chave):
+                if nome_bucket == BUCKET_EXPORTACOES_LOCAL and chave.startswith(antiga + "/"):
+                    recibo = json.loads((bucket / "remocoes" / f"{antiga}.json").read_bytes())
+                    nova = recibo["nova"]
+                    sums = (bucket / nova / "SHA256SUMS").read_bytes()
+                    self.assertEqual(hashlib.sha256(sums).hexdigest(), recibo["sha256sums"])
+                    for nome, soma in _ler_somas_exportacao(nova, sums).items():
+                        self.assertEqual(hashlib.sha256((bucket / nova / nome).read_bytes()).hexdigest(), soma)
+                return apagar(r2, nome_bucket, chave)
+
+            with mock.patch.object(R2Local, "apagar", conferir_destino):
+                rel = self.sincronizar()
+            self.assertEqual(rel.plano["exportacao_regravar"], 1)
+            self.assertEqual(rel.feitas["exportacao_apagar"], len(sqls) + len(vetores) + 1)
+            self.assertFalse(list((bucket / antiga).glob("*")))
+            self.assertFalse((pasta / antiga).exists())
+            nova = json.loads((bucket / "remocoes" / f"{antiga}.json").read_bytes())["nova"]
+            sums = _ler_somas_exportacao(nova, (bucket / nova / "SHA256SUMS").read_bytes())
+            sqls, vetores = _nomes_exportacao(nova, sums)
+            self.assertGreater(len(sqls), 1)
+            self.assertGreater(len(vetores), 1)
+            for nome in sums:
+                dados = (bucket / nova / nome).read_bytes()
+                self.assertLessEqual(len(dados), limite)
+                self.assertEqual(dados, (pasta / nova / nome).read_bytes())
+            dump = _ler_dump(b"".join((bucket / nova / n).read_bytes() for n in sqls))
+            self.assertNotIn(("siscam:900002",), dump["arquivos"])
+            self.assertEqual(dump["trechos"], {k: row for k, row in historico["trechos"].items() if k[0] not in ids})
+            lista = [json.loads(l) for n in vetores
+                     for l in gzip.decompress((bucket / nova / n).read_bytes()).splitlines()]
+            self.assertFalse(ids & {v["id"] for v in lista})
+            self.assertEqual([v["id"] for v in lista], sorted(v["id"] for v in lista))
+            self.assertEqual(self.sincronizar().escritas, 0)
 
     def test_falha_de_publicacao_preserva_versao_antiga_e_retomada_apaga(self):
         antiga = self.sincronizar(exportar=self.cache / "exportacoes").versao

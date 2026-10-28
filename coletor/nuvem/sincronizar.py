@@ -225,6 +225,91 @@ def gzip_deterministico(dados: bytes) -> bytes:
     return saida.getvalue()
 
 
+# Margem sobre LIMITE_ENVIO_R2_REST, inclusive para exportações via S3.
+LIMITE_PARTE_EXPORTACAO = 90_000_000
+
+
+def _partes_exportacao(linhas: Iterable[bytes], *, comprimir: bool = False) -> list[bytes]:
+    """Partes em fronteiras de linha; confere o tamanho dos bytes efetivamente enviados.
+
+    Limitar também a entrada evita comprimir toda a exportação de uma vez. Se o
+    gzip crescer, divide o bloco novamente; uma linha indivisível não cabe e falha
+    antes de publicar qualquer objeto.
+    """
+    partes = []
+
+    def fechar(bloco: list[bytes]) -> None:
+        dados = b"".join(bloco)
+        if comprimir:
+            dados = gzip_deterministico(dados)
+        if len(dados) <= LIMITE_PARTE_EXPORTACAO:
+            partes.append(dados)
+        elif len(bloco) > 1:
+            meio = len(bloco) // 2
+            fechar(bloco[:meio])
+            fechar(bloco[meio:])
+        else:
+            raise ErroNuvem("exportação: linha excede o limite de uma parte")
+
+    bloco, tamanho = [], 0
+    for linha in linhas:
+        if bloco and tamanho + len(linha) > LIMITE_PARTE_EXPORTACAO:
+            fechar(bloco)
+            bloco, tamanho = [], 0
+        bloco.append(linha)
+        tamanho += len(linha)
+    if bloco or not partes:
+        fechar(bloco)
+    return partes
+
+
+def _somas_exportacao(arquivos: dict[str, bytes]) -> bytes:
+    return "".join(f"{sha256(dados)}  {nome}\n" for nome, dados in sorted(arquivos.items())).encode("ascii")
+
+
+def _nomes_exportacao(versao: str, nomes: Iterable[str]) -> tuple[list[str], list[str]]:
+    """Valida nomes locais ao prefixo, sem misturar arquivo único e partes, nem lacunas."""
+    nomes = set(nomes)
+    grupos = []
+    for prefixo, sufixo in (("d1", ".sql"), ("vetores", ".jsonl.gz")):
+        unico = f"{prefixo}-{versao}{sufixo}"
+        padrao = re.compile(rf"{prefixo}-{versao}-([0-9]{{3,}}){re.escape(sufixo)}")
+        partes = sorted((n for n in nomes if padrao.fullmatch(n)),
+                        key=lambda n: int(padrao.fullmatch(n)[1]))
+        if unico in nomes and not partes:
+            grupos.append([unico])
+        elif (partes and unico not in nomes
+              and partes == [f"{prefixo}-{versao}-{i:03d}{sufixo}" for i in range(1, len(partes) + 1)]):
+            grupos.append(partes)
+        else:
+            raise ErroNuvem(f"exportação {versao}: partes incompletas ou nomes inválidos")
+    if nomes != set(grupos[0] + grupos[1]):
+        raise ErroNuvem(f"exportação {versao}: nomes inválidos")
+    return grupos[0], grupos[1]
+
+
+def _ler_somas_exportacao(versao: str, dados: bytes) -> dict[str, str]:
+    try:
+        pares = [linha.split("  ") for linha in dados.decode("ascii").splitlines()]
+        if (not pares or any(len(p) != 2 or not re.fullmatch(r"[0-9a-f]{64}", p[0]) for p in pares)
+                or len({p[1] for p in pares}) != len(pares)):
+            raise ValueError
+        _nomes_exportacao(versao, (p[1] for p in pares))
+    except (ValueError, UnicodeError, ErroNuvem):
+        raise ErroNuvem(f"exportação {versao}: SHA256SUMS inválido") from None
+    return {nome: soma for soma, nome in pares}
+
+
+def _montar_partes_exportacao(versao: str, dump: Iterable[bytes], vetores: Iterable[bytes]) -> dict[str, bytes]:
+    partes_dump = _partes_exportacao(dump)
+    arquivos = {(f"d1-{versao}.sql" if len(partes_dump) == 1 else f"d1-{versao}-{i:03d}.sql"): dados
+                for i, dados in enumerate(partes_dump, 1)}
+    arquivos.update({f"vetores-{versao}-{i:03d}.jsonl.gz": dados
+                     for i, dados in enumerate(_partes_exportacao(vetores, comprimir=True), 1)})
+    arquivos["SHA256SUMS"] = _somas_exportacao(arquivos)
+    return arquivos
+
+
 def _valores_vetores(ambiente: Ambiente, fonte: Fonte, ids: Sequence[str]) -> dict[str, list[float]]:
     valores: dict[str, list[float]] = {}
     faltam = []
@@ -244,16 +329,12 @@ def _valores_vetores(ambiente: Ambiente, fonte: Fonte, ids: Sequence[str]) -> di
 
 
 def montar_exportacao(fonte: Fonte, ambiente: Ambiente, versao: str) -> dict[str, bytes]:
-    """`d1-<versao>.sql`, `vetores-<versao>.jsonl.gz` e `SHA256SUMS` (formato do sha256sum)."""
-    dump = "".join(linhas_dump(fonte)).encode("utf-8")
+    """Dump e vetores em partes limitadas, com `SHA256SUMS` no formato do sha256sum."""
     ids = sorted(fonte.vetores)
     valores = _valores_vetores(ambiente, fonte, ids)
-    jsonl = "".join(json.dumps({"id": i, "metadata": fonte.vetores[i][1], "values": empacotar(valores[i])},
-                               ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n" for i in ids)
-    arquivos = {f"d1-{versao}.sql": dump, f"vetores-{versao}.jsonl.gz": gzip_deterministico(jsonl.encode("utf-8"))}
-    arquivos["SHA256SUMS"] = "".join(f"{sha256(dados)}  {nome}\n" for nome, dados in sorted(arquivos.items())
-                                     ).encode("ascii")
-    return arquivos
+    jsonl = ((json.dumps({"id": i, "metadata": fonte.vetores[i][1], "values": empacotar(valores[i])},
+                        ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n").encode("utf-8") for i in ids)
+    return _montar_partes_exportacao(versao, (l.encode("utf-8") for l in linhas_dump(fonte)), jsonl)
 
 
 TIPOS_EXPORTACAO = {".sql": "application/sql; charset=utf-8", ".gz": "application/gzip"}
@@ -333,9 +414,14 @@ def _exportacoes_pendentes(fonte: Fonte, atual: dict, pasta: Path, reconstruir: 
     novas = fonte.linhas["remocoes"].keys() - atual["remocoes"].keys()
     if novas and (atual["arquivos"] or atual["estado_indice"] is not None):
         return True
-    for sql in sorted(pasta.glob("*/d1-*.sql")):
-        if re.fullmatch(r"[0-9a-f]{16}", sql.parent.name):
-            if _arquivos_removidos(fonte, _ler_dump(sql.read_bytes())["arquivos"]):
+    for destino in sorted(pasta.iterdir()) if pasta.is_dir() else []:
+        if destino.is_dir() and re.fullmatch(r"[0-9a-f]{16}", destino.name):
+            sums = destino / "SHA256SUMS"
+            nomes = (_ler_somas_exportacao(destino.name, sums.read_bytes()) if sums.is_file()
+                     else [p.name for p in destino.iterdir() if p.is_file()])
+            sqls, _ = _nomes_exportacao(destino.name, nomes)
+            dump = b"".join((destino / nome).read_bytes() for nome in sqls)
+            if _arquivos_removidos(fonte, _ler_dump(dump)["arquivos"]):
                 return True
     return False
 
@@ -361,8 +447,8 @@ def _filtrar_exportacao(fonte: Fonte, antiga: str, sql: bytes, vetores: bytes
                     for v in sorted(lista, key=lambda v: v["id"]) if v["id"] not in ids)
     gz = gzip_deterministico(jsonl.encode("utf-8"))
     nova = sha256(b"radar-expurgo/1\n" + antiga.encode("ascii") + b"\n" + dump + gz)[:16]
-    arquivos = {f"d1-{nova}.sql": dump, f"vetores-{nova}.jsonl.gz": gz}
-    arquivos["SHA256SUMS"] = "".join(f"{sha256(dados)}  {nome}\n" for nome, dados in sorted(arquivos.items())).encode("ascii")
+    arquivos = _montar_partes_exportacao(nova, (l.encode("utf-8") for l in linhas_dump(replace(fonte, linhas=linhas))),
+                                       (l.encode("utf-8") for l in jsonl.splitlines(keepends=True)))
     return nova, arquivos
 
 
@@ -403,21 +489,34 @@ def _expurgar_exportacoes(fonte: Fonte, ambiente: Ambiente, raiz: Path, pasta: P
     # Primeiro publica todos os destinos. Só depois resolve as cadeias e apaga:
     # a ordem lexicográfica das versões não pode decidir qual recibo é válido.
     for antiga in sorted(versoes - set(recibos)):
-        nomes = [f"d1-{antiga}.sql", f"vetores-{antiga}.jsonl.gz", "SHA256SUMS"]
-        arquivos = {}
-        for nome in nomes:
+        def obter(nome: str) -> bytes | None:
             dados = r2.obter(bucket, f"{antiga}/{nome}") if r2 is not None else None
             local = pasta / antiga / nome
             if dados is None and local.is_file():
                 dados = local.read_bytes()
+            return dados
+
+        sums = obter("SHA256SUMS")
+        try:
+            nomes = list(_ler_somas_exportacao(antiga, sums)) if sums is not None else None
+        except ErroNuvem:
+            nomes = None  # preserva o aviso para versão não afetada com somas divergentes
+        if nomes is None:
+            nomes = {c.split("/", 1)[1] for c in objetos if c.startswith(f"{antiga}/")}
+            if (pasta / antiga).is_dir():
+                nomes.update(p.name for p in (pasta / antiga).iterdir() if p.is_file())
+            nomes.discard("SHA256SUMS")
+        sqls, vetores = _nomes_exportacao(antiga, nomes)
+        arquivos = {}
+        for nome in sqls + vetores:
+            dados = obter(nome)
             if dados is None:
-                if nome == "SHA256SUMS":
-                    continue  # publicação interrompida: os dados já podem estar completos
                 raise ErroNuvem(f"exportação {antiga}: incompleta; expurgo não concluído")
             arquivos[nome] = dados
-        filtrada = _filtrar_exportacao(fonte, antiga, arquivos[nomes[0]], arquivos[nomes[1]])
-        esperado = "".join(f"{sha256(arquivos[nome])}  {nome}\n" for nome in sorted(nomes[:2])).encode("ascii")
-        if "SHA256SUMS" in arquivos and arquivos["SHA256SUMS"] != esperado:
+        filtrada = _filtrar_exportacao(fonte, antiga, b"".join(arquivos[n] for n in sqls),
+                                      b"".join(arquivos[n] for n in vetores))
+        esperado = _somas_exportacao(arquivos)
+        if sums is not None and sums != esperado:
             if filtrada is not None:
                 raise ErroNuvem(f"exportação {antiga}: SHA256SUMS divergente; expurgo não concluído")
             rel.avisos.append(f"exportação {antiga}: SHA256SUMS difere dos objetos; versão não afetada preservada")
@@ -454,15 +553,7 @@ def _expurgar_exportacoes(fonte: Fonte, ambiente: Ambiente, raiz: Path, pasta: P
             sums = r2.obter(bucket, f"{nova}/SHA256SUMS")
             if sums is None or sha256(sums) != recibo["sha256sums"]:
                 raise ErroNuvem(f"exportação {nova}: destino do expurgo não confirmado")
-            try:
-                pares = [linha.split("  ") for linha in sums.decode("ascii").splitlines()]
-                nomes = {f"d1-{nova}.sql", f"vetores-{nova}.jsonl.gz"}
-                if (len(pares) != 2 or any(len(p) != 2 or not re.fullmatch(r"[0-9a-f]{64}", p[0]) for p in pares)
-                        or {p[1] for p in pares} != nomes):
-                    raise ValueError
-            except (ValueError, UnicodeError):
-                raise ErroNuvem("recibo de expurgo: SHA256SUMS inválido") from None
-            for soma, nome in pares:
+            for nome, soma in _ler_somas_exportacao(nova, sums).items():
                 dados = r2.obter(bucket, f"{nova}/{nome}")
                 if dados is None or sha256(dados) != soma:
                     raise ErroNuvem(f"exportação {nova}: destino do expurgo incompleto")
@@ -476,10 +567,11 @@ def _expurgar_exportacoes(fonte: Fonte, ambiente: Ambiente, raiz: Path, pasta: P
 
 
 def _exportar(fonte: Fonte, ambiente: Ambiente, versao: str, pasta: Path, rel: Relatorio, simular: bool) -> None:
-    rel.plano["exportacao_arquivos"] += 3
     if simular:
+        rel.plano["exportacao_arquivos"] += 3  # mínimo; depende dos valores ainda não buscados
         return
     arquivos = montar_exportacao(fonte, ambiente, versao)
+    rel.plano["exportacao_arquivos"] += len(arquivos)
     destino = Path(pasta) / versao
     for nome, dados in arquivos.items():
         local = destino / nome
@@ -488,9 +580,13 @@ def _exportar(fonte: Fonte, ambiente: Ambiente, versao: str, pasta: Path, rel: R
     if ambiente.r2 is None:
         _publicar_exportacao(arquivos, ambiente, versao, Path(pasta), rel)
         return
-    rel.exportados.extend(f"{versao}/{nome}" for nome in sorted(arquivos, key=lambda n: (n == "SHA256SUMS", n)))
     no_bucket = ambiente.r2.obter(ambiente.bucket_exportacoes, f"{versao}/SHA256SUMS")
     if no_bucket is not None:  # a versão já foi publicada inteira: nada é reenviado
+        try:
+            nomes = list(_ler_somas_exportacao(versao, no_bucket)) + ["SHA256SUMS"]
+        except ErroNuvem:
+            nomes = list(arquivos)
+        rel.exportados.extend(f"{versao}/{nome}" for nome in sorted(nomes, key=lambda n: (n == "SHA256SUMS", n)))
         if no_bucket != arquivos["SHA256SUMS"]:
             rel.avisos.append(f"exportação {versao}: o SHA256SUMS do bucket difere do gerado agora; "
                               "nada foi reenviado (confira o determinismo da exportação)")

@@ -213,12 +213,24 @@ python -m coletor.nuvem --ambiente staging --etapas d1,vetores
 | `--sem-r2` | Não usa o R2: pula a etapa `r2` e o envio da exportação (os arquivos ficam só na pasta local); não grava `estado_indice`. |
 | `--ambiente local\|staging\|production` | `local`: SQLite (`--sqlite`, padrão `<cache>\local.sqlite`), R2 em `<pasta do SQLite>\r2\<bucket>\…`, Vectorize em `<pasta do SQLite>\vetores.jsonl` e embeddings falsos determinísticos (SHAKE-256, 1.024 dimensões), sem rede. `staging`/`production`: nomes e ids de `worker\wrangler.jsonc`. |
 | `--simular` | Só leituras: imprime o plano (contagens por operação) sem gravar nada, nem o SQLite local. |
-| `--exportar DIR` | Grava em `DIR\<versao>\` `d1-<versao>.sql` (tabelas-base, sem `trechos_fts` nem `ementas_fts`), `vetores-<versao>.jsonl.gz` (um vetor por linha, `values` em float32 little-endian base64, gzip com mtime 0 e sem nome) e `SHA256SUMS`, e envia ao bucket de exportações em `<versao>/…` (o `SHA256SUMS` por último). Se `<versao>/SHA256SUMS` já está no bucket, a versão inteira é pulada; se o conteúdo dele difere do gerado agora, sai um aviso. Os valores que faltam no cache de embeddings vêm de `get_by_ids` em lotes de 100 (20 se o índice recusar), dentro do ritmo global de 4 requisições por segundo. |
+| `--exportar DIR` | Grava em `DIR\<versao>\` `d1-<versao>.sql` (ou partes `d1-<versao>-<NNN>.sql`), `vetores-<versao>-<NNN>.jsonl.gz` e `SHA256SUMS`, e envia ao bucket de exportações em `<versao>/…` (o `SHA256SUMS` por último). Se `<versao>/SHA256SUMS` já está no bucket, inclusive no formato antigo sem partes, a versão inteira é pulada; se o conteúdo dele difere do gerado agora, sai um aviso, sem sobrescrever. Os valores que faltam no cache de embeddings vêm de `get_by_ids` em lotes de 100 (20 se o índice recusar), dentro do ritmo global de 4 requisições por segundo. |
 | `--reconstruir` | Limpa as tabelas-base, o FTS e `estado_indice` e regrava tudo a partir do Git; reenvia todos os vetores (reaproveitando o cache de embeddings) e apaga do índice todo vetor listado (`GET …/vectorize/v2/indexes/<índice>/list`, com cursor; sem a rota, `wrangler vectorize list-vectors --json`) que o Git não tem. |
 | `--textos DIR` | Worktree de `dados-textos` (padrão: `RADAR_TEXTOS` ou `..\radar-vereadores-niteroi-textos`). |
 | `--cache DIR` | Cache local (padrão: `RADAR_CACHE`). Originais em `arquivos\<sha256>`; embeddings em `embeddings\<modelo>\<aa>\<sha256>.f32`. |
 | `--commit SHA` | Commit de `main` dos manifestos, gravado em `estado_indice.commit` (padrão: `GITHUB_SHA` ou `git rev-parse HEAD`). |
 | `--commit-dados-textos SHA` | Commit independente dos JSONL, gravado em `estado_indice.commit_dados_textos` (padrão: `git -C <textos> rev-parse HEAD` do worktree, quando disponível; não usa `GITHUB_SHA`). |
+
+**Partes das exportações.** Cada objeto de dados tem até **90.000.000 bytes enviados**, abaixo do teto
+da API REST do R2, sem exigir chaves S3 ou multipart. `NNN` começa em `001` em cada conjunto (mínimo de
+três dígitos). As partes preservam linhas inteiras e ordem determinística; o orçamento também limita a
+entrada antes da compressão. Os vetores têm um registro por linha em ordem de `id`, com `values` em
+float32 little-endian base64; cada parte tem gzip independente, `mtime=0` e nenhum nome no cabeçalho.
+O dump contém tabelas-base, sem `trechos_fts` nem `ementas_fts`. Confira **todos** os arquivos listados em
+`SHA256SUMS`; concatene as partes SQL na ordem numérica antes de importar e, para os vetores, descomprima
+cada parte e concatene na mesma ordem. Uma linha indivisível acima do limite causa falha antes do envio.
+O expurgo lê tanto partes quanto os arquivos únicos antigos, regrava em partes limitadas e só apaga
+todos os objetos da versão antiga depois de confirmar os hashes de todas as partes do destino.
+Uma publicação interrompida retoma sem reenviar objetos já presentes; o `SHA256SUMS` encerra a publicação.
 
 **Etapas, nesta ordem:**
 1. **Barreira de PII:** `mascara.varrer` (com `mascara.liberados`) em todo trecho, em toda ementa mascarada e em todo `motivo` de `config\remocoes.json` a enviar. Uma ocorrência forte aborta antes de qualquer escrita, listando origem, tipo e posição, nunca o valor.

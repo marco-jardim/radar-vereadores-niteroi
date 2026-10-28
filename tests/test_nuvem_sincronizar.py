@@ -21,10 +21,11 @@ from coletor.nuvem import __main__ as cli
 from coletor.nuvem import banco
 from coletor.nuvem.ambientes import BUCKET_ARQUIVOS_LOCAL, BUCKET_EXPORTACOES_LOCAL, ambiente_local
 from coletor.nuvem.fonte import ErroFonte, Fonte, Trecho, carregar_fonte, normalizar_busca, varrer_fonte
-from coletor.nuvem.local import MODELO_LOCAL, VetoresLocal, desempacotar
+from coletor.nuvem.local import MODELO_LOCAL, R2Local, VetoresLocal, desempacotar
 from coletor.nuvem.r2 import chave_r2
 from coletor.nuvem.rede import ErroNuvem
-from coletor.nuvem.sincronizar import ErroBarreira, sincronizar
+from coletor.nuvem.sincronizar import (ErroBarreira, _ler_dump, _ler_somas_exportacao, _nomes_exportacao,
+                                      _partes_exportacao, gzip_deterministico, sincronizar)
 from coletor.trechos import VERSAO_TRECHOS
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures" / "contratos"
@@ -658,14 +659,14 @@ class TestExportacaoEReconstrucao(Base):
         versao = rel.versao
         pasta = self.tmp / "exp1" / versao
         nomes = sorted(p.name for p in pasta.iterdir())
-        self.assertEqual(nomes, sorted(["SHA256SUMS", f"d1-{versao}.sql", f"vetores-{versao}.jsonl.gz"]))
+        self.assertEqual(nomes, sorted(["SHA256SUMS", f"d1-{versao}.sql", f"vetores-{versao}-001.jsonl.gz"]))
         somas = (pasta / "SHA256SUMS").read_text(encoding="ascii").splitlines()
         self.assertEqual(len(somas), 2)
         for linha in somas:
             sha, nome = linha.split("  ", 1)
             self.assertEqual(hashlib.sha256((pasta / nome).read_bytes()).hexdigest(), sha)
 
-        gz = (pasta / f"vetores-{versao}.jsonl.gz").read_bytes()
+        gz = (pasta / f"vetores-{versao}-001.jsonl.gz").read_bytes()
         self.assertEqual(gz[:2], b"\x1f\x8b")
         self.assertEqual(gz[4:8], b"\x00\x00\x00\x00")  # mtime = 0
         self.assertEqual(gz[3] & 0x08, 0)  # sem nome de arquivo
@@ -691,6 +692,109 @@ class TestExportacaoEReconstrucao(Base):
         self.assertEqual(outra.escritas, 0)  # If-None-Match: os objetos já existem
         for nome in nomes:
             self.assertEqual((self.tmp / "exp2" / versao / nome).read_bytes(), (pasta / nome).read_bytes())
+
+    def test_exportacao_em_partes_limitadas_deterministicas_e_sem_reenvio(self):
+        limite = 6_000
+        with mock.patch("coletor.nuvem.sincronizar.LIMITE_PARTE_EXPORTACAO", limite):
+            primeira = self.sincronizar(exportar=self.tmp / "exp1")
+            segunda = self.sincronizar(exportar=self.tmp / "exp2")
+        versao = primeira.versao
+        pasta = self.tmp / "exp1" / versao
+        arquivos = {p.name: p.read_bytes() for p in pasta.iterdir()}
+        somas = _ler_somas_exportacao(versao, arquivos["SHA256SUMS"])
+        sqls, vetores = _nomes_exportacao(versao, somas)
+        self.assertGreater(len(sqls), 1)
+        self.assertGreater(len(vetores), 1)
+        self.assertEqual(vetores, [f"vetores-{versao}-{i:03d}.jsonl.gz" for i in range(1, len(vetores) + 1)])
+        self.assertEqual(sqls, [f"d1-{versao}-{i:03d}.sql" for i in range(1, len(sqls) + 1)])
+        self.assertEqual(set(arquivos), set(somas) | {"SHA256SUMS"})
+        self.assertEqual(primeira.feitas["exportacao_enviar"], len(arquivos))
+        self.assertEqual(primeira.plano["exportacao_arquivos"], len(arquivos))
+        self.assertEqual(segunda.versao, versao)
+        self.assertEqual(segunda.escritas, 0)
+        bucket = self.pasta / "r2" / BUCKET_EXPORTACOES_LOCAL / versao
+        for nome, soma in somas.items():
+            self.assertLessEqual(len(arquivos[nome]), limite)
+            self.assertEqual(hashlib.sha256(arquivos[nome]).hexdigest(), soma)
+        for nome, dados in arquivos.items():
+            self.assertEqual((self.tmp / "exp2" / versao / nome).read_bytes(), dados)
+            self.assertEqual((bucket / nome).read_bytes(), dados)
+        linhas = []
+        for nome in vetores:
+            gz = arquivos[nome]
+            self.assertEqual(gz[4:8], b"\0" * 4)
+            self.assertEqual(gz[3] & 0x08, 0)
+            texto = gzip.decompress(gz)
+            self.assertTrue(texto.endswith(b"\n"))
+            linhas.extend(json.loads(l) for l in texto.splitlines())
+        self.assertEqual([v["id"] for v in linhas], sorted(self.vetores()))
+        dump = _ler_dump(b"".join(arquivos[n] for n in sqls))
+        self.assertEqual(len(dump["documentos"]), 9)
+        self.assertEqual(len(dump["trechos"]), 6)
+
+    def test_exportacao_antiga_de_arquivo_unico_nao_reenvia(self):
+        rel = self.sincronizar(exportar=self.tmp / "exp1")
+        versao = rel.versao
+        bucket = self.pasta / "r2" / BUCKET_EXPORTACOES_LOCAL / versao
+        (bucket / f"vetores-{versao}-001.jsonl.gz").rename(bucket / f"vetores-{versao}.jsonl.gz")
+        dados = {p.name: p.read_bytes() for p in bucket.iterdir() if p.name != "SHA256SUMS"}
+        somas = "".join(f"{hashlib.sha256(b).hexdigest()}  {n}\n" for n, b in sorted(dados.items())).encode("ascii")
+        (bucket / "SHA256SUMS").write_bytes(somas)
+        antes = {p.name: p.read_bytes() for p in bucket.iterdir()}
+        outra = self.sincronizar(exportar=self.tmp / "exp2")
+        self.assertEqual(outra.feitas["exportacao_enviar"], 0)
+        self.assertEqual({p.name: p.read_bytes() for p in bucket.iterdir()}, antes)
+
+    def test_publicacao_em_partes_interrompida_nao_reenvia_partes_confirmadas(self):
+        enviar = R2Local.enviar
+
+        def interromper(r2, bucket, chave, *args, **kw):
+            if bucket == BUCKET_EXPORTACOES_LOCAL and chave.endswith("-002.jsonl.gz"):
+                raise ErroNuvem("interrupção sintética")
+            return enviar(r2, bucket, chave, *args, **kw)
+
+        with mock.patch("coletor.nuvem.sincronizar.LIMITE_PARTE_EXPORTACAO", 6_000):
+            with mock.patch.object(R2Local, "enviar", interromper), self.assertRaises(ErroNuvem):
+                self.sincronizar(exportar=self.tmp / "exp")
+            bucket = self.pasta / "r2" / BUCKET_EXPORTACOES_LOCAL
+            presentes = {p.relative_to(bucket).as_posix(): p.read_bytes() for p in bucket.rglob("*") if p.is_file()}
+            self.assertTrue(presentes)
+            self.assertFalse(any(n.endswith("SHA256SUMS") for n in presentes))
+
+            def conferir(r2, nome_bucket, chave, *args, **kw):
+                if nome_bucket == BUCKET_EXPORTACOES_LOCAL:
+                    self.assertNotIn(chave, presentes)
+                return enviar(r2, nome_bucket, chave, *args, **kw)
+
+            with mock.patch.object(R2Local, "enviar", conferir):
+                rel = self.sincronizar(exportar=self.tmp / "exp")
+            for nome, dados in presentes.items():
+                self.assertEqual((bucket / nome).read_bytes(), dados)
+            self.assertTrue((bucket / rel.versao / "SHA256SUMS").is_file())
+            self.assertEqual(self.sincronizar(exportar=self.tmp / "exp").escritas, 0)
+
+    def test_limite_considera_cabecalho_e_rodape_gzip(self):
+        linhas = [hashlib.sha256(str(i).encode()).digest() + b"\n" for i in range(3)]
+        limite = sum(map(len, linhas))
+        self.assertGreater(len(gzip_deterministico(b"".join(linhas))), limite)
+        with mock.patch("coletor.nuvem.sincronizar.LIMITE_PARTE_EXPORTACAO", limite):
+            partes = _partes_exportacao(linhas, comprimir=True)
+            self.assertGreater(len(partes), 1)
+            self.assertTrue(all(len(p) <= limite for p in partes))
+            self.assertEqual(b"".join(gzip.decompress(p) for p in partes), b"".join(linhas))
+        with mock.patch("coletor.nuvem.sincronizar.LIMITE_PARTE_EXPORTACAO", 10):
+            with self.assertRaisesRegex(ErroNuvem, "linha excede"):
+                _partes_exportacao(linhas[:1], comprimir=True)
+
+    def test_somas_rejeitam_lacunas_mistura_e_caminhos_externos(self):
+        versao = "a" * 16
+        for nomes in ([f"d1-{versao}.sql", f"vetores-{versao}-002.jsonl.gz"],
+                      [f"d1-{versao}.sql", f"vetores-{versao}.jsonl.gz", f"vetores-{versao}-001.jsonl.gz"],
+                      [f"d1-{versao}.sql", "../vetores.jsonl.gz"],
+                      [f"d1-{versao}.sql", f"vetores-{versao}.jsonl.gz", f"vetores-{versao}.jsonl.gz"]):
+            with self.subTest(nomes=nomes), self.assertRaisesRegex(ErroNuvem, "SHA256SUMS inválido"):
+                sums = "".join(f"{'0' * 64}  {n}\n" for n in nomes).encode("ascii")
+                _ler_somas_exportacao(versao, sums)
 
     def test_exportacao_importavel(self):
         rel = self.sincronizar(exportar=self.tmp / "exp")

@@ -323,8 +323,17 @@ com as linhas não marcadas. `estado_indice.total` e `sha256_conjunto` também c
 - Originais no bucket privado `radar-niteroi-arquivos`, na chave `r2_chave`; servidos pelo Worker em
   `GET /api/original/:sha256` com `Content-Disposition: attachment`, `X-Robots-Tag: noindex`,
   `X-Content-Type-Options: nosniff` e `Content-Security-Policy: sandbox`, depois de consultar `remocoes`.
-- Exportações em `radar-niteroi-exportacoes/<versao>/`: dump das tabelas-base, `vetores-<versao>.jsonl.gz` e
-  `SHA256SUMS`.
+- Exportações em `radar-niteroi-exportacoes/<versao>/`: dump das tabelas-base `d1-<versao>.sql` (ou
+  `d1-<versao>-<NNN>.sql`, se precisar de partes), `vetores-<versao>-<NNN>.jsonl.gz` e `SHA256SUMS`.
+  A numeração de cada conjunto começa em `001`, com no mínimo três dígitos, sem lacunas. Cada parte tem
+  no máximo 90.000.000 bytes **publicados** (`LIMITE_PARTE_EXPORTACAO`), abaixo do limite da API REST do R2,
+  inclusive quando o envio usa S3. A divisão determinística preserva linhas inteiras e a ordem de chave
+  primária no SQL e de `id` nos vetores; o orçamento também limita a entrada antes de comprimir.
+  Cada gzip é independente, com `mtime=0` e sem nome no cabeçalho. `SHA256SUMS` lista todas as partes,
+  ordenadas pelo nome, e é publicado por último. Para reconstruir, concatene as partes SQL na ordem numérica
+  antes de importar; descomprima e concatene as partes dos vetores na mesma ordem.
+  Uma linha que não caiba sozinha interrompe a exportação antes do envio. O expurgo e a detecção de versão
+  já publicada continuam aceitando os antigos `d1-<versao>.sql` e `vetores-<versao>.jsonl.gz`, sem partes.
 
 ## 9. Determinismo
 
