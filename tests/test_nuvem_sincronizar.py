@@ -1,0 +1,438 @@
+"""Sincronização no ambiente local (SQLite, R2 e Vectorize em pastas) a partir das fixtures do contrato."""
+from __future__ import annotations
+
+import contextlib
+import gzip
+import hashlib
+import importlib.util
+import io
+import json
+import shutil
+import sqlite3
+import tempfile
+import unittest
+from datetime import datetime, timezone
+from pathlib import Path
+
+from coletor import remocoes
+from coletor.arquivos import salvar_mapa
+from coletor.nuvem import __main__ as cli
+from coletor.nuvem.ambientes import BUCKET_ARQUIVOS_LOCAL, BUCKET_EXPORTACOES_LOCAL, ambiente_local
+from coletor.nuvem.fonte import normalizar_busca
+from coletor.nuvem.local import MODELO_LOCAL, desempacotar
+from coletor.nuvem.r2 import chave_r2
+from coletor.nuvem.sincronizar import ErroBarreira, sincronizar
+from coletor.trechos import VERSAO_TRECHOS
+
+FIXTURES = Path(__file__).resolve().parent / "fixtures" / "contratos"
+AGORA = datetime(2026, 10, 27, 15, 0, 0, tzinfo=timezone.utc)
+COMMIT = "c0ffee0000000000000000000000000000000000"
+
+
+def _gerador():
+    spec = importlib.util.spec_from_file_location("gerar_fixtures_contratos_nuvem", FIXTURES / "gerar_fixtures.py")
+    modulo = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(modulo)
+    return modulo
+
+
+G = _gerador()
+SHA_900002 = hashlib.sha256(G.ORIGINAIS["siscam:900002"]).hexdigest()
+SHA_900005 = hashlib.sha256(G.ORIGINAIS["siscam:900005"]).hexdigest()
+TEXTO_LICENCA = ("Requer informações sobre o pedido de licença ambiental para a reforma da praça central do "
+                 "bairro, com a análise técnica e o parecer da secretaria municipal competente.")
+
+
+class Base(unittest.TestCase):
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp(prefix="radar-nuvem-"))
+        self.addCleanup(shutil.rmtree, self.tmp, ignore_errors=True)
+        self.raiz = self.tmp / "raiz"
+        shutil.copytree(FIXTURES, self.raiz, ignore=shutil.ignore_patterns("*.py", "__pycache__"))
+        self.textos = self.raiz / "dados-textos"
+        self.cache = self.tmp / "cache"
+        (self.cache / "arquivos").mkdir(parents=True)
+        for dados in G.ORIGINAIS.values():
+            if dados:
+                (self.cache / "arquivos" / hashlib.sha256(dados).hexdigest()).write_bytes(dados)
+        self.pasta = self.tmp / "nuvem"
+        self.sqlite = self.pasta / "local.sqlite"
+        self.remocoes_originais = (self.raiz / "config" / "remocoes.json").read_bytes()
+
+    def sincronizar(self, ajustar=None, liberados=None, **kw):
+        remocoes.limpar_cache()
+        ambiente = ambiente_local(self.sqlite, somente_leitura=kw.get("simular", False))
+        if ajustar:
+            ajustar(ambiente)
+        try:
+            return sincronizar(self.raiz, self.textos, ambiente, cache=self.cache, commit=COMMIT,
+                               liberados=G.LIBERADOS if liberados is None else liberados,
+                               agora=lambda: AGORA, **kw)
+        finally:
+            ambiente.banco.fechar()
+
+    def consultar(self, sql, params=()):
+        con = sqlite3.connect(self.sqlite)
+        try:
+            return con.execute(sql, params).fetchall()
+        finally:
+            con.close()
+
+    def contar(self, tabela):
+        return self.consultar(f"SELECT count(*) FROM {tabela}")[0][0]
+
+    def vetores(self) -> dict[str, dict]:
+        caminho = self.pasta / "vetores.jsonl"
+        if not caminho.exists():
+            return {}
+        return {o["id"]: o for o in map(json.loads, caminho.read_text(encoding="utf-8").splitlines())}
+
+    def objeto_r2(self, sha) -> Path:
+        return self.pasta / "r2" / BUCKET_ARQUIVOS_LOCAL / Path(*chave_r2(sha).split("/"))
+
+    def remover(self, chave, sha):
+        dados = json.loads(self.remocoes_originais)
+        dados["remocoes"].append({"chave": chave, "sha256": sha, "motivo": "Teste sintético.",
+                                  "fonte": "https://example.org/remocao", "data": "2026-01-16"})
+        (self.raiz / "config" / "remocoes.json").write_text(json.dumps(dados, ensure_ascii=False, indent=1) + "\n",
+                                                            encoding="utf-8", newline="\n")
+
+    def restaurar_remocoes(self):
+        (self.raiz / "config" / "remocoes.json").write_bytes(self.remocoes_originais)
+
+    def reescrever(self, chave: str, texto: str) -> str:
+        """Troca o texto de um arquivo (um trecho só), atualizando .txt, trechos e manifesto como coletor.textos."""
+        caminho_man = self.raiz / "data" / "textos" / "manifesto-2024.json"
+        manifesto = json.loads(caminho_man.read_text(encoding="utf-8"))
+        e = manifesto[chave]
+        doc = e["documento"]
+        conteudo = (texto + "\n").encode("utf-8")
+        destino = self.textos / "textos" / e["tipo"] / "2024" / doc.split(":", 1)[1] / f"{chave.replace(':', '-', 1)}.txt"
+        destino.write_bytes(conteudo)
+        sha = hashlib.sha256(texto.encode("utf-8")).hexdigest()
+        ident = hashlib.sha1(f"{doc}|{chave}|0|{sha}".encode()).hexdigest()[:16]
+        u16 = len(texto.encode("utf-16-le")) // 2
+        trecho = {"arquivo": chave, "documento": doc, "fim": len(texto), "fim_utf16": u16, "id": ident, "inicio": 0,
+                  "inicio_utf16": 0, "posicao": 0, "sha256": sha, "vetorizavel": True}
+        arq = self.textos / "trechos" / e["tipo"] / "2024.jsonl"
+        lista = [json.loads(linha) for linha in arq.read_text(encoding="utf-8").splitlines() if linha]
+        lista = sorted([t for t in lista if t["arquivo"] != chave] + [trecho],
+                       key=lambda t: (t["documento"], t["arquivo"], t["posicao"]))
+        arq.write_text("".join(json.dumps(t, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n"
+                               for t in lista), encoding="utf-8", newline="\n")
+        e.update(sha256_texto=hashlib.sha256(conteudo).hexdigest(), chars=len(texto), trechos=1,
+                 trechos_vetorizaveis=1)
+        salvar_mapa(caminho_man, manifesto)
+        return ident
+
+
+class TestSincronizacaoCompleta(Base):
+    def test_carga_completa(self):
+        rel = self.sincronizar()
+        self.assertEqual(rel.falhas, [])
+        self.assertTrue(rel.estado_gravado)
+        self.assertEqual(self.contar("documentos"), 9)
+        self.assertEqual(self.contar("arquivos"), 7)  # sem removidos (900004, 900007) e duplicata (900008)
+        self.assertEqual(self.contar("arquivo_documento"), 9)
+        self.assertEqual(self.contar("trechos"), 6)
+        self.assertEqual(self.contar("trechos_fts"), 6)
+        self.assertEqual(self.contar("trechos_indexados"), 7)
+        self.assertEqual(self.contar("remocoes"), 1)
+        self.assertEqual(self.consultar("SELECT documento, slug, papel FROM autoria"),
+                         [("doc:266596", "fulano-sintetico-de-tal", "autor")])
+        self.assertEqual(self.consultar("SELECT tipo, numero, ano, pl FROM documentos WHERE id = 'doc:266596'"),
+                         [("substitutivo", "1", 2024, "doc:127858")])
+        self.assertEqual(self.consultar("SELECT sha256, status, r2_chave FROM arquivos "
+                                        "WHERE id = 'sessao:0000000a-0000-4000-8000-0000000000b2'"),
+                         [(None, "pendente_download", None)])
+        self.assertEqual(sorted(r[0] for r in self.consultar(
+            "SELECT documento FROM arquivo_documento WHERE arquivo = 'siscam:900001'")), ["doc:127858", "doc:266596"])
+        self.assertEqual(self.consultar("SELECT ocr, confianca FROM arquivos WHERE id = 'siscam:900002'"),
+                         [(1, 87.4)])
+
+        # texto do trecho = conteudo[:-1][inicio:fim], conferido pelo sha256
+        for texto, sha in self.consultar("SELECT texto, sha256 FROM trechos"):
+            self.assertEqual(hashlib.sha256(texto.encode()).hexdigest(), sha)
+
+        # originais no R2 (simulado), na chave sha256/<aa>/<bb>/<sha>
+        manifesto = json.loads((self.raiz / "data" / "textos" / "manifesto-2024.json").read_text(encoding="utf-8"))
+        com_r2 = [e for e in manifesto.values() if e["r2_chave"]]
+        self.assertEqual(len(com_r2), 6)
+        for e in com_r2:
+            self.assertEqual(self.objeto_r2(e["sha256_original"]).read_bytes(),
+                             (self.cache / "arquivos" / e["sha256_original"]).read_bytes())
+        self.assertFalse(self.objeto_r2("fa0b85dd45022b83a97322b122308c1f80fe68f9a4a0fc72b483f086c306d8ab").exists())
+
+        vetores = self.vetores()
+        self.assertEqual(len(vetores), 7)
+        self.assertEqual(vetores["ementa:doc:290006"]["metadata"],
+                         {"ano": 2024, "documento": "doc:290006", "tipo": "indicacao"})
+        self.assertEqual(vetores["b30b6c30b03eee82"]["metadata"],
+                         {"ano": 2024, "documento": "doc:127858", "tipo": "pl"})
+        self.assertEqual(len(desempacotar(vetores["b30b6c30b03eee82"]["values"])), 1024)
+
+        estado = self.consultar('SELECT id, versao, "commit", sha256_manifestos, total, sha256_conjunto, modelo, '
+                                'versao_trechos, data FROM estado_indice')
+        self.assertEqual(len(estado), 1)
+        _, versao, commit, sha_man, total, conjunto, modelo, vt, data = estado[0]
+        self.assertEqual((commit, total, modelo, vt, data),
+                         (COMMIT, 6, MODELO_LOCAL, VERSAO_TRECHOS, "2026-10-27T15:00:00Z"))
+        self.assertEqual(versao, rel.versao)
+        self.assertEqual(sha_man, hashlib.sha256(
+            (self.raiz / "data" / "textos" / "manifesto-2024.json").read_bytes()).hexdigest())
+        linhas = sorted(self.consultar("SELECT id, sha256 FROM trechos"))
+        self.assertEqual(conjunto, hashlib.sha256("".join(f"{i} {s}\n" for i, s in linhas).encode()).hexdigest())
+
+    def test_segunda_execucao_sem_escritas(self):
+        primeira = self.sincronizar()
+        self.assertGreater(primeira.escritas, 0)
+        vetores = (self.pasta / "vetores.jsonl").read_bytes()
+        segunda = self.sincronizar()
+        self.assertEqual(segunda.escritas, 0, segunda.texto())
+        self.assertEqual(segunda.falhas, [])
+        self.assertFalse(segunda.estado_gravado)
+        self.assertEqual((self.pasta / "vetores.jsonl").read_bytes(), vetores)
+        self.assertEqual(segunda.versao, primeira.versao)
+
+    def test_migracao_aplicada_uma_vez(self):
+        self.assertEqual(self.sincronizar().feitas["migracoes"], 1)
+        self.assertEqual(self.sincronizar().feitas["migracoes"], 0)
+        self.assertEqual(self.consultar("SELECT name FROM d1_migrations"), [("0001_inicial.sql",)])
+
+    def test_fts_sem_acento(self):
+        ident = self.reescrever("siscam:900003", TEXTO_LICENCA)
+        self.sincronizar()
+        self.assertEqual(normalizar_busca("LICENÇA Ambiental"), "licenca ambiental")
+        for consulta in ("licenca", normalizar_busca("Licença"), "licenca AND praca"):
+            achados = self.consultar("SELECT id FROM trechos_fts WHERE trechos_fts MATCH ?", (consulta,))
+            self.assertEqual(achados, [(ident,)], consulta)
+        juntos = self.consultar("SELECT t.texto FROM trechos_fts f JOIN trechos t ON t.id = f.id "
+                                "WHERE trechos_fts MATCH 'licenca'")
+        self.assertEqual(juntos, [(TEXTO_LICENCA,)])
+
+
+class TestDiferenca(Base):
+    def test_novos_alterados_e_removidos(self):
+        self.remover("siscam:900002", SHA_900002)
+        primeira = self.sincronizar()
+        self.assertEqual(primeira.falhas, [])
+        self.assertEqual(self.contar("trechos"), 5)
+        self.assertNotIn("f23d327591e03053", self.vetores())
+        self.assertFalse(self.objeto_r2(SHA_900002).exists())
+
+        self.restaurar_remocoes()  # 900002 volta: trecho novo
+        novo = self.reescrever("siscam:900003", TEXTO_LICENCA)  # 900003 muda: um trecho sai, outro entra
+        rel = self.sincronizar()
+        self.assertEqual(rel.falhas, [])
+        self.assertEqual(rel.plano["d1_trechos_gravar"], 2)
+        self.assertEqual(rel.plano["d1_trechos_apagar"], 1)
+        self.assertEqual(rel.plano["d1_trechos_fts_gravar"], 2)
+        self.assertEqual(rel.plano["d1_trechos_fts_apagar"], 1)
+        self.assertEqual(rel.plano["vetores_upsert"], 2)
+        self.assertEqual(rel.plano["vetores_apagar"], 1)
+        self.assertEqual(rel.feitas["embeddings"], 2)
+        self.assertEqual(rel.plano["d1_documentos_gravar"], 0)
+        self.assertEqual(rel.plano["r2_enviar"], 1)
+        self.assertEqual(rel.plano["d1_remocoes_apagar"], 1)
+        ids = {r[0] for r in self.consultar("SELECT id FROM trechos")}
+        self.assertIn(novo, ids)
+        self.assertIn("f23d327591e03053", ids)
+        self.assertNotIn("2e52e27349897577", ids)
+        self.assertEqual(self.contar("trechos_fts"), 6)
+        vetores = self.vetores()
+        self.assertIn(novo, vetores)
+        self.assertNotIn("2e52e27349897577", vetores)
+        self.assertEqual({r[0] for r in self.consultar("SELECT id FROM trechos_indexados")}, set(vetores))
+        self.assertTrue(self.objeto_r2(SHA_900002).exists())
+        self.assertEqual(self.sincronizar().escritas, 0)
+
+    def test_remocao_propaga(self):
+        self.sincronizar()
+        self.assertTrue(self.objeto_r2(SHA_900002).exists())
+        self.remover("siscam:900002", SHA_900002)
+        rel = self.sincronizar()
+        self.assertEqual(rel.falhas, [])
+        self.assertEqual(rel.feitas["r2_apagar"], 1)
+        self.assertFalse(self.objeto_r2(SHA_900002).exists())
+        self.assertEqual(self.consultar("SELECT count(*) FROM arquivos WHERE id = 'siscam:900002'"), [(0,)])
+        self.assertEqual(self.consultar("SELECT count(*) FROM arquivo_documento WHERE arquivo = 'siscam:900002'"),
+                         [(0,)])
+        self.assertEqual(self.consultar("SELECT count(*) FROM trechos WHERE arquivo = 'siscam:900002'"), [(0,)])
+        self.assertEqual(self.contar("trechos_fts"), 5)
+        self.assertEqual(self.consultar("SELECT count(*) FROM trechos_fts WHERE id = 'f23d327591e03053'"), [(0,)])
+        self.assertNotIn("f23d327591e03053", self.vetores())
+        self.assertEqual(self.consultar("SELECT count(*) FROM trechos_indexados WHERE id = 'f23d327591e03053'"),
+                         [(0,)])
+        self.assertEqual(self.consultar("SELECT chave FROM remocoes ORDER BY chave"),
+                         [("siscam:900002",), ("siscam:900004",)])
+        self.assertTrue(any("expurgo pendente" in a for a in rel.avisos))
+        self.assertTrue(rel.estado_gravado)
+        self.assertEqual(self.consultar("SELECT total FROM estado_indice"), [(5,)])
+
+
+class TestSegurancaEFalhas(Base):
+    def test_barreira_de_pii_aborta_sem_gravar(self):
+        with self.assertRaises(ErroBarreira) as ctx:
+            self.sincronizar(liberados=frozenset())  # o telefone do gabinete deixa de ser liberado
+        mensagem = str(ctx.exception)
+        self.assertIn("telefone", mensagem)
+        self.assertNotIn("2620", mensagem)
+        self.assertFalse(self.sqlite.exists())
+        self.assertFalse((self.pasta / "r2").exists())
+        self.assertFalse((self.pasta / "vetores.jsonl").exists())
+
+    def test_cli_aborta_na_barreira(self):
+        # a raiz das fixtures não libera o telefone do gabinete: a CLI recusa a carga
+        saida, erro = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(saida), contextlib.redirect_stderr(erro):
+            codigo = cli.main(["--ambiente", "local", "--sqlite", str(self.sqlite), "--raiz", str(self.raiz),
+                               "--textos", str(self.textos), "--cache", str(self.cache), "--commit", COMMIT])
+        self.assertEqual(codigo, 1)
+        self.assertIn("barreira de PII", erro.getvalue())
+        self.assertNotIn("2620", erro.getvalue() + saida.getvalue())
+        self.assertFalse(self.sqlite.exists())
+
+    def test_simular_nao_grava(self):
+        rel = self.sincronizar(simular=True, exportar=self.tmp / "exp")
+        self.assertEqual(rel.escritas, 0)
+        self.assertEqual(rel.plano["migracoes"], 1)
+        self.assertEqual(rel.plano["r2_enviar"], 6)
+        self.assertEqual(rel.plano["d1_documentos_gravar"], 9)
+        self.assertEqual(rel.plano["d1_trechos_gravar"], 6)
+        self.assertEqual(rel.plano["vetores_upsert"], 7)
+        self.assertEqual(rel.plano["estado_indice"], 1)
+        self.assertEqual(rel.plano["exportacao_arquivos"], 3)
+        self.assertIn("simulação", rel.texto())
+        self.assertFalse(self.sqlite.exists())
+        self.assertFalse(self.pasta.exists())
+        self.assertFalse((self.tmp / "exp").exists())
+
+        self.sincronizar()
+        antes = self.sqlite.read_bytes()
+        rel = self.sincronizar(simular=True)
+        self.assertEqual(rel.escritas, 0)
+        for chave in ("migracoes", "r2_enviar", "d1_trechos_gravar", "d1_documentos_gravar", "vetores_upsert",
+                      "vetores_apagar", "estado_indice"):
+            self.assertEqual(rel.plano[chave], 0, chave)
+        self.assertEqual(self.sqlite.read_bytes(), antes)
+
+    def test_estado_nao_gravado_em_falha_no_meio(self):
+        def quebrar(ambiente):
+            def falhar(textos):
+                raise RuntimeError("falha simulada nos embeddings")
+            ambiente.embedder = falhar
+
+        with self.assertRaises(RuntimeError):
+            self.sincronizar(ajustar=quebrar)
+        self.assertEqual(self.contar("trechos"), 6)  # o D1 já foi atualizado
+        self.assertEqual(self.contar("estado_indice"), 0)
+        self.assertEqual(self.contar("trechos_indexados"), 0)
+
+        rel = self.sincronizar()
+        self.assertEqual(rel.plano["vetores_upsert"], 7)
+        self.assertEqual(rel.plano["d1_trechos_gravar"], 0)
+        self.assertEqual(self.contar("estado_indice"), 1)
+
+    def test_original_ausente_no_cache(self):
+        (self.cache / "arquivos" / SHA_900005).unlink()
+        rel = self.sincronizar()
+        self.assertEqual(len(rel.falhas), 1)
+        self.assertIn("siscam:900005", rel.falhas[0])
+        self.assertFalse(rel.estado_gravado)
+        self.assertEqual(self.contar("estado_indice"), 0)
+        self.assertEqual(self.consultar("SELECT count(*) FROM arquivos WHERE id = 'siscam:900005'"), [(0,)])
+
+        (self.cache / "arquivos" / SHA_900005).write_bytes(G.ORIGINAIS["siscam:900005"])
+        rel = self.sincronizar()
+        self.assertEqual(rel.falhas, [])
+        self.assertEqual(rel.feitas["r2_enviar"], 1)
+        self.assertEqual(self.contar("arquivos"), 7)
+        self.assertEqual(self.contar("estado_indice"), 1)
+
+
+class TestExportacaoEReconstrucao(Base):
+    def test_exportacao_deterministica(self):
+        rel = self.sincronizar(exportar=self.tmp / "exp1")
+        versao = rel.versao
+        pasta = self.tmp / "exp1" / versao
+        nomes = sorted(p.name for p in pasta.iterdir())
+        self.assertEqual(nomes, sorted(["SHA256SUMS", f"d1-{versao}.sql", f"vetores-{versao}.jsonl.gz"]))
+        somas = (pasta / "SHA256SUMS").read_text(encoding="ascii").splitlines()
+        self.assertEqual(len(somas), 2)
+        for linha in somas:
+            sha, nome = linha.split("  ", 1)
+            self.assertEqual(hashlib.sha256((pasta / nome).read_bytes()).hexdigest(), sha)
+
+        gz = (pasta / f"vetores-{versao}.jsonl.gz").read_bytes()
+        self.assertEqual(gz[:2], b"\x1f\x8b")
+        self.assertEqual(gz[4:8], b"\x00\x00\x00\x00")  # mtime = 0
+        self.assertEqual(gz[3] & 0x08, 0)  # sem nome de arquivo
+        linhas = gzip.decompress(gz).decode("utf-8").splitlines()
+        self.assertEqual(len(linhas), 7)
+        primeiro = json.loads(linhas[0])
+        self.assertEqual(sorted(primeiro), ["id", "metadata", "values"])
+        self.assertEqual(len(desempacotar(primeiro["values"])), 1024)
+        self.assertEqual([json.loads(x)["id"] for x in linhas], sorted(json.loads(x)["id"] for x in linhas))
+
+        dump = (pasta / f"d1-{versao}.sql").read_text(encoding="utf-8")
+        self.assertNotIn('INSERT INTO "trechos_fts"', dump)
+        self.assertEqual(dump.count('INSERT INTO "trechos" '), 6)
+        self.assertEqual(dump.count('INSERT INTO "documentos" '), 9)
+
+        bucket = self.pasta / "r2" / BUCKET_EXPORTACOES_LOCAL / versao
+        self.assertEqual(sorted(p.name for p in bucket.iterdir()), nomes)
+        self.assertEqual(rel.feitas["exportacao_enviar"], 3)
+
+        outra = self.sincronizar(exportar=self.tmp / "exp2")
+        self.assertEqual(outra.versao, versao)
+        self.assertEqual(outra.escritas, 0)  # If-None-Match: os objetos já existem
+        for nome in nomes:
+            self.assertEqual((self.tmp / "exp2" / versao / nome).read_bytes(), (pasta / nome).read_bytes())
+
+    def test_exportacao_importavel(self):
+        rel = self.sincronizar(exportar=self.tmp / "exp")
+        dump = (self.tmp / "exp" / rel.versao / f"d1-{rel.versao}.sql").read_text(encoding="utf-8")
+        con = sqlite3.connect(":memory:")
+        try:
+            con.executescript((Path(__file__).resolve().parents[1] / "worker" / "migrations" / "0001_inicial.sql")
+                              .read_text(encoding="utf-8"))
+            con.executescript(dump)
+            self.assertEqual(con.execute("SELECT count(*) FROM trechos").fetchone()[0], 6)
+            self.assertEqual(con.execute("SELECT count(*) FROM trechos_indexados").fetchone()[0], 7)
+        finally:
+            con.close()
+
+    def test_reconstruir(self):
+        self.sincronizar()
+        con = sqlite3.connect(self.sqlite)
+        con.execute("DELETE FROM trechos")
+        con.execute("DELETE FROM documentos WHERE tipo = 'pl'")
+        con.execute("INSERT INTO trechos_fts (rowid, id, texto_norm) VALUES (1, 'lixo', 'lixo')")
+        con.execute("INSERT INTO pessoas VALUES ('fantasma', 'Fantasma', NULL)")
+        con.commit()
+        con.close()
+        rel = self.sincronizar(reconstruir=True)
+        self.assertEqual(rel.falhas, [])
+        self.assertEqual(rel.plano["vetores_upsert"], 7)
+        self.assertEqual(self.contar("trechos"), 6)
+        self.assertEqual(self.contar("trechos_fts"), 6)
+        self.assertEqual(self.contar("documentos"), 9)
+        self.assertEqual(self.consultar("SELECT slug FROM pessoas"), [("fulano-sintetico-de-tal",)])
+        self.assertEqual(self.consultar("SELECT count(*) FROM trechos_fts WHERE id = 'lixo'"), [(0,)])
+        self.assertEqual(self.contar("estado_indice"), 1)
+        self.assertEqual(len(self.vetores()), 7)
+        self.assertEqual(self.sincronizar().escritas, 0)
+
+    def test_fts_inconsistente_e_refeito(self):
+        self.sincronizar()
+        con = sqlite3.connect(self.sqlite)
+        con.execute("DELETE FROM trechos_fts")
+        con.commit()
+        con.close()
+        rel = self.sincronizar()
+        self.assertEqual(rel.plano["d1_fts_reconstruir"], 1)
+        self.assertEqual(self.contar("trechos_fts"), 6)
+
+
+if __name__ == "__main__":
+    unittest.main()

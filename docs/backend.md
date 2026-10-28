@@ -96,3 +96,39 @@ Para a carga a partir da máquina local, as mesmas credenciais entram como vari�
   - `npx wrangler r2 bucket dev-url enable radar-niteroi-exportacoes`, para reabrir a leitura pública.
 
   Depois, atualizar os ids em `wrangler.jsonc`. A URL `pub-…` das exportações muda ao recriar o bucket: atualizar este documento e os links da metodologia.
+
+## Sincronização com a nuvem
+
+`python -m coletor.nuvem` (pacote `coletor/nuvem/`, só biblioteca padrão) leva o Git a D1, Vectorize e R2, conforme o contrato `docs/contratos/textos.md` (seção 8). Lê os registros de `data/`, `config/`, os manifestos `data/textos/manifesto-<ano>.json` e o worktree da branch `dados-textos`.
+
+```text
+python -m coletor.nuvem --ambiente local --sqlite D:\radar-niteroi-cache\local.sqlite --simular
+python -m coletor.nuvem --ambiente local --sqlite D:\radar-niteroi-cache\local.sqlite
+python -m coletor.nuvem --ambiente staging
+python -m coletor.nuvem --ambiente production --exportar D:\radar-niteroi-cache\exportacoes
+python -m coletor.nuvem --ambiente production --reconstruir
+```
+
+| Opção | Efeito |
+|---|---|
+| `--ambiente local\|staging\|production` | `local`: SQLite (`--sqlite`, padrão `<cache>\local.sqlite`), R2 em `<pasta do SQLite>\r2\<bucket>\…`, Vectorize em `<pasta do SQLite>\vetores.jsonl` e embeddings falsos determinísticos (SHAKE-256, 1.024 dimensões), sem rede. `staging`/`production`: nomes e ids de `worker\wrangler.jsonc`. |
+| `--simular` | Só leituras: imprime o plano (contagens por operação) sem gravar nada, nem o SQLite local. |
+| `--exportar DIR` | Grava em `DIR\<versao>\` `d1-<versao>.sql` (tabelas-base, sem `trechos_fts`), `vetores-<versao>.jsonl.gz` (um vetor por linha, `values` em float32 little-endian base64, gzip com mtime 0 e sem nome) e `SHA256SUMS`, e envia ao bucket de exportações em `<versao>/…` com `If-None-Match: *` (o `SHA256SUMS` por último). |
+| `--reconstruir` | Limpa as tabelas-base, o FTS e `estado_indice` e regrava tudo a partir do Git; reenvia todos os vetores (reaproveitando o cache de embeddings). |
+| `--textos DIR` | Worktree de `dados-textos` (padrão: `RADAR_TEXTOS` ou `..\radar-vereadores-niteroi-textos`). |
+| `--cache DIR` | Cache local (padrão: `RADAR_CACHE`). Originais em `arquivos\<sha256>`; embeddings em `embeddings\<modelo>\<aa>\<sha256>.f32`. |
+| `--commit SHA` | Commit gravado em `estado_indice.commit` (padrão: `GITHUB_SHA` ou `git rev-parse HEAD`). |
+
+**Etapas, nesta ordem:**
+1. **Barreira de PII:** `mascara.varrer` (com `mascara.liberados`) em todo trecho e em toda ementa mascarada a enviar. Uma ocorrência forte aborta antes de qualquer escrita, listando origem, tipo e posição, nunca o valor.
+2. **Migrações:** `worker\migrations\` é a pasta única. Local: `sqlite3`, com a mesma tabela `d1_migrations` do wrangler. Remoto: `npx wrangler d1 migrations apply <db> --remote [--env staging]`.
+3. **R2:** os originais que ainda não constam em `arquivos` do D1 são conferidos por `HEAD` e, se faltarem, enviados do cache (bytes conferidos pelo SHA-256) com `If-None-Match: *`, `Content-Type` e `x-amz-meta-documentos`. Original ausente no cache é falha: a linha do arquivo não é gravada e `estado_indice` fica como estava. Os originais de `config\remocoes.json` são apagados (`DELETE`, só aqui).
+4. **D1:** diferença de `documentos`, `autoria`, `pessoas`, `arquivos`, `arquivo_documento`, `trechos` (texto = `conteudo[:-1][inicio:fim]`, conferido pelo `sha256`) e `remocoes` contra o Git: grava o que mudou e apaga o que saiu do Git ou entrou nas remoções. O FTS acompanha os trechos e é refeito se a contagem divergir. Até 400 instruções vão por lotes REST (100 parâmetros e 100 KB por instrução, sem `BEGIN`/`COMMIT`). Acima disso, por um arquivo `.sql` temporário e `npx wrangler d1 execute <db> --remote --file=…`.
+5. **Vectorize:** vetores só para trechos vetorizáveis novos ou alterados e para as ementas mascaradas de indicações e moções (`ementa:doc:<id>`), pela diferença contra `trechos_indexados` (`sha256` do texto). Metadados `{tipo, ano, legislatura, documento}`. Embeddings `@cf/baai/bge-m3` em lotes de 50 (dimensão conferida: 1.024), upsert em lotes de 1.000 (até 5.000 e 100 MB), `delete_by_ids` para os ids que saíram e espera por `processedUpToMutation`. Trocar o modelo reenvia todos os vetores.
+6. **Estado:** `estado_indice` só no fim, sem falhas, e só se algo além da data mudou.
+
+Uma segunda execução sem mudanças no Git não faz nenhuma escrita. Código de saída: 0 sem falhas, 1 com falhas.
+
+**Segurança.** Credenciais só por variáveis de ambiente (`CLOUDFLARE_API_TOKEN` ou `CLOUDFLARE_API_TOKEN_DADOS`, `CLOUDFLARE_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`). Mensagens de erro trazem só esquema, host e caminho das URLs; tokens, assinaturas SigV4 e segredos aparecem como `***`. 429 respeita `Retry-After`; 5xx e falhas de rede têm até 5 tentativas com espera progressiva.
+
+**Busca por palavras.** O D1 não confirmou `remove_diacritics`, por isso `trechos_fts` guarda `texto_norm` (NFD sem marcas `Mn`, minúsculas, como `coletor.nuvem.fonte.normalizar_busca`). O Worker aplica a mesma normalização à consulta (`normalize("NFD")`, sem `\p{Mn}`, `toLowerCase()`) e junta por `trechos_fts.id = trechos.id`.
