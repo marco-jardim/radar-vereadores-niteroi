@@ -1,0 +1,313 @@
+                      GABINETE DO VEREADOR ANDERSON PIPICO
+
+                                Projeto de Lei nº           /2026
+
+                                                     INSTITUI O CADASTRO ÚNICO MUNICIPAL DE
+                                                     PESSOAS EM SITUAÇÃO DE RUA DE NITERÓI,
+                                                     ESTABELECE DIRETRIZES PARA A COLETA,
+                                                     TRATAMENTO, PROTEÇÃO E USO DE DADOS
+                                                     PESSOAIS E SOCIOECONÔMICOS, E DÁ
+                                                     OUTRAS PROVIDÊNCIAS.
+
+Art. 1º - Fica instituído o Cadastro Único Municipal de Pessoas em Situação de Rua de Niterói,
+instrumento de identificação, quantificação, organização e acompanhamento de informações
+sobre pessoas em situação de rua no Município, destinado a subsidiar o planejamento, a
+execução, o monitoramento e a avaliação de políticas públicas de acolhimento, assistência
+social, saúde, habitação, documentação, trabalho, renda e reintegração social.
+
+Parágrafo único - O Cadastro Único Municipal deverá ser operado de forma integrada aos
+sistemas já utilizados pela Secretaria Municipal de Assistência Social e Economia Solidária, pelo
+Centro de Referência Especializado para População em Situação de Rua — Centro POP, pelas
+unidades de acolhimento e pelos demais equipamentos da rede socioassistencial, sanitária e de
+segurança alimentar do Município.
+
+Art. 2º - Para os efeitos desta Lei, considera-se:
+
+I — pessoa em situação de rua: pessoa em situação de pobreza extrema, com vínculos
+familiares interrompidos ou fragilizados e sem moradia convencional regular, que utiliza
+logradouros públicos e áreas degradadas como espaço de moradia e/ou de sustento, de forma
+temporária ou permanente, bem como aquela abrigada em unidades de acolhimento para
+pernoite temporário ou como moradia provisória;
+II — cadastrado: a pessoa em situação de rua que adere ao Cadastro Único Municipal,
+fornecendo dados pessoais e socioeconômicos para fins de atendimento individualizado,
+proteção social e acesso a direitos;
+III — tratamento de dados: toda operação realizada com dados pessoais, como coleta,
+produção, recepção, classificação, utilização, acesso, reprodução, transmissão, distribuição,
+processamento, arquivamento, armazenamento, eliminação, avaliação ou controle da
+informação;
+IV — dados sensíveis: dados pessoais sobre origem racial ou étnica, convicção religiosa, opinião
+política, filiação a sindicato ou a organização de caráter religioso, filosófico ou político, dados
+referentes à saúde ou à vida sexual, dados genéticos ou biométricos.
+
+Art. 3º - São objetivos do Cadastro Único Municipal de Pessoas em Situação de Rua:
+
+I — identificar e quantificar a população em situação de rua no Município de Niterói;
+II — conhecer o perfil socioeconômico, de saúde, educacional, habitacional e de
+vulnerabilidades dessa população;
+
+                     GABINETE DO VEREADOR ANDERSON PIPICO
+
+III — subsidiar a formulação, implementação, monitoramento e avaliação de políticas públicas
+específicas;
+IV — facilitar o encaminhamento qualificado para serviços de saúde, assistência social,
+educação, qualificação profissional, habitação, documentação civil e acesso à Justiça;
+V — possibilitar o acompanhamento individualizado e continuado da trajetória das pessoas
+cadastradas;
+VI — promover o acesso a direitos fundamentais, com incentivo à regularização documental;
+VII — gerar dados estatísticos anonimizados para pesquisas, estudos, transparência pública e
+controle social;
+VIII — aprimorar a gestão pública por meio da organização das informações, evitando
+duplicidades, sobreposições e fragmentação dos atendimentos;
+IX — promover a articulação intersetorial entre as políticas de assistência social, saúde,
+educação, habitação, trabalho, renda, segurança alimentar e nutricional, defesa civil, segurança
+pública e acesso à Justiça;
+X — assegurar que a coleta e o uso de dados sejam orientados pela dignidade da pessoa
+humana, pela não discriminação e pela proteção dos direitos fundamentais.
+
+Art. 4º - O Cadastro Único Municipal de Pessoas em Situação de Rua observará as seguintes
+diretrizes:
+
+I — respeito à dignidade da pessoa humana, à autonomia, à privacidade e aos direitos
+fundamentais;
+II — garantia de privacidade e proteção dos dados pessoais, em estrita conformidade com a Lei
+Federal nº 13.709, de 14 de agosto de 2018 — Lei Geral de Proteção de Dados Pessoais (LGPD);
+III — utilização dos dados exclusivamente para as finalidades de formulação, execução,
+monitoramento e avaliação de políticas públicas;
+IV — acesso restrito às informações individualizadas, limitado aos agentes públicos e
+profissionais diretamente envolvidos no atendimento, mediante identificação, autenticação e
+registro de acesso;
+V — atualização periódica das informações cadastrais, com busca ativa e abordagem social
+respeitosa;
+VI — abordagem humanizada, não discriminatória e respeitosa na coleta de dados, realizada
+por equipe técnica multidisciplinar qualificada;
+VII — garantia do direito de informação, acesso, correção, portabilidade, anonimização,
+bloqueio ou eliminação de dados pessoais, nos termos da legislação vigente;
+VIII — proibição de uso dos dados para fins de vigilância generalizada, constrangimento,
+discriminação, cobrança de dívidas, persecução penal automática ou qualquer finalidade
+estranha à proteção social;
+IX — priorização da escuta da pessoa cadastrada e da construção participativa de seu plano
+individual de atendimento.
+
+Art. 5º - O Cadastro Único Municipal conterá dados pessoais e informações socioeconômicas
+necessárias ao atendimento individualizado, incluindo:
+
+                     GABINETE DO VEREADOR ANDERSON PIPICO
+
+I — identificação pessoal: nome civil, nome social, data de nascimento ou idade aproximada,
+filiação, naturalidade, estado civil, documentos de identidade, quando disponíveis, e contato,
+se houver;
+II — informações de saúde: condições gerais de saúde, necessidade de cuidados médicos,
+tratamentos em curso, alergias relevantes, imunizações, uso continuado de medicamentos e
+necessidades de atenção à saúde mental, quando autorizada a coleta;
+III — histórico social, familiar e habitacional: composição familiar, vínculos familiares, tempo
+em situação de rua, trajetória de moradia, escolaridade, qualificação profissional, ocupação,
+renda e vínculos territoriais;
+IV — demandas específicas: necessidade de acompanhamento psicológico, tratamento de
+dependência química, cuidados especiais de saúde, apoio educacional, qualificação profissional,
+documentação, benefícios socioassistenciais e acesso à moradia;
+V — encaminhamentos realizados: registro dos serviços acessados, acolhimentos,
+atendimentos médicos, psicológicos, jurídicos e de assistência social, bem como dos
+encaminhamentos efetivados;
+VI — plano individual de atendimento: metas, necessidades, direitos reivindicados, serviços
+acionados e acompanhamento da trajetória da pessoa cadastrada.
+
+§ 1º A coleta de dados sensíveis relativos à saúde, inclusive informações sobre dependência
+química, transtornos mentais, sorologia, gravidez e outras condições de saúde, somente será
+realizada mediante consentimento livre, informado, inequívoco e específico da pessoa
+cadastrada, nos termos da Lei Federal nº 13.709, de 2018.
+
+§ 2º O cadastramento será precedido de orientação clara, acessível e em linguagem adequada
+sobre:
+
+I — os objetivos do cadastro;
+II — a finalidade das informações coletadas;
+III — os direitos da pessoa cadastrada;
+IV — a política de proteção de dados;
+V — a possibilidade de recusa ao fornecimento de dados sensíveis, sem prejuízo do acesso aos
+serviços públicos essenciais;
+VI — os canais para solicitação de acesso, correção, complementação ou eliminação de dados.
+
+§ 3º A recusa ao fornecimento de dados sensíveis não poderá ser utilizada como fundamento
+para negar atendimento de urgência, acolhimento, assistência social, saúde, alimentação,
+documentação ou acesso a direitos fundamentais.
+
+Art. 6º - Compete ao Município:
+
+I — regulamentar os procedimentos de coleta, armazenamento, tratamento,
+compartilhamento, retenção e eliminação dos dados;
+II — designar autoridade ou setor responsável pela governança, segurança e proteção de dados
+do Cadastro Único Municipal;
+
+                     GABINETE DO VEREADOR ANDERSON PIPICO
+
+III — garantir a capacitação continuada dos profissionais envolvidos no cadastramento, com
+ênfase em proteção de dados pessoais, saúde mental, dependência química, redução de danos,
+direitos humanos, abordagem social e atendimento a pessoas em situação de vulnerabilidade;
+IV — assegurar a adoção de medidas técnicas e administrativas aptas a proteger os dados
+pessoais contra acesso não autorizado, destruição, perda, alteração, comunicação ou difusão
+indevida;
+V — manter canal de atendimento para exercício dos direitos previstos na Lei Federal nº
+13.709, de 2018;
+VI — realizar, periodicamente, diagnóstico municipal da população em situação de rua, com
+divulgação de dados agregados e anonimizados.
+
+Art. 7º - O Cadastro Único Municipal será utilizado para o encaminhamento qualificado das
+pessoas cadastradas aos serviços públicos, incluindo:
+
+I — serviços de acolhimento institucional, centros de referência especializados, abrigos
+emergenciais, repúblicas e demais modalidades de moradia provisória;
+II — serviços de saúde, incluindo atenção básica, saúde mental, Centros de Atenção
+Psicossocial, tratamento de dependência química, redução de danos e atendimento
+especializado;
+III — programas de assistência social, benefícios eventuais, Benefício de Prestação Continuada,
+programas de transferência de renda e demais benefícios a que fizer jus;
+IV — programas educacionais, de alfabetização, elevação de escolaridade, educação de jovens
+e adultos e inclusão digital;
+V — programas de qualificação profissional, intermediação de mão de obra,
+microempreendedorismo e economia solidária;
+VI — programas habitacionais, de locação social, moradia assistida e regularização fundiária,
+quando cabíveis;
+VII — serviços gratuitos de documentação civil, trabalhista e acesso à Justiça, em articulação
+com a Defensoria Pública, o Poder Judiciário e demais órgãos competentes;
+VIII — programas de segurança alimentar e nutricional;
+IX — serviços de proteção e defesa de direitos, especialmente em situações de violência,
+exploração, discriminação, violações de direitos humanos ou risco iminente.
+
+Art. 8º - É assegurada à pessoa cadastrada a elaboração e o acompanhamento de plano
+individual de atendimento, visando à proteção social, à reintegração social e familiar, ao acesso
+à moradia e à construção de autonomia.
+
+Parágrafo único. O Município manterá as informações do Cadastro atualizadas periodicamente,
+realizando abordagem social com busca ativa das pessoas cadastradas para acompanhamento
+de sua trajetória e atualização de dados.
+
+Art. 9º - As informações cadastrais terão caráter sigiloso, sendo vedado seu uso para
+finalidades diversas da formulação, execução, monitoramento e avaliação de políticas públicas.
+
+                     GABINETE DO VEREADOR ANDERSON PIPICO
+
+§ 1º O acesso às informações individualizadas será restrito aos profissionais diretamente
+envolvidos no atendimento, mediante identificação, autenticação e registro de acesso, nos
+termos da Lei Federal nº 13.709, de 2018.
+
+§ 2º A divulgação de dados estatísticos agregados, para fins de pesquisa, transparência pública
+e controle social, não poderá conter informações que permitam a identificação individual das
+pessoas cadastradas.
+
+§ 3º O compartilhamento de dados com órgãos públicos, entidades conveniadas ou parceiros
+somente ocorrerá quando necessário, proporcional e compatível com a finalidade de proteção
+social, observados os princípios da necessidade, da finalidade, da segurança e da accountability.
+
+Art. 10 - Organizações não governamentais, entidades religiosas, instituições de ensino
+superior, institutos de pesquisa e demais organizações do terceiro setor poderão celebrar
+convênios, termos de cooperação ou instrumentos congêneres com o Município para ampliar o
+alcance das ações de acolhimento, atendimento, pesquisa e reintegração social.
+
+Parágrafo único. Os instrumentos de cooperação deverão prever expressamente as hipóteses
+de acesso a dados, as medidas de segurança, a finalidade do tratamento, o prazo de retenção e
+as responsabilidades das partes.
+
+Art. 11 - O Município regulamentará os procedimentos de coleta, armazenamento, tratamento,
+compartilhamento e eliminação dos dados, observadas as normas da Lei Federal nº 13.709, de
+2018.
+
+§ 1º O regulamento definirá o prazo de retenção dos dados pessoais, que não poderá exceder o
+necessário para o cumprimento das finalidades para as quais foram coletados.
+
+§ 2º As pessoas cadastradas terão direito de acesso, correção, complementação, anonimização,
+bloqueio e eliminação de seus dados pessoais, nos termos da legislação vigente.
+
+§ 3º A eliminação de dados não poderá comprometer a preservação de registros necessários ao
+cumprimento de obrigação legal, à defesa em processo administrativo ou judicial ou à garantia
+de direitos previdenciários, assistenciais e trabalhistas.
+
+Art. 12 - As despesas decorrentes da execução desta Lei correrão por conta de dotações
+orçamentárias próprias do Fundo Municipal de Assistência Social de Niterói, suplementadas, se
+necessário, por recursos provenientes de convênios com os governos estadual e federal,
+emendas parlamentares e outras fontes lawfulmente admitidas.
+
+Art. 13 - Esta Lei entra em vigor após decorridos 90 (noventa) dias de sua publicação.
+
+                           Sala das Sessões, 20 de outubro de 2026.
+
+                     GABINETE DO VEREADOR ANDERSON PIPICO
+
+                          VEREADOR ANDERSON JOSÉ RODRIGUES
+
+JUSTIFICATIVA:
+
+           A presente proposição institui o Cadastro Único Municipal de Pessoas em Situação
+de Rua de Niterói, com o objetivo de organizar, proteger e qualificar as informações
+necessárias ao planejamento e à execução de políticas públicas voltadas a uma parcela da
+população que se encontra em situação de extrema vulnerabilidade social.
+
+            Niterói já possui uma estrutura relevante de atendimento a essa população. A rede
+municipal conta com o Centro de Referência Especializado para População em Situação de Rua
+— Centro POP, equipes de abordagem social especializada, dez Centros de Referência da
+Assistência Social — CRAS, dois Centros de Referência Especializado de Assistência Social —
+CREAS e cinco unidades de acolhimento. O Centro POP funciona como porta de entrada para o
+atendimento socioassistencial e realiza encaminhamentos para acolhimento, saúde, trabalho,
+renda, orientação jurídica e documentação civil.
+
+            A existência dessa rede evidencia a necessidade de um instrumento municipal
+permanente de gestão informacional. Atualmente, o atendimento é realizado por distintos
+serviços e equipamentos, o que pode gerar fragmentação de informações, duplicidade de
+registros e dificuldade no acompanhamento longitudinal das pessoas atendidas. Um cadastro
+único, devidamente protegido, permite conhecer a trajetória de cada pessoa, identificar
+demandas não atendidas e coordenar encaminhamentos entre assistência social, saúde,
+habitação, educação, trabalho e acesso à Justiça.
+
+           Os dados disponíveis reforçam a relevância da medida. Segundo informações
+veiculadas em 2026, o Cadastro Único registrou 1.015 pessoas em situação de rua em Niterói.
+Já o diagnóstico municipal divulgado em março de 2024 indicava 740 pessoas em situação de
+rua cadastradas até outubro de 2023, por meio do formulário específico destinado à população
+em situação de rua. A diferença entre os registros demonstra tanto a dinâmica de entrada e
+saída dessa população quanto a necessidade de atualização contínua, busca ativa e
+padronização dos procedimentos de coleta.
+
+             O Centro POP registra, em média, cerca de 260 atendimentos diários, com
+encaminhamentos para unidades de acolhimento e para serviços de saúde, trabalho, renda e
+documentação civil. Esse volume de atendimentos confirma que a municipalidade já
+desenvolve ação expressiva de proteção social, mas carece de um marco legal específico que
+discipline a coleta, o acesso, a segurança, o compartilhamento e a eliminação de dados pessoais
+e sensíveis.
+
+                     GABINETE DO VEREADOR ANDERSON PIPICO
+
+            A proposta é especialmente necessária porque o cadastramento de pessoas em
+situação de rua envolve dados altamente sensíveis, como condições de saúde, dependência
+química, transtornos mentais, histórico familiar, situação de documentação e trajetória de
+moradia. O tratamento dessas informações deve observar rigorosamente a Lei Federal nº
+13.709/2018 — Lei Geral de Proteção de Dados Pessoais, especialmente os princípios da
+finalidade, necessidade, adequação, livre acesso, qualidade dos dados, transparência,
+segurança, prevenção, não discriminação e responsabilização.
+
+            Por isso, o projeto estabelece que a coleta de dados sensíveis somente ocorrerá
+mediante consentimento livre, informado e específico, sem que a recusa possa impedir o
+acesso a serviços essenciais, como acolhimento, alimentação, saúde, documentação e
+assistência social. Essa salvaguarda é indispensável para evitar que o cadastro se converta em
+instrumento de exclusão, vigilância ou discriminação.
+
+            O projeto também assegura que os dados sejam utilizados exclusivamente para
+políticas públicas, restringe o acesso individualizado aos profissionais diretamente envolvidos
+no atendimento, determina registro de acessos e veda a divulgação de informações que
+permitam identificar pessoas cadastradas. A divulgação de dados será permitida apenas em
+formato estatístico agregado e anonimizado, preservando a transparência e o controle social
+sem comprometer a privacidade dos titulares.
+
+            A iniciativa dialoga com a estrutura já existente em Niterói, incluindo o Centro POP,
+as equipes de abordagem social, as unidades de acolhimento, os CRAS, os CREAS e as ações
+articuladas com a Defensoria Pública e o Poder Judiciário. O Cadastro Único Municipal não cria
+uma nova barreira de acesso: ao contrário, busca transformar informações dispersas em
+instrumento de garantia de direitos, permitindo que o Município identifique demandas, evite
+sobreposições e ofereça respostas mais rápidas, coordenadas e personalizadas.
+
+           Por fim, a lei fortalece a política municipal de proteção social ao assegurar
+acompanhamento individualizado, busca ativa, atualização periódica dos dados, capacitação
+continuada das equipes e articulação intersetorial. Trata-se de medida compatível com a
+competência municipal em matéria de assistência social, com o princípio constitucional da
+dignidade da pessoa humana e com o dever de proteção integral das pessoas em situação de
+rua.
+
+           Diante do exposto, submete-se o presente projeto à apreciação desta Casa de Leis,
+na expectativa de sua aprovação.
