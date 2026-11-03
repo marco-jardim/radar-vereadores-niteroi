@@ -291,7 +291,7 @@
      "cargo": "Deputado Federal",
      "uf": "RJ",
      "partido": "PT",
-     "votos": null,
+     "votos": 22570,
      "resultado": "Suplente",
      "fonte": {
       "titulo": "TSE — Dados abertos: candidatos 2026",
@@ -324,8 +324,54 @@
     }
    ],
    "camara": null,
-   "site": null,
-   "redes": [],
+   "site": "https://www.bennybriolly.com",
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/BENNYBRIOLLY",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    },
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/FACLUBEDABENNY",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    },
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/MOBILIZABENNY",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    },
+    {
+     "rede": "facebook",
+     "url": "https://www.facebook.com/SHARE/19CWZ4NSTR",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    },
+    {
+     "rede": "facebook",
+     "url": "https://www.facebook.com/SHARE/1DY5D1TDDY",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    },
+    {
+     "rede": "facebook",
+     "url": "https://www.facebook.com/SHARE/1GXBGDBNUM",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    },
+    {
+     "rede": "x",
+     "url": "https://x.com/BENNYBRIOLLY",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    },
+    {
+     "rede": "tiktok",
+     "url": "https://www.tiktok.com/@BENNYBRIOLLY",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    },
+    {
+     "rede": "threads",
+     "url": "https://www.threads.com/@BENNYBRIOLLY",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    }
+   ],
    "contatos": [
     {
      "tipo": "email",
@@ -504,7 +550,7 @@
      "cargo": "Deputado Estadual",
      "uf": "RJ",
      "partido": "PL",
-     "votos": null,
+     "votos": 42768,
      "resultado": "Eleito por média",
      "fonte": {
       "titulo": "TSE — Dados abertos: candidatos 2026",
@@ -573,8 +619,34 @@
     }
    ],
    "camara": null,
-   "site": null,
-   "redes": [],
+   "site": "https://oficialdanielmarques.com.br",
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/OFICIALDANIELMARQUES",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    },
+    {
+     "rede": "facebook",
+     "url": "https://www.facebook.com/OFICIALDANIELMARQUES",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    },
+    {
+     "rede": "x",
+     "url": "https://x.com/OFICIALDMARQUES",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    },
+    {
+     "rede": "youtube",
+     "url": "https://www.youtube.com/@OFICIALDANIELMARQUES",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    },
+    {
+     "rede": "tiktok",
+     "url": "https://www.tiktok.com/@OFICIALDANIELMARQUES",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    }
+   ],
    "contatos": [
     {
      "tipo": "email",
@@ -618,7 +690,7 @@
      "cargo": "Deputado Federal",
      "uf": "RJ",
      "partido": "PL",
-     "votos": null,
+     "votos": 80310,
      "resultado": "Eleito por média",
      "fonte": {
       "titulo": "TSE — Dados abertos: candidatos 2026",
@@ -651,8 +723,34 @@
     }
    ],
    "camara": null,
-   "site": null,
-   "redes": []
+   "site": "https://www.rjdouglasgomes.com.br",
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/RJDOUGLASGOMES",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    },
+    {
+     "rede": "facebook",
+     "url": "https://www.facebook.com/SHARE/14QXZXDEUCE",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    },
+    {
+     "rede": "x",
+     "url": "https://x.com/RJDOUGLASGOMES",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    },
+    {
+     "rede": "youtube",
+     "url": "https://www.youtube.com/@RJDOUGLASGOMES",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    },
+    {
+     "rede": "tiktok",
+     "url": "https://www.tiktok.com/@RJDOUGLASGOMES",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    }
+   ]
   },
   "EMANUEL JORGE ROCHA": {
    "mandatos": {
@@ -805,7 +903,7 @@
      "cargo": "Deputado Federal",
      "uf": "RJ",
      "partido": "Republicanos",
-     "votos": null,
+     "votos": 6897,
      "resultado": "Suplente",
      "fonte": {
       "titulo": "TSE — Dados abertos: candidatos 2026",
@@ -863,7 +961,13 @@
    ],
    "camara": null,
    "site": null,
-   "redes": [],
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/FABIANOGOLCALVESRJ",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    }
+   ],
    "contatos": [
     {
      "tipo": "telefone",
@@ -917,8 +1021,34 @@
     }
    ],
    "camara": null,
-   "site": null,
-   "redes": [],
+   "site": "https://www.fernandalouback.com.br",
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/FERNANDALOUBACKRJ",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    },
+    {
+     "rede": "facebook",
+     "url": "https://www.facebook.com/SHARE/1BWPYAO5RW",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    },
+    {
+     "rede": "x",
+     "url": "https://x.com/FERNANDALOUBAC2",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    },
+    {
+     "rede": "youtube",
+     "url": "https://www.youtube.com/@FERNANDALOUBACKRJ",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    },
+    {
+     "rede": "tiktok",
+     "url": "https://www.tiktok.com/@FERNANDALOUBACKRJ",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    }
+   ],
    "contatos": [
     {
      "tipo": "email",
@@ -1156,7 +1286,7 @@
      "cargo": "Deputado Estadual",
      "uf": "RJ",
      "partido": "PP",
-     "votos": null,
+     "votos": 4031,
      "resultado": "Suplente",
      "fonte": {
       "titulo": "TSE — Dados abertos: candidatos 2026",
@@ -1214,7 +1344,13 @@
    ],
    "camara": null,
    "site": null,
-   "redes": []
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/FOLHA.ADRIANO",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    }
+   ]
   },
   "JOSÉ ANTONIO TORO FERNANDEZ": {
    "mandatos": {
@@ -2830,7 +2966,7 @@
      "cargo": "Deputado Estadual",
      "uf": "RJ",
      "partido": "PT",
-     "votos": null,
+     "votos": 85421,
      "resultado": "Eleito por QP",
      "fonte": {
       "titulo": "TSE — Dados abertos: candidatos 2026",
@@ -2900,7 +3036,28 @@
    ],
    "camara": null,
    "site": null,
-   "redes": []
+   "redes": [
+    {
+     "rede": "instagram",
+     "url": "https://www.instagram.com/VERONICALIMA_VE",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    },
+    {
+     "rede": "facebook",
+     "url": "https://www.facebook.com/DEPUTADA.VERONICALIMA",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    },
+    {
+     "rede": "x",
+     "url": "https://x.com/VERONICALIMA_VE",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    },
+    {
+     "rede": "tiktok",
+     "url": "https://www.tiktok.com/@VERONICALIMA_VE",
+     "fonte": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026"
+    }
+   ]
   }
  }
 }
