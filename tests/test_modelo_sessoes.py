@@ -428,7 +428,16 @@ class TestFontes(unittest.TestCase):
     @unittest.skipIf(os.environ.get("RADAR_COLETA") == "1", "dados mudam durante a coleta")
     def test_dados_versionados(self):
         resultado = montar_sessoes(montar_modelo(), raiz=RAIZ)
-        self.assertEqual(len(resultado["sessoes"]), 627)
+        # O total cresce a cada coleta semanal: compara com os arquivos lidos
+        # diretamente, sem passar pelo código sob teste, em vez de um número fixo.
+        arquivos = sorted((RAIZ / "data" / "sessoes").glob("*.json"))
+        brutas = [s for arquivo in arquivos
+                  for s in json.loads(arquivo.read_text(encoding="utf-8"))]
+        self.assertTrue(arquivos)
+        self.assertEqual(len(resultado["sessoes"]), len(brutas))
+        self.assertGreaterEqual(len(resultado["sessoes"]), 627)
+        self.assertEqual(resultado["anos"], sorted({s["ano"] for s in brutas}))
+        # 2024 é um ano encerrado e fora da janela de recoleta: o total é estável.
         self.assertEqual(sum(v["data"].startswith("2024-") for v in resultado["votacoes"]), 67)
         veto = next(v for v in resultado["votacoes"] if v["numero"] == "280/2025" and v["materia"] == "veto")
         self.assertEqual(veto["sentido"], "favor_mantem")
